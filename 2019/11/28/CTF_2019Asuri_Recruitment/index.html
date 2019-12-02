@@ -187,14 +187,14 @@
 <p>base64解码</p>
 <p><code>Asuri{view_source&#39;s_power}</code></p>
 <h2 id="快速计算"><a href="#快速计算" class="headerlink" title="快速计算"></a>快速计算</h2><p> <a href="http://47.102.107.100:39012/" target="_blank" rel="noopener">http://47.102.107.100:39012/</a> </p>
+ <a id="more"></a> 
+
 <p>连续20次在1-2s内判断是否正确，即可得到flag。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> re</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> time</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line">s = requests.Session()</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line">r = s.get(<span class="string">"http://47.102.107.100:39012/"</span>)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">7</span></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">20</span>):</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">8</span></pre></td><td class="code"><pre><span class="line">    time.sleep(<span class="number">1</span>)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">9</span></pre></td><td class="code"><pre><span class="line">    equation = re.findall(<span class="string">r'&lt;div&gt;(.*)=(.*)&lt;/div&gt;'</span>, r.text)[<span class="number">0</span>]</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">10</span></pre></td><td class="code"><pre><span class="line">    print(equation)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">11</span></pre></td><td class="code"><pre><span class="line">    answer = eval(equation[<span class="number">0</span>])</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">12</span></pre></td><td class="code"><pre><span class="line">    <span class="keyword">if</span> answer == eval(equation[<span class="number">1</span>]):</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">13</span></pre></td><td class="code"><pre><span class="line">        values = &#123;<span class="string">'answer'</span>: <span class="string">'true'</span>&#125;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">14</span></pre></td><td class="code"><pre><span class="line">    <span class="keyword">else</span>:</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">15</span></pre></td><td class="code"><pre><span class="line">        values = &#123;<span class="string">'answer'</span>: <span class="string">'false'</span>&#125;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">16</span></pre></td><td class="code"><pre><span class="line">    r = s.post(<span class="string">"http://47.102.107.100:39012/"</span>, data=values)</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">17</span></pre></td><td class="code"><pre><span class="line">    r.encoding = <span class="string">'utf-8'</span></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">18</span></pre></td><td class="code"><pre><span class="line">    print(r.text)</span></pre></td></tr></table></figure>
 
 <p><img src="/2019/11/28/CTF_2019Asuri_Recruitment/image-20191117195746861.png" alt="image-20191117195746861"></p>
 <p><code>Asuri{python_1s_th3_be3t_l4ngu4ge}</code></p>
 <h2 id="medium-web-justburp"><a href="#medium-web-justburp" class="headerlink" title="medium_web_justburp"></a>medium_web_justburp</h2><p> <a href="http://139.9.212.218:39010/" target="_blank" rel="noopener">http://139.9.212.218:39010/</a> </p>
- <a id="more"></a> 
-
 <p>查找网站目录下的文件</p>
 <p><img src="/2019/11/28/CTF_2019Asuri_Recruitment/image-20191117204536434.png" alt="image-20191117204536434"></p>
 <p>访问<code>robots.txt</code> 得到：  </p>
@@ -332,9 +332,9 @@
     <a title="喵呜~欢迎各位大佬的来访呀！">喵呜~欢迎各位大佬的来访呀！</a>
     
     <div class="count">
-        <a class="count articles"><span>4</span>文章</a>
-        <a class="count tags"><span>2</span>标签</a>
-        <a class="count categories"><span>2</span>分类</a>
+        <a class="count articles"><span>5</span>文章</a>
+        <a class="count tags"><span>7</span>标签</a>
+        <a class="count categories"><span>6</span>分类</a>
     </div>
 </div>
 
@@ -395,7 +395,20 @@
                     <span>4</span>
                 </p>
                 <p class="title">
-                    <a href="/2019/11/27/hello-world/" title="Hello World">Hello World</a>
+                    <a href="/2019/08/29/typora_tips/" title="typora_tips 一些关于typora的快捷键">typora_tips 一些关于typora的快捷键</a>
+                </p>
+            </div>
+        </li>
+        
+        
+        
+        <li>
+            <div class="normal">
+                <p class="index">
+                    <span>5</span>
+                </p>
+                <p class="title">
+                    <a href="/2019/08/18/Park_at_ease/" title="小想法 | 开源一个自己的Python小项目「Park at ease」停车场管理系统">小想法 | 开源一个自己的Python小项目「Park at ease」停车场管理系统</a>
                 </p>
             </div>
         </li>
@@ -413,8 +426,28 @@
     <div class="cube-boxs">
         
         
-        <div class="cube-box ">
+        <div class="cube-box-bg ">
             <a href="/categories/%E6%97%A5%E5%B8%B8%E7%94%9F%E6%B4%BB/">#日常生活</a>
+        </div>
+        
+        
+        <div class="cube-box ">
+            <a href="/categories/%E5%B0%8F%E6%83%B3%E6%B3%95/">#小想法</a>
+        </div>
+        
+        
+        <div class="cube-box ">
+            <a href="/categories/tips/">#tips</a>
+        </div>
+        
+        
+        <div class="cube-box-bg ">
+            <a href="/categories/%E5%B0%8F%E6%83%B3%E6%B3%95/Python/">#Python</a>
+        </div>
+        
+        
+        <div class="cube-box ">
+            <a href="/categories/%E5%B0%8F%E6%83%B3%E6%B3%95/Python/Projects/">#Projects</a>
         </div>
         
         
@@ -436,6 +469,31 @@
         
         <div class="cube-box ">
             <a href="/tags/%E6%97%A5%E5%B8%B8%E7%94%9F%E6%B4%BB/">#日常生活</a>
+        </div>
+        
+        
+        <div class="cube-box ">
+            <a href="/tags/%E5%B0%8F%E6%83%B3%E6%B3%95/">#小想法</a>
+        </div>
+        
+        
+        <div class="cube-box-bg ">
+            <a href="/tags/Python/">#Python</a>
+        </div>
+        
+        
+        <div class="cube-box ">
+            <a href="/tags/tips/">#tips</a>
+        </div>
+        
+        
+        <div class="cube-box ">
+            <a href="/tags/Markdown/">#Markdown</a>
+        </div>
+        
+        
+        <div class="cube-box ">
+            <a href="/tags/Typora/">#Typora</a>
         </div>
         
         
