@@ -1,0 +1,1517 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="NUAA_iCal_Web在线版本部署, MiaoTony">
+    <meta name="description" content="
+主要是简单记录一下Heroku的部署，毕竟一不小心就忘记该怎么折腾的了…
+（其实应该两周前写这篇blog的，现在已经忘了很多了嘤嘤嘤  
+
+Cause之前折腾了一两个月，做了个把课表导出到ical日历文件的小jio本，即 NUAA_Cla">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>NUAA_iCal_Web在线版本部署 | MiaoTony&#39;s小窝</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
+    
+    <script src="/libs/jquery/jquery.min.js"></script>
+	
+	<script> 
+		//百度统计
+		var _hmt = _hmt || [];
+		(function() {
+		  var hm = document.createElement("script");
+		  hm.src = "https://hm.baidu.com/hm.js?40e312a1eec109cf96e30988cf3bfe70";
+		  var s = document.getElementsByTagName("script")[0]; 
+		  s.parentNode.insertBefore(hm, s);
+		})();
+	</script>
+    
+<link rel="alternate" href="/atom.xml" title="MiaoTony's小窝" type="application/atom+xml">
+<link rel="stylesheet" href="/css/prism.css" type="text/css"></head>
+
+
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper head-container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">MiaoTony's小窝</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>首页</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>标签</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>分类</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/archives" class="waves-effect waves-light">
+      
+      <i class="fas fa-archive" style="zoom: 0.6;"></i>
+      
+      <span>归档</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>关于</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/contact" class="waves-effect waves-light">
+      
+      <i class="fas fa-comments" style="zoom: 0.6;"></i>
+      
+      <span>留言</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/friends" class="waves-effect waves-light">
+      
+      <i class="fas fa-address-book" style="zoom: 0.6;"></i>
+      
+      <span>友链</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="搜索" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">MiaoTony's小窝</div>
+        <div class="logo-desc">
+            
+            喵~欢迎各位大佬的来访呀！
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			首页
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			标签
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			分类
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/archives" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-archive"></i>
+			
+			归档
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			关于
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/contact" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-comments"></i>
+			
+			留言
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/friends" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-address-book"></i>
+			
+			友链
+		</a>
+          
+        </li>
+        
+        
+        <li><div class="divider"></div></li>
+        <li>
+            <a href="https://github.com/miaotony" class="waves-effect waves-light" target="_blank">
+                <i class="fab fa-github-square fa-fw"></i>Fork Me
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+        </div>
+
+        
+            <style>
+    .nav-transparent .github-corner {
+        display: none !important;
+    }
+
+    .github-corner {
+        position: absolute;
+        z-index: 10;
+        top: 0;
+        right: 0;
+        border: 0;
+        transform: scale(1.1);
+    }
+
+    .github-corner svg {
+        color: #0f9d58;
+        fill: #fff;
+        height: 64px;
+        width: 64px;
+    }
+
+    .github-corner:hover .octo-arm {
+        animation: a 0.56s ease-in-out;
+    }
+
+    .github-corner .octo-arm {
+        animation: none;
+    }
+
+    @keyframes a {
+        0%,
+        to {
+            transform: rotate(0);
+        }
+        20%,
+        60% {
+            transform: rotate(-25deg);
+        }
+        40%,
+        80% {
+            transform: rotate(10deg);
+        }
+    }
+</style>
+
+<a href="https://github.com/miaotony" class="github-corner tooltipped hide-on-med-and-down" target="_blank"
+   data-tooltip="Fork Me" data-position="left" data-delay="50">
+    <svg viewBox="0 0 250 250" aria-hidden="true">
+        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+        <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2"
+              fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
+        <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z"
+              fill="currentColor" class="octo-body"></path>
+    </svg>
+</a>
+        
+    </nav>
+
+</header>
+
+    
+<script src="/libs/cryptojs/crypto-js.min.js"></script>
+<script>
+    (function() {
+        let pwd = '';
+        if (pwd && pwd.length > 0) {
+            if (pwd !== CryptoJS.SHA256(prompt('请输入访问本文章的密码')).toString(CryptoJS.enc.Hex)) {
+                alert('密码错误，将返回主页！');
+                location.href = '/';
+            }
+        }
+    })();
+</script>
+
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/23.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <div class="description center-align post-title">
+                        NUAA_iCal_Web在线版本部署
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        width: 345px;
+        padding-left: 20px;
+    }
+
+    .toc-widget .toc-title {
+        margin: 35px 0 15px 0;
+        padding-left: 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content {
+        height: calc(100vh - 250px);
+        overflow: auto;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #42b983;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+    }
+
+    #toc-content .is-active-link {
+        color: #42b983;
+    }
+
+    #toc-content .is-active-link::before {
+        background-color: #42b983;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 15px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/%E5%B0%8F%E6%83%B3%E6%B3%95/">
+                                <span class="chip bg-color">小想法</span>
+                            </a>
+                        
+                            <a href="/tags/iCal/">
+                                <span class="chip bg-color">iCal</span>
+                            </a>
+                        
+                            <a href="/tags/Heroku/">
+                                <span class="chip bg-color">Heroku</span>
+                            </a>
+                        
+                            <a href="/tags/%E9%83%A8%E7%BD%B2/">
+                                <span class="chip bg-color">部署</span>
+                            </a>
+                        
+                            <a href="/tags/flask/">
+                                <span class="chip bg-color">flask</span>
+                            </a>
+                        
+                            <a href="/tags/WEB/">
+                                <span class="chip bg-color">WEB</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/Technology/" class="post-category">
+                                Technology
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2019-12-29
+                </div>
+                
+
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
+                    2.4k
+                </div>
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
+                    8 分
+                </div>
+                
+				
+                
+            </div>
+            
+        </div>
+        <hr class="clearfix">
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <blockquote>
+<p>主要是简单记录一下Heroku的部署，毕竟一不小心就忘记该怎么折腾的了…</p>
+<p>（其实应该两周前写这篇blog的，现在已经忘了很多了嘤嘤嘤  </p>
+</blockquote>
+<h2 id="Cause"><a href="#Cause" class="headerlink" title="Cause"></a>Cause</h2><p>之前折腾了一两个月，做了个把课表导出到ical日历文件的小jio本，即 <code>NUAA_ClassSchedule</code><br>GitHub链接：<a href="https://github.com/miaotony/NUAA_ClassSchedule" target="_blank" rel="noopener">click here</a><br><a href="https://github.com/miaotony/NUAA_ClassSchedule" target="_blank" rel="noopener">https://github.com/miaotony/NUAA_ClassSchedule</a>  </p>
+<p>其中有一个TODO是搭建一个web端，实现在线导出。</p>
+<p>实际上，在教务系统加入验证码之前，已经和奶冰一起做了一个可以用的web端了，只不过只是简单测试还没公开啥的。</p>
+<p>然而，这个验证码一加就麻烦了……之前做的登录显然就不成功了。</p>
+<p>解决方案的话，在本地，是通过把验证码下载下来，PIL调用本地图片查看器来显示，进而在命令行里输入。</p>
+<p>不过web端就有点麻烦了。</p>
+<p>但怎么说好呢，不妨碍用同样的思路解决这一问题呢嘻嘻嘻。后面再说。</p>
+<blockquote>
+<p>其实到写这篇blog为止还没弄清楚他验证码的具体机理。（等我考完试有空再折腾好了喵</p>
+</blockquote>
+<p><strong>不想往下看又想体验<code>NUAA_iCal_Web</code>在线版本的，<a href="https://nuaaical.herokuapp.com/" target="_blank" rel="noopener">点这里</a>访问吧。</strong>   </p>
+<p><br><br></p>
+<hr>
+<h2 id="Deploy"><a href="#Deploy" class="headerlink" title="Deploy"></a>Deploy</h2><h3 id="Heroku简介"><a href="#Heroku简介" class="headerlink" title="Heroku简介"></a><em>Heroku</em>简介</h3><p>偶尔有一天在转GitHub的时候，看到某个项目下有个网页端的界面，README里面也有个<code>deploy with heroku</code>之类的图标按钮。点进去看了看，然后再查了查资料。</p>
+<blockquote>
+<p><em>Heroku</em> is a platform as a service (PaaS) that enables developers to build, run, and operate applications entirely in the cloud.  </p>
+</blockquote>
+<blockquote>
+<p>Heroku是一个支持多种编程语言的云平台即服务。在2010年被Salesforce.com收购。Heroku作为最开始的云平台之一，从2007年6月起开发，当时它仅支持Ruby，但后来增加了对Java、Node.js、Scala、Clojure、Python以及（未记录在正式文件上）PHP和Perl的支持。基础操作系统是Debian，在最新的堆栈则是基于Debian的Ubuntu。</p>
+</blockquote>
+<p>好东西呀！</p>
+<p>发现heroku可以在一定程度上免费搭建网站，当然前提是要有一个wsgi接口之类的，大概意思就是说需要让你的东西能通过网络访问得到。  </p>
+<blockquote>
+<p>其实那时候我连wsgi是啥都不知道……  </p>
+</blockquote>
+<p>官网链接：<a href="https://links.jianshu.com/go?to=https%3A%2F%2Fwww.heroku.com%2F" target="_blank" rel="noopener">https://www.heroku.com/</a></p>
+<p>具体的定价策略参见<a href="https://www.heroku.com/pricing" target="_blank" rel="noopener">这里</a>。  </p>
+<p><img src="/2019/12/29/Tech_NUAAiCalWeb_deploy/price.png" alt="price">  </p>
+<p>Free版本的话，未认证用户每个月550小时免费动态时长，认证用户（好像是绑定银行卡）1000小时；30分钟无访问无活动的话会自己睡大觉，不会占用你的宝贵时长；提供二级域名，还可以自己绑米。  </p>
+<p><strong>对于nuaaical来说，这个完全够用了呢！</strong>  </p>
+<p>那就干脆折腾一下好了。  </p>
+<p><br><br></p>
+<h3 id="NUAA-iCal-Web端搭建"><a href="#NUAA-iCal-Web端搭建" class="headerlink" title="NUAA iCal Web端搭建"></a>NUAA iCal Web端搭建</h3><p>需要一个wsgi接口之类的嘛，flask、django这些现成的就行。</p>
+<p>本来就啥也不知道也没玩过，看来一下flask挺简单的，于是就简单学了一下<strong>flask框架</strong>。</p>
+<p>然而真正搭建的过程中遇到了一堆奇妙的bug，本地跑着好好的，上了heroku就炸了。（这个不细说了  </p>
+<p>实际上代码就是从本地版本改的，毕竟在开发的时候留了很多现成的接口了，改一改调用一下函数之类的就完事了。</p>
+<p>不过这个<strong>验证码</strong>折腾了老半天。</p>
+<p>这里的策略是，当你访问页面的同时，后端去访问教务系统，把验证码图片爬下来送给前端，同时建立了一个与你有关的session。</p>
+<p>当你post用户名密码及验证码后，后端利用同一个session去访问教务系统，<br>进而爬取课表及考试信息，<br>生成icalendar日历文件，<br>而后以附件下载的形式构造response，从而得到属于你的ical课表。  </p>
+<br>
+
+<p>当然，一定程度上安全一点，这个session在构造完response之后就销毁了，不保留在云平台上。</p>
+<p>（这样其实还是没搞清楚验证码的机理，一定程度上相当于绕过了而已。</p>
+<p>其实到这的话，本地搭建就结束了。</p>
+<hr>
+<p>不过还考虑了一下<strong>复杂的生产环境</strong>……  </p>
+<ul>
+<li><p>比如说<strong>登录信息重复post</strong>，而原来的验证码就不再有效了。</p>
+<p>这里其实想了几种方案，但是行不通。最后干脆折腾了一波HTML，加了个前端界面，如果没登陆成功就提示一下，然后过一会儿返回主页好了。233</p>
+<p><strong>（有更好的方案欢迎提出喵！</strong></p>
+</li>
+<li><p>比如<strong>未登录情况下直接访问导出ical的页面</strong>  </p>
+<p>这个也是直接F返回主页了。不过这里这个判断折腾了老半天。</p>
+<p>最后的方案是在session里面建立了一个属于当前session的bool变量，默认为False，登录以后为True。</p>
+<blockquote>
+<p>之前直接写在程序的全局变量里，本地跑着好好的，上云平台就炸了……再见。   </p>
+<p>还写过在flask的g变量里，后来仔细查了资料，g变量好像是只在当前页面请求中有效，意思就是作用范围不一样，于是否决了。</p>
+</blockquote>
+</li>
+<li><p>教务系统<strong>连接已重置</strong></p>
+<p>这个是他教务系统的问题啊，难顶了。还是折腾了老半天才发现这里的问题。  </p>
+<p>又改了改登录的延时，这回变成随机延时了，而且时间也加长了。  </p>
+<p>而且还把爬虫的UA改成了当前浏览器的UA。IP的话好像没办法了。   </p>
+<p>问题有所改善…然而偶尔还存在。</p>
+<p><strong>大不了多试几次就好了。</strong></p>
+</li>
+<li><p>etc.</p>
+</li>
+</ul>
+<p><br><br></p>
+<hr>
+<h3 id="Heroku搭建"><a href="#Heroku搭建" class="headerlink" title="Heroku搭建"></a>Heroku搭建</h3><p>下面来简单记录一下Heroku的部署。</p>
+<ol>
+<li><p><strong>注册一个账号</strong></p>
+<p>网址<a href="https://links.jianshu.com/go?to=https%3A%2F%2Fwww.heroku.com%2F" target="_blank" rel="noopener">https://www.heroku.com/</a></p>
+<p>略。建议用gmail，不过也看到用国内邮箱也成功的。  </p>
+</li>
+</ol>
+<ol start="2">
+<li><p><strong>安装Heroku CLI 命令行接口</strong></p>
+<p>Win-x64：<a href="https://cli-assets.heroku.com/heroku-x64.exe" target="_blank" rel="noopener">下载地址</a></p>
+<p>其他环境的见官网好了。<a href="https://devcenter.heroku.com/articles/heroku-cli" target="_blank" rel="noopener">https://devcenter.heroku.com/articles/heroku-cli</a></p>
+<p>安装完之后就可以在命令行用<code>heroku</code>命令了。</p>
+</li>
+</ol>
+<ol start="3">
+<li><p><strong>登录</strong></p>
+<pre class=" language-bash"><code class="language-bash">heroku login</code></pre>
+<p>会弹出网页登录验证，或者在命令行登录。</p>
+</li>
+</ol>
+<ol start="4">
+<li><p><strong>准备好app</strong></p>
+<p><img src="/2019/12/29/Tech_NUAAiCalWeb_deploy/image-20191229023615517.png" alt="支持的app"></p>
+<p>你看他支持的语言挺多的呢。</p>
+<p>我这里用到的就是python啦。</p>
+<p>这个在上一节已经搭建好了喵。</p>
+</li>
+</ol>
+<ol start="5">
+<li><p><strong>创建app</strong></p>
+<pre class=" language-bash"><code class="language-bash">heroku create</code></pre>
+<p>这时候同时建立了一个名为<code>heroku</code>的git remote仓库，连接到了你本地的git仓库。</p>
+<p>当然也可以现在网站上创建一个应用，再clone</p>
+<pre class=" language-bash"><code class="language-bash">heroku git:clone -a nuaaical
+<span class="token function">cd</span> nuaaical</code></pre>
+<p>这里前提是建立好了名为<code>nuaaical</code>的应用了。</p>
+</li>
+<li><p><strong>建立依赖相关的<code>requirements.txt</code></strong></p>
+<p>略。</p>
+</li>
+</ol>
+<ol start="7">
+<li><p><strong>指定执行的入口</strong></p>
+<p><strong>这里算是一个坑吧，折腾了好久才发现。</strong></p>
+<p>你必须先在代码目录下建立一个名为<code>Procfile</code>的文件，在里面写上你要他执行的命令。比如执行一个python文件之类的。</p>
+<p>在这里用的是<code>gunicorn</code>来建立一个web应用。（flask只用于本地测试使用</p>
+<pre><code>web: gunicorn web:app</code></pre><p>第二个<code>web</code>是文件名（<code>web.py</code>），<code>app</code>是flask实例化的对象啦。<br>（代码里写的<code>app = Flask(__name__)</code>  </p>
+</li>
+</ol>
+<ol start="8">
+<li><p><strong>指定用构建语言（可选）</strong></p>
+<pre class=" language-bash"><code class="language-bash">heroku buildpacks:set heroku/python</code></pre>
+<p>显示指定用python来构建打包（好像说不指定会报错？</p>
+</li>
+</ol>
+<ol start="9">
+<li><p><strong>部署代码</strong></p>
+<p>终于可以部署了呀！直接push好了。</p>
+<pre class=" language-bash"><code class="language-bash"><span class="token function">git</span> push heroku master</code></pre>
+<p>如果不行的话加上<code>-f</code>强制push<strong>（小心一点）</strong>。</p>
+<p>然后可以看到部署的日志，如果有问题就再看看。</p>
+<p>没问题的话，效果类似下面的。</p>
+<p><img src="/2019/12/29/Tech_NUAAiCalWeb_deploy/push.png" alt="push"></p>
+</li>
+</ol>
+<ol start="10">
+<li><p><strong>看看你的网站吧</strong></p>
+<pre class=" language-bash"><code class="language-bash">heroku <span class="token function">open</span></code></pre>
+<p>然后会调用你的浏览器打开。</p>
+<p>或者自己在浏览器访问就好了。</p>
+</li>
+</ol>
+<p><strong>嘻嘻嘻，到这就结束啦~</strong></p>
+<p><br><br></p>
+<h3 id="拓展"><a href="#拓展" class="headerlink" title="拓展"></a>拓展</h3><p>当然还有一些<strong>常用命令</strong>，比如：</p>
+<ul>
+<li><p>查看日志<strong>(debug必备了)</strong></p>
+<pre class=" language-bash"><code class="language-bash">heroku logs --tail</code></pre>
+</li>
+<li><p>看一下还有多少剩余时长</p>
+<pre class=" language-bash"><code class="language-bash">heroku <span class="token function">ps</span></code></pre>
+</li>
+<li><p>打开app服务</p>
+<pre class=" language-bash"><code class="language-bash">heroku ps:scale web<span class="token operator">=</span>1</code></pre>
+</li>
+<li><p>关闭app服务</p>
+<pre class=" language-bash"><code class="language-bash">heroku ps:scale web<span class="token operator">=</span>0</code></pre>
+</li>
+<li><p>etc.</p>
+</li>
+</ul>
+<blockquote>
+<p>官方文档<code>Getting Started on Heroku</code>看这里 <a href="https://devcenter.heroku.com/start" target="_blank" rel="noopener">https://devcenter.heroku.com/start</a></p>
+</blockquote>
+<p><br><br></p>
+<p>除此以外，Heroku还支持<code>pipeline</code>，还可以授权从GitHub上同步部署，还有容器啥的……</p>
+<p><img src="/2019/12/29/Tech_NUAAiCalWeb_deploy/image-20191229033131933.png" alt></p>
+<p>感觉还是挺不错的呢！  </p>
+<p><br><br></p>
+<hr>
+<h2 id="Achievements"><a href="#Achievements" class="headerlink" title="Achievements"></a>Achievements</h2><p>部署好的web端网址：</p>
+<p><a href="https://nuaaical.herokuapp.com/" target="_blank" rel="noopener">https://nuaaical.herokuapp.com/</a></p>
+<p><strong>欢迎来试试呀！</strong></p>
+<p>第一次访问可能会花一些时间，等一等吧。</p>
+<p>如果不成功的话刷新一下页面（但不要重复提交登录信息），或重新开一个页面访问。</p>
+<p>同时多人访问的话也可能会有问题（没试过），那就再试试吧。（摊手</p>
+<p><img src="/2019/12/29/Tech_NUAAiCalWeb_deploy/frontend.png" alt="前端"></p>
+<blockquote>
+<p>好了我知道这个页面丑了。现学的HTML，别说了。</p>
+<p>其实之前奶冰奶冰奶冰冰做了一个前端的↓ </p>
+<p>后面再折腾吧咕咕咕</p>
+<p><img src="/2019/12/29/Tech_NUAAiCalWeb_deploy/frontend_vue.png" alt="vue.js前端"></p>
+<p><strong>欢迎来贡献代码呀！</strong></p>
+</blockquote>
+<blockquote>
+<p>其实之前还折腾了老半天，尝试了<strong>在Azure上部署</strong>，也成功了。</p>
+<p>需要在VSCode中进行部署，然后在配置里设好启动命令（也可以是一个文件）。</p>
+<p><img src="/2019/12/29/Tech_NUAAiCalWeb_deploy/Azure_deploy.png" alt="Azure_deploy"></p>
+<p>不过现在Azure服务到期了。部署的网站也停止了呢。</p>
+<p>截个图纪念一下吧。</p>
+<p><img src="/2019/12/29/Tech_NUAAiCalWeb_deploy/Azure_website.png" alt="Azure_website"></p>
+<p>（hackathon的时候白嫖的Azure还是挺爽的233  </p>
+</blockquote>
+<p>同时，<strong>代码开源在GitHub上了。欢迎来点个star，提个PR喵！</strong>   </p>
+<p><a href="https://github.com/miaotony/NUAA_iCal_Web" target="_blank" rel="noopener">https://github.com/miaotony/NUAA_iCal_Web</a></p>
+<p><br><br></p>
+<p><strong><em>仅供学习研究，未经允许禁止商用，谢谢。</em></strong></p>
+<p>文章中不免存在问题，欢迎提出。  </p>
+<br>
+
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ol>
+<li><a href="https://devcenter.heroku.com/" target="_blank" rel="noopener">https://devcenter.heroku.com/</a></li>
+<li><a href="https://www.jianshu.com/p/191248ad2639" target="_blank" rel="noopener">https://www.jianshu.com/p/191248ad2639</a></li>
+</ol>
+<p><br><br></p>
+<blockquote>
+<p>浪够了，继续准备考试。（真难顶……</p>
+<p>期末冲冲冲！</p>
+<p>说不定这是今年最后一篇blog了喵。</p>
+<p>溜了溜了。</p>
+</blockquote>
+
+            </div>
+            <hr/>
+
+            
+
+    <div class="reprint" id="reprint-statement">
+        
+            <div class="reprint__author">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-user">
+                        文章作者:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="https://miaotony.github.io" rel="external nofollow noreferrer">MiaoTony</a>
+                    </span>
+            </div>
+            <div class="reprint__type">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-link">
+                        文章链接:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="https://miaotony.github.io/2019/12/29/Tech_NUAAiCalWeb_deploy/">https://miaotony.github.io/2019/12/29/Tech_NUAAiCalWeb_deploy/</a>
+                </span>
+            </div>
+            <div class="reprint__notice">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-copyright">
+                        版权声明:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    本博客所有文章除特別声明外，均采用
+                    <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY-SA 4.0</a>
+                    许可协议。转载请注明来源
+                    <a href="https://miaotony.github.io" target="_blank">MiaoTony</a>
+                    !
+                </span>
+            </div>
+        
+    </div>
+
+    <script async defer>
+      document.addEventListener("copy", function (e) {
+        let toastHTML = '<span>复制成功，请遵循本文的转载规则</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">查看</a>';
+        M.toast({html: toastHTML})
+      });
+
+      function navToReprintStatement() {
+        $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
+      }
+    </script>
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            
+                                <a href="/tags/%E5%B0%8F%E6%83%B3%E6%B3%95/">
+                                    <span class="chip bg-color">小想法</span>
+                                </a>
+                            
+                                <a href="/tags/iCal/">
+                                    <span class="chip bg-color">iCal</span>
+                                </a>
+                            
+                                <a href="/tags/Heroku/">
+                                    <span class="chip bg-color">Heroku</span>
+                                </a>
+                            
+                                <a href="/tags/%E9%83%A8%E7%BD%B2/">
+                                    <span class="chip bg-color">部署</span>
+                                </a>
+                            
+                                <a href="/tags/flask/">
+                                    <span class="chip bg-color">flask</span>
+                                </a>
+                            
+                                <a href="/tags/WEB/">
+                                    <span class="chip bg-color">WEB</span>
+                                </a>
+                            
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+
+<div id="article-share">
+    
+    
+    <div class="social-share" data-sites="qq,qzone,wechat,weibo,twitter,facebook,google,douban,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
+    <script src="/libs/share/js/social-share.min.js"></script>
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+                <style>
+    #reward {
+        margin: 40px 0;
+        text-align: center;
+    }
+
+    #reward .reward-link {
+        font-size: 1.4rem;
+        line-height: 38px;
+    }
+
+    #reward .btn-floating:hover {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    #rewardModal {
+        width: 320px;
+        height: 350px;
+    }
+
+    #rewardModal .reward-title {
+        margin: 15px auto;
+        padding-bottom: 5px;
+    }
+
+    #rewardModal .modal-content {
+        padding: 10px;
+    }
+
+    #rewardModal .close {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+        color: rgba(0, 0, 0, 0.5);
+        font-size: 1.3rem;
+        line-height: 20px;
+        cursor: pointer;
+    }
+
+    #rewardModal .close:hover {
+        color: #ef5350;
+        transform: scale(1.3);
+        -moz-transform:scale(1.3);
+        -webkit-transform:scale(1.3);
+        -o-transform:scale(1.3);
+    }
+
+    #rewardModal .reward-tabs {
+        margin: 0 auto;
+        width: 210px;
+    }
+
+    .reward-tabs .tabs {
+        height: 38px;
+        margin: 10px auto;
+        padding-left: 0;
+    }
+
+    .reward-content ul {
+        padding-left: 0 !important;
+    }
+
+    .reward-tabs .tabs .tab {
+        height: 38px;
+        line-height: 38px;
+    }
+
+    .reward-tabs .tab a {
+        color: #fff;
+        background-color: #ccc;
+    }
+
+    .reward-tabs .tab a:hover {
+        background-color: #ccc;
+        color: #fff;
+    }
+
+    .reward-tabs .wechat-tab .active {
+        color: #fff !important;
+        background-color: #22AB38 !important;
+    }
+
+    .reward-tabs .alipay-tab .active {
+        color: #fff !important;
+        background-color: #019FE8 !important;
+    }
+
+    .reward-tabs .reward-img {
+        width: 210px;
+        height: 210px;
+    }
+</style>
+
+<div id="reward">
+    <a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-medium waves-effect waves-light red">赏</a>
+
+    <!-- Modal Structure -->
+    <div id="rewardModal" class="modal">
+        <div class="modal-content">
+            <a class="close modal-close"><i class="fas fa-times"></i></a>
+            <h4 class="reward-title">打赏一下让我来点好吃好玩的呗~</h4>
+            <div class="reward-content">
+                <div class="reward-tabs">
+                    <ul class="tabs row">
+                        <li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li>
+					<!-- 暂时注释掉
+						<li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li>
+					-->
+                    </ul>
+					<div id="wechat">
+                        <img src="/medias/reward/wechat.png" class="reward-img" alt="微信打赏二维码">
+                    </div>                    
+					<!-- 暂时注释掉
+					<div id="alipay">
+                        <img src="" class="reward-img" alt="支付宝打赏二维码">
+                    </div>
+					-->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.tabs').tabs();
+    });
+</script>
+            
+        </div>
+    </div>
+
+    
+        <link rel="stylesheet" href="/libs/gitalk/gitalk.css">
+<link rel="stylesheet" href="/css/my-gitalk.css">
+
+<div class="card gitalk-card" data-aos="fade-up">
+    <div class="comment_headling" style="font-size: 20px; font-weight: 700; position: relative; left: 20px; top: 15px; padding-bottom: 5px;">
+        <i class="fas fa-comments fa-fw" aria-hidden="true"></i>
+        <span>评论</span>
+    </div>
+    <div id="gitalk-container" class="card-content"></div>
+</div>
+
+<script src="/libs/gitalk/gitalk.min.js"></script>
+<script>
+    let gitalk = new Gitalk({
+        clientID: '116343b4650fce4789b6',
+        clientSecret: '3e9be2ad6c9b693af1753290c7c059b1e4f34d5d',
+        repo: 'miaotony.github.io',
+        owner: 'miaotony',
+        admin: "miaotony",
+        id: '2019-12-29T00-49-00',
+        distractionFreeMode: false  // Facebook-like distraction free mode
+    });
+
+    gitalk.render('gitalk-container');
+</script>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
+            <div class="card">
+                <a href="/2019/12/29/Tech_NUAAiCalWeb_deploy/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/23.jpg" class="responsive-img" alt="NUAA_iCal_Web在线版本部署">
+                        
+                        <span class="card-title">NUAA_iCal_Web在线版本部署</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            简单记录一下NUAA_ClassSchedule在线版本NUAA_iCal_Web的部署折腾经历……
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2019-12-29
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/Technology/" class="post-category">
+                                    Technology
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/%E5%B0%8F%E6%83%B3%E6%B3%95/">
+                        <span class="chip bg-color">小想法</span>
+                    </a>
+                    
+                    <a href="/tags/iCal/">
+                        <span class="chip bg-color">iCal</span>
+                    </a>
+                    
+                    <a href="/tags/Heroku/">
+                        <span class="chip bg-color">Heroku</span>
+                    </a>
+                    
+                    <a href="/tags/%E9%83%A8%E7%BD%B2/">
+                        <span class="chip bg-color">部署</span>
+                    </a>
+                    
+                    <a href="/tags/flask/">
+                        <span class="chip bg-color">flask</span>
+                    </a>
+                    
+                    <a href="/tags/WEB/">
+                        <span class="chip bg-color">WEB</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2019/12/21/Idea_RemoteProgramming/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/9.jpg" class="responsive-img" alt="小想法 | 基于VSCode和ssh实现远程编程/炼丹">
+                        
+                        <span class="card-title">小想法 | 基于VSCode和ssh实现远程编程/炼丹</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            有一台内网服务器，想实现远程编程，于是乎瞎折腾了一两天的ssh，简单记录一下吧。
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2019-12-21
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E5%B0%8F%E6%83%B3%E6%B3%95/" class="post-category">
+                                    小想法
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/%E5%B0%8F%E6%83%B3%E6%B3%95/">
+                        <span class="chip bg-color">小想法</span>
+                    </a>
+                    
+                    <a href="/tags/ssh/">
+                        <span class="chip bg-color">ssh</span>
+                    </a>
+                    
+                    <a href="/tags/VSCode/">
+                        <span class="chip bg-color">VSCode</span>
+                    </a>
+                    
+                    <a href="/tags/%E8%BF%9C%E7%A8%8B/">
+                        <span class="chip bg-color">远程</span>
+                    </a>
+                    
+                    <a href="/tags/%E7%BC%96%E7%A8%8B/">
+                        <span class="chip bg-color">编程</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+<script>
+    $('#articleContent').on('copy', function (e) {
+        // IE8 or earlier browser is 'undefined'
+        if (typeof window.getSelection === 'undefined') return;
+
+        var selection = window.getSelection();
+        // if the selection is short let's not annoy our users.
+        if (('' + selection).length < Number.parseInt('200')) {
+            return;
+        }
+
+        // create a div outside of the visible area and fill it with the selected text.
+        var bodyElement = document.getElementsByTagName('body')[0];
+        var newdiv = document.createElement('div');
+        newdiv.style.position = 'absolute';
+        newdiv.style.left = '-99999px';
+        bodyElement.appendChild(newdiv);
+        newdiv.appendChild(selection.getRangeAt(0).cloneContents());
+
+        // we need a <pre> tag workaround.
+        // otherwise the text inside "pre" loses all the line breaks!
+        if (selection.getRangeAt(0).commonAncestorContainer.nodeName === 'PRE') {
+            newdiv.innerHTML = "<pre>" + newdiv.innerHTML + "</pre>";
+        }
+
+        var url = document.location.href;
+        newdiv.innerHTML += '<br />'
+            + '来源: MiaoTony's小窝<br />'
+            + '文章作者: MiaoTony<br />'
+            + '文章链接: <a href="' + url + '">' + url + '</a><br />'
+            + '本文章著作权归作者MiaoTony所有，任何形式的转载都请注明出处。';
+
+        selection.selectAllChildren(newdiv);
+        window.setTimeout(function () {bodyElement.removeChild(newdiv);}, 200);
+    });
+</script>
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+
+    
+<!-- 代码块复制 -->
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
+
+
+<!-- 代码块折行 -->
+
+<style type="text/css">
+code[class*="language-"], pre[class*="language-"] { white-space: pre !important; }
+</style>
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('0'),
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h2, h3, h4').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+
+    <footer class="page-footer bg-color">
+    <div class="container row center-align">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            <span id="year">年份</span>
+            <a href="https://miaotony.github.io" target="_blank">MiaoTony</a>
+            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+            |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
+            <br>
+            
+            &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
+                class="white-color">11.6k</span>&nbsp;字
+            
+            
+            
+            
+            
+            
+            <span id="busuanzi_container_site_pv">
+                |&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
+                    class="white-color"></span>&nbsp;次
+            </span>
+            
+            
+            <span id="busuanzi_container_site_uv">
+                |&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;<span id="busuanzi_value_site_uv"
+                    class="white-color"></span>&nbsp;人
+            </span>
+            
+            <br>
+            
+            <span id="sitetime">载入运行时间...</span>
+            <script>
+                function siteTime() {
+                    window.setTimeout("siteTime()", 1000);
+                    var seconds = 1000;
+                    var minutes = seconds * 60;
+                    var hours = minutes * 60;
+                    var days = hours * 24;
+                    var years = days * 365;
+                    var today = new Date();
+                    var startYear = "2019";
+                    var startMonth = "11";
+                    var startDate = "28";
+                    var startHour = "0";
+                    var startMinute = "0";
+                    var startSecond = "0";
+                    var todayYear = today.getFullYear();
+                    var todayMonth = today.getMonth() + 1;
+                    var todayDate = today.getDate();
+                    var todayHour = today.getHours();
+                    var todayMinute = today.getMinutes();
+                    var todaySecond = today.getSeconds();
+                    var t1 = Date.UTC(startYear, startMonth, startDate, startHour, startMinute, startSecond);
+                    var t2 = Date.UTC(todayYear, todayMonth, todayDate, todayHour, todayMinute, todaySecond);
+                    var diff = t2 - t1;
+                    var diffYears = Math.floor(diff / years);
+                    var diffDays = Math.floor((diff / days) - diffYears * 365);
+                    var diffHours = Math.floor((diff - (diffYears * 365 + diffDays) * days) / hours);
+                    var diffMinutes = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours) /
+                        minutes);
+                    var diffSeconds = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours -
+                        diffMinutes * minutes) / seconds);
+                    if (startYear == todayYear) {
+                        document.getElementById("year").innerHTML = todayYear;
+                        document.getElementById("sitetime").innerHTML = "本站已安全运行 " + diffDays + " 天 " + diffHours +
+                            " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒";
+                    } else {
+                        document.getElementById("year").innerHTML = startYear + " - " + todayYear;
+                        document.getElementById("sitetime").innerHTML = "本站已安全运行 " + diffYears + " 年 " + diffDays +
+                            " 天 " + diffHours + " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒";
+                    }
+                }
+                setInterval(siteTime, 1000);
+            </script>
+            
+            <br>
+            
+        </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+    <a href="https://github.com/miaotony" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+        <i class="fab fa-github"></i>
+    </a>
+
+
+
+    <a href="mailto:miaotony@outlook.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fas fa-envelope-open"></i>
+    </a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
+        <i class="fas fa-rss"></i>
+    </a>
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script src="/js/search.js"></script>
+<script type="text/javascript">
+$(function () {
+    searchFunc("/" + "search.xml", 'searchInput', 'searchResult');
+});
+</script>
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+    <!-- Baidu Analytics -->
+
+    <!-- Baidu Push -->
+
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+    
+    <script src="/libs/others/clicklove.js" async="async"></script>
+    
+    
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+    
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+</body>
+
+</html>
