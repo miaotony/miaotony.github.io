@@ -12,7 +12,7 @@
 
 ## **欢迎各位大佬来交换友链呀~**
 
-**Welcome to exchange your websites!**
+**Welcome to exchange your website links!**
 
 请大佬留下**链接、头像、一句话简介、联系方式**
  或者私戳我也行啦。
