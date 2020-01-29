@@ -57,8 +57,8 @@
 		});
 	</script>
 	
-<link rel="alternate" href="/atom.xml" title="MiaoTony's小窝" type="application/atom+xml">
-<link rel="stylesheet" href="/css/prism.css" type="text/css"></head>
+<link rel="stylesheet" href="/css/prism.css" type="text/css"><link rel="alternate" href="/atom.xml" title="MiaoTony's小窝" type="application/atom+xml">
+</head>
 
 
 <body>
@@ -476,12 +476,12 @@
                                 <span class="chip bg-color">小想法</span>
                             </a>
                         
-                            <a href="/tags/Tech/">
-                                <span class="chip bg-color">Tech</span>
-                            </a>
-                        
                             <a href="/tags/Server/">
                                 <span class="chip bg-color">Server</span>
+                            </a>
+                        
+                            <a href="/tags/Tech/">
+                                <span class="chip bg-color">Tech</span>
                             </a>
                         
                             <a href="/tags/%E7%A9%BF%E9%80%8F/">
@@ -554,8 +554,6 @@
 <br>
 
 <hr>
-<br>
-
 <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><h3 id="What-is-frp"><a href="#What-is-frp" class="headerlink" title="What is frp?"></a>What is frp?</h3><blockquote>
 <p><em>frp</em> is a fast reverse proxy to help you expose a local server behind a NAT or firewall to the Internet. As of now, it supports <strong>TCP</strong> and <strong>UDP</strong>, as well as <strong>HTTP</strong> and <strong>HTTPS</strong> protocols, where requests can be forwarded to internal services by domain name.</p>
 <p><em>frp</em> also has a P2P connect mode.</p>
@@ -639,6 +637,8 @@
 <p>客户端可以在多个主机上运行，只要name不重名就行。</p>
 <p>而后<strong>启动客户端</strong></p>
 <pre class=" language-bash"><code class="language-bash">/etc/frp/frpc -c /etc/frp/frpc.ini</code></pre>
+<p>Windows下：</p>
+<pre class=" language-bash"><code class="language-bash">frpc.exe -c frpc.ini</code></pre>
 <p><img src="/2020/01/29/Server_frp/client.png" alt="client"></p>
 <p><code>start proxy success</code>表示启动成功。</p>
 <hr>
@@ -672,10 +672,11 @@
 <span class="token constant">admin_port</span> <span class="token attr-value"><span class="token punctuation">=</span> 7400</span>
 <span class="token constant">admin_user</span> <span class="token attr-value"><span class="token punctuation">=</span> admin</span>
 <span class="token constant">admin_pwd</span> <span class="token attr-value"><span class="token punctuation">=</span> admin</span></code></pre>
-<p>然后本地就可以通过<a href="http://127.0.0.1:7400来访问**查看状态**和**修改配置**了。" target="_blank" rel="noopener">http://127.0.0.1:7400来访问**查看状态**和**修改配置**了。</a></p>
+<p>然后本地就可以通过 <a href="http://127.0.0.1:7400" target="_blank" rel="noopener">http://127.0.0.1:7400</a> 来访问<strong>查看状态</strong>和<strong>修改配置</strong>了。</p>
 <p>这里如果想通过内网IP（如<code>192.168.1.66</code>）查看的话，需要把<code>admin_addr</code>修改为 <code>0.0.0.0</code>（允许所有访问），或者对应的本地IP（如<code>192.168.1.66</code>）。</p>
 <p>同时也需要在本地的firewall打开这个端口，否则在内网的其他主机也无法访问。（折腾了老半天才发现emmm</p>
 <p>当然，想要在公网访问的话，把7400端口映射到外网就好了，不过安全起见算了吧。</p>
+<p><img src="/2020/01/29/Server_frp/AdminUI.png" alt="AdminUI"></p>
 <hr>
 <h3 id="开机自启"><a href="#开机自启" class="headerlink" title="开机自启"></a>开机自启</h3><p>这次直接把frp作为一个service好了，用systemd好了！</p>
 <h4 id="服务端："><a href="#服务端：" class="headerlink" title="服务端："></a>服务端：</h4><p>新建一个文件，名叫 <code>frps.service</code>，写入</p>
@@ -818,12 +819,12 @@
                                     <span class="chip bg-color">小想法</span>
                                 </a>
                             
-                                <a href="/tags/Tech/">
-                                    <span class="chip bg-color">Tech</span>
-                                </a>
-                            
                                 <a href="/tags/Server/">
                                     <span class="chip bg-color">Server</span>
+                                </a>
+                            
+                                <a href="/tags/Tech/">
+                                    <span class="chip bg-color">Tech</span>
                                 </a>
                             
                                 <a href="/tags/%E7%A9%BF%E9%80%8F/">
@@ -1075,12 +1076,12 @@
                         <span class="chip bg-color">小想法</span>
                     </a>
                     
-                    <a href="/tags/Tech/">
-                        <span class="chip bg-color">Tech</span>
-                    </a>
-                    
                     <a href="/tags/Server/">
                         <span class="chip bg-color">Server</span>
+                    </a>
+                    
+                    <a href="/tags/Tech/">
+                        <span class="chip bg-color">Tech</span>
                     </a>
                     
                     <a href="/tags/%E7%A9%BF%E9%80%8F/">
