@@ -4,12 +4,12 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="NUAA_iCal_Web在线版本部署, MiaoTony">
-    <meta name="description" content="
-主要是简单记录一下Heroku的部署，毕竟一不小心就忘记该怎么折腾的了…
-（其实应该两周前写这篇blog的，现在已经忘了很多了嘤嘤嘤  
+    <meta name="keywords" content="Linux Firewall &amp; Port Configuration, MiaoTony">
+    <meta name="description" content="前言最近在配服务器环境的时候，动不动遇到端口无法访问的情况，折腾了老半天，经过分析判断最后基本是防火墙把网络端口给拦了……
+于是就来简要记录一下Linux下的防火墙配置，以及端口开放、关闭的配置方法。
+整理自网络啦。
 
-Cause之前折腾了一两个月，做了个把课表导出到ical日历文件的小jio本，即 NUAA_Cla">
+CentOSCent">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -17,7 +17,7 @@ Cause之前折腾了一两个月，做了个把课表导出到ical日历文件�
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>NUAA_iCal_Web在线版本部署 | MiaoTony&#39;s小窝</title>
+    <title>Linux Firewall &amp; Port Configuration | MiaoTony&#39;s小窝</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -348,13 +348,13 @@ Cause之前折腾了一两个月，做了个把课表导出到ical日历文件�
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/23.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/13.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
                     <div class="description center-align post-title">
-                        NUAA_iCal_Web在线版本部署
+                        Linux Firewall &amp; Port Configuration
                     </div>
                 </div>
             </div>
@@ -472,28 +472,24 @@ Cause之前折腾了一两个月，做了个把课表导出到ical日历文件�
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/%E5%B0%8F%E6%83%B3%E6%B3%95/">
-                                <span class="chip bg-color">小想法</span>
+                            <a href="/tags/Server/">
+                                <span class="chip bg-color">Server</span>
                             </a>
                         
-                            <a href="/tags/WEB/">
-                                <span class="chip bg-color">WEB</span>
+                            <a href="/tags/Tech/">
+                                <span class="chip bg-color">Tech</span>
                             </a>
                         
-                            <a href="/tags/iCal/">
-                                <span class="chip bg-color">iCal</span>
+                            <a href="/tags/firewall/">
+                                <span class="chip bg-color">firewall</span>
                             </a>
                         
-                            <a href="/tags/Heroku/">
-                                <span class="chip bg-color">Heroku</span>
+                            <a href="/tags/%E7%AB%AF%E5%8F%A3/">
+                                <span class="chip bg-color">端口</span>
                             </a>
                         
-                            <a href="/tags/%E9%83%A8%E7%BD%B2/">
-                                <span class="chip bg-color">部署</span>
-                            </a>
-                        
-                            <a href="/tags/flask/">
-                                <span class="chip bg-color">flask</span>
+                            <a href="/tags/%E9%85%8D%E7%BD%AE/">
+                                <span class="chip bg-color">配置</span>
                             </a>
                         
                     </div>
@@ -508,8 +504,8 @@ Cause之前折腾了一两个月，做了个把课表导出到ical日历文件�
                                 Tech
                             </a>
                         
-                            <a href="/categories/Tech/WEB/" class="post-category">
-                                WEB
+                            <a href="/categories/Tech/Server/" class="post-category">
+                                Server
                             </a>
                         
                     </div>
@@ -521,7 +517,7 @@ Cause之前折腾了一两个月，做了个把课表导出到ical日历文件�
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2019-12-29
+                    2020-01-29
                 </div>
                 
 
@@ -530,14 +526,14 @@ Cause之前折腾了一两个月，做了个把课表导出到ical日历文件�
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    2.4k
+                    1.6k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    8 分
+                    6 分
                 </div>
                 
 				
@@ -548,228 +544,138 @@ Cause之前折腾了一两个月，做了个把课表导出到ical日历文件�
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <blockquote>
-<p>主要是简单记录一下Heroku的部署，毕竟一不小心就忘记该怎么折腾的了…</p>
-<p>（其实应该两周前写这篇blog的，现在已经忘了很多了嘤嘤嘤  </p>
-</blockquote>
-<h2 id="Cause"><a href="#Cause" class="headerlink" title="Cause"></a>Cause</h2><p>之前折腾了一两个月，做了个把课表导出到ical日历文件的小jio本，即 <code>NUAA_ClassSchedule</code><br>GitHub链接：<a href="https://github.com/miaotony/NUAA_ClassSchedule" target="_blank" rel="noopener">click here</a><br><a href="https://github.com/miaotony/NUAA_ClassSchedule" target="_blank" rel="noopener">https://github.com/miaotony/NUAA_ClassSchedule</a>  </p>
-<p>其中有一个TODO是搭建一个web端，实现在线导出。</p>
-<p>实际上，在教务系统加入验证码之前，已经和奶冰一起做了一个可以用的web端了，只不过只是简单测试还没公开啥的。</p>
-<p>然而，这个验证码一加就麻烦了……之前做的登录显然就不成功了。</p>
-<p>解决方案的话，在本地，是通过把验证码下载下来，PIL调用本地图片查看器来显示，进而在命令行里输入。</p>
-<p>不过web端就有点麻烦了。</p>
-<p>但怎么说好呢，不妨碍用同样的思路解决这一问题呢嘻嘻嘻。后面再说。</p>
-<blockquote>
-<p>其实到写这篇blog为止还没弄清楚他验证码的具体机理。（等我考完试有空再折腾好了喵</p>
-</blockquote>
-<p><strong>不想往下看又想体验<code>NUAA_iCal_Web</code>在线版本的，<a href="https://nuaaical.herokuapp.com/" target="_blank" rel="noopener">点这里</a>访问吧。</strong>   </p>
-<p><br><br></p>
+                <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>最近在配服务器环境的时候，动不动遇到端口无法访问的情况，折腾了老半天，经过分析判断最后基本是防火墙把网络端口给拦了……</p>
+<p>于是就来简要记录一下Linux下的防火墙配置，以及端口开放、关闭的配置方法。</p>
+<p>整理自网络啦。</p>
 <hr>
-<h2 id="Deploy"><a href="#Deploy" class="headerlink" title="Deploy"></a>Deploy</h2><h3 id="Heroku简介"><a href="#Heroku简介" class="headerlink" title="Heroku简介"></a><em>Heroku</em>简介</h3><p>偶尔有一天在转GitHub的时候，看到某个项目下有个网页端的界面，README里面也有个<code>deploy with heroku</code>之类的图标按钮。点进去看了看，然后再查了查资料。</p>
+<h2 id="CentOS"><a href="#CentOS" class="headerlink" title="CentOS"></a>CentOS</h2><p>CentOS下用的是<code>firewall-cmd</code></p>
+<h3 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h3><h4 id="启动firewall"><a href="#启动firewall" class="headerlink" title="启动firewall"></a>启动firewall</h4><pre class=" language-bash"><code class="language-bash">systemctl start firewalld.service</code></pre>
+<h4 id="开机自启firewall"><a href="#开机自启firewall" class="headerlink" title="开机自启firewall"></a>开机自启firewall</h4><pre class=" language-bash"><code class="language-bash">systemctl <span class="token function">enable</span> firewalld.service</code></pre>
+<h4 id="查看开机自启是否设置成功"><a href="#查看开机自启是否设置成功" class="headerlink" title="查看开机自启是否设置成功"></a>查看开机自启是否设置成功</h4><pre class=" language-bash"><code class="language-bash">systemctl is-enabled firewalld.service<span class="token punctuation">;</span> <span class="token keyword">echo</span> <span class="token variable">$?</span></code></pre>
 <blockquote>
-<p><em>Heroku</em> is a platform as a service (PaaS) that enables developers to build, run, and operate applications entirely in the cloud.  </p>
+<p>返回如下则开启成功</p>
+<pre><code>enabled
+0</code></pre></blockquote>
+<h4 id="重启firewall"><a href="#重启firewall" class="headerlink" title="重启firewall"></a>重启firewall</h4><pre class=" language-bash"><code class="language-bash">systemctl restart firewalld.service</code></pre>
+<h4 id="关闭firewall"><a href="#关闭firewall" class="headerlink" title="关闭firewall"></a>关闭firewall</h4><pre class=" language-bash"><code class="language-bash">systemctl stop firewalld.service</code></pre>
+<h4 id="检测firewall状态"><a href="#检测firewall状态" class="headerlink" title="检测firewall状态"></a>检测firewall状态</h4><pre class=" language-bash"><code class="language-bash">firewall-cmd --state</code></pre>
+<blockquote>
+<p>例如正在运行：</p>
+<pre class=" language-bash"><code class="language-bash"><span class="token punctuation">[</span>root@localhost ~<span class="token punctuation">]</span><span class="token comment" spellcheck="true"># firewall-cmd --state</span>
+running</code></pre>
+<p>不在运行则为<code>not running</code></p>
+</blockquote>
+<h3 id="端口配置"><a href="#端口配置" class="headerlink" title="端口配置"></a>端口配置</h3><h4 id="查看开放（监听）的端口"><a href="#查看开放（监听）的端口" class="headerlink" title="查看开放（监听）的端口"></a>查看开放（监听）的端口</h4><pre class=" language-bash"><code class="language-bash">firewall-cmd --list-ports</code></pre>
+<blockquote>
+<p>example：</p>
+<pre class=" language-bash"><code class="language-bash"><span class="token punctuation">[</span>root@localhost ~<span class="token punctuation">]</span><span class="token comment" spellcheck="true"># firewall-cmd --list-ports</span>
+80/tcp 7650/tcp 3306/tcp</code></pre>
+</blockquote>
+<p>或</p>
+<pre class=" language-bash"><code class="language-bash"><span class="token function">netstat</span> -ntlp</code></pre>
+<blockquote>
+<p>如果没有的话（<em>centos7默认没有 netstat 命令</em>），先安装<code>net-tools</code>。</p>
+<pre class=" language-bash"><code class="language-bash">yum <span class="token function">install</span> -y net-tools</code></pre>
 </blockquote>
 <blockquote>
-<p>Heroku是一个支持多种编程语言的云平台即服务。在2010年被Salesforce.com收购。Heroku作为最开始的云平台之一，从2007年6月起开发，当时它仅支持Ruby，但后来增加了对Java、Node.js、Scala、Clojure、Python以及（未记录在正式文件上）PHP和Perl的支持。基础操作系统是Debian，在最新的堆栈则是基于Debian的Ubuntu。</p>
-</blockquote>
-<p>好东西呀！</p>
-<p>发现heroku可以在一定程度上免费搭建网站，当然前提是要有一个wsgi接口之类的，大概意思就是说需要让你的东西能通过网络访问得到。  </p>
-<blockquote>
-<p>其实那时候我连wsgi是啥都不知道……  </p>
-</blockquote>
-<p>官网链接：<a href="https://links.jianshu.com/go?to=https%3A%2F%2Fwww.heroku.com%2F" target="_blank" rel="noopener">https://www.heroku.com/</a></p>
-<p>具体的定价策略参见<a href="https://www.heroku.com/pricing" target="_blank" rel="noopener">这里</a>。  </p>
-<p><img src="/2019/12/29/Tech_NUAAiCalWeb_deploy/price.png" alt="price">  </p>
-<p>Free版本的话，未认证用户每个月550小时免费动态时长，认证用户（好像是绑定银行卡）1000小时；30分钟无访问无活动的话会自己睡大觉，不会占用你的宝贵时长；提供二级域名，还可以自己绑米。  </p>
-<p><strong>对于nuaaical来说，这个完全够用了呢！</strong>  </p>
-<p>那就干脆折腾一下好了。  </p>
-<p><br><br></p>
-<h3 id="NUAA-iCal-Web端搭建"><a href="#NUAA-iCal-Web端搭建" class="headerlink" title="NUAA iCal Web端搭建"></a>NUAA iCal Web端搭建</h3><p>需要一个wsgi接口之类的嘛，flask、django这些现成的就行。</p>
-<p>本来就啥也不知道也没玩过，看来一下flask挺简单的，于是就简单学了一下<strong>flask框架</strong>。</p>
-<p>然而真正搭建的过程中遇到了一堆奇妙的bug，本地跑着好好的，上了heroku就炸了。（这个不细说了  </p>
-<p>实际上代码就是从本地版本改的，毕竟在开发的时候留了很多现成的接口了，改一改调用一下函数之类的就完事了。</p>
-<p>不过这个<strong>验证码</strong>折腾了老半天。</p>
-<p>这里的策略是，当你访问页面的同时，后端去访问教务系统，把验证码图片爬下来送给前端，同时建立了一个与你有关的session。</p>
-<p>当你post用户名密码及验证码后，后端利用同一个session去访问教务系统，<br>进而爬取课表及考试信息，<br>生成icalendar日历文件，<br>而后以附件下载的形式构造response，从而得到属于你的ical课表。  </p>
-<br>
+<pre class=" language-bash"><code class="language-bash"><span class="token punctuation">[</span>root@localhost ~<span class="token punctuation">]</span><span class="token comment" spellcheck="true"># netstat -ntlp</span>
+Active Internet connections <span class="token punctuation">(</span>only servers<span class="token punctuation">)</span>
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name
+tcp        0      0 0.0.0.0:3306            0.0.0.0:*               LISTEN      14301/mysqld
+tcp        0      0 0.0.0.0:22              0.0.0.0:*               LISTEN      1840/sshd
+tcp6       0      0 :::6011                 :::*                    LISTEN      8037/sshd: root@pts
+tcp6       0      0 :::22                   :::*                    LISTEN      1840/sshd
 
-<p>当然，一定程度上安全一点，这个session在构造完response之后就销毁了，不保留在云平台上。</p>
-<p>（这样其实还是没搞清楚验证码的机理，一定程度上相当于绕过了而已。</p>
-<p>其实到这的话，本地搭建就结束了。</p>
+……</code></pre>
+<p>其中<code>tcp</code>为ipv4，<code>tcp6</code>为ipv6.</p>
+</blockquote>
+<p>遇到过几次没有开放firewall端口时，只有<code>tcp6</code>而无<code>tcp</code>的情况，导致访问失败。放行端口后访问正常。</p>
+<p>还遇到过只能从本地 127.0.0.1 或 localhost（实际上二者一样的，默认写在了host里）访问，通过（网卡的）IP地址无法访问的情况。表现在 Local Address 上是<code>127.0.0.1:xxxx</code>，通过修改该程序的网络设置把Address修改为对应的IP或 <code>0.0.0.0</code>，即可解决访问的问题。</p>
 <hr>
-<p>不过还考虑了一下<strong>复杂的生产环境</strong>……  </p>
-<ul>
-<li><p>比如说<strong>登录信息重复post</strong>，而原来的验证码就不再有效了。</p>
-<p>这里其实想了几种方案，但是行不通。最后干脆折腾了一波HTML，加了个前端界面，如果没登陆成功就提示一下，然后过一会儿返回主页好了。233</p>
-<p><strong>（有更好的方案欢迎提出喵！</strong></p>
-</li>
-<li><p>比如<strong>未登录情况下直接访问导出ical的页面</strong>  </p>
-<p>这个也是直接返回主页了。不过这里这个判断折腾了老半天。</p>
-<p>最后的方案是在flask的session里建立了一个属于当前session的bool变量，默认为False，登录以后设置为True。</p>
+<h4 id="以下操作之后都要执行-重载-或-重启-才能生效！！！"><a href="#以下操作之后都要执行-重载-或-重启-才能生效！！！" class="headerlink" title="以下操作之后都要执行 重载 或 重启 才能生效！！！"></a><strong>以下操作之后都要执行 重载 或 重启 才能生效</strong>！！！</h4><h4 id="开启特定端口"><a href="#开启特定端口" class="headerlink" title="开启特定端口"></a>开启特定端口</h4><pre class=" language-bash"><code class="language-bash">firewall-cmd --zone<span class="token operator">=</span>public --add-port<span class="token operator">=</span>80/tcp --permanent  <span class="token comment" spellcheck="true"># 开放端口</span>
+systemctl restart firewalld.service    <span class="token comment" spellcheck="true"># 重启firewall</span></code></pre>
+<p>其中， 参数含义为<br><code>--zone</code> 作用域<br><code>--add-port=80/tcp</code>  添加端口，格式为：端口/通讯协议（<code>tcp</code>或<code>udp</code>）<br><code>--permanent</code>   永久生效，没有此参数重启后失效     </p>
 <blockquote>
-<p>之前直接写在程序的全局变量里，本地跑着好好的，上云平台就炸了……再见。   </p>
-<p>还写过在flask的g变量里，后来仔细查了资料，g变量好像是只在当前页面请求中有效，意思就是作用范围不一样，于是否决了。</p>
+<pre class=" language-bash"><code class="language-bash"><span class="token punctuation">[</span>root@localhost ~<span class="token punctuation">]</span><span class="token comment" spellcheck="true"># firewall-cmd --zone=public --add-port=80/tcp --permanent</span>
+success</code></pre>
+<p>成功则返回 success</p>
 </blockquote>
-</li>
-<li><p>教务系统<strong>连接已重置</strong></p>
-<p>这个是他教务系统的问题啊，难顶了。还是折腾了老半天才发现这里的问题。  </p>
-<p>又改了改登录的延时，这回变成随机延时了，而且时间也加长了。  </p>
-<p>而且还把爬虫的UA改成了当前浏览器的UA。IP的话好像没办法了。   </p>
-<p>问题有所改善…然而偶尔还存在。</p>
-<p><strong>大不了多试几次就好了。</strong></p>
-</li>
-<li><p>etc.</p>
-</li>
-</ul>
-<blockquote>
-<p>其实还有个打算是做个前端ifram框架之类的直接嵌套官方的登录界面，然后登录成功后再利用登录信息来爬取课表，这样一定程度上可能还更安全一点。<br>再说吧……</p>
-</blockquote>
+<h4 id="开放多个端口"><a href="#开放多个端口" class="headerlink" title="开放多个端口"></a>开放多个端口</h4><pre class=" language-bash"><code class="language-bash">firewall-cmd --zone<span class="token operator">=</span>public --add-port<span class="token operator">=</span>8080-8083/tcp --permanent
+firewall-cmd --reload   <span class="token comment" spellcheck="true"># 配置立即生效</span></code></pre>
+<h4 id="关闭特定端口"><a href="#关闭特定端口" class="headerlink" title="关闭特定端口"></a>关闭特定端口</h4><pre class=" language-bash"><code class="language-bash">firewall-cmd --zone<span class="token operator">=</span>public --remove-port<span class="token operator">=</span>5672/tcp --permanent  <span class="token comment" spellcheck="true">#关闭5672端口</span>
+firewall-cmd --reload   <span class="token comment" spellcheck="true"># 配置立即生效</span>
+<span class="token comment" spellcheck="true"># 也可以用restart</span></code></pre>
+<h4 id="针对某个-IP-开放端口"><a href="#针对某个-IP-开放端口" class="headerlink" title="针对某个 IP 开放端口"></a>针对某个 IP 开放端口</h4><pre class=" language-bash"><code class="language-bash">firewall-cmd --permanent --add-rich-rule<span class="token operator">=</span><span class="token string">"rule family="</span>ipv4<span class="token string">" source  address="</span>192.168.142.166<span class="token string">" port protocol="</span>tcp<span class="token string">" port="</span>6379<span class="token string">" accept"</span>
+firewall-cmd --permanent --add-rich-rule<span class="token operator">=</span><span class="token string">"rule family="</span>ipv4<span class="token string">" source address="</span>192.168.0.233<span class="token string">" accept"</span></code></pre>
+<h4 id="删除某个-IP"><a href="#删除某个-IP" class="headerlink" title="删除某个 IP"></a>删除某个 IP</h4><pre class=" language-bash"><code class="language-bash"> firewall-cmd --permanent --remove-rich-rule<span class="token operator">=</span><span class="token string">"rule family="</span>ipv4<span class="token string">" source address="</span>192.168.1.51<span class="token string">" accept"</span></code></pre>
+<h4 id="针对一个-IP-段访问"><a href="#针对一个-IP-段访问" class="headerlink" title="针对一个 IP 段访问"></a>针对一个 IP 段访问</h4><pre class=" language-bash"><code class="language-bash">firewall-cmd --permanent --add-rich-rule<span class="token operator">=</span><span class="token string">"rule family="</span>ipv4<span class="token string">" source address="</span>192.168.0.0/16<span class="token string">" accept"</span>
+firewall-cmd --permanent --add-rich-rule<span class="token operator">=</span><span class="token string">"rule family="</span>ipv4<span class="token string">" source  address="</span>192.168.1.0/24<span class="token string">" port protocol="</span>tcp<span class="token string">" port="</span>9200<span class="token string">" accept"</span></code></pre>
 <br>
 
 <hr>
 <br>
 
-<h3 id="Heroku搭建"><a href="#Heroku搭建" class="headerlink" title="Heroku搭建"></a>Heroku搭建</h3><p>下面来简单记录一下Heroku的部署。</p>
+<h2 id="Ubuntu"><a href="#Ubuntu" class="headerlink" title="Ubuntu"></a>Ubuntu</h2><p>Ubuntu 系统默认提供了一个基于<code>iptables</code>之上的防火墙工具<code>ufw</code>。</p>
+<h3 id="常用命令-1"><a href="#常用命令-1" class="headerlink" title="常用命令"></a>常用命令</h3><h4 id="安装ufw"><a href="#安装ufw" class="headerlink" title="安装ufw"></a>安装<code>ufw</code></h4><p>（默认已安装）</p>
+<pre class=" language-bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">apt-get</span> <span class="token function">install</span> ufw</code></pre>
+<h4 id="启用ufw，且在系统启动时自启"><a href="#启用ufw，且在系统启动时自启" class="headerlink" title="启用ufw，且在系统启动时自启"></a>启用<code>ufw</code>，且在系统启动时自启</h4><pre class=" language-bash"><code class="language-bash"><span class="token function">sudo</span> ufw <span class="token function">enable</span></code></pre>
+<h4 id="关闭ufw"><a href="#关闭ufw" class="headerlink" title="关闭ufw"></a>关闭<code>ufw</code></h4><pre class=" language-bash"><code class="language-bash"><span class="token function">sudo</span> ufw disable</code></pre>
+<h4 id="查看防火墙状态"><a href="#查看防火墙状态" class="headerlink" title="查看防火墙状态"></a>查看防火墙状态</h4><pre class=" language-bash"><code class="language-bash"><span class="token function">sudo</span> ufw status</code></pre>
+<h4 id="日志"><a href="#日志" class="headerlink" title="日志"></a>日志</h4><p>系统日志保存于<code>/var/log/ufw.log</code>。LEVEL指定不同的级别 ，默认级别是‘低’</p>
+<pre class=" language-bash"><code class="language-bash"><span class="token function">sudo</span> ufw logging on<span class="token operator">|</span>off  LEVEL   </code></pre>
+<h3 id="端口相关"><a href="#端口相关" class="headerlink" title="端口相关"></a>端口相关</h3><h4 id="设置默认策略"><a href="#设置默认策略" class="headerlink" title="设置默认策略"></a>设置默认策略</h4><p>（比如 “mostly open” vs “mostly closed”）</p>
+<pre class=" language-bash"><code class="language-bash"><span class="token function">sudo</span> ufw default allow  <span class="token comment" spellcheck="true"># 允许所有外部对本机的访问，且本机访问外部正常。</span>
+<span class="token function">sudo</span> ufw default deny   <span class="token comment" spellcheck="true"># 关闭所有外部对本机的访问，但本机访问外部正常。</span></code></pre>
+<h4 id="打开某个端口"><a href="#打开某个端口" class="headerlink" title="打开某个端口"></a>打开某个端口</h4><pre class=" language-bash"><code class="language-bash"><span class="token function">sudo</span> ufw allow smtp　   <span class="token comment" spellcheck="true"># 允许所有的外部IP访问本机的25/tcp （smtp）端口</span>
+<span class="token function">sudo</span> ufw allow 22/tcp   <span class="token comment" spellcheck="true"># 允许所有的外部IP访问本机的22/tcp （ssh）端口</span>
+<span class="token function">sudo</span> ufw allow 53       <span class="token comment" spellcheck="true"># 允许外部访问53端口（tcp/udp）</span>
+<span class="token function">sudo</span> ufw allow from 192.168.1.100  <span class="token comment" spellcheck="true"># 允许此IP访问所有的本机端口</span>
+<span class="token function">sudo</span> ufw allow proto udp 192.168.0.1 port 53 to 192.168.0.2 port 53
+<span class="token function">sudo</span> ufw allow <span class="token keyword">in</span> on eth0 from 192.168.0.0/16  <span class="token comment" spellcheck="true"># 允许来自192.168.0.0-192.168.255.255的数据通过eth0网卡进入主机</span>
+<span class="token function">sudo</span> ufw allow out on eth1 to 10.0.0.0/8   <span class="token comment" spellcheck="true"># 允许指向10.0.0.0-10.255.255.255的数据通过eth1网卡从本机发出</span></code></pre>
+<p>可以用<code>less /etc/services</code>列出所有服务信息，其中包括该服务使用了哪个端口和哪种协议</p>
+<h4 id="关闭端口"><a href="#关闭端口" class="headerlink" title="关闭端口"></a>关闭端口</h4><pre class=" language-bash"><code class="language-bash"><span class="token function">sudo</span> ufw deny smtp          <span class="token comment" spellcheck="true"># 禁止外部访问smtp服务</span>
+<span class="token function">sudo</span> ufw delete allow smtp  <span class="token comment" spellcheck="true"># 删除上面建立的某条规则</span>
+<span class="token function">sudo</span> ufw delete allow 80    <span class="token comment" spellcheck="true"># 禁止外部访问80端口</span>
+<span class="token function">sudo</span> ufw deny proto tcp from 10.0.0.0/8 to 192.168.0.1 port 25  <span class="token comment" spellcheck="true"># 拒绝来自10.0.0.0/8域tcp协议指向192.168.0.1端口25的数据进入本机</span></code></pre>
+<h4 id="路由"><a href="#路由" class="headerlink" title="路由"></a>路由</h4><pre class=" language-bash"><code class="language-bash"><span class="token function">sudo</span> ufw route allow <span class="token keyword">in</span> on eth1 out on eth2   <span class="token comment" spellcheck="true"># 允许经eth1进入，eth2发出的数据经本机路由</span></code></pre>
+<hr>
+<h2 id="进程相关命令"><a href="#进程相关命令" class="headerlink" title="进程相关命令"></a>进程相关命令</h2><h3 id="查看进程的详细信息"><a href="#查看进程的详细信息" class="headerlink" title="查看进程的详细信息"></a>查看进程的详细信息</h3><pre class=" language-bash"><code class="language-bash"><span class="token punctuation">[</span>root@localhost ~<span class="token punctuation">]</span><span class="token comment" spellcheck="true"># ps 1</span>
+  PID TTY      STAT   TIME COMMAND
+    1 ?        Ss     7:25 /usr/lib/systemd/systemd --switched-root --system --deserialize 22</code></pre>
+<h3 id="杀死进程"><a href="#杀死进程" class="headerlink" title="杀死进程"></a>杀死进程</h3><pre class=" language-bash"><code class="language-bash"><span class="token function">kill</span> -9 1234</code></pre>
+<p>1234为对应的PID</p>
+<blockquote>
+<p>只有第9种信号(SIGKILL)才可以无条件终止进程，其他信号进程都有权利忽略。    </p>
+<p>下面是常用的信号：<br>HUP    1    终端断线<br>INT     2    中断（同 Ctrl + C）<br>QUIT    3    退出（同 Ctrl + \）<br>TERM   15    终止<br>KILL    9    强制终止<br>CONT   18    继续（与STOP相反， fg/bg命令）<br>STOP    19    暂停（同 Ctrl + Z）  </p>
+</blockquote>
+<p>或者 </p>
+<p><strong>杀死指定名字的进程</strong>（kill processes by name），可以批量结束某个服务程序带有的全部进程。</p>
 <ol>
-<li><p><strong>注册一个账号</strong></p>
-<p>网址<a href="https://links.jianshu.com/go?to=https%3A%2F%2Fwww.heroku.com%2F" target="_blank" rel="noopener">https://www.heroku.com/</a></p>
-<p>略。建议用gmail，不过也看到用国内邮箱也成功的。  </p>
+<li>杀死所有同名进程   <pre class=" language-bash"><code class="language-bash"> <span class="token function">killall</span> nginx
+ <span class="token function">killall</span> -9 <span class="token function">bash</span></code></pre>
+</li>
+<li>向进程发送指定信号   <pre class=" language-bash"><code class="language-bash"> <span class="token function">killall</span> -TERM ngixn  <span class="token comment" spellcheck="true"># 或者  killall -KILL nginx</span></code></pre>
 </li>
 </ol>
-<ol start="2">
-<li><p><strong>安装Heroku CLI 命令行接口</strong></p>
-<p>Win-x64：<a href="https://cli-assets.heroku.com/heroku-x64.exe" target="_blank" rel="noopener">下载地址</a></p>
-<p>其他环境的见官网好了。<a href="https://devcenter.heroku.com/articles/heroku-cli" target="_blank" rel="noopener">https://devcenter.heroku.com/articles/heroku-cli</a></p>
-<p>安装完之后就可以在命令行用<code>heroku</code>命令了。</p>
-</li>
-</ol>
-<ol start="3">
-<li><p><strong>登录</strong></p>
-<pre class=" language-bash"><code class="language-bash">heroku login</code></pre>
-<p>会弹出网页登录验证，或者在命令行登录。</p>
-</li>
-</ol>
-<ol start="4">
-<li><p><strong>准备好app</strong></p>
-<p><img src="/2019/12/29/Tech_NUAAiCalWeb_deploy/image-20191229023615517.png" alt="支持的app"></p>
-<p>你看他支持的语言挺多的呢。</p>
-<p>我这里用到的就是python啦。</p>
-<p>这个在上一节已经搭建好了喵。</p>
-</li>
-</ol>
-<ol start="5">
-<li><p><strong>创建app</strong></p>
-<pre class=" language-bash"><code class="language-bash">heroku create</code></pre>
-<p>这时候同时建立了一个名为<code>heroku</code>的git remote仓库，连接到了你本地的git仓库。</p>
-<p>当然也可以现在网站上创建一个应用，再clone</p>
-<pre class=" language-bash"><code class="language-bash">heroku git:clone -a nuaaical
-<span class="token function">cd</span> nuaaical</code></pre>
-<p>这里前提是建立好了名为<code>nuaaical</code>的应用了。</p>
-</li>
-<li><p><strong>建立依赖相关的<code>requirements.txt</code></strong></p>
-<p>略。</p>
-</li>
-</ol>
-<ol start="7">
-<li><p><strong>指定执行的入口</strong></p>
-<p><strong>这里算是一个坑吧，折腾了好久才发现。</strong></p>
-<p>你必须先在代码目录下建立一个名为<code>Procfile</code>的文件，在里面写上你要他执行的命令。比如执行一个python文件之类的。</p>
-<p>在这里用的是<code>gunicorn</code>来建立一个web应用。（flask只用于本地测试使用</p>
-<pre><code>web: gunicorn web:app</code></pre><p>第二个<code>web</code>是文件名（<code>web.py</code>），<code>app</code>是flask实例化的对象啦。<br>（代码里写的<code>app = Flask(__name__)</code>  </p>
-</li>
-</ol>
-<ol start="8">
-<li><p><strong>指定用构建语言（可略？）</strong></p>
-<pre class=" language-bash"><code class="language-bash">heroku buildpacks:set heroku/python</code></pre>
-<p>显示指定用python来构建打包（网上有的说不指定会报错？</p>
-</li>
-</ol>
-<ol start="9">
-<li><p><strong>部署代码</strong></p>
-<p>终于可以部署了呀！直接push好了。</p>
-<pre class=" language-bash"><code class="language-bash"><span class="token function">git</span> push heroku master</code></pre>
-<p>如果不行的话加上<code>-f</code>强制push<strong>（小心一点）</strong>。</p>
-<p>然后可以看到部署的日志，如果有问题就再看看。</p>
-<p>没问题的话，效果类似下面的。</p>
-<p><img src="/2019/12/29/Tech_NUAAiCalWeb_deploy/push.png" alt="push"></p>
-</li>
-</ol>
-<ol start="10">
-<li><p><strong>看看你的网站吧</strong></p>
-<pre class=" language-bash"><code class="language-bash">heroku <span class="token function">open</span></code></pre>
-<p>然后会调用你的浏览器打开。</p>
-<p>或者自己在浏览器访问就好了。</p>
-</li>
-</ol>
-<p><strong>嘻嘻嘻，到这就结束啦~</strong></p>
-<p><br><br></p>
-<h3 id="拓展"><a href="#拓展" class="headerlink" title="拓展"></a>拓展</h3><p>当然还有一些<strong>常用命令</strong>，比如：</p>
-<ul>
-<li><p>查看日志<strong>(debug必备了)</strong></p>
-<pre class=" language-bash"><code class="language-bash">heroku logs --tail</code></pre>
-</li>
-<li><p>看一下还有多少剩余时长</p>
-<pre class=" language-bash"><code class="language-bash">heroku <span class="token function">ps</span></code></pre>
-</li>
-<li><p>打开app服务</p>
-<pre class=" language-bash"><code class="language-bash">heroku ps:scale web<span class="token operator">=</span>1</code></pre>
-</li>
-<li><p>关闭app服务</p>
-<pre class=" language-bash"><code class="language-bash">heroku ps:scale web<span class="token operator">=</span>0</code></pre>
-</li>
-<li><p>etc.</p>
-</li>
-</ul>
 <blockquote>
-<p>官方文档<code>Getting Started on Heroku</code>看这里 <a href="https://devcenter.heroku.com/start" target="_blank" rel="noopener">https://devcenter.heroku.com/start</a></p>
-</blockquote>
-<p><br><br></p>
-<p>除此以外，Heroku还支持<code>pipeline</code>，还可以授权从GitHub上同步部署，还有容器啥的……</p>
-<p><img src="/2019/12/29/Tech_NUAAiCalWeb_deploy/image-20191229033131933.png" alt></p>
-<p>感觉还是挺不错的呢！  </p>
-<p><br><br></p>
+<p>命令参数：</p>
+<pre><code>-Z 只杀死拥有scontext 的进程
+-e 要求匹配进程名称
+-I 忽略小写
+-g 杀死进程组而不是进程
+-i 交互模式，杀死进程前先询问用户
+-l 列出所有的已知信号名称
+-q 不输出警告信息
+-s 发送指定的信号
+-v 报告信号是否成功发送
+-w 等待进程死亡
+--help 显示帮助信息
+--version 显示版本显示</code></pre></blockquote>
 <hr>
-<h2 id="Achievements"><a href="#Achievements" class="headerlink" title="Achievements"></a>Achievements</h2><p>部署好的web端网址：</p>
-<p><a href="https://nuaaical.herokuapp.com/" target="_blank" rel="noopener">https://nuaaical.herokuapp.com/</a></p>
-<p><strong>欢迎来试试呀！</strong></p>
-<p>第一次访问可能会花一些时间，等一等吧。</p>
-<p>如果不成功的话刷新一下页面（但不要重复提交登录信息），或重新开一个页面访问。</p>
-<p>同时多人访问的话也可能会有问题（没试过），那就再试试吧。（摊手</p>
-<p><img src="/2019/12/29/Tech_NUAAiCalWeb_deploy/frontend.png" alt="前端"></p>
-<blockquote>
-<p>好了我知道这个页面丑了。现学的HTML，别说了。</p>
-<p>其实之前奶冰奶冰奶冰冰做了一个前端的↓ </p>
-<p>后面再折腾吧咕咕咕</p>
-<p><img src="/2019/12/29/Tech_NUAAiCalWeb_deploy/frontend_vue.png" alt="vue.js前端"></p>
-<p><strong>欢迎来贡献代码呀！</strong></p>
-</blockquote>
-<blockquote>
-<p>其实之前还折腾了老半天，尝试了<strong>在Azure上部署</strong>，也成功了。</p>
-<p>需要在VSCode中进行部署，然后在配置里设好启动命令（也可以是一个文件）。</p>
-<p><img src="/2019/12/29/Tech_NUAAiCalWeb_deploy/Azure_deploy.png" alt="Azure_deploy"></p>
-<p>不过现在Azure服务到期了。部署的网站也停止了呢。</p>
-<p>截个图纪念一下吧。</p>
-<p><img src="/2019/12/29/Tech_NUAAiCalWeb_deploy/Azure_website.png" alt="Azure_website"></p>
-<p>（hackathon的时候白嫖的Azure还是挺爽的233  </p>
-</blockquote>
-<p>同时，<strong>代码开源在GitHub上了。欢迎来点个star，提个PR喵！</strong>   </p>
-<p><a href="https://github.com/miaotony/NUAA_iCal_Web" target="_blank" rel="noopener">https://github.com/miaotony/NUAA_iCal_Web</a></p>
-<p><br><br></p>
-<p><strong><em>仅供学习研究，未经允许禁止商用，谢谢。</em></strong></p>
-<p>文章中不免存在问题，欢迎提出。  </p>
-<br>
-
-<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ol>
-<li><a href="https://devcenter.heroku.com/" target="_blank" rel="noopener">https://devcenter.heroku.com/</a></li>
-<li><a href="https://www.jianshu.com/p/191248ad2639" target="_blank" rel="noopener">https://www.jianshu.com/p/191248ad2639</a></li>
-</ol>
-<p><br><br></p>
-<blockquote>
-<p>浪够了，继续准备考试。（真难顶……</p>
-<p>期末冲冲冲！</p>
-<p>说不定这是今年最后一篇blog了喵。</p>
-<p>溜了溜了。</p>
-</blockquote>
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><p><a href="https://blog.csdn.net/zll_0405/article/details/81208606" target="_blank" rel="noopener">https://blog.csdn.net/zll_0405/article/details/81208606</a></p>
+<p><a href="https://blog.csdn.net/bigdata_mining/article/details/80699180" target="_blank" rel="noopener">https://blog.csdn.net/bigdata_mining/article/details/80699180</a></p>
+<p>etc.</p>
 
             </div>
             <hr/>
@@ -795,7 +701,7 @@ Cause之前折腾了一两个月，做了个把课表导出到ical日历文件�
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://miaotony.xyz/2019/12/29/Tech_NUAAiCalWeb_deploy/">https://miaotony.xyz/2019/12/29/Tech_NUAAiCalWeb_deploy/</a>
+                    <a href="https://miaotony.xyz/2020/01/29/Server_firewall/">https://miaotony.xyz/2020/01/29/Server_firewall/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -833,28 +739,24 @@ Cause之前折腾了一两个月，做了个把课表导出到ical日历文件�
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/%E5%B0%8F%E6%83%B3%E6%B3%95/">
-                                    <span class="chip bg-color">小想法</span>
+                                <a href="/tags/Server/">
+                                    <span class="chip bg-color">Server</span>
                                 </a>
                             
-                                <a href="/tags/WEB/">
-                                    <span class="chip bg-color">WEB</span>
+                                <a href="/tags/Tech/">
+                                    <span class="chip bg-color">Tech</span>
                                 </a>
                             
-                                <a href="/tags/iCal/">
-                                    <span class="chip bg-color">iCal</span>
+                                <a href="/tags/firewall/">
+                                    <span class="chip bg-color">firewall</span>
                                 </a>
                             
-                                <a href="/tags/Heroku/">
-                                    <span class="chip bg-color">Heroku</span>
+                                <a href="/tags/%E7%AB%AF%E5%8F%A3/">
+                                    <span class="chip bg-color">端口</span>
                                 </a>
                             
-                                <a href="/tags/%E9%83%A8%E7%BD%B2/">
-                                    <span class="chip bg-color">部署</span>
-                                </a>
-                            
-                                <a href="/tags/flask/">
-                                    <span class="chip bg-color">flask</span>
+                                <a href="/tags/%E9%85%8D%E7%BD%AE/">
+                                    <span class="chip bg-color">配置</span>
                                 </a>
                             
                         </div>
@@ -1029,7 +931,7 @@ Cause之前折腾了一两个月，做了个把课表导出到ical日历文件�
         repo: 'miaotony.github.io',
         owner: 'miaotony',
         admin: "miaotony",
-        id: '2019-12-29T00-49-00',
+        id: '2020-01-29T21-10-00',
         distractionFreeMode: false  // Facebook-like distraction free mode
     });
 
@@ -1050,29 +952,30 @@ Cause之前折腾了一两个月，做了个把课表导出到ical日历文件�
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
-                <a href="/2020/01/09/Idea_RebuildClassWebsite/">
+                <a href="/2020/01/29/Server_firewall/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/4.jpg" class="responsive-img" alt="小想法 | 重建那些年基于Discuz!系统搭建的满是回忆的班级网站">
+                        <img src="/medias/featureimages/13.jpg" class="responsive-img" alt="Linux Firewall & Port Configuration">
                         
-                        <span class="card-title">小想法 | 重建那些年基于Discuz!系统搭建的满是回忆的班级网站</span>
+                        <span class="card-title">Linux Firewall & Port Configuration</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            N年前搭建的班级网站早就炸了，还好在云平台失效前备份了部分数据。最近突然有个小想法，想尝试着重建一下，于是折腾了两天，终于把大部分数据给恢复了，好怀念喵！
+                            简单记录一下Ubuntu和CentOS下防火墙及端口的相关配置。
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2020-01-09
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-01-29
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
@@ -1081,39 +984,36 @@ Cause之前折腾了一两个月，做了个把课表导出到ical日历文件�
                                     Tech
                                 </a>
                             
-                            <a href="/categories/Tech/WEB/" class="post-category">
-                                    WEB
+                            <a href="/categories/Tech/Server/" class="post-category">
+                                    Server
                                 </a>
                             
                             
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/Life/">
-                        <span class="chip bg-color">Life</span>
+                    <a href="/tags/Server/">
+                        <span class="chip bg-color">Server</span>
                     </a>
                     
-                    <a href="/tags/%E5%B0%8F%E6%83%B3%E6%B3%95/">
-                        <span class="chip bg-color">小想法</span>
+                    <a href="/tags/Tech/">
+                        <span class="chip bg-color">Tech</span>
                     </a>
                     
-                    <a href="/tags/Discuz/">
-                        <span class="chip bg-color">Discuz</span>
+                    <a href="/tags/firewall/">
+                        <span class="chip bg-color">firewall</span>
                     </a>
                     
-                    <a href="/tags/%E7%8F%AD%E7%BD%91/">
-                        <span class="chip bg-color">班网</span>
+                    <a href="/tags/%E7%AB%AF%E5%8F%A3/">
+                        <span class="chip bg-color">端口</span>
                     </a>
                     
-                    <a href="/tags/%E9%87%8D%E5%BB%BA/">
-                        <span class="chip bg-color">重建</span>
-                    </a>
-                    
-                    <a href="/tags/WEB/">
-                        <span class="chip bg-color">WEB</span>
+                    <a href="/tags/%E9%85%8D%E7%BD%AE/">
+                        <span class="chip bg-color">配置</span>
                     </a>
                     
                 </div>
@@ -1127,24 +1027,24 @@ Cause之前折腾了一两个月，做了个把课表导出到ical日历文件�
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2019/12/21/Idea_RemoteProgramming/">
+                <a href="/2020/01/29/Server_frp/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/9.jpg" class="responsive-img" alt="小想法 | 基于VSCode和ssh实现远程编程/炼丹">
+                        <img src="/medias/featureimages/14.jpg" class="responsive-img" alt="基于frp实现内网穿透">
                         
-                        <span class="card-title">小想法 | 基于VSCode和ssh实现远程编程/炼丹</span>
+                        <span class="card-title">基于frp实现内网穿透</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            有一台内网服务器，想实现远程编程，于是乎瞎折腾了一两天的ssh，简单记录一下吧。
+                            折腾了一下frp，轻松实现内网穿透，将内网资源映射到公网访问。
                         
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2019-12-21
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-01-29
                             </span>
                         <span class="publish-author">
                             
@@ -1169,24 +1069,20 @@ Cause之前折腾了一两个月，做了个把课表导出到ical日历文件�
                         <span class="chip bg-color">小想法</span>
                     </a>
                     
-                    <a href="/tags/ssh/">
-                        <span class="chip bg-color">ssh</span>
-                    </a>
-                    
-                    <a href="/tags/VSCode/">
-                        <span class="chip bg-color">VSCode</span>
-                    </a>
-                    
-                    <a href="/tags/%E8%BF%9C%E7%A8%8B/">
-                        <span class="chip bg-color">远程</span>
-                    </a>
-                    
-                    <a href="/tags/%E7%BC%96%E7%A8%8B/">
-                        <span class="chip bg-color">编程</span>
-                    </a>
-                    
                     <a href="/tags/Server/">
                         <span class="chip bg-color">Server</span>
+                    </a>
+                    
+                    <a href="/tags/Tech/">
+                        <span class="chip bg-color">Tech</span>
+                    </a>
+                    
+                    <a href="/tags/%E7%A9%BF%E9%80%8F/">
+                        <span class="chip bg-color">穿透</span>
+                    </a>
+                    
+                    <a href="/tags/%E5%86%85%E7%BD%91/">
+                        <span class="chip bg-color">内网</span>
                     </a>
                     
                 </div>

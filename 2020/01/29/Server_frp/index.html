@@ -526,14 +526,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    1.9k
+                    2k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    7 分
+                    8 分
                 </div>
                 
 				
@@ -678,7 +678,16 @@
 <p>当然，想要在公网访问的话，把7400端口映射到外网就好了，不过安全起见算了吧。</p>
 <p><img src="/2020/01/29/Server_frp/AdminUI.png" alt="AdminUI"></p>
 <hr>
-<h3 id="开机自启"><a href="#开机自启" class="headerlink" title="开机自启"></a>开机自启</h3><p>这次直接把frp作为一个service好了，用systemd好了！</p>
+<h3 id="开启加密、压缩"><a href="#开启加密、压缩" class="headerlink" title="开启加密、压缩"></a>开启加密、压缩</h3><p>在客户端加入<code>use_encryption</code> 和 <code>use_compression</code>这两个参数。</p>
+<pre class=" language-ini"><code class="language-ini"># frpc.ini
+<span class="token selector">[ssh]</span>
+<span class="token constant">type</span> <span class="token attr-value"><span class="token punctuation">=</span> tcp</span>
+<span class="token constant">local_port</span> <span class="token attr-value"><span class="token punctuation">=</span> 22</span>
+<span class="token constant">remote_port</span> <span class="token attr-value"><span class="token punctuation">=</span> 6000</span>
+<span class="token constant">use_encryption</span> <span class="token attr-value"><span class="token punctuation">=</span> true</span>
+<span class="token constant">use_compression</span> <span class="token attr-value"><span class="token punctuation">=</span> true</span></code></pre>
+<hr>
+<h3 id="开机自启"><a href="#开机自启" class="headerlink" title="开机自启"></a>开机自启</h3><p>这次直接把<code>frp</code>作为一个service好了，用<code>systemd</code>好了！</p>
 <h4 id="服务端："><a href="#服务端：" class="headerlink" title="服务端："></a>服务端：</h4><p>新建一个文件，名叫 <code>frps.service</code>，写入</p>
 <pre class=" language-ini"><code class="language-ini"># frps.service
 <span class="token selector">[Unit]</span>
@@ -1030,30 +1039,29 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="far fa-dot-circle"></i>&nbsp;本篇
-            </div>
+                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2020/01/29/Server_frp/">
+                <a href="/2020/01/29/Server_firewall/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/14.jpg" class="responsive-img" alt="基于frp实现内网穿透">
+                        <img src="/medias/featureimages/13.jpg" class="responsive-img" alt="Linux Firewall & Port Configuration">
                         
-                        <span class="card-title">基于frp实现内网穿透</span>
+                        <span class="card-title">Linux Firewall & Port Configuration</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            折腾了一下frp，轻松实现内网穿透，将内网资源映射到公网访问。
+                            简单记录一下Ubuntu和CentOS下防火墙及端口的相关配置。
                         
                     </div>
                     <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2020-01-29
-                            </span>
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2020-01-29
+                        </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
@@ -1070,13 +1078,8 @@
                         </span>
                     </div>
                 </div>
-
                 
                 <div class="card-action article-tags">
-                    
-                    <a href="/tags/%E5%B0%8F%E6%83%B3%E6%B3%95/">
-                        <span class="chip bg-color">小想法</span>
-                    </a>
                     
                     <a href="/tags/Server/">
                         <span class="chip bg-color">Server</span>
@@ -1086,12 +1089,16 @@
                         <span class="chip bg-color">Tech</span>
                     </a>
                     
-                    <a href="/tags/%E7%A9%BF%E9%80%8F/">
-                        <span class="chip bg-color">穿透</span>
+                    <a href="/tags/firewall/">
+                        <span class="chip bg-color">firewall</span>
                     </a>
                     
-                    <a href="/tags/%E5%86%85%E7%BD%91/">
-                        <span class="chip bg-color">内网</span>
+                    <a href="/tags/%E7%AB%AF%E5%8F%A3/">
+                        <span class="chip bg-color">端口</span>
+                    </a>
+                    
+                    <a href="/tags/%E9%85%8D%E7%BD%AE/">
+                        <span class="chip bg-color">配置</span>
                     </a>
                     
                 </div>
@@ -1333,7 +1340,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">21.6k</span>&nbsp;字
+                class="white-color">23.2k</span>&nbsp;字
             
             
             
