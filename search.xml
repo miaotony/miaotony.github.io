@@ -4,6 +4,74 @@
   
     
     <entry>
+      <title>基于Docker搭建Huginn</title>
+      <link href="/2020/02/03/Server_Huginn/"/>
+      <url>/2020/02/03/Server_Huginn/</url>
+      
+        <content type="html"><![CDATA[<p><img src="/2020/02/03/Server_Huginn/Huginn.png" alt="Huginn"></p><h2 id="What-is-Huginn"><a href="#What-is-Huginn" class="headerlink" title="What is Huginn?"></a>What is Huginn?</h2><blockquote><p>Huginn is a system for building agents that perform automated tasks for  you online.  They can read the web, watch for events, and take actions  on your behalf.  Huginn’s Agents create and consume events, propagating  them along a directed graph.  Think of it as a hackable version of IFTTT or Zapier on your own server.  You always know who has your data.  You  do.</p></blockquote><blockquote><p>Huginn是一个神器，它是一个私人IFTTT，例如搭建任务采集触发平台，自动跟进实时提醒（用Email Slack Telegeram QQ  微信接收推送），全文 RSS 输出（把你关注的所有网页进行 RSS  全文输出），同时可以把各种app，软件，网络服务，网络设备等链接在一起做任务触发。 </p></blockquote><p>官方Github仓库：<a href="https://github.com/huginn/huginn" target="_blank" rel="noopener">https://github.com/huginn/huginn</a></p><p>这个是我在玩爬虫的时候，偶然间在网上看到的一个工具，能做的事情还不少，觉得还挺不错的，这次就试着搭建一下吧。  </p><h2 id="Installation"><a href="#Installation" class="headerlink" title="Installation"></a>Installation</h2><p>手动安装的话，需要下面这样一步步来，感觉好麻烦……（懒</p><blockquote><p>The Huginn installation consists of setting up the following components:   </p><ol><li>Packages / Dependencies</li><li>Ruby</li><li>System Users</li><li>Database</li><li>Huginn</li><li>Nginx</li></ol></blockquote><p>但是，Huginn还提供了一种通过docker来搭建的方式，可以免去配环境的烦恼，感觉贼好~</p><p>官方的文档在<a href="https://github.com/huginn/huginn/blob/master/doc/docker/install.md" target="_blank" rel="noopener">这里</a>。</p><h3 id="1-安装-Docker"><a href="#1-安装-Docker" class="headerlink" title="1. 安装 Docker"></a>1. 安装 Docker</h3><p>可以参考这里。</p><h3 id="2-安装-Huginn"><a href="#2-安装-Huginn" class="headerlink" title="2. 安装 Huginn"></a>2. 安装 Huginn</h3><p>最简单的就直接</p><pre class=" language-bash"><code class="language-bash">docker run -it -p 3000:3000 huginn/huginn</code></pre><p>首先会把<code>huginn</code>给pull下来，然后运行。</p><p>然后访问 <a href="http://localhost:3000" target="_blank" rel="noopener">http://localhost:3000</a> 可以看到</p><p><img src="/2020/02/03/Server_Huginn/Huginn2.png" alt="登录界面"></p><h3 id="3-登录"><a href="#3-登录" class="headerlink" title="3. 登录"></a>3. 登录</h3><p>利用username <code>admin</code> and password <code>password</code>登录，之后可以在<code>Account</code>里进行修改。</p><p><img src="/2020/02/03/Server_Huginn/Huginn3.png" alt="登录后首页"></p><h3 id="4-配置开机自启"><a href="#4-配置开机自启" class="headerlink" title="4. 配置开机自启"></a>4. 配置开机自启</h3><pre class=" language-bash"><code class="language-bash">docker update --restart<span class="token operator">=</span>always huginn</code></pre><p>好了，接下来就可以<strong>尽情感受<code>huginn</code>的魅力</strong>了！</p><br><hr><br><h2 id="Connect-to-local-MySQL"><a href="#Connect-to-local-MySQL" class="headerlink" title="Connect to local MySQL"></a>Connect to local MySQL</h2><p>上面的安装方法是最简单的，默认会在docker容器里安装MySQL数据库等等环境。</p><p>但是如果本机就装了一个MySQL数据库，需要huginn共享的话，</p><p>或者说<strong><code>huginn</code>连接到本地数据库</strong>，可以像这样安装。</p><h3 id="1-安装-Docker-1"><a href="#1-安装-Docker-1" class="headerlink" title="1. 安装 Docker"></a>1. 安装 Docker</h3><p>同上。</p><h3 id="2-配置-MySQL"><a href="#2-配置-MySQL" class="headerlink" title="2. 配置 MySQL"></a>2. 配置 MySQL</h3><h4 id="2-1-修改绑定的IP为-0-0-0-0"><a href="#2-1-修改绑定的IP为-0-0-0-0" class="headerlink" title="2.1 修改绑定的IP为 0.0.0.0"></a>2.1 修改绑定的IP为 <code>0.0.0.0</code></h4><p>这是为了让docker能连接到本地的数据库。</p><p>默认的 <code>127.0.0.1</code> 只能从本地访问。</p><p><strong>MySQL：</strong></p><pre class=" language-bash"><code class="language-bash">vim /etc/mysql/mysql.conf.d/mysqld.cnf</code></pre><p>修改</p><pre><code>bind-address = 0.0.0.0</code></pre><p>然后 重启</p><pre class=" language-bash"><code class="language-bash"><span class="token function">sudo</span> systemctl restart mysql </code></pre><p><strong>MariaDB：</strong></p><p><code>/etc/mysql/mariadb.cnf</code>包含了下面的所以<code>.cnf</code>文件</p><pre><code>!includedir /etc/mysql/conf.d/!includedir /etc/mysql/mariadb.conf.d/</code></pre><p>我这里的在下面这个文件里</p><pre class=" language-bash"><code class="language-bash">vim /etc/mysql/mariadb.conf.d/50-server.cnf</code></pre><p>同样修改 <code>bind-address = 0.0.0.0</code></p><p>而后 重启</p><pre class=" language-bash"><code class="language-bash"><span class="token function">sudo</span> systemctl restart mysql</code></pre><h4 id="2-2-MySQL里新建-huginn-用户"><a href="#2-2-MySQL里新建-huginn-用户" class="headerlink" title="2.2 MySQL里新建 huginn 用户"></a>2.2 MySQL里新建 <code>huginn</code> 用户</h4><p>以<code>root</code>登录MySQL / MariaDB</p><pre class=" language-bash"><code class="language-bash">mysql -u root -p</code></pre><p>新建<code>huginn</code>用户，密码为<code>PASSWORD</code></p><pre class=" language-mysql"><code class="language-mysql">create user 'huginn'@'%' identified by 'PASSWORD'</code></pre><p>这个是允许从任意地方登录。</p><p>如果要限制从<code>docker</code>里启动，先<code>ifconfig</code>看下 <code>docker0</code> 的IP，一般是<code>172.17.0.1</code>,那么 docker IP 为<code>172.17.0.*</code>，于是</p><pre class=" language-mysql"><code class="language-mysql">create user 'huginn'@'172.17.0.%' identified by 'PASSWORD'</code></pre><h4 id="2-3-赋予权限"><a href="#2-3-赋予权限" class="headerlink" title="2.3 赋予权限"></a>2.3 赋予权限</h4><pre class=" language-mysql"><code class="language-mysql">GRANT ALL PRIVILEGES ON *.* TO 'huginn'@'172.17.0.%' IDENTIFIED BY 'PASSWORD' WITH GRANT OPTION;flush privileges;</code></pre><p>如果限制访问的数据库则修改<code>*.*</code>为相应的数据库即可。</p><h3 id="3-配置-firewall"><a href="#3-配置-firewall" class="headerlink" title="3. 配置 firewall"></a>3. 配置 firewall</h3><p>如果启用了 firewall 的话，需要放行本地的3306端口。</p><p>Ubuntu：</p><pre class=" language-bash"><code class="language-bash"><span class="token function">sudo</span> ufw allow 3306</code></pre><p>CentOS：</p><pre class=" language-bash"><code class="language-bash"><span class="token function">sudo</span> firewall-cmd --zone<span class="token operator">=</span>public --add-port<span class="token operator">=</span>3306/tcp --permanent  <span class="token comment" spellcheck="true"># 开放端口</span><span class="token function">sudo</span> systemctl restart firewalld.service    <span class="token comment" spellcheck="true"># 重启firewall</span></code></pre><h3 id="4-安装-Huginn"><a href="#4-安装-Huginn" class="headerlink" title="4. 安装 Huginn"></a>4. 安装 Huginn</h3><p>首次安装：</p><pre class=" language-bash"><code class="language-bash">docker run  --name huginn \    -p 3000:3000 \    --restart<span class="token operator">=</span>always \    -e MYSQL_PORT_3306_TCP_ADDR<span class="token operator">=</span>172.17.0.1 \    -e HUGINN_DATABASE_NAME<span class="token operator">=</span>huginn \    -e HUGINN_DATABASE_USERNAME<span class="token operator">=</span>huginn \    -e HUGINN_DATABASE_PASSWORD<span class="token operator">=</span>PASSWORD \    huginn/huginn</code></pre><p>这里建了一个名为<code>huginn</code>的数据库。</p><p><code>172.17.0.1</code>是本地的IP，即在<code>ifconfig</code>看 <code>docker0</code> 的IP。在本地试试可以通过这个IP连上。</p><p>之后直接这样即可↓。</p><pre class=" language-bash"><code class="language-bash">docker start huginn</code></pre><p>上面已经配置了开机自启。</p><p>当然也可以这样</p><pre class=" language-bash"><code class="language-bash">docker update --restart<span class="token operator">=</span>always huginn</code></pre><p>好了，完工！</p><h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><p><a href="https://github.com/huginn/huginn" target="_blank" rel="noopener">https://github.com/huginn/huginn</a></p><p><a href="https://www.jianshu.com/p/d272a09ba686" target="_blank" rel="noopener">https://www.jianshu.com/p/d272a09ba686</a></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> Tech </category>
+          
+          <category> Server </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Tech </tag>
+            
+            <tag> Server </tag>
+            
+            <tag> Huginn </tag>
+            
+            <tag> tips </tag>
+            
+            <tag> Docker </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Docker安装及常用命令</title>
+      <link href="/2020/02/02/Server_Docker/"/>
+      <url>/2020/02/02/Server_Docker/</url>
+      
+        <content type="html"><![CDATA[<p><img src="/2020/02/02/Server_Docker/docker.gif" alt="docker图标"></p><h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><blockquote><p>Building and deploying new applications is faster with containers.<br>Docker containers wrap up software and its dependencies into a  standardized unit for software development that includes everything it  needs to run: code, runtime, system tools and libraries. This guarantees that your application will always run the same and makes collaboration  as simple as sharing a container image.</p></blockquote><blockquote><p>Docker 是一个开源的应用容器引擎，基于 Go 语言 并遵从 Apache2.0 协议开源。</p><p>Docker 可以让开发者打包他们的应用以及依赖包到一个轻量级、可移植的容器中，然后发布到任何流行的 Linux 机器上，也可以实现虚拟化。</p><p>容器是完全使用沙箱机制，相互之间不会有任何接口（类似 iPhone 的 app）,更重要的是容器性能开销极低。</p></blockquote><p>其实感觉上就是emmm</p><p>别人把整套环境都配置好打包好了，你直接拿过来用就好了！</p><p>反正用起来贼方便就是了。</p><p><img src="/2020/02/02/Server_Docker/docker2.png" alt="图标"></p><p>感觉docker的图标就挺好看的（</p><h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><pre class=" language-bash"><code class="language-bash">curl -fsSL get.docker.com -o get-docker.sh<span class="token function">sudo</span> sh get-docker.sh --mirror Aliyun</code></pre><p>Windows下下载Docker Desktop</p><p><a href="https://www.docker.com/products/docker-desktop" target="_blank" rel="noopener">https://www.docker.com/products/docker-desktop</a></p><p>（要登陆）</p><h2 id="换源"><a href="#换源" class="headerlink" title="换源"></a>换源</h2><p>Linux下，编辑此文件，如果没有则新建。</p><pre class=" language-bash"><code class="language-bash">vim /etc/docker/daemon.json</code></pre><p>Windows下文件为：</p><pre><code>%programdata%\docker\config\daemon.json</code></pre><h3 id="USTC-中科大源（推荐！）"><a href="#USTC-中科大源（推荐！）" class="headerlink" title="USTC 中科大源（推荐！）"></a>USTC 中科大源<strong>（推荐！）</strong></h3><p><a href="https://lug.ustc.edu.cn/wiki/mirrors/help/docker" target="_blank" rel="noopener">https://lug.ustc.edu.cn/wiki/mirrors/help/docker</a></p><pre class=" language-json"><code class="language-json"><span class="token punctuation">{</span>  <span class="token property">"registry-mirrors"</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">"https://docker.mirrors.ustc.edu.cn"</span><span class="token punctuation">]</span><span class="token punctuation">}</span></code></pre><h3 id="Azure-中国镜像"><a href="#Azure-中国镜像" class="headerlink" title="Azure 中国镜像"></a>Azure 中国镜像</h3><p><a href="https://github.com/Azure/container-service-for-azure-china/blob/master/aks/README.md#22-container-registry-proxy" target="_blank" rel="noopener">https://github.com/Azure/container-service-for-azure-china/blob/master/aks/README.md#22-container-registry-proxy</a></p><pre class=" language-json"><code class="language-json"><span class="token punctuation">{</span>  <span class="token property">"registry-mirrors"</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">"https://dockerhub.azk8s.cn"</span><span class="token punctuation">]</span><span class="token punctuation">}</span></code></pre><h3 id="DaoCloud-源"><a href="#DaoCloud-源" class="headerlink" title="DaoCloud 源"></a>DaoCloud 源</h3><p><a href="https://www.daocloud.io/mirror" target="_blank" rel="noopener">https://www.daocloud.io/mirror</a></p><pre class=" language-json"><code class="language-json"><span class="token punctuation">{</span>  <span class="token property">"registry-mirrors"</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">"http://f1361db2.m.daocloud.io"</span><span class="token punctuation">]</span><span class="token punctuation">}</span></code></pre><p>或者 直接执行这个就可以一键修改</p><pre class=" language-bash"><code class="language-bash">curl -sSL https://get.daocloud.io/daotools/set_mirror.sh <span class="token operator">|</span> sh -s http://f1361db2.m.daocloud.io</code></pre><h3 id="163网易源"><a href="#163网易源" class="headerlink" title="163网易源"></a>163网易源</h3><pre class=" language-json"><code class="language-json"><span class="token punctuation">{</span>  <span class="token property">"registry-mirrors"</span><span class="token operator">:</span> <span class="token punctuation">[</span>    <span class="token string">"http://hub-mirror.c.163.com"</span>  <span class="token punctuation">]</span><span class="token punctuation">}</span></code></pre><h3 id="阿里源"><a href="#阿里源" class="headerlink" title="阿里源"></a>阿里源</h3><p>要注册，略。</p><h3 id="配置多个镜像"><a href="#配置多个镜像" class="headerlink" title="配置多个镜像"></a>配置多个镜像</h3><pre class=" language-json"><code class="language-json"><span class="token punctuation">{</span>  <span class="token property">"registry-mirrors"</span><span class="token operator">:</span> <span class="token punctuation">[</span>    <span class="token string">"https://docker.mirrors.ustc.edu.cn"</span><span class="token punctuation">,</span>    <span class="token string">"https://dockerhub.azk8s.cn/"</span><span class="token punctuation">,</span>    <span class="token string">"http://hub-mirror.c.163.com"</span>  <span class="token punctuation">]</span><span class="token punctuation">}</span></code></pre><p>注意遵循<code>json</code>格式。</p><h3 id="配置完之后重启服务"><a href="#配置完之后重启服务" class="headerlink" title="配置完之后重启服务"></a>配置完之后重启服务</h3><pre class=" language-bash"><code class="language-bash"><span class="token function">sudo</span> systemctl daemon-reload<span class="token function">sudo</span> systemctl restart docker</code></pre><h3 id="检查加速器是否生效"><a href="#检查加速器是否生效" class="headerlink" title="检查加速器是否生效"></a>检查加速器是否生效</h3><p>有如下信息则配置成功。</p><p><img src="/2020/02/02/Server_Docker/mirror.png" alt="mirrors"></p><hr><h2 id="Portainer"><a href="#Portainer" class="headerlink" title="Portainer"></a>Portainer</h2><blockquote><p>Portainer 是 Docker 的图形化管理工具，提供状态显示面板、应用模板快速部署、容器镜像网络数据卷的基本操作（包括上传下载镜像，创建容器等操作）、事件日志显示、容器控制台操作、Swarm集群和服务等集中管理和操作、登录用户管理和控制等功能。功能十分全面，基本能满足中小型单位对容器管理的全部需求。</p></blockquote><h3 id="部署"><a href="#部署" class="headerlink" title="部署"></a>部署</h3><pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 拉取镜像</span>docker pull portainer/portainer<span class="token comment" spellcheck="true"># 一键部署</span>docker volume create portainer_datadocker run -d -p 9000:9000 --name portainer --restart always -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data portainer/portainer</code></pre><p>访问 <a href="http://127.0.0.1:9000" target="_blank" rel="noopener">http://127.0.0.1:9000</a> 即可访问图形化面板。配置好用户名、密码后登录。</p><p><img src="/2020/02/02/Server_Docker/portainer.png" alt="登录界面"></p><p>连接到Local，登录后的主界面如下。</p><p><img src="/2020/02/02/Server_Docker/portainer2.png" alt="Home"></p><h3 id="通过远程访问"><a href="#通过远程访问" class="headerlink" title="通过远程访问"></a>通过远程访问</h3><p>需要在防火墙放行9000端口。</p><p>Ubuntu:</p><pre class=" language-bash"><code class="language-bash"><span class="token function">sudo</span> ufw allow 9000  </code></pre><p>CentOS:（其实也可以装个 ufw 的）</p><pre class=" language-bash"><code class="language-bash"><span class="token function">sudo</span> firewall-cmd --zone<span class="token operator">=</span>public --add-port<span class="token operator">=</span>9000/tcp --permanent  <span class="token comment" spellcheck="true"># 开放端口</span><span class="token function">sudo</span> systemctl restart firewalld.service    <span class="token comment" spellcheck="true"># 重启firewall</span></code></pre><h3 id="开机自启"><a href="#开机自启" class="headerlink" title="开机自启"></a>开机自启</h3><pre class=" language-bash"><code class="language-bash">docker update --restart<span class="token operator">=</span>always portainer</code></pre><p>其实在上面的一键部署命令中已经加了，这里不需要了。（记录一下而已）</p><hr><h2 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h2><h3 id="系统相关"><a href="#系统相关" class="headerlink" title="系统相关"></a>系统相关</h3><h4 id="查看系统信息"><a href="#查看系统信息" class="headerlink" title="查看系统信息"></a>查看系统信息</h4><pre class=" language-bash"><code class="language-bash">docker info</code></pre><h4 id="查看镜像、容器、数据卷所占用的空间"><a href="#查看镜像、容器、数据卷所占用的空间" class="headerlink" title="查看镜像、容器、数据卷所占用的空间"></a>查看镜像、容器、数据卷所占用的空间</h4><pre class=" language-bash"><code class="language-bash">docker system <span class="token function">df</span></code></pre><hr><h3 id="容器相关"><a href="#容器相关" class="headerlink" title="容器相关"></a>容器相关</h3><h4 id="查看当前容器"><a href="#查看当前容器" class="headerlink" title="查看当前容器"></a>查看当前容器</h4><pre class=" language-bash"><code class="language-bash">docker <span class="token function">ps</span> -a</code></pre><h4 id="创建-amp-使用容器"><a href="#创建-amp-使用容器" class="headerlink" title="创建&amp;使用容器"></a>创建&amp;使用容器</h4><pre class=" language-bash"><code class="language-bash">docker run -it --name 容器名 镜像名/镜像ID /bin/bash</code></pre><p>使用 <code>-d</code> 参数运行容器，可以让容器在后台运行而不把STDOUT输出到宿主机上。</p><p>（用<code>docker logs [container ID or NAMES]</code>查看）</p><p>当 <code>-i</code> <code>-t</code> 参数一起使用时，可以看到 Linux 命令提示符，如<code>root@69d137adef7a:/#</code>。只有 <code>-i</code>则没有命令提示符。</p><h4 id="启动容器"><a href="#启动容器" class="headerlink" title="启动容器"></a>启动容器</h4><pre class=" language-bash"><code class="language-bash">docker start 容器名/容器ID</code></pre><h4 id="重启容器"><a href="#重启容器" class="headerlink" title="重启容器"></a>重启容器</h4><pre class=" language-bash"><code class="language-bash">docker restart 容器名/容器ID</code></pre><h4 id="终止容器"><a href="#终止容器" class="headerlink" title="终止容器"></a>终止容器</h4><pre class=" language-bash"><code class="language-bash">docker stop 容器名/容器ID</code></pre><h4 id="查看容器信息"><a href="#查看容器信息" class="headerlink" title="查看容器信息"></a>查看容器信息</h4><pre class=" language-bash"><code class="language-bash">docker container <span class="token function">ls</span> -a</code></pre><h4 id="容器统计信息"><a href="#容器统计信息" class="headerlink" title="容器统计信息"></a>容器统计信息</h4><pre class=" language-bash"><code class="language-bash">docker stats</code></pre><h4 id="启动已终止容器"><a href="#启动已终止容器" class="headerlink" title="启动已终止容器"></a>启动已终止容器</h4><pre class=" language-bash"><code class="language-bash">docker container start</code></pre><h4 id="获取容器的输出信息"><a href="#获取容器的输出信息" class="headerlink" title="获取容器的输出信息"></a>获取容器的输出信息</h4><pre class=" language-bash"><code class="language-bash">docker container logs <span class="token punctuation">[</span>container ID or NAMES<span class="token punctuation">]</span></code></pre><h4 id="进入容器（连接容器）"><a href="#进入容器（连接容器）" class="headerlink" title="进入容器（连接容器）"></a>进入容器（连接容器）</h4><pre class=" language-bash"><code class="language-bash">docker <span class="token function">exec</span> -it 容器名/容器ID /bin/bash</code></pre><p>从这个 stdin 中 exit，不会导致容器的停止。<strong>（推荐↑）</strong></p><p>而下面这个，从这个 stdin 中 exit，会导致容器的停止。</p><pre class=" language-bash"><code class="language-bash">docker attach 容器名/容器ID</code></pre><h4 id="删除容器"><a href="#删除容器" class="headerlink" title="删除容器"></a>删除容器</h4><pre class=" language-bash"><code class="language-bash">docker <span class="token function">rm</span> 容器名/容器ID</code></pre><hr><h3 id="镜像相关"><a href="#镜像相关" class="headerlink" title="镜像相关"></a>镜像相关</h3><h4 id="搜索镜像"><a href="#搜索镜像" class="headerlink" title="搜索镜像"></a>搜索镜像</h4><pre class=" language-bash"><code class="language-bash">docker search 关键词</code></pre><h4 id="下载镜像"><a href="#下载镜像" class="headerlink" title="下载镜像"></a>下载镜像</h4><pre class=" language-bash"><code class="language-bash">docker pull 镜像名</code></pre><p><code>镜像名:Tag</code> 可以下载不同标签的镜像。</p><h4 id="查看已下载镜像"><a href="#查看已下载镜像" class="headerlink" title="查看已下载镜像"></a>查看已下载镜像</h4><pre class=" language-bash"><code class="language-bash">docker images -a<span class="token comment" spellcheck="true"># 或者 docker image ls</span></code></pre><h4 id="删除镜像"><a href="#删除镜像" class="headerlink" title="删除镜像"></a>删除镜像</h4><pre class=" language-bash"><code class="language-bash">docker rmi <span class="token punctuation">[</span>Image ID<span class="token punctuation">]</span></code></pre><hr><h3 id="端口相关"><a href="#端口相关" class="headerlink" title="端口相关"></a>端口相关</h3><h4 id="端口映射"><a href="#端口映射" class="headerlink" title="端口映射"></a>端口映射</h4><p>将docker内的80端口映射到宿主机的8000端口上</p><pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 可以使用--name自定义部署的容器名</span>docker run -d -p 8000:80 --name 容器名 镜像名<span class="token comment" spellcheck="true"># 也可以直接通过镜像部署</span>docker run -d -p 8000:80 镜像名</code></pre><p><em>（别急，慢慢学好了啦……</em></p><hr><h2 id="拓展阅读"><a href="#拓展阅读" class="headerlink" title="拓展阅读"></a>拓展阅读</h2><p><strong>Docker从入门到实践 GitBook</strong>  <a href="https://yeasy.gitbooks.io/docker_practice/content/" target="_blank" rel="noopener">https://yeasy.gitbooks.io/docker_practice/content/</a></p><p>Docker-镜像常用命令 <a href="https://blog.csdn.net/y472360651/article/details/81289088" target="_blank" rel="noopener">https://blog.csdn.net/y472360651/article/details/81289088</a></p><p>Docker温故知新 <a href="https://www.sqlsec.com/2019/10/docker2.html" target="_blank" rel="noopener">https://www.sqlsec.com/2019/10/docker2.html</a></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> Tech </category>
+          
+          <category> Server </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Tech </tag>
+            
+            <tag> Server </tag>
+            
+            <tag> tips </tag>
+            
+            <tag> Docker </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>Linux Firewall &amp; Port Configuration</title>
       <link href="/2020/01/29/Server_firewall/"/>
       <url>/2020/01/29/Server_firewall/</url>
@@ -22,9 +90,11 @@
       
         <tags>
             
+            <tag> Tech </tag>
+            
             <tag> Server </tag>
             
-            <tag> Tech </tag>
+            <tag> tips </tag>
             
             <tag> firewall </tag>
             
@@ -59,9 +129,9 @@
             
             <tag> 小想法 </tag>
             
-            <tag> Server </tag>
-            
             <tag> Tech </tag>
+            
+            <tag> Server </tag>
             
             <tag> 穿透 </tag>
             
@@ -224,6 +294,8 @@
             
             <tag> 小想法 </tag>
             
+            <tag> Server </tag>
+            
             <tag> ssh </tag>
             
             <tag> VSCode </tag>
@@ -231,8 +303,6 @@
             <tag> 远程 </tag>
             
             <tag> 编程 </tag>
-            
-            <tag> Server </tag>
             
         </tags>
       
