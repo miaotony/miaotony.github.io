@@ -524,7 +524,7 @@ Huginn is a system for building agents that perform automated tasks for  you onl
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    929
+                    994
                 </div>
                 
 
@@ -580,9 +580,9 @@ Huginn is a system for building agents that perform automated tasks for  you onl
 <hr>
 <br>
 
-<h2 id="Connect-to-local-MySQL"><a href="#Connect-to-local-MySQL" class="headerlink" title="Connect to local MySQL"></a>Connect to local MySQL</h2><p>上面的安装方法是最简单的，默认会在docker容器里安装MySQL数据库等等环境。</p>
-<p>但是如果本机就装了一个MySQL数据库，需要huginn共享的话，</p>
-<p>或者说<strong><code>huginn</code>连接到本地数据库</strong>，可以像这样安装。</p>
+<h2 id="Connect-to-local-MySQL"><a href="#Connect-to-local-MySQL" class="headerlink" title="Connect to local MySQL"></a>Connect to local MySQL</h2><p>上面的安装方法是最简单的，默认会在Docker容器里安装MySQL数据库等环境。</p>
+<p>但是如果本机就装了一个MySQL数据库，需要 huginn 共享的话，</p>
+<p>或者说<strong>想要<code>huginn</code>连接到本地数据库</strong>，可以像下面这样安装。</p>
 <h3 id="1-安装-Docker-1"><a href="#1-安装-Docker-1" class="headerlink" title="1. 安装 Docker"></a>1. 安装 Docker</h3><p>同上。</p>
 <h3 id="2-配置-MySQL"><a href="#2-配置-MySQL" class="headerlink" title="2. 配置 MySQL"></a>2. 配置 MySQL</h3><h4 id="2-1-修改绑定的IP为-0-0-0-0"><a href="#2-1-修改绑定的IP为-0-0-0-0" class="headerlink" title="2.1 修改绑定的IP为 0.0.0.0"></a>2.1 修改绑定的IP为 <code>0.0.0.0</code></h4><p>这是为了让docker能连接到本地的数据库。</p>
 <p>默认的 <code>127.0.0.1</code> 只能从本地访问。</p>
@@ -599,17 +599,19 @@ Huginn is a system for building agents that perform automated tasks for  you onl
 <p>同样修改 <code>bind-address = 0.0.0.0</code></p>
 <p>而后 重启</p>
 <pre class=" language-bash"><code class="language-bash"><span class="token function">sudo</span> systemctl restart mysql</code></pre>
-<h4 id="2-2-MySQL里新建-huginn-用户"><a href="#2-2-MySQL里新建-huginn-用户" class="headerlink" title="2.2 MySQL里新建 huginn 用户"></a>2.2 MySQL里新建 <code>huginn</code> 用户</h4><p>以<code>root</code>登录MySQL / MariaDB</p>
+<h4 id="2-2-MySQL里新建-huginn-用户"><a href="#2-2-MySQL里新建-huginn-用户" class="headerlink" title="2.2 MySQL里新建 huginn 用户"></a>2.2 MySQL里新建 <code>huginn</code> 用户</h4><p><strong>当然也可以让<code>huginn</code>直接以<code>root</code>用户来访问数据库，那就直接跳到2.3节。</strong></p>
+<p>不过安全起见，还是新建一个用户吧。</p>
+<p>以<code>root</code>登录MySQL / MariaDB</p>
 <pre class=" language-bash"><code class="language-bash">mysql -u root -p</code></pre>
 <p>新建<code>huginn</code>用户，密码为<code>PASSWORD</code></p>
-<pre class=" language-mysql"><code class="language-mysql">create user 'huginn'@'%' identified by 'PASSWORD'</code></pre>
+<pre class=" language-mysql"><code class="language-mysql">create user 'huginn'@'%' identified by 'PASSWORD';</code></pre>
 <p>这个是允许从任意地方登录。</p>
-<p>如果要限制从<code>docker</code>里启动，先<code>ifconfig</code>看下 <code>docker0</code> 的IP，一般是<code>172.17.0.1</code>,那么 docker IP 为<code>172.17.0.*</code>，于是</p>
-<pre class=" language-mysql"><code class="language-mysql">create user 'huginn'@'172.17.0.%' identified by 'PASSWORD'</code></pre>
+<p>如果要限制从<code>docker</code>里启动，先<code>ifconfig</code>看下 <code>docker0</code> 的IP，一般是<code>172.17.0.1</code>，则 docker IP 为<code>172.17.0.*</code>，于是</p>
+<pre class=" language-mysql"><code class="language-mysql">create user 'huginn'@'172.17.0.%' identified by 'PASSWORD';</code></pre>
 <h4 id="2-3-赋予权限"><a href="#2-3-赋予权限" class="headerlink" title="2.3 赋予权限"></a>2.3 赋予权限</h4><pre class=" language-mysql"><code class="language-mysql">GRANT ALL PRIVILEGES ON *.* TO 'huginn'@'172.17.0.%' IDENTIFIED BY 'PASSWORD' WITH GRANT OPTION;
 flush privileges;</code></pre>
 <p>如果限制访问的数据库则修改<code>*.*</code>为相应的数据库即可。</p>
-<h3 id="3-配置-firewall"><a href="#3-配置-firewall" class="headerlink" title="3. 配置 firewall"></a>3. 配置 firewall</h3><p>如果启用了 firewall 的话，需要放行本地的3306端口。</p>
+<h3 id="3-配置-firewall"><a href="#3-配置-firewall" class="headerlink" title="3. 配置 firewall"></a>3. 配置 firewall</h3><p>如果启用了 firewall 的话，需要放行本地的3306端口（即数据库的相应端口）。</p>
 <p>Ubuntu：</p>
 <pre class=" language-bash"><code class="language-bash"><span class="token function">sudo</span> ufw allow 3306</code></pre>
 <p>CentOS：</p>
@@ -618,18 +620,18 @@ flush privileges;</code></pre>
 <h3 id="4-安装-Huginn"><a href="#4-安装-Huginn" class="headerlink" title="4. 安装 Huginn"></a>4. 安装 Huginn</h3><p>首次安装：</p>
 <pre class=" language-bash"><code class="language-bash">docker run  --name huginn \
     -p 3000:3000 \
-    --restart<span class="token operator">=</span>always \
+    --restart always \
     -e MYSQL_PORT_3306_TCP_ADDR<span class="token operator">=</span>172.17.0.1 \
     -e HUGINN_DATABASE_NAME<span class="token operator">=</span>huginn \
     -e HUGINN_DATABASE_USERNAME<span class="token operator">=</span>huginn \
     -e HUGINN_DATABASE_PASSWORD<span class="token operator">=</span>PASSWORD \
     huginn/huginn</code></pre>
 <p>这里建了一个名为<code>huginn</code>的数据库。</p>
-<p><code>172.17.0.1</code>是本地的IP，即在<code>ifconfig</code>看 <code>docker0</code> 的IP。在本地试试可以通过这个IP连上。</p>
+<p><code>172.17.0.1</code>是本地的IP，即在<code>ifconfig</code>看到的 <code>docker0</code> 的IP。确保在本地可以通过这个IP连上数据库。</p>
 <p>之后直接这样即可↓。</p>
 <pre class=" language-bash"><code class="language-bash">docker start huginn</code></pre>
-<p>上面已经配置了开机自启。</p>
-<p>当然也可以这样</p>
+<p>上面首次安装时已经配置了开机自启。</p>
+<p>当然也可以这样配置——</p>
 <pre class=" language-bash"><code class="language-bash">docker update --restart<span class="token operator">=</span>always huginn</code></pre>
 <p>好了，完工！</p>
 <h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><p><a href="https://github.com/huginn/huginn" target="_blank" rel="noopener">https://github.com/huginn/huginn</a></p>
@@ -1221,7 +1223,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">25.4k</span>&nbsp;字
+                class="white-color">25.5k</span>&nbsp;字
             
             
             
