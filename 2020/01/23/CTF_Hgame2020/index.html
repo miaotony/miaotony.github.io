@@ -561,7 +561,7 @@ Flag格式：hgame{.+}
 <p><code>hgame{Do_y0u_KnOW_uNiC0d3?}</code></p>
 <hr>
 <h3 id="克苏鲁神话"><a href="#克苏鲁神话" class="headerlink" title="克苏鲁神话"></a>克苏鲁神话</h3><p>明文攻击得到了解密后的zip文件。</p>
-<p><img src="/2020/01/23/CTF_Hgame2020/misc_kesulu.png" alt></p>
+<p><img src="/2020/01/23/CTF_Hgame2020/misc_kesulu.png" alt=""></p>
 <p>得到加密的 <code>The Call of Cthulhu.doc</code>文件。根据 <code>Bacon.txt</code>文件提示寻找密码。</p>
 <pre><code>of SuCh GrEAt powers OR beiNGS tHere may BE conCEivAbly A SuRvIval oF HuGely REmOTE periOd.
 
@@ -634,8 +634,8 @@ HDR: s=FFF, id=1, l=1, ep=on, br=4, sf=3, pd=0, pr=0, m=0, js=0, c=0, o=0, e=0
 alg.=MPEG-1, layer=I, tot bitrate=128, sfrq=0.0
 mode=stereo, sblim=32, jsbd=32, ch=2
 [Frame    3]OpenTable: could not find tables/huffdec
-Check local directory &#39;./tables/&#39;
-Please check huffman table &#39;huffdec&#39;</code></pre><p>上网找了一下，下了个音频处理软件<strong><em>Audacity</em></strong>。（免费开源跨平台，还不错</p>
+Check local directory './tables/'
+Please check huffman table 'huffdec'</code></pre><p>上网找了一下，下了个音频处理软件<strong><em>Audacity</em></strong>。（免费开源跨平台，还不错</p>
 <blockquote>
 <p>Free, open source, cross-platform audio software. <em>Audacity</em> is an easy-to-use, multi-track audio editor and recorder for Windows, Mac OS X, GNU/Linux…</p>
 </blockquote>
@@ -658,11 +658,11 @@ Please check huffman table &#39;huffdec&#39;</code></pre><p>上网找了一下�
     filemode = true
     bare = false
     logallrefupdates = true
-[remote &quot;origin&quot;]
+[remote "origin"]
     url = https://github.com/FeYcYodhrPDJSru/8LTUKCL83VLhXbc
     fetch = +refs/heads/*:refs/remotes/origin/*</code></pre><p>好，这个GitHub仓库有戏！</p>
 <p>访问一波，然后在commit里找到了flag。</p>
-<p><img src="/2020/01/23/CTF_Hgame2020/web_Cosmos'sBlog.png" alt="web_Cosmos&#39;sBlog"></p>
+<p><img src="/2020/01/23/CTF_Hgame2020/web_Cosmos'sBlog.png" alt="web_Cosmos'sBlog"></p>
 <p>base64解码得到flag</p>
 <p><code>hgame{g1t_le@k_1s_danger0us_!!!!}</code></p>
 <blockquote>
@@ -782,8 +782,8 @@ $Umm+g{LIe5jphtaAT!ei_m}nR0u!3TP
 5I{eLmt+ha$mgpjU0nmR}eTi3PA!_!uT  
 Lm$jham{pUt+5Ige}!Au3Pem!TTi0n_R</code></pre><p><strong>既然是乱序吧，那就看看到底是什么个顺序好了！</strong></p>
 <p>上面字符串的长度为32，于是构造字符串 </p>
-<p><code>str1=&#39;123456abcdefghijklmnopqrstuvwxyz&#39;</code></p>
-<p>输入后得到 <code>str2=&#39;jhca1346ibdefg25zxsqkmnpyrtuvwlo&#39;</code>  </p>
+<p><code>str1='123456abcdefghijklmnopqrstuvwxyz'</code></p>
+<p>输入后得到 <code>str2='jhca1346ibdefg25zxsqkmnpyrtuvwlo'</code>  </p>
 <p>试了发现该顺序不变，于是得到编码的对应关系（正变换逆变换嘛233333）</p>
 <pre class=" language-python"><code class="language-python">str1<span class="token operator">=</span><span class="token string">'123456abcdefghijklmnopqrstuvwxyz'</span>
 <span class="token keyword">print</span><span class="token punctuation">(</span>len<span class="token punctuation">(</span>str1<span class="token punctuation">)</span><span class="token punctuation">)</span>
@@ -935,7 +935,7 @@ str_decrypt <span class="token operator">=</span> <span class="token string">''<
 <hr>
 <h2 id="Pwn"><a href="#Pwn" class="headerlink" title="Pwn"></a>Pwn</h2><h3 id="Hard-AAAAA"><a href="#Hard-AAAAA" class="headerlink" title="Hard_AAAAA"></a>Hard_AAAAA</h3><p>nc 47.103.214.163 20000</p>
 <p>IDA分析一波，发现是memcmp比较，<code>backdoor</code>函数里是执行<code>/bin/sh</code>的。</p>
-<p>其中s与v5距离为 -31h-(-ACh)=123，构造payload发了个<code>&quot;0O0o&quot;</code>过去，发现么得。</p>
+<p>其中s与v5距离为 -31h-(-ACh)=123，构造payload发了个<code>"0O0o"</code>过去，发现么得。</p>
 <pre class=" language-c"><code class="language-c"><span class="token keyword">int</span> __cdecl <span class="token function">main</span><span class="token punctuation">(</span><span class="token keyword">int</span> argc<span class="token punctuation">,</span> <span class="token keyword">const</span> <span class="token keyword">char</span> <span class="token operator">*</span><span class="token operator">*</span>argv<span class="token punctuation">,</span> <span class="token keyword">const</span> <span class="token keyword">char</span> <span class="token operator">*</span><span class="token operator">*</span>envp<span class="token punctuation">)</span>
 <span class="token punctuation">{</span>
   <span class="token keyword">char</span> s<span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// [esp+0h] [ebp-ACh]</span>
@@ -960,7 +960,25 @@ str_decrypt <span class="token operator">=</span> <span class="token string">''<
 <hr>
 <hr>
 <h2 id="未完待续"><a href="#未完待续" class="headerlink" title="未完待续"></a><strong>未完待续</strong></h2><p><em>（可能会咕咕咕</em></p>
-
+<script>
+        document.querySelectorAll('.github-emoji')
+          .forEach(el => {
+            if (!el.dataset.src) { return; }
+            const img = document.createElement('img');
+            img.style = 'display:none !important;';
+            img.src = el.dataset.src;
+            img.addEventListener('error', () => {
+              img.remove();
+              el.style.color = 'inherit';
+              el.style.backgroundImage = 'none';
+              el.style.background = 'none';
+            });
+            img.addEventListener('load', () => {
+              img.remove();
+            });
+            document.body.appendChild(img);
+          });
+      </script>
             </div>
             <hr/>
 
@@ -1262,12 +1280,12 @@ str_decrypt <span class="token operator">=</span> <span class="token string">''<
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/CTF/">
-                        <span class="chip bg-color">CTF</span>
-                    </a>
-                    
                     <a href="/tags/Life/">
                         <span class="chip bg-color">Life</span>
+                    </a>
+                    
+                    <a href="/tags/CTF/">
+                        <span class="chip bg-color">CTF</span>
                     </a>
                     
                     <a href="/tags/%E7%BA%A2%E5%8C%85%E9%97%AF%E5%85%B3/">
@@ -1529,7 +1547,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">25.5k</span>&nbsp;字
+                class="white-color">26.5k</span>&nbsp;字
             
             
             
