@@ -4,6 +4,37 @@
   
     
     <entry>
+      <title>Blog折腾记 | 升级Gitalk评论插件以解决EmailBombs</title>
+      <link href="/2020/02/07/Blog_UpdateGitalk/"/>
+      <url>/2020/02/07/Blog_UpdateGitalk/</url>
+      
+        <content type="html"><![CDATA[<h2 id="起因"><a href="#起因" class="headerlink" title="起因"></a>起因</h2><p>这几天我的邮箱被 GitHub 轰炸了emmm。</p><p>具体大概是这样的——</p><p><img src="/2020/02/07/Blog_UpdateGitalk/GitHubEmail.png" alt="GitHubEmail"></p><p><img src="/2020/02/07/Blog_UpdateGitalk/GitHubEmail2.png" alt="GitHubEmail2"></p><p>说好的</p><blockquote><p>Depending on your API usage, we’ll be sending you this email reminder at most once every 3 days.</p></blockquote><p>然而从2月4日开始每天都有一堆……</p><p><strong>所以这到底是什么回事呢？</strong></p><p>我一想，用到这个 API 的只有我博客的 Gitalk 评论插件。目前我博客的评论都放在了GitHub项目的issue里，每篇文章浏览到下面的时候会自动加载评论，这时候就会向GitHub的API发请求从而获取相应数据。</p><br><hr><h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><p>于是去 gitalk 的官方仓库看了看，果然2月4日当天就有人提issue了，看来不少人 Email Bombs 了23333（摊手。</p><p><a href="https://github.com/gitalk/gitalk/issues/343" target="_blank" rel="noopener">https://github.com/gitalk/gitalk/issues/343</a></p><p><img src="/2020/02/07/Blog_UpdateGitalk/issue.png" alt="issue"></p><p>很多大佬对这个问题进行了讨论，当然也有不少 <code>+1 Mark</code>之类的在旁观。</p><h3 id="方案一"><a href="#方案一" class="headerlink" title="方案一"></a>方案一</h3><p>2月4日这样，@geektutu 给出了一个 <strong>Use read-only personal access token to replace clientID &amp; clientSecret</strong> 的方案，并提了PR，详见：<a href="https://github.com/gitalk/gitalk/pull/344" target="_blank" rel="noopener">#344</a>。这个PR在2月6日merge了。</p><p>根据他的建议，首先需要更新 <code>gitalk.min.js</code>文件，如果想获得更多的API使用量，需要在 <a href="https://github.com/settings/tokens" target="_blank" rel="noopener">accessToken</a> 里生成一个只读的token，而后修改 Gitalk 模板里的配置，新增<code>accessToken</code>项。</p><pre class=" language-javascript"><code class="language-javascript"><span class="token keyword">const</span> gitalk <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Gitalk</span><span class="token punctuation">(</span><span class="token punctuation">{</span>  clientID<span class="token punctuation">:</span> <span class="token string">'GitHub Application Client ID'</span><span class="token punctuation">,</span>  clientSecret<span class="token punctuation">:</span> <span class="token string">'GitHub Application Client Secret'</span><span class="token punctuation">,</span>  accessToken<span class="token punctuation">:</span> <span class="token string">'Github Personal Access Token'</span><span class="token punctuation">,</span>   <span class="token comment" spellcheck="true">// IMPORTANT !!!</span>  repo<span class="token punctuation">:</span> <span class="token string">'GitHub repo'</span><span class="token punctuation">,</span>  owner<span class="token punctuation">:</span> <span class="token string">'GitHub repo owner'</span><span class="token punctuation">,</span>  <span class="token operator">...</span><span class="token punctuation">}</span><span class="token punctuation">)</span></code></pre><p>根据 <a href="https://developer.github.com/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/#available-scopes" target="_blank" rel="noopener">Understanding scopes for OAuth Apps</a> ，在<strong>新建 access token 时不选择任何选项</strong>，则生成的token只有<strong>公开信息的只读</strong>权限（<em>Grants read-only access to public information (includes public user profile info, public repository info, and gists)</em>）。</p><p>6号我也更新了这一版本，做了相应的修改，的确邮箱不被轰炸了。😂</p><p>但是，<strong>这个 access token 在任何人访问博客的时候都是公开可见的</strong>，不免存在风险，这也在issue里有过讨论。@geektutu 也说这是个临时方案。</p><p><img src="/2020/02/07/Blog_UpdateGitalk/issue2.png" alt="issue2"></p><h3 id="方案二"><a href="#方案二" class="headerlink" title="方案二"></a>方案二</h3><p>2月7日，这个issue的发起者 @fletchto99 给出了他的方案，并提了PR，详见：<a href="https://github.com/gitalk/gitalk/pull/346" target="_blank" rel="noopener">gitalk/gitalk#346</a> </p><p><img src="/2020/02/07/Blog_UpdateGitalk/issue3.png" alt="issue3"></p><p>利用原来的<code>client_id</code> 和 <code>client_secret</code> 作为 basic auth 是可行的。</p><p>按照他的方案，<strong>不需要修改其他的任何配置，直接把Gitalk的js升级到V1.5.2</strong> 即可。</p><p>这样就方便了很多哈，试了一下果然是可行的。</p><p>而且这个可以说是<strong>最佳方案</strong>了呢！</p><h2 id="针对-Matery-主题的修改"><a href="#针对-Matery-主题的修改" class="headerlink" title="针对 Matery 主题的修改"></a>针对 Matery 主题的修改</h2><h3 id="方法一"><a href="#方法一" class="headerlink" title="方法一"></a>方法一</h3><p>对于我现在使用的 <a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank" rel="noopener">Matery</a> 主题（<em>hexo-theme-matery</em>），只需要将 <code>\hexo\themes\matery\source\libs\gitalk</code>目录下的 <code>gitalk.min.js</code>和 <code>gitalk.css</code> 更新到最新版本（&gt;= V1.5.2）即可。</p><h3 id="方法二"><a href="#方法二" class="headerlink" title="方法二"></a>方法二</h3><p>当然也可以修改配置文件里引用的 JavaScript（、CSS）地址为链接版本。</p><p>目前 CDN 上的 Gitalk 已经更新到了最新版本。</p><p>打开<code>\hexo\themes\matery\_config.yml</code>，修改其中的 <code>libs</code>。</p><pre class=" language-yml"><code class="language-yml">libs:  css:    # ...    gitalk: https://cdn.jsdelivr.net/npm/gitalk/dist/gitalk.css    # 或者 https://unpkg.com/gitalk/dist/gitalk.css    # ...  js:    # ...    gitalk: https://cdn.jsdelivr.net/npm/gitalk/dist/gitalk.min.js    # 或者 https://unpkg.com/gitalk/dist/gitalk.min.js     # ...</code></pre><p>保存后，在 hexo 的目录下执行 <code>hexo clean &amp;&amp; hexo g</code>，再部署即可。</p><hr><p>最后，顺手给 <em><a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank" rel="noopener">hexo-theme-matery</a></em> 提了个PR，更新了这一依赖，详见  <a href="https://github.com/blinkfox/hexo-theme-matery/pull/318" target="_blank" rel="noopener">blinkfox/hexo-theme-matery#318</a> 。</p><script>        document.querySelectorAll('.github-emoji')          .forEach(el => {            if (!el.dataset.src) { return; }            const img = document.createElement('img');            img.style = 'display:none !important;';            img.src = el.dataset.src;            img.addEventListener('error', () => {              img.remove();              el.style.color = 'inherit';              el.style.backgroundImage = 'none';              el.style.background = 'none';            });            img.addEventListener('load', () => {              img.remove();            });            document.body.appendChild(img);          });      </script>]]></content>
+      
+      
+      <categories>
+          
+          <category> Blog </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Life </tag>
+            
+            <tag> Tech </tag>
+            
+            <tag> blog </tag>
+            
+            <tag> Gitalk </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>基于Docker搭建Huginn</title>
       <link href="/2020/02/03/Server_Huginn/"/>
       <url>/2020/02/03/Server_Huginn/</url>
@@ -127,9 +158,9 @@
       
         <tags>
             
-            <tag> 小想法 </tag>
-            
             <tag> Tech </tag>
+            
+            <tag> 小想法 </tag>
             
             <tag> Server </tag>
             
@@ -331,9 +362,9 @@
             
             <tag> 小想法 </tag>
             
-            <tag> 分析 </tag>
-            
             <tag> Python </tag>
+            
+            <tag> 分析 </tag>
             
             <tag> 爬虫 </tag>
             
@@ -525,7 +556,7 @@
       
       <categories>
           
-          <category> Life </category>
+          <category> Blog </category>
           
       </categories>
       
@@ -534,9 +565,9 @@
             
             <tag> Life </tag>
             
-            <tag> 小想法 </tag>
-            
             <tag> blog </tag>
+            
+            <tag> 小想法 </tag>
             
         </tags>
       
