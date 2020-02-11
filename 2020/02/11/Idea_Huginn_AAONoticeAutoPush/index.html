@@ -1,0 +1,1582 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="小想法 | 利用Huginn&amp;TelegramBot实现教务通知自动爬取与推送, MiaoTony">
+    <meta name="description" content="最近研究了一下Huginn，实现了教务通知公告的自动爬取，再基于Server Chan及Telegram Bot API，将信息分别推送到微信和TG。">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>小想法 | 利用Huginn&amp;TelegramBot实现教务通知自动爬取与推送 | MiaoTony&#39;s小窝</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
+
+    <script src="/libs/jquery/jquery.min.js"></script>
+	
+	<script> 
+		//Baidu Statistics
+		var _hmt = _hmt || [];
+		(function() {
+		  var hm = document.createElement("script");
+		  hm.src = "https://hm.baidu.com/hm.js?40e312a1eec109cf96e30988cf3bfe70";
+		  var s = document.getElementsByTagName("script")[0]; 
+		  s.parentNode.insertBefore(hm, s);
+		})();
+	</script>
+	<script> 
+		//来个特效玩玩喵 20200123
+		var titleTime;
+		var OriginTitile = document.title;
+		document.addEventListener('visibilitychange', function() {
+			if (document.hidden) {
+				document.title = '|ω·) 喵~快回来呀！';
+				clearTimeout(titleTime);
+			} else {
+				document.title = '(/≧▽≦)/ Meow！';
+				titleTime = setTimeout(function() {
+					document.title = OriginTitile;
+				}, 800);
+			}
+		});
+	</script>
+	
+<link rel="alternate" href="/atom.xml" title="MiaoTony's小窝" type="application/atom+xml">
+<link rel="stylesheet" href="/css/prism.css" type="text/css"></head>
+
+
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">MiaoTony's小窝</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>首页</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>标签</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>分类</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/archives" class="waves-effect waves-light">
+      
+      <i class="fas fa-archive" style="zoom: 0.6;"></i>
+      
+      <span>归档</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>关于</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/contact" class="waves-effect waves-light">
+      
+      <i class="fas fa-comments" style="zoom: 0.6;"></i>
+      
+      <span>留言</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/friends" class="waves-effect waves-light">
+      
+      <i class="fas fa-address-book" style="zoom: 0.6;"></i>
+      
+      <span>友链</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="搜索" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">MiaoTony's小窝</div>
+        <div class="logo-desc">
+            
+            喵~欢迎各位大佬的来访呀！
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			首页
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			标签
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			分类
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/archives" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-archive"></i>
+			
+			归档
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			关于
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/contact" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-comments"></i>
+			
+			留言
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/friends" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-address-book"></i>
+			
+			友链
+		</a>
+          
+        </li>
+        
+        
+        <li><div class="divider"></div></li>
+        <li>
+            <a href="https://github.com/miaotony" class="waves-effect waves-light" target="_blank">
+                <i class="fab fa-github-square fa-fw"></i>Fork Me
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+        </div>
+
+        
+            <style>
+    .nav-transparent .github-corner {
+        display: none !important;
+    }
+
+    .github-corner {
+        position: absolute;
+        z-index: 10;
+        top: 0;
+        right: 0;
+        border: 0;
+        transform: scale(1.1);
+    }
+
+    .github-corner svg {
+        color: #0f9d58;
+        fill: #fff;
+        height: 64px;
+        width: 64px;
+    }
+
+    .github-corner:hover .octo-arm {
+        animation: a 0.56s ease-in-out;
+    }
+
+    .github-corner .octo-arm {
+        animation: none;
+    }
+
+    @keyframes a {
+        0%,
+        to {
+            transform: rotate(0);
+        }
+        20%,
+        60% {
+            transform: rotate(-25deg);
+        }
+        40%,
+        80% {
+            transform: rotate(10deg);
+        }
+    }
+</style>
+
+<a href="https://github.com/miaotony" class="github-corner tooltipped hide-on-med-and-down" target="_blank"
+   data-tooltip="Fork Me" data-position="left" data-delay="50">
+    <svg viewBox="0 0 250 250" aria-hidden="true">
+        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+        <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2"
+              fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
+        <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z"
+              fill="currentColor" class="octo-body"></path>
+    </svg>
+</a>
+        
+    </nav>
+
+</header>
+
+    
+<script src="/libs/cryptojs/crypto-js.min.js"></script>
+<script>
+    (function() {
+        let pwd = '';
+        if (pwd && pwd.length > 0) {
+            if (pwd !== CryptoJS.SHA256(prompt('请输入访问本文章的密码')).toString(CryptoJS.enc.Hex)) {
+                alert('密码错误，将返回主页！');
+                location.href = '/';
+            }
+        }
+    })();
+</script>
+
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/15.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <h1 class="description center-align post-title">小想法 | 利用Huginn&amp;TelegramBot实现教务通知自动爬取与推送</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        width: 345px;
+        padding-left: 20px;
+    }
+
+    .toc-widget .toc-title {
+        margin: 35px 0 15px 0;
+        padding-left: 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content {
+        height: calc(100vh - 250px);
+        overflow: auto;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #42b983;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+    }
+
+    #toc-content .is-active-link {
+        color: #42b983;
+    }
+
+    #toc-content .is-active-link::before {
+        background-color: #42b983;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 15px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/Tech/">
+                                <span class="chip bg-color">Tech</span>
+                            </a>
+                        
+                            <a href="/tags/%E5%B0%8F%E6%83%B3%E6%B3%95/">
+                                <span class="chip bg-color">小想法</span>
+                            </a>
+                        
+                            <a href="/tags/Projects/">
+                                <span class="chip bg-color">Projects</span>
+                            </a>
+                        
+                            <a href="/tags/Huginn/">
+                                <span class="chip bg-color">Huginn</span>
+                            </a>
+                        
+                            <a href="/tags/Telegram/">
+                                <span class="chip bg-color">Telegram</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/Tech/" class="post-category">
+                                Tech
+                            </a>
+                        
+                            <a href="/categories/Tech/Projects/" class="post-category">
+                                Projects
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2020-02-11
+                </div>
+                
+
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
+                    3.4k
+                </div>
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
+                    14 分
+                </div>
+                
+
+                
+            </div>
+
+        </div>
+        <hr class="clearfix">
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>前不久在服务器上装好了Huginn（<a href="https://miaotony.xyz/2020/02/03/Server_Huginn/">详见这里：基于Docker搭建Huginn</a>）。</p>
+<p>这几天折腾了一下，尝试着用它来爬点东西玩一下<em>（bushi</em></p>
+<p>想了一下，平时会关注<strong>教务的通知</strong>，每次都要访问教务网站，虽然说也不是很麻烦，但我想要一个自动推送的工具。或者说，不需要我主动去看有没有新通知，而是有新通知公告了就直接推过来。（类似于Webhook？ 😃</p>
+<p>说到这个，其实之前在 RSSHub 上看到过一个，不过现在好像失效了。考虑到目前没有折腾 RSSHub 的打算，干脆就用 Huginn 自己弄一个好了。</p>
+<p>说干就干了啦。</p>
+<p>哦对了，最终的效果大概这样——</p>
+<p><img src="/2020/02/11/Idea_Huginn_AAONoticeAutoPush/WeChatNotification.png" alt="WeChatNotification"></p>
+<p><img src="/2020/02/11/Idea_Huginn_AAONoticeAutoPush/TG_PC.png" alt="Telegram PC端"></p>
+<p><img src="/2020/02/11/Idea_Huginn_AAONoticeAutoPush/TG_Mobile.png" alt="Telegram Mobile"></p>
+<hr>
+<h2 id="通知的爬取"><a href="#通知的爬取" class="headerlink" title="通知的爬取"></a>通知的爬取</h2><p>与其说专门打造一个教务通知公告的爬取，不如说记录一下 Huginn 的基本使用方法。</p>
+<p>说实话，<strong>Huginn 的资料真的少</strong>，感觉国内都没有多少介绍这个的，于是遇到了不少问题经常不知道怎么办emmm。</p>
+<h3 id="一些小介绍"><a href="#一些小介绍" class="headerlink" title="一些小介绍"></a>一些小介绍</h3><p>打开你喜欢的浏览器，进入 Huginn（默认为 <code>127.0.0.1:3000</code>），最上方有如下几个选项。</p>
+<p><img src="/2020/02/11/Idea_Huginn_AAONoticeAutoPush/huginn_intro.png" alt="标题栏"></p>
+<p>其中Agents就是你的一个个小兵，他们可以互相协作，按照流水线依次完成各自的使命。</p>
+<p>Scenarios 就是这些小兵的集合，或者说是某种场景，官方描述是</p>
+<blockquote>
+<p>Scenarios are named groups of Agents.  Scenarios allow you to organize your agents, and to import and export sets of Agents to share.</p>
+</blockquote>
+<p>比如说你有A、B、C三个Agent，他们共同完成一个任务，你就可以把他们集合起来作为一个Scenario。</p>
+<p>Events 是小兵们收集来的信息。</p>
+<p>Credentials 用来记录一些常量，或者说是环境变量。</p>
+<blockquote>
+<p>Credentials are used to store values used by many Agents. Examples might include “twitter_consumer_secret”, “user_full_name”, or “user_birthday”.      </p>
+</blockquote>
+<p>在使用时，就可以像 <code> {% credential Meow_API %} </code> 这样来引用，其中 <code>Meow_API</code> 在 Credentials 中进行定义。</p>
+<h3 id="大体思路"><a href="#大体思路" class="headerlink" title="大体思路"></a>大体思路</h3><p>Huginn 里有很多种 Agent，这里用到的可以说是最常用的 <strong>Website Agent</strong> 和 <strong>Post Agent</strong> 。</p>
+<p>更多的可以参考官方 Wiki 的介绍，在<a href="https://github.com/huginn/huginn/wiki/Agent-Types-&amp;-Descriptions" target="_blank" rel="noopener">这里</a>。</p>
+<p>这个项目的思路就是</p>
+<ul>
+<li>访问教务网站，爬取通知公告栏的标题及链接</li>
+<li>根据得到的链接，访问相应网址，获得通知具体内容</li>
+<li>将得到的信息打包，根据 Server Chan 和 Telegram Bot API 的格式发送即可</li>
+</ul>
+<h3 id="创建获取信息的-Agent"><a href="#创建获取信息的-Agent" class="headerlink" title="创建获取信息的 Agent"></a>创建获取信息的 Agent</h3><p><strong>Crawler_AAO #1 Get Notice URLs</strong></p>
+<p>选择 Website Agent，界面如下：</p>
+<p> <img src="/2020/02/11/Idea_Huginn_AAONoticeAutoPush/WebsiteAgent.png" alt="Website Agent"></p>
+<p><code>Name</code>自己取个喜欢的名字。</p>
+<p><code>Schedule</code>可以指定运行的周期。如果列表里没有合适的选项的话，可以选择Never，再另外创建一个<strong>Scheduler Agent</strong>，以<a href="http://en.wikipedia.org/wiki/Cron" target="_blank" rel="noopener">cron</a>格式自己写一个，然后在<code>Controllers</code>里指向这个Scheduler Agent。</p>
+<p><code>Keep events</code>可以定义获得Events后保留的时间，过期后自动会删除之前的Events。每次爬取后，获得新的数据才作为一个event，否则不会触发一个新的event，可以说在一定程度上起到了去重的作用。（当然如果还有重复的话，可以后面再加一个<strong>De-duplication Agent</strong>）</p>
+<p>如果数据量过大的话最好不要设成<code>Forever</code>。但是要确保在下一个 Agent 能够在 Event 过期之前获取到数据。</p>
+<p><code>Sources</code>就是上一个Agent，<code>Receivers</code>就是下一个Agent。勾选<code>Propagate immediately</code>的话，上一个Agent获取到数据后则立即执行这个Agent，否则会间隔一分钟再执行。（开启会加重CPU负担）</p>
+<p><code>Scenarios</code>就是那个Agents的集合啦。</p>
+<p><code>Options</code>里是具体的配置，是JSON的格式，可以参考右边的提示来进行设置。</p>
+<p>怎么说好呢，其实简单的参数右边是有了，但是实际配置的时候还是有不少问题。看官方文档吧emmm</p>
+<p><a href="https://huginnio.herokuapp.com/agents" target="_blank" rel="noopener">https://huginnio.herokuapp.com/agents</a> 这里有关于Agents各自API的详细介绍。</p>
+<hr>
+<p>下面是<code>options</code>的具体介绍。</p>
+<p>Website Agent可以爬取来自<code>url</code>/<code>url_from_event</code>/<code>data_from_event</code>的信息。</p>
+<h4 id="type"><a href="#type" class="headerlink" title="type"></a>type</h4><p>可以<code>xml</code>, <code>html</code>, <code>json</code>, or <code>text</code>。相应的类型有各自的介绍，这里是HTML网页，就用<code>html</code>好了。</p>
+<h4 id="mode"><a href="#mode" class="headerlink" title="mode"></a>mode</h4><p>可以是<code>all</code>, <code>on_change</code>, or <code>merge</code>。If you specify <code>merge</code> for the <code>mode</code> option, Huginn will retain the old payload and update it with new values. </p>
+<p>即如果选择<code>merge</code>，则会与之前的信息合并，这个在获取教务通知的具体内容时会用到，之后不再赘述。这里只需要在出现新通知的时候触发，所以用<code>on_change</code>。</p>
+<h4 id="extract"><a href="#extract" class="headerlink" title="extract"></a>extract</h4><p><code>extract</code>里就是要解析的内容，可以用a CSS selector in <code>css</code> or an XPath expression in <code>xpath</code>. （如果<code>type</code>里选<code>text</code>则可以用<code>regexp</code>正则匹配，<em>然而如果要html提取后再正则匹配就需要再来一个Agent，感觉有点蠢emmm如果有更好的办法欢迎来和我交流一下哈</em>）</p>
+<ul>
+<li><p><strong>要注意的是：</strong>这个解析的内容是根据url浏览后<strong>直接获得的页面，没有加载文本之外的任何内容，没有经过JavaScript渲染等等</strong>。或者说就是你<code>F12</code>在<code>Network</code>里看到的页面加载出来的document或xhr之类得到的response。<em>（这个是在利用 Huginn 爬取其他网站的时候发现的）</em></p>
+</li>
+<li><p>如果需要爬取JavaScript加载的网页，可以使用 <strong>Phantom Js Cloud Agent</strong>，这个需要在<a href="https://phantomjscloud.com/" target="_blank" rel="noopener">PhantomJs Cloud</a>申请一个API，有一定的免费额度。这个Agent会返回页面的相应信息，还可以具体设置输出JSON、截图等等。</p>
+</li>
+</ul>
+<p><code>extract</code>里以JSON格式写要解析的对象，后面就会返回 相应名字作为Key，相应的值作为Value 的JSON结果。</p>
+<p>CSS可以这样找↓，直接<strong>复制CSS路径</strong>，再进行缩略处理。</p>
+<p><img src="/2020/02/11/Idea_Huginn_AAONoticeAutoPush/css_selector.png" alt="复制css路径"></p>
+<p>比如这里复制出来是</p>
+<pre class=" language-css"><code class="language-css">html body div<span class="token number">.</span>container-fluid div<span class="token number">.</span>main-content<span class="token number">.</span>clearfix div<span class="token number">.</span>left-content div<span class="token number">.</span>notice-announcement div#index_notice_content<span class="token number">.</span>tab-content div<span class="token number">.</span>tab-pane<span class="token number">.</span>active ul<span class="token number">.</span>tab-pane-ul li div<span class="token number">.</span>inform-content a</code></pre>
+<p>然后<strong>处理 css path</strong>。</p>
+<p>原始路径过长，<strong>删去不带 <code>.</code> 或 <code>#</code> 的节点（节点间以空格“ ”分割），并删去每个节点在 <code>.</code> 或 <code>#</code>前的第一个标签</strong>，得到：</p>
+<pre class=" language-css"><code class="language-css"><span class="token number">.</span>container-fluid <span class="token number">.</span>main-content<span class="token number">.</span>clearfix <span class="token number">.</span>left-content <span class="token number">.</span>notice-announcement #index_notice_content<span class="token number">.</span>tab-content <span class="token number">.</span>tab-pane<span class="token number">.</span>active <span class="token number">.</span>tab-pane-ul <span class="token number">.</span>inform-content a</code></pre>
+<p>前半部分对节点定位用处不大，继续缩略，于是得到</p>
+<pre class=" language-css"><code class="language-css"><span class="token number">.</span>tab-pane<span class="token number">.</span>active <span class="token number">.</span>tab-pane-ul <span class="token number">.</span>inform-content a</code></pre>
+<blockquote>
+<p><strong>非常规情况处理</strong>： </p>
+<p>a. 有些路径中的<strong>节点带空格</strong>，如<code>&lt;div class="packery-item article"&gt;</code>,路径中的空格由<code>.</code>代替，截取为<code>.packery-item.article</code> </p>
+<p>b. 当抓取<strong>多种 css path 规则</strong>时，用逗号<code>,</code>分割</p>
+<pre class=" language-css"><code class="language-css"><span class="token string">"css"</span><span class="token punctuation">:</span> <span class="token string">".focus-title .current a , .stress h2 a"</span>,</code></pre>
+</blockquote>
+<p><code>value</code>用来提取标签中的属性，可以利用<a href="https://www.w3.org/TR/xpath/#section-String-Functions" target="_blank" rel="noopener">XPath functions</a>。（<a href="https://www.w3school.com.cn/xpath/xpath_functions.asp" target="_blank" rel="noopener">中文介绍</a>）</p>
+<p>Xpath Functions是可以进行嵌套来用的<del>（套娃</del>（x</p>
+<p>这里用了 <code>@href</code>来提取链接，用<code>string(.)</code>来提取这个css路径下的字符串，用 <code>normalize-space</code>函数来去除多余的空格。得到的JSON表达式如下。</p>
+<pre class=" language-json"><code class="language-json"><span class="token property">"extract"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">"url"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+        <span class="token property">"css"</span><span class="token operator">:</span> <span class="token string">".tab-pane.active .tab-pane-ul .inform-content a"</span><span class="token punctuation">,</span>
+        <span class="token property">"value"</span><span class="token operator">:</span> <span class="token string">"@href"</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token property">"title"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+        <span class="token property">"css"</span><span class="token operator">:</span> <span class="token string">".tab-pane.active .tab-pane-ul .inform-content a"</span><span class="token punctuation">,</span>
+        <span class="token property">"value"</span><span class="token operator">:</span> <span class="token string">"normalize-space(string(.))"</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<h4 id="template"><a href="#template" class="headerlink" title="template"></a>template</h4><p>除了上面这些，还可以设置<strong>User Agent</strong>，以及一个用<strong>Liquid模板语言编写的模板<code>template</code></strong>等等。</p>
+<blockquote>
+<p>Liquid markup language. Safe, customer facing template language for flexible web apps.  </p>
+</blockquote>
+<p>Liquid官方仓库：<a href="https://github.com/Shopify/liquid" target="_blank" rel="noopener">https://github.com/Shopify/liquid</a>。这里有关于Liquid语法的中文介绍：<a href="https://liquid.bootcss.com/" target="_blank" rel="noopener">https://liquid.bootcss.com/</a>。</p>
+<p>Liquid也是可以嵌套的，利用管道 <code>|</code> 可以将处理后的结果送到下一个filter。</p>
+<p>除了Liquid自带的filter，Huginn还提供了一些自己的用法，详见官方文档 <a href="https://github.com/huginn/huginn/wiki/Formatting-Events-using-Liquid" target="_blank" rel="noopener">Formatting Events using Liquid</a>。</p>
+<p><img src="/2020/02/11/Idea_Huginn_AAONoticeAutoPush/liquid_huginn.png" alt="Liquid Templating"></p>
+<p>在这里，由于得到的 href 是相对地址（如 <code>/2020/0208/c11066a193409/page.htm</code>），为了得到绝对地址，在<code>template</code>中利用 <code> {{ url | to_uri: _response_.url }}</code> 进行处理。</p>
+<p><em>（别说了，这几天找遍了XPath function和Liquid用法）</em></p>
+<hr>
+<p>设好之后可以点击<strong>Dry Run</strong>来试试，看看运行的结果，再做进一步的修改。</p>
+<p>于是最终得到的<code>Crawler_AAO #1 Get Notice URLs</code> Options 如下。</p>
+<pre class=" language-json"><code class="language-json"><span class="token punctuation">{</span>
+  <span class="token property">"expected_update_period_in_days"</span><span class="token operator">:</span> <span class="token string">"2"</span><span class="token punctuation">,</span>
+  <span class="token property">"user_agent"</span><span class="token operator">:</span> <span class="token string">"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:72.0) Gecko/20100101 Firefox/72.0"</span><span class="token punctuation">,</span>
+  <span class="token property">"url"</span><span class="token operator">:</span> <span class="token string">"http://aao.nuaa.edu.cn/"</span><span class="token punctuation">,</span>
+  <span class="token property">"type"</span><span class="token operator">:</span> <span class="token string">"html"</span><span class="token punctuation">,</span>
+  <span class="token property">"mode"</span><span class="token operator">:</span> <span class="token string">"on_change"</span><span class="token punctuation">,</span>
+  <span class="token property">"extract"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">"url"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+      <span class="token property">"css"</span><span class="token operator">:</span> <span class="token string">".tab-pane.active .tab-pane-ul .inform-content a"</span><span class="token punctuation">,</span>
+      <span class="token property">"value"</span><span class="token operator">:</span> <span class="token string">"@href"</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token property">"title"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+      <span class="token property">"css"</span><span class="token operator">:</span> <span class="token string">".tab-pane.active .tab-pane-ul .inform-content a"</span><span class="token punctuation">,</span>
+      <span class="token property">"value"</span><span class="token operator">:</span> <span class="token string">"normalize-space(string(.))"</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token property">"time"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+      <span class="token property">"css"</span><span class="token operator">:</span> <span class="token string">".tab-pane.active .tab-pane-ul .inform-data"</span><span class="token punctuation">,</span>
+      <span class="token property">"value"</span><span class="token operator">:</span> <span class="token string">"normalize-space(.)"</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token property">"template"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">"url"</span><span class="token operator">:</span> "<span class="token punctuation">{</span><span class="token punctuation">{</span> url | to_uri<span class="token operator">:</span> _response_.url <span class="token punctuation">}</span><span class="token punctuation">}</span>"
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<hr>
+<h3 id="创建获取内容的-Agent"><a href="#创建获取内容的-Agent" class="headerlink" title="创建获取内容的 Agent"></a>创建获取内容的 Agent</h3><p><strong>Crawler_AAO #2 Get Notice Contents</strong></p>
+<p>一样是Website Agent。</p>
+<p><code>Sources</code>选择第一步创建的Agent，即 <strong>Crawler_AAO #1 Get Notice URLs</strong>。</p>
+<p><code>Options</code>中的<code>url</code>就来自第一个Agent，于是可以用Liquid中的<code> {{url}} </code>。</p>
+<p><code>mode</code> 为 <code>merge</code>，合并之前的信息作为最终的输出。当然也可以利用模板<code>template</code>以及Liquid来调用之前获取的对象。</p>
+<p>这里再利用Liquid中的<code>strip_html</code>用法，将所有的html标签去除，最终得到的<code>content</code>就只剩包含<code>\n</code>的字符串了。（之前试了XPath Function里的<code>normalize-space</code>函数，发现所有文字都连一起了，<del>丑死了emmm</del></p>
+<p>最终得到如下的Options。</p>
+<pre class=" language-json"><code class="language-json"><span class="token punctuation">{</span>
+  <span class="token property">"expected_update_period_in_days"</span><span class="token operator">:</span> <span class="token string">"2"</span><span class="token punctuation">,</span>
+  <span class="token property">"user_agent"</span><span class="token operator">:</span> <span class="token string">"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:72.0) Gecko/20100101 Firefox/72.0"</span><span class="token punctuation">,</span>
+  <span class="token property">"url"</span><span class="token operator">:</span> <span class="token string">"{{url}}"</span><span class="token punctuation">,</span>
+  <span class="token property">"type"</span><span class="token operator">:</span> <span class="token string">"html"</span><span class="token punctuation">,</span>
+  <span class="token property">"mode"</span><span class="token operator">:</span> <span class="token string">"merge"</span><span class="token punctuation">,</span>
+  <span class="token property">"extract"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">"content"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+      <span class="token property">"css"</span><span class="token operator">:</span> <span class="token string">".wp_articlecontent"</span><span class="token punctuation">,</span>
+      <span class="token property">"value"</span><span class="token operator">:</span> <span class="token string">"."</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  <span class="token property">"template"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">"content"</span><span class="token operator">:</span> "<span class="token punctuation">{</span><span class="token punctuation">{</span> content | strip_html <span class="token punctuation">}</span><span class="token punctuation">}</span>"
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<hr>
+<h2 id="将通知推送到微信"><a href="#将通知推送到微信" class="headerlink" title="将通知推送到微信"></a>将通知推送到微信</h2><p><strong>Crawler_AAO #3 WeChat Push</strong></p>
+<p>这里利用Server Chan提供的微信模板消息推送服务，之前也写过一篇：<a href="https://miaotony.xyz/2019/03/07/Idea_PushBearAPI_WeChatPush/">小想法 | 基于PushBear API实现微信消息推送</a>。这次再来用一下呢。</p>
+<p>现在 PushBear 一对多的推送需要绑定认证过的服务号了，但是个人的推送还是可以用的。</p>
+<p>这次用的就是Huginn里的<strong>Post Agent</strong>啦。</p>
+<h3 id="method"><a href="#method" class="headerlink" title="method"></a>method</h3><p>这个Agent的<code>method</code>可以是<code>get</code>, <code>post</code>, <code>put</code>, <code>patch</code>, and <code>delete</code>，基本的都能实现。</p>
+<p>Server Chan那边说是用GET，但好像POST也行。</p>
+<h3 id="post-url"><a href="#post-url" class="headerlink" title="post_url"></a>post_url</h3><p>填写Server Chan的API地址，<code> https://sc.ftqq.com/{% credential YourServerChanAPI %}.send? </code></p>
+<p>这里把API保存到了Credentials里，直接用Liquid模板调用就好了。</p>
+<h3 id="content-type"><a href="#content-type" class="headerlink" title="content_type"></a>content_type</h3><p>这里用form（<code>application/x-www-form-urlencoded</code>）。</p>
+<h3 id="payload"><a href="#payload" class="headerlink" title="payload"></a>payload</h3><p>API接口有两个参数，标题<code>text</code>（必须），描述<code>desp</code>（可选），支持Markdown语法。</p>
+<p>这里自己定义就好了啦~ 怎么开心怎么来嘻嘻嘻。</p>
+<pre class=" language-json"><code class="language-json"><span class="token property">"payload"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">"text"</span><span class="token operator">:</span> <span class="token string">"【{{title}}】"</span><span class="token punctuation">,</span>
+    <span class="token property">"desp"</span><span class="token operator">:</span> "<span class="token punctuation">{</span><span class="token punctuation">{</span> url <span class="token punctuation">}</span><span class="token punctuation">}</span><span class="token punctuation">{</span>% line_break %<span class="token punctuation">}</span><span class="token punctuation">{</span>% line_break %<span class="token punctuation">}</span><span class="token punctuation">{</span><span class="token punctuation">{</span> content | replace<span class="token operator">:</span> \<span class="token string">"\n\", \"\n\n\" }}"</span>
+<span class="token punctuation">}</span></code></pre>
+<p><strong>要注意的是：</strong>如果直接在它的模板里修改参数信息，则<strong>带有<code>\</code>的会自动转义为<code>\\</code></strong>！</p>
+<p>因此直接写<code>\n</code>不可行，而要点击<strong>Toggle View</strong>然后直接写<code>\n</code>。或者也可以调用 Huginn 提供的方法 <code> {% line_break %} </code> 。</p>
+<p>另一个问题，<strong>在Server Chan中<code>\n\n</code>才能换行</strong>，于是利用 Liquid 的<code> {{ content | replace: \"\n\", \"\n\n\" }} </code> 把<code>\n</code>给替换成<code>\n\n</code>。（需要直接写，不能直接在参数的框里改。</p>
+<p>还要注意保存后如果再次修改则<code>\n</code>又会自动变为<code>\\n</code>，注意留意。建议保存之前先<strong>Dry Run</strong>试试。</p>
+<h3 id="emit-events"><a href="#emit-events" class="headerlink" title="emit_events"></a>emit_events</h3><p>如果设为<code>true</code>，则会返回一个Event，可以再加一个Agent来判断是否发送成功。</p>
+<p>例如某次发送成功后得到的Event如下，其中的body部分为返回的数据。</p>
+<pre class=" language-json"><code class="language-json"><span class="token punctuation">{</span>
+  <span class="token property">"body"</span><span class="token operator">:</span> <span class="token property">"{\"errno\":0,\"errmsg\":\"success\",\"dataset\"</span><span class="token operator">:</span>\<span class="token string">"done\"}"</span><span class="token punctuation">,</span>
+  <span class="token property">"status"</span><span class="token operator">:</span> <span class="token number">200</span><span class="token punctuation">,</span>
+  <span class="token property">"headers"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">"Server"</span><span class="token operator">:</span> <span class="token string">"nginx"</span><span class="token punctuation">,</span>
+    <span class="token property">"Date"</span><span class="token operator">:</span> <span class="token string">"Tue, 10 Feb 2020 09:00:51 GMT"</span><span class="token punctuation">,</span>
+    <span class="token property">"Content-Type"</span><span class="token operator">:</span> <span class="token string">"text/html;charset=utf-8"</span><span class="token punctuation">,</span>
+    <span class="token property">"Transfer-Encoding"</span><span class="token operator">:</span> <span class="token string">"chunked"</span><span class="token punctuation">,</span>
+    <span class="token property">"Connection"</span><span class="token operator">:</span> <span class="token string">"keep-alive"</span><span class="token punctuation">,</span>
+    <span class="token property">"Expires"</span><span class="token operator">:</span> <span class="token string">"Thu, 01 Jan 1970 00:00:01 GMT"</span><span class="token punctuation">,</span>
+    <span class="token property">"Cache-Control"</span><span class="token operator">:</span> <span class="token string">"no-cache, must-revalidate"</span><span class="token punctuation">,</span>
+    <span class="token property">"Pragma"</span><span class="token operator">:</span> <span class="token string">"no-cache"</span><span class="token punctuation">,</span>
+    <span class="token property">"Via"</span><span class="token operator">:</span> <span class="token string">"100167"</span><span class="token punctuation">,</span>
+    <span class="token property">"Set-Cookie"</span><span class="token operator">:</span> <span class="token string">"PHPSESSID=xxxxxxxxxx; expires=Wed, 11-Feb-2020 09:00:51 GMT; path=/; domain=sc.ftqq.com; HttpOnly"</span><span class="token punctuation">,</span>
+    <span class="token property">"Content-Length"</span><span class="token operator">:</span> <span class="token number">47</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<hr>
+<h2 id="将通知推送到Telegram-Channel"><a href="#将通知推送到Telegram-Channel" class="headerlink" title="将通知推送到Telegram Channel"></a>将通知推送到Telegram Channel</h2><p><strong>Crawler_AAO #3 Telegram Channel Push</strong></p>
+<p>同样使用的是<strong>Post Agent</strong>。<em>（看了一下，Telegram Agent好像不大灵活，而且还需要先有一个Event Formatting Agent，让Event中包含either a <code>text</code>, <code>photo</code>, <code>audio</code>, <code>document</code> or <code>video</code> key.）</em></p>
+<p>昨天研究了好久Telegram Bot，看了看<a href="https://core.telegram.org/bots/api" target="_blank" rel="noopener">官方API文档</a>，发现没有想象中的那么困难233333。</p>
+<p>首先 @BotFather 注册一个TGBot，得到token。</p>
+<p>这里没有设置Webhook，只需要用到<code>sendMessage</code>方法就好了。</p>
+<h3 id="post-url-1"><a href="#post-url-1" class="headerlink" title="post_url"></a>post_url</h3><p>URL为<code>https://api.telegram.org/bot&lt;token&gt;/sendMessage</code>，将<code>&lt;token&gt;</code>部分换成自己的Bot token，可以保存到Credentials里。</p>
+<p>如<code>https://api.telegram.org/bot123456:ABC-DEF1234ghIkl-zyx57W2v1u123ew11/sendMessage</code></p>
+<p>可以先用 PostMan 测试一下。</p>
+<p>别忘了<code>bot</code>……<em>（是我了</em></p>
+<h3 id="method-1"><a href="#method-1" class="headerlink" title="method"></a>method</h3><p>POST or GET</p>
+<h3 id="content-type-1"><a href="#content-type-1" class="headerlink" title="content_type"></a>content_type</h3><ul>
+<li><a href="https://en.wikipedia.org/wiki/Query_string" target="_blank" rel="noopener">URL query string</a></li>
+<li>application/x-www-form-urlencoded</li>
+<li>application/json (except for uploading files)</li>
+<li>multipart/form-data (use to upload files)</li>
+</ul>
+<h3 id="payload-1"><a href="#payload-1" class="headerlink" title="payload"></a>payload</h3><p>参数列表如下</p>
+<p><img src="/2020/02/11/Idea_Huginn_AAONoticeAutoPush/TGAPI.png" alt="API参数"></p>
+<p>也可以使用Markdown语法。（还别说，真挺好</p>
+<hr>
+<p>其实还有一个问题，我部署Huginn的服务器是在墙内的，于是还需要想办法转发出去。</p>
+<p>具体自己想办法了啦。</p>
+<p><del>（折腾了半天用 <em>heroku</em> 搭了一个自己凑合着用</del></p>
+<hr>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>其实最初是想看看Huginn怎么用的，折腾过程中还去看了Liquid模板语法，XPath Functions用法。</p>
+<p>推送到微信的前几天就弄好了，昨天想看看TG Bot怎么玩，于是研究了一下Bot API，顺便又写了个推送到TG Channel的。</p>
+<p><strong>最终的效果——</strong></p>
+<p>每隔一段时间，Huginn 就会派出一个Agent小兵，去看一看教务有没有新的通知公告。</p>
+<p>噢来了呀！Agent带回来了一个新的Event，快把它推给主人吧！</p>
+<p>Ding~</p>
+<p>微信来了一条新信息。</p>
+<p><img src="/2020/02/11/Idea_Huginn_AAONoticeAutoPush/WeChatNotification.png" alt="WeChatNotification"></p>
+<p>TG的Channel那边也来了。</p>
+<p><img src="/2020/02/11/Idea_Huginn_AAONoticeAutoPush/TG_PC.png" alt="Telegram PC端"></p>
+<p><img src="/2020/02/11/Idea_Huginn_AAONoticeAutoPush/TG_Mobile.png" alt="Telegram Mobile"></p>
+<p>嗯，这个感觉就很棒，朴实无华，且枯燥。（然而并没有钱</p>
+<p>emmm 24号开始就要网上上课了。</p>
+<hr>
+<p><strong>以上内容仅供学习研究，请勿用于非法用途。</strong></p>
+<p>噢对了，TG Channel的邀请链接在这个网址里找嘻嘻嘻——</p>
+<p><strong>_tg_aaonotice.miaotony.xyz</strong></p>
+<br>
+
+<hr>
+<p>就在我部署这篇文章的时候，发现所有的 非代码块内的 Liquid语言全部被hexo认为是代码了emmm</p>
+<p>我忘记hexo也用了Liquid了。。（感觉蠢死了</p>
+<p>于是把需要在所有的 <code>{{xxx}}</code>和<code>{% xxx %}</code>外面套一层 <code>{% raw %} ...  {% endraw %}</code><br>如果要写上面这个<code>raw</code>，需要写两个（类似于转义）。</p>
+<p><img src="/2020/02/11/Idea_Huginn_AAONoticeAutoPush/hexo_raw.png" alt="raw"></p>
+<p><img src="/2020/02/11/Idea_Huginn_AAONoticeAutoPush/hexo_raw2.png" alt="raw2"></p>
+<hr>
+<br>
+
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ol>
+<li><p><a href="https://github.com/huginn/huginn/wiki" target="_blank" rel="noopener">Huginn Wiki</a></p>
+</li>
+<li><p><a href="https://github.com/huginn/huginn/wiki/Formatting-Events-using-Liquid" target="_blank" rel="noopener">Formatting Events using Liquid</a></p>
+</li>
+<li><p><a href="https://liquid.bootcss.com/" target="_blank" rel="noopener">Liquid 中文文档</a></p>
+</li>
+<li><p><a href="https://huginnio.herokuapp.com/agents" target="_blank" rel="noopener">Huginn Agent 文档</a></p>
+</li>
+<li><p><a href="https://core.telegram.org/bots/api" target="_blank" rel="noopener">Telegram Bot官方API文档</a></p>
+</li>
+<li><p><a href="https://zhuanlan.zhihu.com/p/46216545" target="_blank" rel="noopener">RSS 进阶篇：Huginn - 真·为任意网页定制 RSS 源（PhantomJs 抓取）</a></p>
+</li>
+<li><p><a href="https://blog.wangjiegulu.com/2018/11/16/douban_high_movie_huginn_telegram/" target="_blank" rel="noopener">Huginn 实现自动通过 Telegram 推送豆瓣高分电影</a></p>
+</li>
+<li><p><a href="https://www.w3.org/TR/xpath/#section-String-Functions" target="_blank" rel="noopener">XPath functions</a>（<a href="https://www.w3school.com.cn/xpath/xpath_functions.asp" target="_blank" rel="noopener">中文介绍</a>）</p>
+<p>etc.</p>
+</li>
+</ol>
+<script>
+        document.querySelectorAll('.github-emoji')
+          .forEach(el => {
+            if (!el.dataset.src) { return; }
+            const img = document.createElement('img');
+            img.style = 'display:none !important;';
+            img.src = el.dataset.src;
+            img.addEventListener('error', () => {
+              img.remove();
+              el.style.color = 'inherit';
+              el.style.backgroundImage = 'none';
+              el.style.background = 'none';
+            });
+            img.addEventListener('load', () => {
+              img.remove();
+            });
+            document.body.appendChild(img);
+          });
+      </script>
+            </div>
+            <hr/>
+
+            
+
+    <div class="reprint" id="reprint-statement">
+        
+            <div class="reprint__author">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-user">
+                        文章作者:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="https://miaotony.xyz" rel="external nofollow noreferrer">MiaoTony</a>
+                </span>
+            </div>
+            <div class="reprint__type">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-link">
+                        文章链接:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="https://miaotony.xyz/2020/02/11/Idea_Huginn_AAONoticeAutoPush/">https://miaotony.xyz/2020/02/11/Idea_Huginn_AAONoticeAutoPush/</a>
+                </span>
+            </div>
+            <div class="reprint__notice">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-copyright">
+                        版权声明:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    本博客所有文章除特別声明外，均采用
+                    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY-NC-SA 4.0</a>
+                    许可协议。转载请注明来源
+                    <a href="https://miaotony.xyz" target="_blank">MiaoTony</a>
+                    !
+                </span>
+            </div>
+        
+    </div>
+
+    <script async defer>
+      document.addEventListener("copy", function (e) {
+        let toastHTML = '<span>复制成功，请遵循本文的转载规则</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">查看</a>';
+        M.toast({html: toastHTML})
+      });
+
+      function navToReprintStatement() {
+        $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
+      }
+    </script>
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            
+                                <a href="/tags/Tech/">
+                                    <span class="chip bg-color">Tech</span>
+                                </a>
+                            
+                                <a href="/tags/%E5%B0%8F%E6%83%B3%E6%B3%95/">
+                                    <span class="chip bg-color">小想法</span>
+                                </a>
+                            
+                                <a href="/tags/Projects/">
+                                    <span class="chip bg-color">Projects</span>
+                                </a>
+                            
+                                <a href="/tags/Huginn/">
+                                    <span class="chip bg-color">Huginn</span>
+                                </a>
+                            
+                                <a href="/tags/Telegram/">
+                                    <span class="chip bg-color">Telegram</span>
+                                </a>
+                            
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+
+<div id="article-share">
+    
+    
+    <div class="social-share" data-sites="qq,qzone,wechat,weibo,twitter,facebook,google,douban,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
+    <script src="/libs/share/js/social-share.min.js"></script>
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+                <style>
+    #reward {
+        margin: 40px 0;
+        text-align: center;
+    }
+
+    #reward .reward-link {
+        font-size: 1.4rem;
+        line-height: 38px;
+    }
+
+    #reward .btn-floating:hover {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    #rewardModal {
+        width: 320px;
+        height: 350px;
+    }
+
+    #rewardModal .reward-title {
+        margin: 15px auto;
+        padding-bottom: 5px;
+    }
+
+    #rewardModal .modal-content {
+        padding: 10px;
+    }
+
+    #rewardModal .close {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+        color: rgba(0, 0, 0, 0.5);
+        font-size: 1.3rem;
+        line-height: 20px;
+        cursor: pointer;
+    }
+
+    #rewardModal .close:hover {
+        color: #ef5350;
+        transform: scale(1.3);
+        -moz-transform:scale(1.3);
+        -webkit-transform:scale(1.3);
+        -o-transform:scale(1.3);
+    }
+
+    #rewardModal .reward-tabs {
+        margin: 0 auto;
+        width: 210px;
+    }
+
+    .reward-tabs .tabs {
+        height: 38px;
+        margin: 10px auto;
+        padding-left: 0;
+    }
+
+    .reward-content ul {
+        padding-left: 0 !important;
+    }
+
+    .reward-tabs .tabs .tab {
+        height: 38px;
+        line-height: 38px;
+    }
+
+    .reward-tabs .tab a {
+        color: #fff;
+        background-color: #ccc;
+    }
+
+    .reward-tabs .tab a:hover {
+        background-color: #ccc;
+        color: #fff;
+    }
+
+    .reward-tabs .wechat-tab .active {
+        color: #fff !important;
+        background-color: #22AB38 !important;
+    }
+
+    .reward-tabs .alipay-tab .active {
+        color: #fff !important;
+        background-color: #019FE8 !important;
+    }
+
+    .reward-tabs .reward-img {
+        width: 210px;
+        height: 210px;
+    }
+</style>
+
+<div id="reward">
+    <a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-medium waves-effect waves-light red">赏</a>
+
+    <!-- Modal Structure -->
+    <div id="rewardModal" class="modal">
+        <div class="modal-content">
+            <a class="close modal-close"><i class="fas fa-times"></i></a>
+            <h4 class="reward-title">打赏一下让我来点好吃好玩的呗~</h4>
+            <div class="reward-content">
+                <div class="reward-tabs">
+                    <ul class="tabs row">
+                        <li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li>
+					<!-- 暂时注释掉
+						<li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li>
+					-->
+                    </ul>
+					<div id="wechat">
+                        <img src="/medias/reward/wechat.png" class="reward-img" alt="微信打赏二维码">
+                    </div>                    
+					<!-- 暂时注释掉
+					<div id="alipay">
+                        <img src="" class="reward-img" alt="支付宝打赏二维码">
+                    </div>
+					-->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.tabs').tabs();
+    });
+</script>
+            
+        </div>
+    </div>
+
+    
+        <link rel="stylesheet" href="/libs/gitalk/gitalk.css">
+<link rel="stylesheet" href="/css/my-gitalk.css">
+
+<div class="card gitalk-card" data-aos="fade-up">
+    <div class="comment_headling" style="font-size: 20px; font-weight: 700; position: relative; left: 20px; top: 15px; padding-bottom: 5px;">
+        <i class="fas fa-comments fa-fw" aria-hidden="true"></i>
+        <span>评论</span>
+    </div>
+    <div id="gitalk-container" class="card-content"></div>
+</div>
+
+<script src="/libs/gitalk/gitalk.min.js"></script>
+<script>
+    let gitalk = new Gitalk({
+        clientID: '116343b4650fce4789b6',
+        clientSecret: '3e9be2ad6c9b693af1753290c7c059b1e4f34d5d',
+        repo: 'miaotony.github.io',
+        owner: 'miaotony',
+        admin: "miaotony",
+        id: '2020-02-11T15-30-00',
+        distractionFreeMode: false  // Facebook-like distraction free mode
+    });
+
+    gitalk.render('gitalk-container');
+</script>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
+            <div class="card">
+                <a href="/2020/02/11/Idea_Huginn_AAONoticeAutoPush/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/15.jpg" class="responsive-img" alt="小想法 | 利用Huginn&TelegramBot实现教务通知自动爬取与推送">
+                        
+                        <span class="card-title">小想法 | 利用Huginn&TelegramBot实现教务通知自动爬取与推送</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            最近研究了一下Huginn，实现了教务通知公告的自动爬取，再基于Server Chan及Telegram Bot API，将信息分别推送到微信和TG。
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-02-11
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/Tech/" class="post-category">
+                                    Tech
+                                </a>
+                            
+                            <a href="/categories/Tech/Projects/" class="post-category">
+                                    Projects
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/Tech/">
+                        <span class="chip bg-color">Tech</span>
+                    </a>
+                    
+                    <a href="/tags/%E5%B0%8F%E6%83%B3%E6%B3%95/">
+                        <span class="chip bg-color">小想法</span>
+                    </a>
+                    
+                    <a href="/tags/Projects/">
+                        <span class="chip bg-color">Projects</span>
+                    </a>
+                    
+                    <a href="/tags/Huginn/">
+                        <span class="chip bg-color">Huginn</span>
+                    </a>
+                    
+                    <a href="/tags/Telegram/">
+                        <span class="chip bg-color">Telegram</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2020/02/07/Blog_UpdateGitalk/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/18.jpg" class="responsive-img" alt="Blog折腾记 | 升级Gitalk评论插件以解决EmailBombs">
+                        
+                        <span class="card-title">Blog折腾记 | 升级Gitalk评论插件以解决EmailBombs</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            由于Gitalk中一个GitHub API Deprecation的问题，邮箱被GitHub轰炸了。忍不住了于是来修一修这个bug。
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-02-07
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/Blog/" class="post-category">
+                                    Blog
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/Tech/">
+                        <span class="chip bg-color">Tech</span>
+                    </a>
+                    
+                    <a href="/tags/blog/">
+                        <span class="chip bg-color">blog</span>
+                    </a>
+                    
+                    <a href="/tags/Gitalk/">
+                        <span class="chip bg-color">Gitalk</span>
+                    </a>
+                    
+                    <a href="/tags/Life/">
+                        <span class="chip bg-color">Life</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+<script>
+    $('#articleContent').on('copy', function (e) {
+        // IE8 or earlier browser is 'undefined'
+        if (typeof window.getSelection === 'undefined') return;
+
+        var selection = window.getSelection();
+        // if the selection is short let's not annoy our users.
+        if (('' + selection).length < Number.parseInt('200')) {
+            return;
+        }
+
+        // create a div outside of the visible area and fill it with the selected text.
+        var bodyElement = document.getElementsByTagName('body')[0];
+        var newdiv = document.createElement('div');
+        newdiv.style.position = 'absolute';
+        newdiv.style.left = '-99999px';
+        bodyElement.appendChild(newdiv);
+        newdiv.appendChild(selection.getRangeAt(0).cloneContents());
+
+        // we need a <pre> tag workaround.
+        // otherwise the text inside "pre" loses all the line breaks!
+        if (selection.getRangeAt(0).commonAncestorContainer.nodeName === 'PRE') {
+            newdiv.innerHTML = "<pre>" + newdiv.innerHTML + "</pre>";
+        }
+
+        var url = document.location.href;
+        newdiv.innerHTML += '<br />'
+            + '来源: MiaoTony&#39;s小窝<br />'
+            + '文章作者: MiaoTony<br />'
+            + '文章链接: <a href="' + url + '">' + url + '</a><br />'
+            + '本文章著作权归作者MiaoTony所有，任何形式的转载都请注明出处。';
+
+        selection.selectAllChildren(newdiv);
+        window.setTimeout(function () {bodyElement.removeChild(newdiv);}, 200);
+    });
+</script>
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+
+
+<!-- 代码块复制 -->
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
+
+
+<!-- 代码块折行 -->
+
+<style type="text/css">
+code[class*="language-"], pre[class*="language-"] { white-space: pre !important; }
+</style>
+
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('1'),
+            headingSelector: 'h2, h3, h4, h5'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h2, h3, h4, h5').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+
+    <footer class="page-footer bg-color">
+    
+    <div class="container row center-align" style="margin-bottom: 15px !important;">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            <span id="year">2019</span>
+            <a href="https://miaotony.xyz" target="_blank">MiaoTony</a>
+            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+            |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
+            <br>
+            
+            &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
+                class="white-color">30.9k</span>&nbsp;字
+            
+            
+            
+            
+            
+            
+            <span id="busuanzi_container_site_pv">
+                |&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
+                    class="white-color"></span>&nbsp;次
+            </span>
+            
+            
+            <span id="busuanzi_container_site_uv">
+                |&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;<span id="busuanzi_value_site_uv"
+                    class="white-color"></span>&nbsp;人
+            </span>
+            
+            <br>
+            
+            <span id="sitetime">载入运行时间...</span>
+            <script>
+                function siteTime() {
+                    var seconds = 1000;
+                    var minutes = seconds * 60;
+                    var hours = minutes * 60;
+                    var days = hours * 24;
+                    var years = days * 365;
+                    var today = new Date();
+                    var startYear = "2019";
+                    var startMonth = "11";
+                    var startDate = "28";
+                    var startHour = "0";
+                    var startMinute = "0";
+                    var startSecond = "0";
+                    var todayYear = today.getFullYear();
+                    var todayMonth = today.getMonth() + 1;
+                    var todayDate = today.getDate();
+                    var todayHour = today.getHours();
+                    var todayMinute = today.getMinutes();
+                    var todaySecond = today.getSeconds();
+                    var t1 = Date.UTC(startYear, startMonth, startDate, startHour, startMinute, startSecond);
+                    var t2 = Date.UTC(todayYear, todayMonth, todayDate, todayHour, todayMinute, todaySecond);
+                    var diff = t2 - t1;
+                    var diffYears = Math.floor(diff / years);
+                    var diffDays = Math.floor((diff / days) - diffYears * 365);
+                    var diffHours = Math.floor((diff - (diffYears * 365 + diffDays) * days) / hours);
+                    var diffMinutes = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours) /
+                        minutes);
+                    var diffSeconds = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours -
+                        diffMinutes * minutes) / seconds);
+                    if (startYear == todayYear) {
+                        document.getElementById("year").innerHTML = todayYear;
+                        document.getElementById("sitetime").innerHTML = "本站已安全运行 " + diffDays + " 天 " + diffHours +
+                            " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒";
+                    } else {
+                        document.getElementById("year").innerHTML = startYear + " - " + todayYear;
+                        document.getElementById("sitetime").innerHTML = "本站已安全运行 " + diffYears + " 年 " + diffDays +
+                            " 天 " + diffHours + " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒";
+                    }
+                }
+                setInterval(siteTime, 1000);
+            </script>
+            
+            <br>
+            
+        </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+    <a href="https://github.com/miaotony" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+        <i class="fab fa-github"></i>
+    </a>
+
+
+
+    <a href="mailto:miaotony@outlook.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fas fa-envelope-open"></i>
+    </a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
+        <i class="fas fa-rss"></i>
+    </a>
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script src="/js/search.js"></script>
+<script type="text/javascript">
+$(function () {
+    searchFunc("/" + "search.xml", 'searchInput', 'searchResult');
+});
+</script>
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+    <!-- Baidu Analytics -->
+
+    <!-- Baidu Push -->
+
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+    
+    <script src="/libs/others/clicklove.js" async="async"></script>
+    
+    
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+    
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+</body>
+
+</html>
