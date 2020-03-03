@@ -644,7 +644,7 @@ netsh interface ipv6 add v6v4tunnel interface=IP6Tunnel localaddress=172.16.xxx.
 netsh interface ipv6 add address interface=IP6Tunnel address=2001:470:xx:xxxx::2
 netsh interface ipv6 add route prefix=::/0 interface=IP6Tunnel nexthop=2001:470:xx:xxxx::1</code></pre><p>注意修改对应的IP地址。</p>
 <hr>
-<h2 id="0x03-一些问题的解决"><a href="#0x03-一些问题的解决" class="headerlink" title="0x03 一些问题的解决"></a>0x03 一些问题的解决</h2><p><strong>按照上面一番配置好</strong>之后，有可能还是访问不了 IPv6 的网站。</p>
+<h2 id="0x04-一些问题的解决"><a href="#0x04-一些问题的解决" class="headerlink" title="0x04 一些问题的解决"></a>0x04 一些问题的解决</h2><p><strong>按照上面一番配置好</strong>之后，有可能还是访问不了 IPv6 的网站。</p>
 <p><strong>有可能</strong>需要如下处理吧。<em>（谁知道会这么麻烦呢</em></p>
 <p>要是没事了就直接往下看了。</p>
 <ul>
@@ -670,7 +670,7 @@ nameserver 2001:4860:4860::8844</code></pre>
 <pre class=" language-bash"><code class="language-bash">route -A inet6 add ::/0 dev he-ipv6</code></pre>
 <p>再 ping 一下应该可以了吧（</p>
 <hr>
-<h2 id="0x04-Nginx-支持-IPv6-访问"><a href="#0x04-Nginx-支持-IPv6-访问" class="headerlink" title="0x04 Nginx 支持 IPv6 访问"></a>0x04 Nginx 支持 IPv6 访问</h2><p>修改配置文件，监听 IPv6 端口。</p>
+<h2 id="0x05-Nginx-支持-IPv6-访问"><a href="#0x05-Nginx-支持-IPv6-访问" class="headerlink" title="0x05 Nginx 支持 IPv6 访问"></a>0x05 Nginx 支持 IPv6 访问</h2><p>修改配置文件，监听 IPv6 端口。</p>
 <pre><code>server {
   listen 80;
   listen [::]:80; // 监听 IPv6 的 80 端口
@@ -690,14 +690,14 @@ server {
 <p>每分钟执行一次 ping 操作，这样访问就没问题了。</p>
 <p><em>（不过想不大明白为啥这个通道会自动断开。有人说与 ip6tables 有关，不大清楚。。 emmm</em></p>
 <hr>
-<h2 id="0x05-配置-DNS"><a href="#0x05-配置-DNS" class="headerlink" title="0x05 配置 DNS"></a>0x05 配置 DNS</h2><p>配置一条<strong>AAAA记录指向公网的 IPv6 地址</strong>即可。可以试试开启CDN。</p>
+<h2 id="0x06-配置-DNS"><a href="#0x06-配置-DNS" class="headerlink" title="0x06 配置 DNS"></a>0x06 配置 DNS</h2><p>配置一条<strong>AAAA记录指向公网的 IPv6 地址</strong>即可。可以试试开启CDN。</p>
 <p>而后就可以通过域名访问网站了。</p>
 <p>不过没有 CDN 的话只能通过 IPv6 进行访问。</p>
 <hr>
-<h2 id="0x06-检查网站是否支持-IPv6"><a href="#0x06-检查网站是否支持-IPv6" class="headerlink" title="0x06 检查网站是否支持 IPv6"></a>0x06 检查网站是否支持 IPv6</h2><p>利用 <a href="http://ipv6-test.com/validate.php" target="_blank" rel="noopener">http://ipv6-test.com/validate.php</a></p>
+<h2 id="0x07-检查网站是否支持-IPv6"><a href="#0x07-检查网站是否支持-IPv6" class="headerlink" title="0x07 检查网站是否支持 IPv6"></a>0x07 检查网站是否支持 IPv6</h2><p>利用 <a href="http://ipv6-test.com/validate.php" target="_blank" rel="noopener">http://ipv6-test.com/validate.php</a></p>
 <p><img src="/2020/03/03/Server_ObtainIPv6ViaTunnelBroker/ipv6test.png" alt="ipv6test"></p>
 <hr>
-<h2 id="0x07-自动更新-Endpoint-IP"><a href="#0x07-自动更新-Endpoint-IP" class="headerlink" title="0x07 自动更新 Endpoint IP"></a>0x07 自动更新 Endpoint IP</h2><p>前面说只要公网的IPv4地址<strong>相对固定</strong>就好了，这里就这个意思啦。</p>
+<h2 id="0x08-自动更新-Endpoint-IP"><a href="#0x08-自动更新-Endpoint-IP" class="headerlink" title="0x08 自动更新 Endpoint IP"></a>0x08 自动更新 Endpoint IP</h2><p>前面说只要公网的IPv4地址<strong>相对固定</strong>就好了，这里就这个意思啦。</p>
 <p>HE 还支持<strong>为动态 IPv4 地址建立 IPv6 通道</strong>，这里要用到他提供的API了。</p>
 <blockquote>
 <p>We’ve added support for Dyn-compliant endpoint updates so that equipment talking this spec can very easily update your tunnel endpoint.</p>
