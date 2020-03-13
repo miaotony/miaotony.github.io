@@ -4,7 +4,7 @@
 
 **URL:**   [https://miaotony.xyz/](https://miaotony.xyz/)   
 
-**Telegram Channel: ** [https://t.me/MiaoTonyChannel](https://t.me/MiaoTonyChannel)
+**Telegram Channel:**  [https://t.me/MiaoTonyChannel](https://t.me/MiaoTonyChannel)
 
 
 
