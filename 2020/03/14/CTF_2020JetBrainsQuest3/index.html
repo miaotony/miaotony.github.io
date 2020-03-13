@@ -1,0 +1,1459 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="CTF | JetBrains Quest 3 WriteUp/攻略, MiaoTony">
+    <meta name="description" content="JetBrains Quest 3出来了，又来体验了一波，最后的礼品是20% discount on an All Products Pack subscription，这里随手写写攻略吧。">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>CTF | JetBrains Quest 3 WriteUp/攻略 | MiaoTony&#39;s小窝</title>
+    <link rel="icon" type="image/png" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/favicon.png">
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/libs/awesome/css/all.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/css/my.css">
+
+    <script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/libs/jquery/jquery.min.js"></script>
+	
+    <script>
+        //来个特效玩玩喵 20200123
+        var titleTime;
+        var OriginTitile = document.title;
+        document.addEventListener('visibilitychange', function() {
+            if (document.hidden) {
+                document.title = '|ω·) 喵~快回来呀！';
+                clearTimeout(titleTime);
+            } else {
+                document.title = '(/≧▽≦)/ Meow！';
+                titleTime = setTimeout(function() {
+        	    document.title = OriginTitile;
+        }, 800);
+    }
+        });
+    </script>
+<link rel="alternate" href="/atom.xml" title="MiaoTony's小窝" type="application/atom+xml">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/css/prism.css" type="text/css"></head>
+
+
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">MiaoTony's小窝</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>首页</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>标签</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>分类</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/archives" class="waves-effect waves-light">
+      
+      <i class="fas fa-archive" style="zoom: 0.6;"></i>
+      
+      <span>归档</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>关于</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/contact" class="waves-effect waves-light">
+      
+      <i class="fas fa-comments" style="zoom: 0.6;"></i>
+      
+      <span>留言</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/friends" class="waves-effect waves-light">
+      
+      <i class="fas fa-address-book" style="zoom: 0.6;"></i>
+      
+      <span>友链</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="搜索" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">MiaoTony's小窝</div>
+        <div class="logo-desc">
+            
+            喵~欢迎各位大佬的来访呀！
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			首页
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			标签
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			分类
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/archives" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-archive"></i>
+			
+			归档
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			关于
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/contact" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-comments"></i>
+			
+			留言
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/friends" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-address-book"></i>
+			
+			友链
+		</a>
+          
+        </li>
+        
+        
+        <li><div class="divider"></div></li>
+        <li>
+            <a href="https://github.com/miaotony" class="waves-effect waves-light" target="_blank">
+                <i class="fab fa-github-square fa-fw"></i>Fork Me
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+        </div>
+
+        
+            <style>
+    .nav-transparent .github-corner {
+        display: none !important;
+    }
+
+    .github-corner {
+        position: absolute;
+        z-index: 10;
+        top: 0;
+        right: 0;
+        border: 0;
+        transform: scale(1.1);
+    }
+
+    .github-corner svg {
+        color: #0f9d58;
+        fill: #fff;
+        height: 64px;
+        width: 64px;
+    }
+
+    .github-corner:hover .octo-arm {
+        animation: a 0.56s ease-in-out;
+    }
+
+    .github-corner .octo-arm {
+        animation: none;
+    }
+
+    @keyframes a {
+        0%,
+        to {
+            transform: rotate(0);
+        }
+        20%,
+        60% {
+            transform: rotate(-25deg);
+        }
+        40%,
+        80% {
+            transform: rotate(10deg);
+        }
+    }
+</style>
+
+<a href="https://github.com/miaotony" class="github-corner tooltipped hide-on-med-and-down" target="_blank"
+   data-tooltip="Fork Me" data-position="left" data-delay="50">
+    <svg viewBox="0 0 250 250" aria-hidden="true">
+        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+        <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2"
+              fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
+        <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z"
+              fill="currentColor" class="octo-body"></path>
+    </svg>
+</a>
+        
+    </nav>
+
+</header>
+
+    
+<script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/libs/cryptojs/crypto-js.min.js"></script>
+<script>
+    (function() {
+        let pwd = '';
+        if (pwd && pwd.length > 0) {
+            if (pwd !== CryptoJS.SHA256(prompt('请输入访问本文章的密码')).toString(CryptoJS.enc.Hex)) {
+                alert('密码错误，将返回主页！');
+                location.href = '/';
+            }
+        }
+    })();
+</script>
+
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/medias/featureimages/3.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <h1 class="description center-align post-title">CTF | JetBrains Quest 3 WriteUp/攻略</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        width: 345px;
+        padding-left: 20px;
+    }
+
+    .toc-widget .toc-title {
+        margin: 35px 0 15px 0;
+        padding-left: 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content {
+        height: calc(100vh - 250px);
+        overflow: auto;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #42b983;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+    }
+
+    #toc-content .is-active-link {
+        color: #42b983;
+    }
+
+    #toc-content .is-active-link::before {
+        background-color: #42b983;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 15px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/CTF/">
+                                <span class="chip bg-color">CTF</span>
+                            </a>
+                        
+                            <a href="/tags/WriteUp/">
+                                <span class="chip bg-color">WriteUp</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/CTF/" class="post-category">
+                                CTF
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2020-03-14
+                </div>
+                
+
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
+                    2.1k
+                </div>
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
+                    9 分
+                </div>
+                
+
+                
+            </div>
+
+        </div>
+        <hr class="clearfix">
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <h2 id="Cause"><a href="#Cause" class="headerlink" title="Cause"></a>Cause</h2><p>晚上看到 JetBrains 最后一个 Quest 出来了，于是继续来解个谜吧！</p>
+<p>前两个 JetBrainsQuest 的 WriteUp 在这里↓呢。</p>
+<p><a href="https://miaotony.xyz/2020/03/12/CTF_2020JetBrainsQuest/"><strong>CTF | JetBrains Quest 1&amp;2 WriteUp/攻略</strong></a> </p>
+<p>这次的难度比上次要大一些，不过总体而言也不太难啦。</p>
+<blockquote>
+<p>ATTENTION! </p>
+<p style="color:red">下面的内容 <strong>涉及剧透</strong>！</p>
+
+<p><strong>如果想自己做的话，就暂时不要往下看了！</strong></p>
+</blockquote>
+<h2 id="Step-1"><a href="#Step-1" class="headerlink" title="Step 1"></a>Step 1</h2><p>推特地址：</p>
+<p><a href="https://twitter.com/jetbrains/status/1238420744817782784" target="_blank" rel="noopener">https://twitter.com/jetbrains/status/1238420744817782784</a></p>
+<p><img src="/2020/03/14/CTF_2020JetBrainsQuest3/Quest3.png" alt="Quest 3"></p>
+<p>噫！这是最后一个 quest 了！来解密吧~</p>
+<blockquote>
+<p>SGF2ZSB5b3Ugc2VlbiB0aGUgcG9zdCBvbiBvdXIgSW5zdGFncmFtIGFjY291bnQ/</p>
+</blockquote>
+<p>base64 解密得到</p>
+<blockquote>
+<p>Have you seen the post on our Instagram account?</p>
+</blockquote>
+<p>去 Instagram 找找线索。</p>
+<br>
+
+<h2 id="Step-2"><a href="#Step-2" class="headerlink" title="Step 2"></a>Step 2</h2><p>前往 JetBrains 的Ins： <a href="https://www.instagram.com/jetbrains/" target="_blank" rel="noopener">https://www.instagram.com/jetbrains/</a></p>
+<p>第一张图就是熟悉的 Quest 领取福利的页面背景了。</p>
+<p>（留个<a href="https://www.instagram.com/p/B9q-CnhoUVl/" target="_blank" rel="noopener">备份链接</a></p>
+<p><img src="/2020/03/14/CTF_2020JetBrainsQuest3/Step2.png" alt="Ins"></p>
+<blockquote>
+<p>Welcome to the final Quest! You should start on the Kotlin Playground: <a href="https://jb.gg/kotlin_quest" target="_blank" rel="noopener">https://jb.gg/kotlin_quest</a><br>P.S. If you don’t know about the #JetBrainsQuest, it’s not too late to find out.</p>
+</blockquote>
+<p>得到一个网址：<a href="https://jb.gg/kotlin_quest" target="_blank" rel="noopener">https://jb.gg/kotlin_quest</a></p>
+<br>
+
+<h2 id="Step-3"><a href="#Step-3" class="headerlink" title="Step 3"></a>Step 3</h2><p>访问上面的网址，发现跳转又跳转，最终来到了一个 <strong>Kotlin 在线编程页面</strong>。</p>
+<p>就是他说的 <code>the Kotlin Playground</code> 吧。</p>
+<p>地址<a href="https://play.kotlinlang.org/#eyJ2ZXJzaW9uIjoiMS4zLjUwIiwiY29kZSI6ImZ1biBtYWluKCkge1xuICAgdmFsIHMgPSBcIlpoI2tkeWgjZWhocSN6cnVubHFqIzU1MjojcnEjd2toI3lsZ2hyI2lydSN3a2gjaWx1dncjaHNsdnJnaCNyaSN3a2gjU2tzVndydXAjSERTMSNMaSN6aCNqZHloI3xyeCNkI2ZveGgvI2x3I3pyeG9nI2VoI2hkdnwjZHYjc2wxXCJcblxuICAgIHZhbCBuOiBJbnQgPSBUT0RPKClcbiAgIGZvciAoYyBpbiBzKSB7XG4gICAgICAgcHJpbnQoYyAtIG4pXG4gICB9XG59IiwicGxhdGZvcm0iOiJqYXZhIiwiYXJncyI6IiJ9" target="_blank" rel="noopener">在这里</a> （链接太长了就不显示出来好了</p>
+<p><img src="/2020/03/14/CTF_2020JetBrainsQuest3/Step3.png" alt="Step3"></p>
+<pre class=" language-kotlin"><code class="language-kotlin"><span class="token keyword">fun</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+   <span class="token keyword">val</span> s <span class="token operator">=</span> <span class="token string">"Zh#kdyh#ehhq#zrunlqj#552:#rq#wkh#ylghr#iru#wkh#iluvw#hslvrgh#ri#wkh#SksVwrup#HDS1#Li#zh#jdyh#|rx#d#foxh/#lw#zrxog#eh#hdv|#dv#sl1"</span>
+
+    <span class="token keyword">val</span> n<span class="token operator">:</span> Int <span class="token operator">=</span> <span class="token function">TODO</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+   <span class="token keyword">for</span> <span class="token punctuation">(</span>c <span class="token keyword">in</span> s<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+       <span class="token function">print</span><span class="token punctuation">(</span>c <span class="token operator">-</span> n<span class="token punctuation">)</span>
+   <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre>
+<p>这个含义很明显呢。就是把字符串 <code>s</code> 每个字母往前移动 n 个字符好了。（i.e. SHIFTx，凯撒密码之类的）</p>
+<p>我也不记得 n 是多少了emmm，反正个位数吧，试一试就出来了。</p>
+<p>于是得到</p>
+<pre><code>We have been working 22/7 on the video for the first episode of the PhpStorm EAP. If we gave you a clue, it would be easy as pi.</code></pre><p>关键词：<strong>video</strong>，<strong>PhpStorm EAP</strong>，<strong>pi</strong>。</p>
+<p>盲猜就与 3.14/3.1415926 之类的有关。</p>
+<br>
+
+<h2 id="Step-4"><a href="#Step-4" class="headerlink" title="Step 4"></a>Step 4</h2><p>搜索 <strong>PhpStorm EAP</strong>，来到了<a href="https://www.jetbrains.com/phpstorm/nextversion/" target="_blank" rel="noopener">他的网站</a>。</p>
+<p>噢这是个 PHP 的 IDE 啊。EAP 相当于预发布版本？</p>
+<blockquote>
+<p><strong>PhpStorm Early Access Program</strong></p>
+<p>At JetBrains, we believe that to make great tools for developers, we should listen to and involve developers. Our Early Access Program (EAP) lets our development community participate in the product discussions and influence development planning, from the very early stages.</p>
+</blockquote>
+<p>在页面上没有找到 <code>quest</code>，也没找到视频及其链接，看了一下最新的版本是 <code>2020.1 EAP build 201.6251.26 Released: March 12, 2020</code>。</p>
+<p>看了一下 <strong>Blog &amp; Social</strong>，来到 PHPSTORM 的 <a href="https://blog.jetbrains.com/phpstorm/" target="_blank" rel="noopener">blog</a>，看到了最新版本发布的 Post。</p>
+<p><img src="/2020/03/14/CTF_2020JetBrainsQuest3/PhpStorm_Blog.png" alt="PhpStorm Blog"></p>
+<p>好了，有视频链接了！<a href="https://www.youtube.com/playlist?list=PLQ176FUIyIUb7qSArPCxOkIGX-cqdfoBx" target="_blank" rel="noopener"><em>What’s Coming in PhpStorm 2020.1</em></a></p>
+<p>在 What’s Coming in PhpStorm 2020.1 – EAP Series | Season 2020.1 Episode 1 这个视频里，重点关注 PI 即 3’14’’ 附近的内容。</p>
+<p>发现画面抖动了两下 emmm 有猫腻！ </p>
+<p><img src="/2020/03/14/CTF_2020JetBrainsQuest3/Step4.png" alt="video"></p>
+<p>猜想线索藏在抖动的位置，然而看了几遍，甚至开到最慢的 0.25 倍速，都没看出来 emmm<em>（好菜啊</em></p>
+<p>于是找了个工具把这个视频下载下来，放 Premiere 里逐帧看。</p>
+<p><img src="/2020/03/14/CTF_2020JetBrainsQuest3/Step4_PR.png" alt="Premiere"></p>
+<p>裁剪了，放大再看这1秒多的片段。最后发现 <code>homepage</code> 这里发生了变化。</p>
+<p><img src="/2020/03/14/CTF_2020JetBrainsQuest3/Step4_homepage.png" alt="homepage变化"></p>
+<p>原来他的意思是 clue 在这两段抖动之间啊！</p>
+<p>于是得到下一个链接：<a href="https://jb.gg/31415926" target="_blank" rel="noopener">https://jb.gg/31415926</a></p>
+<p>的确与 PI 有关呢（</p>
+<blockquote>
+<p>有意思的是，<strong>这个视频2月10日就发布了</strong>，真是蓄谋已久啊 233333.</p>
+<p>看评论区还有人一个月前疑惑呢。</p>
+<p><img src="/2020/03/14/CTF_2020JetBrainsQuest3/Step4_comments.png" alt="comments"></p>
+</blockquote>
+<br>
+
+<h2 id="Step-5"><a href="#Step-5" class="headerlink" title="Step 5"></a>Step 5</h2><p>访问 <a href="https://jb.gg/31415926" target="_blank" rel="noopener">https://jb.gg/31415926</a></p>
+<p>301跳转到 <a href="https://www.quiz-maker.com/Q2723CE" target="_blank" rel="noopener">https://www.quiz-maker.com/Q2723CE</a></p>
+<p>（发现这个 <a href="http://www.quiz-maker.com" target="_blank" rel="noopener">www.quiz-maker.com</a> 是个挺不错的在线 quiz 网站呢</p>
+<blockquote>
+<p><strong>The Easiest #1 Rated Online Quiz Maker</strong></p>
+<p>Publish your quiz in a matter of minutes. Go ahead Try it now!</p>
+</blockquote>
+<p><img src="/2020/03/14/CTF_2020JetBrainsQuest3/Step5.png" alt="Step5"></p>
+<p>然后需要你在 1min 内回答关于 JB 的一些问题。</p>
+<p>（真挺好，顺便宣传一下自己。</p>
+<p>做不对再重来，然后发现每次还有新的题目（黑脸</p>
+<p>然后我做了好多次，发现谷歌搜索的 精选摘要 真的好用。</p>
+<p>最后终于全对了。</p>
+<p><img src="/2020/03/14/CTF_2020JetBrainsQuest3/Step5_2.png" alt="Step5_2"></p>
+<blockquote>
+<p>Almost there! The last challenge is in the <em>Tips of the Day</em> of a specific IntelliJ IDEA Community version from our latest build page in Confluence, but… there is a catch. You have to know which version to look for. To find the build number, you need sight beyond sight:</p>
+<p>. Not Everything Today Does All You Could Ask. Lessons Learned From Other Relevant Solutions, Possibly Even Another Kind Emerge. Risking Sometimes Being Liberal Or Generous Proves Ordinary Simple Tests Infinitely More Annoying. Get Examining Hidden Initial Designated Early Symbols. They Have Everything Needed, Except Xerox, To Completely Level Up Everything.</p>
+</blockquote>
+<p>看来与 <em>Tips of the Day</em> of a specific IntelliJ IDEA Community version 有关，藏在每日提示里可还行，而且还是一个神秘的版本。这个版本部署在 Confluence 上面。</p>
+<p>下面这段话有点摸不着头脑。</p>
+<p>不管了先去 IDEA 网站上看看，难道顺便骗一波下载量？？？</p>
+<br>
+
+<h2 id="Step-6"><a href="#Step-6" class="headerlink" title="Step 6"></a>Step 6</h2><p>访问 IDEA 官网，顺着 Release Notes，来到了<a href="https://confluence.jetbrains.com/collector/pages.action?key=IDEADEV" target="_blank" rel="noopener">这里</a>。</p>
+<p><img src="/2020/03/14/CTF_2020JetBrainsQuest3/Step6.png" alt="Step6"></p>
+<p>第一个就是吧。还是几个小时前刚发布的呢！</p>
+<p>就是这个：<a href="https://confluence.jetbrains.com/display/IDEADEV/IDEA+2020.1+Quest+Build+Edition" target="_blank" rel="noopener">IDEA 2020.1 Quest Build Edition</a></p>
+<p><img src="/2020/03/14/CTF_2020JetBrainsQuest3/Step6_QuestBuildEdition.png" alt="Step6_QuestBuildEdition"></p>
+<p>下载下来而后安装。什么，1.4GB？？？</p>
+<p><img src="/2020/03/14/CTF_2020JetBrainsQuest3/IEDA_Setup.png" alt="IEDA_Setup"></p>
+<p>随便了随便了，装完卸掉好了。（不过听说用来写 Java 挺好用的</p>
+<p><em>（估计这里还能引一波流呢</em></p>
+<br>
+
+<h2 id="Step-7"><a href="#Step-7" class="headerlink" title="Step 7"></a>Step 7</h2><p>装好了随意建一个项目，唤出 Tip of the Day.</p>
+<p>翻了几页之后找到了。</p>
+<p><img src="/2020/03/14/CTF_2020JetBrainsQuest3/Step7.png" alt="Tip of the Day"></p>
+<blockquote>
+<p><strong>JETBRAINS QUEST</strong>: LAST PUZZLE</p>
+<p><em>You have discovered our JetBrains Quest! If you don’t know what this is, you should start from the beginning.</em></p>
+<p>This is it. The last puzzle. You are just one step away from glory!<br>Now you just need the Key to unlock the Quest page.<br>The Key is the first and last 4 digits of the 50 * 10^6 position of the Fibonacci sequence (F(50 Million)).<br>As you may know by now, not all that glitters is gold, and to solve this puzzle you should not go straight for the obvious answer. May you make a glorious choice.  </p>
+<p>Remember that you have until the 15th of March 12:00 CEST.</p>
+</blockquote>
+<p>所以这里要找到 <strong>the first and last 4 digits of the 50 * 10^6 position of the Fibonacci sequence (F(50 Million))</strong></p>
+<p>即 <strong>Fibonacci 数列 50×10^6 位置的前4位和后4位</strong>。</p>
+<p>Quest Page 就是之前的 <a href="https://www.jetbrains.com/promo/quest/" target="_blank" rel="noopener">https://www.jetbrains.com/promo/quest/</a></p>
+<br>
+
+<h2 id="Beat-the-Quest"><a href="#Beat-the-Quest" class="headerlink" title="Beat the Quest"></a>Beat the Quest</h2><p>那就算吧，前四位好算，后四位有点难顶。</p>
+<p>搜了一下Google发现出不来。</p>
+<p>不过懒得手撸代码算了，直接找 <a href="https://www.wolframalpha.com/" target="_blank" rel="noopener">wolframalpha</a> 吧！</p>
+<p><img src="/2020/03/14/CTF_2020JetBrainsQuest3/wolframalpha.png" alt="wolframalpha"></p>
+<p>前四位是4602。后四位的话，mod 10000出结果。</p>
+<p><img src="/2020/03/14/CTF_2020JetBrainsQuest3/wolframalpha2.png" alt="wolframalpha2"></p>
+<p>得到后四位为3125。</p>
+<p>于是 Code 就是 <code>46023125</code>啦！</p>
+<p><img src="/2020/03/14/CTF_2020JetBrainsQuest3/BeatTheQuest.png" alt="BeatTheQuest"></p>
+<p><img src="/2020/03/14/CTF_2020JetBrainsQuest3/ComeToAnEnd.png" alt="ComeToAnEnd"></p>
+<p>所以最终得到的是 <strong>JB 家全家桶八折券</strong> emmmm </p>
+<p><del>（还以为是六个月授权凑成一年的呢</del></p>
+<p><em>不管了，反正本来就有教育授权不差这个（</em></p>
+<p><strong>好玩就行了 23333</strong></p>
+<p>如果你需要的话，<strong>Remember that you have until the 15th of March 12:00 CEST.</strong></p>
+<br>
+
+<h2 id="再看-Step-5-中的-Clue"><a href="#再看-Step-5-中的-Clue" class="headerlink" title="再看 Step 5 中的 Clue"></a>再看 Step 5 中的 Clue</h2><p>本来本文到这里就结束了，然后想起来之前的 clue 有点想不通，再来看看。</p>
+<blockquote>
+<p>. Not Everything Today Does All You Could Ask. Lessons Learned From Other Relevant Solutions, Possibly Even Another Kind Emerge. Risking Sometimes Being Liberal Or Generous Proves Ordinary Simple Tests Infinitely More Annoying. Get Examining Hidden Initial Designated Early Symbols. They Have Everything Needed, Except Xerox, To Completely Level Up Everything.</p>
+</blockquote>
+<p>看了一些 V2EX 上的讨论，发现只看首字母可以拼出一句话。</p>
+<blockquote>
+<p>.net day call for speakers blog post image hides the next clue</p>
+</blockquote>
+<p>搜了一下，来到了这里。</p>
+<p><a href="https://blog.jetbrains.com/dotnet/2020/02/13/jetbrains-net-day-online-2020-call-speakers/" target="_blank" rel="noopener">JetBrains .NET Day Online 2020 – Call for Speakers</a></p>
+<p>在这张图片这里找到了线索。（噗</p>
+<p><strong>you_are_looking_for_build_201-6303</strong></p>
+<p><img src="/2020/03/14/CTF_2020JetBrainsQuest3/you_are_looking_for_build_201-6303.png" alt="you_are_looking_for_build_201-6303"></p>
+<p>不过问题不大2333. 反正也找到了呢。</p>
+<br>
+
+<h2 id="Extensive-Reading"><a href="#Extensive-Reading" class="headerlink" title="Extensive Reading"></a>Extensive Reading</h2><p>再看了看<a href="https://www.v2ex.com/t/652589" target="_blank" rel="noopener">大佬们的讨论</a>，发现有大佬用 rust 写了个 <a href="https://play.rust-lang.org/?version=stable&amp;mode=release&amp;edition=2018&amp;gist=b66221ebd69b64d63feb1fe46631957b" target="_blank" rel="noopener">jio本</a> 算出了后四位。</p>
+<p><img src="/2020/03/14/CTF_2020JetBrainsQuest3/Script_Rust.png" alt="Script_Rust"></p>
+<pre class=" language-rust"><code class="language-rust"><span class="token keyword">fn</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">let</span> <span class="token keyword">mut</span> a2<span class="token punctuation">:</span> u128 <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+    <span class="token keyword">let</span> <span class="token keyword">mut</span> a1<span class="token punctuation">:</span> u128 <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+    <span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token number">3</span><span class="token punctuation">..</span><span class="token operator">=</span><span class="token number">50000000</span> <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">//for i in 3..=50 {</span>
+        <span class="token keyword">let</span> new <span class="token operator">=</span> a2 <span class="token operator">+</span> a1<span class="token punctuation">;</span>
+        a2 <span class="token operator">=</span> a1<span class="token punctuation">;</span>
+        <span class="token keyword">if</span> new <span class="token operator">></span> <span class="token number">10000</span> <span class="token punctuation">{</span>
+            a1 <span class="token operator">=</span> new <span class="token operator">%</span> <span class="token number">10000</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+            a1 <span class="token operator">=</span> new<span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+
+    <span class="token keyword">if</span> i <span class="token operator">%</span> <span class="token number">10000</span> <span class="token operator">==</span> <span class="token number">0</span> <span class="token punctuation">{</span>
+            <span class="token function">print!</span><span class="token punctuation">(</span><span class="token string">"\r[{}]"</span><span class="token punctuation">,</span> i<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+    <span class="token function">println!</span><span class="token punctuation">(</span><span class="token string">"\nok: {}"</span><span class="token punctuation">,</span> a1<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<p>他的思路是：</p>
+<blockquote>
+<p>后四位我自己写程序跑，超过四位数就减掉一万，等于只算最后四位。</p>
+</blockquote>
+<p>还有大佬发现了 Fib 数列是有规律的↓。</p>
+<p><a href="http://www.maths.surrey.ac.uk/hosted-sites/R.Knott/Fibonacci/fibmaths.html#section1.1" target="_blank" rel="noopener">http://www.maths.surrey.ac.uk/hosted-sites/R.Knott/Fibonacci/fibmaths.html#section1.1</a></p>
+<p>etc.</p>
+<br>
+
+<hr>
+<br>
+
+<h2 id="题外话"><a href="#题外话" class="headerlink" title="题外话"></a>题外话</h2><p>最近<strong>对博客进行了一些优化</strong>，或者说是除草了，懒得开新文章写了。</p>
+<p>主要让常用的 JavaScript、CSS、一些背景图片走 jsdelivr 的 cdn，优化一点加载速度。</p>
+<p>然后修改了 hexo 的 feed 插件，把 RSS 中的 <code>summary</code> 优化为了文章的摘要（原来是截取全文最开始的一部分文字，还保留着一堆标签，丑死了）。期间还发现报错了，后来去 Github 参考了大佬们更新的源码改了一下模板。</p>
+<p>这样 RSS 的效果就好多了。</p>
+<p>欢迎大佬们关注，和我交换友链呀！</p>
+<p><strong>RSS 地址</strong>：<a href="https://miaotony.xyz/atom.xml">https://miaotony.xyz/atom.xml</a></p>
+<p><img src="/2020/03/14/CTF_2020JetBrainsQuest3/rss.png" alt="rss"></p>
+<p><del>（感觉越写越水了</del></p>
+<p>（溜了溜了</p>
+<script>
+        document.querySelectorAll('.github-emoji')
+          .forEach(el => {
+            if (!el.dataset.src) { return; }
+            const img = document.createElement('img');
+            img.style = 'display:none !important;';
+            img.src = el.dataset.src;
+            img.addEventListener('error', () => {
+              img.remove();
+              el.style.color = 'inherit';
+              el.style.backgroundImage = 'none';
+              el.style.background = 'none';
+            });
+            img.addEventListener('load', () => {
+              img.remove();
+            });
+            document.body.appendChild(img);
+          });
+      </script>
+            </div>
+            <hr/>
+
+            
+
+    <div class="reprint" id="reprint-statement">
+        
+            <div class="reprint__author">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-user">
+                        文章作者:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="https://miaotony.xyz" rel="external nofollow noreferrer">MiaoTony</a>
+                </span>
+            </div>
+            <div class="reprint__type">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-link">
+                        文章链接:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="https://miaotony.xyz/2020/03/14/CTF_2020JetBrainsQuest3/">https://miaotony.xyz/2020/03/14/CTF_2020JetBrainsQuest3/</a>
+                </span>
+            </div>
+            <div class="reprint__notice">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-copyright">
+                        版权声明:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    本博客所有文章除特別声明外，均采用
+                    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY-NC-SA 4.0</a>
+                    许可协议。转载请注明来源
+                    <a href="https://miaotony.xyz" target="_blank">MiaoTony</a>
+                    !
+                </span>
+            </div>
+        
+    </div>
+
+    <script async defer>
+      document.addEventListener("copy", function (e) {
+        let toastHTML = '<span>复制成功，请遵循本文的转载规则</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">查看</a>';
+        M.toast({html: toastHTML})
+      });
+
+      function navToReprintStatement() {
+        $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
+      }
+    </script>
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            
+                                <a href="/tags/CTF/">
+                                    <span class="chip bg-color">CTF</span>
+                                </a>
+                            
+                                <a href="/tags/WriteUp/">
+                                    <span class="chip bg-color">WriteUp</span>
+                                </a>
+                            
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/libs/share/css/share.min.css">
+
+<div id="article-share">
+    
+    
+    <div class="social-share" data-sites="qq,qzone,wechat,weibo,twitter,facebook,google,douban,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
+    <script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/libs/share/js/social-share.min.js"></script>
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+                <style>
+    #reward {
+        margin: 40px 0;
+        text-align: center;
+    }
+
+    #reward .reward-link {
+        font-size: 1.4rem;
+        line-height: 38px;
+    }
+
+    #reward .btn-floating:hover {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    #rewardModal {
+        width: 320px;
+        height: 350px;
+    }
+
+    #rewardModal .reward-title {
+        margin: 15px auto;
+        padding-bottom: 5px;
+    }
+
+    #rewardModal .modal-content {
+        padding: 10px;
+    }
+
+    #rewardModal .close {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+        color: rgba(0, 0, 0, 0.5);
+        font-size: 1.3rem;
+        line-height: 20px;
+        cursor: pointer;
+    }
+
+    #rewardModal .close:hover {
+        color: #ef5350;
+        transform: scale(1.3);
+        -moz-transform:scale(1.3);
+        -webkit-transform:scale(1.3);
+        -o-transform:scale(1.3);
+    }
+
+    #rewardModal .reward-tabs {
+        margin: 0 auto;
+        width: 210px;
+    }
+
+    .reward-tabs .tabs {
+        height: 38px;
+        margin: 10px auto;
+        padding-left: 0;
+    }
+
+    .reward-content ul {
+        padding-left: 0 !important;
+    }
+
+    .reward-tabs .tabs .tab {
+        height: 38px;
+        line-height: 38px;
+    }
+
+    .reward-tabs .tab a {
+        color: #fff;
+        background-color: #ccc;
+    }
+
+    .reward-tabs .tab a:hover {
+        background-color: #ccc;
+        color: #fff;
+    }
+
+    .reward-tabs .wechat-tab .active {
+        color: #fff !important;
+        background-color: #22AB38 !important;
+    }
+
+    .reward-tabs .alipay-tab .active {
+        color: #fff !important;
+        background-color: #019FE8 !important;
+    }
+
+    .reward-tabs .reward-img {
+        width: 210px;
+        height: 210px;
+    }
+</style>
+
+<div id="reward">
+    <a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-medium waves-effect waves-light red">赏</a>
+
+    <!-- Modal Structure -->
+    <div id="rewardModal" class="modal">
+        <div class="modal-content">
+            <a class="close modal-close"><i class="fas fa-times"></i></a>
+            <h4 class="reward-title">打赏一下让我来点好吃好玩的呗~</h4>
+            <div class="reward-content">
+                <div class="reward-tabs">
+                    <ul class="tabs row">
+                        <li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li>
+					<!-- 暂时注释掉
+						<li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li>
+					-->
+                    </ul>
+					<div id="wechat">
+                        <img src="/medias/reward/wechat.png" class="reward-img" alt="微信打赏二维码">
+                    </div>                    
+					<!-- 暂时注释掉
+					<div id="alipay">
+                        <img src="" class="reward-img" alt="支付宝打赏二维码">
+                    </div>
+					-->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.tabs').tabs();
+    });
+</script>
+            
+        </div>
+    </div>
+
+    
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/libs/gitalk/gitalk.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/css/my-gitalk.css">
+
+<div class="card gitalk-card" data-aos="fade-up">
+    <div class="comment_headling" style="font-size: 20px; font-weight: 700; position: relative; left: 20px; top: 15px; padding-bottom: 5px;">
+        <i class="fas fa-comments fa-fw" aria-hidden="true"></i>
+        <span>评论</span>
+    </div>
+    <div id="gitalk-container" class="card-content"></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/libs/gitalk/gitalk.min.js"></script>
+<script>
+    let gitalk = new Gitalk({
+        clientID: '116343b4650fce4789b6',
+        clientSecret: '3e9be2ad6c9b693af1753290c7c059b1e4f34d5d',
+        repo: 'miaotony.github.io',
+        owner: 'miaotony',
+        admin: "miaotony",
+        id: '2020-03-14T00-30-00',
+        distractionFreeMode: false  // Facebook-like distraction free mode
+    });
+
+    gitalk.render('gitalk-container');
+</script>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
+            <div class="card">
+                <a href="/2020/03/14/CTF_2020JetBrainsQuest3/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/medias/featureimages/3.jpg" class="responsive-img" alt="CTF | JetBrains Quest 3 WriteUp/攻略">
+                        
+                        <span class="card-title">CTF | JetBrains Quest 3 WriteUp/攻略</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            JetBrains Quest 3出来了，又来体验了一波，最后的礼品是20% discount on an All Products Pack subscription，这里随手写写攻略吧。
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-03-14
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/CTF/" class="post-category">
+                                    CTF
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/CTF/">
+                        <span class="chip bg-color">CTF</span>
+                    </a>
+                    
+                    <a href="/tags/WriteUp/">
+                        <span class="chip bg-color">WriteUp</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2020/03/12/CTF_2020JetBrainsQuest/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/medias/featureimages/17.jpg" class="responsive-img" alt="CTF | JetBrains Quest 1&2 WriteUp/攻略">
+                        
+                        <span class="card-title">CTF | JetBrains Quest 1&2 WriteUp/攻略</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            体验了一下JetBrainsQuest1&2，白嫖了3+3个月的JB家全产品授权，这里记录一下通关过程，也算是攻略/WriteUp吧。
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-03-12
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/CTF/" class="post-category">
+                                    CTF
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/CTF/">
+                        <span class="chip bg-color">CTF</span>
+                    </a>
+                    
+                    <a href="/tags/WriteUp/">
+                        <span class="chip bg-color">WriteUp</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+<script>
+    $('#articleContent').on('copy', function (e) {
+        // IE8 or earlier browser is 'undefined'
+        if (typeof window.getSelection === 'undefined') return;
+
+        var selection = window.getSelection();
+        // if the selection is short let's not annoy our users.
+        if (('' + selection).length < Number.parseInt('200')) {
+            return;
+        }
+
+        // create a div outside of the visible area and fill it with the selected text.
+        var bodyElement = document.getElementsByTagName('body')[0];
+        var newdiv = document.createElement('div');
+        newdiv.style.position = 'absolute';
+        newdiv.style.left = '-99999px';
+        bodyElement.appendChild(newdiv);
+        newdiv.appendChild(selection.getRangeAt(0).cloneContents());
+
+        // we need a <pre> tag workaround.
+        // otherwise the text inside "pre" loses all the line breaks!
+        if (selection.getRangeAt(0).commonAncestorContainer.nodeName === 'PRE') {
+            newdiv.innerHTML = "<pre>" + newdiv.innerHTML + "</pre>";
+        }
+
+        var url = document.location.href;
+        newdiv.innerHTML += '<br />'
+            + '来源: MiaoTony&#39;s小窝<br />'
+            + '文章作者: MiaoTony<br />'
+            + '文章链接: <a href="' + url + '">' + url + '</a><br />'
+            + '本文章著作权归作者MiaoTony所有，任何形式的转载都请注明出处。';
+
+        selection.selectAllChildren(newdiv);
+        window.setTimeout(function () {bodyElement.removeChild(newdiv);}, 200);
+    });
+</script>
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/libs/codeBlock/codeBlockFuction.js"></script>
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/libs/codeBlock/codeLang.js"></script>
+
+
+<!-- 代码块复制 -->
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/libs/codeBlock/codeShrink.js"></script>
+
+
+<!-- 代码块折行 -->
+
+<style type="text/css">
+code[class*="language-"], pre[class*="language-"] { white-space: pre !important; }
+</style>
+
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('1'),
+            headingSelector: 'h2, h3, h4, h5'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h2, h3, h4, h5').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+
+    <footer class="page-footer bg-color">
+        <div class="container row center-align" style="margin-bottom: 15px !important;">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            <span id="year">2019</span>
+            <a href="https://miaotony.xyz" target="_blank">MiaoTony</a>
+            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+            |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
+            <br>
+                        &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
+                class="white-color">63.2k</span>&nbsp;字
+                                                                                    <span id="busuanzi_container_site_pv">
+			|&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
+                    class="white-color"></span>&nbsp;次
+            </span>
+                                    <span id="busuanzi_container_site_uv">
+                |&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;<span id="busuanzi_value_site_uv"
+                    class="white-color"></span>&nbsp;人
+            </span>
+                        <br>
+                        <span id="sitetime">载入运行时间...</span>
+            <script>
+                function siteTime() {
+                    var seconds = 1000;
+                    var minutes = seconds * 60;
+                    var hours = minutes * 60;
+                    var days = hours * 24;
+                    var years = days * 365;
+                    var today = new Date();
+                    var startYear = "2019";
+                    var startMonth = "11";
+                    var startDate = "28";
+                    var startHour = "0";
+                    var startMinute = "0";
+                    var startSecond = "0";
+                    var todayYear = today.getFullYear();
+                    var todayMonth = today.getMonth() + 1;
+                    var todayDate = today.getDate();
+                    var todayHour = today.getHours();
+                    var todayMinute = today.getMinutes();
+                    var todaySecond = today.getSeconds();
+                    var t1 = Date.UTC(startYear, startMonth, startDate, startHour, startMinute, startSecond);
+                    var t2 = Date.UTC(todayYear, todayMonth, todayDate, todayHour, todayMinute, todaySecond);
+                    var diff = t2 - t1;
+                    var diffYears = Math.floor(diff / years);
+                    var diffDays = Math.floor((diff / days) - diffYears * 365);
+                    var diffHours = Math.floor((diff - (diffYears * 365 + diffDays) * days) / hours);
+                    var diffMinutes = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours) /
+                        minutes);
+                    var diffSeconds = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours -
+                        diffMinutes * minutes) / seconds);
+                    if (startYear == todayYear) {
+                        document.getElementById("year").innerHTML = todayYear;
+                        document.getElementById("sitetime").innerHTML = "本站已安全运行 " + diffDays + " 天 " + diffHours +
+                            " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒";
+                    } else {
+                        document.getElementById("year").innerHTML = startYear + " - " + todayYear;
+                        document.getElementById("sitetime").innerHTML = "本站已安全运行 " + diffYears + " 年 " + diffDays +
+                            " 天 " + diffHours + " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒";
+                    }
+                }
+                setInterval(siteTime, 1000);
+            </script>
+                        <br>
+                    </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+    <a href="https://t.me/MiaoTonyChannel" class="tooltipped" target="_blank" data-tooltip="关注我的TelegramChannel: @MiaoTonyChannel" data-position="top" data-delay="50">
+        <i class="fab fa-telegram"></i>
+    </a>
+
+
+
+    <a href="https://github.com/miaotony" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+        <i class="fab fa-github"></i>
+    </a>
+
+
+
+    <a href="mailto:miaotony@outlook.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fas fa-envelope-open"></i>
+    </a>
+
+
+
+
+
+
+
+
+
+
+
+    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
+        <i class="fas fa-rss"></i>
+    </a>
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/js/search.js"></script>
+<script type="text/javascript">
+$(function () {
+    searchFunc("https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/" + "search.xml", 'searchInput', 'searchResult');
+});
+</script>
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/libs/materialize/materialize.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/libs/aos/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/js/matery.js"></script>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-159946730-1"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+        dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+    gtag('config', 'UA-159946730-1');
+</script>
+
+
+    <!-- Baidu Analytics -->
+
+<script>
+    var _hmt = _hmt || [];
+    (function () {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?40e312a1eec109cf96e30988cf3bfe70";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+    <!-- Baidu Push -->
+
+    
+    <script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/libs/others/clicklove.js" async="async"></script>
+    
+    
+    <script async src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/libs/others/busuanzi.pure.mini.js"></script>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+    
+    <script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+</body>
+
+</html>
