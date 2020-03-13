@@ -4,6 +4,10 @@
 
 **URL:**   [https://miaotony.xyz/](https://miaotony.xyz/)   
 
+**Telegram Channel: ** [https://t.me/MiaoTonyChannel](https://t.me/MiaoTonyChannel)
+
+
+
 **Welcome~**
 
 **欢迎各位大佬的来访呀~**
@@ -17,10 +21,13 @@
 请大佬留下**链接、头像、一句话简介、联系方式**   
  或者私戳我也行啦。  
  Email:  `bWlhb3RvbnlAb3V0bG9vay5jb20=`  
- (懂的都懂 嘿嘿嘿   
+ (base64 懂的都懂 嘿嘿嘿   
 
 ### 一点小要求
 
-*前提至少是我们认识8*   
- 最好保证一下质量，至少能较长时间维护下去吧~   
+*前提至少是**我们认识**8 （不认识的话和我交流一下就好了喵*
+
+最好保证一下质量，至少**能较长时间维护下去**吧~     
+
+还有，**记得上 HTTPS 呢！**
 
