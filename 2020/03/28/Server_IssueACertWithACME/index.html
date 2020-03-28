@@ -4,8 +4,8 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="CTF | JetBrains Quest 1&amp;2 WriteUp/攻略, MiaoTony">
-    <meta name="description" content="体验了一下JetBrainsQuest1&amp;2，白嫖了3+3个月的JB家全产品授权，这里记录一下通关过程，也算是攻略/WriteUp吧。">
+    <meta name="keywords" content="基于acme.sh从Let&#39;s encrypt生成免费且自动更新的SSL证书, MiaoTony">
+    <meta name="description" content="通过Let&#39;s encrypt可以获得90天免费且可续期的SSL证书，而利用acme.sh可以自动生成和更新，这篇文章就来介绍一下配置的过程吧。">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -13,7 +13,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>CTF | JetBrains Quest 1&amp;2 WriteUp/攻略 | MiaoTony&#39;s小窝</title>
+    <title>基于acme.sh从Let&#39;s encrypt生成免费且自动更新的SSL证书 | MiaoTony&#39;s小窝</title>
     <link rel="icon" type="image/png" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/libs/awesome/css/all.css">
@@ -333,12 +333,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/medias/featureimages/17.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/medias/featureimages/21.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">CTF | JetBrains Quest 1&amp;2 WriteUp/攻略</h1>
+                    <h1 class="description center-align post-title">基于acme.sh从Let&#39;s encrypt生成免费且自动更新的SSL证书</h1>
                 </div>
             </div>
         </div>
@@ -455,12 +455,24 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/CTF/">
-                                <span class="chip bg-color">CTF</span>
+                            <a href="/tags/Tech/">
+                                <span class="chip bg-color">Tech</span>
                             </a>
                         
-                            <a href="/tags/WriteUp/">
-                                <span class="chip bg-color">WriteUp</span>
+                            <a href="/tags/Server/">
+                                <span class="chip bg-color">Server</span>
+                            </a>
+                        
+                            <a href="/tags/Web/">
+                                <span class="chip bg-color">Web</span>
+                            </a>
+                        
+                            <a href="/tags/Configuration/">
+                                <span class="chip bg-color">Configuration</span>
+                            </a>
+                        
+                            <a href="/tags/SSL/">
+                                <span class="chip bg-color">SSL</span>
                             </a>
                         
                     </div>
@@ -471,8 +483,12 @@
                     <div class="post-cate">
                         <i class="fas fa-bookmark fa-fw icon-category"></i>
                         
-                            <a href="/categories/CTF/" class="post-category">
-                                CTF
+                            <a href="/categories/Tech/" class="post-category">
+                                Tech
+                            </a>
+                        
+                            <a href="/categories/Tech/Server/" class="post-category">
+                                Server
                             </a>
                         
                     </div>
@@ -484,7 +500,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2020-03-12
+                    2020-03-28
                 </div>
                 
 
@@ -493,14 +509,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    3.5k
+                    4.3k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    15 分
+                    17 分
                 </div>
                 
 
@@ -511,314 +527,281 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>昨晚在 Telegram 里看到朋友发了一个 JetBrains Quest 的 twitter 链接，据说难度不大，还可以白嫖他家的产品授权。</p>
-<p>感兴趣就来体验一下吧！</p>
-<p>于是体验了 Quest1 和 2 白嫖了 3+3 个月的 JB 家全产品授权，这里记录一下<strong>通关过程</strong>，也算是<strong>攻略 / WriteUp</strong> 吧。</p>
-<p>感觉也是 CTF, Capture The Flag 的范畴吧，暂且就归类为 CTF 好了（</p>
-<p>欢迎来和我交流哈。</p>
+                <h2 id="0x00-前言"><a href="#0x00-前言" class="headerlink" title="0x00 前言"></a>0x00 前言</h2><p>3月26日，一堆 GitHub Pages 以及 jd.com 等网站的 SSL 证书被一个自签名证书 （<code>C=CN; ST=GD; L=SZ; O=COM; OU=NSP; CN=SERVER; emailAddress=346608453@qq.com</code> ）劫持了，开启了 HSTS 则会被浏览器拦下来。不过套了 CF 的 CDN 则不受影响。27日发现 <code>*.github.io</code> 好了，GitHub 主站被劫持了……（真狠啊</p>
 <blockquote>
-<p><strong>PAY ATTENTION! 注意！</strong></p>
-<p>如果没有玩过的话</p>
-<p style="color:red">本文下面的内容 <strong>全 是 剧 透</strong>！</p>
-
-<p><strong>如果想自己做的话，就暂时不要往下看了！</strong></p>
+<p>具体参考这几篇：</p>
+<p><a href="https://www.v2ex.com/t/656367" target="_blank" rel="noopener">https://www.v2ex.com/t/656367</a><br><a href="https://www.v2ex.com/t/656394" target="_blank" rel="noopener">https://www.v2ex.com/t/656394</a><br><a href="https://m.cnbeta.com/view/960295.htm" target="_blank" rel="noopener">https://m.cnbeta.com/view/960295.htm</a><br><a href="https://blog.netlab.360.com/ongoing-websites-hijacking/" target="_blank" rel="noopener">一些网站https证书出现问题的情况分析</a>  </p>
+<p><em>（最后这篇说很多大站都受影响了</em></p>
 </blockquote>
-<p>这个 Quest <strong>在 2020-03-15 12:00 CET （欧洲中部时间）之前都有效</strong>。</p>
-<br>
-
-<h2 id="Quest-1"><a href="#Quest-1" class="headerlink" title="Quest 1"></a>Quest 1</h2><p><a href="https://twitter.com/jetbrains/status/1236986174075482113" target="_blank" rel="noopener">https://twitter.com/jetbrains/status/1236986174075482113</a></p>
-<p><img src="/2020/03/12/CTF_2020JetBrainsQuest/Quest1.png" alt="Quest1"></p>
-<pre><code>48 61 76 65 20 79 6f 75 20 73 65 65 6e 20 74 68 65 20 73 6f 75 72 63 65 20 63 6f 64 65 20 6f 66 20 74 68 65 20 4a 65 74 42 72 61 69 6e 73 20 77 65 62 73 69 74 65 3f</code></pre><p>一看是 hex，于是转成 ASCII，得到：</p>
-<pre><code>Have you seen the source code of the JetBrains website?</code></pre><br>
-
-<h3 id="Step-1"><a href="#Step-1" class="headerlink" title="Step 1"></a>Step 1</h3><p>去官网上找呗。传送门：<a href="https://www.jetbrains.com/" target="_blank" rel="noopener">https://www.jetbrains.com/</a></p>
-<p>（还别说，挺久没上 JetBrains 官网了，感觉又多了不少工具，界面也变得更好看了唉。</p>
-<p>提示了看源码，既然是 <code>JetBrainsQuest</code> 了，当然就<strong>搜一下<code>quest</code></strong>。</p>
-<p>果然看到了提示。</p>
-<p><img src="/2020/03/12/CTF_2020JetBrainsQuest/Step1-1.png" alt="Step1"></p>
-<pre class=" language-html"><code class="language-html"><span class="token comment" spellcheck="true">&lt;!--
-      O
-{o)xxx|===============-
-      O
-
-Welcome to the JetBrains Quest.
-
-What awaits ahead is a series of challenges. Each one will require a little initiative, a little thinking, and a whole lot of JetBrains to get to the end. Cheating is allowed and in some places encouraged. You have until the 15th of March at 12:00 CET to finish all the quests.
-Getting to the end of each quest will earn you a reward.
-Let the quest commence!
-
-JetBrains has a lot of products, but there is one that looks like a joke on our Products page, you should start there... (hint: use Chrome Incognito mode)
-It’s dangerous to go alone take this key: Good luck! == Jrrg#oxfn$
-
-                 O
--===============|xxx(o}
-                 O
---></span></code></pre>
-<p>这里提示了<code>hint: use Chrome Incognito mode</code>。</p>
-<p><strong>建议用 Chrome 的无痕模式。</strong></p>
-<br>
-
-<h3 id="Step-2"><a href="#Step-2" class="headerlink" title="Step 2"></a>Step 2</h3><p>于是就<strong>去 products 里找</strong>了呗。</p>
-<p>（可能没注意）没找到入口，盲猜就在 <code>/products</code> 目录了，访问后跳转到了 <a href="https://www.jetbrains.com/products.html" target="_blank" rel="noopener">https://www.jetbrains.com/products.html</a> 。</p>
+<p>HTTPS 加密通信挺重要的，之前也听说过 MITM（中间人攻击），不过这还是第一次听说证书被劫持的……</p>
+<p>怎么说好呢，应该可以说网络上不能保证绝对安全吧，或者说绝对安全是不存在的。</p>
+<p>想起来之前搭建的一个服务还没上 HTTPS，然而想不起来之前是怎么配置 SSL 证书的了，<em>然后又得去找资料<del>烦死了</del>，</em>于是这回顺便来记录一下好了啦。（摊手</p>
+<p><strong>通过 Let’s encrypt 可以获得 90 天免费且可续期的 SSL 证书，而利用 acme.sh 可以自动生成和更新</strong>，就来介绍一下<strong>配置的过程</strong>吧。</p>
 <blockquote>
-<p>后来发现主页上的链接在 <a href="https://www.jetbrains.com/products.html" target="_blank" rel="noopener">See All Tools</a> 里（</p>
+<p>当然，你还可以尝试用 Let’s Encrypt 的 <code>certbot</code> 工具来签发证书，不过要装一堆库吧，我也不记得了……</p>
 </blockquote>
-<p><img src="/2020/03/12/CTF_2020JetBrainsQuest/products.png" alt="products"></p>
-<p>找找哪个<code>looks like a joke</code>，一猜就是 <strong>JK</strong> 了，而且还是2020.1.1版本（嘻嘻 。</p>
-<p><img src="/2020/03/12/CTF_2020JetBrainsQuest/Step1-2.png" alt="Step2"></p>
-<blockquote>
-<p>后来发现，JK 这个产品可能需要在 <strong>无痕模式/隐私模式</strong> 下才出现。（有可能有缓存？</p>
-<p>后面再来分析一下这个怎么加载出来的8.</p>
-</blockquote>
+<p>下面的内容涉及 acme.sh 的安装，证书的签发及认证，如何安装到 nginx，以及自动更新证书、更新 acme.sh 等。</p>
 <br>
 
-<h3 id="Step-3"><a href="#Step-3" class="headerlink" title="Step 3"></a>Step 3</h3><p><strong>找一下 500 到 5000 之内有多少素数</strong>，随手写个 py 的 jio 本。</p>
-<p>（边界值的话，5000肯定不是素数，不影响结果</p>
-<pre class=" language-python"><code class="language-python"><span class="token keyword">from</span> math <span class="token keyword">import</span> sqrt
-cnt <span class="token operator">=</span> <span class="token number">0</span>
-<span class="token keyword">for</span> i <span class="token keyword">in</span> range<span class="token punctuation">(</span><span class="token number">500</span><span class="token punctuation">,</span> <span class="token number">5000</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
-    <span class="token keyword">for</span> j <span class="token keyword">in</span> range<span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">,</span> int<span class="token punctuation">(</span>sqrt<span class="token punctuation">(</span>i<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token operator">+</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
-        <span class="token keyword">if</span> i <span class="token operator">%</span> j <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">:</span>
-            <span class="token keyword">break</span>
-        <span class="token keyword">if</span> j <span class="token operator">==</span> int<span class="token punctuation">(</span>sqrt<span class="token punctuation">(</span>i<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
-            cnt <span class="token operator">+=</span> <span class="token number">1</span>
-<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">'OK!'</span><span class="token punctuation">)</span>
-<span class="token keyword">print</span><span class="token punctuation">(</span>cnt<span class="token punctuation">)</span></code></pre>
-<p>跑出来 <code>cnt</code> 为 574.</p>
-<p>于是访问 <a href="https://jb.gg/574" target="_blank" rel="noopener">https://jb.gg/574</a> .<em>（不输入的话是跳转到官网的</em></p>
-<p><em>（其实爆破也行，反正就三位数呢</em></p>
-<p>发现 301 重定向到了 <a href="https://www.jetbrains.com/help/pycharm/getting-help.html#quest" target="_blank" rel="noopener">https://www.jetbrains.com/help/pycharm/getting-help.html#quest</a> 。</p>
-<p><img src="/2020/03/12/CTF_2020JetBrainsQuest/Step1-3.png" alt="Step3"></p>
-<br>
-
-<h3 id="Step-4"><a href="#Step-4" class="headerlink" title="Step 4"></a>Step 4</h3><p>Google 上一搜就是了。</p>
-<p>（下面还有 V2EX 上别人的讨论 </p>
-<p><small><em>（（不看不看先不看！</em></small></p>
-<p><img src="/2020/03/12/CTF_2020JetBrainsQuest/MPS-31816.png" alt="MPS-31816"></p>
-<p><a href="https://youtrack.jetbrains.com/issue/MPS-31816" target="_blank" rel="noopener">https://youtrack.jetbrains.com/issue/MPS-31816</a></p>
-<p><img src="/2020/03/12/CTF_2020JetBrainsQuest/Step1-4.png" alt="Step4"></p>
-<p>这是 YouTrack 的一个 issue。<em>（这里直接谷歌可能是非预期解了</em></p>
-<pre><code>JetBrains Quest
-“The key is to think back to the beginning.” – The JetBrains Quest team
-
-Qlfh$#Li#|rx#duh#uhdglqj#wklv#|rx#pxvw#kdyh#zrunhg#rxw#krz#wr#ghfu|sw#lw1#Wklv#lv#rxu#lvvxh#wudfnhu#ghvljqhg#iru#djloh#whdpv1#Lw#lv#iuhh#iru#xs#wr#6#xvhuv#lq#Forxg#dqg#iru#43#xvhuv#lq#Vwdqgdorqh/#vr#li#|rx#zdqw#wr#jlyh#lw#d#jr#lq#|rxu#whdp#wkhq#zh#wrwdoo|#uhfrpphqg#lw1#|rx#kdyh#ilqlvkhg#wkh#iluvw#Txhvw/#qrz#lw“v#wlph#wr#uhghhp#|rxu#iluvw#sul}h1#Wkh#frgh#iru#wkh#iluvw#txhvw#lv#‟WkhGulyhWrGhyhors†1#Jr#wr#wkh#Txhvw#Sdjh#dqg#xvh#wkh#frgh#wr#fodlp#|rxu#sul}h1#kwwsv=22zzz1mhweudlqv1frp2surpr2txhvw2</code></pre><p>结合 Step1 中的 <code>Good luck! == Jrrg#oxfn$</code>，分析可知是<strong>往后移了3个字符（SHIFT3）</strong>。</p>
-<p>于是全部往前移3个字符得到：</p>
-<pre><code>Nice! If you are reading this you must have worked out how to decrypt it. This is our issue tracker designed for agile teams. It is free for up to 3 users in Cloud and for 10 users in Standalone, so if you want to give it a go in your team then we totally recommend it. you have finished the first Quest, now it…s time to redeem your first prize. The code for the first quest is &lt;TheDriveToDevelop&lt;. Go to the Quest Page and use the code to claim your prize. https://www.jetbrains.com/promo/quest/</code></pre><br>
-
-<h3 id="Beat-The-Quest"><a href="#Beat-The-Quest" class="headerlink" title="Beat The Quest"></a>Beat The Quest</h3><p>Rua！哇好耶！</p>
-<p><code>TheDriveToDevelop</code></p>
-<p>然后就可以拿着这个 code 去白嫖免费授权了！</p>
-<p><img src="/2020/03/12/CTF_2020JetBrainsQuest/success.png" alt="success"></p>
-<p>输入邮箱和上面的 Code，提交就好啦。</p>
-<blockquote>
-<p>这里看到 Twitter 上有人说 Firefox 会报 CORS issue，请使用 Chrome 试试。</p>
-<p><em>(An error occurred while …</em></p>
-</blockquote>
-<p>这里说了会把你的信息提供给他，他会给你的邮箱发推荐信息，可能这是 JetBrains 吸收流量的一个手段吧<em>（盲猜的</em></p>
-<p>不过他也说了在邮件末尾可以取消订阅。</p>
-<blockquote>
-<p>BTW，发现这里的 Code 并没有上传到后端进行校验，而是直接在前端进行的。</p>
-<p><em>可以给 Code 输入框的 input 打个断点看看（</em></p>
-<p><em>（或者看看提交表格的 call stack 好了</em></p>
-</blockquote>
-<p><img src="/2020/03/12/CTF_2020JetBrainsQuest/success2.png" alt="success2"></p>
-<p>于是得到了白嫖的 <strong>3-months free All Products Pack subscription</strong>。</p>
-<p>有点意思唉~</p>
-<p><img src="/2020/03/12/CTF_2020JetBrainsQuest/success3.png" alt="success3"></p>
-<p>等等？<strong>还没完唉！</strong></p>
-<p><strong>这是一系列的 Quest！</strong></p>
-<p>下一个 quest 的时间是<strong>1583924400</strong>，转换时间戳发现是 <strong>2020-03-11 19:00:00</strong>.</p>
-<p><br><br></p>
-<h3 id="Step2-中-JK-的加载分析"><a href="#Step2-中-JK-的加载分析" class="headerlink" title="Step2 中 JK 的加载分析"></a>Step2 中 JK 的加载分析</h3><p>突然有点好奇这个 JK 是怎么被加载出来的，于是简单分析一下吧。</p>
-<p>这里搜索<code>quest</code>，在网页末尾处看到了一个加载的<code>dialog-polyfill.js</code>。</p>
-<p><img src="/2020/03/12/CTF_2020JetBrainsQuest/JK_Analysis.png" alt="Elements"></p>
-<p>在 Sources 里这个文件里搜索 <code>JK</code>或者<code>quest</code>，都找不到网页上与 JK 有关信息，倒是定义了一堆相关的属性方法之类的，css 文件中是<code>dialog</code>框的相关样式。</p>
-<p><img src="/2020/03/12/CTF_2020JetBrainsQuest/JK_Analysis2.png" alt="dialogJS"></p>
-<p>在 Network 里看 <code>products.html</code> 的 response，里面并没有 <code>JK</code>，也没有<code>quest</code>。就连上面这个脚本文件也没有。</p>
-<p><strong>那这个 JK 到底是怎么加载出来的呢？</strong></p>
-<p>于是<strong>在 Network 里全局搜索了一下 <code>quest</code></strong>，有了新的收获。</p>
-<p>原来这些信息都是<strong>通过一个JS脚本来加载</strong>的。</p>
-<p>这个 js 的 response 包含了页面上的所有产品信息，是把网页内容嵌入到 json 里进行数据交互的。</p>
-<p>哇，第一次见唉！😂</p>
-<p><img src="/2020/03/12/CTF_2020JetBrainsQuest/JK_Analysis3.png" alt="Network"></p>
-<p>再看一下 Initiator，发现调用了 Googletagmanager，这是什么东西唉，之前爬虫虫也没遇到过（又是我知识盲区了</p>
-<p><img src="/2020/03/12/CTF_2020JetBrainsQuest/JK_Analysis4.png" alt="call stack"></p>
-<p>查了一下，是谷歌的标签管理器，都诞生挺久了然而并不知道。</p>
-<blockquote>
-<p><em>Google Tag Manager</em> helps make website tag management simple with tools &amp; solutions that allow small businesses to deploy and edit tags all in one place.</p>
-<p>这里是<a href="https://tagmanager.google.com/" target="_blank" rel="noopener">他的官网</a>。</p>
-</blockquote>
-<p>上去看了一下，感觉就是可以动态修改前端的代码，不用直接修改原本的网站文件，不需要重新部署。而且还自带版本管理，可以多人合作之类的吧。</p>
-<p>谷歌的统计也是用这个来实现的。</p>
-<p>不过有个缺点是，国内访问比较慢而且说不定哪天就连接不上了。</p>
-<p>emmm 后面有空感兴趣再折腾吧（</p>
-<p><img src="/2020/03/12/CTF_2020JetBrainsQuest/googletagmanager.png" alt="googletagmanager"></p>
-<br>
-
-<hr>
-<br>
-
-
-
-<h2 id="Quest-2"><a href="#Quest-2" class="headerlink" title="Quest 2"></a>Quest 2</h2><p>来了来了！第二个 Quest 来了！</p>
-<p><a href="https://twitter.com/jetbrains/status/1237694815283879943" target="_blank" rel="noopener">https://twitter.com/jetbrains/status/1237694815283879943</a></p>
-<p><img src="/2020/03/12/CTF_2020JetBrainsQuest/Quest2.png" alt="Quest2"></p>
-<pre><code>.spleh A+lrtC/dmC .thgis fo tuo si ti semitemos ,etihw si txet nehw sa drah kooL .tseretni wohs dluohs uoy ecalp a si ,dessecorp si xat hctuD erehw esac ehT .sedih tseuq fo txen eht erehw si ,deificeps era segaugnal cificeps-niamod tcudorp ehT</code></pre><p>很明显倒叙了，这里反过来得到：</p>
-<pre><code>The product domain-specific languages are specified, is where the next of quest hides. The case where Dutch tax is processed, is a place you should show interest. Look hard as when text is white, sometimes it is out of sight. Cmd/Ctrl+A helps.</code></pre><p>提示了是个与 <code>domain-specific languages</code>有关的产品，quest相关的文字设置为白色的了。</p>
-<br>
-
-<h3 id="Step-1-1"><a href="#Step-1-1" class="headerlink" title="Step 1"></a>Step 1</h3><p>谷歌搜一下，直接就得到了 JetBrains 家的 <strong>MPS</strong> (MetaProgrammingSystem)   <em>（之前也没了解过</em></p>
-<p><img src="/2020/03/12/CTF_2020JetBrainsQuest/Step2-1.png" alt="谷歌搜索结果"></p>
-<p>访问它的官网吧，传送喵：<a href="https://www.jetbrains.com/mps/" target="_blank" rel="noopener">https://www.jetbrains.com/mps/</a></p>
-<br>
-
-<h3 id="Step-2-1"><a href="#Step-2-1" class="headerlink" title="Step 2"></a>Step 2</h3><p>在网页里同样搜一下 <code>quest</code></p>
-<p><img src="/2020/03/12/CTF_2020JetBrainsQuest/Step2-2.png" alt="网页里找到pdf"></p>
-<p>发现有个 PDF 文件唉~</p>
-<p>打开来看看吧！</p>
-<br>
-
-<h3 id="Step-3-1"><a href="#Step-3-1" class="headerlink" title="Step 3"></a>Step 3</h3><p>于是继续在 PDF 里搜索<code>quest</code>。</p>
-<p>发现果然是白色的文字23333.</p>
-<p><img src="/2020/03/12/CTF_2020JetBrainsQuest/Step2-3.png" alt="Step3"></p>
-<p>Ctrl + A ，Ctrl + C / V，看一下那一块的文字</p>
-<pre><code>This is our 20th year as a company,
-we have shared numbers in our JetBrains
-Annual report, sharing the section with
-18,650 numbers will progress your quest</code></pre><br>
-
-<h3 id="Step-4-1"><a href="#Step-4-1" class="headerlink" title="Step 4"></a>Step 4</h3><p>上面提示了JB 20周年年度报告，想起来官网首页上有个链接来着。</p>
-<p><img src="/2020/03/12/CTF_2020JetBrainsQuest/20Years.png" alt="20周年"></p>
-<p><a href="https://www.jetbrains.com/company/annualreport/2019/" target="_blank" rel="noopener">https://www.jetbrains.com/company/annualreport/2019/</a></p>
-<p>插几句题外话。</p>
-<p>就是个年报吧，看上去 JB 的确挺受欢迎哒！（PyCharm 真挺好用的</p>
-<p>下面这个视频封面的小黄鸭让我想到了 <strong>小黄鸭调试法</strong> 23333</p>
-<p>（这个 <code>Dogfooding</code> 用的有点意思</p>
-<p><img src="/2020/03/12/CTF_2020JetBrainsQuest/20Years2.png" alt=""></p>
-<p>这回再来搜索 <code>quest</code>。</p>
-<p><img src="/2020/03/12/CTF_2020JetBrainsQuest/Step2-4.png" alt="Step4"></p>
-<p>第七届 Hackathon。（emmm</p>
-<pre class=" language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>react-js-quick-share<span class="token punctuation">"</span></span> <span class="token attr-name">data-hashtag</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>JetBrainsQuest<span class="token punctuation">"</span></span> <span class="token attr-name">data-text</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>I have found the JetBrains Quest! Sometimes you just need to look closely at the Haskell language, Hello,World! in the hackathon lego brainstorms project https://blog.jetbrains.com/blog/2019/11/22/jetbrains-7th-annual-hackathon/<span class="token punctuation">"</span></span> <span class="token attr-name">data-theme</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>dark<span class="token punctuation">"</span></span><span class="token punctuation">></span></span></code></pre>
-<br>
-
-<h3 id="Step-5"><a href="#Step-5" class="headerlink" title="Step 5"></a>Step 5</h3><p>访问 <a href="https://blog.jetbrains.com/blog/2019/11/22/jetbrains-7th-annual-hackathon/" target="_blank" rel="noopener">https://blog.jetbrains.com/blog/2019/11/22/jetbrains-7th-annual-hackathon/</a></p>
-<p>重点关注 <code>Haskell language</code>，<code>Hello,World!</code>，<code>hackathon lego brainstorms project</code>。</p>
-<p>看来就与这张图有关了呢！</p>
-<p><img src="/2020/03/12/CTF_2020JetBrainsQuest/Step2-5.png" alt="Step5"></p>
-<p>看来就是右边图上这段话了。emmm</p>
-<pre><code>d1D joo KN0w 
-J378r41n2 12 
-4lw4y2 H1R1Ng? 
-ch3ck Ou7 t3h K4r33r2 
-P4g3 4nD 533 1f 
-7H3r3 12 4 J08 0R 4 
-KW35T 0 cH4Ll3n93 70 
-g0 fUr7h3r @ 13457.
-</code></pre><p>草（一种植物），我大概翻译出来了！</p>
-<pre><code>Did you know 
-jetbrains is 
-always hiring?
-Check Out the kareers
-Page and see if 
-here is a job or a
-kwest challenge to
-go further at least</code></pre><p>形象带师 233333</p>
-<p>（讲真，觉得 CTF 有趣的一个原因大概就是从各种奇怪的数字大小写字母混杂的形象的 flag 开始的吧</p>
-<p>（觉得出题人脑洞就很大</p>
-<p>比如随手来一个 → <code>flag{1t_I5_s0_Fun_70_S33_y0u_H3r3}</code>。😁</p>
-<p>不过这里第一次见把<code>2</code>当作<code>s</code>的。</p>
-<p>还有<code>kareers</code>应该是<code>careers</code>，<code>kwest</code>应该是<code>quest</code>吧 23333.</p>
-<blockquote>
-<p>查了一下，发现原来这个叫做 <strong>Leet</strong>，又叫 <strong>黑客语</strong>。</p>
-<p>详见 <code>VV 1 |&lt; 1 P 3 [) 1 4</code> ，<a href="https://zh.wikipedia.org/zh-cn/Leet" target="_blank" rel="noopener">click here</a>.</p>
-</blockquote>
-<p>所以 JB 顺便再来招个聘？</p>
-<p>看来下一个 Step 是个与 job 有关的地方了。</p>
-<br>
-
-<h3 id="Step-6"><a href="#Step-6" class="headerlink" title="Step 6"></a>Step 6</h3><p>在官网上找到了 Company -&gt; Careers -&gt; Jobs.</p>
-<p><a href="https://www.jetbrains.com/careers/jobs/" target="_blank" rel="noopener">https://www.jetbrains.com/careers/jobs/</a></p>
-<p>搜索<code>Quest</code>，发现了一个奇怪的职位。那就是它了！</p>
-<p><img src="/2020/03/12/CTF_2020JetBrainsQuest/Step2-6.png" alt="Step6"></p>
-<p>于是来到了<a href="https://www.jetbrains.com/careers/jobs/fearless-quester-356/" target="_blank" rel="noopener">这个页面</a> ↓。</p>
-<p><img src="/2020/03/12/CTF_2020JetBrainsQuest/fearless_quester.png" alt="fearless_quester"></p>
-<p>233333 这里回顾了一下这一路 journey 经历过的那些有意思的东西。</p>
-<p><img src="/2020/03/12/CTF_2020JetBrainsQuest/fearless_quester2.png" alt="fearless_quester2"></p>
-<p>到下面这里，点击按钮，会给它的邮箱发个邮件。</p>
-<p>（<code>mailto:jobs@jetbrains.com?subject=Fearless Quester - Any - any</code></p>
-<p>然而发现并不是啦 23333.</p>
-<p>然后再看回 <code>To progress with your quest what you’ll need</code>。</p>
-<p>应该是与一个游戏开发有关，查了一下 Konami games.</p>
-<blockquote>
-<p>日本最具影响力的游戏软件商之一，<em>KONAMI</em>（科乐美）。</p>
-</blockquote>
-<p>可能是有个游戏啥的？</p>
-<br>
-
-<h3 id="Step-7"><a href="#Step-7" class="headerlink" title="Step 7"></a>Step 7</h3><p>找了找 game develop，发现了一个<a href="https://www.jetbrains.com/gamedev/" target="_blank" rel="noopener">这个网页</a>。</p>
-<p><img src="/2020/03/12/CTF_2020JetBrainsQuest/game_development.png" alt="game_development"></p>
-<p>然后找死找不到<code>quest</code>，难受死了。</p>
-<p>在 Network 里找个半天也没找到嘤嘤嘤。</p>
-<p>就在一脸懵逼的时候，想起来好像没有用 Chrome 的无痕模式（（</p>
-<blockquote>
-<p>后来发现是我的浏览器开了弹窗拦截，把找个也给误拦截了emmm。</p>
-</blockquote>
-<p>再一搜，发现了相关的 js 文件。</p>
-<p><img src="/2020/03/12/CTF_2020JetBrainsQuest/Step2-7.png" alt="Step7"></p>
-<br>
-
-<h3 id="Beat-The-Quest-1"><a href="#Beat-The-Quest-1" class="headerlink" title="Beat The Quest"></a>Beat The Quest</h3><p>在<code>block-breaker.js</code> 这个文件里搜索<code>quest</code>，发现了第二个 quest 的 code ↓。</p>
-<p><em>（可能这个也是非预期解了23333</em></p>
-<p><img src="/2020/03/12/CTF_2020JetBrainsQuest/block-breakerJS.png" alt="block-breaker_JS"></p>
-<pre><code>"\n        |\n        |\n        |   Congratulations you have beat the second quest.\n        |   Use the code key GamesAreFun on the\n        |   quest page https://jb.gg/quest to claim your prize.\n        |     \n    "</code></pre><p>所以 Code 就是 <code>GamesAreFun</code> 啦~</p>
-<p>拿着它去 <a href="https://jb.gg/quest" target="_blank" rel="noopener">https://jb.gg/quest</a> 换新的授权吧嘻嘻嘻。</p>
-<p>发现也是跳转到之前的那个页面（ <a href="https://www.jetbrains.com/promo/quest/" target="_blank" rel="noopener">https://www.jetbrains.com/promo/quest/</a> ）。</p>
-<p>同样输入邮箱和 Code 就好了。</p>
-<p>又得到3个月的免费授权！上面说了可以叠加使用。</p>
-<p><img src="/2020/03/12/CTF_2020JetBrainsQuest/Beat_quest2.png" alt="Beat_quest2"></p>
-<blockquote>
-<p>You have passed the second quest and have proven yourself a worthy contender for our devious puzzles. We have one last quest in this series for you. It will be the ultimate quest, and it will secure your place in the halls of JetBrains Quest legend.</p>
-<p><strong>A little @jetbrains bird will deliver the next clue – so do some birdwatching,</strong></p>
-</blockquote>
-<p>噫！还有<strong>一个终极的 quest</strong> 等着大家呢！</p>
-<p>猜一猜是不是六个月的授权，然后凑成一整年呢哈哈哈哈哈。</p>
-<hr>
-<p>然后在邮件结尾又发现了 Leet，就是 Step5 中提到的那个黑客语。这才发现原来 Quest1 的邮件中也有。</p>
-<p>可能这也算是一个暗示/hint 吧！</p>
-<p><img src="/2020/03/12/CTF_2020JetBrainsQuest/email_leet.png" alt="email_leet"></p>
-<pre><code>Y0U H4V3 R3C13V3D 7H15 3M41L B3C4U53 Y0U H4V3 P4RT1C1P4T3D 1N J3TBR41N5 QU35T</code></pre><p>这里还可以取消邮件订阅啥的，应该还算挺友好的吧。</p>
-<br>
-
-<br>
-
-<h3 id="Step7-中-game-dev-页面的游戏解法"><a href="#Step7-中-game-dev-页面的游戏解法" class="headerlink" title="Step7 中 game dev 页面的游戏解法"></a>Step7 中 game dev 页面的游戏解法</h3><p>再回去看一下这个游戏到底啥回事。结合再上一步中的提示。</p>
-<blockquote>
-<p><strong>To progress with your quest what you’ll need:</strong></p>
+<h2 id="0x01-安装-acme-sh"><a href="#0x01-安装-acme-sh" class="headerlink" title="0x01 安装 acme.sh"></a>0x01 安装 acme.sh</h2><pre class=" language-bash"><code class="language-bash">curl https://get.acme.sh <span class="token operator">|</span> sh</code></pre>
+<p>或者</p>
+<pre class=" language-bash"><code class="language-bash"><span class="token function">wget</span> -O -  https://get.acme.sh <span class="token operator">|</span> sh</code></pre>
+<p>执行上面的命令，它会：</p>
 <ul>
-<li>To check out what we have for game developers.</li>
-<li>Be geeky enough to remember how you used to cheat at Konami games.</li>
-<li>Try cheating on the page.</li>
+<li>从 GitHub 上下载 sh 脚本并执行</li>
+<li>把文件解压到用户的 <code>~/.acme.sh</code>目录下</li>
+<li>给命令行设置一个<code>acme.sh</code>的 alias 别名</li>
+<li>最后注册一个 cron 定时任务来自动更新证书。</li>
 </ul>
-</blockquote>
-<p>看了一下别人的讨论，才大概明白这个的意思。</p>
-<p>他是想让你用在 Konami games 里积累的技巧来唤出游戏界面，然后尝试完成游戏，或者尝试在网页中作弊完成（可能是上面的非预期解吧）。</p>
-<p>根据别人的说法，<strong>在网页里</strong>通过依次按下键盘上的 <code>上上下下左右左右BA</code> 这几个键，就能唤出游戏界面了！</p>
-<p><img src="/2020/03/12/CTF_2020JetBrainsQuest/game_start.png" alt="游戏开始界面"></p>
-<p>原来就是个弹球游戏啊 23333. 而且球掉了还可以继续玩。</p>
-<p>看了一下是通过一个 canvas 来实现的。</p>
-<p>把条块消除得差不多就看到 code key 啦！</p>
-<p><img src="/2020/03/12/CTF_2020JetBrainsQuest/game.png" alt="game"></p>
+<p>安装完成后要<strong>自行重启命令行</strong>，或者<strong>重新加载一下<code>.bashrc</code>文件</strong>（<code>source ~/.bashrc</code>）。</p>
+<p>然后看一下有没有生效。</p>
+<pre class=" language-bash"><code class="language-bash">$ acme.sh -h
+https://github.com/acmesh-official/acme.sh
+v2.8.6
+Usage: acme.sh  <span class="token function">command</span> <span class="token punctuation">..</span>.<span class="token punctuation">[</span>parameters<span class="token punctuation">]</span><span class="token punctuation">..</span><span class="token punctuation">..</span>
+Commands:
+  --help, -h               Show this <span class="token function">help</span> message.
+  --version, -v            Show version info.
+  --install                Install acme.sh to your system.
+  --uninstall              Uninstall acme.sh, and uninstall the <span class="token function">cron</span> job.
+  --upgrade                Upgrade acme.sh to the latest code from https://github.com/acmesh-official/acme.sh.
+  --issue                  Issue a cert.
+  --signcsr                Issue a cert from an existing csr.
+  --deploy                 Deploy the cert to your server.
+  --install-cert           Install the issued cert to apache/nginx or any other server.
+<span class="token comment" spellcheck="true"># ......</span></code></pre>
 <br>
 
+<h2 id="0x02-签发-SSL-证书"><a href="#0x02-签发-SSL-证书" class="headerlink" title="0x02 签发 SSL 证书"></a>0x02 签发 SSL 证书</h2><p>签发 SSL 证书需要证明这个域名是属于你的，即<strong>域名所有权</strong>，一般有两种方式验证：http 和 dns 验证。</p>
+<p>通过 acme.sh 可以签发单域名、多域名、泛域名证书，还可以签发 ECC 证书。为了简单起见，这里以<strong>单域名证书</strong>为例，后面再拓展一下好了。</p>
+<p><strong>下面任意一种方式只要安装成功了就行！</strong></p>
+<p>注意：这一步<strong>只是生成了证书，并没有进行配置</strong>，因此访问网站当然上不了 https。</p>
+<h3 id="2-1-HTTP-验证"><a href="#2-1-HTTP-验证" class="headerlink" title="2.1 HTTP 验证"></a>2.1 HTTP 验证</h3><p>这种方式 <code>acme.sh</code> 会自动在你的网站根目录下放置一个文件，来验证你的域名所有权，验证之后就签发证书，最后会自动删除验证文件。</p>
+<p><strong>前提是要绑定的域名已经绑定到了所在服务器上，且可以通过公网进行访问！</strong></p>
+<h4 id="2-1-1-Webroot-mode"><a href="#2-1-1-Webroot-mode" class="headerlink" title="2.1.1  Webroot mode"></a>2.1.1  Webroot mode</h4><p>假设服务器在运行着的，网站域名为 <code>example.com</code>，根目录为 <code>/home/wwwroot/example.com</code>。那么只需要执行下面这条语句就行。</p>
+<pre class=" language-bash"><code class="language-bash">acme.sh  --issue  -d example.com  -w /home/wwwroot/example.com</code></pre>
+<h4 id="2-1-2-Apache-Nginx-mode"><a href="#2-1-2-Apache-Nginx-mode" class="headerlink" title="2.1.2 Apache / Nginx mode"></a>2.1.2 Apache / Nginx mode</h4><p>如果用的是 Apache 或者 Nginx 服务器，可以自动寻找配置文件来进行签发。</p>
+<pre class=" language-bash"><code class="language-bash">acme.sh  --issue  -d example.com  --apache  <span class="token comment" spellcheck="true"># Apache</span>
+acme.sh  --issue  -d example.com  --nginx   <span class="token comment" spellcheck="true"># Nginx</span></code></pre>
+<p>如果找不到配置文件的话可以自行配置。</p>
+<pre class=" language-bash"><code class="language-bash">acme.sh  --issue  -d example.com  --nginx /etc/nginx/nginx.conf  <span class="token comment" spellcheck="true"># 指定nginx的conf</span>
+acme.sh  --issue  -d example.com  --nginx /etc/nginx/conf.d/example.com.conf  <span class="token comment" spellcheck="true"># 指定网站的conf</span></code></pre>
+<h4 id="2-1-3-Standalone-mode"><a href="#2-1-3-Standalone-mode" class="headerlink" title="2.1.3 Standalone mode"></a>2.1.3 Standalone mode</h4><p>这种方式下，acme.sh 会自己建立一个服务器来完成签发。主要适合的是没有建立服务器的情况，不过其实有服务器的话只要暂时关闭，不造成端口冲突就能使用。</p>
+<p>http 模式，80端口：</p>
+<pre class=" language-bash"><code class="language-bash">acme.sh  --issue  -d example.com  --standalone</code></pre>
+<p>如果用了反代之类的不是 80 端口，则可以手动指定。</p>
+<pre class=" language-bash"><code class="language-bash">acme.sh  --issue  -d example.com  --standalone --httpport 88</code></pre>
+<p>当然它还支持 tls 模式，不是 443 端口的话也可以自行指定。</p>
+<pre class=" language-bash"><code class="language-bash">acme.sh  --issue  -d example.com  --alpn
+acme.sh  --issue  -d example.com  --alpn --tlsport 8443  <span class="token comment" spellcheck="true"># 自行指定tls端口</span></code></pre>
+<br>
+
+
+
+<h3 id="2-2-DNS-验证"><a href="#2-2-DNS-验证" class="headerlink" title="2.2 DNS 验证"></a>2.2 DNS 验证</h3><p>这种方式下，不需要任何服务器，不需要任何公网 ip，只需要 dns 的解析记录即可完成验证。</p>
+<p>比如说服务器不能直接公网访问，以及某些 VPS 直接绑定域名没备案的话是上不去的，就需要采用这种方案了。<em>（我的就是了</em></p>
+<p>当然，手里有域名只是想生成一个证书而已也可以这么用。</p>
+<h4 id="2-2-1-DNS-API-mode"><a href="#2-2-1-DNS-API-mode" class="headerlink" title="2.2.1 DNS API mode"></a>2.2.1 DNS API mode</h4><p>这种方式贼强大，直接可以利用域名服务商提供的 API 就可以自动帮你添加 TXT 记录完成验证和证书签发。而且60天后还可以自动完成续期。（我就是用这种方式实现哒~</p>
+<p>比如说 CloudFlare 的，在<a href="https://dash.cloudflare.com/profile" target="_blank" rel="noopener">这里</a>获取你的API Key。可以用全局 API Key，将参数导入到命令行。</p>
+<pre class=" language-bash"><code class="language-bash"><span class="token function">export</span> CF_Token<span class="token operator">=</span><span class="token string">"sdfsdfsdfljlbjkljlkjsdfoiwje"</span>
+<span class="token function">export</span> CF_Account_ID<span class="token operator">=</span><span class="token string">"xxxxxxxxxxxxx"</span></code></pre>
+<p>为了限制权限，可以新建一个区域的 API Key. 这里只需要 Zone.DNS 的编辑权限（restrict the API Token only for write access to Zone.DNS for a single domain）就行。</p>
+<pre class=" language-bash"><code class="language-bash"><span class="token function">export</span> CF_Token<span class="token operator">=</span><span class="token string">"sdfsdfsdfljlbjkljlkjsdfoiwje"</span>
+<span class="token function">export</span> CF_Account_ID<span class="token operator">=</span><span class="token string">"xxxxxxxxxxxxx"</span>
+<span class="token function">export</span> CF_Zone_ID<span class="token operator">=</span><span class="token string">"xxxxxxxxxxxxx"</span></code></pre>
+<p><code>Account_ID</code> 和 <code>Zone_ID</code> 在域名的管理页面右下方可以得到。</p>
+<p>而后再签发证书。</p>
+<pre class=" language-bash"><code class="language-bash">acme.sh --issue --dns dns_cf -d example.com </code></pre>
+<p>之后这些配置信息会保存到 <code>~/.acme.sh/account.conf</code> 这个文件里，在证书续期或者其他利用 CF 进行验证的时候会自动调用。</p>
+<p>当然，国内一般用的是 DNSPod，也提供了 API，类似配置就好了。</p>
+<pre class=" language-bash"><code class="language-bash"><span class="token function">export</span> DP_Id<span class="token operator">=</span><span class="token string">"1234"</span>
+<span class="token function">export</span> DP_Key<span class="token operator">=</span><span class="token string">"sADDsdasdgdsf"</span>
+acme.sh --issue --dns dns_dp -d example.com -d www.example.com</code></pre>
+<p><em>（这个其实就是多域名签发了）</em></p>
+<p>更多例子参考官方 Wiki 好了→ <a href="https://github.com/acmesh-official/acme.sh/wiki/dnsapi" target="_blank" rel="noopener">How to use DNS API</a></p>
+<h4 id="2-2-2-DNS-manual-mode"><a href="#2-2-2-DNS-manual-mode" class="headerlink" title="2.2.2 DNS manual mode"></a>2.2.2 DNS manual mode</h4><p>适合域名服务商没有提供 API 的情况，需要自己在域名配置一个 TXT 记录，且不能自动续期，每次都需要重新配置。</p>
+<pre class=" language-bash"><code class="language-bash">acme.sh  --issue  -d example.com  --dns  -d www.example.com</code></pre>
+<p>更多请参考官方教程 <a href="https://github.com/acmesh-official/acme.sh/wiki/DNS-manual-mode" target="_blank" rel="noopener">DNS manual mode</a>。</p>
+<h4 id="2-2-3-DNS-alias-mode"><a href="#2-2-3-DNS-alias-mode" class="headerlink" title="2.2.3 DNS alias mode"></a>2.2.3 DNS alias mode</h4><p>如果域名服务商没有提供 API，或者是一个挺重要的域名，为了安全不希望或者不方便直接配置这个域名的解析记录，可以通过另一个没那么重要的域名（可能是专门用来签发证书的）间接进行配置。</p>
+<p>实际上还是需要有一个域名来验证所有权啦！</p>
+<p>更多参考官方教程 <a href="https://github.com/acmesh-official/acme.sh/wiki/DNS-alias-mode" target="_blank" rel="noopener">DNS alias mode</a> 好了。</p>
+<br>
+
+
+
+<h3 id="2-3-多域名配置"><a href="#2-3-多域名配置" class="headerlink" title="2.3 多域名配置"></a>2.3 多域名配置</h3><p>多个域名签发同一张证书。只需要在验证方式之后添加多个 <code>-d &lt;YourDomainHere&gt;</code> 参数就行。</p>
+<pre class=" language-bash"><code class="language-bash">acme.sh --issue -d example.com -w /home/wwwroot/example.com -d www.example.com
+
+acme.sh  --issue  -d example.com  --standalone  -d www.example.com 
+
+acme.sh  --issue  -d example.com  --dns  -d www.example.com</code></pre>
+<p>也可以多个域名指定不同的验证方式，例如</p>
+<pre class=" language-bash"><code class="language-bash">acme.sh  --issue  \
+-d aa.com  -w /home/wwwroot/aa.com \
+-d bb.com  --dns dns_cf \
+-d cc.com  --apache \
+-d dd.com  -w /home/wwwroot/dd.com</code></pre>
+<br>
+
+<h3 id="2-4-泛域名配置"><a href="#2-4-泛域名配置" class="headerlink" title="2.4 泛域名配置"></a>2.4 泛域名配置</h3><p>Wildcard certificates</p>
+<p>同理，<strong>只需要加个<code>*</code></strong>就好。不过好像<strong>只适用于 DNS 验证</strong>的方式。</p>
+<pre class=" language-bash"><code class="language-bash">acme.sh  --issue -d example.com  -d <span class="token string">'*.example.com'</span>  --dns dns_cf</code></pre>
+<br>
+
+<h3 id="2-5-签发-ECC-证书"><a href="#2-5-签发-ECC-证书" class="headerlink" title="2.5 签发 ECC 证书"></a>2.5 签发 ECC 证书</h3><p>默认签发的都是基于 RSA 密钥加密的证书，而 <strong>ECC</strong> (Elliptic Curve Cryptography, 椭圆曲线密码) 密钥的保密性比 RSA 更好，密钥长度更短，更能对抗量子解密等，目前现代的操作系统和浏览器都支持 ECC 证书了（Windows XP 及其之前的就算了）。</p>
+<p><code>Let's Encrypt</code> 提供了 ECDSA 证书的签发，且 acme.sh 也支持。</p>
+<p>我看网上的教程基本没讲 ECC 证书的签发，这里就来整一下呗！</p>
+<p>其实只需要加上一个以 <code>ec-</code> 为前缀的 <code>--keylength</code> 参数（或 <code>-k</code>）就可以了。理论上上面的各种验证方式都适用。</p>
+<p>比如</p>
+<pre class=" language-bash"><code class="language-bash">acme.sh --issue -w /home/wwwroot/example.com -d example.com --keylength ec-256  <span class="token comment" spellcheck="true"># 单域名</span>
+acme.sh --issue -w /home/wwwroot/example.com -d example.com -d www.example.com --keylength ec-256  <span class="token comment" spellcheck="true"># 多域名</span></code></pre>
+<p>支持以下长度的证书，一般就用 <code>ec-256</code> 就行了。</p>
+<blockquote>
+<ol>
+<li><strong>ec-256 (prime256v1, “ECDSA P-256”)</strong></li>
+<li><strong>ec-384 (secp384r1,  “ECDSA P-384”)</strong></li>
+<li><strong>ec-521 (secp521r1,  “ECDSA P-521”, which is not supported by Let’s Encrypt yet.)</strong></li>
+</ol>
+</blockquote>
+<br>
+
+
+
+<h2 id="0x03-安装-copy-证书"><a href="#0x03-安装-copy-证书" class="headerlink" title="0x03 安装(copy)证书"></a>0x03 安装(copy)证书</h2><p>签发证书成功后，需要把证书安装或者复制到真正需要的地方，如 nginx / apache 的目录下。</p>
+<p>官方说<strong>必须</strong>用下面的命令来安装证书，<strong>不能</strong>直接用 <code>~/.acme.sh/</code>目录下的证书文件，因为那只能内部使用，且未来目录结构可能会更改。</p>
+<p>我们只需要使用 <code>--installcert</code> 命令，指定目标位置，然后证书文件就会被 copy 到相应的位置了。</p>
+<p>其中域名是必须的，其他参数是可选的。</p>
+<p>有必要的话，可能需要对证书文件的所属权限进行一些设置。（我这边没有问题呢，就略了吧）</p>
+<h3 id="3-1-Nginx"><a href="#3-1-Nginx" class="headerlink" title="3.1 Nginx"></a>3.1 Nginx</h3><pre class=" language-bash"><code class="language-bash">acme.sh --installcert -d example.com \
+--key-file       /path/to/keyfile/in/nginx/key.pem  \
+--fullchain-file /path/to/fullchain/nginx/cert.pem \
+--reloadcmd     <span class="token string">"service nginx force-reload"</span></code></pre>
+<p>比如你可以在 nginx 的目录下新建一个 <code>ssl</code> 目录，然后把证书安装 / copy 过去。</p>
+<pre class=" language-bash"><code class="language-bash">acme.sh --installcert -d example.com \
+        --key-file   /etc/nginx/ssl/example.com.key \
+        --fullchain-file /etc/nginx/ssl/example.com.fullchain.cer \
+        --reloadcmd  <span class="token string">"service nginx force-reload"</span></code></pre>
+<blockquote>
+<p>这里用的是 <code>service nginx force-reload</code>, 不是 <code>service nginx reload</code>, 据测试, <code>reload</code> 并不会重新加载证书, 所以用的 <code>force-reload</code>。</p>
+<p>Nginx 的配置 <code>ssl_certificate</code> 使用 <code>/etc/nginx/ssl/fullchain.cer</code> ，而非 <code>/etc/nginx/ssl/.cer</code> ，否则 <a href="https://www.ssllabs.com/ssltest/" target="_blank" rel="noopener">SSL Labs</a> 的测试会报 <code>Chain issues Incomplete</code> 错误。</p>
+</blockquote>
+<h3 id="3-2-Apache"><a href="#3-2-Apache" class="headerlink" title="3.2 Apache"></a>3.2 Apache</h3><pre class=" language-bash"><code class="language-bash">acme.sh --install-cert -d example.com \
+--cert-file      /path/to/certfile/in/apache/cert.pem  \
+--key-file       /path/to/keyfile/in/apache/key.pem  \
+--fullchain-file /path/to/fullchain/certfile/apache/fullchain.pem \
+--reloadcmd     <span class="token string">"service apache2 force-reload"</span></code></pre>
+<p>在命令中的 <strong><code>reloadcmd</code> 参数很重要！</strong> 这个用来指定证书更新（Renew）后执行的命令，从而使续期后的证书生效。</p>
+<p>默认 60 天就会续期一次，上面这些参数会记录下来并自动执行。（几好，贼方便</p>
+<br>
+
+
+
+<h2 id="0x04-生成-dhparam-pem-文件（可选）"><a href="#0x04-生成-dhparam-pem-文件（可选）" class="headerlink" title="0x04 生成 dhparam.pem 文件（可选）"></a>0x04 生成 dhparam.pem 文件（可选）</h2><pre class=" language-bash"><code class="language-bash">openssl dhparam -out /etc/nginx/ssl/dhparam.pem 2048</code></pre>
+<p>这一步是为了增强 SSL 的安全性。这里生成一个更强壮的 DHE 参数。</p>
+<blockquote>
+<p><strong>前向安全性（Forward Secrecy）</strong>的概念很简单：客户端和服务器协商一个永不重用的密钥，并在会话结束时销毁它。服务器上的 RSA 私钥用于客户端和服务器之间的 Diffie-Hellman 密钥交换签名。从 Diffie-Hellman  握手中获取的预主密钥会用于之后的编码。因为预主密钥是特定于客户端和服务器之间建立的某个连接，并且只用在一个限定的时间内，所以称作短暂模式（Ephemeral）。</p>
+<p>使用了前向安全性，如果一个攻击者取得了一个服务器的私钥，他是不能解码之前的通讯信息的。这个私钥仅用于 Diffie Hellman  握手签名，并不会泄露预主密钥。Diffie Hellman 算法会确保预主密钥绝不会离开客户端和服务器，而且不能被中间人攻击所拦截。</p>
+<p>nginx 依赖于 OpenSSL 给 Diffie-Hellman （DH）的输入参数。不幸的是，这意味着  Diffie-Hellman Ephemeral（DHE）将使用 OpenSSL  的默认设置，包括一个用于密钥交换的1024位密钥。因为我们正在使用2048位证书，DHE 客户端就会使用一个要比非 DHE  客户端更弱的密钥交换。</p>
+</blockquote>
+<p>更多参考<a href="https://weakdh.org/sysadmin.html" target="_blank" rel="noopener">这里 Guide to Deploying Diffie-Hellman for TLS</a> 吧。</p>
+<br>
+
+
+
+<h2 id="0x05-配置-Nginx"><a href="#0x05-配置-Nginx" class="headerlink" title="0x05 配置 Nginx"></a>0x05 配置 Nginx</h2><p>没用过 Apache，这里只说 Nginx 好了。<small>（其实也不怎么会用（小声bb </small></p>
+<p>修改网站的 conf 配置文件，加入 SSL 的相关配置。</p>
+<pre class=" language-nginx"><code class="language-nginx"><span class="token keyword">server</span> <span class="token punctuation">{</span>
+    <span class="token keyword">server_name</span> example<span class="token punctuation">.</span>com<span class="token punctuation">;</span>
+    <span class="token keyword">listen</span>       <span class="token number">443</span> <span class="token keyword">ssl</span> http2 default_server<span class="token punctuation">;</span>
+    <span class="token keyword">listen</span>       <span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token punctuation">]</span><span class="token punctuation">:</span><span class="token number">443</span> <span class="token keyword">ssl</span> http2 default_server<span class="token punctuation">;</span>
+    <span class="token comment" spellcheck="true"># ...    </span>
+    <span class="token comment" spellcheck="true"># ssl 相关配置</span>
+    <span class="token keyword">ssl_certificate</span> <span class="token operator">/</span>etc<span class="token operator">/</span>nginx<span class="token operator">/</span><span class="token keyword">ssl</span><span class="token operator">/</span>example<span class="token punctuation">.</span>com<span class="token punctuation">.</span>fullchain<span class="token punctuation">.</span>cer<span class="token punctuation">;</span>
+    <span class="token keyword">ssl_certificate_key</span> <span class="token operator">/</span>etc<span class="token operator">/</span>nginx<span class="token operator">/</span><span class="token keyword">ssl</span><span class="token operator">/</span>example<span class="token punctuation">.</span>com<span class="token punctuation">.</span>key<span class="token punctuation">;</span>
+    <span class="token keyword">ssl_dhparam</span> <span class="token operator">/</span>etc<span class="token operator">/</span>nginx<span class="token operator">/</span><span class="token keyword">ssl</span><span class="token operator">/</span>dhparam<span class="token punctuation">.</span>pem<span class="token punctuation">;</span>
+    <span class="token keyword">ssl_protocols</span> TLSv1 TLSv1<span class="token number">.1</span> TLSv1<span class="token number">.2</span><span class="token punctuation">;</span>
+    <span class="token keyword">ssl_ciphers</span> <span class="token string">'[ECDHE-ECDSA-AES128-GCM-SHA256|ECDHE-ECDSA-CHACHA20-POLY1305|ECDHE-RSA-AES128-GCM-SHA256|ECDHE-RSA-CHACHA20-POLY1305]:ECDHE+AES128:RSA+AES128:ECDHE+AES256:RSA+AES256:ECDHE+3DES:RSA+3DES'</span><span class="token punctuation">;</span>
+    <span class="token keyword">ssl_prefer_server_ciphers</span> on<span class="token punctuation">;</span>
+
+    <span class="token comment" spellcheck="true"># ...</span>
+<span class="token punctuation">}</span></code></pre>
+<p><code>ssl_dhparam /etc/nginx/ssl/dhparam.pem;</code> 是在 0x04 步骤中生成的，可选。</p>
+<p><code>ssl_ciphers</code>用于指定加密套件，这里采用的是 <a href="https://github.com/cloudflare/sslconfig/blob/master/conf" target="_blank" rel="noopener">CloudFlare 家的</a>，具体也不是很清楚 emmm。可以参考一下 Mozilla 的 Wiki：<a href="https://wiki.mozilla.org/Security/Server_Side_TLS" target="_blank" rel="noopener">Security/Server Side TLS</a></p>
+<p>更多参数可以参考 nginx 的文档：<a href="http://nginx.org/en/docs/http/ngx_http_ssl_module.html" target="_blank" rel="noopener">Module ngx_http_ssl_module</a></p>
+<h3 id="TLSv1-3（可选）"><a href="#TLSv1-3（可选）" class="headerlink" title="TLSv1.3（可选）"></a>TLSv1.3（可选）</h3><p>现在很多网站都上 <strong>TLSv1.3</strong> 了，证书检测的网站对于 TLSv1、TLSv1.1 都认为不安全了，Firefox 自 74.0 版本开始也完全放弃对加密协议 <em>TLS 1.0</em> 和 <em>TLS 1.1</em> 的支持了。</p>
+<p>对于 TLSv1.3 的配置，需要安装最新版的 openssl（OpenSSL 1.1.1 built with TLSv1.3或更高），而后重新编译 nginx，是有点麻烦这里懒得弄了，后面需要再折腾吧。</p>
+<h3 id="开启-HSTS（可选）"><a href="#开启-HSTS（可选）" class="headerlink" title="开启 HSTS（可选）"></a>开启 HSTS（可选）</h3><p>当然，为了更加安全，<strong>可以选择开启 HSTS</strong>（HTTP Strict Transport Security，HTTP严格传输安全协议），强制浏览器通过 https 进行访问。需要在 location 下的设置中加入一个 header。</p>
+<pre class=" language-nginx"><code class="language-nginx"><span class="token keyword">add_header</span> Strict<span class="token operator">-</span>Transport<span class="token operator">-</span>Security <span class="token string">"max-age=31536000; includeSubDomains; preload"</span><span class="token punctuation">;</span></code></pre>
+<p>接下来的一年（即31536000秒）中，浏览器看到 header 中包含 <code>Strict-Transport-Security</code> 的话就会自动切换到 https。</p>
+<p>但是在首次访问网站时如果被劫持了，浏览器还是可能会通过 HTTP 明文传递信息。为此，Chrome 维护了一个 HSTS preload list，内置在浏览器中，对于 Chrome, Firefox, Opera, Safari, IE 11 and Edge 等主流浏览器也适用。可以<a href="https://hstspreload.org/" target="_blank" rel="noopener">在这里</a>提交你的域名到这个列表里。（不过提交之前要考虑好，全站上 https 噢</p>
+<p>如果 TLS 证书无效或不可信，用户不能忽略浏览器警告继续访问网站。这就是前几天访问 GitHub (Pages) 等网站被拦下来的原因了。</p>
 <hr>
-<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>感觉 JetBrains 的这两个 Quest 难度还好，还是挺友好的。</p>
-<p>于是就白嫖了总共六个月的 JB 全家产品免费授权。</p>
-<p>（不过之前就有教育邮箱的免费授权呢</p>
-<p>所以通过这个 Quest，让我们更深入地了解了 JB？说不定还能顺便招聘？</p>
-<p>（这大概是其本意吧？（盲猜</p>
-<p>注意一下上面的内容<strong>仅供学习研究</strong>，转载的话记得留下本文链接呢。</p>
-<p>欢迎一起交流嘻嘻嘻。</p>
-<p>（溜了溜了</p>
+<p>上面的配置完成后检查一下配置是否正确，而后重启 nginx。</p>
+<pre class=" language-bash"><code class="language-bash">nginx -t
+systemctl restart nginx</code></pre>
+<p>之后就可以试一下能不能通过 https 来访问自己的网站啦！</p>
+<p><strong>到这里 SSL 配置就告一段落了，下面是一些 acme.sh 的维护相关的了。</strong></p>
+<br>
+
+
+
+<h2 id="0x06-更新证书"><a href="#0x06-更新证书" class="headerlink" title="0x06 更新证书"></a>0x06 更新证书</h2><p>证书的有效期为 90 天，acme.sh 会 60 天更新（Renew）一次。</p>
+<p>在安装 acme.sh 的时候就自动配置了一条 cron 任务了，会每天检查证书的情况。当然可以到 crontab 里看一下。</p>
+<pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># crontab -l</span>
+43 0 * * * <span class="token string">"/root/.acme.sh"</span>/acme.sh --cron --home <span class="token string">"/root/.acme.sh"</span> <span class="token operator">></span> /dev/null</code></pre>
+<p>也可以试着用上面这条命令执行看一下相关的配置是否正确。</p>
+<p>强制更新可以这样。</p>
+<pre class=" language-bash"><code class="language-bash">acme.sh --renew -d example.com --force  
+acme.sh --renew -d example.com --force --ecc  <span class="token comment" spellcheck="true"># 如果用的是ECC证书</span></code></pre>
+<br>
+
+
+
+<h2 id="0x07-停止更新证书"><a href="#0x07-停止更新证书" class="headerlink" title="0x07 停止更新证书"></a>0x07 停止更新证书</h2><p>查看证书列表</p>
+<pre class=" language-bash"><code class="language-bash">acme.sh --list</code></pre>
+<p>停止 Renew</p>
+<pre class=" language-bash"><code class="language-bash">acme.sh --remove -d example.com <span class="token punctuation">[</span>--ecc<span class="token punctuation">]</span></code></pre>
+<p>之后手动把目录下的证书移除就行。</p>
+<br>
+
+
+
+<h2 id="0x08-升级-acme-sh"><a href="#0x08-升级-acme-sh" class="headerlink" title="0x08 升级 acme.sh"></a>0x08 升级 acme.sh</h2><pre class=" language-bash"><code class="language-bash">acme.sh --upgrade    <span class="token comment" spellcheck="true"># 手动升级</span>
+acme.sh --upgrade --auto-upgrade    <span class="token comment" spellcheck="true"># 自动升级</span>
+acme.sh --upgrade --auto-upgrade 0  <span class="token comment" spellcheck="true"># 停止自动升级</span></code></pre>
+<br>
+
+
+
+<h2 id="0xFF-小结"><a href="#0xFF-小结" class="headerlink" title="0xFF 小结"></a>0xFF 小结</h2><p>除了上面这些配置之外，acme.sh 还提供了通知提醒，可以调用其他 API 来推送提醒，具体参考官方Wiki：<a href="https://github.com/acmesh-official/acme.sh/wiki/notify" target="_blank" rel="noopener">notify</a>。</p>
+<p>总之感觉<strong>这个工具还是很实用的，大大降低了 SSL 配置的门槛</strong>呢。</p>
+<p>草（一种植物），感觉我把官方的教程翻译了，然后又找了一些其他的资料整合起来了的亚子emmm。不过大部分还是自己手码的字啦！</p>
+<p>实际上我这次配置的是 ECC 密钥的泛域名证书，用的是 DNS API 的模式。其实几个月前就折腾过 SSL 证书的配置了，然而过了就忘了，当时先是用 HTTP 模式进行验证，发现行不通才换的 DNS 模式。这次干脆一起理一遍好了，过程中发现原来 HTTP 模式验证比我想的还要强大，只是需求（主要是需要泛域名证书）对不上罢了。</p>
+<p>怎么说好呢，绝对安全不大可能，都是想方设法尽可能相对安全一些呢。</p>
+<p>希望这一篇不会浪费您的宝贵时间呢，有用的话欢迎给我买点好吃的/buy me a coffee（饿了喵</p>
+<p>溜了溜了（</p>
+<h2 id="References-amp-Extensive-Reading"><a href="#References-amp-Extensive-Reading" class="headerlink" title="References &amp; Extensive Reading"></a>References &amp; Extensive Reading</h2><p>下面有的是官方文档，有的是博客之类的，由于时效性有些内容可能不适用了。注意一下就吼。</p>
+<ul>
+<li><p><a href="https://github.com/acmesh-official/acme.sh" target="_blank" rel="noopener">acme.sh GitHub 仓库</a>  </p>
+</li>
+<li><p><a href="https://github.com/acmesh-official/acme.sh/wiki/%E8%AF%B4%E6%98%8E" target="_blank" rel="noopener">官方中文说明</a>  </p>
+</li>
+<li><p><a href="https://github.com/acmesh-official/acme.sh/wiki/How-to-issue-a-cert" target="_blank" rel="noopener">How to issue a cert（官方Wiki）</a>  </p>
+</li>
+<li><p><a href="https://github.com/acmesh-official/acme.sh/wiki/dnsapi" target="_blank" rel="noopener">How to use DNS API</a>  </p>
+</li>
+<li><p><a href="https://wiki.mozilla.org/Security/Server_Side_TLS" target="_blank" rel="noopener">Security/Server Side TLS</a>  </p>
+</li>
+<li><p><a href="http://nginx.org/en/docs/http/ngx_http_ssl_module.html" target="_blank" rel="noopener">（Nginx文档）Module ngx_http_ssl_module</a>  </p>
+</li>
+<li><p><a href="https://imququ.com/post/ecc-certificate.html" target="_blank" rel="noopener">开始使用ECC证书部署HTTPS</a>  </p>
+</li>
+<li><p><a href="https://www.cnblogs.com/xueweihan/p/10057656.html" target="_blank" rel="noopener">MySSL HTTPS 评级 B 升 A+</a>  </p>
+</li>
+<li><p><a href="https://www.acgist.com/article/541.html" target="_blank" rel="noopener">Nginx开启TLSv1.3和HTTP/2</a>  </p>
+<p>etc.</p>
+</li>
+</ul>
 <script>
         document.querySelectorAll('.github-emoji')
           .forEach(el => {
@@ -862,7 +845,7 @@ go further at least</code></pre><p>形象带师 233333</p>
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://miaotony.xyz/2020/03/12/CTF_2020JetBrainsQuest/">https://miaotony.xyz/2020/03/12/CTF_2020JetBrainsQuest/</a>
+                    <a href="https://miaotony.xyz/2020/03/28/Server_IssueACertWithACME/">https://miaotony.xyz/2020/03/28/Server_IssueACertWithACME/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -900,12 +883,24 @@ go further at least</code></pre><p>形象带师 233333</p>
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/CTF/">
-                                    <span class="chip bg-color">CTF</span>
+                                <a href="/tags/Tech/">
+                                    <span class="chip bg-color">Tech</span>
                                 </a>
                             
-                                <a href="/tags/WriteUp/">
-                                    <span class="chip bg-color">WriteUp</span>
+                                <a href="/tags/Server/">
+                                    <span class="chip bg-color">Server</span>
+                                </a>
+                            
+                                <a href="/tags/Web/">
+                                    <span class="chip bg-color">Web</span>
+                                </a>
+                            
+                                <a href="/tags/Configuration/">
+                                    <span class="chip bg-color">Configuration</span>
+                                </a>
+                            
+                                <a href="/tags/SSL/">
+                                    <span class="chip bg-color">SSL</span>
                                 </a>
                             
                         </div>
@@ -1080,7 +1075,7 @@ go further at least</code></pre><p>形象带师 233333</p>
         repo: 'miaotony.github.io',
         owner: 'miaotony',
         admin: "miaotony",
-        id: '2020-03-12T15-00-00',
+        id: '2020-03-28T20-30-00',
         distractionFreeMode: false  // Facebook-like distraction free mode
     });
 
@@ -1101,29 +1096,100 @@ go further at least</code></pre><p>形象带师 233333</p>
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
-                <a href="/2020/03/14/CTF_2020JetBrainsQuest3/">
+                <a href="/2020/03/28/Server_IssueACertWithACME/">
                     <div class="card-image">
                         
                         
-                        <img src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/medias/featureimages/3.jpg" class="responsive-img" alt="CTF | JetBrains Quest 3 WriteUp/攻略">
+                        <img src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/medias/featureimages/21.jpg" class="responsive-img" alt="基于acme.sh从Let's encrypt生成免费且自动更新的SSL证书">
                         
-                        <span class="card-title">CTF | JetBrains Quest 3 WriteUp/攻略</span>
+                        <span class="card-title">基于acme.sh从Let's encrypt生成免费且自动更新的SSL证书</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            JetBrains Quest 3出来了，又来体验了一波，最后的礼品是20% discount on an All Products Pack subscription，这里随手写写攻略吧。
+                            通过Let's encrypt可以获得90天免费且可续期的SSL证书，而利用acme.sh可以自动生成和更新，这篇文章就来介绍一下配置的过程吧。
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2020-03-14
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-03-28
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/Tech/" class="post-category">
+                                    Tech
+                                </a>
+                            
+                            <a href="/categories/Tech/Server/" class="post-category">
+                                    Server
+                                </a>
+                            
+                            
                         </span>
+                    </div>
+                </div>
+
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/Tech/">
+                        <span class="chip bg-color">Tech</span>
+                    </a>
+                    
+                    <a href="/tags/Server/">
+                        <span class="chip bg-color">Server</span>
+                    </a>
+                    
+                    <a href="/tags/Web/">
+                        <span class="chip bg-color">Web</span>
+                    </a>
+                    
+                    <a href="/tags/Configuration/">
+                        <span class="chip bg-color">Configuration</span>
+                    </a>
+                    
+                    <a href="/tags/SSL/">
+                        <span class="chip bg-color">SSL</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2020/03/23/CTF_BJDCTF2nd/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/medias/featureimages/14.jpg" class="responsive-img" alt="CTF | BJDCTF 2nd WriteUp">
+                        
+                        <span class="card-title">CTF | BJDCTF 2nd WriteUp</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            划水划水~周末水了一下BJDCTF 2nd，据说是萌新赛，于是来玩了一下，嗯让我知道了我的确就是萌新。
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-03-23
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
@@ -1145,75 +1211,6 @@ go further at least</code></pre><p>形象带师 233333</p>
                     
                     <a href="/tags/WriteUp/">
                         <span class="chip bg-color">WriteUp</span>
-                    </a>
-                    
-                </div>
-                
-            </div>
-        </div>
-        
-        
-        <div class="article col s12 m6" data-aos="fade-up">
-            <div class="article-badge right-badge text-color">
-                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
-            </div>
-            <div class="card">
-                <a href="/2020/03/03/Server_ObtainIPv6ViaTunnelBroker/">
-                    <div class="card-image">
-                        
-                        
-                        <img src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/medias/featureimages/23.jpg" class="responsive-img" alt="利用TunnelBroker给阿里云ECS配置公网IPv6">
-                        
-                        <span class="card-title">利用TunnelBroker给阿里云ECS配置公网IPv6</span>
-                    </div>
-                </a>
-                <div class="card-content article-content">
-                    <div class="summary block-with-text">
-                        
-                            最近折腾了一下，利用Hurricane Electric提供的免费IPv6 Tunnel Broker，让阿里云的ECS拥有了IPv6地址（非原生）。
-                        
-                    </div>
-                    <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2020-03-03
-                            </span>
-                        <span class="publish-author">
-                            
-                            <i class="fas fa-bookmark fa-fw icon-category"></i>
-                            
-                            <a href="/categories/Tech/" class="post-category">
-                                    Tech
-                                </a>
-                            
-                            <a href="/categories/Tech/Server/" class="post-category">
-                                    Server
-                                </a>
-                            
-                            
-                        </span>
-                    </div>
-                </div>
-                
-                <div class="card-action article-tags">
-                    
-                    <a href="/tags/Tech/">
-                        <span class="chip bg-color">Tech</span>
-                    </a>
-                    
-                    <a href="/tags/Server/">
-                        <span class="chip bg-color">Server</span>
-                    </a>
-                    
-                    <a href="/tags/Web/">
-                        <span class="chip bg-color">Web</span>
-                    </a>
-                    
-                    <a href="/tags/Configuration/">
-                        <span class="chip bg-color">Configuration</span>
-                    </a>
-                    
-                    <a href="/tags/IPv6/">
-                        <span class="chip bg-color">IPv6</span>
                     </a>
                     
                 </div>
