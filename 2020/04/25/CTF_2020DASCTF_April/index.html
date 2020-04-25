@@ -518,13 +518,14 @@
 <p>比赛平台：<a href="https://www.linkedbyx.com/studyCenter/36998/tasks" target="_blank" rel="noopener">https://www.linkedbyx.com/studyCenter/36998/tasks</a> </p>
 <p>请提交flag{}/DASCTF{}括号里面的内容。</p>
 </blockquote>
-<p>今天下午有个 DASCTF 安恒月赛，四月春季战，难度据赵师傅说“雨露均沾”，就来看了看题。</p>
-<p>其实还是大概比赛开始之后一两个小时才注册的，于是划了个水，大概看了几道 Re 和 Misc 的题，随便写写 WP 吧。</p>
+<p>今天下午有个 DASCTF 安恒月赛，四月春季战，难度据赵师傅说<strong>“雨露均沾”</strong>，就来看了看题。</p>
+<p>其实还是大概比赛开始之后一两个小时才注册的，于是划了个水，大概看了几道 <strong>Re 和 Misc 的题</strong>，随便写写 WP 吧。</p>
 <p>（其实也没几道题会做的，有的还是赛后补的，呜。</p>
 <br>
 
 <hr>
-<h2 id="Reverse"><a href="#Reverse" class="headerlink" title="Reverse"></a>Reverse</h2><h3 id="入门reverse"><a href="#入门reverse" class="headerlink" title="入门reverse"></a>入门reverse</h3><p>拖进 IDA 看下。</p>
+<h2 id="Reverse"><a href="#Reverse" class="headerlink" title="Reverse"></a>Reverse</h2><h3 id="入门reverse"><a href="#入门reverse" class="headerlink" title="入门reverse"></a>入门reverse</h3><p><strong>题目附件：</strong><a href="2004225e9ff11e77f07.exe">在这里</a></p>
+<p>拖进 IDA 看下。</p>
 <pre class=" language-cpp"><code class="language-cpp"><span class="token keyword">int</span> __cdecl <span class="token function">main</span><span class="token punctuation">(</span><span class="token keyword">int</span> argc<span class="token punctuation">,</span> <span class="token keyword">const</span> <span class="token keyword">char</span> <span class="token operator">*</span><span class="token operator">*</span>argv<span class="token punctuation">,</span> <span class="token keyword">const</span> <span class="token keyword">char</span> <span class="token operator">*</span><span class="token operator">*</span>envp<span class="token punctuation">)</span>
 <span class="token punctuation">{</span>
   size_t i<span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// [esp+28h] [ebp-80h]</span>
@@ -545,7 +546,7 @@
   <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span></code></pre>
 <p>A0h-30h 正好就是十进制的 112，于是 <code>v6[i - 112]</code> 对应的就是 <code>v5</code> 的地址。</p>
-<p>Exp：</p>
+<p><strong>Exp：</strong></p>
 <pre class=" language-python"><code class="language-python"><span class="token comment" spellcheck="true"># -*- coding:utf-8 -*-</span>
 
 s<span class="token operator">=</span><span class="token string">"akhb~chdaZrdaZudqduvdZvvv|"</span>
@@ -558,7 +559,8 @@ new<span class="token operator">=</span><span class="token string">''</span>
 <p>哇好耶，好久没看到这么简单的 Re 题了唉！</p>
 <br>
 
-<h3 id="encrypt3"><a href="#encrypt3" class="headerlink" title="encrypt3"></a>encrypt3</h3><p>同样拖进 IDA。</p>
+<h3 id="encrypt3"><a href="#encrypt3" class="headerlink" title="encrypt3"></a>encrypt3</h3><p><strong>题目附件：</strong><a href="encrypt3">在这里</a></p>
+<p>同样拖进 IDA。</p>
 <pre class=" language-cpp"><code class="language-cpp"><span class="token keyword">signed</span> __int64 __fastcall <span class="token function">main</span><span class="token punctuation">(</span>__int64 a1<span class="token punctuation">,</span> <span class="token keyword">char</span> <span class="token operator">*</span><span class="token operator">*</span>a2<span class="token punctuation">,</span> <span class="token keyword">char</span> <span class="token operator">*</span><span class="token operator">*</span>a3<span class="token punctuation">)</span>
 <span class="token punctuation">{</span>
   __int64 v3<span class="token punctuation">;</span> <span class="token comment" spellcheck="true">// rax</span>
@@ -690,7 +692,7 @@ new<span class="token operator">=</span><span class="token string">''</span>
 <p><code>v10</code>依次和输入的每个数异或一下，再输出<code>v10</code>和最开始那串数字异或的结果。</p>
 <p><strong>逆向的话，只要找到 <code>flag</code> 就完事了！</strong></p>
 <p>于是直接爆破！</p>
-<p>Exp：</p>
+<p><strong>Exp：</strong></p>
 <p>输了几个数字觉得太麻烦了，于是直接<strong>正则匹配</strong>好了。</p>
 <pre class=" language-python"><code class="language-python"><span class="token keyword">import</span> re
 s <span class="token operator">=</span> <span class="token triple-quoted-string string">"""
@@ -779,6 +781,7 @@ final <span class="token operator">=</span> <span class="token string">''</span>
 <h3 id="blueshrak"><a href="#blueshrak" class="headerlink" title="blueshrak"></a>blueshrak</h3><blockquote>
 <p>Can you dig something you want out from the sea-colored beautiful shark?</p>
 </blockquote>
+<p><strong>题目附件：</strong><a href="2004225e9ff0cd86ee4.pcapng">在这里</a></p>
 <p>一个流量包，看了是蓝牙协议，呜又是没见过的。发现 Wireshark 还可以分析蓝牙数据包唉。（（其实好多都可以</p>
 <p>binwalk 发现了一个 7z 的压缩包，直接当成压缩包打开，发现有个 <code>password_is_Bluetooth_PIN.txt</code>文件，看来得找 PIN 了。</p>
 <p>从数据包这里也找到了这个压缩包。</p>
@@ -1368,7 +1371,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
             <br>
                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">91.7k</span>&nbsp;字
+                class="white-color">91.8k</span>&nbsp;字
                                                                                     <span id="busuanzi_container_site_pv">
 			|&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
                     class="white-color"></span>&nbsp;次
