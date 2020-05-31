@@ -493,14 +493,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    2.4k
+                    2.6k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    10 分
+                    11 分
                 </div>
                 
 
@@ -676,6 +676,19 @@ cargo build --release --features pkg-config-meta,qlog
 <pre class=" language-bash"><code class="language-bash">./curl -v https://106.14.153.173:8443/check.php --http3 -d <span class="token string">"pass=1&amp;newpass=1"</span></code></pre>
 <p>然后得到flag：</p>
 <p><code>NUAACTF{WH4T_d0_y0u_kn0w_H334}</code></p>
+<h4 id="另一种-curl-方法"><a href="#另一种-curl-方法" class="headerlink" title="另一种 curl 方法"></a>另一种 curl 方法</h4><p>想到一个方案，就是直接拉别人构建好的 docker 镜像。</p>
+<p>找到了一个 build 有 HTTP3 的 curl docker image：<strong>ymuski/curl-http3</strong></p>
+<blockquote>
+<p>Docker image of <code>curl</code> compiled with  <code>BoringSSL</code> and <code>quiche/0.2.0</code> for <strong>HTTP3 support</strong>, <code>httpstat</code> for visualization.</p>
+<p>GitHub 仓库：<strong><a href="https://github.com/yurymuski/curl-http3" target="_blank" rel="noopener">curl-http3</a></strong></p>
+</blockquote>
+<pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># docker run -it --rm ymuski/curl-http3 curl -V</span>
+curl 7.71.0-DEV <span class="token punctuation">(</span>x86_64-pc-linux-gnu<span class="token punctuation">)</span> libcurl/7.71.0-DEV BoringSSL quiche/0.4.0
+Release-Date: <span class="token punctuation">[</span>unreleased<span class="token punctuation">]</span>
+Protocols: dict <span class="token function">file</span> <span class="token function">ftp</span> ftps gopher http https imap imaps pop3 pop3s rtsp smb smbs smtp smtps telnet tftp
+Features: alt-svc AsynchDNS HTTP3 HTTPS-proxy IPv6 Largefile NTLM NTLM_WB SSL UnixSockets</code></pre>
+<p>而后直接做题就完事了。</p>
+<pre class=" language-bash"><code class="language-bash">docker run -it --rm ymuski/curl-http3 curl -Lv https://106.14.153.173:8443/check.php --http3 -d <span class="token string">"pass=a&amp;newpass=a"</span></code></pre>
 <br>
 
 <hr>
@@ -1347,7 +1360,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
             <br>
                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">105.7k</span>&nbsp;字
+                class="white-color">105.8k</span>&nbsp;字
                                                                                     <span id="busuanzi_container_site_pv">
 			|&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
                     class="white-color"></span>&nbsp;次
