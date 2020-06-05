@@ -767,17 +767,18 @@ drwxr-xr-x 1 root root           4096 May 19 03:09 <span class="token punctuatio
 <pre class=" language-python"><code class="language-python">python <span class="token operator">-</span>c <span class="token string">"open('./flag','r').read()"</span></code></pre>
 <p>这样会炸内存。</p>
 <p>考虑分块读取，然而好像又有限制。佛了。</p>
+<hr>
 <p><strong>20200605 更新：</strong></p>
 <p>看了看出题的 TaQini 师傅的<a href="http://taqini.space/2020/05/28/bjd3rd-testyournc/#Test-your-nc" target="_blank" rel="noopener">出题笔记</a>，这里顺便参考一下。</p>
 <p>之所以生成的 flag 如此之大，是因为生成的脚本中的 <code>seek</code> 函数在将文件偏移的指针往后移动一段之后，在写入的有效数据（flag）之间留下了一个个由 <code>\x00</code> 组成的空洞（hole），这些 hole 是不占用（不分配）磁盘空间的。因此题目中用<code>df</code>看硬盘空间还是很小的。</p>
 <p>而用<code>lseek</code>函数能跳过 hole 去读取数据。</p>
 <p>可以用 <code>man lseek</code> 来看看函数手册。</p>
 <blockquote>
-<p><strong>off_t lseek</strong>(int fd, off_t offset, int whence);</p>
+<p><strong>off_t lseek</strong> (int fd, off_t offset, int whence);</p>
 <p>The lseek() function repositions the offset of the open file associated with the file descriptor <u>fd</u> to the argument <u>offset</u> according to the directive <u>whence</u>.</p>
 <p>fd：文件描述符； </p>
 <p>offset: 移动文件位置的偏移数，以字节为单位；</p>
-<p>whence为系统定义的常量，可能的值有<strong>SEEK_SET</strong>、<strong>SEEK_CUR</strong>、<strong>SEEK_END</strong>、<strong>SEEK_DATA</strong>、<strong>SEEK_HOLE</strong>。</p>
+<p>whence 为系统定义的常量，可能的值有<strong>SEEK_SET</strong>、<strong>SEEK_CUR</strong>、<strong>SEEK_END</strong>、<strong>SEEK_DATA</strong>、<strong>SEEK_HOLE</strong>。</p>
 <p><strong>SEEK_SET</strong><br>       The offset is set to offset bytes.    文件读写位置从<strong>文件开始</strong>往后移动offset个字节。</p>
 <p><strong>SEEK_CUR</strong><br>       The offset is set to its current location plus offset bytes.  文件读写位置从<strong>当前位置</strong>开始移动offset个字节。offset可以为负值。</p>
 <p><strong>SEEK_END</strong><br>       The offset is set to the size of the file plus offset bytes.  文件读写位置从<strong>文件结尾</strong>移动offset个字节。offset可以为负值。</p>
@@ -798,6 +799,7 @@ drwxr-xr-x 1 root root           4096 May 19 03:09 <span class="token punctuatio
 <p>考虑到没有环境了，这里利用<code>/f1a9.bak</code>中的内容在本地生成了一个 flag，而后参照 TaQini 师傅的脚本来读取 flag。</p>
 <p>首先看一下 flag 有多大。</p>
 <pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># ls -al</span>
+total 56
 drwxr-xr-x 2 root root           4096 6月   5 22:06 ./
 drwxr-xr-x 8 root root           4096 6月   5 21:48 <span class="token punctuation">..</span>/
 -rw-r--r-- 1 root root 15007689474057 6月   5 21:48 flag</code></pre>
@@ -839,7 +841,7 @@ print flag
 <h3 id="babyweb"><a href="#babyweb" class="headerlink" title="babyweb"></a>babyweb</h3><blockquote>
 <p>flag格式：把BJD{this_is_flag}转md5，提交md5值(小写)</p>
 <p><strong>hint:</strong> 第三组密码中的某一位，以下图的解密结果为准：</p>
-<p><img src="/2020/05/24/CTF_BJDCTF3rd/jPqgz2GTi46qq5it.png" alt></p>
+<p><img src="/2020/05/24/CTF_BJDCTF3rd/jPqgz2GTi46qq5it.png" alt=""></p>
 <p>百度图片搜出来的密码表是Q，以原著为准 改成w，再根据图片的提示改成W；如果还提交失败就是其他位有解错的。</p>
 </blockquote>
 <p>有个<code>flag.zip</code>，里面有个图片密码加密了。</p>
@@ -949,7 +951,7 @@ Now, input passwd to start the game:</code></pre><p><a href="http://emoji.taqini
 <p>hint1: 所有没有使用hint()中给出的函数做出题目的方法都是非预期，如果您是非预期请报告我们，所以 从哪里入手应该懂了吧？</p>
 <p>hint2: if( #s#o#m#e#t#h#i#n#g#<em>#I#</em>#w#o#n#t#<em>#t#e#l#l#</em>#y#o#u# )  这过滤了全部字母和数字，当然还过滤了其他符号，需要自己fuzz（socket pwntool等)</p>
 <p>hint3: python几？</p>
-<p><img src="/2020/05/24/CTF_BJDCTF3rd/X1T9NYXZ6Zyt9xKQ.png" alt></p>
+<p><img src="/2020/05/24/CTF_BJDCTF3rd/X1T9NYXZ6Zyt9xKQ.png" alt=""></p>
 <p>打错字了，是result，不影响做题</p>
 </blockquote>
 <p>题目给了 hint 说<strong>过滤了全部字母和数字，当然还过滤了其他符号</strong>。</p>
