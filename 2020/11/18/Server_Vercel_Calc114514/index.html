@@ -459,16 +459,16 @@
                                 <span class="chip bg-color">Tech</span>
                             </a>
                         
+                            <a href="/tags/Web/">
+                                <span class="chip bg-color">Web</span>
+                            </a>
+                        
                             <a href="/tags/Telegram/">
                                 <span class="chip bg-color">Telegram</span>
                             </a>
                         
                             <a href="/tags/Server/">
                                 <span class="chip bg-color">Server</span>
-                            </a>
-                        
-                            <a href="/tags/Web/">
-                                <span class="chip bg-color">Web</span>
                             </a>
                         
                             <a href="/tags/Serverless/">
@@ -513,7 +513,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    2.8k
+                    2.9k
                 </div>
                 
 
@@ -531,9 +531,9 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="0x00-前言"><a href="#0x00-前言" class="headerlink" title="0x00 前言"></a>0x00 前言</h2><p>最近，受到 USTC Hackergame 2020（中国科学技术大学第七届信息安全大赛）超精巧的数字论证器 一题启发，寻思着咱可以整一个网页版本 / Telegram bot 版本的 114514 数字论证器。</p>
+                <h2 id="0x00-Preface-前言"><a href="#0x00-Preface-前言" class="headerlink" title="0x00 Preface 前言"></a>0x00 Preface 前言</h2><p>最近，受到 USTC Hackergame 2020（中国科学技术大学第七届信息安全大赛）超精巧的数字论证器 一题启发，寻思着咱可以整一个网页版本 / Telegram bot 版本的 114514 数字论证器。</p>
 <blockquote>
-<p>BTW, <a href="https://miaotony.xyz/2020/11/08/CTF_2020Hackergame/">USTC Hackergame 2020 WriteUp by MiaoTony</a></p>
+<p>See also: <a href="https://miaotony.xyz/2020/11/08/CTF_2020Hackergame/">USTC Hackergame 2020 WriteUp by MiaoTony</a></p>
 </blockquote>
 <p>说干就干，考虑到 Vercel 有个 Serverless Function 服务，之前也尝试过在上面搭 API<em>（虽然那时由于执行时间限制等原因没用上）</em>，这次的 114514 论证实际上并不复杂，于是就来整一个吧！</p>
 <p><em>（Serverless 真香！</em></p>
@@ -568,7 +568,7 @@ $ curl <span class="token string">"https://calc114514.vercel.app/api/calc?isJson
 <p>第一个不带原数，第二个带原数，效果分别如下所示。</p>
 <p><img src="/2020/11/18/Server_Vercel_Calc114514/image-20201112224905498.png" alt=""></p>
 <hr>
-<h2 id="0x02-题目回顾"><a href="#0x02-题目回顾" class="headerlink" title="0x02 题目回顾"></a>0x02 题目回顾</h2><blockquote>
+<h2 id="0x02-Review-of-the-question-题目回顾"><a href="#0x02-Review-of-the-question-题目回顾" class="headerlink" title="0x02 Review of the question 题目回顾"></a>0x02 Review of the question 题目回顾</h2><blockquote>
 <p>数字论证是一种常见的定理证明方法。</p>
 <p>简单来说，就是对于给定的自然数，找出一个等值的表达式，如果该表达式去除所有符号部分后为字符串「114514」，则完成论证。表达式仅允许整数运算，可以使用括号、常见的代数运算符 <code>+-*/%</code> 和位运算符 <code>~^&amp;|</code>。</p>
 <p><em>Via: USTC Hackergame 2020</em></p>
@@ -619,7 +619,7 @@ $ curl <span class="token string">"https://calc114514.vercel.app/api/calc?isJson
 <p>它支持 GitHub、GitLab 和 Bitbucket 集成，也支持通过命令行 CLI 工具进行部署。</p>
 <p>而且 <a href="https://vercel.com/pricing" target="_blank" rel="noopener">个人版本是永远免费的</a>！<a href="https://vercel.com/docs/platform/limits" target="_blank" rel="noopener">平台限制</a> 也很宽裕。</p>
 <p>更多介绍详见 <a href="https://vercel.com/docs/introduction" target="_blank" rel="noopener">官方介绍文档</a>。</p>
-<p>Vercel 就是之前的 ZEIT，其命令行工具就是 <code>vercel</code>，以前是 <code>now</code>。</p>
+<p>Vercel 就是以前的 ZEIT，其命令行工具就是 <code>vercel</code>，以前是 <code>now</code>。</p>
 <p>首先我们安装命令行工具。</p>
 <pre class=" language-bash"><code class="language-bash"><span class="token function">npm</span> i -g vercel</code></pre>
 <p>看一下版本。</p>
@@ -635,12 +635,13 @@ Vercel CLI 20.1.4
 <p>之后的每一次部署都会部署到 Preview 环境，确定没问题后再用下面的命令部署到生产环境即可。</p>
 <pre class=" language-bash"><code class="language-bash">vercel --prod</code></pre>
 <p>两个环境分离开来就很好用，赞一个。</p>
-<p>当然 Vercel 还支持绑定自己的域名，只需要改一改 CNAME 就好，还能帮你配上 Let’s encrypt! 的证书。</p>
+<p>当然 Vercel 还支持绑定自己的域名，只需要改一改 CNAME 就好，还能自动帮你配上 Let’s encrypt! 的证书。</p>
 <p>除此之外，也可以直接在 Settings 下的 Tokens 里新建一个 token，利用其来进行部署。</p>
 <p><img src="/2020/11/18/Server_Vercel_Calc114514/image-20201119010712433.png" alt="token"></p>
 <pre class=" language-bash"><code class="language-bash">vercel -t <span class="token operator">&lt;</span>TOKEN Here<span class="token operator">></span></code></pre>
-<p>这一操作很适合在服务器上执行，以及可以白嫖 CI 进行部署（嘿嘿，可以在 Organization 里进行构建了</p>
-<p>更多 CLI 使用方法可以参考 <a href="https://vercel.com/docs/cli#commands/overview" target="_blank" rel="noopener">官方 Reference</a>。</p>
+<p>这一操作很适合在服务器上执行，以及可以白嫖 CI 进行部署。</p>
+<p>（嘿嘿，可以在 Organization 里进行构建了</p>
+<p>更多 CLI 使用方法可以参考 <a href="https://vercel.com/docs/cli#commands/overview" target="_blank" rel="noopener">官方 CLI Reference</a>。</p>
 <h3 id="Serverless-部署"><a href="#Serverless-部署" class="headerlink" title="Serverless 部署"></a>Serverless 部署</h3><p>下面就到了愉快的 Serverless 部署环节了。</p>
 <p>参考 <a href="https://vercel.com/docs/serverless-functions/introduction#" target="_blank" rel="noopener">Serverless Functions 官方文档</a>，我们需要新建一个 <code>api</code> 文件夹，在里面放我们的代码。</p>
 <p>目前支持的后端语言包括：</p>
@@ -678,15 +679,16 @@ Vercel CLI 20.1.4
     """</span>
     <span class="token keyword">pass</span></code></pre>
 <hr>
-<h2 id="0x05-部署-Telegram-bot"><a href="#0x05-部署-Telegram-bot" class="headerlink" title="0x05 部署 Telegram bot"></a>0x05 部署 Telegram bot</h2><p><strong>Telegram bot 才是这次的重点。</strong></p>
-<p>由于 Telegram 给我们提供了 <strong>Webhook</strong> 这种处理消息的方式，当 bot 接收到用户发来的消息后，Telegram 服务器会给你设置 Webhook 的 URI 发一个 POST 请求，对这个包进行提取就能得到用户的消息等信息。进而对数据进行处理，再通过 TG bot 的 API 给用户回复消息就完事了。</p>
-<p>首先需要设置好 Webhook 到 Vercel 的 URI 上，利用 Flask 的路由去接收。略了。</p>
-<p>而处理消息的部分，这里在写的时候最开始是想自己写的，毕竟并不复杂，它送来的是个 JSON 格式字符串，提取一下就完事了。</p>
+<h2 id="0x05-部署-Telegram-bot"><a href="#0x05-部署-Telegram-bot" class="headerlink" title="0x05 部署 Telegram bot"></a>0x05 部署 Telegram bot</h2><p><strong>Telegram bot 才是这次的重点吧。</strong></p>
+<p>由于 Telegram 给我们提供了 <strong>Webhook</strong> 这种处理消息的方式，当 bot 接收到用户发来的消息后，Telegram 服务器会给你设置 Webhook 的 URI 发一个 POST 请求，对这个包进行解析就能得到用户的消息等信息。进而对数据进行处理，再通过 TG bot 的 API 给用户回复消息就完事了。</p>
+<p>首先需要设置好 Webhook 到 Vercel 的 URI 上，利用 Flask 的路由去接收。这里略了。</p>
+<p>而处理消息的部分，在写的时候最开始是想自己写的，毕竟并不复杂，它送来的是个 JSON 格式的字符串，提取一下就完事了。</p>
 <p>但是主要想实现一个内联查询（inline query）的功能，同时还要兼顾消息回复，就觉得有点麻烦，还不如用现成的轮子，懒得造轮子了。</p>
 <p>去 GitHub 上搜了一下，发现有两大现成轮子：<strong><a href="https://github.com/python-telegram-bot/python-telegram-bot" target="_blank" rel="noopener">python-telegram-bot</a></strong> 及 <strong><a href="https://github.com/eternnoir/pyTelegramBotAPI" target="_blank" rel="noopener">pyTelegramBotAPI</a></strong>。</p>
 <p>他们的文档都挺丰富的，也有很多例子。主要就是对官方的 HTTP API 接口进行了封装，处理消息上好像还做了个队列，用了异步实现的感觉。</p>
-<p>其中前者本身带有一个 webhook 服务器，但试了发现不符合 Vercel 的要求，没有暴露 <code>app</code> 对象之类的。</p>
-<p>后者则提供了一个 heroku 部署的样例 pyTelegramBotAPI/examples/webhook_examples/<a href="https://github.com/eternnoir/pyTelegramBotAPI/blob/master/examples/webhook_examples/webhook_flask_heroku_echo.py" target="_blank" rel="noopener">webhook_flask_heroku_echo.py</a>  </p>
+<p><em>（u1s1，那时我一度有 还不如自己写 的感觉</em></p>
+<p>其中前者本身带有一个 webhook 服务器，但试了发现不符合 Vercel 的要求，没有暴露 <code>app</code> 对象之类的，于是跑不起来。</p>
+<p>后者则提供了一个 webhook heroku 部署的样例，即 pyTelegramBotAPI/examples/webhook_examples/<a href="https://github.com/eternnoir/pyTelegramBotAPI/blob/master/examples/webhook_examples/webhook_flask_heroku_echo.py" target="_blank" rel="noopener">webhook_flask_heroku_echo.py</a>  </p>
 <p><strong>关键代码：</strong></p>
 <pre class=" language-python"><code class="language-python">@server<span class="token punctuation">.</span>route<span class="token punctuation">(</span><span class="token string">'/'</span> <span class="token operator">+</span> TOKEN<span class="token punctuation">,</span> methods<span class="token operator">=</span><span class="token punctuation">[</span><span class="token string">'POST'</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
 <span class="token keyword">def</span> <span class="token function">getMessage</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
@@ -694,42 +696,46 @@ Vercel CLI 20.1.4
     <span class="token keyword">return</span> <span class="token string">"!"</span><span class="token punctuation">,</span> <span class="token number">200</span></code></pre>
 <p><code>process_new_updates</code> 这个方法能把接收到的信息传进去，从而建立了 Webhook 和 pyTelegramBotAPI 的联系。</p>
 <p>于是就用 pyTelegramBotAPI 这个来实现了。</p>
-<p>还有一个坑就是，可能是由于异步处理消息的原因，Vercel Serverless 中的 <code>process_new_updates</code> 结束 return 之后，消息还来不及处理完回送给 Telegram，在测试过程中经常就消息莫名其妙丢失了，或者连着发几条消息才回复的情况。</p>
+<p>还有一个坑就是，可能是由于异步处理消息的原因，Vercel Serverless 中的 <code>process_new_updates</code> 结束 return 之后这个会话就关闭了，消息还来不及处理完回送给 Telegram。在测试过程中经常就消息莫名其妙丢失了，或者连着发几条消息才回复的情况。</p>
 <p>后来尝试了加一个 <code>bot.get_me()</code> 来缓解。</p>
 <p>再后来，发现直接加个延时就完事了，<code>time.sleep(0.5)</code>，只需要 0.5s 延时，简单粗暴解决问题。</p>
 <p>（喵喵~</p>
 <p>相关代码位于 GitHub repo <a href="https://github.com/miaotony/calc114514" target="_blank" rel="noopener">https://github.com/miaotony/calc114514</a> 的 <code>/api/</code> 目录下，<code>main.py</code> 内包含了开放接口和 bot 交互的相关接口。</p>
 <h3 id="开发说明"><a href="#开发说明" class="headerlink" title="开发说明"></a><strong>开发说明</strong></h3><ol>
-<li><p>Install the requirements.</p>
+<li><p>Install the requirements. 安装依赖。</p>
 <pre><code>pip3 install -r requirements.txt</code></pre></li>
-<li><p>Edit your Telegram bot token and Webhook URL path in the <code>secret.example.py</code>.</p>
+<li><p>Edit your Telegram bot token and Webhook URL path in the <code>secret.example.py</code>. 这里我把关键配置专门拿出来放到 <code>secret.example.py</code> 文件里了，开发的时候要修改成你的。</p>
 </li>
-<li><p>Rename <code>secret.example.py</code> to <code>secret.py</code>.</p>
+<li><p>Rename <code>secret.example.py</code> to <code>secret.py</code>. 改名。</p>
 </li>
-<li><p>Run the backend, for example, <code>gunicorn main:app</code>.</p>
+<li><p>Run the backend, for example, <code>gunicorn main:app</code>. 运行后端程序。</p>
 </li>
 </ol>
 <p><strong>基于 Vercel 部署：</strong></p>
 <p>在配置好 <code>vercel.json</code> 和 <code>api</code> 目录的基础上，直接用 CLI 上传即可。</p>
+<pre class=" language-bash"><code class="language-bash">vercel</code></pre>
 <hr>
 <h2 id="0x06-FrontEnd-前端"><a href="#0x06-FrontEnd-前端" class="headerlink" title="0x06 FrontEnd  前端"></a>0x06 FrontEnd  前端</h2><p>最后，寻思着咱 API 都弄好了，不如再整个前端界面吧。</p>
-<p>前后端分离架构，直接调用之前写的 API 就好了。</p>
+<p>由于采用了前后端分离架构，直接调用之前写的 API 就好了。</p>
 <p>想到 Hackergame 2020 签到题那个界面就不错，于是在此基础上魔改了一下，加了个 AJAX 网络请求，顺便做了个输入框和滑块的双向数据绑定。</p>
-<p>本身就是个静态文件，直接基于 Vercel 完成部署就完事了。</p>
+<p>前端本身就是静态文件了，直接扔根目录下，基于 Vercel 部署就完事了。</p>
 <p>详见： <a href="https://calc114514.vercel.app/?from=blog" target="_blank" rel="noopener">https://calc114514.vercel.app/</a></p>
 <p><img src="/2020/11/18/Server_Vercel_Calc114514/image-20201112225921026.png" alt=""></p>
 <p><img src="/2020/11/18/Server_Vercel_Calc114514/image-20201112225938571.png" alt="img"></p>
 <p>BTW, 当你想要论证 114514 的时候会给你多提示个“恶臭的” <em>（嘻嘻</em></p>
 <hr>
-<h2 id="0x07-小结"><a href="#0x07-小结" class="headerlink" title="0x07 小结"></a>0x07 小结</h2><p>总之就是写了一大版，从论证算法到接口部署到 Telegram bot 部署再到前端界面，把整个实现的过程说了一通。</p>
+<h2 id="0x07-Summary-小结"><a href="#0x07-Summary-小结" class="headerlink" title="0x07 Summary 小结"></a>0x07 Summary 小结</h2><p>总之就是写了一大版，从论证算法到接口部署到 Telegram bot 部署再到前端界面，把整个实现的过程说了一通。</p>
 <p><strong>前端：</strong><a href="https://calc114514.vercel.app/?from=blog" target="_blank" rel="noopener">https://calc114514.vercel.app/</a></p>
 <p><strong>Telegram bot:</strong> <a href="https://t.me/calc114514bot" target="_blank" rel="noopener">@calc114514bot</a>.</p>
 <p>代码开源在 GitHub 上：<a href="https://github.com/miaotony/calc114514" target="_blank" rel="noopener">https://github.com/miaotony/calc114514</a></p>
 <p>走过路过点个 STAR 吧~</p>
-<p>（Serverless 真香！</p>
-<h2 id="0xFF-Extensive-Reading"><a href="#0xFF-Extensive-Reading" class="headerlink" title="0xFF Extensive Reading"></a>0xFF Extensive Reading</h2><p><a href="https://www.ixiqin.com/2020/06/how-to-free-for-your-organizations-project-configuration-vercel/" target="_blank" rel="noopener">如何免费为你的组织项目配置 Vercel</a></p>
-<p><a href="https://www.v2ex.com/t/683606" target="_blank" rel="noopener">V2EX: 基于 Vercel 提供的 Serverless 写的服务</a></p>
-<p><a href="https://www.xuthus.cc/go/vercel-run-go.html" target="_blank" rel="noopener">vercel无服务部署Go函数</a></p>
+<p><em>（Serverless 真香！</em></p>
+<p>当然最后还是提一句——</p>
+<p><strong>本文相关内容仅供学习研究使用，请在合理合法范围内使用，请勿滥用！</strong></p>
+<hr>
+<h2 id="0xFF-Extensive-Reading"><a href="#0xFF-Extensive-Reading" class="headerlink" title="0xFF Extensive Reading"></a>0xFF Extensive Reading</h2><p><a href="https://www.v2ex.com/t/683606" target="_blank" rel="noopener">V2EX: 基于 Vercel 提供的 Serverless 写的服务</a></p>
+<p><a href="https://www.xuthus.cc/go/vercel-run-go.html" target="_blank" rel="noopener">vercel 无服务部署 Go 函数</a></p>
+<p><a href="https://www.ixiqin.com/2020/06/how-to-free-for-your-organizations-project-configuration-vercel/" target="_blank" rel="noopener">如何免费为你的组织项目配置 Vercel</a> （这个就是用到了上面所说的 Token）</p>
 <p><em>（溜了溜了喵~</em></p>
 <script>
         document.querySelectorAll('.github-emoji')
@@ -816,16 +822,16 @@ Vercel CLI 20.1.4
                                     <span class="chip bg-color">Tech</span>
                                 </a>
                             
+                                <a href="/tags/Web/">
+                                    <span class="chip bg-color">Web</span>
+                                </a>
+                            
                                 <a href="/tags/Telegram/">
                                     <span class="chip bg-color">Telegram</span>
                                 </a>
                             
                                 <a href="/tags/Server/">
                                     <span class="chip bg-color">Server</span>
-                                </a>
-                            
-                                <a href="/tags/Web/">
-                                    <span class="chip bg-color">Web</span>
                                 </a>
                             
                                 <a href="/tags/Serverless/">
@@ -1077,16 +1083,16 @@ Vercel CLI 20.1.4
                         <span class="chip bg-color">Tech</span>
                     </a>
                     
+                    <a href="/tags/Web/">
+                        <span class="chip bg-color">Web</span>
+                    </a>
+                    
                     <a href="/tags/Telegram/">
                         <span class="chip bg-color">Telegram</span>
                     </a>
                     
                     <a href="/tags/Server/">
                         <span class="chip bg-color">Server</span>
-                    </a>
-                    
-                    <a href="/tags/Web/">
-                        <span class="chip bg-color">Web</span>
                     </a>
                     
                     <a href="/tags/Serverless/">
@@ -1332,7 +1338,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
             <br>
                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">140.8k</span>&nbsp;字
+                class="white-color">141k</span>&nbsp;字
                                                                                     <span id="busuanzi_container_site_pv">
 			|&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
                     class="white-color"></span>&nbsp;次
