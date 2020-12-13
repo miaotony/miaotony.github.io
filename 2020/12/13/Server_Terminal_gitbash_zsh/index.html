@@ -1,0 +1,1506 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="Install Terminal + git-bash + zsh + oh-my-zsh on Windows 10, MiaoTony">
+    <meta name="description" content="由于已经配了虚拟机，Win10上又不大想装WSL，于是折腾了一下Windows Terminal + git-bash + zsh + oh-my-zsh，感觉有点意思，这里顺便来记录一下。">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Install Terminal + git-bash + zsh + oh-my-zsh on Windows 10 | MiaoTony&#39;s小窝</title>
+    <link rel="icon" type="image/x-icon, image/vnd.microsoft.icon" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/favicon.ico">
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/libs/awesome/css/all.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/css/my.css">
+
+    <script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/libs/jquery/jquery.min.js"></script>
+	
+    <script>
+        //来个特效玩玩喵 20200123
+        var titleTime;
+        var OriginTitile = document.title;
+        document.addEventListener('visibilitychange', function() {
+            if (document.hidden) {
+                document.title = '|ω·) 喵~快回来呀！';
+                clearTimeout(titleTime);
+            } else {
+                document.title = '(/≧▽≦)/ Meow！';
+                titleTime = setTimeout(function() {
+        	    document.title = OriginTitile;
+        }, 800);
+    }
+        });
+    </script>
+<link rel="alternate" href="/atom.xml" title="MiaoTony's小窝" type="application/atom+xml">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/css/prism.css" type="text/css"></head>
+
+
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">MiaoTony's小窝</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>首页</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>标签</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>分类</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/archives" class="waves-effect waves-light">
+      
+      <i class="fas fa-archive" style="zoom: 0.6;"></i>
+      
+      <span>归档</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>关于</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/contact" class="waves-effect waves-light">
+      
+      <i class="fas fa-comments" style="zoom: 0.6;"></i>
+      
+      <span>留言</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/friends" class="waves-effect waves-light">
+      
+      <i class="fas fa-address-book" style="zoom: 0.6;"></i>
+      
+      <span>友链</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="搜索" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">MiaoTony's小窝</div>
+        <div class="logo-desc">
+            
+            喵~欢迎各位大佬的来访呀！
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			首页
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			标签
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			分类
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/archives" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-archive"></i>
+			
+			归档
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			关于
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/contact" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-comments"></i>
+			
+			留言
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/friends" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-address-book"></i>
+			
+			友链
+		</a>
+          
+        </li>
+        
+        
+        <li><div class="divider"></div></li>
+        <li>
+            <a href="https://github.com/miaotony" class="waves-effect waves-light" target="_blank">
+                <i class="fab fa-github-square fa-fw"></i>Fork Me
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+        </div>
+
+        
+            <style>
+    .nav-transparent .github-corner {
+        display: none !important;
+    }
+
+    .github-corner {
+        position: absolute;
+        z-index: 10;
+        top: 0;
+        right: 0;
+        border: 0;
+        transform: scale(1.1);
+    }
+
+    .github-corner svg {
+        color: #0f9d58;
+        fill: #fff;
+        height: 64px;
+        width: 64px;
+    }
+
+    .github-corner:hover .octo-arm {
+        animation: a 0.56s ease-in-out;
+    }
+
+    .github-corner .octo-arm {
+        animation: none;
+    }
+
+    @keyframes a {
+        0%,
+        to {
+            transform: rotate(0);
+        }
+        20%,
+        60% {
+            transform: rotate(-25deg);
+        }
+        40%,
+        80% {
+            transform: rotate(10deg);
+        }
+    }
+</style>
+
+<a href="https://github.com/miaotony" class="github-corner tooltipped hide-on-med-and-down" target="_blank"
+   data-tooltip="Fork Me" data-position="left" data-delay="50">
+    <svg viewBox="0 0 250 250" aria-hidden="true">
+        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+        <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2"
+              fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
+        <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z"
+              fill="currentColor" class="octo-body"></path>
+    </svg>
+</a>
+        
+    </nav>
+
+</header>
+
+    
+<script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/libs/cryptojs/crypto-js.min.js"></script>
+<script>
+    (function() {
+        let pwd = '';
+        if (pwd && pwd.length > 0) {
+            if (pwd !== CryptoJS.SHA256(prompt('请输入访问本文章的密码')).toString(CryptoJS.enc.Hex)) {
+                alert('密码错误，将返回主页！');
+                location.href = '/';
+            }
+        }
+    })();
+</script>
+
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/medias/featureimages/1.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <h1 class="description center-align post-title">Install Terminal + git-bash + zsh + oh-my-zsh on Windows 10</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        width: 345px;
+        padding-left: 20px;
+    }
+
+    .toc-widget .toc-title {
+        margin: 35px 0 15px 0;
+        padding-left: 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content {
+        height: calc(100vh - 250px);
+        overflow: auto;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #42b983;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+    }
+
+    #toc-content .is-active-link {
+        color: #42b983;
+    }
+
+    #toc-content .is-active-link::before {
+        background-color: #42b983;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 15px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/Tech/">
+                                <span class="chip bg-color">Tech</span>
+                            </a>
+                        
+                            <a href="/tags/Server/">
+                                <span class="chip bg-color">Server</span>
+                            </a>
+                        
+                            <a href="/tags/Configuration/">
+                                <span class="chip bg-color">Configuration</span>
+                            </a>
+                        
+                            <a href="/tags/Terminal/">
+                                <span class="chip bg-color">Terminal</span>
+                            </a>
+                        
+                            <a href="/tags/bash/">
+                                <span class="chip bg-color">bash</span>
+                            </a>
+                        
+                            <a href="/tags/zsh/">
+                                <span class="chip bg-color">zsh</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/Tech/" class="post-category">
+                                Tech
+                            </a>
+                        
+                            <a href="/categories/Tech/Server/" class="post-category">
+                                Server
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2020-12-13
+                </div>
+                
+
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
+                    2.2k
+                </div>
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
+                    9 分
+                </div>
+                
+
+                
+            </div>
+
+        </div>
+        <hr class="clearfix">
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>一直一来在 Windows 10 上都是直接用自带的 cmd，感觉界面是挺丑的。</p>
+<p>另一方面在 Linux 环境下用 zsh 加了自动补全用着就贼爽，于是就想到能不能在 Windows 下也整个 zsh。</p>
+<p>大概搜了一下，可以有以下几种选择。</p>
+<ul>
+<li>WSL (Windows Subsystem for Linux, 适用于 Linux 的 Windows 子系统) + zsh</li>
+<li>CygWin+ zsh</li>
+<li>Git Bash + zsh</li>
+</ul>
+<p>由于已经配了虚拟机，在 Windows 10 上不大想也懒得装 WSL2<em>（而且还占用一堆 C盘空间无法接受）</em>，而 <strong>Git 带有的 Bash 感觉是个不错的选择</strong>。</p>
+<p>于是折腾了一下，配了个 <strong>Windows Terminal + git-bash + zsh + oh-my-zsh</strong>，感觉有点意思，这里顺便就来记录一下。</p>
+<hr>
+<h2 id="Steps"><a href="#Steps" class="headerlink" title="Steps"></a>Steps</h2><h3 id="0x00-安装-git-bash-for-windows"><a href="#0x00-安装-git-bash-for-windows" class="headerlink" title="0x00 安装 git bash for windows"></a>0x00 安装 git bash for windows</h3><p>官方下载链接，点开就能弹出下载 ↓</p>
+<p><a href="https://git-scm.com/download/win" target="_blank" rel="noopener">https://git-scm.com/download/win</a></p>
+<p>安装就略了，当前的最新版本是 <code>2.29.2</code>。安装完成后会有个 git bash 程序。</p>
+<p>（啊，我发现忘记截图了，问题不大）</p>
+<p>记得留意一下 Git 的安装目录，下面会用到。</p>
+<p>例如我安装在 <code>D:\Program Files\Git</code>。</p>
+<h3 id="0x01-安装-zsh"><a href="#0x01-安装-zsh" class="headerlink" title="0x01 安装 zsh"></a>0x01 安装 zsh</h3><blockquote>
+<p><strong><em>Zsh</em></strong> is a shell designed for interactive use, although it is also a powerful scripting language.  Many of the useful features of <em>bash</em>, <em>ksh</em>, and <em>tcsh</em> were incorporated into zsh; many original features were added.  The <a href="http://zsh.sourceforge.net/Intro/intro_toc.html" target="_blank" rel="noopener">introductory document</a> details some of the unique features of zsh.  It assumes basic knowledge of the standard UNIX shells; the intent is to show a reader already familiar with one of the other major shells what makes zsh more useful or more powerful.</p>
+</blockquote>
+<p>在下面的网站可以下载到最新的 zsh 安装包：</p>
+<p><a href="https://packages.msys2.org/package/zsh?repo=msys&amp;variant=x86_64" target="_blank" rel="noopener">https://packages.msys2.org/package/zsh?repo=msys&amp;variant=x86_64</a></p>
+<p><img src="/2020/12/13/Server_Terminal_gitbash_zsh/image-20201213174051162.png" alt="下载zsh"></p>
+<p>下载完成后解压再解压，可以看到文件如下。</p>
+<p><img src="/2020/12/13/Server_Terminal_gitbash_zsh/image-20201213174241795.png" alt="文件内容"></p>
+<p>将这些文件直接解压到 Git 的安装目录下，与之前的文件进行合并，可以理解为把 zsh 当作 git bash 的一个补充安装包。</p>
+<p>完成后的效果如下图所示。</p>
+<p><img src="/2020/12/13/Server_Terminal_gitbash_zsh/image-20201213174609786.png" alt="合并后的效果"></p>
+<p>此时我们打开 git bash，敲下 <code>zsh</code>，<del>神奇的场面出现了</del> 我们并没有成功切换到 zsh<em>（当然你进入了当我没说</em></p>
+<p><strong>这啥回事啊？这不对劲啊！</strong>我们回去看看合并了什么文件吧。</p>
+<p>bash 会调用 <code>/usr/bin/</code> 下的可执行程序，而 zsh 也在这个目录下。</p>
+<p><img src="/2020/12/13/Server_Terminal_gitbash_zsh/image-20201213175240930.png" alt=""></p>
+<p>发现这个 <code>zsh.exe</code> 文件大小为0，感觉可能是个链接/快捷方式啥的，但不懂为啥这里用不通。</p>
+<p>而真正用到的是这个 <code>zsh-5.8.exe</code>。</p>
+<p>于是我们删掉 <code>zsh.exe</code>，把  <code>zsh-5.8.exe</code> 更名为 <code>zsh.exe</code> 就完事了。</p>
+<p>这时再启动 git bash，敲下 <code>zsh</code>，嘿嘿，熟悉的 zsh 出来了！</p>
+<p><img src="/2020/12/13/Server_Terminal_gitbash_zsh/image-20201213175713252.png" alt="zsh"></p>
+<p>当然这里可能会提示需要你配置一下 <code>.zshrc</code>，这个后面再说。</p>
+<p>看一下 zsh 版本。</p>
+<pre class=" language-bash"><code class="language-bash">zsh --version</code></pre>
+<p><img src="/2020/12/13/Server_Terminal_gitbash_zsh/image-20201213180053175.png" alt="zsh version"></p>
+<h3 id="0x02-安装-Oh-My-Zsh"><a href="#0x02-安装-Oh-My-Zsh" class="headerlink" title="0x02 安装 Oh My Zsh"></a>0x02 安装 Oh My Zsh</h3><p>zsh 都有了，怎么能不上 oh my zsh 呢。</p>
+<blockquote>
+<p>Oh My Zsh is a delightful, open source, community-driven framework for managing your Zsh        configuration. It comes bundled with thousands of helpful functions, helpers, plugins, themes, and a few things that make you shout…</p>
+<p><strong>“Oh My ZSH!”</strong></p>
+<p><strong>Official Website:</strong> <a href="http://ohmyz.sh" target="_blank" rel="noopener">http://ohmyz.sh</a></p>
+<p><strong>GitHub repo:</strong> <a href="https://github.com/ohmyzsh/ohmyzsh" target="_blank" rel="noopener">https://github.com/ohmyzsh/ohmyzsh</a></p>
+</blockquote>
+<p>在 zsh 里执行（curl）</p>
+<pre class=" language-bash"><code class="language-bash">sh -c <span class="token string">"<span class="token variable"><span class="token variable">$(</span>curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh<span class="token variable">)</span></span>"</span>
+<span class="token comment" spellcheck="true"># 或者 </span>
+<span class="token comment" spellcheck="true"># sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"</span></code></pre>
+<p>或者用 wget</p>
+<pre class=" language-bash"><code class="language-bash">sh -c <span class="token string">"<span class="token variable"><span class="token variable">$(</span><span class="token function">wget</span> https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh -O -<span class="token variable">)</span></span>"</span></code></pre>
+<p>国内下载可能会不大行<em>（DNS 污染之类的）</em>，那就挂个 ladder 什么的在浏览器先下载到本地，然后在 zsh 里 <code>sh install.sh</code> 进行安装。</p>
+<p>由于 <code>chsh</code> 在 git bash 里没有，这里可能会报错，但问题不大~</p>
+<p>oh my zsh 相关的文件存放在 <code>~/.oh-my-zsh</code> 目录下。</p>
+<p>而 <code>~</code> 的目录为 <code>C:\Users\&lt;your username&gt;</code>.</p>
+<p><img src="/2020/12/13/Server_Terminal_gitbash_zsh/image-20201213181510130.png" alt=".oh-my-zsh"></p>
+<blockquote>
+<p> lib 提供了核心功能的脚本库<br> tools 提供安装、升级等功能的快捷工具<br> plugins 自带插件的存放位置<br> templates 自带模板的存放位置<br> themes  自带主题文件的存放位置<br> custom 个性化配置目录，自安装的插件和主题可放这里</p>
+</blockquote>
+<p>Oh My Zsh 默认自带了一些默认主题，存放在<code>~/.oh-my-zsh/plugins</code>目录中，可以通过编辑<code>~/.zshrc</code>文件中的 <code>ZSH_THEME="robbyrussel"</code> 进行配置。</p>
+<p>P.S.:  很多主题需要先安装 <em><a href="https://github.com/powerline/fonts" target="_blank" rel="noopener">Powerline Fonts</a></em> 才能正常渲染图标。</p>
+<h3 id="0x03-Oh-My-Zsh-插件-amp-一些配置"><a href="#0x03-Oh-My-Zsh-插件-amp-一些配置" class="headerlink" title="0x03 Oh My Zsh 插件 &amp; 一些配置"></a>0x03 Oh My Zsh 插件 &amp; 一些配置</h3><h4 id="zsh-autosuggestions-自动补全"><a href="#zsh-autosuggestions-自动补全" class="headerlink" title="zsh-autosuggestions 自动补全"></a><strong>zsh-autosuggestions</strong> 自动补全</h4><p> <a href="https://github.com/zsh-users/zsh-autosuggestions" target="_blank" rel="noopener">https://github.com/zsh-users/zsh-autosuggestions</a>  </p>
+<p>参考 <a href="https://github.com/zsh-users/zsh-autosuggestions/blob/master/INSTALL.md#oh-my-zsh" target="_blank" rel="noopener">官方安装说明</a></p>
+<pre class=" language-bash"><code class="language-bash"><span class="token function">git</span> clone https://github.com/zsh-users/zsh-autosuggestions <span class="token variable">${ZSH_CUSTOM:-~/.oh-my-zsh/custom}</span>/plugins/zsh-autosuggestions</code></pre>
+<p>然后编辑 <code>~/.zshrc</code>，加入插件。</p>
+<p>注意是以 空格 或者 空行 作为分隔符。</p>
+<pre><code>plugins=( [plugins...] zsh-autosuggestions)</code></pre><p>最后重启 zsh 即可。</p>
+<h4 id="zsh-syntax-highlighting-语法高亮"><a href="#zsh-syntax-highlighting-语法高亮" class="headerlink" title="zsh-syntax-highlighting 语法高亮"></a><strong>zsh-syntax-highlighting</strong> 语法高亮</h4><p> <a href="https://github.com/zsh-users/zsh-syntax-highlighting" target="_blank" rel="noopener">https://github.com/zsh-users/zsh-syntax-highlighting</a></p>
+<p>参考 <a href="https://github.com/zsh-users/zsh-syntax-highlighting/blob/master/INSTALL.md#oh-my-zsh" target="_blank" rel="noopener">官方安装说明</a></p>
+<pre class=" language-bash"><code class="language-bash"><span class="token function">git</span> clone https://github.com/zsh-users/zsh-syntax-highlighting.git <span class="token variable">${ZSH_CUSTOM:-~/.oh-my-zsh/custom}</span>/plugins/zsh-syntax-highlighting</code></pre>
+<p>然后编辑 <code>~/.zshrc</code>，加入插件。</p>
+<pre><code>plugins=( [plugins...] zsh-syntax-highlighting)</code></pre><p>最后重启 zsh 即可。</p>
+<h4 id="给history命令增加时间"><a href="#给history命令增加时间" class="headerlink" title="给history命令增加时间"></a>给history命令增加时间</h4><p>啊其实这个不算是插件，混入的喵（</p>
+<p>把 <code>HIST_STAMPS</code> 这个注释去除了就行，当然也可以设置成你喜欢的时间格式。</p>
+<p>配置好的效果类似于下图。</p>
+<p><img src="/2020/12/13/Server_Terminal_gitbash_zsh/image-20201213183440438.png" alt=""></p>
+<h4 id="更新-oh-my-zsh"><a href="#更新-oh-my-zsh" class="headerlink" title="更新 oh-my-zsh"></a>更新 oh-my-zsh</h4><p>默认的话是有更新的时候会提示，问你要不要更新。</p>
+<p>如果需要它自动更新的话，把 <code>~/.zshrc</code> 里下面这行注释取消就好了。</p>
+<pre class=" language-bash"><code class="language-bash">DISABLE_UPDATE_PROMPT<span class="token operator">=</span>true</code></pre>
+<p>手动更新的话，<del>直接执行<code>upgrade_oh_my_zsh</code></del>.</p>
+<blockquote>
+<p>Note: <code>upgrade_oh_my_zsh</code> is deprecated. Use <code>omz update</code> instead.</p>
+</blockquote>
+<p>啊现在换成下面这个了。</p>
+<pre class=" language-bash"><code class="language-bash">omz update</code></pre>
+<p><img src="/2020/12/13/Server_Terminal_gitbash_zsh/image-20201213184825287.png" alt="upgrade"></p>
+<h4 id="卸载-oh-my-zsh"><a href="#卸载-oh-my-zsh" class="headerlink" title="卸载 oh-my-zsh"></a>卸载 oh-my-zsh</h4><p><strong><em>（不会吧，这就卸了？</em></strong></p>
+<pre class=" language-bash"><code class="language-bash">uninstall_oh_my_zsh</code></pre>
+<h3 id="0x04-配置-zsh-为-bash-默认终端"><a href="#0x04-配置-zsh-为-bash-默认终端" class="headerlink" title="0x04 配置 zsh 为 bash 默认终端"></a>0x04 配置 zsh 为 bash 默认终端</h3><p>编辑  <code>~/.bashrc</code>，或者是 <code>D:\Program Files\Git\etc\bash.bashrc</code>，加入下面的几行。</p>
+<pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># Launch Zsh</span>
+<span class="token keyword">if</span> <span class="token punctuation">[</span> -t 1 <span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token keyword">then</span>
+<span class="token function">exec</span> zsh
+<span class="token keyword">fi</span></code></pre>
+<p>而后重启 git bash 即可自动以 zsh 启动。</p>
+<h3 id="0x05-配置-Windows-Terminal-使用-git-bash"><a href="#0x05-配置-Windows-Terminal-使用-git-bash" class="headerlink" title="0x05 配置 Windows Terminal 使用 git bash"></a>0x05 配置 Windows Terminal 使用 git bash</h3><p>当然首先是在 Microsoft Store 里安装 Windows Terminal 了，这里略了。</p>
+<p>你看 Terminal 多好看（</p>
+<p>快捷键 <code>Ctrl + ,</code> 打开配置文件 <code>settings.json</code>。</p>
+<p>在 <code>profiles &gt; list</code> 下新增一个 object，加入 git bash。</p>
+<p><code>commandline</code> 为 git bash 的路径。</p>
+<p>为了确保 <code>.bash_profile</code> 被加载，需要在 <code>commandline</code> 选项中加入 <code>-l -i</code> 。</p>
+<p><code>icon</code> 图标是下面这个，当然也可以换成你喜欢的。</p>
+<p><img src="/2020/12/13/Server_Terminal_gitbash_zsh/git-icon.png" alt="git-icon"></p>
+<pre class=" language-json"><code class="language-json"><span class="token punctuation">{</span>
+    <span class="token property">"guid"</span><span class="token operator">:</span> <span class="token string">"{1c4de342-38b7-51cf-b940-2309a097f589}"</span><span class="token punctuation">,</span>
+    <span class="token property">"hidden"</span><span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
+    <span class="token property">"name"</span><span class="token operator">:</span> <span class="token string">"git bash"</span><span class="token punctuation">,</span>
+    <span class="token property">"commandline"</span><span class="token operator">:</span> <span class="token string">"\"D:\\Program Files\\Git\\bin\\bash.exe\" -i -l"</span><span class="token punctuation">,</span>
+    <span class="token property">"historySize"</span><span class="token operator">:</span> <span class="token number">9001</span><span class="token punctuation">,</span>
+    <span class="token property">"name"</span><span class="token operator">:</span> <span class="token string">"Bash"</span><span class="token punctuation">,</span>
+    <span class="token property">"closeOnExit"</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+    <span class="token property">"useAcrylic"</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+    <span class="token property">"acrylicOpacity"</span><span class="token operator">:</span> <span class="token number">0.85</span><span class="token punctuation">,</span>  //透明度
+    <span class="token property">"icon"</span><span class="token operator">:</span> <span class="token string">"D:\\tools\\my-git-bash\\git-icon.png"</span><span class="token punctuation">,</span>
+    <span class="token property">"startingDirectory"</span><span class="token operator">:</span> <span class="token null">null</span>
+<span class="token punctuation">}</span></code></pre>
+<h4 id="默认使用-git-bash-作为-Terminal-启动"><a href="#默认使用-git-bash-作为-Terminal-启动" class="headerlink" title="默认使用 git bash 作为 Terminal 启动"></a>默认使用 git bash 作为 Terminal 启动</h4><p>修改上述文件中的 <code>defaultProfile</code> 为 git bash 的 <code>guid</code>，此处为 <code>{1c4de342-38b7-51cf-b940-2309a097f589}</code></p>
+<p>效果就是 </p>
+<pre class=" language-json"><code class="language-json"><span class="token property">"defaultProfile"</span><span class="token operator">:</span> <span class="token string">"{1c4de342-38b7-51cf-b940-2309a097f589}"</span></code></pre>
+<h3 id="0x06-将-Windows-Terminal-加入到右键菜单"><a href="#0x06-将-Windows-Terminal-加入到右键菜单" class="headerlink" title="0x06 将 Windows Terminal 加入到右键菜单"></a>0x06 将 Windows Terminal 加入到右键菜单</h3><p>首先<strong>在 cmd 里</strong>测试一下下面这两个常量是否正常。</p>
+<pre><code>echo %USERPROFILE%
+echo %LOCALAPPDATA%</code></pre><p>如果有相应的信息输出，则后续可直接使用这两个常量。</p>
+<p>否则需要进行如下替换：</p>
+<pre><code>%USERPROFILE% =&gt; C:\Users\&lt;username&gt;
+%LOCALAPPDATA% =&gt; C:\Users\&lt;username&gt;\AppData\Local</code></pre><p>其中，<code>&lt;username&gt;</code> 是你的用户名。</p>
+<p><strong>新建目录</strong></p>
+<pre><code>mkdir "%USERPROFILE%\AppData\Local\terminal"</code></pre><p>把 Windows Terminal 图标复制到这个目录下，图标放在 <a href="terminal.ico">这里</a> <code>terminal.ico</code>。</p>
+<p>将如下内容另存为 <code>wt.reg</code>, 然后<strong>以 “管理员权限” 运行</strong></p>
+<pre><code>Windows Registry Editor Version 5.00
+
+[HKEY_CLASSES_ROOT\Directory\Background\shell\wt]
+@="Windows terminal here"
+"Icon"="%LOCALAPPDATA%\\terminal\\terminal.ico"
+
+[HKEY_CLASSES_ROOT\Directory\Background\shell\wt\command]
+@="C:\\Users\\&lt;your username&gt;\\AppData\\Local\\Microsoft\\WindowsApps\\wt.exe"</code></pre><p>请注意，对于 <code>wt.exe</code> 的路径，需使用完整的绝对路径，否则会报错。</p>
+<p>而后双击执行，将配置添加到注册表。</p>
+<p>效果就像下面这样了。</p>
+<p><img src="/2020/12/13/Server_Terminal_gitbash_zsh/image-20201213192257077.png" alt="右键菜单"></p>
+<p>点击之后就能进入 git bash，并且就在当前目录下了。</p>
+<h3 id="0x07-一些-Git-Bash-配置和快捷键"><a href="#0x07-一些-Git-Bash-配置和快捷键" class="headerlink" title="0x07 一些 Git Bash 配置和快捷键"></a>0x07 一些 Git Bash 配置和快捷键</h3><p>参考 <a href="https://github.com/xnng/my-git-bash" target="_blank" rel="noopener">https://github.com/xnng/my-git-bash</a></p>
+<p>这里面还有一些特定针对于 git bash 的字体 / 主题 / Tmux / wget、tree安装 / VSCode + git bash 相关的设置。</p>
+<p><strong>但要注意，有一些和 zsh、Oh-my-zsh 的配置会有冲突 emmm</strong></p>
+<p>所以你喜欢用 zsh 的话，就直接配置 zsh 好了唉。</p>
+<h4 id="常用的快捷键"><a href="#常用的快捷键" class="headerlink" title="常用的快捷键"></a>常用的快捷键</h4><table>
+<thead>
+<tr>
+<th>按键</th>
+<th>效果</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Alt + Enter</td>
+<td>全屏</td>
+</tr>
+<tr>
+<td>关闭窗口</td>
+<td>Ctrl + D（需当前行没有字符才可用）</td>
+</tr>
+<tr>
+<td>清屏</td>
+<td>Ctrl + L</td>
+</tr>
+<tr>
+<td>打开终端</td>
+<td>右键快捷方式，在属性中自行设置</td>
+</tr>
+<tr>
+<td>复制粘贴</td>
+<td>Ctrl + Shift + C/V（v2.20.0 版本后才支持）</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>其他快捷键遵循 <code>Bash</code> 标准快捷键，例如 <code>Ctrl + R</code> 搜索历史命令、<code>exit</code> 退出终端、<code>clear</code> 和 <code>reset</code> 清屏、<code>Ctrl + E/A</code> 光标到行首尾，等等可自行搜索。</p>
+</blockquote>
+<hr>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>反正贼舒服就是了！</p>
+<p><img src="/2020/12/13/Server_Terminal_gitbash_zsh/image-20201213194048117.png" alt=""></p>
+<p>（溜了溜了</p>
+<hr>
+<h2 id="References-amp-Extensive-Reading"><a href="#References-amp-Extensive-Reading" class="headerlink" title="References &amp; Extensive Reading"></a>References &amp; Extensive Reading</h2><ul>
+<li><a href="https://gist.github.com/fworks/af4c896c9de47d827d4caa6fd7154b6b" target="_blank" rel="noopener">install-zsh-windows-git-bash.md</a></li>
+<li><a href="http://i.lckiss.com/?p=6268" target="_blank" rel="noopener">install zsh with git-bash on Windows10</a></li>
+<li><a href="https://blog.csdn.net/czg13548930186/article/details/72858289/" target="_blank" rel="noopener">CSDN: 利用Oh-My-Zsh打造你的超级终端</a></li>
+<li><a href="https://www.jianshu.com/p/b8a80dd59414" target="_blank" rel="noopener">Linux 终端美化 - Oh My Zsh</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/280858375" target="_blank" rel="noopener">在windwos terminal 中使用git bash的alias</a></li>
+<li>GitHub: xnng/<strong><a href="https://github.com/xnng/my-git-bash" target="_blank" rel="noopener">my-git-bash</a></strong></li>
+<li><a href="https://cloud.tencent.com/developer/article/1652576" target="_blank" rel="noopener">使用 ohmyzsh 打造 windows、ubuntu、mac 系统高效终端命令行工具</a>。</li>
+<li><a href="https://www.zhihu.com/question/325948326/answer/700753639" target="_blank" rel="noopener">B乎：新发布的Windows Terminal如何添加到右键菜单？</a></li>
+<li><a href="https://segmentfault.com/a/1190000015155864" target="_blank" rel="noopener">win10 安装 oh my zsh 和 windows git bash 设置别名提高效率</a></li>
+<li><a href="https://dev.to/vsalbuq/how-to-install-oh-my-zsh-on-windows-10-home-edition-49g2" target="_blank" rel="noopener">How to Install Oh My Zsh! on Windows 10 Home Edition</a></li>
+<li>etc.</li>
+</ul>
+<script>
+        document.querySelectorAll('.github-emoji')
+          .forEach(el => {
+            if (!el.dataset.src) { return; }
+            const img = document.createElement('img');
+            img.style = 'display:none !important;';
+            img.src = el.dataset.src;
+            img.addEventListener('error', () => {
+              img.remove();
+              el.style.color = 'inherit';
+              el.style.backgroundImage = 'none';
+              el.style.background = 'none';
+            });
+            img.addEventListener('load', () => {
+              img.remove();
+            });
+            document.body.appendChild(img);
+          });
+      </script>
+            </div>
+            <hr/>
+
+            
+
+    <div class="reprint" id="reprint-statement">
+        
+            <div class="reprint__author">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-user">
+                        文章作者:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="https://miaotony.xyz" rel="external nofollow noreferrer">MiaoTony</a>
+                </span>
+            </div>
+            <div class="reprint__type">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-link">
+                        文章链接:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="https://miaotony.xyz/2020/12/13/Server_Terminal_gitbash_zsh/">https://miaotony.xyz/2020/12/13/Server_Terminal_gitbash_zsh/</a>
+                </span>
+            </div>
+            <div class="reprint__notice">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-copyright">
+                        版权声明:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    本博客所有文章除特別声明外，均采用
+                    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY-NC-SA 4.0</a>
+                    许可协议。转载请注明来源
+                    <a href="https://miaotony.xyz" target="_blank">MiaoTony</a>
+                    !
+                </span>
+            </div>
+        
+    </div>
+
+    <script async defer>
+      document.addEventListener("copy", function (e) {
+        let toastHTML = '<span>复制成功，请遵循本文的转载规则</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">查看</a>';
+        M.toast({html: toastHTML})
+      });
+
+      function navToReprintStatement() {
+        $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
+      }
+    </script>
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            
+                                <a href="/tags/Tech/">
+                                    <span class="chip bg-color">Tech</span>
+                                </a>
+                            
+                                <a href="/tags/Server/">
+                                    <span class="chip bg-color">Server</span>
+                                </a>
+                            
+                                <a href="/tags/Configuration/">
+                                    <span class="chip bg-color">Configuration</span>
+                                </a>
+                            
+                                <a href="/tags/Terminal/">
+                                    <span class="chip bg-color">Terminal</span>
+                                </a>
+                            
+                                <a href="/tags/bash/">
+                                    <span class="chip bg-color">bash</span>
+                                </a>
+                            
+                                <a href="/tags/zsh/">
+                                    <span class="chip bg-color">zsh</span>
+                                </a>
+                            
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/libs/share/css/share.min.css">
+
+<div id="article-share">
+    
+    
+    <div class="social-share" data-sites="qq,qzone,wechat,weibo,twitter,facebook,google,douban,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
+    <script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/libs/share/js/social-share.min.js"></script>
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+                <style>
+    #reward {
+        margin: 40px 0;
+        text-align: center;
+    }
+
+    #reward .reward-link {
+        font-size: 1.4rem;
+        line-height: 38px;
+    }
+
+    #reward .btn-floating:hover {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    #rewardModal {
+        width: 320px;
+        height: 350px;
+    }
+
+    #rewardModal .reward-title {
+        margin: 15px auto;
+        padding-bottom: 5px;
+    }
+
+    #rewardModal .modal-content {
+        padding: 10px;
+    }
+
+    #rewardModal .close {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+        color: rgba(0, 0, 0, 0.5);
+        font-size: 1.3rem;
+        line-height: 20px;
+        cursor: pointer;
+    }
+
+    #rewardModal .close:hover {
+        color: #ef5350;
+        transform: scale(1.3);
+        -moz-transform:scale(1.3);
+        -webkit-transform:scale(1.3);
+        -o-transform:scale(1.3);
+    }
+
+    #rewardModal .reward-tabs {
+        margin: 0 auto;
+        width: 210px;
+    }
+
+    .reward-tabs .tabs {
+        height: 38px;
+        margin: 10px auto;
+        padding-left: 0;
+    }
+
+    .reward-content ul {
+        padding-left: 0 !important;
+    }
+
+    .reward-tabs .tabs .tab {
+        height: 38px;
+        line-height: 38px;
+    }
+
+    .reward-tabs .tab a {
+        color: #fff;
+        background-color: #ccc;
+    }
+
+    .reward-tabs .tab a:hover {
+        background-color: #ccc;
+        color: #fff;
+    }
+
+    .reward-tabs .wechat-tab .active {
+        color: #fff !important;
+        background-color: #22AB38 !important;
+    }
+
+    .reward-tabs .alipay-tab .active {
+        color: #fff !important;
+        background-color: #019FE8 !important;
+    }
+
+    .reward-tabs .reward-img {
+        width: 210px;
+        height: 210px;
+    }
+</style>
+
+<div id="reward">
+    <a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-medium waves-effect waves-light red">赏</a>
+
+    <!-- Modal Structure -->
+    <div id="rewardModal" class="modal">
+        <div class="modal-content">
+            <a class="close modal-close"><i class="fas fa-times"></i></a>
+            <h4 class="reward-title">打赏一下让我来点好吃好玩的呗~</h4>
+            <div class="reward-content">
+                <div class="reward-tabs">
+                    <ul class="tabs row">
+                        <li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li>
+					<!-- 暂时注释掉
+						<li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li>
+					-->
+                    </ul>
+					<div id="wechat">
+                        <img src="/medias/reward/wechat.png" class="reward-img" alt="微信打赏二维码">
+                    </div>                    
+					<!-- 暂时注释掉
+					<div id="alipay">
+                        <img src="" class="reward-img" alt="支付宝打赏二维码">
+                    </div>
+					-->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.tabs').tabs();
+    });
+</script>
+            
+        </div>
+    </div>
+
+    
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/libs/gitalk/gitalk.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/css/my-gitalk.css">
+
+<div class="card gitalk-card" data-aos="fade-up">
+    <div class="comment_headling" style="font-size: 20px; font-weight: 700; position: relative; left: 20px; top: 15px; padding-bottom: 5px;">
+        <i class="fas fa-comments fa-fw" aria-hidden="true"></i>
+        <span>评论</span>
+    </div>
+    <div id="gitalk-container" class="card-content"></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/libs/gitalk/gitalk.min.js"></script>
+<script>
+    let gitalk = new Gitalk({
+        clientID: '116343b4650fce4789b6',
+        clientSecret: '3e9be2ad6c9b693af1753290c7c059b1e4f34d5d',
+        repo: 'miaotony.github.io',
+        owner: 'miaotony',
+        admin: "miaotony",
+        id: '2020-12-13T17-20-00',
+        distractionFreeMode: false  // Facebook-like distraction free mode
+    });
+
+    gitalk.render('gitalk-container');
+</script>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
+            <div class="card">
+                <a href="/2020/12/13/Server_Terminal_gitbash_zsh/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/medias/featureimages/1.jpg" class="responsive-img" alt="Install Terminal + git-bash + zsh + oh-my-zsh on Windows 10">
+                        
+                        <span class="card-title">Install Terminal + git-bash + zsh + oh-my-zsh on Windows 10</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            由于已经配了虚拟机，Win10上又不大想装WSL，于是折腾了一下Windows Terminal + git-bash + zsh + oh-my-zsh，感觉有点意思，这里顺便来记录一下。
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-12-13
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/Tech/" class="post-category">
+                                    Tech
+                                </a>
+                            
+                            <a href="/categories/Tech/Server/" class="post-category">
+                                    Server
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/Tech/">
+                        <span class="chip bg-color">Tech</span>
+                    </a>
+                    
+                    <a href="/tags/Server/">
+                        <span class="chip bg-color">Server</span>
+                    </a>
+                    
+                    <a href="/tags/Configuration/">
+                        <span class="chip bg-color">Configuration</span>
+                    </a>
+                    
+                    <a href="/tags/Terminal/">
+                        <span class="chip bg-color">Terminal</span>
+                    </a>
+                    
+                    <a href="/tags/bash/">
+                        <span class="chip bg-color">bash</span>
+                    </a>
+                    
+                    <a href="/tags/zsh/">
+                        <span class="chip bg-color">zsh</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2020/12/10/Life_2020XNUCA_trip/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/medias/featureimages/7.jpg" class="responsive-img" alt="碎碎念 | X-NUCA 2020 全国高校网安联赛总决赛 深圳游记">
+                        
+                        <span class="card-title">碎碎念 | X-NUCA 2020 全国高校网安联赛总决赛 深圳游记</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            这几天去深圳打了个 X-NUCA 全国网安联赛总决赛，趁着还有兴致，就来大概总结一下吧，喵~
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-12-10
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/Life/" class="post-category">
+                                    Life
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/Life/">
+                        <span class="chip bg-color">Life</span>
+                    </a>
+                    
+                    <a href="/tags/CTF/">
+                        <span class="chip bg-color">CTF</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+<script>
+    $('#articleContent').on('copy', function (e) {
+        // IE8 or earlier browser is 'undefined'
+        if (typeof window.getSelection === 'undefined') return;
+
+        var selection = window.getSelection();
+        // if the selection is short let's not annoy our users.
+        if (('' + selection).length < Number.parseInt('200')) {
+            return;
+        }
+
+        // create a div outside of the visible area and fill it with the selected text.
+        var bodyElement = document.getElementsByTagName('body')[0];
+        var newdiv = document.createElement('div');
+        newdiv.style.position = 'absolute';
+        newdiv.style.left = '-99999px';
+        bodyElement.appendChild(newdiv);
+        newdiv.appendChild(selection.getRangeAt(0).cloneContents());
+
+        // we need a <pre> tag workaround.
+        // otherwise the text inside "pre" loses all the line breaks!
+        if (selection.getRangeAt(0).commonAncestorContainer.nodeName === 'PRE') {
+            newdiv.innerHTML = "<pre>" + newdiv.innerHTML + "</pre>";
+        }
+
+        var url = document.location.href;
+        newdiv.innerHTML += '<br />'
+            + '来源: MiaoTony&#39;s小窝<br />'
+            + '文章作者: MiaoTony<br />'
+            + '文章链接: <a href="' + url + '">' + url + '</a><br />'
+            + '本文章著作权归作者MiaoTony所有，任何形式的转载都请注明出处。';
+
+        selection.selectAllChildren(newdiv);
+        window.setTimeout(function () {bodyElement.removeChild(newdiv);}, 200);
+    });
+</script>
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/libs/codeBlock/codeBlockFuction.js"></script>
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/libs/codeBlock/codeLang.js"></script>
+
+
+<!-- 代码块复制 -->
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/libs/codeBlock/codeShrink.js"></script>
+
+
+<!-- 代码块折行 -->
+
+<style type="text/css">
+code[class*="language-"], pre[class*="language-"] { white-space: pre !important; }
+</style>
+
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('1'),
+            headingSelector: 'h2, h3, h4, h5'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h2, h3, h4, h5').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+
+    <footer class="page-footer bg-color">
+        <div class="container row center-align" style="margin-bottom: 15px !important;">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            <span id="year">2019</span>
+            <a href="https://miaotony.xyz" target="_blank">MiaoTony</a>
+            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+            |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
+            <br>
+                        &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
+                class="white-color">147.4k</span>&nbsp;字
+                                                                                    <span id="busuanzi_container_site_pv">
+			|&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
+                    class="white-color"></span>&nbsp;次
+            </span>
+                                    <span id="busuanzi_container_site_uv">
+                |&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;<span id="busuanzi_value_site_uv"
+                    class="white-color"></span>&nbsp;人
+            </span>
+                        <br>
+                        <span id="sitetime">载入运行时间...</span>
+            <script>
+                function siteTime() {
+                    var seconds = 1000;
+                    var minutes = seconds * 60;
+                    var hours = minutes * 60;
+                    var days = hours * 24;
+                    var years = days * 365;
+                    var today = new Date();
+                    var startYear = "2019";
+                    var startMonth = "11";
+                    var startDate = "28";
+                    var startHour = "0";
+                    var startMinute = "0";
+                    var startSecond = "0";
+                    var todayYear = today.getFullYear();
+                    var todayMonth = today.getMonth() + 1;
+                    var todayDate = today.getDate();
+                    var todayHour = today.getHours();
+                    var todayMinute = today.getMinutes();
+                    var todaySecond = today.getSeconds();
+                    var t1 = Date.UTC(startYear, startMonth, startDate, startHour, startMinute, startSecond);
+                    var t2 = Date.UTC(todayYear, todayMonth, todayDate, todayHour, todayMinute, todaySecond);
+                    var diff = t2 - t1;
+                    var diffYears = Math.floor(diff / years);
+                    var diffDays = Math.floor((diff / days) - diffYears * 365);
+                    var diffHours = Math.floor((diff - (diffYears * 365 + diffDays) * days) / hours);
+                    var diffMinutes = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours) /
+                        minutes);
+                    var diffSeconds = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours -
+                        diffMinutes * minutes) / seconds);
+                    if (startYear == todayYear) {
+                        document.getElementById("year").innerHTML = todayYear;
+                        document.getElementById("sitetime").innerHTML = "本站已安全运行 " + diffDays + " 天 " + diffHours +
+                            " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒";
+                    } else {
+                        document.getElementById("year").innerHTML = startYear + " - " + todayYear;
+                        document.getElementById("sitetime").innerHTML = "本站已安全运行 " + diffYears + " 年 " + diffDays +
+                            " 天 " + diffHours + " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒";
+                    }
+                }
+                setInterval(siteTime, 1000);
+            </script>
+                        <br>
+                    </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+    <a href="https://t.me/MiaoTonyChannel" class="tooltipped" target="_blank" data-tooltip="关注我的TelegramChannel: @MiaoTonyChannel" data-position="top" data-delay="50">
+        <i class="fab fa-telegram"></i>
+    </a>
+
+
+
+    <a href="https://github.com/miaotony" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+        <i class="fab fa-github"></i>
+    </a>
+
+
+
+    <a href="mailto:miaotony@outlook.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fas fa-envelope-open"></i>
+    </a>
+
+
+
+
+
+
+
+
+
+
+
+    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
+        <i class="fas fa-rss"></i>
+    </a>
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/js/search.js"></script>
+<script type="text/javascript">
+$(function () {
+    searchFunc("https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/" + "search.xml", 'searchInput', 'searchResult');
+});
+</script>
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/libs/materialize/materialize.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/libs/aos/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/js/matery.js"></script>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-159946730-1"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+        dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+    gtag('config', 'UA-159946730-1');
+</script>
+
+
+    <!-- Baidu Analytics -->
+
+<script>
+    var _hmt = _hmt || [];
+    (function () {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?40e312a1eec109cf96e30988cf3bfe70";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+    <!-- Baidu Push -->
+
+    
+    <script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/libs/others/clicklove.js" async="async"></script>
+    
+    
+    <script async src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/libs/others/busuanzi.pure.mini.js"></script>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+    
+    <script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+</body>
+
+</html>
