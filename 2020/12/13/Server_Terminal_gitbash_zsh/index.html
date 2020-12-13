@@ -513,7 +513,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    2.2k
+                    2.3k
                 </div>
                 
 
@@ -536,7 +536,7 @@
 <p>大概搜了一下，可以有以下几种选择。</p>
 <ul>
 <li>WSL (Windows Subsystem for Linux, 适用于 Linux 的 Windows 子系统) + zsh</li>
-<li>CygWin+ zsh</li>
+<li>CygWin + zsh</li>
 <li>Git Bash + zsh</li>
 </ul>
 <p>由于已经配了虚拟机，在 Windows 10 上不大想也懒得装 WSL2<em>（而且还占用一堆 C盘空间无法接受）</em>，而 <strong>Git 带有的 Bash 感觉是个不错的选择</strong>。</p>
@@ -562,7 +562,7 @@
 <p>此时我们打开 git bash，敲下 <code>zsh</code>，<del>神奇的场面出现了</del> 我们并没有成功切换到 zsh<em>（当然你进入了当我没说</em></p>
 <p><strong>这啥回事啊？这不对劲啊！</strong>我们回去看看合并了什么文件吧。</p>
 <p>bash 会调用 <code>/usr/bin/</code> 下的可执行程序，而 zsh 也在这个目录下。</p>
-<p><img src="/2020/12/13/Server_Terminal_gitbash_zsh/image-20201213175240930.png" alt></p>
+<p><img src="/2020/12/13/Server_Terminal_gitbash_zsh/image-20201213175240930.png" alt=""></p>
 <p>发现这个 <code>zsh.exe</code> 文件大小为0，感觉可能是个链接/快捷方式啥的，但不懂为啥这里用不通。</p>
 <p>而真正用到的是这个 <code>zsh-5.8.exe</code>。</p>
 <p>于是我们删掉 <code>zsh.exe</code>，把  <code>zsh-5.8.exe</code> 更名为 <code>zsh.exe</code> 就完事了。</p>
@@ -593,7 +593,7 @@
 <blockquote>
 <p> lib 提供了核心功能的脚本库<br> tools 提供安装、升级等功能的快捷工具<br> plugins 自带插件的存放位置<br> templates 自带模板的存放位置<br> themes  自带主题文件的存放位置<br> custom 个性化配置目录，自安装的插件和主题可放这里</p>
 </blockquote>
-<p>Oh My Zsh 默认自带了一些默认主题，存放在<code>~/.oh-my-zsh/plugins</code>目录中，可以通过编辑<code>~/.zshrc</code>文件中的 <code>ZSH_THEME="robbyrussel"</code> 进行配置。</p>
+<p>Oh My Zsh 默认自带了一些默认主题，存放在<code>~/.oh-my-zsh/plugins</code>目录中，可以通过编辑 <code>~/.zshrc</code> 文件中的 <code>ZSH_THEME="robbyrussel"</code> 进行配置。</p>
 <p>P.S.:  很多主题需要先安装 <em><a href="https://github.com/powerline/fonts" target="_blank" rel="noopener">Powerline Fonts</a></em> 才能正常渲染图标。</p>
 <h3 id="0x03-Oh-My-Zsh-插件-amp-一些配置"><a href="#0x03-Oh-My-Zsh-插件-amp-一些配置" class="headerlink" title="0x03 Oh My Zsh 插件 &amp; 一些配置"></a>0x03 Oh My Zsh 插件 &amp; 一些配置</h3><h4 id="zsh-autosuggestions-自动补全"><a href="#zsh-autosuggestions-自动补全" class="headerlink" title="zsh-autosuggestions 自动补全"></a><strong>zsh-autosuggestions</strong> 自动补全</h4><p> <a href="https://github.com/zsh-users/zsh-autosuggestions" target="_blank" rel="noopener">https://github.com/zsh-users/zsh-autosuggestions</a>  </p>
 <p>参考 <a href="https://github.com/zsh-users/zsh-autosuggestions/blob/master/INSTALL.md#oh-my-zsh" target="_blank" rel="noopener">官方安装说明</a></p>
@@ -602,14 +602,14 @@
 <p>注意是以 空格 或者 空行 作为分隔符。</p>
 <pre><code>plugins=( [plugins...] zsh-autosuggestions)</code></pre><p>最后重启 zsh 即可。</p>
 <h4 id="zsh-syntax-highlighting-语法高亮"><a href="#zsh-syntax-highlighting-语法高亮" class="headerlink" title="zsh-syntax-highlighting 语法高亮"></a><strong>zsh-syntax-highlighting</strong> 语法高亮</h4><p> <a href="https://github.com/zsh-users/zsh-syntax-highlighting" target="_blank" rel="noopener">https://github.com/zsh-users/zsh-syntax-highlighting</a></p>
-<p>参考 <a href="https://github.com/zsh-users/zsh-syntax-highlighting/blob/master/INSTALL.md#oh-my-zsh" target="_blank" rel="noopener">官方安装说明</a></p>
+<p>参考 <a href="https://github.com/zsh-users/zsh-syntax-highlighting/blob/master/INSTALL.md#oh-my-zsh" target="_blank" rel="noopener">官方安装说明</a>。</p>
 <pre class=" language-bash"><code class="language-bash"><span class="token function">git</span> clone https://github.com/zsh-users/zsh-syntax-highlighting.git <span class="token variable">${ZSH_CUSTOM:-~/.oh-my-zsh/custom}</span>/plugins/zsh-syntax-highlighting</code></pre>
 <p>然后编辑 <code>~/.zshrc</code>，加入插件。</p>
 <pre><code>plugins=( [plugins...] zsh-syntax-highlighting)</code></pre><p>最后重启 zsh 即可。</p>
 <h4 id="给history命令增加时间"><a href="#给history命令增加时间" class="headerlink" title="给history命令增加时间"></a>给history命令增加时间</h4><p>啊其实这个不算是插件，混入的喵（</p>
 <p>把 <code>HIST_STAMPS</code> 这个注释去除了就行，当然也可以设置成你喜欢的时间格式。</p>
 <p>配置好的效果类似于下图。</p>
-<p><img src="/2020/12/13/Server_Terminal_gitbash_zsh/image-20201213183440438.png" alt></p>
+<p><img src="/2020/12/13/Server_Terminal_gitbash_zsh/image-20201213183440438.png" alt=""></p>
 <h4 id="更新-oh-my-zsh"><a href="#更新-oh-my-zsh" class="headerlink" title="更新 oh-my-zsh"></a>更新 oh-my-zsh</h4><p>默认的话是有更新的时候会提示，问你要不要更新。</p>
 <p>如果需要它自动更新的话，把 <code>~/.zshrc</code> 里下面这行注释取消就好了。</p>
 <pre class=" language-bash"><code class="language-bash">DISABLE_UPDATE_PROMPT<span class="token operator">=</span>true</code></pre>
@@ -629,13 +629,14 @@
 <span class="token keyword">fi</span></code></pre>
 <p>而后重启 git bash 即可自动以 zsh 启动。</p>
 <h3 id="0x05-配置-Windows-Terminal-使用-git-bash"><a href="#0x05-配置-Windows-Terminal-使用-git-bash" class="headerlink" title="0x05 配置 Windows Terminal 使用 git bash"></a>0x05 配置 Windows Terminal 使用 git bash</h3><p>当然首先是在 Microsoft Store 里安装 Windows Terminal 了，这里略了。</p>
-<p>你看 Terminal 多好看（</p>
-<p>快捷键 <code>Ctrl + ,</code> 打开配置文件 <code>settings.json</code>。</p>
+<p><em>你看 Terminal 多好看（</em></p>
+<p>使用快捷键 <code>Ctrl + ,</code> 打开配置文件 <code>settings.json</code>。</p>
 <p>在 <code>profiles &gt; list</code> 下新增一个 object，加入 git bash。</p>
 <p><code>commandline</code> 为 git bash 的路径。</p>
 <p>为了确保 <code>.bash_profile</code> 被加载，需要在 <code>commandline</code> 选项中加入 <code>-l -i</code> 。</p>
 <p><code>icon</code> 图标是下面这个，当然也可以换成你喜欢的。</p>
 <p><img src="/2020/12/13/Server_Terminal_gitbash_zsh/git-icon.png" alt="git-icon"></p>
+<p>这里给出我的配置，供参考。</p>
 <pre class=" language-json"><code class="language-json"><span class="token punctuation">{</span>
     <span class="token property">"guid"</span><span class="token operator">:</span> <span class="token string">"{1c4de342-38b7-51cf-b940-2309a097f589}"</span><span class="token punctuation">,</span>
     <span class="token property">"hidden"</span><span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
@@ -649,10 +650,10 @@
     <span class="token property">"icon"</span><span class="token operator">:</span> <span class="token string">"D:\\tools\\my-git-bash\\git-icon.png"</span><span class="token punctuation">,</span>
     <span class="token property">"startingDirectory"</span><span class="token operator">:</span> <span class="token null">null</span>
 <span class="token punctuation">}</span></code></pre>
-<h4 id="默认使用-git-bash-作为-Terminal-启动"><a href="#默认使用-git-bash-作为-Terminal-启动" class="headerlink" title="默认使用 git bash 作为 Terminal 启动"></a>默认使用 git bash 作为 Terminal 启动</h4><p>修改上述文件中的 <code>defaultProfile</code> 为 git bash 的 <code>guid</code>，此处为 <code>{1c4de342-38b7-51cf-b940-2309a097f589}</code></p>
-<p>效果就是 </p>
+<h4 id="默认使用-git-bash-作为-Terminal-启动"><a href="#默认使用-git-bash-作为-Terminal-启动" class="headerlink" title="默认使用 git bash 作为 Terminal 启动"></a>默认使用 git bash 作为 Terminal 启动</h4><p>修改上述文件中的 <code>defaultProfile</code> 为 git bash 的 <code>guid</code>，此处为 <code>{1c4de342-38b7-51cf-b940-2309a097f589}</code>。</p>
+<p>效果类似于</p>
 <pre class=" language-json"><code class="language-json"><span class="token property">"defaultProfile"</span><span class="token operator">:</span> <span class="token string">"{1c4de342-38b7-51cf-b940-2309a097f589}"</span></code></pre>
-<h3 id="0x06-将-Windows-Terminal-加入到右键菜单"><a href="#0x06-将-Windows-Terminal-加入到右键菜单" class="headerlink" title="0x06 将 Windows Terminal 加入到右键菜单"></a>0x06 将 Windows Terminal 加入到右键菜单</h3><p>首先<strong>在 cmd 里</strong>测试一下下面这两个常量是否正常。</p>
+<h3 id="0x06-将-Windows-Terminal-加入到右键菜单"><a href="#0x06-将-Windows-Terminal-加入到右键菜单" class="headerlink" title="0x06 将 Windows Terminal 加入到右键菜单"></a>0x06 将 Windows Terminal 加入到右键菜单</h3><p>首先 <strong>在 cmd 里</strong> 测试一下下面这两个常量是否正常。</p>
 <pre><code>echo %USERPROFILE%
 echo %LOCALAPPDATA%</code></pre><p>如果有相应的信息输出，则后续可直接使用这两个常量。</p>
 <p>否则需要进行如下替换：</p>
@@ -668,11 +669,11 @@ echo %LOCALAPPDATA%</code></pre><p>如果有相应的信息输出，则后续可
 "Icon"="%LOCALAPPDATA%\\terminal\\terminal.ico"
 
 [HKEY_CLASSES_ROOT\Directory\Background\shell\wt\command]
-@="C:\\Users\\&lt;your username&gt;\\AppData\\Local\\Microsoft\\WindowsApps\\wt.exe"</code></pre><p>请注意，对于 <code>wt.exe</code> 的路径，需使用完整的绝对路径，否则会报错。</p>
+@="C:\\Users\\&lt;your username&gt;\\AppData\\Local\\Microsoft\\WindowsApps\\wt.exe"</code></pre><p>请注意，对于最后一行 <code>wt.exe</code> 的路径，需使用<strong>完整的绝对路径</strong>，否则会报错。</p>
 <p>而后双击执行，将配置添加到注册表。</p>
 <p>效果就像下面这样了。</p>
 <p><img src="/2020/12/13/Server_Terminal_gitbash_zsh/image-20201213192257077.png" alt="右键菜单"></p>
-<p>点击之后就能进入 git bash，并且就在当前目录下了。</p>
+<p>点击之后就能进入 git bash，使用 zsh 终端，并且就在当前目录下了。</p>
 <h3 id="0x07-一些-Git-Bash-配置和快捷键"><a href="#0x07-一些-Git-Bash-配置和快捷键" class="headerlink" title="0x07 一些 Git Bash 配置和快捷键"></a>0x07 一些 Git Bash 配置和快捷键</h3><p>参考 <a href="https://github.com/xnng/my-git-bash" target="_blank" rel="noopener">https://github.com/xnng/my-git-bash</a></p>
 <p>这里面还有一些特定针对于 git bash 的字体 / 主题 / Tmux / wget、tree安装 / VSCode + git bash 相关的设置。</p>
 <p><strong>但要注意，有一些和 zsh、Oh-my-zsh 的配置会有冲突 emmm</strong></p>
@@ -710,8 +711,8 @@ echo %LOCALAPPDATA%</code></pre><p>如果有相应的信息输出，则后续可
 </blockquote>
 <hr>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>反正贼舒服就是了！</p>
-<p><img src="/2020/12/13/Server_Terminal_gitbash_zsh/image-20201213194048117.png" alt></p>
-<p>（溜了溜了</p>
+<p><img src="/2020/12/13/Server_Terminal_gitbash_zsh/image-20201213194048117.png" alt=""></p>
+<p>（溜了溜了喵</p>
 <hr>
 <h2 id="References-amp-Extensive-Reading"><a href="#References-amp-Extensive-Reading" class="headerlink" title="References &amp; Extensive Reading"></a>References &amp; Extensive Reading</h2><ul>
 <li><a href="https://gist.github.com/fworks/af4c896c9de47d827d4caa6fd7154b6b" target="_blank" rel="noopener">install-zsh-windows-git-bash.md</a></li>
