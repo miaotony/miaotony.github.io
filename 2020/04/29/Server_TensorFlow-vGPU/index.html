@@ -583,7 +583,7 @@
 <h2 id="0x03-安装-NVIDIA-显卡驱动及授权"><a href="#0x03-安装-NVIDIA-显卡驱动及授权" class="headerlink" title="0x03 安装 NVIDIA 显卡驱动及授权"></a>0x03 安装 NVIDIA 显卡驱动及授权</h2><p>这里别人帮配好了的，同样参考<a href="https://bbs.sangfor.com.cn/forum.php?mod=viewthread&amp;tid=104141" target="_blank" rel="noopener">上面那一篇</a>，这里记录一下吧，顺便借一下图。</p>
 <h3 id="0x03-1-安装显卡驱动"><a href="#0x03-1-安装显卡驱动" class="headerlink" title="0x03-1 安装显卡驱动"></a>0x03-1 安装显卡驱动</h3><p>虚拟机新建一个文件夹，然后上传类似于 <code>NVIDIA-Linux-x86_64-430.63-grid.run</code> 的显卡驱动文件。</p>
 <p><strong>注意一下这个版本要满足 0x01 中的条件。</strong></p>
-<p><img src="/2020/04/29/Server_TensorFlow-vGPU/180342ucwqytqncnm09lwc.png" alt>   </p>
+<p><img src="/2020/04/29/Server_TensorFlow-vGPU/180342ucwqytqncnm09lwc.png" alt="">   </p>
 <p>或者可以这样↓。</p>
 <p>首先添加源。</p>
 <pre class=" language-bash"><code class="language-bash"><span class="token function">sudo</span> add-apt-repository ppa:graphics-drivers/ppa
@@ -591,10 +591,10 @@
 <p>检查可以安装的驱动版本，选择最合适的版本安装即可。</p>
 <pre class=" language-bash"><code class="language-bash"><span class="token function">sudo</span> apt <span class="token function">install</span> nvidia-driver-XXX</code></pre>
 <p><strong>安装显卡驱动</strong>的时候需要注意，先执行<code>sudo init 3</code> 然后在驱动文件目录下执行<code>sudo sh  显卡驱动名 --no-opengl-files</code>  （加<code>--no-opengl-files</code>的目的是为了防止图形界面登录的时候循环输入密码的情况），然后按照提示执行下一步就可以。</p>
-<p><img src="/2020/04/29/Server_TensorFlow-vGPU/180352u8rlu2u8hryf27r7.png" alt>   </p>
-<p><img src="/2020/04/29/Server_TensorFlow-vGPU/180357vu66uuriaa6ut26a.png" alt><br><img src="/2020/04/29/Server_TensorFlow-vGPU/180405qtt59evncw7v70w0.png" alt> </p>
+<p><img src="/2020/04/29/Server_TensorFlow-vGPU/180352u8rlu2u8hryf27r7.png" alt="">   </p>
+<p><img src="/2020/04/29/Server_TensorFlow-vGPU/180357vu66uuriaa6ut26a.png" alt=""><br><img src="/2020/04/29/Server_TensorFlow-vGPU/180405qtt59evncw7v70w0.png" alt=""> </p>
 <p>显卡安装完成后进行检查，<strong>执行<code>nvidia-smi</code></strong>，如果输出类似如下，则代表显卡安装成功。</p>
-<p><img src="/2020/04/29/Server_TensorFlow-vGPU/180411yjjzmrda8djr7ada.png" alt>   </p>
+<p><img src="/2020/04/29/Server_TensorFlow-vGPU/180411yjjzmrda8djr7ada.png" alt="">   </p>
 <p>类似于下面这样的。（我这里显卡驱动版本为 440.56）</p>
 <pre><code>+-----------------------------------------------------------------------------+
 | NVIDIA-SMI 440.56       Driver Version: 440.56       CUDA Version: 10.2     |
@@ -617,16 +617,16 @@
 <p>如果使用的是切分显卡，那么授权一定是 vDWS 授权类型，此处需要提前先部署好 vGPU 授权服务器，授权服务器的部署，此处不再赘述。</p>
 <p>然后再虚拟机中配置授权信息，执行命令<code>cd /etc/nvidia</code>，然后<code>ls</code>查看会有一个授权文件配置模板，然后执行命令 <code>sudo cp gridd.conf.template  gridd.conf</code>。</p>
 </blockquote>
-<p><img src="https://bbs.sangfor.com.cn/data/attachment/forum/202004/07/180420qzxi4vur4iznr7bo.png" alt>   </p>
+<p><img src="https://bbs.sangfor.com.cn/data/attachment/forum/202004/07/180420qzxi4vur4iznr7bo.png" alt="">   </p>
 <blockquote>
 <p>编辑授权信息，执行 <code>sudo vim gridd.conf</code>，然后需要配置三个地方，也即<strong>授权服务器的地址、端口、以及授权类型</strong>，填写完成保存之后执行命令 <code>systemctl restart nvidia-gridd</code>。</p>
 </blockquote>
-<p><img src="/2020/04/29/Server_TensorFlow-vGPU/180429v0o6sk76pcx6x76z.png" alt>   </p>
-<p><img src="/2020/04/29/Server_TensorFlow-vGPU/180435lj46knr6kv8kkrjz.png" alt>   </p>
-<p><img src="/2020/04/29/Server_TensorFlow-vGPU/180441krcfyttcvmlkyfmu.png" alt>   </p>
-<p><img src="/2020/04/29/Server_TensorFlow-vGPU/180447are3iooz8m3g00o0.png" alt>  </p>
+<p><img src="/2020/04/29/Server_TensorFlow-vGPU/180429v0o6sk76pcx6x76z.png" alt="">   </p>
+<p><img src="/2020/04/29/Server_TensorFlow-vGPU/180435lj46knr6kv8kkrjz.png" alt="">   </p>
+<p><img src="/2020/04/29/Server_TensorFlow-vGPU/180441krcfyttcvmlkyfmu.png" alt="">   </p>
+<p><img src="/2020/04/29/Server_TensorFlow-vGPU/180447are3iooz8m3g00o0.png" alt="">  </p>
 <p>而后在授权服务器确认虚拟机是否已经获取到授权。</p>
-<p><img src="/2020/04/29/Server_TensorFlow-vGPU/180453n4gudc4v8cgmzpdd.png" alt></p>
+<p><img src="/2020/04/29/Server_TensorFlow-vGPU/180453n4gudc4v8cgmzpdd.png" alt=""></p>
 <p>到这里为止，下面的步骤就和 vGPU 没有很大的关系了，<strong>就当物理机上的真实 GPU 使用就好了</strong>。</p>
 <p>也就是说下面的步骤对于 Linux 下的 GPU 理论上都是通用的啦。</p>
 <br>
