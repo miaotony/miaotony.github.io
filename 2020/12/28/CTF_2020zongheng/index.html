@@ -511,7 +511,7 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p><img src="/2020/12/28/CTF_2020zongheng/image-20201228143836286.png" alt=""></p>
+                <p><img src="/2020/12/28/CTF_2020zongheng/image-20201228143836286.png" alt></p>
 <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>呜，转眼就到 2020 年末了，事情有点杂有点小多，发现有不少想做的事情咕掉了，等后面年终总结再说吧（可能这个也咕了呢 233.</p>
 <p>前几天天天有比赛，华为 XCTF 三场顶不住，还有 DASCTF x BJDCTF4th，不过期末了队里没师傅打也没怎么看。</p>
 <p>不过周末和队友一起打了个纵横杯，题目还是有点意思的。</p>
@@ -549,19 +549,19 @@ flag <span class="token operator">=</span> <span class="token string">''</span>
 <p>PASS1 is 123456</p>
 </blockquote>
 <p>下载下来两张图片一个音频，音频听了没啥明显问题。</p>
-<p><img src="/2020/12/28/CTF_2020zongheng/image-20201228150122612.png" alt=""></p>
+<p><img src="/2020/12/28/CTF_2020zongheng/image-20201228150122612.png" alt></p>
 <p><code>stego.png</code> 拿 StegSolve 看了一下 RGB 里 LSB 都有数据。</p>
 <p>用 <a href="https://github.com/livz/cloacked-pixel" target="_blank" rel="noopener">https://github.com/livz/cloacked-pixel</a> 这个工具来解密 LSB 数据，密码就是题目所给的 123456。</p>
-<p><img src="/2020/12/28/CTF_2020zongheng/image-20201227005139560.png" alt=""></p>
+<p><img src="/2020/12/28/CTF_2020zongheng/image-20201227005139560.png" alt></p>
 <p>得到密钥为 <code>38d668578a3686ab</code>。</p>
 <p>对 <code>01 blood and wine.wav</code> 用 DeepSound 解密。</p>
-<p><img src="/2020/12/28/CTF_2020zongheng/image-20201226175128179.png" alt=""></p>
+<p><img src="/2020/12/28/CTF_2020zongheng/image-20201226175128179.png" alt></p>
 <p><img src="/2020/12/28/CTF_2020zongheng/image-20201226174646998.png" alt="pass"></p>
 <p>得到密钥为 <code>carrier</code>。</p>
 <p>根据图片和题目提示，用 oursecret 解密</p>
-<p><img src="/2020/12/28/CTF_2020zongheng/image-20201226173249099.png" alt=""></p>
+<p><img src="/2020/12/28/CTF_2020zongheng/image-20201226173249099.png" alt></p>
 <p>拿到 flag</p>
-<p><img src="/2020/12/28/CTF_2020zongheng/image-20201226172757191.png" alt=""></p>
+<p><img src="/2020/12/28/CTF_2020zongheng/image-20201226172757191.png" alt></p>
 <p><code>flag{3072d7b4-d3f4-4d8a-bd8b-ac9285df11f2}</code></p>
 <h3 id="babymaze2-beta"><a href="#babymaze2-beta" class="headerlink" title="babymaze2_beta"></a>babymaze2_beta</h3><p><em>（babymaze1 走迷宫，队友打的，不过环境关了，也没源代码，复现不了了就不写了8</em></p>
 <p>这题也是走迷宫，不过每次只给出当前位置附近的 3*3 的环境情况。</p>
@@ -570,7 +570,7 @@ flag <span class="token operator">=</span> <span class="token string">''</span>
 <p>Python2 input RCE</p>
 <pre class=" language-python"><code class="language-python">__import__<span class="token punctuation">(</span><span class="token string">'os'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>system<span class="token punctuation">(</span><span class="token string">'cat flag'</span><span class="token punctuation">)</span></code></pre>
 <p>复现成功喵~</p>
-<p><img src="/2020/12/28/CTF_2020zongheng/image-20201228152015811.png" alt=""></p>
+<p><img src="/2020/12/28/CTF_2020zongheng/image-20201228152015811.png" alt></p>
 <p>BTW，想知道这题真正做的话怎么写（</p>
 <h3 id="magic-download"><a href="#magic-download" class="headerlink" title="magic_download"></a>magic_download</h3><p><code>run.sh</code></p>
 <pre class=" language-bash"><code class="language-bash"><span class="token shebang important">#!/bin/bash</span>
@@ -619,10 +619,10 @@ stdbuf -oL <span class="token keyword">echo</span> -n <span class="token string"
 <p><img src="/2020/12/28/CTF_2020zongheng/image-20201228171352186.png" alt="collection.class.php"></p>
 <p>这里相对于官方源码去掉了 curl 执行，直接用 <code>file_get_contents</code> 来执行了。</p>
 <p>模块管理下的 采集管理，网址配置为 vps 上一个页面，vps 上放 payload。</p>
-<p><img src="/2020/12/28/CTF_2020zongheng/image-20201226193643241.png" alt=""></p>
+<p><img src="/2020/12/28/CTF_2020zongheng/image-20201226193643241.png" alt></p>
 <p>页面上放上一个 <code>a</code> 标签，构造目录穿越。</p>
 <p>先试了试 <code>file</code> 协议，发现会提示 <code>链接地址仅允许HTTP和HTTPS协议！</code></p>
-<p><img src="/2020/12/28/CTF_2020zongheng/image-20201226194116722.png" alt=""></p>
+<p><img src="/2020/12/28/CTF_2020zongheng/image-20201226194116722.png" alt></p>
 <p>再查看源码。</p>
 <p> <code>url_check</code>函数</p>
 <pre class=" language-php"><code class="language-php">    <span class="token comment" spellcheck="true">/**
@@ -650,7 +650,7 @@ stdbuf -oL <span class="token keyword">echo</span> -n <span class="token string"
 <p><strong>Payload:</strong></p>
 <pre class=" language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>test</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>a</span> <span class="token attr-name">href</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>httpss://miaotony.xyz/../../../../../../../../flag<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>meow<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>a</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>test</span><span class="token punctuation">></span></span></code></pre>
 <p>测试采集，得到 flag</p>
-<p><img src="/2020/12/28/CTF_2020zongheng/image-20201226164308132.png" alt=""></p>
+<p><img src="/2020/12/28/CTF_2020zongheng/image-20201226164308132.png" alt></p>
 <p><code>flag{de3974b7-9c59-4317-b7ab-479b4e058683}</code></p>
 <h3 id="hello-php"><a href="#hello-php" class="headerlink" title="hello_php"></a>hello_php</h3><blockquote>
 <p>XXXCMS是一种可以综合管理网站上各种栏目的通用工具，新闻、产品、文档、下载、音乐、教学视频……，通过模版技术，他们都在同一套系统里完成更新和维护。XXXCMS 是目前国内最强大、最稳定的中小型门户网站建设解决方案之一，基于PHP、 MySQL的技术开发，全部源码开放。</p>
@@ -1420,7 +1420,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
             <br>
                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">149.9k</span>&nbsp;字
+                class="white-color">150k</span>&nbsp;字
                                                                                     <span id="busuanzi_container_site_pv">
 			|&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
                     class="white-color"></span>&nbsp;次
