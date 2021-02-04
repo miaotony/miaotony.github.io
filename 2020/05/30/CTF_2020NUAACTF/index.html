@@ -13,19 +13,32 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-159946730-1"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+        dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+    gtag('config', 'UA-159946730-1');
+</script>
+
+
     <title>CTF | 2020 NUAACTF 吸喵喵队 Writeup | MiaoTony&#39;s小窝</title>
-    <link rel="icon" type="image/x-icon, image/vnd.microsoft.icon" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/favicon.ico">
+    <link rel="icon" type="image/x-icon, image/vnd.microsoft.icon" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/favicon.ico">
 
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/libs/awesome/css/all.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/libs/materialize/materialize.min.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/libs/aos/aos.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/libs/animate/animate.min.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/libs/lightGallery/css/lightgallery.min.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/css/matery.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/css/my.css">
-
-    <script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/libs/jquery/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/awesome/css/all.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/css/matery.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/css/my.css">
 	
+    <script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/jquery/jquery.min.js"></script>
     <script>
         //来个特效玩玩喵 20200123
         var titleTime;
@@ -42,8 +55,12 @@
     }
         });
     </script>
+<meta name="generator" content="Hexo 5.3.0">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
 <link rel="alternate" href="/atom.xml" title="MiaoTony's小窝" type="application/atom+xml">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/css/prism.css" type="text/css"></head>
+</head>
+
+
 
 
 <body>
@@ -53,9 +70,9 @@
             <div class="brand-logo">
                 <a href="/" class="waves-effect waves-light">
                     
-                    <img src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/medias/logo.png" class="logo-img" alt="LOGO">
+                    <img src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/medias/logo.png" class="logo-img" alt="LOGO">
                     
-                    <span class="logo-span">MiaoTony's小窝</span>
+                    <span class="logo-span">MiaoTony&#39;s小窝</span>
                 </a>
             </div>
             
@@ -147,13 +164,14 @@
   </li>
 </ul>
 
+
 <div id="mobile-nav" class="side-nav sidenav">
 
     <div class="mobile-head bg-color">
         
-        <img src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/medias/logo.png" class="logo-img circle responsive-img">
+        <img src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/medias/logo.png" class="logo-img circle responsive-img">
         
-        <div class="logo-name">MiaoTony's小窝</div>
+        <div class="logo-name">MiaoTony&#39;s小窝</div>
         <div class="logo-desc">
             
             喵~欢迎各位大佬的来访呀！
@@ -253,6 +271,7 @@
     </ul>
 </div>
 
+
         </div>
 
         
@@ -317,7 +336,7 @@
 </header>
 
     
-<script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/libs/cryptojs/crypto-js.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/cryptojs/crypto-js.min.js"></script>
 <script>
     (function() {
         let pwd = '';
@@ -333,7 +352,7 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/medias/featureimages/0.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/medias/featureimages/0.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
@@ -351,7 +370,7 @@
 <main class="post-container content">
 
     
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/libs/tocbot/tocbot.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/tocbot/tocbot.css">
 <style>
     #articleContent h1::before,
     #articleContent h2::before,
@@ -381,8 +400,7 @@
     }
 
     .toc-widget .toc-title {
-        margin: 35px 0 15px 0;
-        padding-left: 17px;
+        padding: 35px 0 15px 17px;
         font-size: 1.5rem;
         font-weight: bold;
         line-height: 1.5rem;
@@ -394,7 +412,7 @@
     }
 
     #toc-content {
-        height: calc(100vh - 250px);
+        padding-bottom: 30px;
         overflow: auto;
     }
 
@@ -415,14 +433,14 @@
     #toc-content .toc-link::before {
         background-color: transparent;
         max-height: 25px;
+
+        position: absolute;
+        right: 23.5vw;
+        display: block;
     }
 
     #toc-content .is-active-link {
         color: #42b983;
-    }
-
-    #toc-content .is-active-link::before {
-        background-color: #42b983;
     }
 
     #floating-toc-btn {
@@ -506,9 +524,16 @@
 
                 
             </div>
-
         </div>
         <hr class="clearfix">
+
+        
+        <!-- 是否加载使用自带的 prismjs. -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/prism/prism.css">
+        
+
+        
+
         <div class="card-content article-card-content">
             <div id="articleContent">
                 <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p><strong>吸喵喵，冲冲冲！</strong></p>
@@ -528,23 +553,23 @@
 <p>回来到比赛结束这中间几个小时，<strong>真 的 头 秃</strong>，又困又累又无助，就是好多题看上去能做但做不出 flag 那种……顺手打开了音乐舒缓一下心情。</p>
 <p><img src="/2020/05/30/CTF_2020NUAACTF/upload_7cb6ec474349e2e415bb5eb411fbf1bf.png" alt="吸喵喵"></p>
 <hr>
-<h2 id="平台信息"><a href="#平台信息" class="headerlink" title="平台信息"></a>平台信息</h2><p><a href="http://47.102.118.76:8000" target="_blank" rel="noopener">http://47.102.118.76:8000</a></p>
+<h2 id="平台信息"><a href="#平台信息" class="headerlink" title="平台信息"></a>平台信息</h2><p><a target="_blank" rel="noopener" href="http://47.102.118.76:8000/">http://47.102.118.76:8000</a></p>
 <p>部分题目环境信息：</p>
 <blockquote>
-<p>web1 checkin:<br><a href="http://139.9.221.0:8086/" target="_blank" rel="noopener">http://139.9.221.0:8086/</a> 已部署</p>
-<p>web2 jwt :<br><a href="http://139.9.221.0:8090/" target="_blank" rel="noopener">http://139.9.221.0:8090/</a> 已部署</p>
-<p>web3 easypop<br><a href="http://139.9.221.0:8088/" target="_blank" rel="noopener">http://139.9.221.0:8088/</a> 已部署</p>
-<p>web4 command inj:<br><a href="http://139.9.221.0:8092/" target="_blank" rel="noopener">http://139.9.221.0:8092/</a> 已部署</p>
-<p>web5-escape<br><a href="http://139.9.221.0:8094/" target="_blank" rel="noopener">http://139.9.221.0:8094/</a> 已部署</p>
+<p>web1 checkin:<br><a target="_blank" rel="noopener" href="http://139.9.221.0:8086/">http://139.9.221.0:8086/</a> 已部署</p>
+<p>web2 jwt :<br><a target="_blank" rel="noopener" href="http://139.9.221.0:8090/">http://139.9.221.0:8090/</a> 已部署</p>
+<p>web3 easypop<br><a target="_blank" rel="noopener" href="http://139.9.221.0:8088/">http://139.9.221.0:8088/</a> 已部署</p>
+<p>web4 command inj:<br><a target="_blank" rel="noopener" href="http://139.9.221.0:8092/">http://139.9.221.0:8092/</a> 已部署</p>
+<p>web5-escape<br><a target="_blank" rel="noopener" href="http://139.9.221.0:8094/">http://139.9.221.0:8094/</a> 已部署</p>
 <p>misc3-babyhttp 已部署<br>106.14.153.173 8443</p>
-<p>pwn1-first-pwn<br>49.235.243.206 10501<br><a href="https://share.weiyun.com/qoaVHGg8" target="_blank" rel="noopener">https://share.weiyun.com/qoaVHGg8</a></p>
-<p>pwn2-baby-format<br>49.235.243.206 10502<br><a href="https://share.weiyun.com/efHNDo4X" target="_blank" rel="noopener">https://share.weiyun.com/efHNDo4X</a></p>
-<p>pwn3-baby-rop<br>49.235.243.206 10503<br><a href="https://share.weiyun.com/gwHWgypr" target="_blank" rel="noopener">https://share.weiyun.com/gwHWgypr</a></p>
-<p>pwn4-easy-heap<br>49.235.243.206 10504<br><a href="https://share.weiyun.com/uh36Y68j" target="_blank" rel="noopener">https://share.weiyun.com/uh36Y68j</a></p>
-<p>pwn5-easy-format<br>49.235.243.206 10505<br><a href="https://share.weiyun.com/0zDGYyYw" target="_blank" rel="noopener">https://share.weiyun.com/0zDGYyYw</a></p>
-<p>pwn6-baby-shellcode<br>49.235.243.206 10506<br><a href="https://share.weiyun.com/HLUP79Fs" target="_blank" rel="noopener">https://share.weiyun.com/HLUP79Fs</a></p>
+<p>pwn1-first-pwn<br>49.235.243.206 10501<br><a target="_blank" rel="noopener" href="https://share.weiyun.com/qoaVHGg8">https://share.weiyun.com/qoaVHGg8</a></p>
+<p>pwn2-baby-format<br>49.235.243.206 10502<br><a target="_blank" rel="noopener" href="https://share.weiyun.com/efHNDo4X">https://share.weiyun.com/efHNDo4X</a></p>
+<p>pwn3-baby-rop<br>49.235.243.206 10503<br><a target="_blank" rel="noopener" href="https://share.weiyun.com/gwHWgypr">https://share.weiyun.com/gwHWgypr</a></p>
+<p>pwn4-easy-heap<br>49.235.243.206 10504<br><a target="_blank" rel="noopener" href="https://share.weiyun.com/uh36Y68j">https://share.weiyun.com/uh36Y68j</a></p>
+<p>pwn5-easy-format<br>49.235.243.206 10505<br><a target="_blank" rel="noopener" href="https://share.weiyun.com/0zDGYyYw">https://share.weiyun.com/0zDGYyYw</a></p>
+<p>pwn6-baby-shellcode<br>49.235.243.206 10506<br><a target="_blank" rel="noopener" href="https://share.weiyun.com/HLUP79Fs">https://share.weiyun.com/HLUP79Fs</a></p>
 </blockquote>
-<p>官方源码 GitHub 仓库<a href="https://github.com/Kit4y/2020-NUAACTF-SZCup" target="_blank" rel="noopener">在这里</a>。</p>
+<p>官方源码 GitHub 仓库<a target="_blank" rel="noopener" href="https://github.com/Kit4y/2020-NUAACTF-SZCup">在这里</a>。</p>
 <br>
 
 <hr>
@@ -557,20 +582,21 @@
 <p><img src="/2020/05/30/CTF_2020NUAACTF/image-20200530201155492.png" alt="key"></p>
 <p>key:<br><code>NuAa</code></p>
 <p>在线平台构造 jwt</p>
-<p><a href="https://jwt.io/" target="_blank" rel="noopener">https://jwt.io/</a></p>
+<p><a target="_blank" rel="noopener" href="https://jwt.io/">https://jwt.io/</a></p>
 <p><img src="/2020/05/30/CTF_2020NUAACTF/image-20200530201238039.png" alt="jwt"></p>
 <p>得到 JWT</p>
-<pre><code>eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIn0.SYQ-AGwY5XIcxY621ToK8zEgomHE0Bla9tAUWTLxnwA</code></pre><p>改 jwt 登录 admin 账号即可得到flag。</p>
+<pre class="language-none"><code class="language-none">eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIn0.SYQ-AGwY5XIcxY621ToK8zEgomHE0Bla9tAUWTLxnwA</code></pre>
+<p>改 jwt 登录 admin 账号即可得到flag。</p>
 <p><img src="/2020/05/30/CTF_2020NUAACTF/image-20200530201535739.png" alt="flag"></p>
 <p>耗几锅锅太强了！</p>
 <h3 id="web3-easypop"><a href="#web3-easypop" class="headerlink" title="web3-easypop"></a>web3-easypop</h3><p>打开题目直接出源码</p>
 <p><img src="/2020/05/30/CTF_2020NUAACTF/haha.png" alt="web3"></p>
 <p><strong>Exp:</strong></p>
-<pre class=" language-php"><code class="language-php"><span class="token delimiter">&lt;?php</span>
+<pre class="language-php" data-language="php"><code class="language-php"><span class="token php language-php"><span class="token delimiter important">&lt;?php</span>
 <span class="token keyword">class</span> <span class="token class-name">lemon</span> <span class="token punctuation">{</span>
     <span class="token keyword">protected</span> <span class="token variable">$ClassObj</span><span class="token punctuation">;</span>
     <span class="token keyword">function</span> <span class="token function">__construct</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        <span class="token variable">$this</span><span class="token operator">-</span><span class="token operator">></span><span class="token property">ClassObj</span> <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">evil</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token variable">$this</span><span class="token operator">-&gt;</span><span class="token property">ClassObj</span> <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">evil</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
 <span class="token punctuation">}</span>
 <span class="token keyword">class</span> <span class="token class-name">evil</span> <span class="token punctuation">{</span>
@@ -578,7 +604,7 @@
 <span class="token punctuation">}</span>
 <span class="token keyword">echo</span> <span class="token function">urlencode</span><span class="token punctuation">(</span><span class="token function">serialize</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">lemon</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-<span class="token delimiter">?></span></code></pre>
+<span class="token delimiter important">?&gt;</span></span></code></pre>
 <p>把结果直接传参给d，出flag。</p>
 <p><img src="/2020/05/30/CTF_2020NUAACTF/image-20200530205135242.png" alt="web3-flag"></p>
 <br>
@@ -605,107 +631,107 @@
 <p>这题看到最新的 HTTP，其实我一开始就猜是 HTTP3（QUIC）了。（果然是陆老板出的题，嘤嘤嘤</p>
 <p>毕竟我这个博客本身就基于 CloudFlare 部署了 HTTP3，只是目前的浏览器支持还不是很好。</p>
 <p><img src="/2020/05/30/CTF_2020NUAACTF/image-20200531005455811.png" alt="http3"></p>
-<p>这题试着用 Chrome 开启 QUIC 进行访问 <a href="https://106.14.154.173:8443" target="_blank" rel="noopener">https://106.14.154.173:8443</a> ，发现被拒绝。用wireshark 抓包也没抓到有关的流量，只看到了 TCP 数据包。</p>
+<p>这题试着用 Chrome 开启 QUIC 进行访问 <a target="_blank" rel="noopener" href="https://106.14.154.173:8443/">https://106.14.154.173:8443</a> ，发现被拒绝。用wireshark 抓包也没抓到有关的流量，只看到了 TCP 数据包。</p>
 <p>中途怀疑难道是 HTTP2 的一些罕见方法？于是用 postman 把所有方法都试了一遍，全被拒绝了。</p>
 <p>再回来重新搜了一波 HTTP3 的资料，考虑是<strong>用 curl 来连接</strong>，顺便记录一下，比如下面几个：</p>
 <blockquote>
-<p><a href="https://blog.cloudflare.com/zh/http3-the-past-present-and-future-zh/" target="_blank" rel="noopener">HTTP/3：过去，现在，还有未来</a> （这也是最后给的hint了）</p>
-<p><a href="https://github.com/curl/curl/blob/master/docs/HTTP3.md#quiche-version" target="_blank" rel="noopener">curl  HTTP3 (and QUIC)</a></p>
-<p><a href="http://www.ruanyifeng.com/blog/2019/09/curl-reference.html" target="_blank" rel="noopener">curl 的用法指南（阮一峰）</a></p>
-<p><a href="https://curl.haxx.se/libcurl/c/libcurl-tutorial.html" target="_blank" rel="noopener">libcurl programming tutorial</a></p>
-<p><a href="https://geekflare.com/http3-test/" target="_blank" rel="noopener">How to Test if a Website supports HTTP/3?</a></p>
-<p><a href="https://geekflare.com/curl-installation/" target="_blank" rel="noopener">How to Build and Install latest cURL version on CentOS/RHEL?</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.cloudflare.com/zh/http3-the-past-present-and-future-zh/">HTTP/3：过去，现在，还有未来</a> （这也是最后给的hint了）</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/curl/curl/blob/master/docs/HTTP3.md#quiche-version">curl  HTTP3 (and QUIC)</a></p>
+<p><a target="_blank" rel="noopener" href="http://www.ruanyifeng.com/blog/2019/09/curl-reference.html">curl 的用法指南（阮一峰）</a></p>
+<p><a target="_blank" rel="noopener" href="https://curl.haxx.se/libcurl/c/libcurl-tutorial.html">libcurl programming tutorial</a></p>
+<p><a target="_blank" rel="noopener" href="https://geekflare.com/http3-test/">How to Test if a Website supports HTTP/3?</a></p>
+<p><a target="_blank" rel="noopener" href="https://geekflare.com/curl-installation/">How to Build and Install latest cURL version on CentOS/RHEL?</a></p>
 <p>网站 HTTP3 部署测试：</p>
-<p><a href="https://gf.dev/http3-test" target="_blank" rel="noopener">HTTP/3 Test, Check if H3/QUIC is enabled on your website</a></p>
-<p><a href="https://www.http3check.net/" target="_blank" rel="noopener">HTTP/3 CHECK</a></p>
+<p><a target="_blank" rel="noopener" href="https://gf.dev/http3-test">HTTP/3 Test, Check if H3/QUIC is enabled on your website</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.http3check.net/">HTTP/3 CHECK</a></p>
 </blockquote>
 <p>然后按照上面的流程<strong>基于 Rust &amp; quiche 来安装 curl</strong>。</p>
 <p>Build quiche and BoringSSL:</p>
-<pre class=" language-bash"><code class="language-bash"><span class="token function">git</span> clone --recursive https://github.com/cloudflare/quiche
-<span class="token function">cd</span> quiche
+<pre class="language-bash" data-language="bash"><code class="language-bash"><span class="token function">git</span> clone --recursive https://github.com/cloudflare/quiche
+<span class="token builtin class-name">cd</span> quiche
 cargo build --release --features pkg-config-meta,qlog
 <span class="token function">mkdir</span> deps/boringssl/lib
 <span class="token function">ln</span> -vnf <span class="token variable"><span class="token variable">$(</span><span class="token function">find</span> target/release -name libcrypto.a -o -name libssl.a<span class="token variable">)</span></span> deps/boringssl/lib/</code></pre>
 <p>而后 Build curl:</p>
-<pre class=" language-bash"><code class="language-bash"><span class="token function">cd</span> <span class="token punctuation">..</span>
+<pre class="language-bash" data-language="bash"><code class="language-bash"><span class="token builtin class-name">cd</span> <span class="token punctuation">..</span>
 <span class="token function">git</span> clone https://github.com/curl/curl
-<span class="token function">cd</span> curl
+<span class="token builtin class-name">cd</span> <span class="token function">curl</span>
 ./buildconf
-./configure LDFLAGS<span class="token operator">=</span><span class="token string">"-Wl,-rpath,<span class="token variable">$PWD</span>/../quiche/target/release"</span> --with-ssl<span class="token operator">=</span><span class="token variable">$PWD</span>/<span class="token punctuation">..</span>/quiche/deps/boringssl --with-quiche<span class="token operator">=</span><span class="token variable">$PWD</span>/<span class="token punctuation">..</span>/quiche/target/release --enable-alt-svc
+./configure <span class="token assign-left variable">LDFLAGS</span><span class="token operator">=</span><span class="token string">"-Wl,-rpath,<span class="token environment constant">$PWD</span>/../quiche/target/release"</span> --with-ssl<span class="token operator">=</span><span class="token environment constant">$PWD</span>/<span class="token punctuation">..</span>/quiche/deps/boringssl --with-quiche<span class="token operator">=</span><span class="token environment constant">$PWD</span>/<span class="token punctuation">..</span>/quiche/target/release --enable-alt-svc
 <span class="token function">make</span></code></pre>
 <p>上面 build 过程中需要自行安装 cargo、CMake、Go、autoconf、libtoolize 等依赖，或者根据报错信息相应进行安装就好。（一环套一环，绝了</p>
 <p>比如 CMake 报错找不到 Go：</p>
-<pre class=" language-bash"><code class="language-bash"><span class="token function">sudo</span> apt <span class="token function">install</span> golang</code></pre>
+<pre class="language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> golang</code></pre>
 <p>再比如报错需要 autoconf、libtoolize：</p>
 <p><img src="/2020/05/30/CTF_2020NUAACTF/image-20200531181838258.png" alt="autoconf"></p>
 <p><img src="/2020/05/30/CTF_2020NUAACTF/image-20200531181939936.png" alt="libtoolize"></p>
-<pre class=" language-bash"><code class="language-bash"><span class="token function">sudo</span> apt <span class="token function">install</span> autoconf
-<span class="token function">sudo</span> apt <span class="token function">install</span> libtoolize</code></pre>
+<pre class="language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> autoconf
+<span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> libtoolize</code></pre>
 <p>然而国内出口速度不行，在本地在国内的服务器上都试了，装了几个小时 curl 到比赛结束都没装上，代码半天拉不下来。后来直接下载仓库 ZIP 再装，build 还要下载新东西？？？好气啊！做题的时候超想找个 curl 编译有 http3 的小伙伴。。<em>（看来打CTF整个国外VPS来跑很有必要</em></p>
 <p>安装好之后就可以试试了，比如看看版本信息。（要用 build 好的 curl）</p>
-<pre class=" language-bash"><code class="language-bash">./curl --version</code></pre>
+<pre class="language-bash" data-language="bash"><code class="language-bash">./curl --version</code></pre>
 <p>这题 curl 出来是一个web题……</p>
-<pre class=" language-bash"><code class="language-bash">./curl -v https://106.14.153.173:8443  --http3 </code></pre>
+<pre class="language-bash" data-language="bash"><code class="language-bash">./curl -v https://106.14.153.173:8443  --http3 </code></pre>
 <p><img src="/2020/05/30/CTF_2020NUAACTF/image-20200531184849738.png" alt="一个web题"></p>
 <p>提示访问<code>check.php</code>.</p>
-<pre class=" language-bash"><code class="language-bash">./curl -v https://106.14.153.173:8443/check.php  --http3 </code></pre>
+<pre class="language-bash" data-language="bash"><code class="language-bash">./curl -v https://106.14.153.173:8443/check.php  --http3 </code></pre>
 <p>得到一道题，PHP的。</p>
-<pre class=" language-html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>code</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span><span class="token style-attr language-css"><span class="token attr-name"> <span class="token attr-name">style</span></span><span class="token punctuation">="</span><span class="token attr-value"><span class="token property">color</span><span class="token punctuation">:</span> <span class="token hexcode">#000000</span></span><span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
-        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span><span class="token style-attr language-css"><span class="token attr-name"> <span class="token attr-name">style</span></span><span class="token punctuation">="</span><span class="token attr-value"><span class="token property">color</span><span class="token punctuation">:</span> <span class="token hexcode">#0000BB</span></span><span class="token punctuation">"</span></span><span class="token punctuation">></span></span><span class="token entity" title="&lt;">&amp;lt;</span>?php<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span> <span class="token punctuation">/></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span><span class="token style-attr language-css"><span class="token attr-name"> <span class="token attr-name">style</span></span><span class="token punctuation">="</span><span class="token attr-value"><span class="token property">color</span><span class="token punctuation">:</span> <span class="token hexcode">#007700</span></span><span class="token punctuation">"</span></span><span class="token punctuation">></span></span>include<span class="token entity" title="&nbsp;">&amp;nbsp;</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span><span class="token style-attr language-css"><span class="token attr-name">
-            <span class="token attr-name">style</span></span><span class="token punctuation">="</span><span class="token attr-value"><span class="token property">color</span><span class="token punctuation">:</span> <span class="token hexcode">#DD0000</span></span><span class="token punctuation">"</span></span><span class="token punctuation">></span></span>'flag.php'<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span><span class="token style-attr language-css"><span class="token attr-name"> <span class="token attr-name">style</span></span><span class="token punctuation">="</span><span class="token attr-value"><span class="token property">color</span><span class="token punctuation">:</span> <span class="token hexcode">#007700</span></span><span class="token punctuation">"</span></span><span class="token punctuation">></span></span>;<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span> <span class="token punctuation">/></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span><span class="token style-attr language-css"><span class="token attr-name">
-            <span class="token attr-name">style</span></span><span class="token punctuation">="</span><span class="token attr-value"><span class="token property">color</span><span class="token punctuation">:</span> <span class="token hexcode">#0000BB</span></span><span class="token punctuation">"</span></span><span class="token punctuation">></span></span>error_reporting<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span><span class="token style-attr language-css"><span class="token attr-name"> <span class="token attr-name">style</span></span><span class="token punctuation">="</span><span class="token attr-value"><span class="token property">color</span><span class="token punctuation">:</span> <span class="token hexcode">#007700</span></span><span class="token punctuation">"</span></span><span class="token punctuation">></span></span>(<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span><span class="token style-attr language-css"><span class="token attr-name">
-            <span class="token attr-name">style</span></span><span class="token punctuation">="</span><span class="token attr-value"><span class="token property">color</span><span class="token punctuation">:</span> <span class="token hexcode">#0000BB</span></span><span class="token punctuation">"</span></span><span class="token punctuation">></span></span>0<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span><span class="token style-attr language-css"><span class="token attr-name"> <span class="token attr-name">style</span></span><span class="token punctuation">="</span><span class="token attr-value"><span class="token property">color</span><span class="token punctuation">:</span> <span class="token hexcode">#007700</span></span><span class="token punctuation">"</span></span><span class="token punctuation">></span></span>);<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span> <span class="token punctuation">/></span></span>if<span class="token entity" title="&nbsp;">&amp;nbsp;</span>(<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span><span class="token style-attr language-css"><span class="token attr-name">
-            <span class="token attr-name">style</span></span><span class="token punctuation">="</span><span class="token attr-value"><span class="token property">color</span><span class="token punctuation">:</span> <span class="token hexcode">#0000BB</span></span><span class="token punctuation">"</span></span><span class="token punctuation">></span></span>$_SERVER<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span><span class="token style-attr language-css"><span class="token attr-name"> <span class="token attr-name">style</span></span><span class="token punctuation">="</span><span class="token attr-value"><span class="token property">color</span><span class="token punctuation">:</span> <span class="token hexcode">#007700</span></span><span class="token punctuation">"</span></span><span class="token punctuation">></span></span>[<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span><span class="token style-attr language-css"><span class="token attr-name">
-            <span class="token attr-name">style</span></span><span class="token punctuation">="</span><span class="token attr-value"><span class="token property">color</span><span class="token punctuation">:</span> <span class="token hexcode">#DD0000</span></span><span class="token punctuation">"</span></span><span class="token punctuation">></span></span>"REQUEST_METHOD"<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span><span class="token style-attr language-css"><span class="token attr-name"> <span class="token attr-name">style</span></span><span class="token punctuation">="</span><span class="token attr-value"><span class="token property">color</span><span class="token punctuation">:</span> <span class="token hexcode">#007700</span></span><span class="token punctuation">"</span></span><span class="token punctuation">></span></span>]<span class="token entity" title="&nbsp;">&amp;nbsp;</span>==<span class="token entity" title="&nbsp;">&amp;nbsp;</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span><span class="token style-attr language-css"><span class="token attr-name">
-            <span class="token attr-name">style</span></span><span class="token punctuation">="</span><span class="token attr-value"><span class="token property">color</span><span class="token punctuation">:</span> <span class="token hexcode">#DD0000</span></span><span class="token punctuation">"</span></span><span class="token punctuation">></span></span>"POST"<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span><span class="token style-attr language-css"><span class="token attr-name">
-            <span class="token attr-name">style</span></span><span class="token punctuation">="</span><span class="token attr-value"><span class="token property">color</span><span class="token punctuation">:</span> <span class="token hexcode">#007700</span></span><span class="token punctuation">"</span></span><span class="token punctuation">></span></span>)<span class="token entity" title="&nbsp;">&amp;nbsp;</span>{<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span> <span class="token punctuation">/></span></span><span class="token entity" title="&nbsp;">&amp;nbsp;</span><span class="token entity" title="&nbsp;">&amp;nbsp;</span><span class="token entity" title="&nbsp;">&amp;nbsp;</span><span class="token entity" title="&nbsp;">&amp;nbsp;</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span><span class="token style-attr language-css"><span class="token attr-name">
-            <span class="token attr-name">style</span></span><span class="token punctuation">="</span><span class="token attr-value"><span class="token property">color</span><span class="token punctuation">:</span> <span class="token hexcode">#0000BB</span></span><span class="token punctuation">"</span></span><span class="token punctuation">></span></span>extract<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span><span class="token style-attr language-css"><span class="token attr-name"> <span class="token attr-name">style</span></span><span class="token punctuation">="</span><span class="token attr-value"><span class="token property">color</span><span class="token punctuation">:</span> <span class="token hexcode">#007700</span></span><span class="token punctuation">"</span></span><span class="token punctuation">></span></span>(<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span><span class="token style-attr language-css"><span class="token attr-name">
-            <span class="token attr-name">style</span></span><span class="token punctuation">="</span><span class="token attr-value"><span class="token property">color</span><span class="token punctuation">:</span> <span class="token hexcode">#0000BB</span></span><span class="token punctuation">"</span></span><span class="token punctuation">></span></span>$_POST<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span><span class="token style-attr language-css"><span class="token attr-name">
-            <span class="token attr-name">style</span></span><span class="token punctuation">="</span><span class="token attr-value"><span class="token property">color</span><span class="token punctuation">:</span> <span class="token hexcode">#007700</span></span><span class="token punctuation">"</span></span><span class="token punctuation">></span></span>);<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span> <span class="token punctuation">/></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span> <span class="token punctuation">/></span></span><span class="token entity" title="&nbsp;">&amp;nbsp;</span><span class="token entity" title="&nbsp;">&amp;nbsp;</span><span class="token entity" title="&nbsp;">&amp;nbsp;</span><span class="token entity" title="&nbsp;">&amp;nbsp;</span>if<span class="token entity" title="&nbsp;">&amp;nbsp;</span>(<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span><span class="token style-attr language-css"><span class="token attr-name">
-            <span class="token attr-name">style</span></span><span class="token punctuation">="</span><span class="token attr-value"><span class="token property">color</span><span class="token punctuation">:</span> <span class="token hexcode">#0000BB</span></span><span class="token punctuation">"</span></span><span class="token punctuation">></span></span>$pass<span class="token entity" title="&nbsp;">&amp;nbsp;</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span><span class="token style-attr language-css"><span class="token attr-name"> <span class="token attr-name">style</span></span><span class="token punctuation">="</span><span class="token attr-value"><span class="token property">color</span><span class="token punctuation">:</span> <span class="token hexcode">#007700</span></span><span class="token punctuation">"</span></span><span class="token punctuation">></span></span>==<span class="token entity" title="&nbsp;">&amp;nbsp;</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span><span class="token style-attr language-css"><span class="token attr-name">
-            <span class="token attr-name">style</span></span><span class="token punctuation">="</span><span class="token attr-value"><span class="token property">color</span><span class="token punctuation">:</span> <span class="token hexcode">#0000BB</span></span><span class="token punctuation">"</span></span><span class="token punctuation">></span></span>$newpass<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span><span class="token style-attr language-css"><span class="token attr-name">
-            <span class="token attr-name">style</span></span><span class="token punctuation">="</span><span class="token attr-value"><span class="token property">color</span><span class="token punctuation">:</span> <span class="token hexcode">#007700</span></span><span class="token punctuation">"</span></span><span class="token punctuation">></span></span>)<span class="token entity" title="&nbsp;">&amp;nbsp;</span>{<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span> <span class="token punctuation">/></span></span><span class="token entity" title="&nbsp;">&amp;nbsp;</span><span class="token entity" title="&nbsp;">&amp;nbsp;</span><span class="token entity" title="&nbsp;">&amp;nbsp;</span><span class="token entity" title="&nbsp;">&amp;nbsp;</span><span class="token entity" title="&nbsp;">&amp;nbsp;</span><span class="token entity" title="&nbsp;">&amp;nbsp;</span><span class="token entity" title="&nbsp;">&amp;nbsp;</span><span class="token entity" title="&nbsp;">&amp;nbsp;</span>echo<span class="token entity" title="&nbsp;">&amp;nbsp;</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span><span class="token style-attr language-css"><span class="token attr-name">
-            <span class="token attr-name">style</span></span><span class="token punctuation">="</span><span class="token attr-value"><span class="token property">color</span><span class="token punctuation">:</span> <span class="token hexcode">#0000BB</span></span><span class="token punctuation">"</span></span><span class="token punctuation">></span></span>$flag<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span><span class="token style-attr language-css"><span class="token attr-name">
-            <span class="token attr-name">style</span></span><span class="token punctuation">="</span><span class="token attr-value"><span class="token property">color</span><span class="token punctuation">:</span> <span class="token hexcode">#007700</span></span><span class="token punctuation">"</span></span><span class="token punctuation">></span></span>;<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span> <span class="token punctuation">/></span></span><span class="token entity" title="&nbsp;">&amp;nbsp;</span><span class="token entity" title="&nbsp;">&amp;nbsp;</span><span class="token entity" title="&nbsp;">&amp;nbsp;</span><span class="token entity" title="&nbsp;">&amp;nbsp;</span>}<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span> <span class="token punctuation">/></span></span>}<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span> <span class="token punctuation">/></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span><span class="token style-attr language-css"><span class="token attr-name">
-            <span class="token attr-name">style</span></span><span class="token punctuation">="</span><span class="token attr-value"><span class="token property">color</span><span class="token punctuation">:</span> <span class="token hexcode">#0000BB</span></span><span class="token punctuation">"</span></span><span class="token punctuation">></span></span>highlight_file<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span><span class="token style-attr language-css"><span class="token attr-name"> <span class="token attr-name">style</span></span><span class="token punctuation">="</span><span class="token attr-value"><span class="token property">color</span><span class="token punctuation">:</span> <span class="token hexcode">#007700</span></span><span class="token punctuation">"</span></span><span class="token punctuation">></span></span>(<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span><span class="token style-attr language-css"><span class="token attr-name">
-            <span class="token attr-name">style</span></span><span class="token punctuation">="</span><span class="token attr-value"><span class="token property">color</span><span class="token punctuation">:</span> <span class="token hexcode">#0000BB</span></span><span class="token punctuation">"</span></span><span class="token punctuation">></span></span>__FILE__<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span><span class="token style-attr language-css"><span class="token attr-name"> <span class="token attr-name">style</span></span><span class="token punctuation">="</span><span class="token attr-value"><span class="token property">color</span><span class="token punctuation">:</span> <span class="token hexcode">#007700</span></span><span class="token punctuation">"</span></span><span class="token punctuation">></span></span>);<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span> <span class="token punctuation">/></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>code</span><span class="token punctuation">></span></span>
+<pre class="language-html" data-language="html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>code</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token style-attr"><span class="token attr-name">style</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span><span class="token style language-css"><span class="token property">color</span><span class="token punctuation">:</span> #000000</span><span class="token punctuation">"</span></span></span><span class="token punctuation">&gt;</span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token style-attr"><span class="token attr-name">style</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span><span class="token style language-css"><span class="token property">color</span><span class="token punctuation">:</span> #0000BB</span><span class="token punctuation">"</span></span></span><span class="token punctuation">&gt;</span></span><span class="token entity named-entity" title="<">&amp;lt;</span>?php<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span> <span class="token punctuation">/&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token style-attr"><span class="token attr-name">style</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span><span class="token style language-css"><span class="token property">color</span><span class="token punctuation">:</span> #007700</span><span class="token punctuation">"</span></span></span><span class="token punctuation">&gt;</span></span>include<span class="token entity named-entity" title="&nbsp;">&amp;nbsp;</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span>
+            <span class="token style-attr"><span class="token attr-name">style</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span><span class="token style language-css"><span class="token property">color</span><span class="token punctuation">:</span> #DD0000</span><span class="token punctuation">"</span></span></span><span class="token punctuation">&gt;</span></span>'flag.php'<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token style-attr"><span class="token attr-name">style</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span><span class="token style language-css"><span class="token property">color</span><span class="token punctuation">:</span> #007700</span><span class="token punctuation">"</span></span></span><span class="token punctuation">&gt;</span></span>;<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span> <span class="token punctuation">/&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span>
+            <span class="token style-attr"><span class="token attr-name">style</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span><span class="token style language-css"><span class="token property">color</span><span class="token punctuation">:</span> #0000BB</span><span class="token punctuation">"</span></span></span><span class="token punctuation">&gt;</span></span>error_reporting<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token style-attr"><span class="token attr-name">style</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span><span class="token style language-css"><span class="token property">color</span><span class="token punctuation">:</span> #007700</span><span class="token punctuation">"</span></span></span><span class="token punctuation">&gt;</span></span>(<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span>
+            <span class="token style-attr"><span class="token attr-name">style</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span><span class="token style language-css"><span class="token property">color</span><span class="token punctuation">:</span> #0000BB</span><span class="token punctuation">"</span></span></span><span class="token punctuation">&gt;</span></span>0<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token style-attr"><span class="token attr-name">style</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span><span class="token style language-css"><span class="token property">color</span><span class="token punctuation">:</span> #007700</span><span class="token punctuation">"</span></span></span><span class="token punctuation">&gt;</span></span>);<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span> <span class="token punctuation">/&gt;</span></span>if<span class="token entity named-entity" title="&nbsp;">&amp;nbsp;</span>(<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span>
+            <span class="token style-attr"><span class="token attr-name">style</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span><span class="token style language-css"><span class="token property">color</span><span class="token punctuation">:</span> #0000BB</span><span class="token punctuation">"</span></span></span><span class="token punctuation">&gt;</span></span>$_SERVER<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token style-attr"><span class="token attr-name">style</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span><span class="token style language-css"><span class="token property">color</span><span class="token punctuation">:</span> #007700</span><span class="token punctuation">"</span></span></span><span class="token punctuation">&gt;</span></span>[<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span>
+            <span class="token style-attr"><span class="token attr-name">style</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span><span class="token style language-css"><span class="token property">color</span><span class="token punctuation">:</span> #DD0000</span><span class="token punctuation">"</span></span></span><span class="token punctuation">&gt;</span></span>"REQUEST_METHOD"<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token style-attr"><span class="token attr-name">style</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span><span class="token style language-css"><span class="token property">color</span><span class="token punctuation">:</span> #007700</span><span class="token punctuation">"</span></span></span><span class="token punctuation">&gt;</span></span>]<span class="token entity named-entity" title="&nbsp;">&amp;nbsp;</span>==<span class="token entity named-entity" title="&nbsp;">&amp;nbsp;</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span>
+            <span class="token style-attr"><span class="token attr-name">style</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span><span class="token style language-css"><span class="token property">color</span><span class="token punctuation">:</span> #DD0000</span><span class="token punctuation">"</span></span></span><span class="token punctuation">&gt;</span></span>"POST"<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span>
+            <span class="token style-attr"><span class="token attr-name">style</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span><span class="token style language-css"><span class="token property">color</span><span class="token punctuation">:</span> #007700</span><span class="token punctuation">"</span></span></span><span class="token punctuation">&gt;</span></span>)<span class="token entity named-entity" title="&nbsp;">&amp;nbsp;</span>{<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span> <span class="token punctuation">/&gt;</span></span><span class="token entity named-entity" title="&nbsp;">&amp;nbsp;</span><span class="token entity named-entity" title="&nbsp;">&amp;nbsp;</span><span class="token entity named-entity" title="&nbsp;">&amp;nbsp;</span><span class="token entity named-entity" title="&nbsp;">&amp;nbsp;</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span>
+            <span class="token style-attr"><span class="token attr-name">style</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span><span class="token style language-css"><span class="token property">color</span><span class="token punctuation">:</span> #0000BB</span><span class="token punctuation">"</span></span></span><span class="token punctuation">&gt;</span></span>extract<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token style-attr"><span class="token attr-name">style</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span><span class="token style language-css"><span class="token property">color</span><span class="token punctuation">:</span> #007700</span><span class="token punctuation">"</span></span></span><span class="token punctuation">&gt;</span></span>(<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span>
+            <span class="token style-attr"><span class="token attr-name">style</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span><span class="token style language-css"><span class="token property">color</span><span class="token punctuation">:</span> #0000BB</span><span class="token punctuation">"</span></span></span><span class="token punctuation">&gt;</span></span>$_POST<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span>
+            <span class="token style-attr"><span class="token attr-name">style</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span><span class="token style language-css"><span class="token property">color</span><span class="token punctuation">:</span> #007700</span><span class="token punctuation">"</span></span></span><span class="token punctuation">&gt;</span></span>);<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span> <span class="token punctuation">/&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span> <span class="token punctuation">/&gt;</span></span><span class="token entity named-entity" title="&nbsp;">&amp;nbsp;</span><span class="token entity named-entity" title="&nbsp;">&amp;nbsp;</span><span class="token entity named-entity" title="&nbsp;">&amp;nbsp;</span><span class="token entity named-entity" title="&nbsp;">&amp;nbsp;</span>if<span class="token entity named-entity" title="&nbsp;">&amp;nbsp;</span>(<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span>
+            <span class="token style-attr"><span class="token attr-name">style</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span><span class="token style language-css"><span class="token property">color</span><span class="token punctuation">:</span> #0000BB</span><span class="token punctuation">"</span></span></span><span class="token punctuation">&gt;</span></span>$pass<span class="token entity named-entity" title="&nbsp;">&amp;nbsp;</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token style-attr"><span class="token attr-name">style</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span><span class="token style language-css"><span class="token property">color</span><span class="token punctuation">:</span> #007700</span><span class="token punctuation">"</span></span></span><span class="token punctuation">&gt;</span></span>==<span class="token entity named-entity" title="&nbsp;">&amp;nbsp;</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span>
+            <span class="token style-attr"><span class="token attr-name">style</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span><span class="token style language-css"><span class="token property">color</span><span class="token punctuation">:</span> #0000BB</span><span class="token punctuation">"</span></span></span><span class="token punctuation">&gt;</span></span>$newpass<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span>
+            <span class="token style-attr"><span class="token attr-name">style</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span><span class="token style language-css"><span class="token property">color</span><span class="token punctuation">:</span> #007700</span><span class="token punctuation">"</span></span></span><span class="token punctuation">&gt;</span></span>)<span class="token entity named-entity" title="&nbsp;">&amp;nbsp;</span>{<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span> <span class="token punctuation">/&gt;</span></span><span class="token entity named-entity" title="&nbsp;">&amp;nbsp;</span><span class="token entity named-entity" title="&nbsp;">&amp;nbsp;</span><span class="token entity named-entity" title="&nbsp;">&amp;nbsp;</span><span class="token entity named-entity" title="&nbsp;">&amp;nbsp;</span><span class="token entity named-entity" title="&nbsp;">&amp;nbsp;</span><span class="token entity named-entity" title="&nbsp;">&amp;nbsp;</span><span class="token entity named-entity" title="&nbsp;">&amp;nbsp;</span><span class="token entity named-entity" title="&nbsp;">&amp;nbsp;</span>echo<span class="token entity named-entity" title="&nbsp;">&amp;nbsp;</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span>
+            <span class="token style-attr"><span class="token attr-name">style</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span><span class="token style language-css"><span class="token property">color</span><span class="token punctuation">:</span> #0000BB</span><span class="token punctuation">"</span></span></span><span class="token punctuation">&gt;</span></span>$flag<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span>
+            <span class="token style-attr"><span class="token attr-name">style</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span><span class="token style language-css"><span class="token property">color</span><span class="token punctuation">:</span> #007700</span><span class="token punctuation">"</span></span></span><span class="token punctuation">&gt;</span></span>;<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span> <span class="token punctuation">/&gt;</span></span><span class="token entity named-entity" title="&nbsp;">&amp;nbsp;</span><span class="token entity named-entity" title="&nbsp;">&amp;nbsp;</span><span class="token entity named-entity" title="&nbsp;">&amp;nbsp;</span><span class="token entity named-entity" title="&nbsp;">&amp;nbsp;</span>}<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span> <span class="token punctuation">/&gt;</span></span>}<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span> <span class="token punctuation">/&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span>
+            <span class="token style-attr"><span class="token attr-name">style</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span><span class="token style language-css"><span class="token property">color</span><span class="token punctuation">:</span> #0000BB</span><span class="token punctuation">"</span></span></span><span class="token punctuation">&gt;</span></span>highlight_file<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token style-attr"><span class="token attr-name">style</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span><span class="token style language-css"><span class="token property">color</span><span class="token punctuation">:</span> #007700</span><span class="token punctuation">"</span></span></span><span class="token punctuation">&gt;</span></span>(<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span>
+            <span class="token style-attr"><span class="token attr-name">style</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span><span class="token style language-css"><span class="token property">color</span><span class="token punctuation">:</span> #0000BB</span><span class="token punctuation">"</span></span></span><span class="token punctuation">&gt;</span></span>__FILE__<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token style-attr"><span class="token attr-name">style</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span><span class="token style language-css"><span class="token property">color</span><span class="token punctuation">:</span> #007700</span><span class="token punctuation">"</span></span></span><span class="token punctuation">&gt;</span></span>);<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>br</span> <span class="token punctuation">/&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">&gt;</span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>span</span><span class="token punctuation">&gt;</span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>code</span><span class="token punctuation">&gt;</span></span>
 </code></pre>
 <p>传入两个参数<code>pass</code>和<code>newpass</code>，让它俩的值相等就行了。</p>
-<pre class=" language-bash"><code class="language-bash">./curl -v https://106.14.153.173:8443/check.php --http3 -d <span class="token string">"pass=1&amp;newpass=1"</span></code></pre>
+<pre class="language-bash" data-language="bash"><code class="language-bash">./curl -v https://106.14.153.173:8443/check.php --http3 -d <span class="token string">"pass=1&amp;newpass=1"</span></code></pre>
 <p>然后得到flag：</p>
 <p><code>NUAACTF{WH4T_d0_y0u_kn0w_H334}</code></p>
 <h4 id="另一种-curl-方法"><a href="#另一种-curl-方法" class="headerlink" title="另一种 curl 方法"></a>另一种 curl 方法</h4><p>想到一个方案，就是直接拉别人构建好的 docker 镜像。</p>
 <p>找到了一个 build 有 HTTP3 的 curl docker image：<strong>ymuski/curl-http3</strong></p>
 <blockquote>
 <p>Docker image of <code>curl</code> compiled with  <code>BoringSSL</code> and <code>quiche/0.2.0</code> for <strong>HTTP3 support</strong>, <code>httpstat</code> for visualization.</p>
-<p>GitHub 仓库：<strong><a href="https://github.com/yurymuski/curl-http3" target="_blank" rel="noopener">curl-http3</a></strong></p>
+<p>GitHub 仓库：**<a target="_blank" rel="noopener" href="https://github.com/yurymuski/curl-http3">curl-http3</a>**</p>
 </blockquote>
-<pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># docker run -it --rm ymuski/curl-http3 curl -V</span>
-curl 7.71.0-DEV <span class="token punctuation">(</span>x86_64-pc-linux-gnu<span class="token punctuation">)</span> libcurl/7.71.0-DEV BoringSSL quiche/0.4.0
+<pre class="language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># docker run -it --rm ymuski/curl-http3 curl -V</span>
+<span class="token function">curl</span> <span class="token number">7.71</span>.0-DEV <span class="token punctuation">(</span>x86_64-pc-linux-gnu<span class="token punctuation">)</span> libcurl/7.71.0-DEV BoringSSL quiche/0.4.0
 Release-Date: <span class="token punctuation">[</span>unreleased<span class="token punctuation">]</span>
 Protocols: dict <span class="token function">file</span> <span class="token function">ftp</span> ftps gopher http https imap imaps pop3 pop3s rtsp smb smbs smtp smtps telnet tftp
 Features: alt-svc AsynchDNS HTTP3 HTTPS-proxy IPv6 Largefile NTLM NTLM_WB SSL UnixSockets</code></pre>
 <p>而后直接做题就完事了。</p>
-<pre class=" language-bash"><code class="language-bash">docker run -it --rm ymuski/curl-http3 curl -Lv https://106.14.153.173:8443/check.php --http3 -d <span class="token string">"pass=a&amp;newpass=a"</span></code></pre>
+<pre class="language-bash" data-language="bash"><code class="language-bash">docker run -it --rm ymuski/curl-http3 <span class="token function">curl</span> -Lv https://106.14.153.173:8443/check.php --http3 -d <span class="token string">"pass=a&amp;newpass=a"</span></code></pre>
 <br>
 
 <hr>
-<h2 id="Rev"><a href="#Rev" class="headerlink" title="Rev"></a>Rev</h2><h3 id="rev1-xor"><a href="#rev1-xor" class="headerlink" title="rev1-xor"></a>rev1-xor</h3><p>pyc 反编译（可以利用<a href="https://tool.lu/pyc/" target="_blank" rel="noopener">这个工具</a>）</p>
-<pre class=" language-python"><code class="language-python"><span class="token keyword">from</span> flag <span class="token keyword">import</span> flag
+<h2 id="Rev"><a href="#Rev" class="headerlink" title="Rev"></a>Rev</h2><h3 id="rev1-xor"><a href="#rev1-xor" class="headerlink" title="rev1-xor"></a>rev1-xor</h3><p>pyc 反编译（可以利用<a target="_blank" rel="noopener" href="https://tool.lu/pyc/">这个工具</a>）</p>
+<pre class="language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> flag <span class="token keyword">import</span> flag
 s <span class="token operator">=</span> <span class="token string">'qwertyuiopasdfghjklzxcvbnm1234567890'</span>
-<span class="token keyword">for</span> x <span class="token keyword">in</span> range<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> len<span class="token punctuation">(</span>flag<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
-    <span class="token keyword">print</span><span class="token punctuation">(</span>ord<span class="token punctuation">(</span>s<span class="token punctuation">[</span>x<span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token operator">^</span> ord<span class="token punctuation">(</span>flag<span class="token punctuation">[</span>x<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">' '</span><span class="token punctuation">,</span> <span class="token operator">**</span>None<span class="token punctuation">)</span></code></pre>
+<span class="token keyword">for</span> x <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token builtin">len</span><span class="token punctuation">(</span>flag<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token builtin">ord</span><span class="token punctuation">(</span>s<span class="token punctuation">[</span>x<span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token operator">^</span> <span class="token builtin">ord</span><span class="token punctuation">(</span>flag<span class="token punctuation">[</span>x<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">' '</span><span class="token punctuation">,</span> <span class="token operator">**</span><span class="token boolean">None</span><span class="token punctuation">)</span></code></pre>
 <p>哇呜，最简单的异或，直接异或回去就完事了。</p>
 <p><strong>Exp:</strong></p>
-<pre class=" language-python"><code class="language-python">encrypted <span class="token operator">=</span> <span class="token string">"31 2 4 19 23 13 19 18 24 31 22 44 29 9 18 55 9 10 2 37 10 6 23 14 2 20 110 86 82 90 86 83 74"</span>
+<pre class="language-python" data-language="python"><code class="language-python">encrypted <span class="token operator">=</span> <span class="token string">"31 2 4 19 23 13 19 18 24 31 22 44 29 9 18 55 9 10 2 37 10 6 23 14 2 20 110 86 82 90 86 83 74"</span>
 s <span class="token operator">=</span> <span class="token string">'qwertyuiopasdfghjklzxcvbnm1234567890'</span>
 m <span class="token operator">=</span> encrypted<span class="token punctuation">.</span>split<span class="token punctuation">(</span><span class="token string">' '</span><span class="token punctuation">)</span>
-m<span class="token operator">=</span>list<span class="token punctuation">(</span>map<span class="token punctuation">(</span>int<span class="token punctuation">,</span>m<span class="token punctuation">)</span><span class="token punctuation">)</span>
+m<span class="token operator">=</span><span class="token builtin">list</span><span class="token punctuation">(</span><span class="token builtin">map</span><span class="token punctuation">(</span><span class="token builtin">int</span><span class="token punctuation">,</span>m<span class="token punctuation">)</span><span class="token punctuation">)</span>
 <span class="token keyword">print</span><span class="token punctuation">(</span>m<span class="token punctuation">)</span>
-<span class="token keyword">for</span> x <span class="token keyword">in</span> range<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> len<span class="token punctuation">(</span>m<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
-    <span class="token keyword">print</span><span class="token punctuation">(</span>chr<span class="token punctuation">(</span>ord<span class="token punctuation">(</span>s<span class="token punctuation">[</span>x<span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token operator">^</span> m<span class="token punctuation">[</span>x<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">,</span> end<span class="token operator">=</span><span class="token string">""</span><span class="token punctuation">)</span></code></pre>
+<span class="token keyword">for</span> x <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token builtin">len</span><span class="token punctuation">(</span>m<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token builtin">chr</span><span class="token punctuation">(</span><span class="token builtin">ord</span><span class="token punctuation">(</span>s<span class="token punctuation">[</span>x<span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token operator">^</span> m<span class="token punctuation">[</span>x<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">,</span> end<span class="token operator">=</span><span class="token string">""</span><span class="token punctuation">)</span></code></pre>
 <p><img src="/2020/05/30/CTF_2020NUAACTF/image-20200530132410728.png" alt="re1"></p>
 <p><code>nuaactf{wow_you_can_really_dance}</code></p>
 <h3 id="rev2-demium"><a href="#rev2-demium" class="headerlink" title="rev2-demium"></a>rev2-demium</h3><blockquote>
@@ -717,22 +743,22 @@ m<span class="token operator">=</span>list<span class="token punctuation">(</spa
 <p><img src="/2020/05/30/CTF_2020NUAACTF/image-20200530135033544.png" alt="re2-2"></p>
 <p>python 写一波jio本。</p>
 <p><strong>Exp：</strong></p>
-<pre class=" language-python"><code class="language-python"><span class="token comment" spellcheck="true"># -*- coding:utf-8 -*-</span>
+<pre class="language-python" data-language="python"><code class="language-python"><span class="token comment"># -*- coding:utf-8 -*-</span>
 
-m <span class="token operator">=</span> r<span class="token string">"W1og39p2Kp+2_Zpx2{/yF"</span>
-s <span class="token operator">=</span> r<span class="token string">"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890-=!@#$%^&amp;*()_+"</span>
-e <span class="token operator">=</span> r<span class="token string">"oLlQfWgThE_1-ZpsUHMS+ex6K\tP{9I}Jn8C4/kmcd5yBAz0RDaVrwuGvNjqOYi===========2b"</span>
+m <span class="token operator">=</span> <span class="token string">r"W1og39p2Kp+2_Zpx2{/yF"</span>
+s <span class="token operator">=</span> <span class="token string">r"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890-=!@#$%^&amp;*()_+"</span>
+e <span class="token operator">=</span> <span class="token string">r"oLlQfWgThE_1-ZpsUHMS+ex6K\tP{9I}Jn8C4/kmcd5yBAz0RDaVrwuGvNjqOYi===========2b"</span>
 flag <span class="token operator">=</span> <span class="token string">''</span>
 
 <span class="token keyword">for</span> i <span class="token keyword">in</span> m<span class="token punctuation">:</span>
     index <span class="token operator">=</span> e<span class="token punctuation">.</span>find<span class="token punctuation">(</span>i<span class="token punctuation">)</span>
-    <span class="token comment" spellcheck="true"># print(e.find(i))</span>
-    <span class="token keyword">if</span> index <span class="token operator">>=</span> <span class="token number">0</span><span class="token punctuation">:</span>
+    <span class="token comment"># print(e.find(i))</span>
+    <span class="token keyword">if</span> index <span class="token operator">&gt;=</span> <span class="token number">0</span><span class="token punctuation">:</span>
         single <span class="token operator">=</span> s<span class="token punctuation">[</span>index<span class="token punctuation">]</span>
-        <span class="token comment" spellcheck="true"># print(single)</span>
+        <span class="token comment"># print(single)</span>
         flag <span class="token operator">+=</span> single
 <span class="token keyword">print</span><span class="token punctuation">(</span>flag<span class="token punctuation">)</span>
-<span class="token comment" spellcheck="true"># flagDo_you_know_CLR</span></code></pre>
+<span class="token comment"># flagDo_you_know_CLR</span></code></pre>
 <p><em>（exp中没有写<code>{</code> <code>}</code>的对应关系，问题不大</em></p>
 <p>得到 flag:</p>
 <p><code>flag{Do_you_know_CLR}</code></p>
@@ -741,14 +767,17 @@ flag <span class="token operator">=</span> <span class="token string">''</span>
 <hr>
 <h2 id="Crypto"><a href="#Crypto" class="headerlink" title="Crypto"></a>Crypto</h2><h3 id="Crypto1-贝斯"><a href="#Crypto1-贝斯" class="headerlink" title="Crypto1-贝斯"></a>Crypto1-贝斯</h3><p>base64 一波完事</p>
 <h3 id="crypto4-RREAL-RSA"><a href="#crypto4-RREAL-RSA" class="headerlink" title="crypto4-RREAL_RSA"></a>crypto4-RREAL_RSA</h3><p>哇呜，有直接了当的 RSA！</p>
-<pre><code>Public key:
+<pre class="language-none"><code class="language-none">Public key:
 e=65537, n=1106081963347301781444155926534938643298217639670251381867474826890728970307
 Encrypted flag:
-c=681873475888907291485502809441689140305197371659486141705279050132490452420</code></pre><p>大整数N分解得到两个质数：</p>
+c=681873475888907291485502809441689140305197371659486141705279050132490452420</code></pre>
+
+
+<p>大整数N分解得到两个质数：</p>
 <p>6598638704725743849027686163703739789</p>
 <p>167622749606696848477732277529837832463</p>
 <blockquote>
-<p>本地跑了半天没跑出来，拿去 <a href="http://factordb.com/" target="_blank" rel="noopener">http://factordb.com/</a> 这里分解就好了。</p>
+<p>本地跑了半天没跑出来，拿去 <a target="_blank" rel="noopener" href="http://factordb.com/">http://factordb.com/</a> 这里分解就好了。</p>
 </blockquote>
 <p>计算D再解密C即可得到flag</p>
 <p><img src="/2020/05/30/CTF_2020NUAACTF/image-20200530140248121.png" alt="crypto4"></p>
@@ -765,11 +794,11 @@ c=681873475888907291485502809441689140305197371659486141705279050132490452420</c
 <p><img src="/2020/05/30/CTF_2020NUAACTF/pwn3-2.png" alt="pwn3-2"></p>
 <p><img src="/2020/05/30/CTF_2020NUAACTF/pwn3-3.png" alt="pwn3-3"></p>
 <p><strong>Exp:</strong></p>
-<pre class=" language-python"><code class="language-python"><span class="token keyword">from</span> pwn <span class="token keyword">import</span> <span class="token operator">*</span>
+<pre class="language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> pwn <span class="token keyword">import</span> <span class="token operator">*</span>
 context<span class="token punctuation">.</span>log_level <span class="token operator">=</span> <span class="token string">'debug'</span>
 c <span class="token operator">=</span> remote<span class="token punctuation">(</span><span class="token string">'49.235.243.206'</span><span class="token punctuation">,</span> <span class="token number">10503</span><span class="token punctuation">)</span>
-<span class="token comment" spellcheck="true">#c = process('./33')</span>
-<span class="token comment" spellcheck="true">#gdb.attach(c)</span>
+<span class="token comment">#c = process('./33')</span>
+<span class="token comment">#gdb.attach(c)</span>
 
 sysaddr <span class="token operator">=</span> <span class="token number">0x004007FB</span>
 
@@ -795,25 +824,8 @@ c<span class="token punctuation">.</span>interactive<span class="token punctuati
 <p>可能这就是 CTF 的魅力吧。</p>
 <p>就先这样了8，后面有空再来复现喵~</p>
 <p>（溜了喵</p>
-<script>
-        document.querySelectorAll('.github-emoji')
-          .forEach(el => {
-            if (!el.dataset.src) { return; }
-            const img = document.createElement('img');
-            img.style = 'display:none !important;';
-            img.src = el.dataset.src;
-            img.addEventListener('error', () => {
-              img.remove();
-              el.style.color = 'inherit';
-              el.style.backgroundImage = 'none';
-              el.style.background = 'none';
-            });
-            img.addEventListener('load', () => {
-              img.remove();
-            });
-            document.body.appendChild(img);
-          });
-      </script>
+
+                
             </div>
             <hr/>
 
@@ -888,13 +900,12 @@ c<span class="token punctuation">.</span>interactive<span class="token punctuati
                     
                 </div>
                 <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
-                    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/libs/share/css/share.min.css">
-
+                    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/share/css/share.min.css">
 <div id="article-share">
-    
+
     
     <div class="social-share" data-sites="qq,qzone,wechat,weibo,twitter,facebook,google,douban,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
-    <script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/libs/share/js/social-share.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/share/js/social-share.min.js"></script>
     
 
     
@@ -1008,19 +1019,19 @@ c<span class="token punctuation">.</span>interactive<span class="token punctuati
             <div class="reward-content">
                 <div class="reward-tabs">
                     <ul class="tabs row">
+                        <!-- 
+                            <li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li> 
+                        -->
                         <li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li>
-					<!-- 暂时注释掉
-						<li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li>
-					-->
                     </ul>
-					<div id="wechat">
-                        <img src="/medias/reward/wechat.png" class="reward-img" alt="微信打赏二维码">
-                    </div>                    
-					<!-- 暂时注释掉
-					<div id="alipay">
-                        <img src="" class="reward-img" alt="支付宝打赏二维码">
+                    <!-- 
+                        <div id="alipay">
+                        <img src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/" class="reward-img" alt="支付宝打赏二维码">
+                        </div> 
+                -->
+                    <div id="wechat">
+                        <img src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/medias/reward/wechat.png" class="reward-img" alt="微信打赏二维码">
                     </div>
-					-->
                 </div>
             </div>
         </div>
@@ -1032,23 +1043,24 @@ c<span class="token punctuation">.</span>interactive<span class="token punctuati
         $('.tabs').tabs();
     });
 </script>
+
             
         </div>
     </div>
 
     
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/libs/gitalk/gitalk.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/css/my-gitalk.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/gitalk/gitalk.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/css/my-gitalk.css">
 
 <div class="card gitalk-card" data-aos="fade-up">
-    <div class="comment_headling" style="font-size: 20px; font-weight: 700; position: relative; left: 20px; top: 15px; padding-bottom: 5px;">
+    <div class="comment_headling" style="font-size: 20px; font-weight: 700; position: relative; padding-left: 20px; top: 15px; padding-bottom: 5px;">
         <i class="fas fa-comments fa-fw" aria-hidden="true"></i>
         <span>评论</span>
     </div>
     <div id="gitalk-container" class="card-content"></div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/libs/gitalk/gitalk.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/gitalk/gitalk.min.js"></script>
 <script>
     let gitalk = new Gitalk({
         clientID: '116343b4650fce4789b6',
@@ -1062,6 +1074,13 @@ c<span class="token punctuation">.</span>interactive<span class="token punctuati
 
     gitalk.render('gitalk-container');
 </script>
+
+    
+
+    
+
+    
+
     
 
     
@@ -1085,7 +1104,7 @@ c<span class="token punctuation">.</span>interactive<span class="token punctuati
                     <div class="card-image">
                         
                         
-                        <img src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/medias/featureimages/6.jpg" class="responsive-img" alt="DSP | CCS v3.3 利用I/O端口从外部文件传送数据的相关配置">
+                        <img src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/medias/featureimages/6.jpg" class="responsive-img" alt="DSP | CCS v3.3 利用I/O端口从外部文件传送数据的相关配置">
                         
                         <span class="card-title">DSP | CCS v3.3 利用I/O端口从外部文件传送数据的相关配置</span>
                     </div>
@@ -1146,9 +1165,9 @@ c<span class="token punctuation">.</span>interactive<span class="token punctuati
                     <div class="card-image">
                         
                         
-                        <img src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/medias/featureimages/23.jpg" class="responsive-img" alt="CTF | DASCTF May & BJDCTF3rd 部分WriteUp">
+                        <img src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/medias/featureimages/23.jpg" class="responsive-img" alt="CTF | DASCTF May &amp; BJDCTF3rd 部分WriteUp">
                         
-                        <span class="card-title">CTF | DASCTF May & BJDCTF3rd 部分WriteUp</span>
+                        <span class="card-title">CTF | DASCTF May &amp; BJDCTF3rd 部分WriteUp</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -1234,31 +1253,26 @@ c<span class="token punctuation">.</span>interactive<span class="token punctuati
 
 
 <!-- 代码块功能依赖 -->
-<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/libs/codeBlock/codeBlockFuction.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/codeBlock/codeBlockFuction.js"></script>
 
 <!-- 代码语言 -->
 
-<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/libs/codeBlock/codeLang.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/codeBlock/codeLang.js"></script>
 
 
 <!-- 代码块复制 -->
 
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/codeBlock/codeCopy.js"></script>
+
 
 <!-- 代码块收缩 -->
 
-<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/libs/codeBlock/codeShrink.js"></script>
-
-
-<!-- 代码块折行 -->
-
-<style type="text/css">
-code[class*="language-"], pre[class*="language-"] { white-space: pre !important; }
-</style>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/codeBlock/codeShrink.js"></script>
 
 
     </div>
     <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
-        <div class="toc-widget">
+        <div class="toc-widget card" style="background-color: white;">
             <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;目录</div>
             <div id="toc-content"></div>
         </div>
@@ -1274,7 +1288,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
 </div>
 
 
-<script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/libs/tocbot/tocbot.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/tocbot/tocbot.min.js"></script>
 <script>
     $(function () {
         tocbot.init({
@@ -1356,17 +1370,21 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
 
 
 
+
     <footer class="page-footer bg-color">
         <div class="container row center-align" style="margin-bottom: 15px !important;">
         <div class="col s12 m8 l8 copy-right">
             Copyright&nbsp;&copy;
+            
+                <span id="year">2019-2021</span>
+            
             <span id="year">2019</span>
-            <a href="https://miaotony.xyz" target="_blank">MiaoTony</a>
+            <a href="/about" target="_blank">MiaoTony</a>
             |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
             |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
             <br>
                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">158.8k</span>&nbsp;字
+                class="white-color">158.2k</span>&nbsp;字
                                                                                     <span id="busuanzi_container_site_pv">
 			|&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
                     class="white-color"></span>&nbsp;次
@@ -1448,6 +1466,8 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
 
 
 
+
+
     <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
         <i class="fas fa-rss"></i>
     </a>
@@ -1457,6 +1477,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
 </footer>
 
 <div class="progress-bar"></div>
+
 
     <!-- 搜索遮罩框 -->
 <div id="searchModal" class="modal">
@@ -1470,12 +1491,98 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
     </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/js/search.js"></script>
 <script type="text/javascript">
 $(function () {
-    searchFunc("https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/" + "search.xml", 'searchInput', 'searchResult');
+    var searchFunc = function (path, search_id, content_id) {
+        'use strict';
+        $.ajax({
+            url: path,
+            dataType: "xml",
+            success: function (xmlResponse) {
+                // get the contents from search data
+                var datas = $("entry", xmlResponse).map(function () {
+                    return {
+                        title: $("title", this).text(),
+                        content: $("content", this).text(),
+                        url: $("url", this).text()
+                    };
+                }).get();
+                var $input = document.getElementById(search_id);
+                var $resultContent = document.getElementById(content_id);
+                $input.addEventListener('input', function () {
+                    var str = '<ul class=\"search-result-list\">';
+                    var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                    $resultContent.innerHTML = "";
+                    if (this.value.trim().length <= 0) {
+                        return;
+                    }
+                    // perform local searching
+                    datas.forEach(function (data) {
+                        var isMatch = true;
+                        var data_title = data.title.trim().toLowerCase();
+                        var data_content = data.content.trim().replace(/<[^>]+>/g, "").toLowerCase();
+                        var data_url = data.url;
+                        data_url = data_url.indexOf('/') === 0 ? data.url : '/' + data_url;
+                        var index_title = -1;
+                        var index_content = -1;
+                        var first_occur = -1;
+                        // only match artiles with not empty titles and contents
+                        if (data_title !== '' && data_content !== '') {
+                            keywords.forEach(function (keyword, i) {
+                                index_title = data_title.indexOf(keyword);
+                                index_content = data_content.indexOf(keyword);
+                                if (index_title < 0 && index_content < 0) {
+                                    isMatch = false;
+                                } else {
+                                    if (index_content < 0) {
+                                        index_content = 0;
+                                    }
+                                    if (i === 0) {
+                                        first_occur = index_content;
+                                    }
+                                }
+                            });
+                        }
+                        // show search results
+                        if (isMatch) {
+                            str += "<li><a href='" + data_url + "' class='search-result-title'>" + data_title + "</a>";
+                            var content = data.content.trim().replace(/<[^>]+>/g, "");
+                            if (first_occur >= 0) {
+                                // cut out 100 characters
+                                var start = first_occur - 20;
+                                var end = first_occur + 80;
+                                if (start < 0) {
+                                    start = 0;
+                                }
+                                if (start === 0) {
+                                    end = 100;
+                                }
+                                if (end > content.length) {
+                                    end = content.length;
+                                }
+                                var match_content = content.substr(start, end);
+                                // highlight all keywords
+                                keywords.forEach(function (keyword) {
+                                    var regS = new RegExp(keyword, "gi");
+                                    match_content = match_content.replace(regS, "<em class=\"search-keyword\">" + keyword + "</em>");
+                                });
+
+                                str += "<p class=\"search-result\">" + match_content + "...</p>"
+                            }
+                            str += "</li>";
+                        }
+                    });
+                    str += "</ul>";
+                    $resultContent.innerHTML = str;
+                });
+            }
+        });
+    };
+
+    searchFunc('/search.xml', 'searchInput', 'searchResult');
 });
 </script>
+
     <!-- 回到顶部按钮 -->
 <div id="backTop" class="top-scroll">
     <a class="btn-floating btn-large waves-effect waves-light" href="#!">
@@ -1484,29 +1591,14 @@ $(function () {
 </div>
 
 
-    <script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/libs/materialize/materialize.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/libs/masonry/masonry.pkgd.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/libs/aos/aos.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/libs/scrollprogress/scrollProgress.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/libs/lightGallery/js/lightgallery-all.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/js/matery.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/materialize/materialize.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/aos/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/js/matery.min.js"></script>
 
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-159946730-1"></script>
-<script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag() {
-        dataLayer.push(arguments);
-    }
-
-    gtag('js', new Date());
-    gtag('config', 'UA-159946730-1');
-</script>
-
-
-    <!-- Baidu Analytics -->
-
+    
 <script>
     var _hmt = _hmt || [];
     (function () {
@@ -1517,15 +1609,12 @@ $(function () {
     })();
 </script>
 
-    <!-- Baidu Push -->
-
-    
-    <script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/libs/others/clicklove.js" async="async"></script>
     
     
-    <script async src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/libs/others/busuanzi.pure.mini.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/others/clicklove.js" async="async"></script>
     
-
+    
+    <script async src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/others/busuanzi.pure.mini.js"></script>
     
 
     
@@ -1533,11 +1622,14 @@ $(function () {
     
 
     
+    
 
     
+
     
+
     
-    <script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/libs/instantpage/instantpage.js" type="module"></script>
+    <script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/instantpage/instantpage.js" type="module"></script>
     
 
 </body>

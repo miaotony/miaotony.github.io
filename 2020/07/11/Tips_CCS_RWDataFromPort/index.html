@@ -13,19 +13,32 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-159946730-1"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+        dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+    gtag('config', 'UA-159946730-1');
+</script>
+
+
     <title>DSP | CCS v3.3 利用I/O端口从外部文件传送数据的相关配置 | MiaoTony&#39;s小窝</title>
-    <link rel="icon" type="image/x-icon, image/vnd.microsoft.icon" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/favicon.ico">
+    <link rel="icon" type="image/x-icon, image/vnd.microsoft.icon" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/favicon.ico">
 
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/libs/awesome/css/all.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/libs/materialize/materialize.min.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/libs/aos/aos.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/libs/animate/animate.min.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/libs/lightGallery/css/lightgallery.min.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/css/matery.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/css/my.css">
-
-    <script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/libs/jquery/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/awesome/css/all.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/css/matery.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/css/my.css">
 	
+    <script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/jquery/jquery.min.js"></script>
     <script>
         //来个特效玩玩喵 20200123
         var titleTime;
@@ -42,8 +55,12 @@
     }
         });
     </script>
+<meta name="generator" content="Hexo 5.3.0">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
 <link rel="alternate" href="/atom.xml" title="MiaoTony's小窝" type="application/atom+xml">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/css/prism.css" type="text/css"></head>
+</head>
+
+
 
 
 <body>
@@ -53,9 +70,9 @@
             <div class="brand-logo">
                 <a href="/" class="waves-effect waves-light">
                     
-                    <img src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/medias/logo.png" class="logo-img" alt="LOGO">
+                    <img src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/medias/logo.png" class="logo-img" alt="LOGO">
                     
-                    <span class="logo-span">MiaoTony's小窝</span>
+                    <span class="logo-span">MiaoTony&#39;s小窝</span>
                 </a>
             </div>
             
@@ -147,13 +164,14 @@
   </li>
 </ul>
 
+
 <div id="mobile-nav" class="side-nav sidenav">
 
     <div class="mobile-head bg-color">
         
-        <img src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/medias/logo.png" class="logo-img circle responsive-img">
+        <img src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/medias/logo.png" class="logo-img circle responsive-img">
         
-        <div class="logo-name">MiaoTony's小窝</div>
+        <div class="logo-name">MiaoTony&#39;s小窝</div>
         <div class="logo-desc">
             
             喵~欢迎各位大佬的来访呀！
@@ -253,6 +271,7 @@
     </ul>
 </div>
 
+
         </div>
 
         
@@ -317,7 +336,7 @@
 </header>
 
     
-<script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/libs/cryptojs/crypto-js.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/cryptojs/crypto-js.min.js"></script>
 <script>
     (function() {
         let pwd = '';
@@ -333,7 +352,7 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/medias/featureimages/6.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/medias/featureimages/6.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
@@ -351,7 +370,7 @@
 <main class="post-container content">
 
     
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/libs/tocbot/tocbot.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/tocbot/tocbot.css">
 <style>
     #articleContent h1::before,
     #articleContent h2::before,
@@ -381,8 +400,7 @@
     }
 
     .toc-widget .toc-title {
-        margin: 35px 0 15px 0;
-        padding-left: 17px;
+        padding: 35px 0 15px 17px;
         font-size: 1.5rem;
         font-weight: bold;
         line-height: 1.5rem;
@@ -394,7 +412,7 @@
     }
 
     #toc-content {
-        height: calc(100vh - 250px);
+        padding-bottom: 30px;
         overflow: auto;
     }
 
@@ -415,14 +433,14 @@
     #toc-content .toc-link::before {
         background-color: transparent;
         max-height: 25px;
+
+        position: absolute;
+        right: 23.5vw;
+        display: block;
     }
 
     #toc-content .is-active-link {
         color: #42b983;
-    }
-
-    #toc-content .is-active-link::before {
-        background-color: #42b983;
     }
 
     #floating-toc-btn {
@@ -514,18 +532,25 @@
 
                 
             </div>
-
         </div>
         <hr class="clearfix">
+
+        
+        <!-- 是否加载使用自带的 prismjs. -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/prism/prism.css">
+        
+
+        
+
         <div class="card-content article-card-content">
             <div id="articleContent">
                 <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>喵呜，不知不觉有一个多月没来写东西了（摊手</p>
-<p>考试月也太难熬了吧<strong><em>（头秃.gif）</em></strong>！<strong>啊啊啊终于过来了！</strong></p>
+<p>考试月也太难熬了吧**<em>（头秃.gif）**</em>！<strong>啊啊啊终于过来了！</strong></p>
 <p>每个期末都很难过，但这个期末怕是最难受最焦虑的一个了，主要是一堆事情全堆到了考试月甚至最后的扎堆考试周。五门线上考试有四门是两门两门连着考的，期间还有各种课程的实验（及实验报告）、大作业（及其报告）、结课报告、网课考试，以及零零散散的杂事 balabala。考前赶着 ddl 一天写了两篇半报告，然后挤着时间疯狂 <del>复</del> 预习考试课程，人都要没了……</p>
 <p>这学期选了一门 <strong>DSP 原理与应用</strong> 选修课，亲身感受证明这门课太难了，唉，<del>后悔没退掉哭唧唧。</del> 这个大作业太难做了呀！之前折腾了好久做不出来，拖着拖着就有点佛系了（（</p>
-<p>做这个 DSP 大作业需要用到 CCS 软件，就是辣个 TI 出的 <a href="https://www.ti.com.cn/tool/cn/CCSTUDIO" target="_blank" rel="noopener">Code Composer Studio 集成开发环境 (IDE)</a>，然而是用<strong>古老的 v3.3 版本！</strong>据老师是因为用到的是 DSP 型号为 TMS320C54x 系列，而这个系列只有在这一版本上才有支持。啊是挺古老的了。</p>
+<p>做这个 DSP 大作业需要用到 CCS 软件，就是辣个 TI 出的 <a target="_blank" rel="noopener" href="https://www.ti.com.cn/tool/cn/CCSTUDIO">Code Composer Studio 集成开发环境 (IDE)</a>，然而是用<strong>古老的 v3.3 版本！</strong>据老师是因为用到的是 DSP 型号为 TMS320C54x 系列，而这个系列只有在这一版本上才有支持。啊是挺古老的了。</p>
 <p>去官网看了看，现在最新的是 11 Jun 2020 发布的 10.1.0.00010。</p>
-<p>又去翻了翻 <a href="http://software-dl.ti.com/ccs/esd/documents/ccs_downloads.html" target="_blank" rel="noopener">CCS 版本历史页面</a>，拉到最下面才找到了 V3.3 版本，佛了，CCSv4.0.x是2009年发布的，那 v3.3 岂不是更古老……</p>
+<p>又去翻了翻 <a target="_blank" rel="noopener" href="http://software-dl.ti.com/ccs/esd/documents/ccs_downloads.html">CCS 版本历史页面</a>，拉到最下面才找到了 V3.3 版本，佛了，CCSv4.0.x是2009年发布的，那 v3.3 岂不是更古老……</p>
 <p><img src="/2020/07/11/Tips_CCS_RWDataFromPort/image-20200712002124213.png" alt="Version3"></p>
 <p>据说这个软件只支持 32 位操作系统，于是先在虚拟机里整了个 Windows 7 32bit 系统，然后才装上这古董 emmm。</p>
 <p>而对于<strong>利用 Simulator 的 I/O 端口从外部文件传送数据的方法</strong>，查了各种资料几乎没有相关介绍，最后是在老师和小伙伴的指导和提示下，才实现了这一操作。</p>
@@ -546,8 +571,8 @@
 <p>通过修改 GEL文件，<strong>定义 I/O 端口地址映像</strong>。</p>
 <p>在初始化过程中<strong>将输出端口 PA0 映射到 0x0000，将输入端口 PA1 映射到 0x0001</strong>。</p>
 <p>即在 <code>C5402_Init()</code> 函数中加入下面的语句。</p>
-<pre class=" language-c"><code class="language-c"><span class="token function">GEL_MapAdd</span><span class="token punctuation">(</span><span class="token number">0x0001</span><span class="token punctuation">,</span><span class="token number">2</span><span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">/* I/O Read */</span>
-<span class="token function">GEL_MapAdd</span><span class="token punctuation">(</span><span class="token number">0x0000</span><span class="token punctuation">,</span><span class="token number">2</span><span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">/* I/O Write */</span></code></pre>
+<pre class="language-c" data-language="c"><code class="language-c"><span class="token function">GEL_MapAdd</span><span class="token punctuation">(</span><span class="token number">0x0001</span><span class="token punctuation">,</span><span class="token number">2</span><span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">/* I/O Read */</span>
+<span class="token function">GEL_MapAdd</span><span class="token punctuation">(</span><span class="token number">0x0000</span><span class="token punctuation">,</span><span class="token number">2</span><span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">/* I/O Write */</span></code></pre>
 <blockquote>
 <p>具体含义是</p>
 <p><strong>GEL_MapAdd(address, page, length, readable, writeable);</strong></p>
@@ -582,16 +607,16 @@
 <p>（盲猜可能在输出缓存中？占用了文件句柄但没有 flush？）</p>
 <p>因此要想看到结果的话一种方法是断开输出文件，另一种方法，关掉 CCS（简单粗暴。</p>
 <h3 id="Step-5-在汇编中使用端口"><a href="#Step-5-在汇编中使用端口" class="headerlink" title="Step 5 在汇编中使用端口"></a>Step 5 在汇编中使用端口</h3><p>首先定义输入输出端口如下。</p>
-<pre class=" language-asm"><code class="language-asm">PA0 .set 0 ;0口 输出 
+<pre class="language-asm" data-language="asm"><code class="language-asm">PA0 .set 0 ;0口 输出 
 PA1 .set 1 ;1口 输入</code></pre>
 <p>而后结合 PORTR、PORTW 等命令使用端口即可。</p>
-<pre class=" language-asm"><code class="language-asm">PORTR PA1,@x
+<pre class="language-asm" data-language="asm"><code class="language-asm">PORTR PA1,@x
 PORTW @y,PA0</code></pre>
 <p>好了，大概就这些了喵~</p>
 <hr>
 <h2 id="一种简化方法"><a href="#一种简化方法" class="headerlink" title="一种简化方法"></a>一种简化方法</h2><p>噢对了，书上还给出了一种替代方案，可以简化前述方法的 Step 3.</p>
 <p>就是<strong>在 GEL 文件初始化函数中再加入下面的语句</strong>，直接建立端口的连接。</p>
-<pre class=" language-c"><code class="language-c"><span class="token function">GEL_PortConnect</span><span class="token punctuation">(</span><span class="token number">0x0001</span><span class="token punctuation">,</span><span class="token number">2</span><span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">0x01</span><span class="token punctuation">,</span><span class="token string">"C:\\ti\\C54x\\in.dat"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<pre class="language-c" data-language="c"><code class="language-c"><span class="token function">GEL_PortConnect</span><span class="token punctuation">(</span><span class="token number">0x0001</span><span class="token punctuation">,</span><span class="token number">2</span><span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">0x01</span><span class="token punctuation">,</span><span class="token string">"C:\\ti\\C54x\\in.dat"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token function">GEL_PortConnect</span><span class="token punctuation">(</span><span class="token number">0x0000</span><span class="token punctuation">,</span><span class="token number">2</span><span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">0x02</span><span class="token punctuation">,</span><span class="token string">"C:\\ti\\C54x\\out.dat"</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
 <blockquote>
 <p>具体含义是</p>
@@ -623,27 +648,10 @@ PORTW @y,PA0</code></pre>
 <p>就这样吧。</p>
 <p>（溜了喵~</p>
 <hr>
-<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><p><a href="https://www.ti.com.cn/tool/cn/CCSTUDIO" target="_blank" rel="noopener">Code Composer Studio 集成开发环境 (IDE)</a>（TI 官网）</p>
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><p><a target="_blank" rel="noopener" href="https://www.ti.com.cn/tool/cn/CCSTUDIO">Code Composer Studio 集成开发环境 (IDE)</a>（TI 官网）</p>
 <p>戴明桢, 周建江. TMS320C54x DSP 结构、原理及应用(第2版)[M]. 北京:北京航空航天大学出版社.</p>
-<script>
-        document.querySelectorAll('.github-emoji')
-          .forEach(el => {
-            if (!el.dataset.src) { return; }
-            const img = document.createElement('img');
-            img.style = 'display:none !important;';
-            img.src = el.dataset.src;
-            img.addEventListener('error', () => {
-              img.remove();
-              el.style.color = 'inherit';
-              el.style.backgroundImage = 'none';
-              el.style.background = 'none';
-            });
-            img.addEventListener('load', () => {
-              img.remove();
-            });
-            document.body.appendChild(img);
-          });
-      </script>
+
+                
             </div>
             <hr/>
 
@@ -726,13 +734,12 @@ PORTW @y,PA0</code></pre>
                     
                 </div>
                 <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
-                    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/libs/share/css/share.min.css">
-
+                    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/share/css/share.min.css">
 <div id="article-share">
-    
+
     
     <div class="social-share" data-sites="qq,qzone,wechat,weibo,twitter,facebook,google,douban,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
-    <script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/libs/share/js/social-share.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/share/js/social-share.min.js"></script>
     
 
     
@@ -846,19 +853,19 @@ PORTW @y,PA0</code></pre>
             <div class="reward-content">
                 <div class="reward-tabs">
                     <ul class="tabs row">
+                        <!-- 
+                            <li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li> 
+                        -->
                         <li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li>
-					<!-- 暂时注释掉
-						<li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li>
-					-->
                     </ul>
-					<div id="wechat">
-                        <img src="/medias/reward/wechat.png" class="reward-img" alt="微信打赏二维码">
-                    </div>                    
-					<!-- 暂时注释掉
-					<div id="alipay">
-                        <img src="" class="reward-img" alt="支付宝打赏二维码">
+                    <!-- 
+                        <div id="alipay">
+                        <img src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/" class="reward-img" alt="支付宝打赏二维码">
+                        </div> 
+                -->
+                    <div id="wechat">
+                        <img src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/medias/reward/wechat.png" class="reward-img" alt="微信打赏二维码">
                     </div>
-					-->
                 </div>
             </div>
         </div>
@@ -870,23 +877,24 @@ PORTW @y,PA0</code></pre>
         $('.tabs').tabs();
     });
 </script>
+
             
         </div>
     </div>
 
     
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/libs/gitalk/gitalk.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/css/my-gitalk.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/gitalk/gitalk.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/css/my-gitalk.css">
 
 <div class="card gitalk-card" data-aos="fade-up">
-    <div class="comment_headling" style="font-size: 20px; font-weight: 700; position: relative; left: 20px; top: 15px; padding-bottom: 5px;">
+    <div class="comment_headling" style="font-size: 20px; font-weight: 700; position: relative; padding-left: 20px; top: 15px; padding-bottom: 5px;">
         <i class="fas fa-comments fa-fw" aria-hidden="true"></i>
         <span>评论</span>
     </div>
     <div id="gitalk-container" class="card-content"></div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/libs/gitalk/gitalk.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/gitalk/gitalk.min.js"></script>
 <script>
     let gitalk = new Gitalk({
         clientID: '116343b4650fce4789b6',
@@ -900,6 +908,13 @@ PORTW @y,PA0</code></pre>
 
     gitalk.render('gitalk-container');
 </script>
+
+    
+
+    
+
+    
+
     
 
     
@@ -923,9 +938,9 @@ PORTW @y,PA0</code></pre>
                     <div class="card-image">
                         
                         
-                        <img src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/medias/featureimages/9.jpg" class="responsive-img" alt="CTF | 2020 CISCN初赛 Z3&LFSR WriteUp">
+                        <img src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/medias/featureimages/9.jpg" class="responsive-img" alt="CTF | 2020 CISCN初赛 Z3&amp;LFSR WriteUp">
                         
-                        <span class="card-title">CTF | 2020 CISCN初赛 Z3&LFSR WriteUp</span>
+                        <span class="card-title">CTF | 2020 CISCN初赛 Z3&amp;LFSR WriteUp</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -980,7 +995,7 @@ PORTW @y,PA0</code></pre>
                     <div class="card-image">
                         
                         
-                        <img src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/medias/featureimages/0.jpg" class="responsive-img" alt="CTF | 2020 NUAACTF 吸喵喵队 Writeup">
+                        <img src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/medias/featureimages/0.jpg" class="responsive-img" alt="CTF | 2020 NUAACTF 吸喵喵队 Writeup">
                         
                         <span class="card-title">CTF | 2020 NUAACTF 吸喵喵队 Writeup</span>
                     </div>
@@ -1068,31 +1083,26 @@ PORTW @y,PA0</code></pre>
 
 
 <!-- 代码块功能依赖 -->
-<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/libs/codeBlock/codeBlockFuction.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/codeBlock/codeBlockFuction.js"></script>
 
 <!-- 代码语言 -->
 
-<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/libs/codeBlock/codeLang.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/codeBlock/codeLang.js"></script>
 
 
 <!-- 代码块复制 -->
 
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/codeBlock/codeCopy.js"></script>
+
 
 <!-- 代码块收缩 -->
 
-<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/libs/codeBlock/codeShrink.js"></script>
-
-
-<!-- 代码块折行 -->
-
-<style type="text/css">
-code[class*="language-"], pre[class*="language-"] { white-space: pre !important; }
-</style>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/codeBlock/codeShrink.js"></script>
 
 
     </div>
     <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
-        <div class="toc-widget">
+        <div class="toc-widget card" style="background-color: white;">
             <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;目录</div>
             <div id="toc-content"></div>
         </div>
@@ -1108,7 +1118,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
 </div>
 
 
-<script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/libs/tocbot/tocbot.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/tocbot/tocbot.min.js"></script>
 <script>
     $(function () {
         tocbot.init({
@@ -1190,17 +1200,21 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
 
 
 
+
     <footer class="page-footer bg-color">
         <div class="container row center-align" style="margin-bottom: 15px !important;">
         <div class="col s12 m8 l8 copy-right">
             Copyright&nbsp;&copy;
+            
+                <span id="year">2019-2021</span>
+            
             <span id="year">2019</span>
-            <a href="https://miaotony.xyz" target="_blank">MiaoTony</a>
+            <a href="/about" target="_blank">MiaoTony</a>
             |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
             |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
             <br>
                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">158.8k</span>&nbsp;字
+                class="white-color">158.2k</span>&nbsp;字
                                                                                     <span id="busuanzi_container_site_pv">
 			|&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
                     class="white-color"></span>&nbsp;次
@@ -1282,6 +1296,8 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
 
 
 
+
+
     <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
         <i class="fas fa-rss"></i>
     </a>
@@ -1291,6 +1307,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
 </footer>
 
 <div class="progress-bar"></div>
+
 
     <!-- 搜索遮罩框 -->
 <div id="searchModal" class="modal">
@@ -1304,12 +1321,98 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
     </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/js/search.js"></script>
 <script type="text/javascript">
 $(function () {
-    searchFunc("https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/" + "search.xml", 'searchInput', 'searchResult');
+    var searchFunc = function (path, search_id, content_id) {
+        'use strict';
+        $.ajax({
+            url: path,
+            dataType: "xml",
+            success: function (xmlResponse) {
+                // get the contents from search data
+                var datas = $("entry", xmlResponse).map(function () {
+                    return {
+                        title: $("title", this).text(),
+                        content: $("content", this).text(),
+                        url: $("url", this).text()
+                    };
+                }).get();
+                var $input = document.getElementById(search_id);
+                var $resultContent = document.getElementById(content_id);
+                $input.addEventListener('input', function () {
+                    var str = '<ul class=\"search-result-list\">';
+                    var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                    $resultContent.innerHTML = "";
+                    if (this.value.trim().length <= 0) {
+                        return;
+                    }
+                    // perform local searching
+                    datas.forEach(function (data) {
+                        var isMatch = true;
+                        var data_title = data.title.trim().toLowerCase();
+                        var data_content = data.content.trim().replace(/<[^>]+>/g, "").toLowerCase();
+                        var data_url = data.url;
+                        data_url = data_url.indexOf('/') === 0 ? data.url : '/' + data_url;
+                        var index_title = -1;
+                        var index_content = -1;
+                        var first_occur = -1;
+                        // only match artiles with not empty titles and contents
+                        if (data_title !== '' && data_content !== '') {
+                            keywords.forEach(function (keyword, i) {
+                                index_title = data_title.indexOf(keyword);
+                                index_content = data_content.indexOf(keyword);
+                                if (index_title < 0 && index_content < 0) {
+                                    isMatch = false;
+                                } else {
+                                    if (index_content < 0) {
+                                        index_content = 0;
+                                    }
+                                    if (i === 0) {
+                                        first_occur = index_content;
+                                    }
+                                }
+                            });
+                        }
+                        // show search results
+                        if (isMatch) {
+                            str += "<li><a href='" + data_url + "' class='search-result-title'>" + data_title + "</a>";
+                            var content = data.content.trim().replace(/<[^>]+>/g, "");
+                            if (first_occur >= 0) {
+                                // cut out 100 characters
+                                var start = first_occur - 20;
+                                var end = first_occur + 80;
+                                if (start < 0) {
+                                    start = 0;
+                                }
+                                if (start === 0) {
+                                    end = 100;
+                                }
+                                if (end > content.length) {
+                                    end = content.length;
+                                }
+                                var match_content = content.substr(start, end);
+                                // highlight all keywords
+                                keywords.forEach(function (keyword) {
+                                    var regS = new RegExp(keyword, "gi");
+                                    match_content = match_content.replace(regS, "<em class=\"search-keyword\">" + keyword + "</em>");
+                                });
+
+                                str += "<p class=\"search-result\">" + match_content + "...</p>"
+                            }
+                            str += "</li>";
+                        }
+                    });
+                    str += "</ul>";
+                    $resultContent.innerHTML = str;
+                });
+            }
+        });
+    };
+
+    searchFunc('/search.xml', 'searchInput', 'searchResult');
 });
 </script>
+
     <!-- 回到顶部按钮 -->
 <div id="backTop" class="top-scroll">
     <a class="btn-floating btn-large waves-effect waves-light" href="#!">
@@ -1318,29 +1421,14 @@ $(function () {
 </div>
 
 
-    <script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/libs/materialize/materialize.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/libs/masonry/masonry.pkgd.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/libs/aos/aos.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/libs/scrollprogress/scrollProgress.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/libs/lightGallery/js/lightgallery-all.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/js/matery.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/materialize/materialize.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/aos/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/js/matery.min.js"></script>
 
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-159946730-1"></script>
-<script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag() {
-        dataLayer.push(arguments);
-    }
-
-    gtag('js', new Date());
-    gtag('config', 'UA-159946730-1');
-</script>
-
-
-    <!-- Baidu Analytics -->
-
+    
 <script>
     var _hmt = _hmt || [];
     (function () {
@@ -1351,15 +1439,12 @@ $(function () {
     })();
 </script>
 
-    <!-- Baidu Push -->
-
-    
-    <script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/libs/others/clicklove.js" async="async"></script>
     
     
-    <script async src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/libs/others/busuanzi.pure.mini.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/others/clicklove.js" async="async"></script>
     
-
+    
+    <script async src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/others/busuanzi.pure.mini.js"></script>
     
 
     
@@ -1367,11 +1452,14 @@ $(function () {
     
 
     
+    
 
     
+
     
+
     
-    <script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/libs/instantpage/instantpage.js" type="module"></script>
+    <script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/instantpage/instantpage.js" type="module"></script>
     
 
 </body>
