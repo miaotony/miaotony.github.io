@@ -1042,11 +1042,11 @@ c <span class="token operator">=</span> a <span class="token operator">**</span>
 </ol>
 <p>如果 ac≡bc (mod m)，且c和m互质，则 a≡b (mod m）。<br>[理解：当且仅当c和m互质，c^-1存在，等式左右可同乘模逆。]</p>
 <p><strong>除法规则：</strong><br>在模n意义下，a/b不再仅仅代表这两个数相除，而是指 a + k1 * n 和 b + k2 * n 这两个组数中任意两个相除，使商为整数<br>因此也就可以理解，除以一个数等价于乘以它的逆<br>a/b ≡ c(mod n) &lt;=&gt; a ≡ c * (b^-1) (mod n)，其中b模n的逆记作b的负一次方。</p>
-<p><strong>费马小定理：</strong><br>a是整数，p是质数，则 a^p==a (mod p)，如果a不是p的倍数，还有a^(p-1) ≡ 1(mod p) </p>
-<p>See Also:  <a target="_blank" rel="noopener" href="https://blog.sengxian.com/algorithms/mod-world">模运算总结</a> 和 <a target="_blank" rel="noopener" href="https://github.com/wujr5/algorithm-analysis-and-design/blob/master/relative-algorithm-learning/6-algorithm-about-modulo-operation.md">取模运算涉及的算法</a></p>
+<p><strong>费马小定理：</strong><br>a是整数，p是质数，则 a^p==a (mod p)，如果 a 不是 p 的倍数，还有 a^(p-1) ≡ 1 (mod p) </p>
+<p><strong>See Also:</strong>  <a target="_blank" rel="noopener" href="https://blog.sengxian.com/algorithms/mod-world">模运算总结</a> 和 <a target="_blank" rel="noopener" href="https://github.com/wujr5/algorithm-analysis-and-design/blob/master/relative-algorithm-learning/6-algorithm-about-modulo-operation.md">取模运算涉及的算法</a></p>
 </blockquote>
 <p>在这题里面，就可以化简一下。</p>
-<p>$$<br>c = a ^ p \cdot m \bmod p \<br>\ = a \cdot m \bmod p \<br>\Rightarrow<br>m = c \cdot a^{-1} \bmod p<br>$$</p>
+<p>$$<br>c = a ^ p \cdot m \bmod p \\<br>\ = a \cdot m \bmod p \\<br>\Rightarrow<br>m = c \cdot a^{-1} \bmod p<br>$$</p>
 <p><strong>Exp:</strong></p>
 <pre class="language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> libnum <span class="token keyword">import</span> <span class="token operator">*</span>
 <span class="token keyword">import</span> gmpy2
@@ -1095,12 +1095,12 @@ cipher <span class="token operator">=</span> <span class="token builtin">pow</sp
 <ol>
 <li>Compute the square root of $c$ modulo $p$ and $q$ using these formulas:</li>
 </ol>
-<p>$$<br>{\displaystyle {\begin{aligned}<br>m_{p}=c^{\frac {1}{4}(p+1)}{\bmod {p}} \<br>m_{q}=c^{\frac {1}{4}(q+1)}{\bmod {q}}<br>\end{aligned}}}<br>$$</p>
+<p>$$<br>{\displaystyle {\begin{aligned}<br>m_{p}=c^{\frac {1}{4}(p+1)}{\bmod {p}} \\<br>m_{q}=c^{\frac {1}{4}(q+1)}{\bmod {q}}<br>\end{aligned}}}<br>$$</p>
 <ol start="2">
 <li>Use the <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Extended_Euclidean_algorithm">extended Euclidean algorithm</a> to find $y_{p}$ and $y_{q}$ such that  $$ y_{p}\cdot p+y_{q}\cdot q=1 $$</li>
 <li>Use the <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Chinese_remainder_theorem">Chinese remainder theorem</a> to find the four square roots of  $c$ modulo $n$:</li>
 </ol>
-<p>$$<br>r_{1}=\left(y_{p}\cdot p\cdot m_{q}+y_{q}\cdot q\cdot m_{p}\right){\bmod {n}}\<br>r_{2}=n-r_{1}\<br>r_{3}=\left(y_{p}\cdot p\cdot m_{q}-y_{q}\cdot q\cdot m_{p}\right){\bmod {n}}\<br>r_{4}=n-r_{3}<br>$$</p>
+<p>$$<br>r_{1}=\left(y_{p}\cdot p\cdot m_{q}+y_{q}\cdot q\cdot m_{p}\right){\bmod {n}} \\<br>r_{2}=n-r_{1} \\<br>r_{3}=\left(y_{p}\cdot p\cdot m_{q}-y_{q}\cdot q\cdot m_{p}\right){\bmod {n}} \\<br>r_{4}=n-r_{3}<br>$$</p>
 <p>One of these four values is the original plaintext $m$.</p>
 <p>四个解中有一个就是密文 m。</p>
 </blockquote>
@@ -1824,7 +1824,9 @@ y_7&#x3D;x_7⊕n_7⊕(x_7⋙2)⊕(x_7⋘5)
 <script src="https://cdn.bootcss.com/mathjax/2.7.9/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 <script>
     MathJax.Hub.Config({
-        tex2jax: {inlineMath: [['$', '$']]}  //, ['\(', '\)']
+        tex2jax: {inlineMath: [['$', '$']]},  //, ['\\(', '\\)']
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
     });
 </script>
 
@@ -1842,7 +1844,7 @@ y_7&#x3D;x_7⊕n_7⊕(x_7⋙2)⊕(x_7⋘5)
             |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
             <br>
                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">172.5k</span>&nbsp;字
+                class="white-color">172.6k</span>&nbsp;字
                                                                                     <span id="busuanzi_container_site_pv">
 			|&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
                     class="white-color"></span>&nbsp;次
