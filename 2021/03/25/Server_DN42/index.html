@@ -524,7 +524,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    4k
+                    4.1k
                 </div>
                 
 
@@ -549,10 +549,10 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="0x00-前言"><a href="#0x00-前言" class="headerlink" title="0x00 前言"></a>0x00 前言</h2><p>其实想玩 DN42 也有一段时间了，正好最近群友也在聊 DN42，动不动就「 <strong>来 Peer！</strong>」。</p>
+                <h2 id="0x00-前言"><a href="#0x00-前言" class="headerlink" title="0x00 前言"></a>0x00 前言</h2><p>其实想玩 DN42 也有一段时间了，正好最近群友也在聊 DN42，动不动就「<strong>来 Peer！</strong>」。</p>
 <p>那咱就来整一个好了！</p>
 <p>请注意，本文<strong>不是</strong>一篇完整的介绍性文章，只是记录一下配置过程中遇到的坑啊什么的。</p>
-<h2 id="0x01-What-is-DN42"><a href="#0x01-What-is-DN42" class="headerlink" title="0x01 What is DN42?"></a>0x01 What is DN42?</h2><p><img src="/2021/03/25/Server_DN42/dn42.png" alt="dn42"></p>
+<h2 id="0x01-What-is-DN42"><a href="#0x01-What-is-DN42" class="headerlink" title="0x01 What is DN42?"></a>0x01 What is DN42?</h2><p><img src="/2021/03/25/Server_DN42/dn42.png"></p>
 <blockquote>
 <p>dn42 is a big dynamic <a target="_blank" rel="noopener" href="http://en.wikipedia.org/wiki/Virtual_private_network">VPN</a>, which employs Internet technologies (<a target="_blank" rel="noopener" href="http://en.wikipedia.org/wiki/Bgp">BGP</a>, whois database, <a target="_blank" rel="noopener" href="http://en.wikipedia.org/wiki/Domain_Name_System">DNS</a>, etc).  Participants connect to each other using network tunnels (<a target="_blank" rel="noopener" href="https://dn42.eu/howto/GRE-on-FreeBSD">GRE</a>, <a target="_blank" rel="noopener" href="https://dn42.eu/howto/openvpn">OpenVPN</a>, <a target="_blank" rel="noopener" href="https://dn42.eu/howto/tinc">Tinc</a>, <a target="_blank" rel="noopener" href="https://dn42.eu/howto/IPsec-with-PublicKeys">IPsec</a>) and exchange routes thanks to the Border Gateway Protocol.  Network addresses are assigned in the <code>172.20.0.0/14</code> range and private AS numbers are used (see <a target="_blank" rel="noopener" href="https://dn42.eu/services/Whois">registry</a>) as well as IPv6 addresses from the ULA-Range (<code>fd00::/8</code>) - see <a target="_blank" rel="noopener" href="https://dn42.eu/FAQ#frequently-asked-questions_what-about-ipv6-in-dn42">FAQ</a>.</p>
 <p>A number of services are provided on the network: see <a target="_blank" rel="noopener" href="https://dn42.eu/internal/Internal-Services">internal</a> (only available from within dn42).  Also, dn42 is interconnected with other networks, such as <a target="_blank" rel="noopener" href="http://wiki.hamburg.ccc.de/ChaosVPN">ChaosVPN</a> or some <a target="_blank" rel="noopener" href="http://en.wikipedia.org/wiki/Freifunk">Freifunk</a> networks.</p>
@@ -648,6 +648,9 @@ PublicKey = &lt;对方的公钥&gt;
 Endpoint = &lt;对方的公网地址&gt;:&lt;对方的端口，一般是自己ASN后五位&gt;
 AllowedIPs = 0.0.0.0/0, ::/0</code></pre>
 <p>如果 <code>[Interface]</code> 里写了 <code>Address</code> 的话需要在 <code>PostUp</code> 里先删掉 addr 再加上 <code>peer</code>，所以干脆就不配 <code>Address</code> 了。</p>
+<p>注意这里 <code>Table = off</code> 要加上，不然所有的流量，包括公网上的流量就都转发给你的 peer 了，这样可能你就连自己的机器都连不上了。</p>
+<p><img src="/2021/03/25/Server_DN42/image-20210327015332317.png"></p>
+<p><em>然后喵喵配完 wg，一启动，SSH 连接断了，喵喵愣住了（还好服务商能起 VNC，然后上去把 wg 连接断了才重新连上 SSH…</em></p>
 <p>这里一般推荐用 <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Link-local_address">link-local 地址</a> 进行配置，除非双方约定好是用 ULA。</p>
 <p>这是<strong>链路本地地址</strong>， IPv6 定义在 <strong>fe80::/10</strong> 地址块。一般就是 <code>fe80::&lt;你的ASN后四位&gt;</code>。</p>
 <p>然后为了方便，参考 <a target="_blank" rel="noopener" href="https://cas7.moe/">@moecast</a> 大佬的配置脚本，一步配置 service。</p>
@@ -778,6 +781,9 @@ birdc c  <span class="token comment"># 即 birdc configure</span></code></pre>
 <p>在 <code>dnpeers</code> 里的 <code>ipv4</code> 中加入 <code>extended next hop on;</code> 即可使用这一特性。</p>
 <p><img src="/2021/03/25/Server_DN42/image-20210326004515058.png"></p>
 <p>于是和别人 peer 的时候，WireGuard 只需要 peer 一个 IPv6 link-local address 就完事了，连 DN42 IPv4 都不需要了。</p>
+<p>当然还需要加一个 dummy 接口来写本机的地址，类似于</p>
+<pre class="language-bash" data-language="bash"><code class="language-bash"><span class="token function">ip</span> <span class="token function">link</span> <span class="token function">add</span> dummy1 <span class="token builtin class-name">type</span> dummy
+<span class="token function">ip</span> addr <span class="token function">add</span> <span class="token operator">&lt;</span>你的DN42 ipv<span class="token operator"><span class="token file-descriptor important">4</span>&gt;</span>/32 dev dummy1</code></pre>
 <p>BTW，喵喵觉得一个一个手动配太麻烦了，于是自己用 Python 糊了个小脚本，只需要输入必要的信息，就能自动生成配置文件，并建立 WireGuard 连接，重新加载 BIRD 配置了，贼舒服！</p>
 <p>（不过脚本太丑了而且是自己用的，就不放出来了吧</p>
 <h2 id="0x07-一些好玩的东西"><a href="#0x07-一些好玩的东西" class="headerlink" title="0x07 一些好玩的东西"></a>0x07 一些好玩的东西</h2><p>大佬们给节点做了可视化，比如以下几个。</p>
@@ -853,6 +859,8 @@ birdc c  <span class="token comment"># 即 birdc configure</span></code></pre>
 <li><a target="_blank" rel="noopener" href="https://blog.outv.im/2020/dn42-neonetwork-guide/">接入 dn42 及 NeoNetwork</a></li>
 <li><a target="_blank" rel="noopener" href="https://www.wsfnk.com/archives/category/dn42">辣条①号 的 DN42 系列</a></li>
 <li><a target="_blank" rel="noopener" href="https://ithelp.ithome.com.tw/users/20119484/ironman/3438">什麼，透過BGP從小型網路到真正的網際網路！？ 系列</a></li>
+<li><a target="_blank" rel="noopener" href="https://soha.moe/post/bird-bgp-kickstart.html">BIRD 与 BGP 的新手开场</a></li>
+<li><a target="_blank" rel="noopener" href="https://weiti.org/dn42/2018/01/13/ibgp-bgp-within-as4242423905">iBGP - BGP within AS4242423905</a></li>
 <li>etc.</li>
 </ul>
 <br>
@@ -1433,7 +1441,7 @@ birdc c  <span class="token comment"># 即 birdc configure</span></code></pre>
             |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
             <br>
                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">190.5k</span>&nbsp;字
+                class="white-color">190.6k</span>&nbsp;字
                                                                                     <span id="busuanzi_container_site_pv">
 			|&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
                     class="white-color"></span>&nbsp;次
