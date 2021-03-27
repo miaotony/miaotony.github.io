@@ -524,7 +524,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    4.2k
+                    4.3k
                 </div>
                 
 
@@ -786,6 +786,29 @@ birdc c  <span class="token comment"># 即 birdc configure</span></code></pre>
 <span class="token function">ip</span> addr <span class="token function">add</span> <span class="token operator">&lt;</span>你的DN42 IPv<span class="token operator"><span class="token file-descriptor important">4</span>&gt;</span>/32 dev dummy1
 <span class="token function">ip</span> addr <span class="token function">add</span> <span class="token operator">&lt;</span>你的DN42 IPv<span class="token operator"><span class="token file-descriptor important">6</span>&gt;</span>/128 dev dummy1</code></pre>
 <p>不然路由表有可能写入不到内核中。</p>
+<p>为了持久化，需要写到配置文件中。Ubuntu 下用的是 netplan。</p>
+<p>在 <code>/etc/netplan/</code> 目录下新建一个文件，内容如下。</p>
+<pre class="language-bash" data-language="bash"><code class="language-bash">$ <span class="token function">cat</span> 01-dummy0.yaml
+network:
+  version: <span class="token number">2</span>
+  renderer: networkd
+  bridges:
+    dummy0:
+      dhcp4: no
+      dhcp6: no
+      accept-ra: no
+      interfaces: <span class="token punctuation">[</span> <span class="token punctuation">]</span>
+      addresses:
+        - <span class="token operator">&lt;</span>你的DN42 IPv<span class="token operator"><span class="token file-descriptor important">4</span>&gt;</span>/32
+        - <span class="token operator">&lt;</span>你的DN42 IPv<span class="token operator"><span class="token file-descriptor important">6</span>&gt;</span>/128</code></pre>
+<p>其他系统的话可以配置 <code>/etc/network/interfaces</code>。</p>
+<pre class="language-bash" data-language="bash"><code class="language-bash">auto dummy0
+iface dummy0 inet static
+        pre-up <span class="token function">ip</span> <span class="token function">link</span> del dummy0 <span class="token operator">||</span> <span class="token boolean">true</span>
+        pre-up <span class="token function">ip</span> <span class="token function">link</span> <span class="token function">add</span> dummy0 <span class="token builtin class-name">type</span> dummy <span class="token operator">||</span> <span class="token boolean">true</span>
+        address <span class="token operator">&lt;</span>你的DN42 IPv<span class="token operator"><span class="token file-descriptor important">4</span>&gt;</span>/32
+        post-up <span class="token function">ip</span> addr <span class="token function">add</span> <span class="token operator">&lt;</span>你的DN42 IPv<span class="token operator"><span class="token file-descriptor important">6</span>&gt;</span>/128 dev dummy0</code></pre>
+<p>然后重启之后就能自动配上这个 dummy 接口了。</p>
 <p>BTW，喵喵觉得一个一个手动配太麻烦了，于是自己用 Python 糊了个小脚本，只需要输入必要的信息，就能自动生成配置文件，并建立 WireGuard 连接，重新加载 BIRD 配置了，贼舒服！</p>
 <p>（不过脚本太丑了而且是自己用的，就不放出来了吧</p>
 <h2 id="0x07-一些好玩的东西"><a href="#0x07-一些好玩的东西" class="headerlink" title="0x07 一些好玩的东西"></a>0x07 一些好玩的东西</h2><p>大佬们给节点做了可视化，比如以下几个。</p>
@@ -1449,7 +1472,7 @@ birdc c  <span class="token comment"># 即 birdc configure</span></code></pre>
             |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
             <br>
                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">190.7k</span>&nbsp;字
+                class="white-color">190.8k</span>&nbsp;字
                                                                                     <span id="busuanzi_container_site_pv">
 			|&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
                     class="white-color"></span>&nbsp;次
