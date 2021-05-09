@@ -4,6 +4,33 @@
   
     
     <entry>
+      <title>CTF | 2021 蓝帽杯 Misc 冬奥会_is_coming WriteUp</title>
+      <link href="2021/05/09/CTF_2021BlueHat/"/>
+      <url>2021/05/09/CTF_2021BlueHat/</url>
+      
+        <content type="html"><![CDATA[<p><img src="/2021/05/09/CTF_2021BlueHat/image-20210509221228678.png"></p><h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><blockquote><p><strong>第五届蓝帽杯全国大学生网络安全技能大赛</strong></p><p>比赛时间: 2021-04-29 09:00 ~ 15:00</p><p>比赛官网: <a href="https://bcs.qianxin.com/bluehatcup/index/index#/">https://bcs.qianxin.com/bluehatcup/index/index#/</a></p></blockquote><p>五一之前打了个蓝帽杯，这里就摸鱼随意写一道 Misc 题目的 WriteUp 好了。</p><h2 id="Misc"><a href="#Misc" class="headerlink" title="Misc"></a>Misc</h2><h3 id="冬奥会-is-coming"><a href="#冬奥会-is-coming" class="headerlink" title="冬奥会_is_coming"></a>冬奥会_is_coming</h3><p>拼接隐写，分离出一个 rar。</p><p><img src="/2021/05/09/CTF_2021BlueHat/image-20210429111257146.png"></p><p>备注提示八位数，联系题目冬奥会，应该是 2022 北京冬奥会开幕的日子吧。</p><p>用 MP3Stego 解密。</p><pre class="language-bash" data-language="bash"><code class="language-bash">MP3StegoDecode.exe -X encode.mp3 -P <span class="token number">20220204</span></code></pre><p>得到</p><pre class="language-none"><code class="language-none">\xe2\x9c\x8c\xef\xb8\x8e \xe2\x98\x9d\xef\xb8\x8e\xe2\x99\x93\xef\xb8\x8e\xe2\xa7\xab\xef\xb8\x8e\xe2\x98\x9f\xef\xb8\x8e\xe2\x97\x86\xef\xb8\x8e\xe2\x99\x8c\xef\xb8\x8e \xe2\x9d\x92\xef\xb8\x8e\xe2\x99\x8f\xef\xb8\x8e\xe2\x97\xbb\xef\xb8\x8e\xe2\x96\xa1\xef\xb8\x8e\xe2\xac\xa7\xef\xb8\x8e\xe2\x99\x93\xef\xb8\x8e\xe2\xa7\xab\xef\xb8\x8e\xe2\x96\xa1\xef\xb8\x8e\xe2\x9d\x92\xef\xb8\x8e\xe2\x8d\x93\xef\xb8\x8e \xe2\x96\xa0\xef\xb8\x8e\xe2\x99\x8b\xef\xb8\x8e\xe2\x9d\x8d\xef\xb8\x8e\xe2\x99\x8f\xef\xb8\x8e\xe2\x99\x8e\xef\xb8\x8e \xf0\x9f\x93\x82\xef\xb8\x8e\xe2\x99\x8d\xef\xb8\x8e\xe2\x99\x8f\xef\xb8\x8e\xf0\x9f\x8f\xb1\xef\xb8\x8e\xe2\x99\x8f\xef\xb8\x8e\xe2\x99\x8b\xef\xb8\x8e\xf0\x9f\x99\xb5 \xe2\x99\x93\xef\xb8\x8e\xe2\xac\xa7\xef\xb8\x8e \xe2\x9d\x96\xef\xb8\x8e\xe2\x99\x8f\xef\xb8\x8e\xe2\x9d\x92\xef\xb8\x8e\xe2\x8d\x93\xef\xb8\x8e \xe2\x99\x93\xef\xb8\x8e\xe2\x96\xa0\xef\xb8\x8e\xe2\xa7\xab\xef\xb8\x8e\xe2\x99\x8f\xef\xb8\x8e\xe2\x9d\x92\xef\xb8\x8e\xe2\x99\x8f\xef\xb8\x8e\xe2\xac\xa7\xef\xb8\x8e\xe2\xa7\xab\xef\xb8\x8e\xe2\x99\x93\xef\xb8\x8e\xe2\x96\xa0\xef\xb8\x8e\xe2\x99\x91\xef\xb8\x8e\xf0\x9f\x93\xac\xef\xb8\x8e \xf0\x9f\x95\x88\xef\xb8\x8e\xe2\x99\x92\xef\xb8\x8e\xe2\x8d\x93\xef\xb8\x8e \xe2\x96\xa0\xef\xb8\x8e\xe2\x96\xa1\xef\xb8\x8e\xe2\xa7\xab\xef\xb8\x8e \xe2\xa7\xab\xef\xb8\x8e\xe2\x99\x8b\xef\xb8\x8e\xf0\x9f\x99\xb5\xe2\x99\x8f\xef\xb8\x8e \xe2\x99\x8b\xef\xb8\x8e \xe2\x97\x8f\xef\xb8\x8e\xe2\x96\xa1\xef\xb8\x8e\xe2\x96\xa1\xef\xb8\x8e\xf0\x9f\x99\xb5 \xe2\x99\x8b\xef\xb8\x8e\xe2\xa7\xab\xef\xb8\x8e \xe2\x99\x93\xef\xb8\x8e\xe2\xa7\xab\xef\xb8\x8e\xe2\x9c\x8d\xef\xb8\x8e</code></pre><p>拿 python 解码一下。</p><pre class="language-python" data-language="python"><code class="language-python">s<span class="token operator">=</span><span class="token string">b'\xe2\x9c\x8c\xef\xb8\x8e \xe2\x98\x9d\xef\xb8\x8e\xe2\x99\x93\xef\xb8\x8e\xe2\xa7\xab\xef\xb8\x8e\xe2\x98\x9f\xef\xb8\x8e\xe2\x97\x86\xef\xb8\x8e\xe2\x99\x8c\xef\xb8\x8e \xe2\x9d\x92\xef\xb8\x8e\xe2\x99\x8f\xef\xb8\x8e\xe2\x97\xbb\xef\xb8\x8e\xe2\x96\xa1\xef\xb8\x8e\xe2\xac\xa7\xef\xb8\x8e\xe2\x99\x93\xef\xb8\x8e\xe2\xa7\xab\xef\xb8\x8e\xe2\x96\xa1\xef\xb8\x8e\xe2\x9d\x92\xef\xb8\x8e\xe2\x8d\x93\xef\xb8\x8e \xe2\x96\xa0\xef\xb8\x8e\xe2\x99\x8b\xef\xb8\x8e\xe2\x9d\x8d\xef\xb8\x8e\xe2\x99\x8f\xef\xb8\x8e\xe2\x99\x8e\xef\xb8\x8e \xf0\x9f\x93\x82\xef\xb8\x8e\xe2\x99\x8d\xef\xb8\x8e\xe2\x99\x8f\xef\xb8\x8e\xf0\x9f\x8f\xb1\xef\xb8\x8e\xe2\x99\x8f\xef\xb8\x8e\xe2\x99\x8b\xef\xb8\x8e\xf0\x9f\x99\xb5 \xe2\x99\x93\xef\xb8\x8e\xe2\xac\xa7\xef\xb8\x8e \xe2\x9d\x96\xef\xb8\x8e\xe2\x99\x8f\xef\xb8\x8e\xe2\x9d\x92\xef\xb8\x8e\xe2\x8d\x93\xef\xb8\x8e \xe2\x99\x93\xef\xb8\x8e\xe2\x96\xa0\xef\xb8\x8e\xe2\xa7\xab\xef\xb8\x8e\xe2\x99\x8f\xef\xb8\x8e\xe2\x9d\x92\xef\xb8\x8e\xe2\x99\x8f\xef\xb8\x8e\xe2\xac\xa7\xef\xb8\x8e\xe2\xa7\xab\xef\xb8\x8e\xe2\x99\x93\xef\xb8\x8e\xe2\x96\xa0\xef\xb8\x8e\xe2\x99\x91\xef\xb8\x8e\xf0\x9f\x93\xac\xef\xb8\x8e \xf0\x9f\x95\x88\xef\xb8\x8e\xe2\x99\x92\xef\xb8\x8e\xe2\x8d\x93\xef\xb8\x8e \xe2\x96\xa0\xef\xb8\x8e\xe2\x96\xa1\xef\xb8\x8e\xe2\xa7\xab\xef\xb8\x8e \xe2\xa7\xab\xef\xb8\x8e\xe2\x99\x8b\xef\xb8\x8e\xf0\x9f\x99\xb5\xe2\x99\x8f\xef\xb8\x8e \xe2\x99\x8b\xef\xb8\x8e \xe2\x97\x8f\xef\xb8\x8e\xe2\x96\xa1\xef\xb8\x8e\xe2\x96\xa1\xef\xb8\x8e\xf0\x9f\x99\xb5 \xe2\x99\x8b\xef\xb8\x8e\xe2\xa7\xab\xef\xb8\x8e \xe2\x99\x93\xef\xb8\x8e\xe2\xa7\xab\xef\xb8\x8e\xe2\x9c\x8d\xef\xb8\x8e'</span><span class="token keyword">print</span><span class="token punctuation">(</span>s<span class="token punctuation">.</span>decode<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token comment"># ✌︎ ☝︎♓︎⧫︎☟︎◆︎♌︎ ❒︎♏︎◻︎□︎⬧︎♓︎⧫︎□︎❒︎⍓︎ ■︎♋︎❍︎♏︎♎︎ 📂︎♍︎♏︎🏱︎♏︎♋︎🙵 ♓︎⬧︎ ❖︎♏︎❒︎⍓︎ ♓︎■︎⧫︎♏︎❒︎♏︎⬧︎⧫︎♓︎■︎♑︎📬︎ 🕈︎♒︎⍓︎ ■︎□︎⧫︎ ⧫︎♋︎🙵♏︎ ♋︎ ●︎□︎□︎🙵 ♋︎⧫︎ ♓︎⧫︎✍︎</span></code></pre><p>WingDing 编码，在 <a href="https://lingojam.com/WingDing">https://lingojam.com/WingDing</a> 这里在线解码一下。</p><p><img src="/2021/05/09/CTF_2021BlueHat/image-20210429162641099.png"></p><pre class="language-none"><code class="language-none">A︎ G︎i︎t︎H︎u︎b︎ r︎e︎p︎o︎s︎i︎t︎o︎r︎y︎ n︎a︎m︎e︎d︎ 1︎c︎e︎P︎e︎a︎k i︎s︎ v︎e︎r︎y︎ i︎n︎t︎e︎r︎e︎s︎t︎i︎n︎g︎.︎ W︎h︎y︎ n︎o︎t︎ t︎a︎ke︎ a︎ l︎o︎o︎k a︎t︎ i︎t︎?︎</code></pre><blockquote><p>WingDing 编码表</p><p><img src="/2021/05/09/CTF_2021BlueHat/gSEBUIX.png"></p></blockquote><p>在 GitHub 上找到了 <a href="https://github.com/Tr0jAnV1rU4/1cePeak">https://github.com/Tr0jAnV1rU4/1cePeak</a> 这个仓库。</p><p><a href="https://github.com/Tr0jAnV1rU4/1cePeak/blob/main/A/post-checkout">https://github.com/Tr0jAnV1rU4/1cePeak/blob/main/A/post-checkout</a></p><p><img src="/2021/05/09/CTF_2021BlueHat/image-20210429162954567.png"></p><p>又想到在 mp3 结尾有个 <code>cipher</code></p><p><img src="/2021/05/09/CTF_2021BlueHat/image-20210429163106993.png"></p><p>Hex 解码出来是一堆 emoji</p><p><img src="/2021/05/09/CTF_2021BlueHat/image-20210429163410691.png"></p><p>考虑是 emoji-aes 加密</p><p><a href="https://aghorler.github.io/emoji-aes/">https://aghorler.github.io/emoji-aes/</a></p><p>（或者用咱自己搭的 <a href="https://emoji-aes.miaotony.xyz/">https://emoji-aes.miaotony.xyz/</a> 也行</p><p>用 <code>How_6ad_c0uld_a_1cePeak_be?</code> 作为 Key 去解密，拿到 flag。</p><p><img src="/2021/05/09/CTF_2021BlueHat/image-20210429163623937.png"></p><p><code>flag{e32f619b-dbcd-49bd-9126-5d841aa01767}</code></p><h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>喵，摸鱼真舒服。</p><p>转眼之间就到五月份了啊。</p><p>这个月有点忙不能摸鱼了，喵呜呜呜呜呜呜。</p><p><em>（溜了溜了喵</em></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> CTF </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> CTF </tag>
+            
+            <tag> WriteUp </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>CTF | 2021 MRCTF WriteUp</title>
       <link href="2021/04/15/CTF_2021MRCTF/"/>
       <url>2021/04/15/CTF_2021MRCTF/</url>
@@ -269,9 +296,9 @@
       
         <tags>
             
-            <tag> Life </tag>
-            
             <tag> CTF </tag>
+            
+            <tag> Life </tag>
             
             <tag> 红包闯关 </tag>
             
@@ -499,9 +526,9 @@
       
         <tags>
             
-            <tag> Life </tag>
-            
             <tag> CTF </tag>
+            
+            <tag> Life </tag>
             
         </tags>
       
@@ -1331,13 +1358,13 @@
       
         <tags>
             
+            <tag> Life </tag>
+            
             <tag> Tech </tag>
             
             <tag> blog </tag>
             
             <tag> Gitalk </tag>
-            
-            <tag> Life </tag>
             
         </tags>
       
@@ -1370,9 +1397,9 @@
             
             <tag> Docker </tag>
             
-            <tag> tips </tag>
-            
             <tag> Huginn </tag>
+            
+            <tag> tips </tag>
             
         </tags>
       
@@ -1502,9 +1529,9 @@
       
         <tags>
             
-            <tag> Life </tag>
-            
             <tag> CTF </tag>
+            
+            <tag> Life </tag>
             
             <tag> 红包闯关 </tag>
             
@@ -1874,9 +1901,9 @@
       
         <tags>
             
-            <tag> blog </tag>
-            
             <tag> Life </tag>
+            
+            <tag> blog </tag>
             
             <tag> 小想法 </tag>
             
