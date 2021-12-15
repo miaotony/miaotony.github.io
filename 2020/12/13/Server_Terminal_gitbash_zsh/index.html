@@ -596,7 +596,7 @@
 <p><img src="/2020/12/13/Server_Terminal_gitbash_zsh/image-20201213175713252.png" alt="zsh"></p>
 <p>当然这里可能会提示需要你配置一下 <code>.zshrc</code>，这个后面再说。</p>
 <p>看一下 zsh 版本。</p>
-<pre class="language-bash" data-language="bash"><code class="language-bash"><span class="token function">zsh</span> --version</code></pre>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">zsh</span> --version<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p><img src="/2020/12/13/Server_Terminal_gitbash_zsh/image-20201213180053175.png" alt="zsh version"></p>
 <h3 id="0x02-安装-Oh-My-Zsh"><a href="#0x02-安装-Oh-My-Zsh" class="headerlink" title="0x02 安装 Oh My Zsh"></a>0x02 安装 Oh My Zsh</h3><p>zsh 都有了，怎么能不上 oh my zsh 呢。</p>
 <blockquote>
@@ -606,11 +606,11 @@
 <p><strong>GitHub repo:</strong> <a target="_blank" rel="noopener" href="https://github.com/ohmyzsh/ohmyzsh">https://github.com/ohmyzsh/ohmyzsh</a></p>
 </blockquote>
 <p>在 zsh 里执行（curl）</p>
-<pre class="language-bash" data-language="bash"><code class="language-bash"><span class="token function">sh</span> -c <span class="token string">"<span class="token variable"><span class="token variable">$(</span><span class="token function">curl</span> -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh<span class="token variable">)</span></span>"</span>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sh</span> -c <span class="token string">"<span class="token variable"><span class="token variable">$(</span><span class="token function">curl</span> -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh<span class="token variable">)</span></span>"</span>
 <span class="token comment"># 或者 </span>
-<span class="token comment"># sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"</span></code></pre>
+<span class="token comment"># sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 <p>或者用 wget</p>
-<pre class="language-bash" data-language="bash"><code class="language-bash"><span class="token function">sh</span> -c <span class="token string">"<span class="token variable"><span class="token variable">$(</span><span class="token function">wget</span> https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh -O -<span class="token variable">)</span></span>"</span></code></pre>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sh</span> -c <span class="token string">"<span class="token variable"><span class="token variable">$(</span><span class="token function">wget</span> https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh -O -<span class="token variable">)</span></span>"</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>国内下载可能会不大行<em>（DNS 污染之类的）</em>，那就挂个 ladder 什么的在浏览器先下载到本地，然后在 zsh 里 <code>sh install.sh</code> 进行安装。</p>
 <p>由于 <code>chsh</code> 在 git bash 里没有，这里可能会报错，但问题不大~</p>
 <p>oh my zsh 相关的文件存放在 <code>~/.oh-my-zsh</code> 目录下。</p>
@@ -623,16 +623,16 @@
 <p>P.S.:  很多主题需要先安装 <em><a target="_blank" rel="noopener" href="https://github.com/powerline/fonts">Powerline Fonts</a></em> 才能正常渲染图标。</p>
 <h3 id="0x03-Oh-My-Zsh-插件-amp-一些配置"><a href="#0x03-Oh-My-Zsh-插件-amp-一些配置" class="headerlink" title="0x03 Oh My Zsh 插件 &amp; 一些配置"></a>0x03 Oh My Zsh 插件 &amp; 一些配置</h3><h4 id="zsh-autosuggestions-自动补全"><a href="#zsh-autosuggestions-自动补全" class="headerlink" title="zsh-autosuggestions 自动补全"></a><strong>zsh-autosuggestions</strong> 自动补全</h4><p> <a target="_blank" rel="noopener" href="https://github.com/zsh-users/zsh-autosuggestions">https://github.com/zsh-users/zsh-autosuggestions</a>  </p>
 <p>参考 <a target="_blank" rel="noopener" href="https://github.com/zsh-users/zsh-autosuggestions/blob/master/INSTALL.md#oh-my-zsh">官方安装说明</a></p>
-<pre class="language-bash" data-language="bash"><code class="language-bash"><span class="token function">git</span> clone https://github.com/zsh-users/zsh-autosuggestions <span class="token variable">${ZSH_CUSTOM<span class="token operator">:-</span>~<span class="token operator">/</span>.oh-my-zsh<span class="token operator">/</span>custom}</span>/plugins/zsh-autosuggestions</code></pre>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">git</span> clone https://github.com/zsh-users/zsh-autosuggestions <span class="token variable">${ZSH_CUSTOM<span class="token operator">:-</span>~<span class="token operator">/</span>.oh-my-zsh<span class="token operator">/</span>custom}</span>/plugins/zsh-autosuggestions<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>然后编辑 <code>~/.zshrc</code>，加入插件。</p>
 <p>注意是以 空格 或者 空行 作为分隔符。</p>
-<pre class="language-none"><code class="language-none">plugins=( [plugins...] zsh-autosuggestions)</code></pre>
+<pre class="line-numbers language-none"><code class="language-none">plugins=( [plugins...] zsh-autosuggestions)<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>最后重启 zsh 即可。</p>
 <h4 id="zsh-syntax-highlighting-语法高亮"><a href="#zsh-syntax-highlighting-语法高亮" class="headerlink" title="zsh-syntax-highlighting 语法高亮"></a><strong>zsh-syntax-highlighting</strong> 语法高亮</h4><p> <a target="_blank" rel="noopener" href="https://github.com/zsh-users/zsh-syntax-highlighting">https://github.com/zsh-users/zsh-syntax-highlighting</a></p>
 <p>参考 <a target="_blank" rel="noopener" href="https://github.com/zsh-users/zsh-syntax-highlighting/blob/master/INSTALL.md#oh-my-zsh">官方安装说明</a>。</p>
-<pre class="language-bash" data-language="bash"><code class="language-bash"><span class="token function">git</span> clone https://github.com/zsh-users/zsh-syntax-highlighting.git <span class="token variable">${ZSH_CUSTOM<span class="token operator">:-</span>~<span class="token operator">/</span>.oh-my-zsh<span class="token operator">/</span>custom}</span>/plugins/zsh-syntax-highlighting</code></pre>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">git</span> clone https://github.com/zsh-users/zsh-syntax-highlighting.git <span class="token variable">${ZSH_CUSTOM<span class="token operator">:-</span>~<span class="token operator">/</span>.oh-my-zsh<span class="token operator">/</span>custom}</span>/plugins/zsh-syntax-highlighting<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>然后编辑 <code>~/.zshrc</code>，加入插件。</p>
-<pre class="language-none"><code class="language-none">plugins=( [plugins...] zsh-syntax-highlighting)</code></pre>
+<pre class="line-numbers language-none"><code class="language-none">plugins=( [plugins...] zsh-syntax-highlighting)<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>最后重启 zsh 即可。</p>
 <h4 id="给history命令增加时间"><a href="#给history命令增加时间" class="headerlink" title="给history命令增加时间"></a>给history命令增加时间</h4><p>啊其实这个不算是插件，混入的喵（</p>
 <p>把 <code>HIST_STAMPS</code> 这个注释去除了就行，当然也可以设置成你喜欢的时间格式。</p>
@@ -640,23 +640,23 @@
 <p><img src="/2020/12/13/Server_Terminal_gitbash_zsh/image-20201213183440438.png"></p>
 <h4 id="更新-oh-my-zsh"><a href="#更新-oh-my-zsh" class="headerlink" title="更新 oh-my-zsh"></a>更新 oh-my-zsh</h4><p>默认的话是有更新的时候会提示，问你要不要更新。</p>
 <p>如果需要它自动更新的话，把 <code>~/.zshrc</code> 里下面这行注释取消就好了。</p>
-<pre class="language-bash" data-language="bash"><code class="language-bash"><span class="token assign-left variable">DISABLE_UPDATE_PROMPT</span><span class="token operator">=</span>true</code></pre>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token assign-left variable">DISABLE_UPDATE_PROMPT</span><span class="token operator">=</span>true<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>手动更新的话，<del>直接执行<code>upgrade_oh_my_zsh</code></del>.</p>
 <blockquote>
 <p>Note: <code>upgrade_oh_my_zsh</code> is deprecated. Use <code>omz update</code> instead.</p>
 </blockquote>
 <p>啊现在换成下面这个了。</p>
-<pre class="language-bash" data-language="bash"><code class="language-bash">omz update</code></pre>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">omz update<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p><img src="/2020/12/13/Server_Terminal_gitbash_zsh/image-20201213184825287.png" alt="upgrade"></p>
 <h4 id="卸载-oh-my-zsh"><a href="#卸载-oh-my-zsh" class="headerlink" title="卸载 oh-my-zsh"></a>卸载 oh-my-zsh</h4><p><strong><em>（不会吧，这就卸了？</em></strong></p>
-<pre class="language-bash" data-language="bash"><code class="language-bash">uninstall_oh_my_zsh</code></pre>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">uninstall_oh_my_zsh<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 
 <h3 id="0x04-配置-zsh-为-bash-默认终端"><a href="#0x04-配置-zsh-为-bash-默认终端" class="headerlink" title="0x04 配置 zsh 为 bash 默认终端"></a>0x04 配置 zsh 为 bash 默认终端</h3><p>编辑  <code>~/.bashrc</code>，或者是 <code>D:\Program Files\Git\etc\bash.bashrc</code>，加入下面的几行。</p>
-<pre class="language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># Launch Zsh</span>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># Launch Zsh</span>
 <span class="token keyword">if</span> <span class="token punctuation">[</span> -t <span class="token number">1</span> <span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token keyword">then</span>
 <span class="token builtin class-name">exec</span> <span class="token function">zsh</span>
-<span class="token keyword">fi</span></code></pre>
+<span class="token keyword">fi</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 <p>而后重启 git bash 即可自动以 zsh 启动。</p>
 <h3 id="0x05-配置-Windows-Terminal-使用-git-bash"><a href="#0x05-配置-Windows-Terminal-使用-git-bash" class="headerlink" title="0x05 配置 Windows Terminal 使用 git bash"></a>0x05 配置 Windows Terminal 使用 git bash</h3><p>当然首先是在 Microsoft Store 里安装 Windows Terminal 了，这里略了。</p>
 <p><em>你看 Terminal 多好看（</em></p>
@@ -667,7 +667,7 @@
 <p><code>icon</code> 图标是下面这个，当然也可以换成你喜欢的。</p>
 <p><img src="/2020/12/13/Server_Terminal_gitbash_zsh/git-icon.png" alt="git-icon"></p>
 <p>这里给出我的配置，供参考。</p>
-<pre class="language-json" data-language="json"><code class="language-json"><span class="token punctuation">{</span>
+<pre class="line-numbers language-json" data-language="json"><code class="language-json"><span class="token punctuation">{</span>
     <span class="token property">"guid"</span><span class="token operator">:</span> <span class="token string">"{1c4de342-38b7-51cf-b940-2309a097f589}"</span><span class="token punctuation">,</span>
     <span class="token property">"hidden"</span><span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
     <span class="token property">"name"</span><span class="token operator">:</span> <span class="token string">"git bash"</span><span class="token punctuation">,</span>
@@ -679,34 +679,34 @@
     <span class="token property">"acrylicOpacity"</span><span class="token operator">:</span> <span class="token number">0.85</span><span class="token punctuation">,</span>  <span class="token comment">//透明度</span>
     <span class="token property">"icon"</span><span class="token operator">:</span> <span class="token string">"D:\\tools\\my-git-bash\\git-icon.png"</span><span class="token punctuation">,</span>
 	<span class="token property">"startingDirectory"</span><span class="token operator">:</span> <span class="token null keyword">null</span>
-<span class="token punctuation">}</span></code></pre>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 
 <h4 id="默认使用-git-bash-作为-Terminal-启动"><a href="#默认使用-git-bash-作为-Terminal-启动" class="headerlink" title="默认使用 git bash 作为 Terminal 启动"></a>默认使用 git bash 作为 Terminal 启动</h4><p>修改上述文件中的 <code>defaultProfile</code> 为 git bash 的 <code>guid</code>，此处为 <code>{1c4de342-38b7-51cf-b940-2309a097f589}</code>。</p>
 <p>效果类似于</p>
-<pre class="language-json" data-language="json"><code class="language-json"><span class="token property">"defaultProfile"</span><span class="token operator">:</span> <span class="token string">"{1c4de342-38b7-51cf-b940-2309a097f589}"</span></code></pre>
+<pre class="line-numbers language-json" data-language="json"><code class="language-json"><span class="token property">"defaultProfile"</span><span class="token operator">:</span> <span class="token string">"{1c4de342-38b7-51cf-b940-2309a097f589}"</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 
 <h3 id="0x06-将-Windows-Terminal-加入到右键菜单"><a href="#0x06-将-Windows-Terminal-加入到右键菜单" class="headerlink" title="0x06 将 Windows Terminal 加入到右键菜单"></a>0x06 将 Windows Terminal 加入到右键菜单</h3><p>首先 <strong>在 cmd 里</strong> 测试一下下面这两个常量是否正常。</p>
-<pre class="language-none"><code class="language-none">echo %USERPROFILE%
-echo %LOCALAPPDATA%</code></pre>
+<pre class="line-numbers language-none"><code class="language-none">echo %USERPROFILE%
+echo %LOCALAPPDATA%<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 <p>如果有相应的信息输出，则后续可直接使用这两个常量。</p>
 <p>否则需要进行如下替换：</p>
-<pre class="language-none"><code class="language-none">%USERPROFILE% =&gt; C:\Users\&lt;username&gt;
-%LOCALAPPDATA% =&gt; C:\Users\&lt;username&gt;\AppData\Local</code></pre>
+<pre class="line-numbers language-none"><code class="language-none">%USERPROFILE% =&gt; C:\Users\&lt;username&gt;
+%LOCALAPPDATA% =&gt; C:\Users\&lt;username&gt;\AppData\Local<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 <p>其中，<code>&lt;username&gt;</code> 是你的用户名。</p>
 <p><strong>新建目录</strong></p>
-<pre class="language-none"><code class="language-none">mkdir "%USERPROFILE%\AppData\Local\terminal"</code></pre>
+<pre class="line-numbers language-none"><code class="language-none">mkdir "%USERPROFILE%\AppData\Local\terminal"<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>把 Windows Terminal 图标复制到这个目录下，图标放在 <a href="terminal.ico">这里</a> <code>terminal.ico</code>。</p>
 <p>将如下内容另存为 <code>wt.reg</code>, 然后<strong>以 “管理员权限” 运行</strong></p>
-<pre class="language-none"><code class="language-none">Windows Registry Editor Version 5.00
+<pre class="line-numbers language-none"><code class="language-none">Windows Registry Editor Version 5.00
 
 [HKEY_CLASSES_ROOT\Directory\Background\shell\wt]
 @="Windows terminal here"
 "Icon"="%LOCALAPPDATA%\\terminal\\terminal.ico"
 
 [HKEY_CLASSES_ROOT\Directory\Background\shell\wt\command]
-@="C:\\Users\\&lt;your username&gt;\\AppData\\Local\\Microsoft\\WindowsApps\\wt.exe"</code></pre>
+@="C:\\Users\\&lt;your username&gt;\\AppData\\Local\\Microsoft\\WindowsApps\\wt.exe"<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>请注意，对于最后一行 <code>wt.exe</code> 的路径，需使用<strong>完整的绝对路径</strong>，否则会报错。</p>
 <p>而后双击执行，将配置添加到注册表。</p>
 <p>效果就像下面这样了。</p>

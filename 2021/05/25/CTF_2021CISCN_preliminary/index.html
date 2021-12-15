@@ -552,7 +552,7 @@
 <p><code>flag_wrapper</code> 导出内容，解压之后得到</p>
 <p><img src="/2021/05/25/CTF_2021CISCN_preliminary/image-20210515144137795.png"></p>
 <p><code>test</code> 和 <code>secret</code> 用 brotli 解压</p>
-<pre class="language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> brotli
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> brotli
 
 <span class="token keyword">with</span> <span class="token builtin">open</span><span class="token punctuation">(</span><span class="token string">'test'</span><span class="token punctuation">,</span> <span class="token string">'rb'</span><span class="token punctuation">)</span> <span class="token keyword">as</span> fin<span class="token punctuation">:</span>
     s <span class="token operator">=</span> fin<span class="token punctuation">.</span>read<span class="token punctuation">(</span><span class="token punctuation">)</span>
@@ -565,10 +565,10 @@ y <span class="token operator">=</span> brotli<span class="token punctuation">.<
 <span class="token keyword">print</span><span class="token punctuation">(</span>y<span class="token punctuation">)</span>
 
 <span class="token keyword">with</span> <span class="token builtin">open</span><span class="token punctuation">(</span><span class="token string">'secret1'</span><span class="token punctuation">,</span> <span class="token string">'wb'</span><span class="token punctuation">)</span> <span class="token keyword">as</span> fout<span class="token punctuation">:</span>
-    fout<span class="token punctuation">.</span>write<span class="token punctuation">(</span>y<span class="token punctuation">)</span></code></pre>
+    fout<span class="token punctuation">.</span>write<span class="token punctuation">(</span>y<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>发现 <code>test</code> 是 <a target="_blank" rel="noopener" href="https://developers.google.com/protocol-buffers">Protocol Buffzers</a></p>
 <p>参考 <a target="_blank" rel="noopener" href="https://github.com/MonsterMeng92/protobuf/blob/master/docs/%E5%AD%A6%E4%B9%A0%E6%8C%87%E5%8D%97(proto3).md">https://github.com/MonsterMeng92/protobuf/blob/master/docs/%E5%AD%A6%E4%B9%A0%E6%8C%87%E5%8D%97(proto3).md</a></p>
-<pre class="language-protobuf" data-language="protobuf"><code class="language-protobuf"><span class="token keyword">syntax</span> <span class="token operator">=</span> <span class="token string">"proto3"</span><span class="token punctuation">;</span>
+<pre class="line-numbers language-protobuf" data-language="protobuf"><code class="language-protobuf"><span class="token keyword">syntax</span> <span class="token operator">=</span> <span class="token string">"proto3"</span><span class="token punctuation">;</span>
 
 <span class="token keyword">message</span> <span class="token class-name">PBResponse</span> <span class="token punctuation">{</span>
   <span class="token builtin">int32</span> code <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
@@ -586,7 +586,7 @@ y <span class="token operator">=</span> brotli<span class="token punctuation">.<
   <span class="token builtin">string</span> cate_id <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
   <span class="token builtin">int32</span> page <span class="token operator">=</span> <span class="token number">2</span><span class="token punctuation">;</span>
   <span class="token builtin">int32</span> pageSize <span class="token operator">=</span> <span class="token number">3</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span></code></pre>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>里面定义了传输中的格式。</p>
 <p>而<code>secret</code> 是序列化后的密文。</p>
 <p>参考 <a target="_blank" rel="noopener" href="https://www.yuanrenxue.com/app-crawl/parse-protobuf.html">Protobuf协议逆向解析-APP爬虫</a></p>
@@ -594,7 +594,7 @@ y <span class="token operator">=</span> brotli<span class="token punctuation">.<
 <p><a target="_blank" rel="noopener" href="https://github.com/protocolbuffers/protobuf/releases/">https://github.com/protocolbuffers/protobuf/releases/</a></p>
 <p><img src="/2021/05/25/CTF_2021CISCN_preliminary/image-20210515143119110.png"></p>
 <p>解码得到</p>
-<pre class="language-none"><code class="language-none">1: 200
+<pre class="line-numbers language-none"><code class="language-none">1: 200
 2: 15100450
 3 {
   1 {
@@ -607,18 +607,18 @@ y <span class="token operator">=</span> brotli<span class="token punctuation">.<
   2: "82bc0"
 }
 4: 16453958
-5: "d172a38dc"</code></pre>
+5: "d172a38dc"<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>发现并不是很清楚，先生成 python 代码</p>
-<pre class="language-bash" data-language="bash"><code class="language-bash">protoc.exe test.proto --python_out<span class="token operator">=</span>.</code></pre>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">protoc.exe test.proto --python_out<span class="token operator">=</span>.<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>然后写个脚本解码</p>
-<pre class="language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> test_pb2
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> test_pb2
 r <span class="token operator">=</span> test_pb2<span class="token punctuation">.</span>PBResponse<span class="token punctuation">(</span><span class="token punctuation">)</span>
 <span class="token keyword">with</span> <span class="token builtin">open</span><span class="token punctuation">(</span><span class="token string">'secret1'</span><span class="token punctuation">,</span> <span class="token string">'rb'</span><span class="token punctuation">)</span> <span class="token keyword">as</span> fin<span class="token punctuation">:</span>
     s <span class="token operator">=</span> fin<span class="token punctuation">.</span>read<span class="token punctuation">(</span><span class="token punctuation">)</span>
 r<span class="token punctuation">.</span>ParseFromString<span class="token punctuation">(</span>s<span class="token punctuation">)</span>
-<span class="token keyword">print</span><span class="token punctuation">(</span>r<span class="token punctuation">)</span></code></pre>
+<span class="token keyword">print</span><span class="token punctuation">(</span>r<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>得到</p>
-<pre class="language-none"><code class="language-none">code: 200
+<pre class="line-numbers language-none"><code class="language-none">code: 200
 flag_part_convert_to_hex_plz: 15100450
 dataList {
   flag_part: "e2345"
@@ -629,14 +629,14 @@ dataList {
   junk_data: "82bc0"
 }
 flag_part_plz_convert_to_hex: 16453958
-flag_last_part: "d172a38dc"</code></pre>
+flag_last_part: "d172a38dc"<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>拼成 flag，其中 <code>junk_data</code> 是垃圾数据不要</p>
 <p><code>CISCN{e66a22e23457889b0fb1146d172a38dc}</code></p>
 <p><img src="/2021/05/25/CTF_2021CISCN_preliminary/image-20210515150924012.png"></p>
 <h3 id="running-pixel"><a href="#running-pixel" class="headerlink" title="running_pixel"></a>running_pixel</h3><p>开局一张动图</p>
 <p><img src="/2021/05/25/CTF_2021CISCN_preliminary/running_pixel.gif" alt="running_pixel"></p>
 <p>一共有 382 帧，逐帧查看，导出每一帧。</p>
-<pre class="language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> os
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> os
 <span class="token keyword">from</span> PIL <span class="token keyword">import</span> Image<span class="token punctuation">,</span> ImageSequence
 
 <span class="token keyword">def</span> <span class="token function">parseGIF</span><span class="token punctuation">(</span>gifname<span class="token punctuation">)</span><span class="token punctuation">:</span>
@@ -661,14 +661,14 @@ flag_last_part: "d172a38dc"</code></pre>
         index <span class="token operator">+=</span> <span class="token number">1</span>
 
 <span class="token keyword">if</span> __name__ <span class="token operator">==</span> <span class="token string">"__main__"</span><span class="token punctuation">:</span>
-    parseGIF<span class="token punctuation">(</span><span class="token string">"running_pixel.gif"</span><span class="token punctuation">)</span></code></pre>
+    parseGIF<span class="token punctuation">(</span><span class="token string">"running_pixel.gif"</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>随意看前几帧，放大来看，发现有个像素点在动。</p>
 <p>所以题目名称中的跑动的像素应该就是这个了。</p>
 <p><img src="/2021/05/25/CTF_2021CISCN_preliminary/image-20210525212257022.png"></p>
 <p>提取得到这个像素点颜色 RGB 为 (233, 233, 233)，而背景色是 (247, 247, 247)</p>
 <p>另外发现每隔一定帧数，这个像素点会消失，然后在另一个地方出现。</p>
 <p>于是写个脚本跑所有的帧，把这个像素点的轨迹画出来，每消失一次保存一张图片。</p>
-<pre class="language-python" data-language="python"><code class="language-python"><span class="token triple-quoted-string string">"""
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token triple-quoted-string string">"""
 MiaoTony
 """</span>
 <span class="token keyword">import</span> cv2
@@ -701,13 +701,13 @@ last_cnt <span class="token operator">=</span> <span class="token number">0</spa
                 last_cnt <span class="token operator">=</span> cnt
 
 im2<span class="token punctuation">.</span>show<span class="token punctuation">(</span><span class="token punctuation">)</span>
-im2<span class="token punctuation">.</span>save<span class="token punctuation">(</span><span class="token string">'final.png'</span><span class="token punctuation">)</span></code></pre>
+im2<span class="token punctuation">.</span>save<span class="token punctuation">(</span><span class="token string">'final.png'</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>最后的图是这样的。</p>
 <p><img src="/2021/05/25/CTF_2021CISCN_preliminary/final.png"></p>
 <p>手动按顺序把出来的图片各个字母提取出来。</p>
 <p>（其实更好的思路是每次像素点消失的时候新建一张图的……看的要眼瞎了</p>
 <p>出来是个 UUID 的格式。</p>
-<pre class="language-none"><code class="language-none">12504D0F-9DE1-4B00-87A5-A5FDD0986A00</code></pre>
+<pre class="line-numbers language-none"><code class="language-none">12504D0F-9DE1-4B00-87A5-A5FDD0986A00<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>裹上 CISCN，然后发现 19:00，草，交不上去了！</p>
 <p>心态炸了！！！</p>
 <p>（后来看大佬 wp 说这里还要转成小写再交上去</p>
@@ -730,17 +730,17 @@ im2<span class="token punctuation">.</span>save<span class="token punctuation">(
 <p>手动解码前几条</p>
 <p><img src="/2021/05/25/CTF_2021CISCN_preliminary/image-20210525224211606.png"></p>
 <p>发现是</p>
-<pre class="language-none"><code class="language-none">hello,bob!what is the flag?
+<pre class="line-numbers language-none"><code class="language-none">hello,bob!what is the flag?
 the first part of the flag is the first 8 digits of your phone number
 那其他部分呢
 看看你能从这些数据里发现什么？w465
 5b4c4ce7b6d5edd6d5cb961fca84f193ca71471db155b62c9df5ea1ebed933929de07bebcdb7853ddaf6303ac6fbaaa0fff6bb23cbfefbecd716028173e1259796fbeebf3f12f43ea54fcfeee54f11c8
 f5a91d7cb54fd0b83e927bbfbe7d6a121d32649748f453ca0fbffe56162c5e5c4e3f757804e9aeb17a8b441513c78591c43c9493bb2567c6a475e69c59912c9e2f0785fe43761a523efa7c7479effdbf
-...</code></pre>
+...<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>flag 的第一部分是号码的前8位，+8615030442000，那就是 <code>15030442</code>。</p>
 <p>之后就一堆 hex 编码。</p>
 <p>写个脚本提取并导出到文件。</p>
-<pre class="language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> smspdu<span class="token punctuation">.</span>codecs <span class="token keyword">import</span> GSM<span class="token punctuation">,</span> UCS2
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> smspdu<span class="token punctuation">.</span>codecs <span class="token keyword">import</span> GSM<span class="token punctuation">,</span> UCS2
 <span class="token keyword">from</span> smspdu<span class="token punctuation">.</span>easy <span class="token keyword">import</span> easy_sms
 <span class="token keyword">from</span> binascii <span class="token keyword">import</span> unhexlify
 
@@ -764,14 +764,14 @@ x <span class="token operator">=</span> <span class="token string">''</span>
 y <span class="token operator">=</span> unhexlify<span class="token punctuation">(</span>x<span class="token punctuation">)</span>
 
 <span class="token keyword">with</span> <span class="token builtin">open</span><span class="token punctuation">(</span><span class="token string">'decode.dat'</span><span class="token punctuation">,</span> <span class="token string">'wb'</span><span class="token punctuation">)</span> <span class="token keyword">as</span> fout<span class="token punctuation">:</span>
-    fout<span class="token punctuation">.</span>write<span class="token punctuation">(</span>y<span class="token punctuation">)</span></code></pre>
+    fout<span class="token punctuation">.</span>write<span class="token punctuation">(</span>y<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>binwalk 一下发现有张 png 图片，提取出来。</p>
 <p>然而发现打不开……</p>
 <p>然后比赛的时候试了用 PCRT 来修复，但没成功。网上找了个工具然后要收钱，气死喵喵了！！！</p>
 <p>后来发现需要按照时间顺序排序。</p>
 <p><img src="/2021/05/25/CTF_2021CISCN_preliminary/image-20210525232953543.png"></p>
 <p>唉好烦（</p>
-<pre class="language-python" data-language="python"><code class="language-python"><span class="token triple-quoted-string string">"""
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token triple-quoted-string string">"""
 MiaoTony
 """</span>
 <span class="token keyword">from</span> smspdu<span class="token punctuation">.</span>codecs <span class="token keyword">import</span> GSM<span class="token punctuation">,</span> UCS2
@@ -801,7 +801,7 @@ info <span class="token operator">=</span> <span class="token string">''</span><
 y <span class="token operator">=</span> unhexlify<span class="token punctuation">(</span>info<span class="token punctuation">)</span>
 
 <span class="token keyword">with</span> <span class="token builtin">open</span><span class="token punctuation">(</span><span class="token string">'decode2.dat'</span><span class="token punctuation">,</span> <span class="token string">'wb'</span><span class="token punctuation">)</span> <span class="token keyword">as</span> fout<span class="token punctuation">:</span>
-    fout<span class="token punctuation">.</span>write<span class="token punctuation">(</span>y<span class="token punctuation">)</span></code></pre>
+    fout<span class="token punctuation">.</span>write<span class="token punctuation">(</span>y<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>得到一张图，终于能打开了，而且整个数据就是一整张图片。然而还是没思路。</p>
 <p><img src="/2021/05/25/CTF_2021CISCN_preliminary/image-20210526000029763.png"></p>
 <p>看了大佬们的 wp 才发现，<code>w465</code> 是宽度为 465 的意思……草！</p>
@@ -822,7 +822,7 @@ y <span class="token operator">=</span> unhexlify<span class="token punctuation"
 <p>之后在流量里发现有一系列设置坐标的，盲猜这个就是机器人画的东西了。</p>
 <p><img src="/2021/05/25/CTF_2021CISCN_preliminary/image-20210516024416682.png"></p>
 <p>于是写个脚本提取一下，画张图。</p>
-<pre class="language-python" data-language="python"><code class="language-python"><span class="token triple-quoted-string string">"""
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token triple-quoted-string string">"""
 MiaoTony
 """</span>
 <span class="token keyword">import</span> re
@@ -855,7 +855,7 @@ points <span class="token operator">=</span> <span class="token punctuation">[</
 
 im<span class="token punctuation">.</span>show<span class="token punctuation">(</span><span class="token punctuation">)</span>
 im<span class="token punctuation">.</span>save<span class="token punctuation">(</span><span class="token string">'info.png'</span><span class="token punctuation">)</span>
-<span class="token comment"># easy_robo_xx</span></code></pre>
+<span class="token comment"># easy_robo_xx</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>还原出来机器人绘制的字符串为 <code>easy_robo_xx</code></p>
 <p><img src="/2021/05/25/CTF_2021CISCN_preliminary/info.png"></p>
 <p>md5  <code>d4f1fb80bc11ffd722861367747c0f10</code></p>

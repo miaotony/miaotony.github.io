@@ -594,11 +594,11 @@
 <p>将 <strong>frps</strong> 及 <strong>frps.ini</strong> 放到具有公网 IP 的机器上。</p>
 <p>将 <strong>frpc</strong> 及 <strong>frpc.ini</strong> 放到处于内网环境的机器上。</p>
 <h3 id="服务器端的搭建"><a href="#服务器端的搭建" class="headerlink" title="服务器端的搭建"></a>服务器端的搭建</h3><p>可以在服务器上可以用wget下载。</p>
-<pre class="language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">mkdir</span> -p /etc/frp
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">mkdir</span> -p /etc/frp
 <span class="token builtin class-name">cd</span> /etc/frp
 <span class="token function">sudo</span> <span class="token function">wget</span> <span class="token string">"https://github.com/fatedier/frp/releases/download/v0.31.1/frp_0.31.1_linux_amd64.tar.gz"</span>
 <span class="token function">sudo</span> <span class="token function">tar</span> xzvf frp_0.31.1_linux_amd64.tar.gz
-<span class="token function">sudo</span> <span class="token function">mv</span> frp_0.31.1_linux_amd64/* /etc/frp</code></pre>
+<span class="token function">sudo</span> <span class="token function">mv</span> frp_0.31.1_linux_amd64/* /etc/frp<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>然而国内下载速度感人，大概8M的文件就几KB/s…</p>
 <p>于是还不如直接搭个梯子到外面下载好了再传到服务器上。</p>
 <p>服务器端server嘛，当然用的是 <strong>frps</strong> 及 <strong>frps.ini</strong>。</p>
@@ -606,11 +606,11 @@
 <br>
 
 <p>最简单的<strong>配置</strong>就直接这样写</p>
-<pre class="language-ini" data-language="ini"><code class="language-ini"><span class="token comment"># frps.ini</span>
+<pre class="line-numbers language-ini" data-language="ini"><code class="language-ini"><span class="token comment"># frps.ini</span>
 <span class="token selector">[common]</span>
-<span class="token constant">bind_port</span> <span class="token attr-value"><span class="token punctuation">=</span> 7000</span></code></pre>
+<span class="token constant">bind_port</span> <span class="token attr-value"><span class="token punctuation">=</span> 7000</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 <p>然后**启动<code>frps</code>**（Linux下）</p>
-<pre class="language-bash" data-language="bash"><code class="language-bash">/etc/frp/frps -c /etc/frp/frps.ini</code></pre>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">/etc/frp/frps -c /etc/frp/frps.ini<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>再去把系统的<strong>防.火|墙打开</strong>，以及阿里云等平台的<strong>安全组规则设好允许入站出站</strong>。</p>
 <blockquote>
 <p>这个firewall搞死我了emmm折腾了老半天最后发现没放行端口……</p>
@@ -620,7 +620,7 @@
 <hr>
 <h3 id="客户端（内网主机）的搭建"><a href="#客户端（内网主机）的搭建" class="headerlink" title="客户端（内网主机）的搭建"></a>客户端（内网主机）的搭建</h3><p>同理把<code>frp</code>解压的文件放到<code>/etc/frp</code>文件夹下。</p>
 <p>客户端client，用的是 <strong>frpc</strong> 及 <strong>frpc.ini</strong>。</p>
-<pre class="language-ini" data-language="ini"><code class="language-ini"><span class="token comment"># frpc.ini</span>
+<pre class="line-numbers language-ini" data-language="ini"><code class="language-ini"><span class="token comment"># frpc.ini</span>
 <span class="token selector">[common]</span>
 <span class="token constant">server_addr</span> <span class="token attr-value"><span class="token punctuation">=</span> x.x.x.x</span>
 <span class="token constant">server_port</span> <span class="token attr-value"><span class="token punctuation">=</span> 7000</span>
@@ -635,7 +635,7 @@
 <span class="token constant">type</span> <span class="token attr-value"><span class="token punctuation">=</span> tcp</span>
 <span class="token constant">local_ip</span> <span class="token attr-value"><span class="token punctuation">=</span> 127.0.0.1   #也可以是局域网中的内网IP</span>
 <span class="token constant">local_port</span> <span class="token attr-value"><span class="token punctuation">=</span> 3306</span>
-<span class="token constant">remote_port</span> <span class="token attr-value"><span class="token punctuation">=</span> 7002</span></code></pre>
+<span class="token constant">remote_port</span> <span class="token attr-value"><span class="token punctuation">=</span> 7002</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>其中common里的<code>server_addr</code>是公网主机的公网IP，<code>server_port</code>设成与服务端一样的端口。</p>
 <p>每个方框<code>[.+]</code>里的是name，下面都对应着一个规则，要求不能重名。</p>
 <p><code>type</code>可以是tcp/udp/http/https/stcp/xtcp（具体看官方文档），一般就tcp/http啦。</p>
@@ -645,9 +645,9 @@
 
 <p>客户端可以在多个主机上运行，只要name不重名就行。</p>
 <p>而后<strong>启动客户端</strong></p>
-<pre class="language-bash" data-language="bash"><code class="language-bash">/etc/frp/frpc -c /etc/frp/frpc.ini</code></pre>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">/etc/frp/frpc -c /etc/frp/frpc.ini<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>Windows下：</p>
-<pre class="language-bash" data-language="bash"><code class="language-bash">frpc.exe -c frpc.ini</code></pre>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">frpc.exe -c frpc.ini<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p><img src="/2020/01/29/Server_frp/client.png" alt="client"></p>
 <p><code>start proxy success</code>表示启动成功。</p>
 <hr>
@@ -662,12 +662,12 @@
 
 <h2 id="进阶"><a href="#进阶" class="headerlink" title="进阶"></a>进阶</h2><h3 id="Dashboard"><a href="#Dashboard" class="headerlink" title="Dashboard"></a>Dashboard</h3><p><code>frp</code>的<strong>服务器端</strong>提供了一个在web端<strong>查看运行状态</strong>的展示界面。</p>
 <p>配置如下，在<code>common</code>中添加如下信息：</p>
-<pre class="language-ini" data-language="ini"><code class="language-ini"><span class="token comment"># frps.ini</span>
+<pre class="line-numbers language-ini" data-language="ini"><code class="language-ini"><span class="token comment"># frps.ini</span>
 <span class="token selector">[common]</span>
 <span class="token constant">dashboard_port</span> <span class="token attr-value"><span class="token punctuation">=</span> 7500 # 注意开放端口</span>
 <span class="token comment"># dashboard 用户名密码，默认都为 admin</span>
 <span class="token constant">dashboard_user</span> <span class="token attr-value"><span class="token punctuation">=</span> admin</span>
-<span class="token constant">dashboard_pwd</span> <span class="token attr-value"><span class="token punctuation">=</span> admin</span></code></pre>
+<span class="token constant">dashboard_pwd</span> <span class="token attr-value"><span class="token punctuation">=</span> admin</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>而后重启服务端，就可以在<code>http://[server_addr]:7500</code> 访问 dashboard 界面，用户名密码默认为 <code>admin</code>。</p>
 <p><img src="/2020/01/29/Server_frp/Dashboard_Overview.png" alt="Dashboard_Overview"></p>
 <p><img src="/2020/01/29/Server_frp/Dashboard_Proxies.png" alt="Dashboard_Proxies"></p>
@@ -675,12 +675,12 @@
 <p>看了一下，基于<code>vue</code>写的。</p>
 <hr>
 <h3 id="Admin-UI"><a href="#Admin-UI" class="headerlink" title="Admin UI"></a>Admin UI</h3><p>在客户端也提供了一个类似于dashboard的查看状态和管理配置的界面。</p>
-<pre class="language-ini" data-language="ini"><code class="language-ini"><span class="token comment"># frpc.ini</span>
+<pre class="line-numbers language-ini" data-language="ini"><code class="language-ini"><span class="token comment"># frpc.ini</span>
 <span class="token selector">[common]</span>
 <span class="token constant">admin_addr</span> <span class="token attr-value"><span class="token punctuation">=</span> 127.0.0.1</span>
 <span class="token constant">admin_port</span> <span class="token attr-value"><span class="token punctuation">=</span> 7400</span>
 <span class="token constant">admin_user</span> <span class="token attr-value"><span class="token punctuation">=</span> admin</span>
-<span class="token constant">admin_pwd</span> <span class="token attr-value"><span class="token punctuation">=</span> admin</span></code></pre>
+<span class="token constant">admin_pwd</span> <span class="token attr-value"><span class="token punctuation">=</span> admin</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>然后本地就可以通过 <a target="_blank" rel="noopener" href="http://127.0.0.1:7400/">http://127.0.0.1:7400</a> 来访问<strong>查看状态</strong>和<strong>修改配置</strong>了。</p>
 <p>这里如果想通过内网IP（如<code>192.168.1.66</code>）查看的话，需要把<code>admin_addr</code>修改为 <code>0.0.0.0</code>（允许所有访问），或者对应的本地IP（如<code>192.168.1.66</code>）。</p>
 <p>同时也需要在本地的firewall打开这个端口，否则在内网的其他主机也无法访问。（折腾了老半天才发现emmm</p>
@@ -688,19 +688,19 @@
 <p><img src="/2020/01/29/Server_frp/AdminUI.png" alt="AdminUI"></p>
 <hr>
 <h3 id="开启加密、压缩"><a href="#开启加密、压缩" class="headerlink" title="开启加密、压缩"></a>开启加密、压缩</h3><p>在客户端加入<code>use_encryption</code> 和 <code>use_compression</code>这两个参数。</p>
-<pre class="language-ini" data-language="ini"><code class="language-ini"><span class="token comment"># frpc.ini</span>
+<pre class="line-numbers language-ini" data-language="ini"><code class="language-ini"><span class="token comment"># frpc.ini</span>
 <span class="token selector">[ssh]</span>
 <span class="token constant">type</span> <span class="token attr-value"><span class="token punctuation">=</span> tcp</span>
 <span class="token constant">local_port</span> <span class="token attr-value"><span class="token punctuation">=</span> 22</span>
 <span class="token constant">remote_port</span> <span class="token attr-value"><span class="token punctuation">=</span> 6000</span>
 <span class="token constant">use_encryption</span> <span class="token attr-value"><span class="token punctuation">=</span> true</span>
-<span class="token constant">use_compression</span> <span class="token attr-value"><span class="token punctuation">=</span> true</span></code></pre>
+<span class="token constant">use_compression</span> <span class="token attr-value"><span class="token punctuation">=</span> true</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 
 <hr>
 <h3 id="开机自启"><a href="#开机自启" class="headerlink" title="开机自启"></a>开机自启</h3><p>这次直接把<code>frp</code>作为一个service好了，用<code>systemd</code>好了！</p>
 <h4 id="服务端："><a href="#服务端：" class="headerlink" title="服务端："></a>服务端：</h4><p>新建一个文件，名叫 <code>frps.service</code>，写入</p>
-<pre class="language-ini" data-language="ini"><code class="language-ini"><span class="token comment"># frps.service</span>
+<pre class="line-numbers language-ini" data-language="ini"><code class="language-ini"><span class="token comment"># frps.service</span>
 <span class="token selector">[Unit]</span>
 <span class="token constant">Description</span><span class="token attr-value"><span class="token punctuation">=</span>Frp Server</span>
 <span class="token constant">After</span><span class="token attr-value"><span class="token punctuation">=</span>syslog.target network.target</span>
@@ -717,9 +717,9 @@
 <span class="token constant">Restart</span><span class="token attr-value"><span class="token punctuation">=</span>always</span>
 
 <span class="token selector">[Install]</span>
-<span class="token constant">WantedBy</span><span class="token attr-value"><span class="token punctuation">=</span>multi-user.target</span></code></pre>
+<span class="token constant">WantedBy</span><span class="token attr-value"><span class="token punctuation">=</span>multi-user.target</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h4 id="客户端："><a href="#客户端：" class="headerlink" title="客户端："></a>客户端：</h4><p><code>frpc.service</code></p>
-<pre class="language-ini" data-language="ini"><code class="language-ini"><span class="token comment"># frpc.service</span>
+<pre class="line-numbers language-ini" data-language="ini"><code class="language-ini"><span class="token comment"># frpc.service</span>
 <span class="token selector">[Unit]</span>
 <span class="token constant">Description</span><span class="token attr-value"><span class="token punctuation">=</span>Frp Client</span>
 <span class="token constant">After</span><span class="token attr-value"><span class="token punctuation">=</span>syslog.target network.target</span>
@@ -736,18 +736,18 @@
 <span class="token constant">Restart</span><span class="token attr-value"><span class="token punctuation">=</span>always</span>
 
 <span class="token selector">[Install]</span>
-<span class="token constant">WantedBy</span><span class="token attr-value"><span class="token punctuation">=</span>multi-user.target</span></code></pre>
+<span class="token constant">WantedBy</span><span class="token attr-value"><span class="token punctuation">=</span>multi-user.target</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>而后将此文件放到 服务器端和客户端的**<code>/etc/systemd/system/</code> 目录**下。</p>
 <p>先<code>killall frps</code>（或frpc），再调用</p>
-<pre class="language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> systemctl <span class="token builtin class-name">enable</span> frps.service</code></pre>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> systemctl <span class="token builtin class-name">enable</span> frps.service<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>或</p>
-<pre class="language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> systemctl <span class="token builtin class-name">enable</span> frpc.service</code></pre>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> systemctl <span class="token builtin class-name">enable</span> frpc.service<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>这样就成功配置了开机自启。</p>
 <p>而且可以通过下列命令进行管理：</p>
-<pre class="language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> systemctl start frpc.service    <span class="token comment"># 启动</span>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> systemctl start frpc.service    <span class="token comment"># 启动</span>
 <span class="token function">sudo</span> systemctl stop frpc.service     <span class="token comment"># 停止</span>
 <span class="token function">sudo</span> systemctl restart frpc.service  <span class="token comment"># 重启</span>
-<span class="token function">sudo</span> systemctl status frpc.service   <span class="token comment"># 查看状态</span></code></pre>
+<span class="token function">sudo</span> systemctl status frpc.service   <span class="token comment"># 查看状态</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 <p>frps同理。</p>
 <p><img src="/2020/01/29/Server_frp/service.png" alt="查看状态"></p>
 <br>

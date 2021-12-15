@@ -612,10 +612,10 @@
 <p><img src="/2020/04/29/Server_TensorFlow-vGPU/180342ucwqytqncnm09lwc.png">   </p>
 <p>或者可以这样↓。</p>
 <p>首先添加源。</p>
-<pre class="language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> add-apt-repository ppa:graphics-drivers/ppa
-<span class="token function">sudo</span> <span class="token function">apt</span> update</code></pre>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> add-apt-repository ppa:graphics-drivers/ppa
+<span class="token function">sudo</span> <span class="token function">apt</span> update<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 <p>检查可以安装的驱动版本，选择最合适的版本安装即可。</p>
-<pre class="language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> nvidia-driver-XXX</code></pre>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> nvidia-driver-XXX<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 
 <p><strong>安装显卡驱动</strong>的时候需要注意，先执行<code>sudo init 3</code> 然后在驱动文件目录下执行<code>sudo sh  显卡驱动名 --no-opengl-files</code>  （加<code>--no-opengl-files</code>的目的是为了防止图形界面登录的时候循环输入密码的情况），然后按照提示执行下一步就可以。</p>
@@ -624,7 +624,7 @@
 <p>显卡安装完成后进行检查，**执行<code>nvidia-smi</code>**，如果输出类似如下，则代表显卡安装成功。</p>
 <p><img src="/2020/04/29/Server_TensorFlow-vGPU/180411yjjzmrda8djr7ada.png">   </p>
 <p>类似于下面这样的。（我这里显卡驱动版本为 440.56）</p>
-<pre class="language-none"><code class="language-none">+-----------------------------------------------------------------------------+
+<pre class="line-numbers language-none"><code class="language-none">+-----------------------------------------------------------------------------+
 | NVIDIA-SMI 440.56       Driver Version: 440.56       CUDA Version: 10.2     |
 |-------------------------------+----------------------+----------------------+
 | GPU  Name        Persistence-M| Bus-Id        Disp.A | Volatile Uncorr. ECC |
@@ -640,7 +640,7 @@
 |=============================================================================|
 |  No running processes found                                                 |
 +-----------------------------------------------------------------------------+
-</code></pre>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h3 id="0x03-2-显卡授权"><a href="#0x03-2-显卡授权" class="headerlink" title="0x03-2 显卡授权"></a>0x03-2 显卡授权</h3><p>下面进行<strong>显卡授权</strong>的配置。</p>
 <blockquote>
 <p>如果使用的是切分显卡，那么授权一定是 vDWS 授权类型，此处需要提前先部署好 vGPU 授权服务器，授权服务器的部署，此处不再赘述。</p>
@@ -675,19 +675,19 @@
 <p>这样就不需要安装 CUDA toolkit 了。</p>
 <p>目前最新的 docker 就是 19.03.8 版本，所以用<code>nvidia-container-toolkit</code> 软件包和 <code>--gpus all</code> 标记。</p>
 <h3 id="0x04-1-安装-nvidia-container-toolkit"><a href="#0x04-1-安装-nvidia-container-toolkit" class="headerlink" title="0x04-1 安装 nvidia-container-toolkit"></a>0x04-1 安装 nvidia-container-toolkit</h3><p>（Ubuntu 16.04/18.04, Debian Jessie/Stretch/Buster）</p>
-<pre class="language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># Add the package repositories</span>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># Add the package repositories</span>
 <span class="token assign-left variable">distribution</span><span class="token operator">=</span><span class="token variable"><span class="token variable">$(</span><span class="token builtin class-name">.</span> /etc/os-release<span class="token punctuation">;</span><span class="token builtin class-name">echo</span> $ID$VERSION_ID<span class="token variable">)</span></span>
 <span class="token function">curl</span> -s -L https://nvidia.github.io/nvidia-docker/gpgkey <span class="token operator">|</span> <span class="token function">sudo</span> apt-key <span class="token function">add</span> -
 <span class="token function">curl</span> -s -L https://nvidia.github.io/nvidia-docker/<span class="token variable">$distribution</span>/nvidia-docker.list <span class="token operator">|</span> <span class="token function">sudo</span> <span class="token function">tee</span> /etc/apt/sources.list.d/nvidia-docker.list
 
 <span class="token function">sudo</span> <span class="token function">apt-get</span> update <span class="token operator">&amp;&amp;</span> <span class="token function">sudo</span> <span class="token function">apt-get</span> <span class="token function">install</span> -y nvidia-container-toolkit
-<span class="token function">sudo</span> systemctl restart docker</code></pre>
+<span class="token function">sudo</span> systemctl restart docker<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>之后就可以测试一下能否在docker里调用显卡了。</p>
-<pre class="language-bash" data-language="bash"><code class="language-bash"><span class="token comment">#### Test nvidia-smi with the latest official CUDA image</span>
-docker run --gpus all nvidia/cuda:10.0-base nvidia-smi</code></pre>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment">#### Test nvidia-smi with the latest official CUDA image</span>
+docker run --gpus all nvidia/cuda:10.0-base nvidia-smi<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 <p>正常的话效果与 <code>nvidia-smi</code>效果相同。</p>
 <p>下面这几个是指定特定显卡的。</p>
-<pre class="language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># Start a GPU enabled container on two GPUs</span>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># Start a GPU enabled container on two GPUs</span>
 docker run --gpus <span class="token number">2</span> nvidia/cuda:10.0-base nvidia-smi
 
 <span class="token comment"># Starting a GPU enabled container on specific GPUs</span>
@@ -696,7 +696,7 @@ docker run --gpus <span class="token string">'"device=UUID-ABCDEF,1"'</span> nvi
 
 <span class="token comment"># Specifying a capability (graphics, compute, ...) for my container</span>
 <span class="token comment"># Note this is rarely if ever used this way</span>
-docker run --gpus all,capabilities<span class="token operator">=</span>utility nvidia/cuda:10.0-base nvidia-smi</code></pre>
+docker run --gpus all,capabilities<span class="token operator">=</span>utility nvidia/cuda:10.0-base nvidia-smi<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h3 id="0x04-2-拉取-tensorflow-官方镜像-amp-运行代码"><a href="#0x04-2-拉取-tensorflow-官方镜像-amp-运行代码" class="headerlink" title="0x04-2 拉取 tensorflow 官方镜像&amp;运行代码"></a>0x04-2 拉取 tensorflow 官方镜像&amp;运行代码</h3><table>
 <thead>
 <tr>
@@ -743,15 +743,15 @@ docker run --gpus all,capabilities<span class="token operator">=</span>utility n
 </tr>
 </tbody></table>
 <p><strong>下载并运行支持 GPU 的 TensorFlow 映像</strong>，而后运行这行代码测试一下。</p>
-<pre class="language-bash" data-language="bash"><code class="language-bash">docker run --gpus all -it --rm tensorflow/tensorflow:latest-gpu <span class="token punctuation">\</span>
-       python -c <span class="token string">"import tensorflow as tf; print(tf.reduce_sum(tf.random.normal([1000, 1000])))"</span></code></pre>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">docker run --gpus all -it --rm tensorflow/tensorflow:latest-gpu <span class="token punctuation">\</span>
+       python -c <span class="token string">"import tensorflow as tf; print(tf.reduce_sum(tf.random.normal([1000, 1000])))"</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 <p>镜像大概2个G吧，拉取镜像挺久的……上面这个拉取的是最新版本的GPU镜像。可以通过上面这个测试一下是否安装成功。之后可以利用<code>docker exec</code> 重用容器。</p>
 <blockquote>
 <p>使用最新的 TensorFlow GPU 映像在容器中启动 <code>bash</code> shell 会话：</p>
-<pre class="language-bash" data-language="bash"><code class="language-bash">docker run --gpus all -it tensorflow/tensorflow:latest-gpu <span class="token function">bash</span></code></pre>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">docker run --gpus all -it tensorflow/tensorflow:latest-gpu <span class="token function">bash</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>要在容器内运行在主机上开发的 TensorFlow 程序，请装载主机目录并更改容器的工作目录 (<code>-v hostDir:containerDir -w workDir</code>)：</p>
 </blockquote>
-<pre class="language-bash" data-language="bash"><code class="language-bash">docker run --gpus all -it --rm -v <span class="token environment constant">$PWD</span>:/tmp -w /tmp tensorflow/tensorflow:latest-gpu python ./script.py</code></pre>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">docker run --gpus all -it --rm -v <span class="token environment constant">$PWD</span>:/tmp -w /tmp tensorflow/tensorflow:latest-gpu python ./script.py<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p><strong>要调用 GPU 的时候记得加上<code>--gpus all</code>标记呀！</strong></p>
 <br>
 
@@ -762,30 +762,30 @@ docker run --gpus all,capabilities<span class="token operator">=</span>utility n
 <p>执行 <code>nvidia-smi</code> 得到的<code>CUDA Version</code>应该是 CUDA Driver 的版本，这里要装的 CUDA Toolkit 对应的是 Runtime version 吧（猜的）。</p>
 <p>根据 0x01 中的版本关系，以及上面 docker 中运行的 CUDA 版本，这里我用了 10.1.243 版本，可以在 <a target="_blank" rel="noopener" href="https://developer.nvidia.com/cuda-10.1-download-archive-update2?target_os=Linux&amp;target_arch=x86_64&amp;target_distro=Ubuntu&amp;target_version=1604&amp;target_type=runfilelocal">CUDA Toolkit 10.1 update2  Archive 这里</a>看下载地址。目前不推荐用最新的10.2版本，当然随着发展后续肯定会更新另说。</p>
 <p><img src="/2020/04/29/Server_TensorFlow-vGPU/image-20200430000707961.png" alt="CUDA Toolkit 10.1 update2  Archive"></p>
-<pre class="language-bash" data-language="bash"><code class="language-bash"><span class="token function">wget</span> http://developer.download.nvidia.com/compute/cuda/10.1/Prod/local_installers/cuda_10.1.243_418.87.00_linux.runsudo 
-<span class="token function">sh</span> cuda_10.1.243_418.87.00_linux.run</code></pre>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">wget</span> http://developer.download.nvidia.com/compute/cuda/10.1/Prod/local_installers/cuda_10.1.243_418.87.00_linux.runsudo 
+<span class="token function">sh</span> cuda_10.1.243_418.87.00_linux.run<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 <p>这里安装界面挺有意思的，命令行里的折叠菜单，想不到吧！</p>
 <p><strong>注意</strong>一下：这里<strong>不要选 Driver 了</strong>，<strong>在<code>Driver</code>那里敲个回车把<code>X</code>去掉</strong>。因为你驱动已经装好了啦，而且比这个新。（截图的时候没有去掉懒得重新截了）</p>
 <p><img src="/2020/04/29/Server_TensorFlow-vGPU/image-20200430001524136.png" alt="CUDA installer"></p>
 <p>安装完之后要把路径加入到 <code>PATH</code> 里。</p>
-<pre class="language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">vim</span> ~/.bashrc</code></pre>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">vim</span> ~/.bashrc<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>在最后新增下面几行。</p>
-<pre class="language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># CUDA config</span>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># CUDA config</span>
 <span class="token builtin class-name">export</span> <span class="token assign-left variable">LD_LIBRARY_PATH</span><span class="token operator">=</span><span class="token string">"<span class="token variable">$LD_LIBRARY_PATH</span>:/usr/local/cuda/lib64:/usr/local/cuda/extras/CUPTI/lib64"</span>
 <span class="token builtin class-name">export</span> <span class="token assign-left variable">CUDA_HOME</span><span class="token operator">=</span><span class="token string">"/usr/local/cuda"</span>
-<span class="token builtin class-name">export</span> <span class="token assign-left variable"><span class="token environment constant">PATH</span></span><span class="token operator">=</span><span class="token string">"/usr/local/cuda/bin:<span class="token environment constant">$PATH</span>"</span></code></pre>
+<span class="token builtin class-name">export</span> <span class="token assign-left variable"><span class="token environment constant">PATH</span></span><span class="token operator">=</span><span class="token string">"/usr/local/cuda/bin:<span class="token environment constant">$PATH</span>"</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 <p>使配置生效（或重启终端也行）。</p>
-<pre class="language-bash" data-language="bash"><code class="language-bash"><span class="token builtin class-name">source</span> ~/.bashrc</code></pre>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token builtin class-name">source</span> ~/.bashrc<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>验证一下有没有安装成功。</p>
-<pre class="language-bash" data-language="bash"><code class="language-bash">miaotony@localhost:~<span class="token comment"># nvcc -V</span>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">miaotony@localhost:~<span class="token comment"># nvcc -V</span>
 nvcc: NVIDIA <span class="token punctuation">(</span>R<span class="token punctuation">)</span> Cuda compiler driver
 Copyright <span class="token punctuation">(</span>c<span class="token punctuation">)</span> <span class="token number">2005</span>-2019 NVIDIA Corporation
 Built on Sun_Jul_28_19:07:16_PDT_2019
-Cuda compilation tools, release <span class="token number">10.1</span>, V10.1.243</code></pre>
+Cuda compilation tools, release <span class="token number">10.1</span>, V10.1.243<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>如果上面安装时候装了实例的话，可以来测试一下。</p>
-<pre class="language-bash" data-language="bash"><code class="language-bash"><span class="token builtin class-name">cd</span> /usr/local/cuda/samples/1_Utilities/deviceQuery/
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token builtin class-name">cd</span> /usr/local/cuda/samples/1_Utilities/deviceQuery/
 <span class="token function">sudo</span> <span class="token function">make</span>
-./deviceQuery</code></pre>
+./deviceQuery<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 <p><img src="/2020/04/29/Server_TensorFlow-vGPU/image-20200430003224527.png" alt="deviceQuery"></p>
 <p>这里就显示出了显卡的各种参数，最后<code>Result=PASS</code>则说明安装成功了。</p>
 <p>当然也可以试试别的例子，先编译再执行就好。</p>
@@ -800,25 +800,25 @@ Cuda compilation tools, release <span class="token number">10.1</span>, V10.1.24
 <p>输入 <code>conda --version</code>，出现版本号则安装成功。</p>
 <h3 id="0x06-2-换源"><a href="#0x06-2-换源" class="headerlink" title="0x06-2 换源"></a>0x06-2 换源</h3><p>众所周知官方的 conda 源速度比较慢，换清华 tuna 源吧。</p>
 <p>（记得有段时间因为版权问题 tuna 镜像还中断过一阵子，后来放开了）</p>
-<pre class="language-bash" data-language="bash"><code class="language-bash">conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/
 conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main/
-conda config --set show_channel_urls <span class="token function">yes</span></code></pre>
+conda config --set show_channel_urls <span class="token function">yes</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 <br>
 
 <hr>
 <h2 id="0x07-安装-tensorflow-gpu-（包括-cuDNN）"><a href="#0x07-安装-tensorflow-gpu-（包括-cuDNN）" class="headerlink" title="0x07 安装 tensorflow-gpu （包括 cuDNN）"></a>0x07 安装 tensorflow-gpu （包括 cuDNN）</h2><h3 id="0x07-1-新建一个虚拟环境（可选的啦）"><a href="#0x07-1-新建一个虚拟环境（可选的啦）" class="headerlink" title="0x07-1 新建一个虚拟环境（可选的啦）"></a>0x07-1 新建一个虚拟环境（可选的啦）</h3><p>名为<code>tensorflow</code>，指定 python 版本为3.6。（这个看个人以及需求吧）</p>
-<pre class="language-bash" data-language="bash"><code class="language-bash">conda create -n tensorflow <span class="token assign-left variable">python</span><span class="token operator">=</span><span class="token number">3.6</span></code></pre>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">conda create -n tensorflow <span class="token assign-left variable">python</span><span class="token operator">=</span><span class="token number">3.6</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>可能需要确认就回车或者输入<code>y</code>完事。</p>
 <h3 id="0x07-2-安装-tensorflow-gpu"><a href="#0x07-2-安装-tensorflow-gpu" class="headerlink" title="0x07-2 安装 tensorflow-gpu"></a>0x07-2 安装 tensorflow-gpu</h3><p>首先查一下当前环境下支持的版本。</p>
-<pre class="language-bash" data-language="bash"><code class="language-bash">conda search tensorflow-gpu</code></pre>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">conda search tensorflow-gpu<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>注意一下驱动的版本问题，对于新的tf版本，驱动可能不支持。</p>
 <p><img src="/2020/04/29/Server_TensorFlow-vGPU/image-20200430004948774.png" alt="tf-gpu"></p>
 <p>比如装1.15.0版本。</p>
-<pre class="language-bash" data-language="bash"><code class="language-bash">conda <span class="token function">install</span> tensorflow-gpu<span class="token operator">==</span><span class="token number">1.15</span>.0</code></pre>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">conda <span class="token function">install</span> tensorflow-gpu<span class="token operator">==</span><span class="token number">1.15</span>.0<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>大概六七百MB的亚子，网络不是很稳定，大概率需要重试几次才行。</p>
 <h3 id="0x07-3-验证安装"><a href="#0x07-3-验证安装" class="headerlink" title="0x07-3 验证安装"></a>0x07-3 验证安装</h3><p>安装完成后，进入<code>python</code>试一试呗。</p>
-<pre class="language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> tensorflow <span class="token keyword">as</span> tf
-<span class="token keyword">print</span><span class="token punctuation">(</span>tf<span class="token punctuation">.</span>test<span class="token punctuation">.</span>is_gpu_available<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span></code></pre>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> tensorflow <span class="token keyword">as</span> tf
+<span class="token keyword">print</span><span class="token punctuation">(</span>tf<span class="token punctuation">.</span>test<span class="token punctuation">.</span>is_gpu_available<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 <p><img src="/2020/04/29/Server_TensorFlow-vGPU/image-20200430005628362.png" alt="tftest"></p>
 <p>显示为<code>True</code>则表示以上安装成功了！</p>
 <p>（tf 2.x 的话这个方法已经 deprecated 了，建议用<code>tf.config.list_physical_devices('GPU')</code> 方法。tf 1.x 无此用法。</p>

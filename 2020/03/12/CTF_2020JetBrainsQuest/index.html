@@ -554,9 +554,9 @@
 
 <h2 id="Quest-1"><a href="#Quest-1" class="headerlink" title="Quest 1"></a>Quest 1</h2><p><a target="_blank" rel="noopener" href="https://twitter.com/jetbrains/status/1236986174075482113">https://twitter.com/jetbrains/status/1236986174075482113</a></p>
 <p><img src="/2020/03/12/CTF_2020JetBrainsQuest/Quest1.png" alt="Quest1"></p>
-<pre class="language-none"><code class="language-none">48 61 76 65 20 79 6f 75 20 73 65 65 6e 20 74 68 65 20 73 6f 75 72 63 65 20 63 6f 64 65 20 6f 66 20 74 68 65 20 4a 65 74 42 72 61 69 6e 73 20 77 65 62 73 69 74 65 3f</code></pre>
+<pre class="line-numbers language-none"><code class="language-none">48 61 76 65 20 79 6f 75 20 73 65 65 6e 20 74 68 65 20 73 6f 75 72 63 65 20 63 6f 64 65 20 6f 66 20 74 68 65 20 4a 65 74 42 72 61 69 6e 73 20 77 65 62 73 69 74 65 3f<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>一看是 hex，于是转成 ASCII，得到：</p>
-<pre class="language-none"><code class="language-none">Have you seen the source code of the JetBrains website?</code></pre>
+<pre class="line-numbers language-none"><code class="language-none">Have you seen the source code of the JetBrains website?<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <br>
 
 <h3 id="Step-1"><a href="#Step-1" class="headerlink" title="Step 1"></a>Step 1</h3><p>去官网上找呗。传送门：<a target="_blank" rel="noopener" href="https://www.jetbrains.com/">https://www.jetbrains.com/</a></p>
@@ -564,7 +564,7 @@
 <p>提示了看源码，既然是 <code>JetBrainsQuest</code> 了，当然就**搜一下<code>quest</code>**。</p>
 <p>果然看到了提示。</p>
 <p><img src="/2020/03/12/CTF_2020JetBrainsQuest/Step1-1.png" alt="Step1"></p>
-<pre class="language-html" data-language="html"><code class="language-html"><span class="token comment">&lt;!--
+<pre class="line-numbers language-html" data-language="html"><code class="language-html"><span class="token comment">&lt;!--
       O
 {o)xxx|===============-
       O
@@ -581,7 +581,7 @@ It’s dangerous to go alone take this key: Good luck! == Jrrg#oxfn$
                  O
 -===============|xxx(o}
                  O
---&gt;</span></code></pre>
+--&gt;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>这里提示了<code>hint: use Chrome Incognito mode</code>。</p>
 <p><strong>建议用 Chrome 的无痕模式。</strong></p>
 <br>
@@ -602,7 +602,7 @@ It’s dangerous to go alone take this key: Good luck! == Jrrg#oxfn$
 
 <h3 id="Step-3"><a href="#Step-3" class="headerlink" title="Step 3"></a>Step 3</h3><p><strong>找一下 500 到 5000 之内有多少素数</strong>，随手写个 py 的 jio 本。</p>
 <p>（边界值的话，5000肯定不是素数，不影响结果</p>
-<pre class="language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> math <span class="token keyword">import</span> sqrt
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> math <span class="token keyword">import</span> sqrt
 cnt <span class="token operator">=</span> <span class="token number">0</span>
 <span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">500</span><span class="token punctuation">,</span> <span class="token number">5000</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
     <span class="token keyword">for</span> j <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">,</span> <span class="token builtin">int</span><span class="token punctuation">(</span>sqrt<span class="token punctuation">(</span>i<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token operator">+</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
@@ -611,7 +611,7 @@ cnt <span class="token operator">=</span> <span class="token number">0</span>
         <span class="token keyword">if</span> j <span class="token operator">==</span> <span class="token builtin">int</span><span class="token punctuation">(</span>sqrt<span class="token punctuation">(</span>i<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
             cnt <span class="token operator">+=</span> <span class="token number">1</span>
 <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">'OK!'</span><span class="token punctuation">)</span>
-<span class="token keyword">print</span><span class="token punctuation">(</span>cnt<span class="token punctuation">)</span></code></pre>
+<span class="token keyword">print</span><span class="token punctuation">(</span>cnt<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>跑出来 <code>cnt</code> 为 574.</p>
 <p>于是访问 <a target="_blank" rel="noopener" href="https://jb.gg/574">https://jb.gg/574</a> .<em>（不输入的话是跳转到官网的</em></p>
 <p><em>（其实爆破也行，反正就三位数呢</em></p>
@@ -626,13 +626,13 @@ cnt <span class="token operator">=</span> <span class="token number">0</span>
 <p><a target="_blank" rel="noopener" href="https://youtrack.jetbrains.com/issue/MPS-31816">https://youtrack.jetbrains.com/issue/MPS-31816</a></p>
 <p><img src="/2020/03/12/CTF_2020JetBrainsQuest/Step1-4.png" alt="Step4"></p>
 <p>这是 YouTrack 的一个 issue。<em>（这里直接谷歌可能是非预期解了</em></p>
-<pre class="language-none"><code class="language-none">JetBrains Quest
+<pre class="line-numbers language-none"><code class="language-none">JetBrains Quest
 “The key is to think back to the beginning.” – The JetBrains Quest team
 
-Qlfh$#Li#|rx#duh#uhdglqj#wklv#|rx#pxvw#kdyh#zrunhg#rxw#krz#wr#ghfu|sw#lw1#Wklv#lv#rxu#lvvxh#wudfnhu#ghvljqhg#iru#djloh#whdpv1#Lw#lv#iuhh#iru#xs#wr#6#xvhuv#lq#Forxg#dqg#iru#43#xvhuv#lq#Vwdqgdorqh/#vr#li#|rx#zdqw#wr#jlyh#lw#d#jr#lq#|rxu#whdp#wkhq#zh#wrwdoo|#uhfrpphqg#lw1#|rx#kdyh#ilqlvkhg#wkh#iluvw#Txhvw/#qrz#lw“v#wlph#wr#uhghhp#|rxu#iluvw#sul}h1#Wkh#frgh#iru#wkh#iluvw#txhvw#lv#‟WkhGulyhWrGhyhors†1#Jr#wr#wkh#Txhvw#Sdjh#dqg#xvh#wkh#frgh#wr#fodlp#|rxu#sul}h1#kwwsv=22zzz1mhweudlqv1frp2surpr2txhvw2</code></pre>
+Qlfh$#Li#|rx#duh#uhdglqj#wklv#|rx#pxvw#kdyh#zrunhg#rxw#krz#wr#ghfu|sw#lw1#Wklv#lv#rxu#lvvxh#wudfnhu#ghvljqhg#iru#djloh#whdpv1#Lw#lv#iuhh#iru#xs#wr#6#xvhuv#lq#Forxg#dqg#iru#43#xvhuv#lq#Vwdqgdorqh/#vr#li#|rx#zdqw#wr#jlyh#lw#d#jr#lq#|rxu#whdp#wkhq#zh#wrwdoo|#uhfrpphqg#lw1#|rx#kdyh#ilqlvkhg#wkh#iluvw#Txhvw/#qrz#lw“v#wlph#wr#uhghhp#|rxu#iluvw#sul}h1#Wkh#frgh#iru#wkh#iluvw#txhvw#lv#‟WkhGulyhWrGhyhors†1#Jr#wr#wkh#Txhvw#Sdjh#dqg#xvh#wkh#frgh#wr#fodlp#|rxu#sul}h1#kwwsv=22zzz1mhweudlqv1frp2surpr2txhvw2<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 <p>结合 Step1 中的 <code>Good luck! == Jrrg#oxfn$</code>，分析可知是<strong>往后移了3个字符（SHIFT3）</strong>。</p>
 <p>于是全部往前移3个字符得到：</p>
-<pre class="language-none"><code class="language-none">Nice! If you are reading this you must have worked out how to decrypt it. This is our issue tracker designed for agile teams. It is free for up to 3 users in Cloud and for 10 users in Standalone, so if you want to give it a go in your team then we totally recommend it. you have finished the first Quest, now it…s time to redeem your first prize. The code for the first quest is &lt;TheDriveToDevelop&lt;. Go to the Quest Page and use the code to claim your prize. https://www.jetbrains.com/promo/quest/</code></pre>
+<pre class="line-numbers language-none"><code class="language-none">Nice! If you are reading this you must have worked out how to decrypt it. This is our issue tracker designed for agile teams. It is free for up to 3 users in Cloud and for 10 users in Standalone, so if you want to give it a go in your team then we totally recommend it. you have finished the first Quest, now it…s time to redeem your first prize. The code for the first quest is &lt;TheDriveToDevelop&lt;. Go to the Quest Page and use the code to claim your prize. https://www.jetbrains.com/promo/quest/<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <br>
 
 <h3 id="Beat-The-Quest"><a href="#Beat-The-Quest" class="headerlink" title="Beat The Quest"></a>Beat The Quest</h3><p>Rua！哇好耶！</p>
@@ -693,9 +693,9 @@ Qlfh$#Li#|rx#duh#uhdglqj#wklv#|rx#pxvw#kdyh#zrunhg#rxw#krz#wr#ghfu|sw#lw1#Wklv#l
 <h2 id="Quest-2"><a href="#Quest-2" class="headerlink" title="Quest 2"></a>Quest 2</h2><p>来了来了！第二个 Quest 来了！</p>
 <p><a target="_blank" rel="noopener" href="https://twitter.com/jetbrains/status/1237694815283879943">https://twitter.com/jetbrains/status/1237694815283879943</a></p>
 <p><img src="/2020/03/12/CTF_2020JetBrainsQuest/Quest2.png" alt="Quest2"></p>
-<pre class="language-none"><code class="language-none">.spleh A+lrtC/dmC .thgis fo tuo si ti semitemos ,etihw si txet nehw sa drah kooL .tseretni wohs dluohs uoy ecalp a si ,dessecorp si xat hctuD erehw esac ehT .sedih tseuq fo txen eht erehw si ,deificeps era segaugnal cificeps-niamod tcudorp ehT</code></pre>
+<pre class="line-numbers language-none"><code class="language-none">.spleh A+lrtC/dmC .thgis fo tuo si ti semitemos ,etihw si txet nehw sa drah kooL .tseretni wohs dluohs uoy ecalp a si ,dessecorp si xat hctuD erehw esac ehT .sedih tseuq fo txen eht erehw si ,deificeps era segaugnal cificeps-niamod tcudorp ehT<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>很明显倒叙了，这里反过来得到：</p>
-<pre class="language-none"><code class="language-none">The product domain-specific languages are specified, is where the next of quest hides. The case where Dutch tax is processed, is a place you should show interest. Look hard as when text is white, sometimes it is out of sight. Cmd/Ctrl+A helps.</code></pre>
+<pre class="line-numbers language-none"><code class="language-none">The product domain-specific languages are specified, is where the next of quest hides. The case where Dutch tax is processed, is a place you should show interest. Look hard as when text is white, sometimes it is out of sight. Cmd/Ctrl+A helps.<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>提示了是个与 <code>domain-specific languages</code>有关的产品，quest相关的文字设置为白色的了。</p>
 <br>
 
@@ -714,10 +714,10 @@ Qlfh$#Li#|rx#duh#uhdglqj#wklv#|rx#pxvw#kdyh#zrunhg#rxw#krz#wr#ghfu|sw#lw1#Wklv#l
 <p>发现果然是白色的文字23333.</p>
 <p><img src="/2020/03/12/CTF_2020JetBrainsQuest/Step2-3.png" alt="Step3"></p>
 <p>Ctrl + A ，Ctrl + C / V，看一下那一块的文字</p>
-<pre class="language-none"><code class="language-none">This is our 20th year as a company,
+<pre class="line-numbers language-none"><code class="language-none">This is our 20th year as a company,
 we have shared numbers in our JetBrains
 Annual report, sharing the section with
-18,650 numbers will progress your quest</code></pre>
+18,650 numbers will progress your quest<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 <br>
 
 <h3 id="Step-4-1"><a href="#Step-4-1" class="headerlink" title="Step 4"></a>Step 4</h3><p>上面提示了JB 20周年年度报告，想起来官网首页上有个链接来着。</p>
@@ -731,7 +731,7 @@ Annual report, sharing the section with
 <p>这回再来搜索 <code>quest</code>。</p>
 <p><img src="/2020/03/12/CTF_2020JetBrainsQuest/Step2-4.png" alt="Step4"></p>
 <p>第七届 Hackathon。（emmm</p>
-<pre class="language-html" data-language="html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>react-js-quick-share<span class="token punctuation">"</span></span> <span class="token attr-name">data-hashtag</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>JetBrainsQuest<span class="token punctuation">"</span></span> <span class="token attr-name">data-text</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>I have found the JetBrains Quest! Sometimes you just need to look closely at the Haskell language, Hello,World! in the hackathon lego brainstorms project https://blog.jetbrains.com/blog/2019/11/22/jetbrains-7th-annual-hackathon/<span class="token punctuation">"</span></span> <span class="token attr-name">data-theme</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>dark<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span></code></pre>
+<pre class="line-numbers language-html" data-language="html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>react-js-quick-share<span class="token punctuation">"</span></span> <span class="token attr-name">data-hashtag</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>JetBrainsQuest<span class="token punctuation">"</span></span> <span class="token attr-name">data-text</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>I have found the JetBrains Quest! Sometimes you just need to look closely at the Haskell language, Hello,World! in the hackathon lego brainstorms project https://blog.jetbrains.com/blog/2019/11/22/jetbrains-7th-annual-hackathon/<span class="token punctuation">"</span></span> <span class="token attr-name">data-theme</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>dark<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <br>
 
 <h3 id="Step-5"><a href="#Step-5" class="headerlink" title="Step 5"></a>Step 5</h3><p>访问 <a target="_blank" rel="noopener" href="https://blog.jetbrains.com/blog/2019/11/22/jetbrains-7th-annual-hackathon/">https://blog.jetbrains.com/blog/2019/11/22/jetbrains-7th-annual-hackathon/</a></p>
@@ -739,7 +739,7 @@ Annual report, sharing the section with
 <p>看来就与这张图有关了呢！</p>
 <p><img src="/2020/03/12/CTF_2020JetBrainsQuest/Step2-5.png" alt="Step5"></p>
 <p>看来就是右边图上这段话了。emmm</p>
-<pre class="language-none"><code class="language-none">d1D joo KN0w 
+<pre class="line-numbers language-none"><code class="language-none">d1D joo KN0w 
 J378r41n2 12 
 4lw4y2 H1R1Ng? 
 ch3ck Ou7 t3h K4r33r2 
@@ -747,16 +747,16 @@ P4g3 4nD 533 1f
 7H3r3 12 4 J08 0R 4 
 KW35T 0 cH4Ll3n93 70 
 g0 fUr7h3r @ 13457.
-</code></pre>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>草（一种植物），我大概翻译出来了！</p>
-<pre class="language-none"><code class="language-none">Did you know 
+<pre class="line-numbers language-none"><code class="language-none">Did you know 
 jetbrains is 
 always hiring?
 Check Out the kareers
 Page and see if 
 here is a job or a
 kwest challenge to
-go further at least</code></pre>
+go further at least<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>形象带师 233333</p>
 <p>（讲真，觉得 CTF 有趣的一个原因大概就是从各种奇怪的数字大小写字母混杂的形象的 flag 开始的吧</p>
 <p>（觉得出题人脑洞就很大</p>
@@ -805,7 +805,7 @@ go further at least</code></pre>
 <h3 id="Beat-The-Quest-1"><a href="#Beat-The-Quest-1" class="headerlink" title="Beat The Quest"></a>Beat The Quest</h3><p>在<code>block-breaker.js</code> 这个文件里搜索<code>quest</code>，发现了第二个 quest 的 code ↓。</p>
 <p><em>（可能这个也是非预期解了23333</em></p>
 <p><img src="/2020/03/12/CTF_2020JetBrainsQuest/block-breakerJS.png" alt="block-breaker_JS"></p>
-<pre class="language-none"><code class="language-none">"\n        |\n        |\n        |   Congratulations you have beat the second quest.\n        |   Use the code key GamesAreFun on the\n        |   quest page https://jb.gg/quest to claim your prize.\n        |     \n    "</code></pre>
+<pre class="line-numbers language-none"><code class="language-none">"\n        |\n        |\n        |   Congratulations you have beat the second quest.\n        |   Use the code key GamesAreFun on the\n        |   quest page https://jb.gg/quest to claim your prize.\n        |     \n    "<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>所以 Code 就是 <code>GamesAreFun</code> 啦~</p>
 <p>拿着它去 <a target="_blank" rel="noopener" href="https://jb.gg/quest">https://jb.gg/quest</a> 换新的授权吧嘻嘻嘻。</p>
 <p>发现也是跳转到之前的那个页面（ <a target="_blank" rel="noopener" href="https://www.jetbrains.com/promo/quest/">https://www.jetbrains.com/promo/quest/</a> ）。</p>
@@ -822,7 +822,7 @@ go further at least</code></pre>
 <p>然后在邮件结尾又发现了 Leet，就是 Step5 中提到的那个黑客语。这才发现原来 Quest1 的邮件中也有。</p>
 <p>可能这也算是一个暗示/hint 吧！</p>
 <p><img src="/2020/03/12/CTF_2020JetBrainsQuest/email_leet.png" alt="email_leet"></p>
-<pre class="language-none"><code class="language-none">Y0U H4V3 R3C13V3D 7H15 3M41L B3C4U53 Y0U H4V3 P4RT1C1P4T3D 1N J3TBR41N5 QU35T</code></pre>
+<pre class="line-numbers language-none"><code class="language-none">Y0U H4V3 R3C13V3D 7H15 3M41L B3C4U53 Y0U H4V3 P4RT1C1P4T3D 1N J3TBR41N5 QU35T<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>这里还可以取消邮件订阅啥的，应该还算挺友好的吧。</p>
 <br>
 
@@ -1227,12 +1227,12 @@ go further at least</code></pre>
                         <span class="chip bg-color">Tech</span>
                     </a>
                     
-                    <a href="/tags/Web/">
-                        <span class="chip bg-color">Web</span>
-                    </a>
-                    
                     <a href="/tags/Server/">
                         <span class="chip bg-color">Server</span>
+                    </a>
+                    
+                    <a href="/tags/Web/">
+                        <span class="chip bg-color">Web</span>
                     </a>
                     
                     <a href="/tags/Configuration/">

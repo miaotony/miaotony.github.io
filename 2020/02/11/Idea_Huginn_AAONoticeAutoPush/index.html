@@ -616,22 +616,22 @@
 <p>CSS可以这样找↓，直接<strong>复制CSS路径</strong>，再进行缩略处理。</p>
 <p><img src="/2020/02/11/Idea_Huginn_AAONoticeAutoPush/css_selector.png" alt="复制css路径"></p>
 <p>比如这里复制出来是</p>
-<pre class="language-css" data-language="css"><code class="language-css">html body div.container-fluid div.main-content.clearfix div.left-content div.notice-announcement div#index_notice_content.tab-content div.tab-pane.active ul.tab-pane-ul li div.inform-content a</code></pre>
+<pre class="line-numbers language-css" data-language="css"><code class="language-css">html body div.container-fluid div.main-content.clearfix div.left-content div.notice-announcement div#index_notice_content.tab-content div.tab-pane.active ul.tab-pane-ul li div.inform-content a<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>然后<strong>处理 css path</strong>。</p>
 <p>原始路径过长，<strong>删去不带 <code>.</code> 或 <code>#</code> 的节点（节点间以空格“ ”分割），并删去每个节点在 <code>.</code> 或 <code>#</code>前的第一个标签</strong>，得到：</p>
-<pre class="language-css" data-language="css"><code class="language-css">.container-fluid .main-content.clearfix .left-content .notice-announcement #index_notice_content.tab-content .tab-pane.active .tab-pane-ul .inform-content a</code></pre>
+<pre class="line-numbers language-css" data-language="css"><code class="language-css">.container-fluid .main-content.clearfix .left-content .notice-announcement #index_notice_content.tab-content .tab-pane.active .tab-pane-ul .inform-content a<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>前半部分对节点定位用处不大，继续缩略，于是得到</p>
-<pre class="language-css" data-language="css"><code class="language-css">.tab-pane.active .tab-pane-ul .inform-content a</code></pre>
+<pre class="line-numbers language-css" data-language="css"><code class="language-css">.tab-pane.active .tab-pane-ul .inform-content a<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <blockquote>
 <p><strong>非常规情况处理</strong>： </p>
 <p>a. 有些路径中的<strong>节点带空格</strong>，如<code>&lt;div class="packery-item article"&gt;</code>,路径中的空格由<code>.</code>代替，截取为<code>.packery-item.article</code> </p>
 <p>b. 当抓取<strong>多种 css path 规则</strong>时，用逗号<code>,</code>分割</p>
-<pre class="language-css" data-language="css"><code class="language-css"><span class="token string">"css"</span><span class="token punctuation">:</span> <span class="token string">".focus-title .current a , .stress h2 a"</span><span class="token punctuation">,</span></code></pre>
+<pre class="line-numbers language-css" data-language="css"><code class="language-css"><span class="token string">"css"</span><span class="token punctuation">:</span> <span class="token string">".focus-title .current a , .stress h2 a"</span><span class="token punctuation">,</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p><code>value</code>用来提取标签中的属性，可以利用<a target="_blank" rel="noopener" href="https://www.w3.org/TR/xpath/#section-String-Functions">XPath functions</a>。（<a target="_blank" rel="noopener" href="https://www.w3school.com.cn/xpath/xpath_functions.asp">中文介绍</a>）</p>
 </blockquote>
 <p>Xpath Functions是可以进行嵌套来用的<del>（套娃</del>（x</p>
 <p>这里用了 <code>@href</code>来提取链接，用<code>string(.)</code>来提取这个css路径下的字符串，用 <code>normalize-space</code>函数来去除多余的空格。得到的JSON表达式如下。</p>
-<pre class="language-json" data-language="json"><code class="language-json"><span class="token property">"extract"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+<pre class="line-numbers language-json" data-language="json"><code class="language-json"><span class="token property">"extract"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
     <span class="token property">"url"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
         <span class="token property">"css"</span><span class="token operator">:</span> <span class="token string">".tab-pane.active .tab-pane-ul .inform-content a"</span><span class="token punctuation">,</span>
         <span class="token property">"value"</span><span class="token operator">:</span> <span class="token string">"@href"</span>
@@ -640,7 +640,7 @@
         <span class="token property">"css"</span><span class="token operator">:</span> <span class="token string">".tab-pane.active .tab-pane-ul .inform-content a"</span><span class="token punctuation">,</span>
         <span class="token property">"value"</span><span class="token operator">:</span> <span class="token string">"normalize-space(string(.))"</span>
     <span class="token punctuation">}</span>
-<span class="token punctuation">}</span></code></pre>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 
 <h4 id="template"><a href="#template" class="headerlink" title="template"></a>template</h4><p>除了上面这些，还可以设置<strong>User Agent</strong>，以及一个用**Liquid模板语言编写的模板<code>template</code>**等等。</p>
@@ -656,7 +656,7 @@
 <hr>
 <p>设好之后可以点击<strong>Dry Run</strong>来试试，看看运行的结果，再做进一步的修改。</p>
 <p>于是最终得到的<code>Crawler_AAO #1 Get Notice URLs</code> Options 如下。</p>
-<pre class="language-json" data-language="json"><code class="language-json"><span class="token punctuation">{</span>
+<pre class="line-numbers language-json" data-language="json"><code class="language-json"><span class="token punctuation">{</span>
   <span class="token property">"expected_update_period_in_days"</span><span class="token operator">:</span> <span class="token string">"2"</span><span class="token punctuation">,</span>
   <span class="token property">"user_agent"</span><span class="token operator">:</span> <span class="token string">"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:72.0) Gecko/20100101 Firefox/72.0"</span><span class="token punctuation">,</span>
   <span class="token property">"url"</span><span class="token operator">:</span> <span class="token string">"http://aao.nuaa.edu.cn/"</span><span class="token punctuation">,</span>
@@ -679,7 +679,7 @@
   <span class="token property">"template"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
     <span class="token property">"url"</span><span class="token operator">:</span> <span class="token string">"{{ url | to_uri: _response_.url }}"</span>
   <span class="token punctuation">}</span>
-<span class="token punctuation">}</span></code></pre>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <hr>
 <h3 id="创建获取内容的-Agent"><a href="#创建获取内容的-Agent" class="headerlink" title="创建获取内容的 Agent"></a>创建获取内容的 Agent</h3><p><strong>Crawler_AAO #2 Get Notice Contents</strong></p>
 <p>一样是Website Agent。</p>
@@ -688,7 +688,7 @@
 <p><code>mode</code> 为 <code>merge</code>，合并之前的信息作为最终的输出。当然也可以利用模板<code>template</code>以及Liquid来调用之前获取的对象。</p>
 <p>这里再利用Liquid中的<code>strip_html</code>用法，将所有的html标签去除，最终得到的<code>content</code>就只剩包含<code>\n</code>的字符串了。（之前试了XPath Function里的<code>normalize-space</code>函数，发现所有文字都连一起了，<del>丑死了emmm</del></p>
 <p>最终得到如下的Options。</p>
-<pre class="language-json" data-language="json"><code class="language-json"><span class="token punctuation">{</span>
+<pre class="line-numbers language-json" data-language="json"><code class="language-json"><span class="token punctuation">{</span>
   <span class="token property">"expected_update_period_in_days"</span><span class="token operator">:</span> <span class="token string">"2"</span><span class="token punctuation">,</span>
   <span class="token property">"user_agent"</span><span class="token operator">:</span> <span class="token string">"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:72.0) Gecko/20100101 Firefox/72.0"</span><span class="token punctuation">,</span>
   <span class="token property">"url"</span><span class="token operator">:</span> <span class="token string">"{{url}}"</span><span class="token punctuation">,</span>
@@ -703,7 +703,7 @@
   <span class="token property">"template"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
     <span class="token property">"content"</span><span class="token operator">:</span> <span class="token string">"{{ content | strip_html }}"</span>
   <span class="token punctuation">}</span>
-<span class="token punctuation">}</span></code></pre>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 
 <hr>
@@ -718,17 +718,17 @@
 <h3 id="content-type"><a href="#content-type" class="headerlink" title="content_type"></a>content_type</h3><p>这里用form（<code>application/x-www-form-urlencoded</code>）。</p>
 <h3 id="payload"><a href="#payload" class="headerlink" title="payload"></a>payload</h3><p>API接口有两个参数，标题<code>text</code>（必须），描述<code>desp</code>（可选），支持Markdown语法。</p>
 <p>这里自己定义就好了啦~ 怎么开心怎么来嘻嘻嘻。</p>
-<pre class="language-json" data-language="json"><code class="language-json"><span class="token property">"payload"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+<pre class="line-numbers language-json" data-language="json"><code class="language-json"><span class="token property">"payload"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
     <span class="token property">"text"</span><span class="token operator">:</span> <span class="token string">"【{{title}}】"</span><span class="token punctuation">,</span>
     <span class="token property">"desp"</span><span class="token operator">:</span> <span class="token string">"{{ url }}{% line_break %}{% line_break %}{{ content | replace: \"\n\", \"\n\n\" }}"</span>
-<span class="token punctuation">}</span></code></pre>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 <p><strong>要注意的是：</strong>如果直接在它的模板里修改参数信息，则**带有<code>\</code>的会自动转义为<code>\\</code>**！</p>
 <p>因此直接写<code>\n</code>不可行，而要点击<strong>Toggle View</strong>然后直接写<code>\n</code>。或者也可以调用 Huginn 提供的方法 <code> {% line_break %} </code> 。</p>
 <p>另一个问题，<strong>在Server Chan中<code>\n\n</code>才能换行</strong>，于是利用 Liquid 的<code>  {{ content | replace: \"\n\", \"\n\n\" }} </code> 把<code>\n</code>给替换成<code>\n\n</code>。（需要直接写，不能直接在参数的框里改。</p>
 <p>还要注意保存后如果再次修改则<code>\n</code>又会自动变为<code>\\n</code>，注意留意。建议保存之前先<strong>Dry Run</strong>试试。</p>
 <h3 id="emit-events"><a href="#emit-events" class="headerlink" title="emit_events"></a>emit_events</h3><p>如果设为<code>true</code>，则会返回一个Event，可以再加一个Agent来判断是否发送成功。</p>
 <p>例如某次发送成功后得到的Event如下，其中的body部分为返回的数据。</p>
-<pre class="language-json" data-language="json"><code class="language-json"><span class="token punctuation">{</span>
+<pre class="line-numbers language-json" data-language="json"><code class="language-json"><span class="token punctuation">{</span>
   <span class="token property">"body"</span><span class="token operator">:</span> <span class="token string">"{\"errno\":0,\"errmsg\":\"success\",\"dataset\":\"done\"}"</span><span class="token punctuation">,</span>
   <span class="token property">"status"</span><span class="token operator">:</span> <span class="token number">200</span><span class="token punctuation">,</span>
   <span class="token property">"headers"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
@@ -744,7 +744,7 @@
     <span class="token property">"Set-Cookie"</span><span class="token operator">:</span> <span class="token string">"PHPSESSID=xxxxxxxxxx; expires=Wed, 11-Feb-2020 09:00:51 GMT; path=/; domain=sc.ftqq.com; HttpOnly"</span><span class="token punctuation">,</span>
     <span class="token property">"Content-Length"</span><span class="token operator">:</span> <span class="token number">47</span>
   <span class="token punctuation">}</span>
-<span class="token punctuation">}</span></code></pre>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <hr>
 <h2 id="将通知推送到Telegram-Channel"><a href="#将通知推送到Telegram-Channel" class="headerlink" title="将通知推送到Telegram Channel"></a>将通知推送到Telegram Channel</h2><p><strong>Crawler_AAO #3 Telegram Channel Push</strong></p>
 <p>同样使用的是<strong>Post Agent</strong>。<em>（看了一下，Telegram Agent好像不大灵活，而且还需要先有一个Event Formatting Agent，让Event中包含either a <code>text</code>, <code>photo</code>, <code>audio</code>, <code>document</code> or <code>video</code> key.）</em></p>

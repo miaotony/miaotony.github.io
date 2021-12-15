@@ -628,7 +628,7 @@
 <p><img src="/2020/05/04/CTF_2020De1CTF/image-20200504215546635.png" alt="dir"></p>
 <p>这里发现就藏在 <code>666.jpg</code> 里了呀！</p>
 <p>使用 <code>notepad</code> 可以查看里面的内容了。</p>
-<pre class="language-bash" data-language="bash"><code class="language-bash">notepad <span class="token number">666</span>.jpg:fffffffflllll.txt</code></pre>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">notepad <span class="token number">666</span>.jpg:fffffffflllll.txt<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p><img src="/2020/05/04/CTF_2020De1CTF/image-20200504215709498.png" alt="flag"></p>
 <p>于是 flag 就是</p>
 <p><code>De1CTF{E4Sy_M1sc_By_Jaivy_31b229908cb9bb}</code></p>
@@ -640,14 +640,14 @@
 <p><strong>下载地址：</strong> <a target="_blank" rel="noopener" href="https://files.cnblogs.com/files/rainbow7/lads.zip">戳这里</a></p>
 <p><strong>使用方法：</strong></p>
 <p>搜索 <code>File</code> 所在目录及其子目录下的所有数据流：（<code>/S</code>表示递归子目录）</p>
-<pre class="language-bash" data-language="bash"><code class="language-bash">lads.exe File /S</code></pre>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">lads.exe File /S<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>或者把lads复制到要搜索的目录，就不用指定file了。</p>
-<pre class="language-bash" data-language="bash"><code class="language-bash">lads.exe /S</code></pre>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">lads.exe /S<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>而后再用 notepad 之类打开就完事了。</p>
 <p>或者<strong>也可以用 powershell 查看内容</strong>。</p>
 <p>利用 <code>-Stream</code> 参数来提取。</p>
-<pre class="language-powershell" data-language="powershell"><code class="language-powershell"><span class="token function">cat</span> <span class="token punctuation">.</span>\666<span class="token punctuation">.</span>jpg <span class="token operator">-</span>Stream fffffffflllll<span class="token punctuation">.</span>txt
-<span class="token comment"># 其实就是 Get-Content .\666.jpg -Stream fffffffflllll.txt</span></code></pre>
+<pre class="line-numbers language-powershell" data-language="powershell"><code class="language-powershell"><span class="token function">cat</span> <span class="token punctuation">.</span>\666<span class="token punctuation">.</span>jpg <span class="token operator">-</span>Stream fffffffflllll<span class="token punctuation">.</span>txt
+<span class="token comment"># 其实就是 Get-Content .\666.jpg -Stream fffffffflllll.txt</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 <p><img src="/2020/05/04/CTF_2020De1CTF/image-20200504223649771.png" alt="powershell"></p>
 <p>不过怎么说呢，这个软件挺老了，<a target="_blank" rel="noopener" href="http://www.heysoft.de/">作者网站</a>上说Windows下用 <code>dir /r</code> 都有这个功能了，于是不再需要 LADS 了，也因此不提供下载了，妙啊 2333.</p>
 <h4 id="AlternateStreamView"><a href="#AlternateStreamView" class="headerlink" title="AlternateStreamView"></a>AlternateStreamView</h4><p>这个网上一搜就有下载了。</p>
@@ -660,27 +660,27 @@
 <p><img src="/2020/05/04/CTF_2020De1CTF/image-20200504220908382.png" alt="Ntfs Streams Editor"></p>
 <p>当然，貌似用一些内存取证的工具也能提取，这里不说了啦。</p>
 <h3 id="写入-ADS"><a href="#写入-ADS" class="headerlink" title="写入 ADS"></a>写入 ADS</h3><h4 id="echo"><a href="#echo" class="headerlink" title="echo"></a>echo</h4><p>首先创建一个文件，再写入隐藏的信息。</p>
-<pre class="language-bash" data-language="bash"><code class="language-bash"><span class="token builtin class-name">echo</span> <span class="token string">"hello"</span> <span class="token operator">&gt;</span> <span class="token number">1</span>.txt
-<span class="token builtin class-name">echo</span> <span class="token string">"miaotony"</span> <span class="token operator">&gt;</span> <span class="token number">1</span>.txt:2.txt</code></pre>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token builtin class-name">echo</span> <span class="token string">"hello"</span> <span class="token operator">&gt;</span> <span class="token number">1</span>.txt
+<span class="token builtin class-name">echo</span> <span class="token string">"miaotony"</span> <span class="token operator">&gt;</span> <span class="token number">1</span>.txt:2.txt<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 <p><img src="/2020/05/04/CTF_2020De1CTF/image-20200504224344130.png" alt="写入ADS"></p>
 <p>注意一下，用<code>dir</code>是看不到这个隐藏的数据流哒。</p>
 <p><img src="/2020/05/04/CTF_2020De1CTF/image-20200504224556651.png" alt="dir"></p>
 <p>同理使用 binwalk / foremost 也不能看到隐写的数据。</p>
 <h4 id="type"><a href="#type" class="headerlink" title="type"></a>type</h4><p>还可以使用<code>type</code>命令，将已经存在的文件附加上去。</p>
-<pre class="language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># type "要隐藏的附加文件"&gt;"宿主文件":"要隐藏的附加文件"</span>
-<span class="token builtin class-name">type</span> <span class="token string">"2.txt"</span> <span class="token operator">&gt;</span> <span class="token string">"1.txt"</span><span class="token builtin class-name">:</span><span class="token string">"2.txt"</span></code></pre>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># type "要隐藏的附加文件"&gt;"宿主文件":"要隐藏的附加文件"</span>
+<span class="token builtin class-name">type</span> <span class="token string">"2.txt"</span> <span class="token operator">&gt;</span> <span class="token string">"1.txt"</span><span class="token builtin class-name">:</span><span class="token string">"2.txt"</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 <p>可以用它来向 ADS 中写入图像/音频/可执行文件。</p>
-<pre class="language-bash" data-language="bash"><code class="language-bash"><span class="token builtin class-name">type</span> <span class="token string">"hidden.jpg"</span> <span class="token operator">&gt;</span> <span class="token string">"targe.jpg"</span><span class="token builtin class-name">:</span><span class="token string">"hidden.jpg"</span>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token builtin class-name">type</span> <span class="token string">"hidden.jpg"</span> <span class="token operator">&gt;</span> <span class="token string">"targe.jpg"</span><span class="token builtin class-name">:</span><span class="token string">"hidden.jpg"</span>
 <span class="token builtin class-name">type</span> <span class="token string">"hidden.mp4"</span> <span class="token operator">&gt;</span> <span class="token string">"targe.jpg"</span><span class="token builtin class-name">:</span><span class="token string">"hidden.mp4"</span>
 <span class="token builtin class-name">type</span> <span class="token string">"hidden.exe"</span><span class="token operator">&gt;&gt;</span><span class="token string">"targe.txt"</span><span class="token builtin class-name">:</span><span class="token string">"hidden.exe"</span>
-<span class="token builtin class-name">type</span> <span class="token string">"hidden.exe"</span><span class="token operator">&gt;&gt;</span><span class="token string">"targe.exe"</span><span class="token builtin class-name">:</span><span class="token string">"hidden.exe"</span></code></pre>
+<span class="token builtin class-name">type</span> <span class="token string">"hidden.exe"</span><span class="token operator">&gt;&gt;</span><span class="token string">"targe.exe"</span><span class="token builtin class-name">:</span><span class="token string">"hidden.exe"</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 <p>不过在 Windows Vista 及后续系统中已经无法直接运行 ADS 中的可执行文件了。</p>
 <h3 id="删除-ADS"><a href="#删除-ADS" class="headerlink" title="删除 ADS"></a>删除 ADS</h3><p>可以使用 Ntfs Streams Editor，搜索到勾选删除就好。</p>
 <p><img src="/2020/05/04/CTF_2020De1CTF/image-20200504224924332.png" alt="删除ADS"></p>
 <p>也可以使用<code>streams.exe</code>这个软件删除。</p>
 <p>下载地址：<a target="_blank" rel="noopener" href="https://files.cnblogs.com/files/rainbow7/streams.zip">戳这里</a></p>
 <p><img src="/2020/05/04/CTF_2020De1CTF/image-20200504225625810.png" alt="streams"></p>
-<pre class="language-bash" data-language="bash"><code class="language-bash">streams.exe -d <span class="token operator">&lt;</span>File<span class="token operator">&gt;</span></code></pre>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">streams.exe -d <span class="token operator">&lt;</span>File<span class="token operator">&gt;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>加入<code>-s</code>参数则递归子目录删除。</p>
 <p>如果报错就先把相关的进程结束掉再执行。</p>
 <p>注意不要在根目录下执行，以防删除有用的数据流呀。</p>

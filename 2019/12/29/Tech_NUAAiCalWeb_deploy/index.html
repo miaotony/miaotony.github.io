@@ -650,7 +650,7 @@
 <p>安装完之后就可以在命令行用<code>heroku</code>命令了。</p>
 </li>
 <li><p><strong>登录</strong></p>
-<pre class="language-bash" data-language="bash"><code class="language-bash">heroku login</code></pre>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">heroku login<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>会弹出网页登录验证，或者在命令行登录。</p>
 </li>
 <li><p><strong>准备好app</strong></p>
@@ -660,11 +660,11 @@
 <p>这个在上一节已经搭建好了喵。</p>
 </li>
 <li><p><strong>创建app</strong></p>
-<pre class="language-bash" data-language="bash"><code class="language-bash">heroku create</code></pre>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">heroku create<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>这时候同时建立了一个名为<code>heroku</code>的git remote仓库，连接到了你本地的git仓库。</p>
 <p>当然也可以现在网站上创建一个应用，再clone</p>
-<pre class="language-bash" data-language="bash"><code class="language-bash">heroku git:clone -a nuaaical
-<span class="token builtin class-name">cd</span> nuaaical</code></pre>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">heroku git:clone -a nuaaical
+<span class="token builtin class-name">cd</span> nuaaical<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 <p>这里前提是建立好了名为<code>nuaaical</code>的应用了。</p>
 </li>
 <li><p><strong>建立依赖相关的<code>requirements.txt</code></strong></p>
@@ -674,23 +674,23 @@
 <p><strong>这里算是一个坑吧，折腾了好久才发现。</strong></p>
 <p>你必须先在代码目录下建立一个名为<code>Procfile</code>的文件，在里面写上你要他执行的命令。比如执行一个python文件之类的。</p>
 <p>在这里用的是<code>gunicorn</code>来建立一个web应用。（flask只用于本地测试使用</p>
-<pre class="language-none"><code class="language-none">web: gunicorn web:app</code></pre>
+<pre class="line-numbers language-none"><code class="language-none">web: gunicorn web:app<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>第二个<code>web</code>是文件名（<code>web.py</code>），<code>app</code>是flask实例化的对象啦。<br>（代码里写的<code>app = Flask(__name__)</code>  </p>
 </li>
 <li><p><strong>指定用构建语言（可略？）</strong></p>
-<pre class="language-bash" data-language="bash"><code class="language-bash">heroku buildpacks:set heroku/python</code></pre>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">heroku buildpacks:set heroku/python<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>显示指定用python来构建打包（网上有的说不指定会报错？</p>
 </li>
 <li><p><strong>部署代码</strong></p>
 <p>终于可以部署了呀！直接push好了。</p>
-<pre class="language-bash" data-language="bash"><code class="language-bash"><span class="token function">git</span> push heroku master</code></pre>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">git</span> push heroku master<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>如果不行的话加上<code>-f</code>强制push<strong>（小心一点）</strong>。</p>
 <p>然后可以看到部署的日志，如果有问题就再看看。</p>
 <p>没问题的话，效果类似下面的。</p>
 <p><img src="/2019/12/29/Tech_NUAAiCalWeb_deploy/push.png" alt="push"></p>
 </li>
 <li><p><strong>看看你的网站吧</strong></p>
-<pre class="language-bash" data-language="bash"><code class="language-bash">heroku <span class="token function">open</span></code></pre>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">heroku <span class="token function">open</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>然后会调用你的浏览器打开。</p>
 <p>或者自己在浏览器访问就好了。</p>
 </li>
@@ -700,14 +700,14 @@
 <h3 id="拓展"><a href="#拓展" class="headerlink" title="拓展"></a>拓展</h3><p>当然还有一些<strong>常用命令</strong>，比如：</p>
 <ul>
 <li><p>查看日志**(debug必备了)**</p>
-<pre class="language-bash" data-language="bash"><code class="language-bash">heroku logs --tail</code></pre></li>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">heroku logs --tail<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
 <li><p>看一下还有多少剩余时长</p>
-<pre class="language-bash" data-language="bash"><code class="language-bash">heroku <span class="token function">ps</span></code></pre>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">heroku <span class="token function">ps</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 </li>
 <li><p>打开app服务</p>
-<pre class="language-bash" data-language="bash"><code class="language-bash">heroku ps:scale <span class="token assign-left variable">web</span><span class="token operator">=</span><span class="token number">1</span></code></pre></li>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">heroku ps:scale <span class="token assign-left variable">web</span><span class="token operator">=</span><span class="token number">1</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
 <li><p>关闭app服务</p>
-<pre class="language-bash" data-language="bash"><code class="language-bash">heroku ps:scale <span class="token assign-left variable">web</span><span class="token operator">=</span><span class="token number">0</span></code></pre>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">heroku ps:scale <span class="token assign-left variable">web</span><span class="token operator">=</span><span class="token number">0</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 </li>
 <li><p>etc.</p>
 </li>

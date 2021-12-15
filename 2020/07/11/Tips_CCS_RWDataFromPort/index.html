@@ -572,8 +572,8 @@
 <p>通过修改 GEL文件，<strong>定义 I/O 端口地址映像</strong>。</p>
 <p>在初始化过程中<strong>将输出端口 PA0 映射到 0x0000，将输入端口 PA1 映射到 0x0001</strong>。</p>
 <p>即在 <code>C5402_Init()</code> 函数中加入下面的语句。</p>
-<pre class="language-c" data-language="c"><code class="language-c"><span class="token function">GEL_MapAdd</span><span class="token punctuation">(</span><span class="token number">0x0001</span><span class="token punctuation">,</span><span class="token number">2</span><span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">/* I/O Read */</span>
-<span class="token function">GEL_MapAdd</span><span class="token punctuation">(</span><span class="token number">0x0000</span><span class="token punctuation">,</span><span class="token number">2</span><span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">/* I/O Write */</span></code></pre>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token function">GEL_MapAdd</span><span class="token punctuation">(</span><span class="token number">0x0001</span><span class="token punctuation">,</span><span class="token number">2</span><span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">/* I/O Read */</span>
+<span class="token function">GEL_MapAdd</span><span class="token punctuation">(</span><span class="token number">0x0000</span><span class="token punctuation">,</span><span class="token number">2</span><span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">/* I/O Write */</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 <blockquote>
 <p>具体含义是</p>
 <p><strong>GEL_MapAdd(address, page, length, readable, writeable);</strong></p>
@@ -608,17 +608,17 @@
 <p>（盲猜可能在输出缓存中？占用了文件句柄但没有 flush？）</p>
 <p>因此要想看到结果的话一种方法是断开输出文件，另一种方法，关掉 CCS（简单粗暴。</p>
 <h3 id="Step-5-在汇编中使用端口"><a href="#Step-5-在汇编中使用端口" class="headerlink" title="Step 5 在汇编中使用端口"></a>Step 5 在汇编中使用端口</h3><p>首先定义输入输出端口如下。</p>
-<pre class="language-asm" data-language="asm"><code class="language-asm">PA0 .set 0 ;0口 输出 
-PA1 .set 1 ;1口 输入</code></pre>
+<pre class="line-numbers language-asm" data-language="asm"><code class="language-asm">PA0 .set 0 ;0口 输出 
+PA1 .set 1 ;1口 输入<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 <p>而后结合 PORTR、PORTW 等命令使用端口即可。</p>
-<pre class="language-asm" data-language="asm"><code class="language-asm">PORTR PA1,@x
-PORTW @y,PA0</code></pre>
+<pre class="line-numbers language-asm" data-language="asm"><code class="language-asm">PORTR PA1,@x
+PORTW @y,PA0<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 <p>好了，大概就这些了喵~</p>
 <hr>
 <h2 id="一种简化方法"><a href="#一种简化方法" class="headerlink" title="一种简化方法"></a>一种简化方法</h2><p>噢对了，书上还给出了一种替代方案，可以简化前述方法的 Step 3.</p>
 <p>就是<strong>在 GEL 文件初始化函数中再加入下面的语句</strong>，直接建立端口的连接。</p>
-<pre class="language-c" data-language="c"><code class="language-c"><span class="token function">GEL_PortConnect</span><span class="token punctuation">(</span><span class="token number">0x0001</span><span class="token punctuation">,</span><span class="token number">2</span><span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">0x01</span><span class="token punctuation">,</span><span class="token string">"C:\\ti\\C54x\\in.dat"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token function">GEL_PortConnect</span><span class="token punctuation">(</span><span class="token number">0x0000</span><span class="token punctuation">,</span><span class="token number">2</span><span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">0x02</span><span class="token punctuation">,</span><span class="token string">"C:\\ti\\C54x\\out.dat"</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token function">GEL_PortConnect</span><span class="token punctuation">(</span><span class="token number">0x0001</span><span class="token punctuation">,</span><span class="token number">2</span><span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">0x01</span><span class="token punctuation">,</span><span class="token string">"C:\\ti\\C54x\\in.dat"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">GEL_PortConnect</span><span class="token punctuation">(</span><span class="token number">0x0000</span><span class="token punctuation">,</span><span class="token number">2</span><span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">0x02</span><span class="token punctuation">,</span><span class="token string">"C:\\ti\\C54x\\out.dat"</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 <blockquote>
 <p>具体含义是</p>
 <p><strong>GEL_PortConnect(portAddress, page, length, accessType, fileName);</strong></p>

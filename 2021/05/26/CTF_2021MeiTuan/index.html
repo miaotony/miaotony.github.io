@@ -560,7 +560,7 @@
 <p>图片高度都为100，宽度有所区别。盲猜是一维码了。</p>
 <p>写个jio本合成一下。</p>
 <p>其实写脚本的时候这里直接是 foremost 导出来的，按照 <code>null.vhd</code> 里存放的先后顺序。</p>
-<pre class="language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> PIL<span class="token punctuation">.</span>Image <span class="token keyword">as</span> Image
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> PIL<span class="token punctuation">.</span>Image <span class="token keyword">as</span> Image
 <span class="token keyword">import</span> os
 
 IMAGES_PATH <span class="token operator">=</span> <span class="token string">r'.\Misc_Different_Puzzle\null.vhd_outfile\png\\'</span>
@@ -578,7 +578,7 @@ x <span class="token operator">=</span> <span class="token number">0</span>
 
 to_image<span class="token punctuation">.</span>show<span class="token punctuation">(</span><span class="token punctuation">)</span>
 to_image<span class="token punctuation">.</span>save<span class="token punctuation">(</span><span class="token string">'decode.png'</span><span class="token punctuation">)</span>
-<span class="token comment"># EuO9&amp;cDH</span></code></pre>
+<span class="token comment"># EuO9&amp;cDH</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 
 <p><img src="/2021/05/26/CTF_2021MeiTuan/decode.png" alt="decode"></p>
@@ -602,7 +602,7 @@ to_image<span class="token punctuation">.</span>save<span class="token punctuati
 <p>一共 88209 行数据，正好是 297x297。</p>
 <p>那说不定括号里就是 (R, G, B, A)，把对应的颜色映射为 0 和 1，那就是二维码了吧。</p>
 <p>写个 jio 本复原一下。</p>
-<pre class="language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> re
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> re
 <span class="token keyword">from</span> PIL <span class="token keyword">import</span> Image
 
 <span class="token keyword">with</span> <span class="token builtin">open</span><span class="token punctuation">(</span><span class="token string">'useful.txt'</span><span class="token punctuation">,</span> <span class="token string">'r'</span><span class="token punctuation">,</span> encoding<span class="token operator">=</span><span class="token string">'utf-8'</span><span class="token punctuation">)</span> <span class="token keyword">as</span> fin<span class="token punctuation">:</span>
@@ -635,7 +635,7 @@ im2 <span class="token operator">=</span> Image<span class="token punctuation">.
             <span class="token comment"># im2.putpixel((i, j), (255, 255, 255))</span>
 
 <span class="token comment"># im2.show()</span>
-im2<span class="token punctuation">.</span>save<span class="token punctuation">(</span><span class="token string">'decrypt2.png'</span><span class="token punctuation">)</span></code></pre>
+im2<span class="token punctuation">.</span>save<span class="token punctuation">(</span><span class="token string">'decrypt2.png'</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>得到一张二维码。</p>
 <p><img src="/2021/05/26/CTF_2021MeiTuan/decrypt.png" alt="decrypt"></p>
 <p>扫描 QR 得到 <code>8c8040579121e55ca4c58f9</code>，拿去解压。</p>
@@ -646,7 +646,7 @@ im2<span class="token punctuation">.</span>save<span class="token punctuation">(
 <p>参考 <a target="_blank" rel="noopener" href="https://desertwatermelon.blog.csdn.net/article/details/81455344">KNN分类算法原理及实现及sklearn中的使用方法</a>，<a target="_blank" rel="noopener" href="https://blog.csdn.net/pengjunlee/article/details/82713047">机器学习之KNN最邻近分类算法</a></p>
 <p>咱就整个 KNN 出来吧。</p>
 <p>这里直接用 sklearn 里自带的 KNN 来实现了。</p>
-<pre class="language-python" data-language="python"><code class="language-python"><span class="token comment"># 导入画图工具</span>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token comment"># 导入画图工具</span>
 <span class="token keyword">import</span> matplotlib<span class="token punctuation">.</span>pyplot <span class="token keyword">as</span> plt
 <span class="token comment"># 导入数组工具</span>
 <span class="token keyword">import</span> numpy <span class="token keyword">as</span> np
@@ -693,7 +693,7 @@ im2 <span class="token operator">=</span> Image<span class="token punctuation">.
             im2<span class="token punctuation">.</span>putpixel<span class="token punctuation">(</span><span class="token punctuation">(</span>i<span class="token punctuation">,</span> j<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
 
 im2<span class="token punctuation">.</span>show<span class="token punctuation">(</span><span class="token punctuation">)</span>
-im2<span class="token punctuation">.</span>save<span class="token punctuation">(</span><span class="token string">'decrypt2.png'</span><span class="token punctuation">)</span></code></pre>
+im2<span class="token punctuation">.</span>save<span class="token punctuation">(</span><span class="token string">'decrypt2.png'</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 
 <p><img src="/2021/05/26/CTF_2021MeiTuan/decrypt2.png" alt="decrypt2"></p>

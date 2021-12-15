@@ -575,7 +575,7 @@
 <p><img src="/2021/05/24/CTF_2021RedHat/image-20210509220834285.png"></p>
 <p>然而这题里魔改了一下，就根据 data2 重新映射一下。</p>
 <p>写个 jio本。</p>
-<pre class="language-python" data-language="python"><code class="language-python"><span class="token triple-quoted-string string">"""
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token triple-quoted-string string">"""
 MiaoTony
 """</span>
 <span class="token keyword">from</span> PIL <span class="token keyword">import</span> Image
@@ -622,7 +622,7 @@ cnt <span class="token operator">=</span> <span class="token number">0</span>
         cnt <span class="token operator">+=</span> <span class="token number">1</span>
 
 c<span class="token punctuation">.</span>show<span class="token punctuation">(</span><span class="token punctuation">)</span>
-c<span class="token punctuation">.</span>save<span class="token punctuation">(</span><span class="token string">"c.png"</span><span class="token punctuation">)</span></code></pre>
+c<span class="token punctuation">.</span>save<span class="token punctuation">(</span><span class="token string">"c.png"</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>得到</p>
 <p><img src="/2021/05/24/CTF_2021RedHat/c.png" alt="c"></p>
 <p>再到 <strong><a target="_blank" rel="noopener" href="https://www.bertnase.de/npiet/npiet-execute.php">npiet online</a></strong> 上去执行一下，就能拿到 flag 了。</p>
@@ -633,7 +633,7 @@ c<span class="token punctuation">.</span>save<span class="token punctuation">(</
 <p><a target="_blank" rel="noopener" href="https://pan.baidu.com/s/1GiXAmi2ZRVL4hBKTovfX9w">附件下载</a> 提取码（GAME）<a target="_blank" rel="noopener" href="https://share.weiyun.com/XyY8ELYw">备用下载</a></p>
 </blockquote>
 <h4 id="challenge-1"><a href="#challenge-1" class="headerlink" title="challenge 1"></a>challenge 1</h4><p><code>create.py</code></p>
-<pre class="language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> os
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> os
 <span class="token keyword">import</span> cv2
 <span class="token keyword">import</span> struct
 <span class="token keyword">import</span> numpy <span class="token keyword">as</span> np
@@ -680,12 +680,12 @@ c<span class="token punctuation">.</span>save<span class="token punctuation">(</
 
     r_file<span class="token punctuation">.</span>close<span class="token punctuation">(</span><span class="token punctuation">)</span>
     os<span class="token punctuation">.</span>system<span class="token punctuation">(</span><span class="token string">'ffmpeg -i m/%03d.png -r 25 -vcodec png 1.mkv'</span><span class="token punctuation">)</span>
-    os<span class="token punctuation">.</span>system<span class="token punctuation">(</span><span class="token string">'ffmpeg -i p/%03d.png -r 25 -vcodec png 2.mkv'</span><span class="token punctuation">)</span></code></pre>
+    os<span class="token punctuation">.</span>system<span class="token punctuation">(</span><span class="token string">'ffmpeg -i p/%03d.png -r 25 -vcodec png 2.mkv'</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>可以发现把视频切分得到每一帧，然后 FFT 得到幅度m和相位p，再合并得到两个视频。文件 <code>r</code> 里存了每一帧中幅值的最大和最小值。</p>
 <p>那咱就反过来，通过幅值和相位的视频切分得到每一帧，然后 IFFT 变换回去就完事了。</p>
 <p>相位范围就是 -pi 到 pi 之间。</p>
 <p>写个脚本。</p>
-<pre class="language-python" data-language="python"><code class="language-python"><span class="token triple-quoted-string string">"""
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token triple-quoted-string string">"""
 MiaoTony
 """</span>
 <span class="token keyword">import</span> os
@@ -751,11 +751,11 @@ MiaoTony
         img_raw <span class="token operator">=</span> ifft<span class="token punctuation">(</span>m<span class="token punctuation">,</span> p<span class="token punctuation">)</span>
         <span class="token comment"># plot(img_raw)</span>
         <span class="token comment"># show()</span>
-        cv2<span class="token punctuation">.</span>imwrite<span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f'frame/</span><span class="token interpolation"><span class="token punctuation">{</span><span class="token builtin">file</span><span class="token punctuation">}</span></span><span class="token string">'</span></span><span class="token punctuation">,</span> img_raw<span class="token punctuation">)</span></code></pre>
+        cv2<span class="token punctuation">.</span>imwrite<span class="token punctuation">(</span><span class="token string-interpolation"><span class="token string">f'frame/</span><span class="token interpolation"><span class="token punctuation">{</span><span class="token builtin">file</span><span class="token punctuation">}</span></span><span class="token string">'</span></span><span class="token punctuation">,</span> img_raw<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>在还原后的视频的最后，得到压缩包的解压密码 <code>zs6hmdlq5ohav5l1</code></p>
 <p><img src="/2021/05/24/CTF_2021RedHat/200.png"></p>
 <h4 id="challenge-2"><a href="#challenge-2" class="headerlink" title="challenge 2"></a>challenge 2</h4><p><code>hint.txt</code> 是个 MathML</p>
-<pre class="language-none"><code class="language-none">&lt;math&gt;&lt;mrow&gt;&lt;mo&gt;{&lt;/mo&gt;&lt;mtable&gt;&lt;mtr&gt;&lt;mtd&gt;&lt;mi&gt;A&lt;/mi&gt;&lt;mi&gt;cos&lt;/mi&gt;&lt;mo&gt;⁡&lt;/mo&gt;&lt;mo&gt;(&lt;/mo&gt;&lt;mi&gt;m&lt;/mi&gt;&lt;mi&gt;x&lt;/mi&gt;&lt;mo&gt;+&lt;/mo&gt;&lt;mi&gt;n&lt;/mi&gt;&lt;mo&gt;)&lt;/mo&gt;&lt;/mtd&gt;&lt;/mtr&gt;&lt;mtr&gt;&lt;mtd&gt;&lt;mi&gt;B&lt;/mi&gt;&lt;mi&gt;cos&lt;/mi&gt;&lt;mo&gt;⁡&lt;/mo&gt;&lt;mo&gt;(&lt;/mo&gt;&lt;mi&gt;p&lt;/mi&gt;&lt;mi&gt;x&lt;/mi&gt;&lt;mo&gt;+&lt;/mo&gt;&lt;mi&gt;q&lt;/mi&gt;&lt;mo&gt;)&lt;/mo&gt;&lt;/mtd&gt;&lt;/mtr&gt;&lt;/mtable&gt;&lt;mo&gt;&lt;/mo&gt;&lt;/mrow&gt;&lt;mo&gt;⟶&lt;/mo&gt;&lt;mrow&gt;&lt;mo&gt;{&lt;/mo&gt;&lt;mtable&gt;&lt;mtr&gt;&lt;mtd&gt;&lt;mi&gt;A&lt;/mi&gt;&lt;mi&gt;cos&lt;/mi&gt;&lt;mo&gt;⁡&lt;/mo&gt;&lt;mo&gt;(&lt;/mo&gt;&lt;mi&gt;p&lt;/mi&gt;&lt;mi&gt;x&lt;/mi&gt;&lt;mo&gt;+&lt;/mo&gt;&lt;mi&gt;q&lt;/mi&gt;&lt;mo&gt;)&lt;/mo&gt;&lt;/mtd&gt;&lt;/mtr&gt;&lt;mtr&gt;&lt;mtd&gt;&lt;mi&gt;B&lt;/mi&gt;&lt;mi&gt;cos&lt;/mi&gt;&lt;mo&gt;⁡&lt;/mo&gt;&lt;mo&gt;(&lt;/mo&gt;&lt;mi&gt;m&lt;/mi&gt;&lt;mi&gt;x&lt;/mi&gt;&lt;mo&gt;+&lt;/mo&gt;&lt;mi&gt;n&lt;/mi&gt;&lt;mo&gt;)&lt;/mo&gt;&lt;/mtd&gt;&lt;/mtr&gt;&lt;/mtable&gt;&lt;mo&gt;&lt;/mo&gt;&lt;/mrow&gt;&lt;math&gt;</code></pre>
+<pre class="line-numbers language-none"><code class="language-none">&lt;math&gt;&lt;mrow&gt;&lt;mo&gt;{&lt;/mo&gt;&lt;mtable&gt;&lt;mtr&gt;&lt;mtd&gt;&lt;mi&gt;A&lt;/mi&gt;&lt;mi&gt;cos&lt;/mi&gt;&lt;mo&gt;⁡&lt;/mo&gt;&lt;mo&gt;(&lt;/mo&gt;&lt;mi&gt;m&lt;/mi&gt;&lt;mi&gt;x&lt;/mi&gt;&lt;mo&gt;+&lt;/mo&gt;&lt;mi&gt;n&lt;/mi&gt;&lt;mo&gt;)&lt;/mo&gt;&lt;/mtd&gt;&lt;/mtr&gt;&lt;mtr&gt;&lt;mtd&gt;&lt;mi&gt;B&lt;/mi&gt;&lt;mi&gt;cos&lt;/mi&gt;&lt;mo&gt;⁡&lt;/mo&gt;&lt;mo&gt;(&lt;/mo&gt;&lt;mi&gt;p&lt;/mi&gt;&lt;mi&gt;x&lt;/mi&gt;&lt;mo&gt;+&lt;/mo&gt;&lt;mi&gt;q&lt;/mi&gt;&lt;mo&gt;)&lt;/mo&gt;&lt;/mtd&gt;&lt;/mtr&gt;&lt;/mtable&gt;&lt;mo&gt;&lt;/mo&gt;&lt;/mrow&gt;&lt;mo&gt;⟶&lt;/mo&gt;&lt;mrow&gt;&lt;mo&gt;{&lt;/mo&gt;&lt;mtable&gt;&lt;mtr&gt;&lt;mtd&gt;&lt;mi&gt;A&lt;/mi&gt;&lt;mi&gt;cos&lt;/mi&gt;&lt;mo&gt;⁡&lt;/mo&gt;&lt;mo&gt;(&lt;/mo&gt;&lt;mi&gt;p&lt;/mi&gt;&lt;mi&gt;x&lt;/mi&gt;&lt;mo&gt;+&lt;/mo&gt;&lt;mi&gt;q&lt;/mi&gt;&lt;mo&gt;)&lt;/mo&gt;&lt;/mtd&gt;&lt;/mtr&gt;&lt;mtr&gt;&lt;mtd&gt;&lt;mi&gt;B&lt;/mi&gt;&lt;mi&gt;cos&lt;/mi&gt;&lt;mo&gt;⁡&lt;/mo&gt;&lt;mo&gt;(&lt;/mo&gt;&lt;mi&gt;m&lt;/mi&gt;&lt;mi&gt;x&lt;/mi&gt;&lt;mo&gt;+&lt;/mo&gt;&lt;mi&gt;n&lt;/mi&gt;&lt;mo&gt;)&lt;/mo&gt;&lt;/mtd&gt;&lt;/mtr&gt;&lt;/mtable&gt;&lt;mo&gt;&lt;/mo&gt;&lt;/mrow&gt;&lt;math&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>也就是 </p>
 <p><img src="/2021/05/24/CTF_2021RedHat/image-20210525002117213.png"></p>
 <p>意思是幅值不变，而相位相互交换。</p>
@@ -763,7 +763,7 @@ MiaoTony
 <p><img src="/2021/05/24/CTF_2021RedHat/mix1.png" alt="mix1"></p>
 <p><img src="/2021/05/24/CTF_2021RedHat/mix2.png" alt="mix2"></p>
 <p>第二张明显有个二维码，脚本整一个！</p>
-<pre class="language-python" data-language="python"><code class="language-python"><span class="token triple-quoted-string string">"""
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token triple-quoted-string string">"""
 MiaoTony
 """</span>
 <span class="token keyword">import</span> os
@@ -800,16 +800,16 @@ MiaoTony
     new_img2 <span class="token operator">=</span> ifft<span class="token punctuation">(</span>m2<span class="token punctuation">,</span> p1<span class="token punctuation">)</span>
 
     cv2<span class="token punctuation">.</span>imwrite<span class="token punctuation">(</span><span class="token string">'new1.png'</span><span class="token punctuation">,</span> new_img1<span class="token punctuation">)</span>
-    cv2<span class="token punctuation">.</span>imwrite<span class="token punctuation">(</span><span class="token string">'new2.png'</span><span class="token punctuation">,</span> new_img2<span class="token punctuation">)</span></code></pre>
+    cv2<span class="token punctuation">.</span>imwrite<span class="token punctuation">(</span><span class="token string">'new2.png'</span><span class="token punctuation">,</span> new_img2<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>其中一张里面就看出二维码了。</p>
 <p><img src="/2021/05/24/CTF_2021RedHat/new1.png" alt="new1"></p>
 <p>再稍微调一下图像的曲线。</p>
 <p><img src="/2021/05/24/CTF_2021RedHat/new1-1.png"></p>
 <p>扫码得到</p>
-<pre class="language-none"><code class="language-none">0f88b8529ab6c0dd2b5ceefaa1c5151aa207da114831b371ddcafc74cf8701c1d3318468d50e4b1725179d1bc04b251f</code></pre>
+<pre class="line-numbers language-none"><code class="language-none">0f88b8529ab6c0dd2b5ceefaa1c5151aa207da114831b371ddcafc74cf8701c1d3318468d50e4b1725179d1bc04b251f<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <blockquote>
 <p>唔，IFFT 那步应该取模值而不是直接取实部，也就是改成</p>
-<pre class="language-python" data-language="python"><code class="language-python">img <span class="token operator">=</span> np<span class="token punctuation">.</span><span class="token builtin">abs</span><span class="token punctuation">(</span>np<span class="token punctuation">.</span>fft<span class="token punctuation">.</span>ifft2<span class="token punctuation">(</span>y<span class="token punctuation">)</span><span class="token punctuation">)</span></code></pre>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">img <span class="token operator">=</span> np<span class="token punctuation">.</span><span class="token builtin">abs</span><span class="token punctuation">(</span>np<span class="token punctuation">.</span>fft<span class="token punctuation">.</span>ifft2<span class="token punctuation">(</span>y<span class="token punctuation">)</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 <p>这样得到的图片就不会丢失虚部的信息了。</p>
 <p><img src="/2021/05/24/CTF_2021RedHat/new11.png"></p>
@@ -817,7 +817,7 @@ MiaoTony
 <h4 id="final-challenge"><a href="#final-challenge" class="headerlink" title="final challenge"></a>final challenge</h4><p><img src="/2021/05/24/CTF_2021RedHat/phase.png" alt="phase"></p>
 <p>根据文件名称，盲猜是相位上有猫腻。</p>
 <p>首先将幅值调整到 -pi 到 pi 之间，当作相位，作傅里叶反变换，最后再归一化到 0 到 255 之间，画出图像。</p>
-<pre class="language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> os
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> os
 <span class="token keyword">import</span> cv2
 <span class="token keyword">import</span> struct
 <span class="token keyword">import</span> numpy <span class="token keyword">as</span> np
@@ -857,11 +857,11 @@ MiaoTony
     img_raw <span class="token operator">=</span> ifft<span class="token punctuation">(</span>p<span class="token punctuation">)</span>
     img2 <span class="token operator">=</span> mapping<span class="token punctuation">(</span>img_raw<span class="token punctuation">)</span>
     cv2<span class="token punctuation">.</span>imwrite<span class="token punctuation">(</span><span class="token string">'final.png'</span><span class="token punctuation">,</span> img2<span class="token punctuation">)</span>
-</code></pre>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p><img src="/2021/05/24/CTF_2021RedHat/final.png" alt="final"></p>
 <p>得到 <code>AESKEY: a8bms0v4qer3wgd67ofjhyxku5pi1czl</code></p>
 <p>而后用 AES ECB 模式解密</p>
-<pre class="language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> Crypto<span class="token punctuation">.</span>Cipher <span class="token keyword">import</span> AES
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> Crypto<span class="token punctuation">.</span>Cipher <span class="token keyword">import</span> AES
 
 key <span class="token operator">=</span> <span class="token string">"a8bms0v4qer3wgd67ofjhyxku5pi1czl"</span>
 aes <span class="token operator">=</span> AES<span class="token punctuation">.</span>new<span class="token punctuation">(</span>key<span class="token punctuation">,</span> AES<span class="token punctuation">.</span>MODE_ECB<span class="token punctuation">)</span>
@@ -869,13 +869,13 @@ cipher <span class="token operator">=</span> binascii<span class="token punctuat
     <span class="token string">"0f88b8529ab6c0dd2b5ceefaa1c5151aa207da114831b371ddcafc74cf8701c1d3318468d50e4b1725179d1bc04b251f"</span><span class="token punctuation">)</span>
 flag <span class="token operator">=</span> aes<span class="token punctuation">.</span>decrypt<span class="token punctuation">(</span>cipher<span class="token punctuation">)</span>
 <span class="token keyword">print</span><span class="token punctuation">(</span>flag<span class="token punctuation">)</span>
-<span class="token comment"># b'flag{1ba48c8b-4eca-46aa-8216-d164538af310}\x06\x06\x06\x06\x06\x06'</span></code></pre>
+<span class="token comment"># b'flag{1ba48c8b-4eca-46aa-8216-d164538af310}\x06\x06\x06\x06\x06\x06'</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p><code>flag{1ba48c8b-4eca-46aa-8216-d164538af310}</code></p>
 <blockquote>
 <p>草，果然是 CV 带师，把傅里叶变换各种折腾，喵喵是 fw，咱自己爬（（</p>
 </blockquote>
 <h2 id="Web"><a href="#Web" class="headerlink" title="Web"></a>Web</h2><h3 id="find-it"><a href="#find-it" class="headerlink" title="find_it"></a>find_it</h3><p><code>robots.txt</code> 泄露，访问 <code>1ndexx.php</code> 报500，后打开 <code>.1ndexx.php.swp</code> 拿到源码，phpinfo 页面拿到 flag</p>
-<pre class="language-none"><code class="language-none">code=&lt;?php phpinfo();?&gt;</code></pre>
+<pre class="line-numbers language-none"><code class="language-none">code=&lt;?php phpinfo();?&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 
 <h3 id="framework"><a href="#framework" class="headerlink" title="framework"></a>framework</h3><p><code>www.zip</code> 拿到源码</p>
@@ -883,7 +883,7 @@ flag <span class="token operator">=</span> aes<span class="token punctuation">.<
 <p><a target="_blank" rel="noopener" href="https://ca01h.top/code_audit/PHP/8.Yii2%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90%E5%8F%8A%E6%8B%93%E5%B1%95/#%E7%BC%96%E5%86%99EXP">https://ca01h.top/code_audit/PHP/8.Yii2%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90%E5%8F%8A%E6%8B%93%E5%B1%95/#%E7%BC%96%E5%86%99EXP</a></p>
 <p>魔改 exp <code>file_put_contents</code> 上传马，然后蚁剑连上后绕过 disable_function，拿到 flag</p>
 <h3 id="WebsiteManger"><a href="#WebsiteManger" class="headerlink" title="WebsiteManger"></a>WebsiteManger</h3><p><code>image.php?id=</code> 存在注入</p>
-<pre class="language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> requests
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> requests
 
 passwd <span class="token operator">=</span> <span class="token string">''</span>
 <span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">100</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
@@ -897,7 +897,7 @@ passwd <span class="token operator">=</span> <span class="token string">''</span
             <span class="token keyword">print</span><span class="token punctuation">(</span>passwd<span class="token punctuation">)</span>
             <span class="token keyword">continue</span>
 
-<span class="token comment"># e845b14ae11ff886a2f72</span></code></pre>
+<span class="token comment"># e845b14ae11ff886a2f72</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p><code>admin</code> / <code>e845b14ae11ff886a2f72</code> 登录</p>
 <p>而后 SSRF <code>file:///flag</code> 拿到 flag</p>
 <p><img src="/2021/05/24/CTF_2021RedHat/upload_7eec12741899fd163833b3f3d7db7fad.png"></p>

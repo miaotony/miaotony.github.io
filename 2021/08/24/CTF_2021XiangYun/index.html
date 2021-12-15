@@ -555,7 +555,7 @@
 <p><img src="/2021/08/24/CTF_2021XiangYun/upload_358bd4cb1aeb2934e7fac55dbdb7688e.png"></p>
 <p><code>Because I like naruto best</code> 作为密码，解压得到一堆的图片</p>
 <p>发现只有两种图片，换成 0/1 导出，得到一张图片，上面就有 flag</p>
-<pre class="language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> os
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> os
 
 files <span class="token operator">=</span> os<span class="token punctuation">.</span>listdir<span class="token punctuation">(</span><span class="token string">'out/'</span><span class="token punctuation">)</span>
 
@@ -587,7 +587,7 @@ d <span class="token operator">=</span> <span class="token string">''</span><spa
 result <span class="token operator">=</span> <span class="token string">''</span><span class="token punctuation">.</span>join<span class="token punctuation">(</span><span class="token builtin">list</span><span class="token punctuation">(</span><span class="token builtin">map</span><span class="token punctuation">(</span><span class="token builtin">str</span><span class="token punctuation">,</span> data<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
 <span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token builtin">len</span><span class="token punctuation">(</span>result<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token number">8</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
     byte <span class="token operator">=</span> result<span class="token punctuation">[</span>i<span class="token punctuation">:</span>i<span class="token operator">+</span><span class="token number">8</span><span class="token punctuation">]</span>
-    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token builtin">chr</span><span class="token punctuation">(</span><span class="token builtin">int</span><span class="token punctuation">(</span>byte<span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span> end<span class="token operator">=</span><span class="token string">""</span><span class="token punctuation">)</span></code></pre>
+    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token builtin">chr</span><span class="token punctuation">(</span><span class="token builtin">int</span><span class="token punctuation">(</span>byte<span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span> end<span class="token operator">=</span><span class="token string">""</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p><img src="/2021/08/24/CTF_2021XiangYun/upload_bc39a553828fad8dcc9cd6718cff8a8d.png"></p>
 <p><code>flag{57dd74fb21bb1aee50f19421bf836f23}</code></p>
 <h3 id="层层取证"><a href="#层层取证" class="headerlink" title="层层取证"></a>层层取证</h3><blockquote>
@@ -597,15 +597,15 @@ result <span class="token operator">=</span> <span class="token string">''</span
 <p><em>（这个文件镜像 13GB 也太大了吧……</em></p>
 <p>他这个是用 ftk 提的镜像</p>
 <p>从内存镜像里导出 bitlocker 密钥</p>
-<pre class="language-bash" data-language="bash"><code class="language-bash">$ volatility --plugins<span class="token operator">=</span>plugins/bitlocker -f memdump.mem --profile<span class="token operator">=</span>Win7SP1x64 bitlocker
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ volatility --plugins<span class="token operator">=</span>plugins/bitlocker -f memdump.mem --profile<span class="token operator">=</span>Win7SP1x64 bitlocker
 Volatility Foundation Volatility Framework <span class="token number">2.6</span>
 
 Address <span class="token builtin class-name">:</span> 0xfa800d12e7e0                                                                                                                                      
 Cipher  <span class="token builtin class-name">:</span> AES-128
 FVEK    <span class="token builtin class-name">:</span> 0ff9192acdbf1df3c6dc36fb58cf76ce
-TWEAK   <span class="token builtin class-name">:</span> b423bd84872ff72b583bb9bdee1762ac</code></pre>
+TWEAK   <span class="token builtin class-name">:</span> b423bd84872ff72b583bb9bdee1762ac<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>取证大师挂载磁盘，解开 bitlocker，xiaoming 桌面上有个 <code>flag.txt</code> ，和内存 notepad 进程里的内容一致</p>
-<pre class="language-none"><code class="language-none">hint: 你连电脑都不能仿真打开，还想要flag ?</code></pre>
+<pre class="line-numbers language-none"><code class="language-none">hint: 你连电脑都不能仿真打开，还想要flag ?<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>加密盘里发现有个 <code>2.pcapng</code> 流量包</p>
 <p>大部分流量是在搜 CTF、flag、黑客 啥的，不过 strings 发现有个 <code>flag.docx</code>，在一堆 udp 流量里发现了这个 rar</p>
 <p><img src="https://hackmd.summershrimp.com/uploads/upload_d19cf7835911098f31db5993ff8ff95b.png"></p>
@@ -623,7 +623,7 @@ TWEAK   <span class="token builtin class-name">:</span> b423bd84872ff72b583bb9bd
 <p><a target="_blank" rel="noopener" href="https://pan.baidu.com/s/12Vagp9-EBgELXQx8xoFJKg">附件下载</a> 提取码（GAME）<a target="_blank" rel="noopener" href="https://share.weiyun.com/rqQsMnq9">备用下载</a> </p>
 </blockquote>
 <p>咋又是取证啊（（</p>
-<pre class="language-bash" data-language="bash"><code class="language-bash">$ volatility -f memory --profile<span class="token operator">=</span>WinXPSP2x86 cmdscan        
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ volatility -f memory --profile<span class="token operator">=</span>WinXPSP2x86 cmdscan        
 Volatility Foundation Volatility Framework <span class="token number">2.6</span>
 **************************************************
 CommandProcess: csrss.exe Pid: <span class="token number">620</span>
@@ -648,13 +648,13 @@ Cmd <span class="token comment">#13 @ 0x522d28: Nonononononononononononono!!!!!!
 Cmd <span class="token comment">#14 @ 0x522d88: "C:\Documents and Settings\Administrator\??\Oneclickcleanup.exe"</span>
 Cmd <span class="token comment">#15 @ 0x5224b8: fuc</span>
 **************************************************
-</code></pre>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>这个 <code>Oneclickcleanup.exe</code> 很可疑，于是 dump 出来看一下逆一下。</p>
 <p><img src="/2021/08/24/CTF_2021XiangYun/upload_b51ff175d441c7c8d23276d657fe7798.png"></p>
 <p><img src="/2021/08/24/CTF_2021XiangYun/upload_673fb7085bd7dbe7ae28b9790933b49c.png"></p>
 <p>可以看到循环异或这个 key，即 <code>this_a_key</code>，然后把内容写入文件。</p>
 <p>按逻辑写个脚本导出</p>
-<pre class="language-python" data-language="python"><code class="language-python">data <span class="token operator">=</span> <span class="token builtin">bytearray</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">data <span class="token operator">=</span> <span class="token builtin">bytearray</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
 <span class="token keyword">with</span> <span class="token builtin">open</span><span class="token punctuation">(</span><span class="token string">'data.txt'</span><span class="token punctuation">,</span> <span class="token string">'r'</span><span class="token punctuation">,</span> encoding<span class="token operator">=</span><span class="token string">'utf-8'</span><span class="token punctuation">)</span> <span class="token keyword">as</span> f<span class="token punctuation">:</span>
     <span class="token keyword">while</span> <span class="token boolean">True</span><span class="token punctuation">:</span>
         s <span class="token operator">=</span> f<span class="token punctuation">.</span>readline<span class="token punctuation">(</span><span class="token punctuation">)</span>
@@ -677,13 +677,13 @@ data_decode <span class="token operator">=</span> <span class="token builtin">by
 <span class="token keyword">print</span><span class="token punctuation">(</span>data_decode<span class="token punctuation">)</span>
 
 <span class="token keyword">with</span> <span class="token builtin">open</span><span class="token punctuation">(</span><span class="token string">'1.doc'</span><span class="token punctuation">,</span> <span class="token string">'wb'</span><span class="token punctuation">)</span> <span class="token keyword">as</span> f<span class="token punctuation">:</span>
-    f<span class="token punctuation">.</span>write<span class="token punctuation">(</span>data_decode<span class="token punctuation">)</span></code></pre>
+    f<span class="token punctuation">.</span>write<span class="token punctuation">(</span>data_decode<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <blockquote>
 <p>赛后问了问队里 binary 爷爷，才知道 IDA 里直接按 Shift + E 就能直接导出数据，这样就不用复制粘贴然后自己手动处理这个原始数据了……</p>
 <p><img src="/2021/08/24/CTF_2021XiangYun/image-20210825224343206.png"></p>
 </blockquote>
 <p>同理，文件名，不过貌似没啥用（</p>
-<pre class="language-python" data-language="python"><code class="language-python"><span class="token comment"># filename</span>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token comment"># filename</span>
 filename <span class="token operator">=</span> <span class="token builtin">bytearray</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
 filename <span class="token operator">+=</span> <span class="token string">b'7R570'</span>
 <span class="token keyword">with</span> <span class="token builtin">open</span><span class="token punctuation">(</span><span class="token string">'data2.txt'</span><span class="token punctuation">,</span> <span class="token string">'r'</span><span class="token punctuation">,</span> encoding<span class="token operator">=</span><span class="token string">'utf-8'</span><span class="token punctuation">)</span> <span class="token keyword">as</span> f<span class="token punctuation">:</span>
@@ -700,11 +700,11 @@ filename_decode <span class="token operator">=</span> <span class="token builtin
 <span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token builtin">len</span><span class="token punctuation">(</span>filename<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
     filename_decode<span class="token punctuation">.</span>append<span class="token punctuation">(</span>filename<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">^</span> key<span class="token punctuation">[</span>i <span class="token operator">%</span> <span class="token builtin">len</span><span class="token punctuation">(</span>key<span class="token punctuation">)</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
 <span class="token keyword">print</span><span class="token punctuation">(</span>filename_decode<span class="token punctuation">)</span>
-<span class="token comment"># bytearray(b'C:\\Documents and Settings\\All Users\\Templates')</span></code></pre>
+<span class="token comment"># bytearray(b'C:\\Documents and Settings\\All Users\\Templates')</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>发现文件是个 doc，里面就一句话</p>
 <p><img src="/2021/08/24/CTF_2021XiangYun/upload_5dcb9201bf66d0fb1ad11d9dfb073a30.png"></p>
 <p>查看文件 hex，发现这句话后面还有点东西，参考前面的异或逻辑，这里爆破了一下 key，最后发现 key 是 <code>-</code>。。</p>
-<pre class="language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> string
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> string
 <span class="token keyword">with</span> <span class="token builtin">open</span><span class="token punctuation">(</span><span class="token string">'1.doc'</span><span class="token punctuation">,</span> <span class="token string">'rb'</span><span class="token punctuation">)</span> <span class="token keyword">as</span> f<span class="token punctuation">:</span>
     raw <span class="token operator">=</span> f<span class="token punctuation">.</span>read<span class="token punctuation">(</span><span class="token punctuation">)</span>
 
@@ -721,7 +721,7 @@ l <span class="token operator">=</span> <span class="token punctuation">[</span>
         <span class="token keyword">print</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span>
         <span class="token keyword">print</span><span class="token punctuation">(</span>x<span class="token punctuation">)</span>
     <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">'======================='</span><span class="token punctuation">)</span>
-    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token punctuation">)</span></code></pre>
+    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>顺便和原始文件对比一下。</p>
 <p><img src="/2021/08/24/CTF_2021XiangYun/upload_e5943718bf57f966a7203fb628a497e6.png"></p>
 <p><img src="/2021/08/24/CTF_2021XiangYun/upload_d527bcf51d68c2983e64e99180c6c340.png"></p>
@@ -741,7 +741,7 @@ l <span class="token operator">=</span> <span class="token punctuation">[</span>
 <p><img src="/2021/08/24/CTF_2021XiangYun/upload_847ceb48b068546c8035586bfc78c5c9.png"></p>
 <p><img src="/2021/08/24/CTF_2021XiangYun/upload_7e05b76ea98f2cab3a8bde0f82253527.png"></p>
 <p>可以看出确实是差分的正余弦信号，考虑把这个四元组转换为角度</p>
-<pre class="language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> math
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> math
 <span class="token keyword">import</span> matplotlib<span class="token punctuation">.</span>pyplot <span class="token keyword">as</span> plt
 <span class="token keyword">import</span> numpy <span class="token keyword">as</span> np
 
@@ -779,7 +779,7 @@ plt<span class="token punctuation">.</span>grid<span class="token punctuation">(
 angle2 <span class="token operator">=</span> np<span class="token punctuation">.</span>arccos<span class="token punctuation">(</span>data_cos<span class="token punctuation">)</span><span class="token operator">/</span>np<span class="token punctuation">.</span>pi<span class="token operator">*</span><span class="token number">180</span>
 plt<span class="token punctuation">.</span>plot<span class="token punctuation">(</span>angle2<span class="token punctuation">)</span>
 plt<span class="token punctuation">.</span>grid<span class="token punctuation">(</span><span class="token boolean">True</span><span class="token punctuation">)</span>
-plt<span class="token punctuation">.</span>show<span class="token punctuation">(</span><span class="token punctuation">)</span></code></pre>
+plt<span class="token punctuation">.</span>show<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p><img src="/2021/08/24/CTF_2021XiangYun/upload_9255eee4ca410bebe846c2c1308c2658.png"></p>
 <p>由于超过了180度中间的角度会反而减小，要加回去。。</p>

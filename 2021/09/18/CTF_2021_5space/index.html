@@ -555,16 +555,16 @@
 <p>结合题目名字 alpha10 猜想是盲水印，<code>alpha</code> 是参数。</p>
 <p>然后又想起 <a href="https://miaotony.xyz/2021/02/12/CTF_2021HappyChineseNewYear/">喵喵的牛年解谜闯关</a> 就出过一题盲水印的（</p>
 <p>试了发现是 <a target="_blank" rel="noopener" href="https://github.com/chishaxie/BlindWaterMark">chishaxie 的 BlindWaterMark</a></p>
-<pre class="language-bash" data-language="bash"><code class="language-bash">python3 bwmforpy3.py decode 00001404.jpg 00001537.png <span class="token number">1</span>.png --alpha <span class="token number">10</span></code></pre>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">python3 bwmforpy3.py decode 00001404.jpg 00001537.png <span class="token number">1</span>.png --alpha <span class="token number">10</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>水印里就是 flag</p>
 <p><img src="/2021/09/18/CTF_2021_5space/upload_7165b14bacc9e1a36c883ffdd4cd81bf.png"></p>
 <p> <code>flag{XqAe3QzK2ehD5fWv8jfBitPqHUw0}</code></p>
 <h3 id="BabyMi"><a href="#BabyMi" class="headerlink" title="BabyMi"></a>BabyMi</h3><p>给了个 USB 流量，看上去里面包含有文件传输</p>
 <p><img src="/2021/09/18/CTF_2021_5space/upload_46cba5c13c2d2e752cd37722c0e56309.png"></p>
 <p>先用 tshark 导出流量数据</p>
-<pre class="language-bash" data-language="bash"><code class="language-bash">tshark -r usb.pcap -T fields -e usb.capdata <span class="token operator">&gt;</span> data.txt</code></pre>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">tshark -r usb.pcap -T fields -e usb.capdata <span class="token operator">&gt;</span> data.txt<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>然后写个脚本把里面的非空 非全零 <em>（后来觉得好像没必要，不过问题不大）</em> 字符串 unhex 一下，合并为一个文件。</p>
-<pre class="language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> binascii <span class="token keyword">import</span> unhexlify
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> binascii <span class="token keyword">import</span> unhexlify
 
 cnt <span class="token operator">=</span> <span class="token number">1</span>
 <span class="token keyword">with</span> <span class="token builtin">open</span><span class="token punctuation">(</span><span class="token string">'data.txt'</span><span class="token punctuation">,</span> <span class="token string">'r'</span><span class="token punctuation">,</span> encoding<span class="token operator">=</span><span class="token string">'utf-8'</span><span class="token punctuation">)</span> <span class="token keyword">as</span> f<span class="token punctuation">:</span>
@@ -586,7 +586,7 @@ cnt <span class="token operator">=</span> <span class="token number">1</span>
             fout<span class="token punctuation">.</span>write<span class="token punctuation">(</span>d<span class="token punctuation">)</span>
         <span class="token keyword">print</span><span class="token punctuation">(</span>cnt<span class="token punctuation">)</span>
         cnt <span class="token operator">+=</span> <span class="token number">1</span>
-        </code></pre>
+        <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>拿 diskgenius 恢复一下文件，得到一个 mp4，播放就发现里面输入了 flag</p>
 <p><img src="/2021/09/18/CTF_2021_5space/upload_2671b8c08acafa8611c0dd467507d777.png"></p>
 <p><code>flag{A good hacker do not need any mi?}</code></p>

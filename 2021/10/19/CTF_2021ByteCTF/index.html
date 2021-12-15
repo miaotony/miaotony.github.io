@@ -581,7 +581,7 @@
 <p><img src="/2021/10/19/CTF_2021ByteCTF/-163448210748612.png"></p>
 <p>有戏了！</p>
 <p>这个导出 json</p>
-<pre class="language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> base64
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> base64
 <span class="token keyword">import</span> json
 
 
@@ -608,7 +608,7 @@ data_extract <span class="token operator">=</span> <span class="token string">''
 
 data_decode <span class="token operator">=</span> base64<span class="token punctuation">.</span>b64decode<span class="token punctuation">(</span>data_extract<span class="token punctuation">)</span>
 <span class="token keyword">with</span> <span class="token builtin">open</span><span class="token punctuation">(</span><span class="token string">'decode.png'</span><span class="token punctuation">,</span> <span class="token string">'wb'</span><span class="token punctuation">)</span> <span class="token keyword">as</span> fout<span class="token punctuation">:</span>
-    fout<span class="token punctuation">.</span>write<span class="token punctuation">(</span>data_decode<span class="token punctuation">)</span></code></pre>
+    fout<span class="token punctuation">.</span>write<span class="token punctuation">(</span>data_decode<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>（后来发现还不如直接导出 CSV，然后删除冗余信息，复制粘贴到 CyberChef 处理。。</p>
 <p>然后发现改来改去都不对，这解析出来的 png 图片怎么都是损坏的，虽然说勉强能看到点东西，但感觉哪里锅了啊……</p>
 <p><img src="/2021/10/19/CTF_2021ByteCTF/image-20211017225528488.png"></p>
@@ -621,7 +621,7 @@ data_decode <span class="token operator">=</span> base64<span class="token punct
 <p><img src="/2021/10/19/CTF_2021ByteCTF/image-20211017231349418.png"></p>
 <p><img src="/2021/10/19/CTF_2021ByteCTF/image-20211017233242886.png"></p>
 <p>或者也可以拿 tshark 导出，然后匹配字符串来处理</p>
-<pre class="language-bash" data-language="bash"><code class="language-bash">tshark -T fields -r frequently.pcap -e dns.qry.name -e dns.id <span class="token operator">&gt;</span> <span class="token number">1</span>.txt</code></pre>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">tshark -T fields -r frequently.pcap -e dns.qry.name -e dns.id <span class="token operator">&gt;</span> <span class="token number">1</span>.txt<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 
 <p>观察发现<code>base64</code>编码的数据返回的<code>a</code>记录都是<code>10.0.0.1</code>，<code>o</code>和<code>i</code>的返回<code>a</code>记录都是<code>10.0.0.2</code>。</p>
@@ -629,7 +629,7 @@ data_decode <span class="token operator">=</span> base64<span class="token punct
 <p>单独看 <code>i</code> <code>o</code></p>
 <p>提取<code>o</code> <code>i</code>，发现刚好为 360 个，转为 01 然后转 ascii 得到前半段 flag</p>
 <p><code>dns &amp;&amp; dns.qry.name matches "^[io].bytedanec.top" &amp;&amp; ip.src == 8.8.8.8</code></p>
-<pre class="language-none"><code class="language-none">The first part of flag: ByteCTF{^_^enJ0y&amp;y0ur</code></pre>
+<pre class="line-numbers language-none"><code class="language-none">The first part of flag: ByteCTF{^_^enJ0y&amp;y0ur<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>后半段 <code>udp.stream eq 1</code>  得到另一半 flag</p>
 <p><img src="/2021/10/19/CTF_2021ByteCTF/-163448222633316.png"></p>
 <p><img src="/2021/10/19/CTF_2021ByteCTF/-163448229964822.png"></p>
@@ -668,7 +668,7 @@ data_decode <span class="token operator">=</span> base64<span class="token punct
 <p><img src="/2021/10/19/CTF_2021ByteCTF/image-20211023043109920.png"></p>
 <p>Exp:</p>
 <p>这里试了试发现得按照从左到右先读第一行，然后再从上到下读第二行这样。</p>
-<pre class="language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> Crypto<span class="token punctuation">.</span>Util<span class="token punctuation">.</span>number <span class="token keyword">import</span> long_to_bytes
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> Crypto<span class="token punctuation">.</span>Util<span class="token punctuation">.</span>number <span class="token keyword">import</span> long_to_bytes
 <span class="token keyword">import</span> numpy <span class="token keyword">as</span> np
 <span class="token keyword">import</span> matplotlib<span class="token punctuation">.</span>pyplot <span class="token keyword">as</span> plt
 <span class="token keyword">from</span> PIL <span class="token keyword">import</span> Image
@@ -695,7 +695,7 @@ result <span class="token operator">=</span> <span class="token string">''</span
 <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
 <span class="token keyword">print</span><span class="token punctuation">(</span>result<span class="token punctuation">)</span>
 
-<span class="token keyword">print</span><span class="token punctuation">(</span>long_to_bytes<span class="token punctuation">(</span><span class="token builtin">int</span><span class="token punctuation">(</span>result<span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span></code></pre>
+<span class="token keyword">print</span><span class="token punctuation">(</span>long_to_bytes<span class="token punctuation">(</span><span class="token builtin">int</span><span class="token punctuation">(</span>result<span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p><img src="/2021/10/19/CTF_2021ByteCTF/image-20211023043425169.png" alt="flag"></p>
 <p><code>ByteCTF{ExcelHiddenWM}</code></p>
 <h2 id="BabyShark"><a href="#BabyShark" class="headerlink" title="BabyShark"></a>BabyShark</h2><blockquote>
@@ -718,7 +718,7 @@ result <span class="token operator">=</span> <span class="token string">''</span
 <p>虽然文件可能还有点问题，但也能把这个 dex 给解压出来了。</p>
 <p><img src="/2021/10/19/CTF_2021ByteCTF/image-20211023051859711.png"></p>
 <p>然后直接进行一个逆向。</p>
-<pre class="language-java" data-language="java"><code class="language-java"><span class="token keyword">package</span> <span class="token namespace">com<span class="token punctuation">.</span>bytectf<span class="token punctuation">.</span>misc1</span><span class="token punctuation">;</span>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">package</span> <span class="token namespace">com<span class="token punctuation">.</span>bytectf<span class="token punctuation">.</span>misc1</span><span class="token punctuation">;</span>
 
 <span class="token keyword">import</span> <span class="token namespace">android<span class="token punctuation">.</span>os<span class="token punctuation">.</span></span><span class="token class-name">Build</span><span class="token punctuation">.</span>VERSION<span class="token punctuation">;</span>
 <span class="token keyword">import</span> <span class="token namespace">android<span class="token punctuation">.</span>os<span class="token punctuation">.</span></span><span class="token class-name">Bundle</span><span class="token punctuation">;</span>
@@ -811,7 +811,7 @@ result <span class="token operator">=</span> <span class="token string">''</span
     paramBundle <span class="token operator">=</span> <span class="token function">loadPBClass</span><span class="token punctuation">(</span><span class="token function">getPBClass</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getMethods</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token number">37</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
     <span class="token class-name">AesUtil</span><span class="token punctuation">.</span><span class="token function">decrypt</span><span class="token punctuation">(</span><span class="token function">getAESKey</span><span class="token punctuation">(</span><span class="token function">getPBResp</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> paramBundle<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">"8939AA47D35006FB2B5FBDB9A810B25294B5D4D76E4204D33BA01F7B3F9D99B1"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
   <span class="token punctuation">}</span>
-<span class="token punctuation">}</span></code></pre>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>大概的逻辑是：</p>
 <ul>
 <li>从 <code>Environment.getExternalStorageDirectory().getAbsolutePath() + "/PBClass.dex"</code> 这个文件里加载类 <code>loadClass("com.bytectf.misc1.KeyPB")</code></li>
@@ -822,7 +822,7 @@ result <span class="token operator">=</span> <span class="token string">''</span
 <p>于是最后的结果应该就是 flag 了。</p>
 <p>那现在就去找这段 bytes，直接看流量里的 <code>/api</code> 部分就完事了。</p>
 <p><img src="/2021/10/19/CTF_2021ByteCTF/image-20211023052829512.png"></p>
-<pre class="language-none"><code class="language-none">088bb7bdf5dbd53711a1f831e6d61cc840</code></pre>
+<pre class="line-numbers language-none"><code class="language-none">088bb7bdf5dbd53711a1f831e6d61cc840<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>其实当时队友已经做到这里了，然而并不知道这个 <code>PB</code> 是啥玩意。。</p>
 <p>赛后才知道是 protobuf，看人家队伍经典 fuzz……（摊手</p>
 <blockquote>
@@ -831,25 +831,25 @@ result <span class="token operator">=</span> <span class="token string">''</span
 <p>然后丢去 <a target="_blank" rel="noopener" href="https://chef.miaotony.xyz/#recipe=From_Hex('Auto')Protobuf_Decode()">赛博厨子</a> 解密一下</p>
 <p><img src="/2021/10/19/CTF_2021ByteCTF/image-20211023054042514.png"></p>
 <p>得到俩数字</p>
-<pre class="language-json" data-language="json"><code class="language-json"><span class="token punctuation">{</span>
+<pre class="line-numbers language-json" data-language="json"><code class="language-json"><span class="token punctuation">{</span>
     <span class="token property">"1"</span><span class="token operator">:</span> <span class="token number">244837809871755</span><span class="token punctuation">,</span>
     <span class="token property">"2"</span><span class="token operator">:</span> <span class="token number">11671133301835090000</span>
-<span class="token punctuation">}</span></code></pre>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 <p>根据源码可以看出这个就是 <code>AesUtil.decrypt</code> 函数的参数 <code>paramLong</code>，于是应该取的是 <code>244837809871755</code>。</p>
 <blockquote>
 <p>另外参考官方 wp，也可以用 python 库<code>blackboxprotobuf</code>进行解析。</p>
-<pre class="language-python" data-language="python"><code class="language-python">data <span class="token operator">=</span> <span class="token string">b'\x08\x8b\xb7\xbd\xf5\xdb\xd5\x37\x11\xa1\xf8\x31\xe6\xd6\x1c\xc8\x40'</span>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">data <span class="token operator">=</span> <span class="token string">b'\x08\x8b\xb7\xbd\xf5\xdb\xd5\x37\x11\xa1\xf8\x31\xe6\xd6\x1c\xc8\x40'</span>
 blackboxprotobuf<span class="token punctuation">.</span>decode_message<span class="token punctuation">(</span>data<span class="token punctuation">)</span>
 <span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span>
 <span class="token punctuation">(</span><span class="token punctuation">{</span><span class="token string">'1'</span><span class="token punctuation">:</span> <span class="token number">244837809871755</span><span class="token punctuation">,</span> <span class="token string">'2'</span><span class="token punctuation">:</span> <span class="token number">4668012723080132769</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
- <span class="token punctuation">{</span><span class="token string">'1'</span><span class="token punctuation">:</span> <span class="token punctuation">{</span><span class="token string">'type'</span><span class="token punctuation">:</span> <span class="token string">'int'</span><span class="token punctuation">,</span> <span class="token string">'name'</span><span class="token punctuation">:</span> <span class="token string">''</span><span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token string">'2'</span><span class="token punctuation">:</span> <span class="token punctuation">{</span><span class="token string">'type'</span><span class="token punctuation">:</span> <span class="token string">'fixed64'</span><span class="token punctuation">,</span> <span class="token string">'name'</span><span class="token punctuation">:</span> <span class="token string">''</span><span class="token punctuation">}</span><span class="token punctuation">}</span><span class="token punctuation">)</span></code></pre>
+ <span class="token punctuation">{</span><span class="token string">'1'</span><span class="token punctuation">:</span> <span class="token punctuation">{</span><span class="token string">'type'</span><span class="token punctuation">:</span> <span class="token string">'int'</span><span class="token punctuation">,</span> <span class="token string">'name'</span><span class="token punctuation">:</span> <span class="token string">''</span><span class="token punctuation">}</span><span class="token punctuation">,</span> <span class="token string">'2'</span><span class="token punctuation">:</span> <span class="token punctuation">{</span><span class="token string">'type'</span><span class="token punctuation">:</span> <span class="token string">'fixed64'</span><span class="token punctuation">,</span> <span class="token string">'name'</span><span class="token punctuation">:</span> <span class="token string">''</span><span class="token punctuation">}</span><span class="token punctuation">}</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 
 </blockquote>
 <p>然后回去解密就完事了。</p>
 <p><code>AES/CFB/NoPadding</code></p>
 <p><em>（可恶，怎么你们都会 Java 啊，呜呜呜</em></p>
-<pre class="language-java" data-language="java"><code class="language-java"><span class="token keyword">import</span> <span class="token namespace">com<span class="token punctuation">.</span>bytectf<span class="token punctuation">.</span>misc1<span class="token punctuation">.</span></span><span class="token class-name">AesUtil</span><span class="token punctuation">;</span>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">import</span> <span class="token namespace">com<span class="token punctuation">.</span>bytectf<span class="token punctuation">.</span>misc1<span class="token punctuation">.</span></span><span class="token class-name">AesUtil</span><span class="token punctuation">;</span>
 
 <span class="token keyword">public</span> <span class="token keyword">class</span> exp <span class="token punctuation">{</span>
     <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token keyword">final</span> <span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
@@ -857,7 +857,7 @@ blackboxprotobuf<span class="token punctuation">.</span>decode_message<span clas
                 <span class="token string">"8939AA47D35006FB2B5FBDB9A810B25294B5D4D76E4204D33BA01F7B3F9D99B1"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
         <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>flag<span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
-<span class="token punctuation">}</span></code></pre>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 
 <p>就这样吧（</p>

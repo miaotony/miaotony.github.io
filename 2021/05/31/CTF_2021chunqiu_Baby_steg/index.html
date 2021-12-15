@@ -559,30 +559,30 @@
 <p>在 <a target="_blank" rel="noopener" href="https://www.crark.net/crark-7zip.html">https://www.crark.net/crark-7zip.html</a> 这里下载。</p>
 <p>参考 <a target="_blank" rel="noopener" href="https://www.crark.net/cRARk-7z.html">https://www.crark.net/cRARk-7z.html</a> 写 <code>password.def</code> 定义文件。</p>
 <p>由于全是数字，直接就写成这样。</p>
-<pre class="language-none"><code class="language-none">##
-$1 *</code></pre>
+<pre class="line-numbers language-none"><code class="language-none">##
+$1 *<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 <p>然后指定最小和最大的长度去解密。</p>
-<pre class="language-bash" data-language="bash"><code class="language-bash">crark-7z.exe -l6 -g8 password.7z</code></pre>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">crark-7z.exe -l6 -g8 password.7z<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p><img src="/2021/05/31/CTF_2021chunqiu_Baby_steg/image-20210529175232631.png"></p>
 <p>得到 7z 的密码 <code>321456</code></p>
 <p>解压出来个 <code>password.txt</code></p>
-<pre class="language-none"><code class="language-none">7324623c</code></pre>
+<pre class="line-numbers language-none"><code class="language-none">7324623c<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p><code>flag1.txt</code> 这是什么玩意……</p>
 <p><img src="/2021/05/31/CTF_2021chunqiu_Baby_steg/image-20210529182615012.png"></p>
 <p>后来看了别人 wp 才发现是 uuencode。来复现一下。</p>
 <p>拿 python 写个脚本解码一下。</p>
-<pre class="language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> uu
-s <span class="token operator">=</span> uu<span class="token punctuation">.</span>decode<span class="token punctuation">(</span><span class="token string">'flag1.txt'</span><span class="token punctuation">)</span></code></pre>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> uu
+s <span class="token operator">=</span> uu<span class="token punctuation">.</span>decode<span class="token punctuation">(</span><span class="token string">'flag1.txt'</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 <p>它会自动输出文件。</p>
 <blockquote>
 <p>加密的话就是</p>
-<pre class="language-none"><code class="language-none">uu.encode(input_file, output_file)</code></pre>
+<pre class="line-numbers language-none"><code class="language-none">uu.encode(input_file, output_file)<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>用上面解密得到的 <code>7324623c</code> 作为密码解压。</p>
 </blockquote>
 <p>得到一张图 <code>challenge.png</code></p>
 <p><img src="/2021/05/31/CTF_2021chunqiu_Baby_steg/challenge.png" alt="challenge"></p>
 <p>以及 <code>encode.py</code></p>
-<pre class="language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> numpy <span class="token keyword">as</span> np
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> numpy <span class="token keyword">as</span> np
 <span class="token keyword">import</span> cv2
 <span class="token keyword">import</span> sys
 <span class="token keyword">import</span> random
@@ -608,12 +608,12 @@ s <span class="token operator">=</span> uu<span class="token punctuation">.</spa
     encode<span class="token punctuation">(</span>sys<span class="token punctuation">.</span>argv<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
 
 <span class="token keyword">if</span> __name__ <span class="token operator">==</span> <span class="token string">'__main__'</span><span class="token punctuation">:</span>
-    main<span class="token punctuation">(</span><span class="token punctuation">)</span></code></pre>
+    main<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>随机数种子在 520-540 之前取值，<code>np.random.shuffle</code> 函数把 <code>to_hide_array</code> 第1个维度上的数字进行位置上的随机打乱。</p>
 <p>于是可以试试爆破这个随机数种子，记录下打乱前后下标的映射关系，再反过来恢复出原始图像，其中一个就是打乱之前的图像了。</p>
 <p>另外注意 <code>random.randint(520,540)</code> 在 520 和 540 上都能取到值，即左右区间都闭合。 </p>
 <p>代码写的有点乱，能用就行了。<em>（逃走</em></p>
-<pre class="language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> numpy <span class="token keyword">as</span> np
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> numpy <span class="token keyword">as</span> np
 <span class="token keyword">import</span> cv2
 <span class="token keyword">import</span> sys
 <span class="token keyword">import</span> random
@@ -646,7 +646,7 @@ s <span class="token operator">=</span> uu<span class="token punctuation">.</spa
 
 
 <span class="token keyword">if</span> __name__ <span class="token operator">==</span> <span class="token string">'__main__'</span><span class="token punctuation">:</span>
-    main<span class="token punctuation">(</span><span class="token punctuation">)</span></code></pre>
+    main<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>最后跑出来是随机种子为 540 时候的情况，得出 flag。</p>
 <p><img src="/2021/05/31/CTF_2021chunqiu_Baby_steg/decode540.png" alt="decode540"></p>
 <h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>Baby_steg 这题还是堆了几个没玩过的知识点的，正好还把 7z 压缩包爆破的工具也找了一波，cRARk for 7-Zip 还是挺香的！</p>

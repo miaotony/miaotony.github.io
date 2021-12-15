@@ -482,12 +482,12 @@
                                 <span class="chip bg-color">Projects</span>
                             </a>
                         
-                            <a href="/tags/Web/">
-                                <span class="chip bg-color">Web</span>
-                            </a>
-                        
                             <a href="/tags/Server/">
                                 <span class="chip bg-color">Server</span>
+                            </a>
+                        
+                            <a href="/tags/Web/">
+                                <span class="chip bg-color">Web</span>
                             </a>
                         
                             <a href="/tags/Serverless/">
@@ -583,11 +583,11 @@
 <p><strong>Return:</strong></p>
 <p>See examples below.</p>
 <p><strong>Examples:</strong></p>
-<pre class="language-bash" data-language="bash"><code class="language-bash">$ <span class="token function">curl</span> <span class="token string">"https://calc114514.vercel.app/api/calc?num=114514"</span>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ <span class="token function">curl</span> <span class="token string">"https://calc114514.vercel.app/api/calc?num=114514"</span>
 -~-~-~-~<span class="token punctuation">(</span>-~<span class="token punctuation">(</span>-~-~-~-~-~<span class="token punctuation">(</span>-~-~-~-~<span class="token punctuation">(</span>-~<span class="token punctuation">(</span>-~~-1*-~-~-~-~-~-~-~-~-~1<span class="token punctuation">)</span>*-~-~-~-~-~-~4<span class="token punctuation">)</span>*-~-~-~-~-~5<span class="token punctuation">)</span>*-~-~-~-~-~-~-~-~-~1<span class="token punctuation">)</span>*-~-~-~-~-~-~4<span class="token punctuation">)</span>
 
 $ <span class="token function">curl</span> <span class="token string">"https://calc114514.vercel.app/api/calc?isJson=1&amp;num=114514"</span>
-<span class="token punctuation">{</span><span class="token string">"answer"</span><span class="token builtin class-name">:</span><span class="token string">"-~-~-~-~(-~(-~-~-~-~-~(-~-~-~-~(-~(-~~-1*-~-~-~-~-~-~-~-~-~1)*-~-~-~-~-~-~4)*-~-~-~-~-~5)*-~-~-~-~-~-~-~-~-~1)*-~-~-~-~-~-~4)"</span>,<span class="token string">"number"</span><span class="token builtin class-name">:</span><span class="token string">"114514"</span><span class="token punctuation">}</span></code></pre>
+<span class="token punctuation">{</span><span class="token string">"answer"</span><span class="token builtin class-name">:</span><span class="token string">"-~-~-~-~(-~(-~-~-~-~-~(-~-~-~-~(-~(-~~-1*-~-~-~-~-~-~-~-~-~1)*-~-~-~-~-~-~4)*-~-~-~-~-~5)*-~-~-~-~-~-~-~-~-~1)*-~-~-~-~-~-~4)"</span>,<span class="token string">"number"</span><span class="token builtin class-name">:</span><span class="token string">"114514"</span><span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 
 <h3 id="Telegram-bot"><a href="#Telegram-bot" class="headerlink" title="Telegram bot"></a>Telegram bot</h3><p>See <a target="_blank" rel="noopener" href="https://t.me/calc114514bot">@calc114514bot</a>.</p>
@@ -615,7 +615,7 @@ $ <span class="token function">curl</span> <span class="token string">"https://c
 <blockquote>
 <p>一个办法就是<strong>按照十进制的方式来凑</strong>，即 <code>given_number = (((((((0+a)*10+b)*10+c)*10+d)*10)+e)*10)+f</code> ，其中 <code>a b c d e f</code> 为 0 到 9 之间的整数。表达式中的值 <code>0 10 10 10 10 10</code> 可以分别利用 <code>1 1 4 5 1 4</code> 与嵌套 <code>~-</code> 来凑出，而 <code>+a +b +c +d +e +f</code> 可以直接利用嵌套 <code>~-</code> 来实现（不需要使用数字）。</p>
 </blockquote>
-<pre class="language-python" data-language="python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">getans</span><span class="token punctuation">(</span>number<span class="token punctuation">)</span><span class="token punctuation">:</span>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">getans</span><span class="token punctuation">(</span>number<span class="token punctuation">)</span><span class="token punctuation">:</span>
     <span class="token triple-quoted-string string">"""
     Get the answer using `114514` &amp; `-~`, `~-`.
     参考官方 WriteUp，基于十进制分解实现，支持6位及以下数字
@@ -632,7 +632,7 @@ $ <span class="token function">curl</span> <span class="token string">"https://c
         digit <span class="token operator">=</span> <span class="token punctuation">(</span>number <span class="token operator">//</span> <span class="token punctuation">(</span>jz <span class="token operator">**</span> <span class="token punctuation">(</span><span class="token builtin">len</span><span class="token punctuation">(</span>e<span class="token punctuation">)</span> <span class="token operator">-</span> <span class="token number">1</span> <span class="token operator">-</span> i<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">%</span> jz
         ans <span class="token operator">=</span> <span class="token string">"("</span> <span class="token operator">+</span> ans <span class="token operator">+</span> <span class="token string">"*"</span> <span class="token operator">+</span> s<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">+</span> <span class="token string">")"</span> <span class="token keyword">if</span> i <span class="token operator">&gt;</span> <span class="token number">0</span> <span class="token keyword">else</span> s<span class="token punctuation">[</span>i<span class="token punctuation">]</span>
         ans <span class="token operator">=</span> <span class="token string">"-~"</span> <span class="token operator">*</span> digit <span class="token operator">+</span> ans
-    <span class="token keyword">return</span> ans</code></pre>
+    <span class="token keyword">return</span> ans<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 
 <h3 id="超过六位数的论证方法"><a href="#超过六位数的论证方法" class="headerlink" title="超过六位数的论证方法"></a>超过六位数的论证方法</h3><p>对于所给整数<code>n</code>，采用与十进制类似的方法，在 $ n^{1/6} $ 附近取六个数，每位取不同进制，最后再凑到所给的数。</p>
@@ -655,24 +655,24 @@ $ <span class="token function">curl</span> <span class="token string">"https://c
 <p>更多介绍详见 <a target="_blank" rel="noopener" href="https://vercel.com/docs/introduction">官方介绍文档</a>。</p>
 <p>Vercel 就是以前的 ZEIT，其命令行工具就是 <code>vercel</code>，以前是 <code>now</code>。</p>
 <p>首先我们安装命令行工具。</p>
-<pre class="language-bash" data-language="bash"><code class="language-bash"><span class="token function">npm</span> i -g vercel</code></pre>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">npm</span> i -g vercel<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>看一下版本。</p>
-<pre class="language-bash" data-language="bash"><code class="language-bash">$ vercel --version
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ vercel --version
 Vercel CLI <span class="token number">20.1</span>.4
-<span class="token number">20.1</span>.4</code></pre>
+<span class="token number">20.1</span>.4<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 <p>初次使用需要登录，输入邮箱，而后点击邮件里的链接进行授权。</p>
-<pre class="language-bash" data-language="bash"><code class="language-bash">vercel login</code></pre>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">vercel login<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>若直接部署当前文件夹，直接在命令行输入</p>
-<pre class="language-bash" data-language="bash"><code class="language-bash">vercel</code></pre>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">vercel<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>而后按照提示进行操作即可。</p>
 <p>其中会询问你项目名称，首次部署时会以此给你分配一个 <code>*.vercel.app</code> 之类的免费域名，这个对应着生产环境。而 <code>*.&lt;username&gt;.vercel.app</code> 则对应着 预览环境/开发环境 (preview)。</p>
 <p>之后的每一次部署都会部署到 Preview 环境，确定没问题后再用下面的命令部署到生产环境即可。</p>
-<pre class="language-bash" data-language="bash"><code class="language-bash">vercel --prod</code></pre>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">vercel --prod<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>两个环境分离开来就很好用，赞一个。</p>
 <p>当然 Vercel 还支持绑定自己的域名，只需要改一改 CNAME 就好，还能自动帮你配上 Let’s encrypt! 的证书。</p>
 <p>除此之外，也可以直接在 Settings 下的 Tokens 里新建一个 token，利用其来进行部署。</p>
 <p><img src="/2020/11/18/Server_Vercel_Calc114514/image-20201119010712433.png" alt="token"></p>
-<pre class="language-bash" data-language="bash"><code class="language-bash">vercel -t <span class="token operator">&lt;</span>TOKEN Here<span class="token operator">&gt;</span></code></pre>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">vercel -t <span class="token operator">&lt;</span>TOKEN Here<span class="token operator">&gt;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>这一操作很适合在服务器上执行，以及可以白嫖 CI 进行部署。</p>
 <p>（嘿嘿，可以在 Organization 里进行构建了</p>
 <p>更多 CLI 使用方法可以参考 <a target="_blank" rel="noopener" href="https://vercel.com/docs/cli#commands/overview">官方 CLI Reference</a>。</p>
@@ -694,7 +694,7 @@ Vercel CLI <span class="token number">20.1</span>.4
 <p>但这不合适，我们这里是在一个 py 文件里通过 Flask 来处理路由，暴露一个 <code>app</code> 对象。于是需要自己配置一下。</p>
 <p>在 <code>api</code> 外面的目录下新建一个 <code>vercel.json</code> 文件，在里面进行配置。</p>
 <p>参考 <a target="_blank" rel="noopener" href="https://vercel.com/docs/configuration#introduction/configuration-reference">Configuration Reference</a>，我这里把 <code>/api(.*)</code> 都交给 <code>api/main.py</code> 文件进行处理，这样就能解决路由问题。</p>
-<pre class="language-json" data-language="json"><code class="language-json"><span class="token punctuation">{</span>
+<pre class="line-numbers language-json" data-language="json"><code class="language-json"><span class="token punctuation">{</span>
 	<span class="token property">"version"</span><span class="token operator">:</span> <span class="token number">2</span><span class="token punctuation">,</span>
 	<span class="token property">"routes"</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">{</span>
 		<span class="token property">"headers"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
@@ -704,14 +704,14 @@ Vercel CLI <span class="token number">20.1</span>.4
 		<span class="token property">"dest"</span><span class="token operator">:</span> <span class="token string">"api/main.py"</span><span class="token punctuation">,</span>
 		<span class="token property">"continue"</span><span class="token operator">:</span> <span class="token boolean">true</span>
 	<span class="token punctuation">}</span><span class="token punctuation">]</span>
-<span class="token punctuation">}</span></code></pre>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>同时要注意的是，<code>main.py</code> 里的路由也需要包含 <code>/api</code>，例如</p>
-<pre class="language-python" data-language="python"><code class="language-python"><span class="token decorator annotation punctuation">@app<span class="token punctuation">.</span>route</span><span class="token punctuation">(</span><span class="token string">'/api/calc'</span><span class="token punctuation">,</span> methods<span class="token operator">=</span><span class="token punctuation">[</span><span class="token string">'GET'</span><span class="token punctuation">,</span> <span class="token string">'POST'</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token decorator annotation punctuation">@app<span class="token punctuation">.</span>route</span><span class="token punctuation">(</span><span class="token string">'/api/calc'</span><span class="token punctuation">,</span> methods<span class="token operator">=</span><span class="token punctuation">[</span><span class="token string">'GET'</span><span class="token punctuation">,</span> <span class="token string">'POST'</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
 <span class="token keyword">def</span> <span class="token function">api_calc</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
     <span class="token triple-quoted-string string">"""
     Calculate 114514 API
     """</span>
-    <span class="token keyword">pass</span></code></pre>
+    <span class="token keyword">pass</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 
 <hr>
@@ -726,10 +726,10 @@ Vercel CLI <span class="token number">20.1</span>.4
 <p>其中前者本身带有一个 webhook 服务器，但试了发现不符合 Vercel 的要求，没有暴露 <code>app</code> 对象之类的，于是跑不起来。</p>
 <p>后者则提供了一个 webhook heroku 部署的样例，即 pyTelegramBotAPI/examples/webhook_examples/<a target="_blank" rel="noopener" href="https://github.com/eternnoir/pyTelegramBotAPI/blob/master/examples/webhook_examples/webhook_flask_heroku_echo.py">webhook_flask_heroku_echo.py</a>  </p>
 <p><strong>关键代码：</strong></p>
-<pre class="language-python" data-language="python"><code class="language-python"><span class="token decorator annotation punctuation">@server<span class="token punctuation">.</span>route</span><span class="token punctuation">(</span><span class="token string">'/'</span> <span class="token operator">+</span> TOKEN<span class="token punctuation">,</span> methods<span class="token operator">=</span><span class="token punctuation">[</span><span class="token string">'POST'</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token decorator annotation punctuation">@server<span class="token punctuation">.</span>route</span><span class="token punctuation">(</span><span class="token string">'/'</span> <span class="token operator">+</span> TOKEN<span class="token punctuation">,</span> methods<span class="token operator">=</span><span class="token punctuation">[</span><span class="token string">'POST'</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
 <span class="token keyword">def</span> <span class="token function">getMessage</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
     bot<span class="token punctuation">.</span>process_new_updates<span class="token punctuation">(</span><span class="token punctuation">[</span>telebot<span class="token punctuation">.</span>types<span class="token punctuation">.</span>Update<span class="token punctuation">.</span>de_json<span class="token punctuation">(</span>request<span class="token punctuation">.</span>stream<span class="token punctuation">.</span>read<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>decode<span class="token punctuation">(</span><span class="token string">"utf-8"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
-    <span class="token keyword">return</span> <span class="token string">"!"</span><span class="token punctuation">,</span> <span class="token number">200</span></code></pre>
+    <span class="token keyword">return</span> <span class="token string">"!"</span><span class="token punctuation">,</span> <span class="token number">200</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 <p><code>process_new_updates</code> 这个方法能把接收到的信息传进去，从而建立了 Webhook 和 pyTelegramBotAPI 的联系。</p>
 <p>于是就用 pyTelegramBotAPI 这个来实现了。</p>
 <p>还有一个坑就是，可能是由于异步处理消息的原因，Vercel Serverless 中的 <code>process_new_updates</code> 结束 return 之后这个会话就关闭了，消息还来不及处理完回送给 Telegram。在测试过程中经常就消息莫名其妙丢失了，或者连着发几条消息才回复的情况。</p>
@@ -739,7 +739,7 @@ Vercel CLI <span class="token number">20.1</span>.4
 <p>相关代码位于 GitHub repo <a target="_blank" rel="noopener" href="https://github.com/miaotony/calc114514">https://github.com/miaotony/calc114514</a> 的 <code>/api/</code> 目录下，<code>main.py</code> 内包含了开放接口和 bot 交互的相关接口。</p>
 <h3 id="开发说明"><a href="#开发说明" class="headerlink" title="开发说明"></a><strong>开发说明</strong></h3><ol>
 <li><p>Install the requirements. 安装依赖。</p>
-<pre class="language-none"><code class="language-none">pip3 install -r requirements.txt</code></pre></li>
+<pre class="line-numbers language-none"><code class="language-none">pip3 install -r requirements.txt<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
 <li><p>Edit your Telegram bot token and Webhook URL path in the <code>secret.example.py</code>. 这里我把关键配置专门拿出来放到 <code>secret.example.py</code> 文件里了，开发的时候要修改成你的。</p>
 </li>
 <li><p>Rename <code>secret.example.py</code> to <code>secret.py</code>. 改名。</p>
@@ -749,7 +749,7 @@ Vercel CLI <span class="token number">20.1</span>.4
 </ol>
 <p><strong>基于 Vercel 部署：</strong></p>
 <p>在配置好 <code>vercel.json</code> 和 <code>api</code> 目录的基础上，直接用 CLI 上传即可。</p>
-<pre class="language-bash" data-language="bash"><code class="language-bash">vercel</code></pre>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">vercel<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 
 <hr>
@@ -847,12 +847,12 @@ Vercel CLI <span class="token number">20.1</span>.4
                                     <span class="chip bg-color">Projects</span>
                                 </a>
                             
-                                <a href="/tags/Web/">
-                                    <span class="chip bg-color">Web</span>
-                                </a>
-                            
                                 <a href="/tags/Server/">
                                     <span class="chip bg-color">Server</span>
+                                </a>
+                            
+                                <a href="/tags/Web/">
+                                    <span class="chip bg-color">Web</span>
                                 </a>
                             
                                 <a href="/tags/Serverless/">

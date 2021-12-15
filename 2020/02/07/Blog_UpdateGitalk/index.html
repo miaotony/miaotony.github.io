@@ -565,14 +565,14 @@
 <p>很多大佬对这个问题进行了讨论，当然也有不少 <code>+1 Mark</code>之类的在旁观。</p>
 <h3 id="方案一"><a href="#方案一" class="headerlink" title="方案一"></a>方案一</h3><p>2月4日这样，@geektutu 给出了一个 <strong>Use read-only personal access token to replace clientID &amp; clientSecret</strong> 的方案，并提了PR，详见：<a target="_blank" rel="noopener" href="https://github.com/gitalk/gitalk/pull/344">#344</a>。这个PR在2月6日merge了。</p>
 <p>根据他的建议，首先需要更新 <code>gitalk.min.js</code>文件，如果想获得更多的API使用量，需要在 <a target="_blank" rel="noopener" href="https://github.com/settings/tokens">accessToken</a> 里生成一个只读的token，而后修改 Gitalk 模板里的配置，新增<code>accessToken</code>项。</p>
-<pre class="language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">const</span> gitalk <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Gitalk</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">const</span> gitalk <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Gitalk</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
   clientID<span class="token operator">:</span> <span class="token string">'GitHub Application Client ID'</span><span class="token punctuation">,</span>
   clientSecret<span class="token operator">:</span> <span class="token string">'GitHub Application Client Secret'</span><span class="token punctuation">,</span>
   accessToken<span class="token operator">:</span> <span class="token string">'Github Personal Access Token'</span><span class="token punctuation">,</span>   <span class="token comment">// IMPORTANT !!!</span>
   repo<span class="token operator">:</span> <span class="token string">'GitHub repo'</span><span class="token punctuation">,</span>
   owner<span class="token operator">:</span> <span class="token string">'GitHub repo owner'</span><span class="token punctuation">,</span>
   <span class="token operator">...</span>
-<span class="token punctuation">}</span><span class="token punctuation">)</span></code></pre>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>根据 <a target="_blank" rel="noopener" href="https://developer.github.com/apps/building-oauth-apps/understanding-scopes-for-oauth-apps/#available-scopes">Understanding scopes for OAuth Apps</a> ，在<strong>新建 access token 时不选择任何选项</strong>，则生成的token只有<strong>公开信息的只读</strong>权限（*Grants read-only access to public information (includes public user profile info, public repository info, and gists)*）。</p>
 <p>6号我也更新了这一版本，做了相应的修改，的确邮箱不被轰炸了。😂</p>
 <p>但是，<strong>这个 access token 在任何人访问博客的时候都是公开可见的</strong>，不免存在风险，这也在issue里有过讨论。@geektutu 也说这是个临时方案。</p>
@@ -587,7 +587,7 @@
 <h3 id="方法二"><a href="#方法二" class="headerlink" title="方法二"></a>方法二</h3><p>当然也可以修改配置文件里引用的 JavaScript（、CSS）地址为链接版本。</p>
 <p>目前 CDN 上的 Gitalk 已经更新到了最新版本。</p>
 <p>打开<code>\hexo\themes\matery\_config.yml</code>，修改其中的 <code>libs</code>。</p>
-<pre class="language-yml" data-language="yml"><code class="language-yml">libs:
+<pre class="line-numbers language-yml" data-language="yml"><code class="language-yml">libs:
   css:
     # ...
     gitalk: https://cdn.jsdelivr.net/npm/gitalk/dist/gitalk.css
@@ -597,7 +597,7 @@
     # ...
     gitalk: https://cdn.jsdelivr.net/npm/gitalk/dist/gitalk.min.js
     # 或者 https://unpkg.com/gitalk/dist/gitalk.min.js 
-    # ...</code></pre>
+    # ...<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>保存后，在 hexo 的目录下执行 <code>hexo clean &amp;&amp; hexo g</code>，再部署即可。</p>
 <hr>
 <p>最后，顺手给 <em><a target="_blank" rel="noopener" href="https://github.com/blinkfox/hexo-theme-matery">hexo-theme-matery</a></em> 提了个PR，更新了这一依赖，详见  <a target="_blank" rel="noopener" href="https://github.com/blinkfox/hexo-theme-matery/pull/318">blinkfox/hexo-theme-matery#318</a> 。</p>
@@ -1005,12 +1005,12 @@
                         <span class="chip bg-color">Docker</span>
                     </a>
                     
-                    <a href="/tags/Huginn/">
-                        <span class="chip bg-color">Huginn</span>
-                    </a>
-                    
                     <a href="/tags/tips/">
                         <span class="chip bg-color">tips</span>
+                    </a>
+                    
+                    <a href="/tags/Huginn/">
+                        <span class="chip bg-color">Huginn</span>
                     </a>
                     
                 </div>

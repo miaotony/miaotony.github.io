@@ -550,7 +550,7 @@
 <p>链接：<a target="_blank" rel="noopener" href="https://pan.baidu.com/s/1mqJsQN1kfNFwV0lpGiOBpg">https://pan.baidu.com/s/1mqJsQN1kfNFwV0lpGiOBpg</a> 提取码：news </p>
 <p>（或去官方比赛群1063624041的群文件-临时题目文件夹中获取）</p>
 </blockquote>
-<pre class="language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># volatility -f mem.raw --profile Win7SP1x64 filescan | grep Desktop</span>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># volatility -f mem.raw --profile Win7SP1x64 filescan | grep Desktop</span>
 Volatility Foundation Volatility Framework <span class="token number">2.6</span>
 0x000000003dca8280      <span class="token number">4</span>      <span class="token number">0</span> R--r-d <span class="token punctuation">\</span>Device<span class="token punctuation">\</span>HarddiskVolume1<span class="token punctuation">\</span>Users<span class="token punctuation">\</span>mumuzi<span class="token punctuation">\</span>Desktop<span class="token punctuation">\</span>DumpIt.exe
 0x000000003dcc8600      <span class="token number">2</span>      <span class="token number">0</span> R--rwd <span class="token punctuation">\</span>Device<span class="token punctuation">\</span>HarddiskVolume1<span class="token punctuation">\</span>Users<span class="token punctuation">\</span>mumuzi<span class="token punctuation">\</span>Links<span class="token punctuation">\</span>Desktop.lnk
@@ -581,15 +581,15 @@ Volatility Foundation Volatility Framework <span class="token number">2.6</span>
 <span class="token comment"># volatility -f mem.raw --profile Win7SP1x64 dumpfiles -Q 0x000000003fa4b450 -D . -u</span>
 Volatility Foundation Volatility Framework <span class="token number">2.6</span>
 DataSectionObject 0x3fa4b450   None   <span class="token punctuation">\</span>Device<span class="token punctuation">\</span>HarddiskVolume1<span class="token punctuation">\</span>Users<span class="token punctuation">\</span>mumuzi<span class="token punctuation">\</span>Desktop<span class="token punctuation">\</span>hint.txt
-</code></pre>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>桌面上有个 <code>hint.txt</code>，提取出来。</p>
 <p><img src="/2021/06/18/CTF_2021NewsCTF0601/image-20210602164058269.png"></p>
 <p>内容是</p>
-<pre class="language-none"><code class="language-none">you ask me where is the passwd?
+<pre class="line-numbers language-none"><code class="language-none">you ask me where is the passwd?
 you can try to find the user passwd.
-it is so ez!!!!!! </code></pre>
+it is so ez!!!!!! <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 <p>那就查看内存，提取密码。</p>
-<pre class="language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># volatility -f mem.raw --profile Win7SP1x64 hivelist                                            </span>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># volatility -f mem.raw --profile Win7SP1x64 hivelist                                            </span>
 Volatility Foundation Volatility Framework <span class="token number">2.6</span>
 Virtual            Physical           Name
 ------------------ ------------------ ----
@@ -626,10 +626,10 @@ Warning: Only <span class="token number">12</span> candidates buffered <span cla
 Proceeding with wordlist:/usr/share/john/password.lst, rules:Wordlist
 <span class="token number">123456789</span>        <span class="token punctuation">(</span>Guest<span class="token punctuation">)</span>
 Proceeding with incremental:ASCII
-<span class="token punctuation">..</span>.</code></pre>
+<span class="token punctuation">..</span>.<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>貌似没啥用……</p>
 <p>看看命令行记录。</p>
-<pre class="language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># volatility -f mem.raw --profile Win7SP1x64 cmdscan                                                        </span>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># volatility -f mem.raw --profile Win7SP1x64 cmdscan                                                        </span>
 Volatility Foundation Volatility Framework <span class="token number">2.6</span>
 **************************************************
 CommandProcess: conhost.exe Pid: <span class="token number">1588</span>
@@ -659,17 +659,17 @@ CommandCount: <span class="token number">0</span> LastAdded: -1 LastDisplayed: -
 FirstCommand: <span class="token number">0</span> CommandCountMax: <span class="token number">50</span>
 ProcessHandle: 0x60
 Cmd <span class="token comment">#29 @ 0x2d0158: 5</span>
-Cmd <span class="token comment">#30 @ 0x34f940: 4</span></code></pre>
+Cmd <span class="token comment">#30 @ 0x34f940: 4</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>当成 flag 交上去都不对。不信了。</p>
 <p>再去搜一波文件。</p>
-<pre class="language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># volatility -f mem.raw --profile Win7SP1x64 filescan |grep "flag"               </span>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># volatility -f mem.raw --profile Win7SP1x64 filescan |grep "flag"               </span>
 Volatility Foundation Volatility Framework <span class="token number">2.6</span>
 0x000000003e4b2070      <span class="token number">2</span>      <span class="token number">0</span> -W-rwd <span class="token punctuation">\</span>Device<span class="token punctuation">\</span>HarddiskVolume1<span class="token punctuation">\</span>galf<span class="token punctuation">\</span>fl^ag.zipesktop<span class="token punctuation">\</span>fl^ag.zipp<span class="token punctuation">\</span>vmware-mumuzi<span class="token punctuation">\</span>VMwareDnD<span class="token punctuation">\</span>9451fe4f<span class="token punctuation">\</span>flag.zip
 0x000000003fa56dd0      <span class="token number">2</span>      <span class="token number">0</span> RW-rw- <span class="token punctuation">\</span>Device<span class="token punctuation">\</span>HarddiskVolume1<span class="token punctuation">\</span>Users<span class="token punctuation">\</span>mumuzi<span class="token punctuation">\</span>AppData<span class="token punctuation">\</span>Roaming<span class="token punctuation">\</span>Microsoft<span class="token punctuation">\</span>Windows<span class="token punctuation">\</span>Recent<span class="token punctuation">\</span>flag.lnk
 <span class="token comment"># volatility -f mem.raw --profile Win7SP1x64 dumpfiles -Q 0x000000003e4b2070 -D . -u                     </span>
 Volatility Foundation Volatility Framework <span class="token number">2.6</span>
 DataSectionObject 0x3e4b2070   None   <span class="token punctuation">\</span>Device<span class="token punctuation">\</span>HarddiskVolume1<span class="token punctuation">\</span>galf<span class="token punctuation">\</span>fl^ag.zipesktop<span class="token punctuation">\</span>fl^ag.zipp<span class="token punctuation">\</span>vmware-mumuzi<span class="token punctuation">\</span>VMwareDnD<span class="token punctuation">\</span>9451fe4f<span class="token punctuation">\</span>flag.zip
-</code></pre>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p><img src="/2021/06/18/CTF_2021NewsCTF0601/image-20210602170702052.png"></p>
 <p>用 <code>(ljmmz)ovo</code> 作为密码解压，得到 flag。</p>
 <p><code>flag{ez_di_imp_1t_y0u_like?}</code></p>
@@ -686,7 +686,7 @@ DataSectionObject 0x3e4b2070   None   <span class="token punctuation">\</span>De
 <p><img src="/2021/06/18/CTF_2021NewsCTF0601/image-20210603011117444.png"></p>
 <p>好家伙，看来网页上又有假的 flag。原来是 Misc + Web 啊。</p>
 <p>网页上给了源码。</p>
-<pre class="language-php" data-language="php"><code class="language-php"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>html</span><span class="token punctuation">&gt;</span></span>
+<pre class="line-numbers language-php" data-language="php"><code class="language-php"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>html</span><span class="token punctuation">&gt;</span></span>
     <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>head</span><span class="token punctuation">&gt;</span></span>
         <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>meta</span> <span class="token attr-name">http-equiv</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>Content-Type<span class="token punctuation">"</span></span> <span class="token attr-name">content</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>text/html;charset=UTF-8<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span>
         <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>title</span><span class="token punctuation">&gt;</span></span>EasyWeb<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>title</span><span class="token punctuation">&gt;</span></span>
@@ -741,7 +741,7 @@ DataSectionObject 0x3e4b2070   None   <span class="token punctuation">\</span>De
         <span class="token delimiter important">?&gt;</span></span>
         <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">&gt;</span></span>
     <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>body</span><span class="token punctuation">&gt;</span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>html</span><span class="token punctuation">&gt;</span></span></code></pre>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>html</span><span class="token punctuation">&gt;</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>md5 <code>e10adc3949ba59abbe56e057f20f883e</code> 对应的明文是 <code>123456</code>，md5 相同而内容不同的话可以用数组绕过，即 <code>a[]=1&amp;b[]=2</code>.</p>
 <p>然而这个 <code>if($array[]=1)</code> 怎么绕过，咱两天里断断续续想着也没想出来……</p>
 <p>最后比赛结束了才知道是数组 Key <strong>整数溢出</strong>。</p>
@@ -752,10 +752,10 @@ DataSectionObject 0x3e4b2070   None   <span class="token punctuation">\</span>De
 <p>而这里的最大表示数是 2**63-1，即 9223372036854775807，然后因为 <code>if($array[++$c]=1)</code> 做了自增处理，咱把 <code>c</code> 设为 9223372036854775806，当 <code>if($array[]=1)</code> 赋值的时候就会造成溢出，报错且判断不为真，从而能够拿到 <code>$flag</code>.</p>
 <p><em>（感觉说的好乱啊，随意看看就好了</em></p>
 <p>于是 Payload：</p>
-<pre class="language-none"><code class="language-none">webp=123456&amp;a[]=1&amp;b[]=2&amp;c=9223372036854775806</code></pre>
+<pre class="line-numbers language-none"><code class="language-none">webp=123456&amp;a[]=1&amp;b[]=2&amp;c=9223372036854775806<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p><img src="/2021/06/18/CTF_2021NewsCTF0601/image-20210603011603035.png"></p>
 <p>你看他这里报的错就是 由于下一个元素被占用而不能将其添加到 array 中。</p>
-<pre class="language-none"><code class="language-none">password: xluoyyds123456@@@ </code></pre>
+<pre class="line-numbers language-none"><code class="language-none">password: xluoyyds123456@@@ <span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>拿去解压得到最终的 flag。</p>
 <p><code>newsctf{this_1s_veryveryveryeasyweb}</code></p>
 <blockquote>
