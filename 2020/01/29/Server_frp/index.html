@@ -336,19 +336,6 @@
 </header>
 
     
-<script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/cryptojs/crypto-js.min.js"></script>
-<script>
-    (function() {
-        let pwd = '';
-        if (pwd && pwd.length > 0) {
-            if (pwd !== CryptoJS.SHA256(prompt('请输入访问本文章的密码')).toString(CryptoJS.enc.Hex)) {
-                alert('密码错误，将返回主页！');
-                location.href = '/';
-            }
-        }
-    })();
-</script>
-
 
 
 
@@ -553,17 +540,19 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>之前为了实现远程编程，折腾了一阵子<code>autossh</code>，利用反向代理把内网服务器的ssh映射到了公网端口，详见下面这篇。</p>
+                <h2 id="前言">前言</h2>
+<p>之前为了实现远程编程，折腾了一阵子<code>autossh</code>，利用反向代理把内网服务器的ssh映射到了公网端口，详见下面这篇。</p>
 <blockquote>
 <p><a href="https://miaotony.xyz/2019/12/21/Idea_RemoteProgramming/">小想法 | 基于VSCode和ssh实现远程编程/炼丹</a></p>
 </blockquote>
 <p>这次需求扩大了一点，比如说想访问<strong>内网搭建的网站、数据库等等</strong>，但这些都<strong>不能直接在公网进行访问</strong>，<code>autossh</code>就有点不大给力了。</p>
 <p>之前还了解过花生壳、ngrok这些，但是一般需要money要限速或者说不大友好，然后一想大家都在推荐<code>frp</code>，这回就来折腾一下吧！（主要是以后忘了还可以回来看嘻嘻</p>
-<p>总体感受就是，**<code>frp</code>搭建起来比<code>autossh</code>方便多了**呀！</p>
+<p>总体感受就是，<strong><code>frp</code>搭建起来比<code>autossh</code>方便多了</strong>呀！</p>
 <br>
-
 <hr>
-<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><h3 id="What-is-frp"><a href="#What-is-frp" class="headerlink" title="What is frp?"></a>What is frp?</h3><blockquote>
+<h2 id="简介">简介</h2>
+<h3 id="What-is-frp">What is frp?</h3>
+<blockquote>
 <p><em>frp</em> is a fast reverse proxy to help you expose a local server behind a NAT or firewall to the Internet. As of now, it supports <strong>TCP</strong> and <strong>UDP</strong>, as well as <strong>HTTP</strong> and <strong>HTTPS</strong> protocols, where requests can be forwarded to internal services by domain name.</p>
 <p><em>frp</em> also has a P2P connect mode.</p>
 </blockquote>
@@ -574,18 +563,19 @@
 <p>FRP，fast reverse proxy。使用 Go 语言开发，支持 Windows、Linux、macOS、ARM 等多平台部署。</p>
 <p>其实简单地说也就是借助一台有公网IP的服务器作为中转，把内外网直接的流量连接起来。</p>
 <p>其开源仓库：<a target="_blank" rel="noopener" href="https://github.com/fatedier/frp">https://github.com/fatedier/frp</a></p>
-<h3 id="What-should-I-prepare"><a href="#What-should-I-prepare" class="headerlink" title="What should I prepare?"></a>What should I prepare?</h3><p><strong>内网主机（客户端）：</strong>能上互联网（外网），或者说能连上你的公网服务器就行。（但没有公网IP）</p>
+<h3 id="What-should-I-prepare">What should I prepare?</h3>
+<p>**内网主机（客户端）：**能上互联网（外网），或者说能连上你的公网服务器就行。（但没有公网IP）</p>
 <p>可以是电脑（Windows，MacOS，Linux）/嵌入式设备（如树莓派）…对的，<strong>frp跨平台</strong>。</p>
-<p><strong>公网主机（服务端）：</strong>有公网IP，或者绑定了域名能通过端口访问也行。</p>
+<p>**公网主机（服务端）：**有公网IP，或者绑定了域名能通过端口访问也行。</p>
 <p>以及</p>
 <p>想<strong>连接内网的你喜欢的设备</strong>。</p>
 <br>
-
 <hr>
 <br>
-
-<h2 id="搭建过程"><a href="#搭建过程" class="headerlink" title="搭建过程"></a>搭建过程</h2><p>分为<strong>服务器端</strong>和<strong>客户端</strong>两部分。</p>
-<h3 id="下载程序"><a href="#下载程序" class="headerlink" title="下载程序"></a>下载程序</h3><p>根据对应的操作系统及架构，从 <a target="_blank" rel="noopener" href="https://github.com/fatedier/frp/releases">Release</a> 页面下载最新版本的程序。</p>
+<h2 id="搭建过程">搭建过程</h2>
+<p>分为<strong>服务器端</strong>和<strong>客户端</strong>两部分。</p>
+<h3 id="下载程序">下载程序</h3>
+<p>根据对应的操作系统及架构，从 <a target="_blank" rel="noopener" href="https://github.com/fatedier/frp/releases">Release</a> 页面下载最新版本的程序。</p>
 <p>目前最新的版本是 <code>v0.31.1</code></p>
 <p>比如Windows64位下载 <a target="_blank" rel="noopener" href="https://github.com/fatedier/frp/releases/download/v0.31.1/frp_0.31.1_windows_amd64.zip">frp_0.31.1_windows_amd64.zip</a>，</p>
 <p>Linux64位一般是这个 <a target="_blank" rel="noopener" href="https://github.com/fatedier/frp/releases/download/v0.31.1/frp_0.31.1_linux_amd64.tar.gz">frp_0.31.1_linux_amd64.tar.gz</a>。</p>
@@ -593,7 +583,8 @@
 <p><img src="/2020/01/29/Server_frp/download.png" alt="下载对应的文件"></p>
 <p>将 <strong>frps</strong> 及 <strong>frps.ini</strong> 放到具有公网 IP 的机器上。</p>
 <p>将 <strong>frpc</strong> 及 <strong>frpc.ini</strong> 放到处于内网环境的机器上。</p>
-<h3 id="服务器端的搭建"><a href="#服务器端的搭建" class="headerlink" title="服务器端的搭建"></a>服务器端的搭建</h3><p>可以在服务器上可以用wget下载。</p>
+<h3 id="服务器端的搭建">服务器端的搭建</h3>
+<p>可以在服务器上可以用wget下载。</p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">mkdir</span> -p /etc/frp
 <span class="token builtin class-name">cd</span> /etc/frp
 <span class="token function">sudo</span> <span class="token function">wget</span> <span class="token string">"https://github.com/fatedier/frp/releases/download/v0.31.1/frp_0.31.1_linux_amd64.tar.gz"</span>
@@ -604,12 +595,11 @@
 <p>服务器端server嘛，当然用的是 <strong>frps</strong> 及 <strong>frps.ini</strong>。</p>
 <p>完整版的 <code>frps_full.ini</code>里面有很详细的注释，也可以用来参考。</p>
 <br>
-
 <p>最简单的<strong>配置</strong>就直接这样写</p>
 <pre class="line-numbers language-ini" data-language="ini"><code class="language-ini"><span class="token comment"># frps.ini</span>
 <span class="token selector">[common]</span>
 <span class="token constant">bind_port</span> <span class="token attr-value"><span class="token punctuation">=</span> 7000</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-<p>然后**启动<code>frps</code>**（Linux下）</p>
+<p>然后<strong>启动<code>frps</code></strong>（Linux下）</p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">/etc/frp/frps -c /etc/frp/frps.ini<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>再去把系统的<strong>防.火|墙打开</strong>，以及阿里云等平台的<strong>安全组规则设好允许入站出站</strong>。</p>
 <blockquote>
@@ -618,7 +608,8 @@
 </blockquote>
 <p>好了，下面到客户端。</p>
 <hr>
-<h3 id="客户端（内网主机）的搭建"><a href="#客户端（内网主机）的搭建" class="headerlink" title="客户端（内网主机）的搭建"></a>客户端（内网主机）的搭建</h3><p>同理把<code>frp</code>解压的文件放到<code>/etc/frp</code>文件夹下。</p>
+<h3 id="客户端（内网主机）的搭建">客户端（内网主机）的搭建</h3>
+<p>同理把<code>frp</code>解压的文件放到<code>/etc/frp</code>文件夹下。</p>
 <p>客户端client，用的是 <strong>frpc</strong> 及 <strong>frpc.ini</strong>。</p>
 <pre class="line-numbers language-ini" data-language="ini"><code class="language-ini"><span class="token comment"># frpc.ini</span>
 <span class="token selector">[common]</span>
@@ -642,7 +633,6 @@
 <p><code>local_ip</code>和<code>local_port</code>为本地地址及端口。</p>
 <p><code>remote_port</code>为公网的端口，这个可以在服务端进行限制，注意<strong>要在服务端放行这些端口</strong>啊！</p>
 <br>
-
 <p>客户端可以在多个主机上运行，只要name不重名就行。</p>
 <p>而后<strong>启动客户端</strong></p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">/etc/frp/frpc -c /etc/frp/frpc.ini<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
@@ -651,16 +641,17 @@
 <p><img src="/2020/01/29/Server_frp/client.png" alt="client"></p>
 <p><code>start proxy success</code>表示启动成功。</p>
 <hr>
-<h3 id="远程访问"><a href="#远程访问" class="headerlink" title="远程访问"></a>远程访问</h3><p>现在就可以直接通过公网IP的7001端口访问内网的ssh，通过7002端口访问内网的Mysql啦！</p>
+<h3 id="远程访问">远程访问</h3>
+<p>现在就可以直接通过公网IP的7001端口访问内网的ssh，通过7002端口访问内网的Mysql啦！</p>
 <p><strong>远程编程，访问网页，管理数据库</strong>什么的都可以实现啦！</p>
 <p><strong>好棒呀！</strong></p>
 <br>
-
 <hr>
 <hr>
 <br>
-
-<h2 id="进阶"><a href="#进阶" class="headerlink" title="进阶"></a>进阶</h2><h3 id="Dashboard"><a href="#Dashboard" class="headerlink" title="Dashboard"></a>Dashboard</h3><p><code>frp</code>的<strong>服务器端</strong>提供了一个在web端<strong>查看运行状态</strong>的展示界面。</p>
+<h2 id="进阶">进阶</h2>
+<h3 id="Dashboard">Dashboard</h3>
+<p><code>frp</code>的<strong>服务器端</strong>提供了一个在web端<strong>查看运行状态</strong>的展示界面。</p>
 <p>配置如下，在<code>common</code>中添加如下信息：</p>
 <pre class="line-numbers language-ini" data-language="ini"><code class="language-ini"><span class="token comment"># frps.ini</span>
 <span class="token selector">[common]</span>
@@ -674,20 +665,22 @@
 <p>还别说，挺好看的唉！</p>
 <p>看了一下，基于<code>vue</code>写的。</p>
 <hr>
-<h3 id="Admin-UI"><a href="#Admin-UI" class="headerlink" title="Admin UI"></a>Admin UI</h3><p>在客户端也提供了一个类似于dashboard的查看状态和管理配置的界面。</p>
+<h3 id="Admin-UI">Admin UI</h3>
+<p>在客户端也提供了一个类似于dashboard的查看状态和管理配置的界面。</p>
 <pre class="line-numbers language-ini" data-language="ini"><code class="language-ini"><span class="token comment"># frpc.ini</span>
 <span class="token selector">[common]</span>
 <span class="token constant">admin_addr</span> <span class="token attr-value"><span class="token punctuation">=</span> 127.0.0.1</span>
 <span class="token constant">admin_port</span> <span class="token attr-value"><span class="token punctuation">=</span> 7400</span>
 <span class="token constant">admin_user</span> <span class="token attr-value"><span class="token punctuation">=</span> admin</span>
 <span class="token constant">admin_pwd</span> <span class="token attr-value"><span class="token punctuation">=</span> admin</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>然后本地就可以通过 <a target="_blank" rel="noopener" href="http://127.0.0.1:7400/">http://127.0.0.1:7400</a> 来访问<strong>查看状态</strong>和<strong>修改配置</strong>了。</p>
+<p>然后本地就可以通过 <a target="_blank" rel="noopener" href="http://127.0.0.1:7400">http://127.0.0.1:7400</a> 来访问<strong>查看状态</strong>和<strong>修改配置</strong>了。</p>
 <p>这里如果想通过内网IP（如<code>192.168.1.66</code>）查看的话，需要把<code>admin_addr</code>修改为 <code>0.0.0.0</code>（允许所有访问），或者对应的本地IP（如<code>192.168.1.66</code>）。</p>
 <p>同时也需要在本地的firewall打开这个端口，否则在内网的其他主机也无法访问。（折腾了老半天才发现emmm</p>
 <p>当然，想要在公网访问的话，把7400端口映射到外网就好了，不过安全起见算了吧。</p>
 <p><img src="/2020/01/29/Server_frp/AdminUI.png" alt="AdminUI"></p>
 <hr>
-<h3 id="开启加密、压缩"><a href="#开启加密、压缩" class="headerlink" title="开启加密、压缩"></a>开启加密、压缩</h3><p>在客户端加入<code>use_encryption</code> 和 <code>use_compression</code>这两个参数。</p>
+<h3 id="开启加密、压缩">开启加密、压缩</h3>
+<p>在客户端加入<code>use_encryption</code> 和 <code>use_compression</code>这两个参数。</p>
 <pre class="line-numbers language-ini" data-language="ini"><code class="language-ini"><span class="token comment"># frpc.ini</span>
 <span class="token selector">[ssh]</span>
 <span class="token constant">type</span> <span class="token attr-value"><span class="token punctuation">=</span> tcp</span>
@@ -695,11 +688,11 @@
 <span class="token constant">remote_port</span> <span class="token attr-value"><span class="token punctuation">=</span> 6000</span>
 <span class="token constant">use_encryption</span> <span class="token attr-value"><span class="token punctuation">=</span> true</span>
 <span class="token constant">use_compression</span> <span class="token attr-value"><span class="token punctuation">=</span> true</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-
 <hr>
-<h3 id="开机自启"><a href="#开机自启" class="headerlink" title="开机自启"></a>开机自启</h3><p>这次直接把<code>frp</code>作为一个service好了，用<code>systemd</code>好了！</p>
-<h4 id="服务端："><a href="#服务端：" class="headerlink" title="服务端："></a>服务端：</h4><p>新建一个文件，名叫 <code>frps.service</code>，写入</p>
+<h3 id="开机自启">开机自启</h3>
+<p>这次直接把<code>frp</code>作为一个service好了，用<code>systemd</code>好了！</p>
+<h4 id="服务端：">服务端：</h4>
+<p>新建一个文件，名叫 <code>frps.service</code>，写入</p>
 <pre class="line-numbers language-ini" data-language="ini"><code class="language-ini"><span class="token comment"># frps.service</span>
 <span class="token selector">[Unit]</span>
 <span class="token constant">Description</span><span class="token attr-value"><span class="token punctuation">=</span>Frp Server</span>
@@ -718,7 +711,8 @@
 
 <span class="token selector">[Install]</span>
 <span class="token constant">WantedBy</span><span class="token attr-value"><span class="token punctuation">=</span>multi-user.target</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<h4 id="客户端："><a href="#客户端：" class="headerlink" title="客户端："></a>客户端：</h4><p><code>frpc.service</code></p>
+<h4 id="客户端：">客户端：</h4>
+<p><code>frpc.service</code></p>
 <pre class="line-numbers language-ini" data-language="ini"><code class="language-ini"><span class="token comment"># frpc.service</span>
 <span class="token selector">[Unit]</span>
 <span class="token constant">Description</span><span class="token attr-value"><span class="token punctuation">=</span>Frp Client</span>
@@ -751,12 +745,11 @@
 <p>frps同理。</p>
 <p><img src="/2020/01/29/Server_frp/service.png" alt="查看状态"></p>
 <br>
-
 <hr>
 <hr>
 <br>
-
-<h2 id="Summary"><a href="#Summary" class="headerlink" title="Summary"></a>Summary</h2><p>frp很强大的呢！</p>
+<h2 id="Summary">Summary</h2>
+<p>frp很强大的呢！</p>
 <p>比如还可以在一定情况下绕过服务器实现点对点P2P连接，不过前提是内网和你的设备两端都要装frpc客户端。</p>
 <p>更多且看<strong>官方文档</strong>：<a target="_blank" rel="noopener" href="https://github.com/fatedier/frp">https://github.com/fatedier/frp</a></p>
 <p>关键这个<strong>配置起来贼方便啊</strong>！</p>
@@ -765,7 +758,8 @@
 <p>溜了溜了。</p>
 <hr>
 <hr>
-<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ol>
+<h2 id="Reference">Reference</h2>
+<ol>
 <li>官方仓库及介绍 <a target="_blank" rel="noopener" href="https://github.com/fatedier/frp">https://github.com/fatedier/frp</a></li>
 <li>官方中文文档 <a target="_blank" rel="noopener" href="https://github.com/fatedier/frp/blob/master/README_zh.md">https://github.com/fatedier/frp/blob/master/README_zh.md</a></li>
 <li><a target="_blank" rel="noopener" href="https://www.iplaysoft.com/frp.html">https://www.iplaysoft.com/frp.html</a></li>
@@ -1361,7 +1355,7 @@
             |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
             <br>
                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">308.6k</span>&nbsp;字
+                class="white-color">308.3k</span>&nbsp;字
                                                                                     <span id="busuanzi_container_site_pv">
 			|&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
                     class="white-color"></span>&nbsp;次
@@ -1502,11 +1496,12 @@ $(function () {
                         var data_title = data.title.trim().toLowerCase();
                         var data_content = data.content.trim().replace(/<[^>]+>/g, "").toLowerCase();
                         var data_url = data.url;
+                        data_url = data_url.indexOf('/') === 0 ? data.url : '/' + data_url;
                         var index_title = -1;
                         var index_content = -1;
                         var first_occur = -1;
                         // only match artiles with not empty titles and contents
-                        if (data_title != '' && data_content != '') {
+                        if (data_title !== '' && data_content !== '') {
                             keywords.forEach(function (keyword, i) {
                                 index_title = data_title.indexOf(keyword);
                                 index_content = data_content.indexOf(keyword);
@@ -1516,7 +1511,7 @@ $(function () {
                                     if (index_content < 0) {
                                         index_content = 0;
                                     }
-                                    if (i == 0) {
+                                    if (i === 0) {
                                         first_occur = index_content;
                                     }
                                 }
@@ -1547,12 +1542,12 @@ $(function () {
                         }
                     });
                     str += "</ul>";
-                    str = "<p class=\"search-result-summary\">共找到" + String(cnt-1) + "条结果</p>"  + str;
+                    str = "<p class=\"search-result-summary\">共找到 " + String(cnt-1) + " 条结果</p>"  + str;
                     $resultContent.innerHTML = str;
                 });
             }
         });
-    }
+    };
 
     searchFunc('https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/search.xml', 'searchInput', 'searchResult');
 });

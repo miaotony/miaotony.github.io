@@ -336,19 +336,6 @@
 </header>
 
     
-<script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/cryptojs/crypto-js.min.js"></script>
-<script>
-    (function() {
-        let pwd = '';
-        if (pwd && pwd.length > 0) {
-            if (pwd !== CryptoJS.SHA256(prompt('请输入访问本文章的密码')).toString(CryptoJS.enc.Hex)) {
-                alert('密码错误，将返回主页！');
-                location.href = '/';
-            }
-        }
-    })();
-</script>
-
 
 
 
@@ -550,23 +537,25 @@
         <div class="card-content article-card-content">
             <div id="articleContent">
                 <blockquote>
-<p>搬运自之前的小脑洞小想法啦      </p>
+<p>搬运自之前的小脑洞小想法啦</p>
 </blockquote>
-<h2 id="起因"><a href="#起因" class="headerlink" title="起因"></a>起因</h2><p>昨晚有个小伙伴空间里把列表都at了（后来知道的），附带P1这张图。  </p>
+<h2 id="起因">起因</h2>
+<p>昨晚有个小伙伴空间里把列表都at了（后来知道的），附带P1这张图。</p>
 <p><img src="/2019/03/30/Idea_AnalysisOfHackingPage/1.jpg" alt="1"></p>
-<p>然后感觉不对劲，肯定是被盗号了。  </p>
-<p>然后突然有个脑洞，去看看这里面有啥吧  </p>
-<h2 id="折腾记录"><a href="#折腾记录" class="headerlink" title="折腾记录"></a>折腾记录</h2><p>用扫码工具（千万别拿QQ来扫，虽然这次的链接没啥大影响）得到二维码文字内容，发现是类似<code>url.cn/...</code>的短链接。</p>
+<p>然后感觉不对劲，肯定是被盗号了。</p>
+<p>然后突然有个脑洞，去看看这里面有啥吧</p>
+<h2 id="折腾记录">折腾记录</h2>
+<p>用扫码工具（千万别拿QQ来扫，虽然这次的链接没啥大影响）得到二维码文字内容，发现是类似<code>url.cn/...</code>的短链接。</p>
 <p><img src="/2019/03/30/Idea_AnalysisOfHackingPage/2.jpg" alt="2"></p>
-<p>用电脑浏览器打开，同时打开调试窗口，发现短链接跳转到一个Github.io的页面（P3），很明显是GitHub Pages。   </p>
+<p>用电脑浏览器打开，同时打开调试窗口，发现短链接跳转到一个Github.io的页面（P3），很明显是GitHub Pages。</p>
 <p><img src="/2019/03/30/Idea_AnalysisOfHackingPage/3.png" alt="3"></p>
-<p>于是去GitHub上查找该用户，发现只有个项目，里面就只有一个index.html文件，对应着P2页面，最新版本还是昨天提交的（P4）。   </p>
+<p>于是去GitHub上查找该用户，发现只有个项目，里面就只有一个index.html文件，对应着P2页面，最新版本还是昨天提交的（P4）。</p>
 <p><img src="/2019/03/30/Idea_AnalysisOfHackingPage/4.png" alt="4"></p>
-<p>感觉不对，于是改变 User Agent 为手机，重新访问短链接，跳转P5页面，是个伪QQ空间登录界面，果然是个钓鱼页面233。 </p>
+<p>感觉不对，于是改变 User Agent 为手机，重新访问短链接，跳转P5页面，是个伪QQ空间登录界面，果然是个钓鱼页面233。</p>
 <p><img src="/2019/03/30/Idea_AnalysisOfHackingPage/5.png" alt="5"></p>
-<p>点击一键登录，延时一会儿会提示 请安装最新版本QQ 。【忘了密码】及【注册新账号】都是跳转到QQ官方的页面。然后输个123456789啥的测试一下，还会提示 请输入正确账号或者密码 啥的（P6）。  </p>
+<p>点击一键登录，延时一会儿会提示 请安装最新版本QQ 。【忘了密码】及【注册新账号】都是跳转到QQ官方的页面。然后输个123456789啥的测试一下，还会提示 请输入正确账号或者密码 啥的（P6）。</p>
 <p><img src="/2019/03/30/Idea_AnalysisOfHackingPage/6.png" alt="6"></p>
-<p>乱输一个987321654，噫进去了，跳转到了真的QQ空间，虽然并没有真的登录（P7）。  </p>
+<p>乱输一个987321654，噫进去了，跳转到了真的QQ空间，虽然并没有真的登录（P7）。</p>
 <p><img src="/2019/03/30/Idea_AnalysisOfHackingPage/7.png" alt="7"></p>
 <p>而后在调试窗口network下找了半天，都没发现我提交的账号密码。（P8-9）</p>
 <p><img src="/2019/03/30/Idea_AnalysisOfHackingPage/8.png" alt="8"></p>
@@ -577,19 +566,20 @@
 <p><img src="/2019/03/30/Idea_AnalysisOfHackingPage/10.png" alt="10"></p>
 <p><img src="/2019/03/30/Idea_AnalysisOfHackingPage/11.png" alt="11"></p>
 <p>哈哈哈哈哈这个逻辑判断写的还是有点意思的，还把一堆常用简单数字给处理了，难怪前面输123456789玩不来。这个一键登录就是个假的（万一真的估计就得不到账号密码了吧）。点击登录的时候，将用户名密码拼接成json字符串，然后将字符串转换成base64加密传输，而后跳转到官方QQ空间界面。将P9的token用base64解密，果然得到了账号密码（P12）。</p>
-<p><img src="/2019/03/30/Idea_AnalysisOfHackingPage/12.png" alt="12">  </p>
-<p><em>// 他没调用官方登录接口，没有真的登录到QQ空间已经很友好了，不然更难发现呢</em>  </p>
+<p><img src="/2019/03/30/Idea_AnalysisOfHackingPage/12.png" alt="12"></p>
+<p><em>// 他没调用官方登录接口，没有真的登录到QQ空间已经很友好了，不然更难发现呢</em></p>
 <hr>
 <p>到这差不多了，但感觉还没完，我们再来<strong>查查这个域名</strong>吧。</p>
 <p>P13-15注册者信息，这人注册的域名真多。</p>
-<p><img src="/2019/03/30/Idea_AnalysisOfHackingPage/13.png" alt="13">  </p>
-<p><img src="/2019/03/30/Idea_AnalysisOfHackingPage/14.png" alt="14">  </p>
+<p><img src="/2019/03/30/Idea_AnalysisOfHackingPage/13.png" alt="13"></p>
+<p><img src="/2019/03/30/Idea_AnalysisOfHackingPage/14.png" alt="14"></p>
 <p><img src="/2019/03/30/Idea_AnalysisOfHackingPage/15.png" alt="15"></p>
 <p>用邮箱查询，而后随便访问几个，P16发现都重定向到了一个相似页面，原来那是西部数码上的一个域名经销商。这么说那个人也只是从经销商那里买了个域名而已。</p>
 <p><img src="/2019/03/30/Idea_AnalysisOfHackingPage/16.png" alt="16"></p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>这是个做得有点水平的钓鱼网站。</p>
+<h2 id="总结">总结</h2>
+<p>这是个做得有点水平的钓鱼网站。</p>
 <p><strong>碰到类似的二维码别乱扫，扫了也别登录！</strong></p>
-<p>至于获取账号密码之后把全列表都at，估计还写了别的脚本或者调用了啥接口，这个我还不清楚emmm   </p>
+<p>至于获取账号密码之后把全列表都at，估计还写了别的脚本或者调用了啥接口，这个我还不清楚emmm</p>
 <p><img src="/2019/03/30/Idea_AnalysisOfHackingPage/17.jpg" alt="又开始了"></p>
 <p>以上内容均基于公开资料，<strong>仅供学习研究使用，请勿用于非法用途</strong>。</p>
 
@@ -1179,7 +1169,7 @@
             |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
             <br>
                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">308.6k</span>&nbsp;字
+                class="white-color">308.3k</span>&nbsp;字
                                                                                     <span id="busuanzi_container_site_pv">
 			|&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
                     class="white-color"></span>&nbsp;次
@@ -1320,11 +1310,12 @@ $(function () {
                         var data_title = data.title.trim().toLowerCase();
                         var data_content = data.content.trim().replace(/<[^>]+>/g, "").toLowerCase();
                         var data_url = data.url;
+                        data_url = data_url.indexOf('/') === 0 ? data.url : '/' + data_url;
                         var index_title = -1;
                         var index_content = -1;
                         var first_occur = -1;
                         // only match artiles with not empty titles and contents
-                        if (data_title != '' && data_content != '') {
+                        if (data_title !== '' && data_content !== '') {
                             keywords.forEach(function (keyword, i) {
                                 index_title = data_title.indexOf(keyword);
                                 index_content = data_content.indexOf(keyword);
@@ -1334,7 +1325,7 @@ $(function () {
                                     if (index_content < 0) {
                                         index_content = 0;
                                     }
-                                    if (i == 0) {
+                                    if (i === 0) {
                                         first_occur = index_content;
                                     }
                                 }
@@ -1365,12 +1356,12 @@ $(function () {
                         }
                     });
                     str += "</ul>";
-                    str = "<p class=\"search-result-summary\">共找到" + String(cnt-1) + "条结果</p>"  + str;
+                    str = "<p class=\"search-result-summary\">共找到 " + String(cnt-1) + " 条结果</p>"  + str;
                     $resultContent.innerHTML = str;
                 });
             }
         });
-    }
+    };
 
     searchFunc('https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/search.xml', 'searchInput', 'searchResult');
 });

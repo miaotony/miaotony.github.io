@@ -336,19 +336,6 @@
 </header>
 
     
-<script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/cryptojs/crypto-js.min.js"></script>
-<script>
-    (function() {
-        let pwd = '';
-        if (pwd && pwd.length > 0) {
-            if (pwd !== CryptoJS.SHA256(prompt('请输入访问本文章的密码')).toString(CryptoJS.enc.Hex)) {
-                alert('密码错误，将返回主页！');
-                location.href = '/';
-            }
-        }
-    })();
-</script>
-
 
 
 
@@ -512,7 +499,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    3.6k
+                    3.7k
                 </div>
                 
 
@@ -537,8 +524,9 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p><img src="/2021/02/11/CTF_2021NewsCTF/logo.png"></p>
-<h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p><strong>NewsCTF 2021 新春赛</strong></p>
+                <p><img src="/2021/02/11/CTF_2021NewsCTF/logo.png" alt=""></p>
+<h2 id="引言">引言</h2>
+<p><strong>NewsCTF 2021 新春赛</strong></p>
 <p>看群里师傅说这几天有个新春小比赛，做出题目还送红包，顺手就来看看了。</p>
 <p>题目据说是小师傅们自己出的，也是自己组织的，开心就好。</p>
 <blockquote>
@@ -548,15 +536,16 @@
 <p>因为比较菜，出题人基本都是大一萌新，所以某些方向题目比较少请见谅</p>
 </blockquote>
 <p>大一萌新太强了！</p>
-<h2 id="Misc"><a href="#Misc" class="headerlink" title="Misc"></a>Misc</h2><h3 id="misc签到处"><a href="#misc签到处" class="headerlink" title="misc签到处"></a>misc签到处</h3><p>图片结尾有个压缩包，里面 base64 解密一下就好</p>
+<h2 id="Misc">Misc</h2>
+<h3 id="misc签到处">misc签到处</h3>
+<p>图片结尾有个压缩包，里面 base64 解密一下就好</p>
 <p><img src="/2021/02/11/CTF_2021NewsCTF/image-20210208153708076.png" alt="welcome"></p>
 <pre class="line-numbers language-none"><code class="language-none">ZmxhZ3tXZWxjMG1lX3QwX25ld3NjdGYhISF9CuaUr+S7mOWuneWPo+S7pFvmrKLov47mnaXliLDokIzmlrDnvqTotZtd
 
 flag{Welc0me_t0_newsctf!!!}
 支付宝口令[欢迎来到萌新群赛]<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-
-
-<h3 id="happy-ox"><a href="#happy-ox" class="headerlink" title="happy ox"></a>happy ox</h3><blockquote>
+<h3 id="happy-ox">happy ox</h3>
+<blockquote>
 <p>这次我们邀请到了牛爷爷来给大家拜个年 （共10包）</p>
 </blockquote>
 <p>很明显 LSB 有隐写，提取一下。</p>
@@ -569,23 +558,23 @@ flag{Welc0me_t0_newsctf!!!}
 <p>又因为是小写，得到 <code>passwdiskbyydsez</code>，即 <code>kbyydsez</code></p>
 <pre class="line-numbers language-none"><code class="language-none">flag{0h_y0u_f1nd_Me_h3ck}
 支付宝口令[牛年行大运愿岁月安好]<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-
-<h3 id="EMOJI"><a href="#EMOJI" class="headerlink" title="EMOJI"></a>EMOJI</h3><blockquote>
+<h3 id="EMOJI">EMOJI</h3>
+<blockquote>
 <p>EMOJI(笑) 得到的flag中数字的中文为支付宝口令红包，禁止一人多包或分享。 如flag{t3st_123_1t} 则口令红包为：三一二三一</p>
 </blockquote>
 <p>还是改文件头。。</p>
 <p><img src="/2021/02/11/CTF_2021NewsCTF/image-20210208155703148.png" alt="改文件头"></p>
 <p><img src="/2021/02/11/CTF_2021NewsCTF/%E5%9B%BE%E7%89%871.png" alt="图片1"></p>
 <p>查了一下，这是 <strong>《长安12时辰》的望楼系统</strong>，太强了！</p>
-<p> 9宫格的空间，用来表示个位。 </p>
+<p>9宫格的空间，用来表示个位。</p>
 <p><img src="/2021/02/11/CTF_2021NewsCTF/213e-icapxph4120507.jpg" alt="个位"></p>
-<p> 左边的4个花瓣位，用来表示十位。 </p>
+<p>左边的4个花瓣位，用来表示十位。</p>
 <p><img src="/2021/02/11/CTF_2021NewsCTF/9655-icapxph4120797.jpg" alt="十位"></p>
-<p>右边的4个花瓣位，用来表示百位。 </p>
+<p>右边的4个花瓣位，用来表示百位。</p>
 <p><img src="http://n.sinaimg.cn/spider20190812/246/w1399h1247/20190812/4fe2-icapxph4121484.jpg" alt="百位"></p>
 <p>什么都不出现，就表示0。</p>
 <p><em>Via <a target="_blank" rel="noopener" href="http://finance.sina.com.cn/roll/2019-08-12/doc-ihytcitm8543366.shtml">研究完《长安12时辰》的望楼系统，我魔怔了</a></em></p>
-<p>于是就是 </p>
+<p>于是就是</p>
 <p>799*248+21 即 198173，<code>一九八一七三</code></p>
 <p>解压得到</p>
 <pre class="line-numbers language-none"><code class="language-none">key:sixgod
@@ -594,17 +583,18 @@ ciphertext:🙃💵🌿🎤🚪🌏🐎🥋🚫😆✅🍌✅🚨📂📮🕹�
 <p>然后查了一下，发现了个带 key 的。</p>
 <p><strong>emoji-aes</strong> 解密 <a target="_blank" rel="noopener" href="https://aghorler.github.io/emoji-aes/">https://aghorler.github.io/emoji-aes/</a></p>
 <blockquote>
-<p>emoji-aes encrypts string data with the symmetric AES encryption cipher (using <a target="_blank" rel="noopener" href="https://github.com/brix/crypto-js">crypto-js</a>), and then replaces the Base64 output with emojis.    </p>
+<p>emoji-aes encrypts string data with the symmetric AES encryption cipher (using <a target="_blank" rel="noopener" href="https://github.com/brix/crypto-js">crypto-js</a>), and then replaces the Base64 output with emojis.</p>
 </blockquote>
 <p>咱自己也部署了一个，在这里 ==&gt; <a target="_blank" rel="noopener" href="https://emoji-aes.miaotony.xyz/">https://emoji-aes.miaotony.xyz/</a></p>
-<p><img src="/2021/02/11/CTF_2021NewsCTF/image-20210208171007134.png"></p>
+<p><img src="/2021/02/11/CTF_2021NewsCTF/image-20210208171007134.png" alt=""></p>
 <p><code>flag{em0j1_Aes_1s_3_ni5e_3ncr9pt_to0l}</code></p>
-<h3 id="伪装者"><a href="#伪装者" class="headerlink" title="伪装者"></a>伪装者</h3><blockquote>
+<h3 id="伪装者">伪装者</h3>
+<blockquote>
 <p><a target="_blank" rel="noopener" href="https://wws.lanzous.com/ihGAlldzfmb">https://wws.lanzous.com/ihGAlldzfmb</a> 支付宝红包口令是flag{}里面的内容,如果有两个今晚吃鸡请删掉一个。 flag格式：flag{}</p>
 </blockquote>
 <p><code>伪装者.rar</code></p>
 <p>和正常的 rar 对比可以看到文件头改掉了</p>
-<p><img src="/2021/02/11/CTF_2021NewsCTF/image-20210208153900151.png"></p>
+<p><img src="/2021/02/11/CTF_2021NewsCTF/image-20210208153900151.png" alt=""></p>
 <p>改回 rar 就好。</p>
 <p><code>背景.txt</code>:</p>
 <pre class="line-numbers language-none"><code class="language-none">小林 正在追一部剧,但是他忘了剧名中一位角色的名字,于是他截了个图(好看的剧.png),开始了询问环节.
@@ -616,22 +606,22 @@ ciphertext:🙃💵🌿🎤🚪🌏🐎🥋🚫😆✅🍌✅🚨📂📮🕹�
 
 
 注:角色名字(中文拼音)是压缩包的密码<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p><img src="/2021/02/11/CTF_2021NewsCTF/image-20210208180617379.png"></p>
+<p><img src="/2021/02/11/CTF_2021NewsCTF/image-20210208180617379.png" alt=""></p>
 <p>百度识图一下</p>
 <p><img src="/2021/02/11/CTF_2021NewsCTF/image-20210208175514664.png" alt="百度识图"></p>
 <p>liuyijun 不对，要角色名字(中文拼音)</p>
 <p><a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E4%BC%AA%E8%A3%85%E8%80%85/15932508#3_1">《伪装者》</a></p>
 <p>草，就是题目名称……</p>
-<p><img src="/2021/02/11/CTF_2021NewsCTF/image-20210208180414277.png"></p>
+<p><img src="/2021/02/11/CTF_2021NewsCTF/image-20210208180414277.png" alt=""></p>
 <p>wangtianfeng</p>
-<p>解压得到 </p>
+<p>解压得到</p>
 <p><img src="/2021/02/11/CTF_2021NewsCTF/niu.jpg" alt="niu"></p>
 <p><code>key.wav</code> 文件结尾，貌似没啥用。</p>
-<p><img src="/2021/02/11/CTF_2021NewsCTF/image-20210208181121395.png"></p>
+<p><img src="/2021/02/11/CTF_2021NewsCTF/image-20210208181121395.png" alt=""></p>
 <p>音频有一段 DTMF</p>
 <p><img src="/2021/02/11/CTF_2021NewsCTF/image-20210208181051381.png" alt="DTMF"></p>
 <p>截取这部分音频，然后提取一下。</p>
-<p><img src="/2021/02/11/CTF_2021NewsCTF/image-20210208181611215.png"></p>
+<p><img src="/2021/02/11/CTF_2021NewsCTF/image-20210208181611215.png" alt=""></p>
 <p>结合频谱图再修正一下。</p>
 <pre class="line-numbers language-none"><code class="language-none">#222833344477773338866#<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>九键键盘密码（草，是 GKCTF2020 的音频</p>
@@ -645,10 +635,11 @@ wrote extracted data to <span class="token string">"flag.txt"</span><span class=
 
 熊曰：呋食很誒咯噔破啽住有歡嗚註嗄和你吃冬註物物眠嗚笨嘍擊笨噤襲你爾咬你爾常破很歡我吖拙歡意擊咯堅有嗷嗥哞怎發唬肉既歡沒破噤咯人和嘶啽更<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p><a target="_blank" rel="noopener" href="http://hi.pcmoe.net/">与熊论道</a></p>
-<p><img src="/2021/02/11/CTF_2021NewsCTF/image-20210210222545512.png"></p>
+<p><img src="/2021/02/11/CTF_2021NewsCTF/image-20210210222545512.png" alt=""></p>
 <p>然后去掉一个 <code>今晚吃鸡</code></p>
 <p><code>flag{牛年大吉今晚吃鸡小年快乐happy}</code></p>
-<h3 id="听说你喜欢薅羊毛"><a href="#听说你喜欢薅羊毛" class="headerlink" title="听说你喜欢薅羊毛"></a>听说你喜欢薅羊毛</h3><blockquote>
+<h3 id="听说你喜欢薅羊毛">听说你喜欢薅羊毛</h3>
+<blockquote>
 <p>附件地址：<a target="_blank" rel="noopener" href="https://wwa.lanzous.com/iNdm7lfooaj">https://wwa.lanzous.com/iNdm7lfooaj</a></p>
 </blockquote>
 <p><code>羊毛.jpg</code> 结尾</p>
@@ -658,7 +649,7 @@ wrote extracted data to <span class="token string">"flag.txt"</span><span class=
 <p>然而用这个去解压缩包怎么都解不开。。</p>
 <p>后来发现图片还有加密……</p>
 <p>JPHS <code>tingshuonixihuanyangmao</code></p>
-<p><img src="/2021/02/11/CTF_2021NewsCTF/image-20210208215505824.png"></p>
+<p><img src="/2021/02/11/CTF_2021NewsCTF/image-20210208215505824.png" alt=""></p>
 <p>得到 <code>Wdn1His87</code>，解压得到 <code>brainpower.txt</code> 和 <code>flag.zip</code></p>
 <p>看<code>brainpower.txt</code> 文件头 ID3，遂改后缀名为 mp3.</p>
 <p>看一下频谱，对数坐标好看一点。</p>
@@ -674,12 +665,13 @@ wrote extracted data to <span class="token string">"flag.txt"</span><span class=
 <p><img src="/2021/02/11/CTF_2021NewsCTF/image-20210208222209669.png" alt="文件头"></p>
 <p><img src="/2021/02/11/CTF_2021NewsCTF/image-20210208222304905.png" alt="改"></p>
 <p>然后得到二维码</p>
-<p><img src="/2021/02/11/CTF_2021NewsCTF/download.png"></p>
+<p><img src="/2021/02/11/CTF_2021NewsCTF/download.png" alt=""></p>
 <p>扫码得到</p>
 <pre class="line-numbers language-none"><code class="language-none">flag{s0_easy_is_not_it?}
 支付宝[三三六六五八九九]<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 <p><em>（巨套娃了</em></p>
-<h3 id="缺斤少两"><a href="#缺斤少两" class="headerlink" title="缺斤少两"></a>缺斤少两</h3><p>两张二维码</p>
+<h3 id="缺斤少两">缺斤少两</h3>
+<p>两张二维码</p>
 <p><img src="/2021/02/11/CTF_2021NewsCTF/xieyingeng.png" alt="谐音梗，扣钱！"></p>
 <p>扫码得到</p>
 <pre class="line-numbers language-none"><code class="language-none">大牛：我也很疑惑呢<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
@@ -687,7 +679,7 @@ wrote extracted data to <span class="token string">"flag.txt"</span><span class=
 <p>发现是不全的。</p>
 <p>两张图异或一下，然后再反个色，再补上四个识别框。</p>
 <p><img src="/2021/02/11/CTF_2021NewsCTF/image-20210210200225810.png" alt="xor"></p>
-<p><img src="/2021/02/11/CTF_2021NewsCTF/1.png"></p>
+<p><img src="/2021/02/11/CTF_2021NewsCTF/1.png" alt=""></p>
 <p>扫码得到解压密码。</p>
 <pre class="line-numbers language-none"><code class="language-none">password:1q2w3e4r5t6y7u8i<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>解压得到两张图</p>
@@ -710,7 +702,7 @@ hint2:Zmlyc3Q/LGxlbihmaXJzdCk9NQ==
 <p>hint1: 明文长度是9，会下棋吗？//题目更正为9</p>
 <p>hint2: first?,len(first)=5</p>
 <p><strong>波利比奥斯方阵密码</strong></p>
-<p><img src="/2021/02/11/CTF_2021NewsCTF/20200712175337742.png"></p>
+<p><img src="/2021/02/11/CTF_2021NewsCTF/20200712175337742.png" alt=""></p>
 <p>网上找了个脚本改改跑一下。</p>
 <pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> itertools
 s <span class="token operator">=</span> <span class="token string">"first"</span>
@@ -732,7 +724,7 @@ ciper <span class="token operator">=</span> <span class="token string">"iftffsis
             xx <span class="token operator">+=</span> <span class="token number">1</span>
         ans_ <span class="token operator">+=</span> <span class="token builtin">chr</span><span class="token punctuation">(</span>xx<span class="token punctuation">)</span>
     <span class="token keyword">print</span><span class="token punctuation">(</span>ans_<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p><img src="/2021/02/11/CTF_2021NewsCTF/image-20210210204147261.png"></p>
+<p><img src="/2021/02/11/CTF_2021NewsCTF/image-20210210204147261.png" alt=""></p>
 <p>密码就这个了。</p>
 <p>解压得到 <code>flag.txt</code></p>
 <pre class="line-numbers language-none"><code class="language-none">密文：mtHVnkLnIaP3FaW7KOWjTmKkVjWjVzKjdeNvTnAjoH9iZOIvTeHbvD==
@@ -744,9 +736,10 @@ flag：NEWCTF2021{}<span aria-hidden="true" class="line-numbers-rows"><span></sp
 <p>魔改的 base64，alphabet 差了 4 位，包括 34ju 这四个字符。</p>
 <p>手动试了试，应该是</p>
 <pre class="line-numbers language-none"><code class="language-none">JASGBWcQPRXEFLbCDIlmnHUVKTYZdMovwipatNOefghq56rs34ujkxyz012789+/<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p><img src="/2021/02/11/CTF_2021NewsCTF/image-20210210210737044.png"></p>
+<p><img src="/2021/02/11/CTF_2021NewsCTF/image-20210210210737044.png" alt=""></p>
 <p><code>NEWSCTF2021{base64_1s_v3ry_e@sy_and_fuN}</code></p>
-<h3 id="哥哥的秘密"><a href="#哥哥的秘密" class="headerlink" title="哥哥的秘密"></a>哥哥的秘密</h3><p>有 社工 / OSINT 题唉！</p>
+<h3 id="哥哥的秘密">哥哥的秘密</h3>
+<p>有 社工 / OSINT 题唉！</p>
 <pre class="line-numbers language-none"><code class="language-none">据说哥哥的秘密藏在了妹妹的QQ空间里
 QQ：2492853776
 去寻找flag吧<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
@@ -754,74 +747,87 @@ QQ：2492853776
 <p>///勿在评论区泄露或提供解题思路，否则将关闭评论功能。题目中涉及到的人名，生日均为虚构，涉及到的地名，公司等均是随机挑选的，请勿对题目中出现的手机号进行骚扰，出题人概不承担责任///</p>
 </blockquote>
 <blockquote>
-<p>感谢节奏大师带我入坑音游，虽然几年没玩了<br>但是现在依旧回归啦！<br>屁股肉（phigros）会记住你的<img src="http://qzonestyle.gtimg.cn/qzone/em/e246.png" alt="img"><br>还有bang dream</p>
+<p>感谢节奏大师带我入坑音游，虽然几年没玩了<br>
+但是现在依旧回归啦！<br>
+屁股肉（phigros）会记住你的<img src="http://qzonestyle.gtimg.cn/qzone/em/e246.png" alt="img"><br>
+还有bang dream</p>
 </blockquote>
 <blockquote>
-<p>玩到了那么久，累死了。<br>今天还学到个东西<br>⠀⡘⠀⡙⠀⡞⠀⡄⣿⠪⡛⣶⡸⠱⠀⠍⡥⣆⡗⠀⡎⢊==</p>
+<p>玩到了那么久，累死了。<br>
+今天还学到个东西<br>
+⠀⡘⠀⡙⠀⡞⠀⡄⣿⠪⡛⣶⡸⠱⠀⠍⡥⣆⡗⠀⡎⢊==</p>
 </blockquote>
 <p><a target="_blank" rel="noopener" href="https://www.qqxiuzi.cn/bianma/wenbenjiami.php?s=mangwen">盲文解密</a></p>
-<p><img src="/2021/02/11/CTF_2021NewsCTF/image-20210208174746791.png"></p>
+<p><img src="/2021/02/11/CTF_2021NewsCTF/image-20210208174746791.png" alt=""></p>
 <pre class="line-numbers language-none"><code class="language-none">hint：密码=时地人<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <blockquote>
-<p>今天哥哥给了个旗帜叫我保管好<br>那我还是放别的地方吧<br>怕忘了还是存一下相册</p>
+<p>今天哥哥给了个旗帜叫我保管好<br>
+那我还是放别的地方吧<br>
+怕忘了还是存一下相册</p>
 </blockquote>
-<p><img src="/2021/02/11/CTF_2021NewsCTF/image-20210208175342822.png"></p>
+<p><img src="/2021/02/11/CTF_2021NewsCTF/image-20210208175342822.png" alt=""></p>
 <blockquote>
-<p>哇哈哈哈哈佳佳今天连着5个运气王<br>果然我刘某人名不虚传</p>
+<p>哇哈哈哈哈佳佳今天连着5个运气王<br>
+果然我刘某人名不虚传</p>
 </blockquote>
 <p>==&gt; 刘佳佳</p>
-<p><img src="/2021/02/11/CTF_2021NewsCTF/image-20210208194712410.png"></p>
+<p><img src="/2021/02/11/CTF_2021NewsCTF/image-20210208194712410.png" alt=""></p>
 <blockquote>
 <p>1月14日 22:05</p>
 <p>今天终于放假啦！吃火锅敲开心的！</p>
 </blockquote>
 <blockquote>
 <p>2020年12月31日 00:00</p>
-<p>马上放假啦！！！！！！<br>晚上看电影<br>要<br>注意<br>细节~</p>
+<p>马上放假啦！！！！！！<br>
+晚上看电影<br>
+要<br>
+注意<br>
+细节~</p>
 </blockquote>
 <blockquote>
 <p>2020年12月25日 22:22</p>
-<p>三个节日连着过 好快落 明天就第二个十年啦        </p>
+<p>三个节日连着过 好快落 明天就第二个十年啦</p>
 </blockquote>
 <blockquote>
 <p>2020年12月22日 23:33</p>
-<p>今天学校的事也好多-n-<br>希望过几天可以吃顿好的(*≧▽≦)ﾉｼ))</p>
-<p>四川绵阳 </p>
+<p>今天学校的事也好多-n-<br>
+希望过几天可以吃顿好的(*≧▽≦)ﾉｼ))</p>
+<p>四川绵阳</p>
 </blockquote>
 <p>结合评论</p>
-<p><img src="/2021/02/11/CTF_2021NewsCTF/psc.jpg"></p>
+<p><img src="/2021/02/11/CTF_2021NewsCTF/psc.jpg" alt=""></p>
 <p>==&gt; birthday: 20001226</p>
 <p>顺便，一直有 2931479782 这个QQ点赞和评论。他有条说说</p>
 <blockquote>
 <p>hint:弱口令 地区字母，名字字母(<em>¯ㅿ¯</em>;)生日 不同形式都试试</p>
 </blockquote>
 <p>相册：</p>
-<p><img src="/2021/02/11/CTF_2021NewsCTF/image-20210208175419070.png"></p>
+<p><img src="/2021/02/11/CTF_2021NewsCTF/image-20210208175419070.png" alt=""></p>
 <p><code>sU*f4#OY/6+ghE</code> 不懂</p>
-<p>再回到妹妹的相册，第三个相册，根据提示 </p>
+<p>再回到妹妹的相册，第三个相册，根据提示</p>
 <p>2+3+8 密码为</p>
 <p><code>lsljj20001226</code></p>
 <p>得到一张二维码。</p>
-<p><img src="/2021/02/11/CTF_2021NewsCTF/image-20210209180235911.png"></p>
+<p><img src="/2021/02/11/CTF_2021NewsCTF/image-20210209180235911.png" alt=""></p>
 <p>扫码得到</p>
 <pre class="line-numbers language-none"><code class="language-none">My MicroBlog name：啊这ovo001<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>去微博找找。</p>
-<p><img src="/2021/02/11/CTF_2021NewsCTF/image-20210209180747524.png"></p>
-<p><img src="/2021/02/11/CTF_2021NewsCTF/image-20210209180819031.png"></p>
+<p><img src="/2021/02/11/CTF_2021NewsCTF/image-20210209180747524.png" alt=""></p>
+<p><img src="/2021/02/11/CTF_2021NewsCTF/image-20210209180819031.png" alt=""></p>
 <p>有 Nano 唉（x</p>
-<p><img src="/2021/02/11/CTF_2021NewsCTF/image-20210209180842507.png"></p>
+<p><img src="/2021/02/11/CTF_2021NewsCTF/image-20210209180842507.png" alt=""></p>
 <p>2598888 乐山 =&gt; 尚纬股份</p>
-<p><img src="/2021/02/11/CTF_2021NewsCTF/image-20210209181440142.png"></p>
+<p><img src="/2021/02/11/CTF_2021NewsCTF/image-20210209181440142.png" alt=""></p>
 <p>解得妹妹的第一个相册密码（哥哥的公司）</p>
-<p><img src="/2021/02/11/CTF_2021NewsCTF/image-20210209181542666.png"></p>
+<p><img src="/2021/02/11/CTF_2021NewsCTF/image-20210209181542666.png" alt=""></p>
 <p>得到两张图</p>
-<p><img src="/2021/02/11/CTF_2021NewsCTF/psc2.jpg"></p>
-<p><img src="/2021/02/11/CTF_2021NewsCTF/psc3.jpg"></p>
+<p><img src="/2021/02/11/CTF_2021NewsCTF/psc2.jpg" alt=""></p>
+<p><img src="/2021/02/11/CTF_2021NewsCTF/psc3.jpg" alt=""></p>
 <p><code>a2492853776@163.com</code></p>
 <p>那看第一张图好了。</p>
-<p><img src="/2021/02/11/CTF_2021NewsCTF/image-20210209181952221.png"></p>
+<p><img src="/2021/02/11/CTF_2021NewsCTF/image-20210209181952221.png" alt=""></p>
 <p>发现原图结尾隐写了个 zip</p>
-<p><img src="/2021/02/11/CTF_2021NewsCTF/image-20210209182039405.png"></p>
+<p><img src="/2021/02/11/CTF_2021NewsCTF/image-20210209182039405.png" alt=""></p>
 <pre class="line-numbers language-none"><code class="language-none">以下是题目描述：
 噢，我的老兄，很抱歉看了你的照片，这感觉真是太糟了。我是说，虽然隔了这么久，我还是忍不住想用沉默之眼来寻查这之中的秘密。我想你可能对我们的靴子朋友或者屁股老弟有什么偏见，就像我们都以为约翰尼先生总打他的狗，但是事实不是那样的，他们就像兄弟一样，我亲眼所见，我发誓。
 
@@ -830,9 +836,9 @@ QQ：2492853776
 找到密码，将密码发送给指定的邮箱，即可获得flag，快来挑战吧！
 （密码必须写在主题上而不是内容上）<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p><code>星星的夜.png</code> 隐写</p>
-<p><img src="/2021/02/11/CTF_2021NewsCTF/image-20210209183434340.png"></p>
+<p><img src="/2021/02/11/CTF_2021NewsCTF/image-20210209183434340.png" alt=""></p>
 <p>另一张带有邮箱的图也隐写有 zip。</p>
-<p><img src="/2021/02/11/CTF_2021NewsCTF/image-20210209182324784.png"></p>
+<p><img src="/2021/02/11/CTF_2021NewsCTF/image-20210209182324784.png" alt=""></p>
 <p><code>倒数第2步.txt</code></p>
 <pre class="line-numbers language-none"><code class="language-none">题目2：（题目1和题目2都可以得到flag相册密码，自由抉择选择哪条）
 
@@ -849,39 +855,46 @@ QQ：2492853776
 4.IAU在1928国际天文会议中认定的新的星座的拉丁学名是？
 5.https://www.bilibili.com/网站ip地址为110/120.xx.xx.xx的运营商的官网是？<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <ol>
-<li><p>G（《Goyang Ubur Ubur》，印尼宽带广告的背景音乐的歌词空耳，歌词原文应为 Takupaz Dance Crew，塔库帕兹舞蹈队   </p>
+<li>
+<p>G（《Goyang Ubur Ubur》，印尼宽带广告的背景音乐的歌词空耳，歌词原文应为 Takupaz Dance Crew，塔库帕兹舞蹈队</p>
 </li>
-<li><p>W（<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/William_Joseph_Burns">William Joseph Burns</a>，（问了出题人说是这个。。）详见 <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Director_of_the_Central_Intelligence_Agency">Director of the Central Intelligence Agency</a> </p>
-<p><del>David S. Cohen，20210120 宣誓就职，注意到很多地方甚至中文维基百科都没更新，详情 <a target="_blank" rel="noopener" href="https://www.cia.gov/about/">https://www.cia.gov/about/</a></del></p>
-<p><img src="/2021/02/11/CTF_2021NewsCTF/image-20210209203954297.png"></p>
+<li>
+<p>W（<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/William_Joseph_Burns">William Joseph Burns</a>，（问了出题人说是这个。。）详见 <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Director_of_the_Central_Intelligence_Agency">Director of the Central Intelligence Agency</a></p>
+<p><s>David S. Cohen，20210120 宣誓就职，注意到很多地方甚至中文维基百科都没更新，详情 <a target="_blank" rel="noopener" href="https://www.cia.gov/about/">https://www.cia.gov/about/</a></s></p>
+<p><img src="/2021/02/11/CTF_2021NewsCTF/image-20210209203954297.png" alt=""></p>
 </li>
-<li><p>F（f2549bf9e2c93acbb794041185c26fc0. 考虑到2.1之前，且答案都是英文字母，是 UP 主</p>
+<li>
+<p>F（f2549bf9e2c93acbb794041185c26fc0. 考虑到2.1之前，且答案都是英文字母，是 UP 主</p>
 <p>（哈希值就 A-F 嘛</p>
-<p><img src="/2021/02/11/CTF_2021NewsCTF/image-20210209214058782.png"></p>
-<p><img src="/2021/02/11/CTF_2021NewsCTF/image-20210209214155104.png"></p>
+<p><img src="/2021/02/11/CTF_2021NewsCTF/image-20210209214058782.png" alt=""></p>
+<p><img src="/2021/02/11/CTF_2021NewsCTF/image-20210209214155104.png" alt=""></p>
 </li>
-<li><p>O（Ophiuchus，蛇夫座</p>
+<li>
+<p>O（Ophiuchus，蛇夫座</p>
 </li>
-<li><p>K（金山云，<a target="_blank" rel="noopener" href="http://www.ksyun.com,用/">www.ksyun.com，用</a> <a target="_blank" rel="noopener" href="http://ping.chinaz.com/">ping 工具</a>看了看，小破站的服务商真多</p>
-<p><img src="/2021/02/11/CTF_2021NewsCTF/image-20210209201113130.png"></p>
+<li>
+<p>K（金山云，<a target="_blank" rel="noopener" href="http://www.ksyun.com">www.ksyun.com</a>，用 <a target="_blank" rel="noopener" href="http://ping.chinaz.com/">ping 工具</a>看了看，小破站的服务商真多</p>
+<p><img src="/2021/02/11/CTF_2021NewsCTF/image-20210209201113130.png" alt=""></p>
 </li>
 </ol>
 <p><code>GWFOK</code></p>
 <p>然后发邮件给那个邮箱。</p>
 <p>这里我还以为直接就是相册密码了呢，去爆破了空间相册（x</p>
 <p>然后验证码确认点不动，于是看了看QQ空间相册的代码，好丑啊。</p>
-<p><img src="/2021/02/11/CTF_2021NewsCTF/image-20210209213540794.png"></p>
-<p><img src="/2021/02/11/CTF_2021NewsCTF/image-20210209213402571.png"></p>
+<p><img src="/2021/02/11/CTF_2021NewsCTF/image-20210209213540794.png" alt=""></p>
+<p><img src="/2021/02/11/CTF_2021NewsCTF/image-20210209213402571.png" alt=""></p>
 <pre class="line-numbers language-none"><code class="language-none">恭喜你！这是相册“旗帜”的密码（只套了简单的4层）：
 
 23khUrNeAf1igP4PixgoUUDQLaRGGfEpPsFEd9CCKaUWfwYmG4ZmCwFVEkNNwtijxVcn6a6XkwC1ctqMLAax4aGK<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 <p>又是 base 全家桶</p>
-<p><img src="/2021/02/11/CTF_2021NewsCTF/image-20210209214955746.png"></p>
+<p><img src="/2021/02/11/CTF_2021NewsCTF/image-20210209214955746.png" alt=""></p>
 <p>得到相册密码 <code>youfindme!</code></p>
 <p>拿到 flag</p>
-<p><img src="/2021/02/11/CTF_2021NewsCTF/image-20210209215103759.png"></p>
+<p><img src="/2021/02/11/CTF_2021NewsCTF/image-20210209215103759.png" alt=""></p>
 <p><code>flag{th1s_1s_A_Fla9_aNd_n0bod9_C3n_f1nd_1t}</code></p>
-<h2 id="Crypto"><a href="#Crypto" class="headerlink" title="Crypto"></a>Crypto</h2><h3 id="贝斯家族"><a href="#贝斯家族" class="headerlink" title="贝斯家族"></a>贝斯家族</h3><pre class="line-numbers language-none"><code class="language-none">;gM&amp;7AOTKl:236b;HHIm='%8*=''2q;FX]*&lt;,5Z\&gt;'a(\&lt;*)(o:2&lt;mE;DL+19egH[A2@7[A28+B;L2)3;-,Jc&lt;EDpe@kpeS=]Ipp@5)e@;FN&lt;1@VeM3=tj,I=u'8;;FXDT@;BL0@o[bo=]\dGA2?f'&lt;CL(F@k`.CASl6l:236V@Vo.c&gt;&amp;6JY@mipjA4Tls;/:D4=]I2%@PTof&lt;*)gK;eo9(@VeIr<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h2 id="Crypto">Crypto</h2>
+<h3 id="贝斯家族">贝斯家族</h3>
+<pre class="line-numbers language-none"><code class="language-none">;gM&amp;7AOTKl:236b;HHIm='%8*=''2q;FX]*&lt;,5Z\&gt;'a(\&lt;*)(o:2&lt;mE;DL+19egH[A2@7[A28+B;L2)3;-,Jc&lt;EDpe@kpeS=]Ipp@5)e@;FN&lt;1@VeM3=tj,I=u'8;;FXDT@;BL0@o[bo=]\dGA2?f'&lt;CL(F@k`.CASl6l:236V@Vo.c&gt;&amp;6JY@mipjA4Tls;/:D4=]I2%@PTof&lt;*)gK;eo9(@VeIr<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>base85</p>
 <pre class="line-numbers language-none"><code class="language-none">SzJSeERNNjFBRWJXWW5zWWl5RFVoTkZvZzRiTW9iNkViR25VM1lOd3VLd2poRzNLQW1hUWNIc2NNYUFZa0tnRE1GblFRZ0ZCZ2Z3RFNLakg0cUxrYWZpd3IzUEZ0c0xkemlaNjF6bmVqZlA0cDJWdHZKQkx3YU1yb28xTWN0SkRKblE=<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>base64</p>
@@ -903,20 +916,24 @@ BASE64 = ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/
 BASE85 = 0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!#$%&amp;()*+-;&lt;=&gt;?@^_`{|}~
 BASE91 = ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!#$%&amp;()*+,./:;&lt;=&gt;?@[]^_`{|}~"
 BASE94 = !"#$%&amp;\'()*+,-./0123456789:;&lt;=&gt;?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
 <p>Python3 base85 中分为 base64.a85encode 和 base64.b85encode，a是 Ascii85，b是 IPv6（<a target="_blank" rel="noopener" href="https://tools.ietf.org/html/rfc1924">RFC1924</a>）。</p>
 <ol>
-<li><p><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Ascii85">ASCII85</a> encoding. This is the default. 0x00000000 is compressed to z. Spaces are not compressed.</p>
+<li>
+<p><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Ascii85">ASCII85</a> encoding. This is the default. 0x00000000 is compressed to z. Spaces are not compressed.</p>
 </li>
-<li><p><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Ascii85">Adobe ASCII85</a> encoding is same as previous except data is enclosed between &lt;~ and ~&gt; .</p>
+<li>
+<p><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Ascii85">Adobe ASCII85</a> encoding is same as previous except data is enclosed between &lt;~ and ~&gt; .</p>
 </li>
-<li><p><a target="_blank" rel="noopener" href="https://rfc.zeromq.org/spec:32/Z85/">ZeroMQ (Z85)</a> encoding. NOTE! Even though specification says input length must be divisible by 4, this is not currently enforced. Spaces and zeroes are not compressed.</p>
+<li>
+<p><a target="_blank" rel="noopener" href="https://rfc.zeromq.org/spec:32/Z85/">ZeroMQ (Z85)</a> encoding. NOTE! Even though specification says input length must be divisible by 4, this is not currently enforced. Spaces and zeroes are not compressed.</p>
 </li>
-<li><p>Character set from <a target="_blank" rel="noopener" href="https://tools.ietf.org/html/rfc1924">RFC1924</a> which is an April fools joke. Spaces and zeroes are not compressed.</p>
+<li>
+<p>Character set from <a target="_blank" rel="noopener" href="https://tools.ietf.org/html/rfc1924">RFC1924</a> which is an April fools joke. Spaces and zeroes are not compressed.</p>
 </li>
 </ol>
 </blockquote>
-<h3 id="好日子"><a href="#好日子" class="headerlink" title="好日子"></a>好日子</h3><blockquote>
+<h3 id="好日子">好日子</h3>
+<blockquote>
 <p>好日子，11月11日</p>
 </blockquote>
 <pre class="line-numbers language-none"><code class="language-none">↗↗←↖↕↖↕↳↗↰↗↺↖→↔↰↕↙↕↺↔↰↖↗↔↖↔↑↔→←↑↖↓↗↓←↔↔↗←↘↕↖←↕↕↻↗↰↕↓↖←↗↲↗↑↗↱↗↘↕↔↕↻←↓↔↘↗↕↕↔↖↑↖↖↗↔↗↲↔↙↗↗↗↗↔↔↕↰↔↔↕↰↖↰↔↔↗→↕↔↗↕↖→↕↖↕↓↖←↗↰↔↑↗↖↕↻←↕↕↕←↖↗↘↔↔↕↔↖→↔↰←↔↖↖↖↘↕↱←↑↔↰↔↗↕↘↕↺←→↗↖↗↲←↙=<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
@@ -926,12 +943,14 @@ BASE94 = !"#$%&amp;\'()*+,-./0123456789:;&lt;=&gt;?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\
 <pre class="line-numbers language-none"><code class="language-none">U2FsdGVkX19oI1ocbbcM5wensOuKarNA3noE/HS74RNYqh0stoMpQohkLGqF<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>再 base64 可以发现开头是 <code>Salted__</code>，加盐加密了。</p>
 <p><a target="_blank" rel="noopener" href="https://www.sojson.com/encrypt_rabbit.html">Rabbit 解密</a></p>
-<p><img src="/2021/02/11/CTF_2021NewsCTF/image-20210208213700246.png"></p>
+<p><img src="/2021/02/11/CTF_2021NewsCTF/image-20210208213700246.png" alt=""></p>
 <pre class="line-numbers language-none"><code class="language-none">klv,oclz{mkd_slp_vb_zjjs_slp}<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>懒了，直接去 <a target="_blank" rel="noopener" href="https://quipqiup.com/">quipquip</a> 跑了。</p>
-<p><img src="/2021/02/11/CTF_2021NewsCTF/image-20210208214007562.png"></p>
+<p><img src="/2021/02/11/CTF_2021NewsCTF/image-20210208214007562.png" alt=""></p>
 <p><code>flag{the_day_is_good_day}</code></p>
-<h2 id="Web"><a href="#Web" class="headerlink" title="Web"></a>Web</h2><h3 id="girlfriend"><a href="#girlfriend" class="headerlink" title="girlfriend"></a>girlfriend</h3><p>签到题</p>
+<h2 id="Web">Web</h2>
+<h3 id="girlfriend">girlfriend</h3>
+<p>签到题</p>
 <pre class="line-numbers language-php" data-language="php"><code class="language-php"><span class="token php language-php"><span class="token delimiter important">&lt;?php</span>
 <span class="token keyword">include</span> <span class="token punctuation">(</span><span class="token string single-quoted-string">'flag.php'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token function">error_reporting</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -962,15 +981,16 @@ BASE94 = !"#$%&amp;\'()*+,-./0123456789:;&lt;=&gt;?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\
 <span class="token punctuation">}</span> </span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p><strong>PHP 反序列化漏洞</strong></p>
 <p>先本地试了试，payload 为 <code>flagmiaotony</code> 得到的序列化对象</p>
-<p><img src="/2021/02/11/CTF_2021NewsCTF/image-20210210230936642.png"></p>
+<p><img src="/2021/02/11/CTF_2021NewsCTF/image-20210210230936642.png" alt=""></p>
 <p><code>";s:8:"Hed9eh0g";s:14:"has_girlfriend";}</code> 长度为40，用 10个 <code>flag</code> 滤掉就好了。</p>
-<p><img src="/2021/02/11/CTF_2021NewsCTF/image-20210210230916007.png"></p>
+<p><img src="/2021/02/11/CTF_2021NewsCTF/image-20210210230916007.png" alt=""></p>
 <p><strong>Payload:</strong></p>
 <pre class="line-numbers language-none"><code class="language-none">flagflagflagflagflagflagflagflagflagflag";s:8:"Hed9eh0g";s:14:"has_girlfriend";}
 
 http://47.106.172.29:2333/?payload=flagflagflagflagflagflagflagflagflagflag%22;s:8:%22Hed9eh0g%22;s:14:%22has_girlfriend%22;}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 <p><code>newsctf{i_Lov3_nEws4tF_wEb}</code></p>
-<h3 id="beautifulgirlfriend"><a href="#beautifulgirlfriend" class="headerlink" title="beautifulgirlfriend"></a>beautifulgirlfriend</h3><p><a target="_blank" rel="noopener" href="http://47.106.172.29:8081/">http://47.106.172.29:8081</a></p>
+<h3 id="beautifulgirlfriend">beautifulgirlfriend</h3>
+<p><a target="_blank" rel="noopener" href="http://47.106.172.29:8081">http://47.106.172.29:8081</a></p>
 <p>访问 <code>/source</code> 得到源码</p>
 <pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> base64
 <span class="token keyword">import</span> pickle
@@ -1045,7 +1065,8 @@ highest protocol among opcodes <span class="token operator">=</span> <span class
 <p>然后 <code>/guess?payload=xxxxx</code> 打过去就好了。</p>
 <p><code>newsctf{girlfriend?nothing!!!Affect_sword_speed}</code></p>
 <p>其实这题打法应该挺多的，反弹 shell 应该也行，但不知道为啥没打通（？）</p>
-<h3 id="EZ套娃"><a href="#EZ套娃" class="headerlink" title="EZ套娃"></a>EZ套娃</h3><blockquote>
+<h3 id="EZ套娃">EZ套娃</h3>
+<blockquote>
 <p>bugku web41 附链接：<a target="_blank" rel="noopener" href="https://ctf.bugku.com/challenges/detail/id/183.html">https://ctf.bugku.com/challenges/detail/id/183.html</a></p>
 </blockquote>
 <pre class="line-numbers language-php" data-language="php"><code class="language-php"> <span class="token php language-php"><span class="token delimiter important">&lt;?php</span>
@@ -1117,10 +1138,8 @@ highest protocol among opcodes <span class="token operator">=</span> <span class
 encrypt 长度 23
 
 -->
-
-
-
-<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p><img src="/2021/02/11/CTF_2021NewsCTF/image-20210211180017825.png"></p>
+<h2 id="小结">小结</h2>
+<p><img src="/2021/02/11/CTF_2021NewsCTF/image-20210211180017825.png" alt=""></p>
 <p>Misc AK 了！</p>
 <p>好家伙，快打 FW_Mumuzi 师傅，出题老套娃了！</p>
 <p>Web 怎么全是反序列化，有毒</p>
@@ -1685,7 +1704,7 @@ encrypt 长度 23
             |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
             <br>
                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">308.6k</span>&nbsp;字
+                class="white-color">308.3k</span>&nbsp;字
                                                                                     <span id="busuanzi_container_site_pv">
 			|&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
                     class="white-color"></span>&nbsp;次
@@ -1826,11 +1845,12 @@ $(function () {
                         var data_title = data.title.trim().toLowerCase();
                         var data_content = data.content.trim().replace(/<[^>]+>/g, "").toLowerCase();
                         var data_url = data.url;
+                        data_url = data_url.indexOf('/') === 0 ? data.url : '/' + data_url;
                         var index_title = -1;
                         var index_content = -1;
                         var first_occur = -1;
                         // only match artiles with not empty titles and contents
-                        if (data_title != '' && data_content != '') {
+                        if (data_title !== '' && data_content !== '') {
                             keywords.forEach(function (keyword, i) {
                                 index_title = data_title.indexOf(keyword);
                                 index_content = data_content.indexOf(keyword);
@@ -1840,7 +1860,7 @@ $(function () {
                                     if (index_content < 0) {
                                         index_content = 0;
                                     }
-                                    if (i == 0) {
+                                    if (i === 0) {
                                         first_occur = index_content;
                                     }
                                 }
@@ -1871,12 +1891,12 @@ $(function () {
                         }
                     });
                     str += "</ul>";
-                    str = "<p class=\"search-result-summary\">共找到" + String(cnt-1) + "条结果</p>"  + str;
+                    str = "<p class=\"search-result-summary\">共找到 " + String(cnt-1) + " 条结果</p>"  + str;
                     $resultContent.innerHTML = str;
                 });
             }
         });
-    }
+    };
 
     searchFunc('https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/search.xml', 'searchInput', 'searchResult');
 });

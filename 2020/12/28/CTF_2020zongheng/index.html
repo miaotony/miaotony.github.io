@@ -336,19 +336,6 @@
 </header>
 
     
-<script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/cryptojs/crypto-js.min.js"></script>
-<script>
-    (function() {
-        let pwd = '';
-        if (pwd && pwd.length > 0) {
-            if (pwd !== CryptoJS.SHA256(prompt('请输入访问本文章的密码')).toString(CryptoJS.enc.Hex)) {
-                alert('密码错误，将返回主页！');
-                location.href = '/';
-            }
-        }
-    })();
-</script>
-
 
 
 
@@ -537,18 +524,22 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p><img src="/2020/12/28/CTF_2020zongheng/image-20201228143836286.png"></p>
-<h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>呜，转眼就到 2020 年末了，事情有点杂有点小多，发现有不少想做的事情咕掉了，等后面年终总结再说吧（可能这个也咕了呢 233.</p>
+                <p><img src="/2020/12/28/CTF_2020zongheng/image-20201228143836286.png" alt=""></p>
+<h2 id="引言">引言</h2>
+<p>呜，转眼就到 2020 年末了，事情有点杂有点小多，发现有不少想做的事情咕掉了，等后面年终总结再说吧（可能这个也咕了呢 233.</p>
 <p>前几天天天有比赛，华为 XCTF 三场顶不住，还有 DASCTF x BJDCTF4th，不过期末了队里没师傅打也没怎么看。</p>
 <p>不过周末和队友一起打了个纵横杯，题目还是有点意思的。</p>
 <blockquote>
 <p><strong>平台地址：</strong></p>
-<p><a target="_blank" rel="noopener" href="https://www.ichunqiu.com/2020zongheng">https://www.ichunqiu.com/2020zongheng</a><br><a target="_blank" rel="noopener" href="https://race.ichunqiu.com/2020zongheng">https://race.ichunqiu.com/2020zongheng</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.ichunqiu.com/2020zongheng">https://www.ichunqiu.com/2020zongheng</a><br>
+<a target="_blank" rel="noopener" href="https://race.ichunqiu.com/2020zongheng">https://race.ichunqiu.com/2020zongheng</a></p>
 </blockquote>
-<p>这里写写几道题目的 WriteUp 吧。  </p>
+<p>这里写写几道题目的 WriteUp 吧。</p>
 <p>（看了大佬们的 WP，顺便复现了几题</p>
 <hr>
-<h2 id="Misc"><a href="#Misc" class="headerlink" title="Misc"></a>Misc</h2><h3 id="签到"><a href="#签到" class="headerlink" title="签到"></a>签到</h3><blockquote>
+<h2 id="Misc">Misc</h2>
+<h3 id="签到">签到</h3>
+<blockquote>
 <p>[0146, 0154, 0141, 0147, 0173, 0167, 063, 0154, 0143, 0157, 0155, 0145,  0137, 0164, 0157, 0137, 062, 0157, 0156, 0147, 0137, 0150, 063, 0156,  0147, 0137, 0142, 0145, 061, 0175]</p>
 </blockquote>
 <p>八进制转字符串</p>
@@ -558,7 +549,8 @@ flag <span class="token operator">=</span> <span class="token string">''</span>
     flag <span class="token operator">+=</span> <span class="token builtin">chr</span><span class="token punctuation">(</span><span class="token builtin">int</span><span class="token punctuation">(</span><span class="token builtin">str</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span><span class="token punctuation">,</span><span class="token number">8</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
     <span class="token keyword">print</span><span class="token punctuation">(</span>flag<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p><code>flag{w3lcome_to_2ong_h3ng_be1}</code></p>
-<h3 id="马赛克"><a href="#马赛克" class="headerlink" title="马赛克"></a>马赛克</h3><p>原图：</p>
+<h3 id="马赛克">马赛克</h3>
+<p>原图：</p>
 <p><img src="/2020/12/28/CTF_2020zongheng/mosaic.png" alt="mosaic"></p>
 <p>利用 <strong>Depix</strong> 工具</p>
 <p><a target="_blank" rel="noopener" href="https://github.com/beurtschipper/Depix">https://github.com/beurtschipper/Depix</a></p>
@@ -570,35 +562,38 @@ flag <span class="token operator">=</span> <span class="token string">''</span>
 <blockquote>
 <p>没想到之前逛 GitHub 看到的工具居然就在 CTF 题目里用到了，妙啊~</p>
 </blockquote>
-<h3 id="My-Secret"><a href="#My-Secret" class="headerlink" title="My_Secret"></a>My_Secret</h3><blockquote>
+<h3 id="My-Secret">My_Secret</h3>
+<blockquote>
 <p>LSB have a deep secret</p>
 <p>PASS1 is 123456</p>
 </blockquote>
 <p>下载下来两张图片一个音频，音频听了没啥明显问题。</p>
-<p><img src="/2020/12/28/CTF_2020zongheng/image-20201228150122612.png"></p>
+<p><img src="/2020/12/28/CTF_2020zongheng/image-20201228150122612.png" alt=""></p>
 <p><code>stego.png</code> 拿 StegSolve 看了一下 RGB 里 LSB 都有数据。</p>
 <p>用 <a target="_blank" rel="noopener" href="https://github.com/livz/cloacked-pixel">https://github.com/livz/cloacked-pixel</a> 这个工具来解密 LSB 数据，密码就是题目所给的 123456。</p>
-<p><img src="/2020/12/28/CTF_2020zongheng/image-20201227005139560.png"></p>
+<p><img src="/2020/12/28/CTF_2020zongheng/image-20201227005139560.png" alt=""></p>
 <p>得到密钥为 <code>38d668578a3686ab</code>。</p>
 <p>对 <code>01 blood and wine.wav</code> 用 DeepSound 解密。</p>
-<p><img src="/2020/12/28/CTF_2020zongheng/image-20201226175128179.png"></p>
+<p><img src="/2020/12/28/CTF_2020zongheng/image-20201226175128179.png" alt=""></p>
 <p><img src="/2020/12/28/CTF_2020zongheng/image-20201226174646998.png" alt="pass"></p>
 <p>得到密钥为 <code>carrier</code>。</p>
 <p>根据图片和题目提示，用 oursecret 解密</p>
-<p><img src="/2020/12/28/CTF_2020zongheng/image-20201226173249099.png"></p>
+<p><img src="/2020/12/28/CTF_2020zongheng/image-20201226173249099.png" alt=""></p>
 <p>拿到 flag</p>
-<p><img src="/2020/12/28/CTF_2020zongheng/image-20201226172757191.png"></p>
+<p><img src="/2020/12/28/CTF_2020zongheng/image-20201226172757191.png" alt=""></p>
 <p><code>flag{3072d7b4-d3f4-4d8a-bd8b-ac9285df11f2}</code></p>
-<h3 id="babymaze2-beta"><a href="#babymaze2-beta" class="headerlink" title="babymaze2_beta"></a>babymaze2_beta</h3><p><em>（babymaze1 走迷宫，队友打的，不过环境关了，也没源代码，复现不了了就不写了8</em></p>
+<h3 id="babymaze2-beta">babymaze2_beta</h3>
+<p><em>（babymaze1 走迷宫，队友打的，不过环境关了，也没源代码，复现不了了就不写了8</em></p>
 <p>这题也是走迷宫，不过每次只给出当前位置附近的 3*3 的环境情况。</p>
 <p>附件的话倒是给了个 <code>.so</code> 文件，python 写的，不会逆嘤嘤嘤。</p>
 <p>但是真没想到能非预期，学到了学到了。</p>
 <p>Python2 input RCE</p>
 <pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token builtin">__import__</span><span class="token punctuation">(</span><span class="token string">'os'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>system<span class="token punctuation">(</span><span class="token string">'cat flag'</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>复现成功喵~</p>
-<p><img src="/2020/12/28/CTF_2020zongheng/image-20201228152015811.png"></p>
+<p><img src="/2020/12/28/CTF_2020zongheng/image-20201228152015811.png" alt=""></p>
 <p>BTW，想知道这题真正做的话怎么写（</p>
-<h3 id="magic-download"><a href="#magic-download" class="headerlink" title="magic_download"></a>magic_download</h3><p><code>run.sh</code></p>
+<h3 id="magic-download">magic_download</h3>
+<p><code>run.sh</code></p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token shebang important">#!/bin/bash</span>
 <span class="token builtin class-name">ulimit</span> -c <span class="token number">0</span>      <span class="token comment"># core dump size (kb)</span>
 <span class="token builtin class-name">ulimit</span> -t <span class="token number">60</span>     <span class="token comment"># max cpu using (s/min)</span>
@@ -626,9 +621,12 @@ stdbuf -oL <span class="token builtin class-name">echo</span> -n <span class="to
 127.0.0.1<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 <p>而 grep 就会匹配到最后一行的 <code>127.0.0.1</code>，于是就认为是合理 IP 了。</p>
 <p><em>（学到了学到了</em></p>
-<h3 id="问卷调查"><a href="#问卷调查" class="headerlink" title="问卷调查"></a>问卷调查</h3><p><code>flag{thanks_for_playing_our_games}</code></p>
+<h3 id="问卷调查">问卷调查</h3>
+<p><code>flag{thanks_for_playing_our_games}</code></p>
 <hr>
-<h2 id="Web"><a href="#Web" class="headerlink" title="Web"></a>Web</h2><h3 id="ezcms"><a href="#ezcms" class="headerlink" title="ezcms"></a>ezcms</h3><p><strong>YzmCMS</strong></p>
+<h2 id="Web">Web</h2>
+<h3 id="ezcms">ezcms</h3>
+<p><strong>YzmCMS</strong></p>
 <p><code>www.zip</code> 源码泄露</p>
 <p><code>/www/common/config/config.php</code> 配置文件</p>
 <pre class="line-numbers language-php" data-language="php"><code class="language-php"><span class="token comment">//数据库配置</span>
@@ -640,18 +638,19 @@ stdbuf -oL <span class="token builtin class-name">echo</span> -n <span class="to
 <span class="token string single-quoted-string">'db_port'</span> <span class="token operator">=&gt;</span> <span class="token number">3306</span><span class="token punctuation">,</span>              <span class="token comment">// 端口</span>
 <span class="token string single-quoted-string">'db_prefix'</span> <span class="token operator">=&gt;</span> <span class="token string single-quoted-string">'yzm_'</span><span class="token punctuation">,</span>          <span class="token comment">// 数据库表前缀</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>/admin 后台弱口令登录，用户名密码同数据库配置。</p>
-<p>admin<br>admin868</p>
+<p>admin<br>
+admin868</p>
 <p>参考 <a target="_blank" rel="noopener" href="https://www.cnblogs.com/Spec/p/11188198.html">https://www.cnblogs.com/Spec/p/11188198.html</a></p>
 <p><code>/www/yzmphp/core/class/collection.class.php</code></p>
 <p><img src="/2020/12/28/CTF_2020zongheng/image-20201228171352186.png" alt="collection.class.php"></p>
 <p>这里相对于官方源码去掉了 curl 执行，直接用 <code>file_get_contents</code> 来执行了。</p>
 <p>模块管理下的 采集管理，网址配置为 vps 上一个页面，vps 上放 payload。</p>
-<p><img src="/2020/12/28/CTF_2020zongheng/image-20201226193643241.png"></p>
+<p><img src="/2020/12/28/CTF_2020zongheng/image-20201226193643241.png" alt=""></p>
 <p>页面上放上一个 <code>a</code> 标签，构造目录穿越。</p>
 <p>先试了试 <code>file</code> 协议，发现会提示 <code>链接地址仅允许HTTP和HTTPS协议！</code></p>
-<p><img src="/2020/12/28/CTF_2020zongheng/image-20201226194116722.png"></p>
+<p><img src="/2020/12/28/CTF_2020zongheng/image-20201226194116722.png" alt=""></p>
 <p>再查看源码。</p>
-<p> <code>url_check</code>函数</p>
+<p><code>url_check</code>函数</p>
 <pre class="line-numbers language-php" data-language="php"><code class="language-php">   <span class="token comment">/**
  * URL地址检查
  * @param string $url      需要检查的URL
@@ -677,9 +676,10 @@ stdbuf -oL <span class="token builtin class-name">echo</span> -n <span class="to
 <p><strong>Payload:</strong></p>
 <pre class="line-numbers language-html" data-language="html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>test</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>a</span> <span class="token attr-name">href</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>httpss://miaotony.xyz/../../../../../../../../flag<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span>meow<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>a</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>test</span><span class="token punctuation">&gt;</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>测试采集，得到 flag</p>
-<p><img src="/2020/12/28/CTF_2020zongheng/image-20201226164308132.png"></p>
+<p><img src="/2020/12/28/CTF_2020zongheng/image-20201226164308132.png" alt=""></p>
 <p><code>flag{de3974b7-9c59-4317-b7ab-479b4e058683}</code></p>
-<h3 id="hello-php"><a href="#hello-php" class="headerlink" title="hello_php"></a>hello_php</h3><blockquote>
+<h3 id="hello-php">hello_php</h3>
+<blockquote>
 <p>XXXCMS是一种可以综合管理网站上各种栏目的通用工具，新闻、产品、文档、下载、音乐、教学视频……，通过模版技术，他们都在同一套系统里完成更新和维护。XXXCMS 是目前国内最强大、最稳定的中小型门户网站建设解决方案之一，基于PHP、 MySQL的技术开发，全部源码开放。</p>
 </blockquote>
 <p><code>www.zip</code> 源码泄露</p>
@@ -698,7 +698,8 @@ stdbuf -oL <span class="token builtin class-name">echo</span> -n <span class="to
     &lt;/html&gt;
 <span class="token delimiter symbol">EOD<span class="token punctuation">;</span></span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>从中得知用户名密码为</p>
-<p>admin<br>admin888</p>
+<p>admin<br>
+admin888</p>
 <p>在 <code>login.php</code> 登录，然后访问 <code>admin.php</code>，源码如下。</p>
 <pre class="line-numbers language-php" data-language="php"><code class="language-php"><span class="token php language-php"><span class="token delimiter important">&lt;?php</span>
 <span class="token function">session_start</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -838,17 +839,23 @@ location<span class="token punctuation">.</span><span class="token function">rel
 <p>最后在 <code>config.php</code> 用一句话木马拿 flag。</p>
 <p><img src="/2020/12/28/CTF_2020zongheng/image-20201228203651237.png" alt="修改后的 config.php"></p>
 <blockquote>
-<p>BTW, <strong>利用条件：</strong><br> ① phar 文件要能够上传到服务器端<br> ② 要有可用的魔术方法作为“跳板”<br> ③ 要有文件操作函数，如<code>file_exists()</code>，<code>fopen()</code>，<code>file_get_contents()</code>，<code>file()</code><br> ③ 文件操作函数的参数可控，且<code>:</code>、<code>/</code>、<code>phar</code>等特殊字符没有被过滤</p>
+<p>BTW, <strong>利用条件：</strong><br>
+① phar 文件要能够上传到服务器端<br>
+② 要有可用的魔术方法作为“跳板”<br>
+③ 要有文件操作函数，如<code>file_exists()</code>，<code>fopen()</code>，<code>file_get_contents()</code>，<code>file()</code><br>
+③ 文件操作函数的参数可控，且<code>:</code>、<code>/</code>、<code>phar</code>等特殊字符没有被过滤</p>
 <p><strong>References:</strong></p>
 <p><a target="_blank" rel="noopener" href="https://blog.csdn.net/silence1_/article/details/102683254">关于phar反序列化——BUUCTF-[CISCN2019 华北赛区 Day1 Web1]Dropbox</a></p>
 <p><a target="_blank" rel="noopener" href="https://www.freebuf.com/column/198945.html">PHP反序列化入门之phar</a></p>
 </blockquote>
-<h3 id="大家一起来审代码"><a href="#大家一起来审代码" class="headerlink" title="大家一起来审代码"></a>大家一起来审代码</h3><blockquote>
-<p>小路学会了渗透基础，突然有一天特别无聊想要渗透，她请教了某大佬，大佬丢给了她一个网站地址和网站源码(<a target="_blank" rel="noopener" href="http://www.zip),然后,然后,小路就开始了苦逼的代码审计之旅,越是审越想和周公约会,快来救救她吧!!!/">www.zip)，然后，然后，小路就开始了苦逼的代码审计之旅，越是审越想和周公约会，快来救救她吧！！！</a></p>
+<h3 id="大家一起来审代码">大家一起来审代码</h3>
+<blockquote>
+<p>小路学会了渗透基础，突然有一天特别无聊想要渗透，她请教了某大佬，大佬丢给了她一个网站地址和网站源码(www.zip)，然后，然后，小路就开始了苦逼的代码审计之旅，越是审越想和周公约会，快来救救她吧！！！</p>
 </blockquote>
 <p><code>www.zip</code> 源码泄露</p>
 <p><code>/adm1n</code> 后台弱口令登录</p>
-<p>admin<br>admin</p>
+<p>admin<br>
+admin</p>
 <p><strong>海洋CMS</strong></p>
 <p>有一堆洞（</p>
 <p>发现 GitHub 上有人提了 <strong>后台 getshell</strong> 的 issue：</p>
@@ -858,7 +865,8 @@ location<span class="token punctuation">.</span><span class="token function">rel
 <p>而后在 <code>/data/admin/smtp.php</code> 路径下执行木马拿 flag 即可。</p>
 <p><img src="/2020/12/28/CTF_2020zongheng/upload_48999df9438701ff778625217c9284aa.png" alt="flag"></p>
 <hr>
-<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>学到了不少喵~</p>
+<h2 id="小结">小结</h2>
+<p>学到了不少喵~</p>
 <p>BTW，这比赛到最后大家疯狂交 flag，太卷了太卷了。</p>
 <p>就先这样吧，这几天要大降温了，注意保暖w</p>
 <p><em>（溜了溜了喵</em></p>
@@ -1433,7 +1441,7 @@ location<span class="token punctuation">.</span><span class="token function">rel
             |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
             <br>
                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">308.6k</span>&nbsp;字
+                class="white-color">308.3k</span>&nbsp;字
                                                                                     <span id="busuanzi_container_site_pv">
 			|&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
                     class="white-color"></span>&nbsp;次
@@ -1574,11 +1582,12 @@ $(function () {
                         var data_title = data.title.trim().toLowerCase();
                         var data_content = data.content.trim().replace(/<[^>]+>/g, "").toLowerCase();
                         var data_url = data.url;
+                        data_url = data_url.indexOf('/') === 0 ? data.url : '/' + data_url;
                         var index_title = -1;
                         var index_content = -1;
                         var first_occur = -1;
                         // only match artiles with not empty titles and contents
-                        if (data_title != '' && data_content != '') {
+                        if (data_title !== '' && data_content !== '') {
                             keywords.forEach(function (keyword, i) {
                                 index_title = data_title.indexOf(keyword);
                                 index_content = data_content.indexOf(keyword);
@@ -1588,7 +1597,7 @@ $(function () {
                                     if (index_content < 0) {
                                         index_content = 0;
                                     }
-                                    if (i == 0) {
+                                    if (i === 0) {
                                         first_occur = index_content;
                                     }
                                 }
@@ -1619,12 +1628,12 @@ $(function () {
                         }
                     });
                     str += "</ul>";
-                    str = "<p class=\"search-result-summary\">共找到" + String(cnt-1) + "条结果</p>"  + str;
+                    str = "<p class=\"search-result-summary\">共找到 " + String(cnt-1) + " 条结果</p>"  + str;
                     $resultContent.innerHTML = str;
                 });
             }
         });
-    }
+    };
 
     searchFunc('https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/search.xml', 'searchInput', 'searchResult');
 });

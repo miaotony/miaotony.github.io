@@ -336,19 +336,6 @@
 </header>
 
     
-<script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/cryptojs/crypto-js.min.js"></script>
-<script>
-    (function() {
-        let pwd = '';
-        if (pwd && pwd.length > 0) {
-            if (pwd !== CryptoJS.SHA256(prompt('请输入访问本文章的密码')).toString(CryptoJS.enc.Hex)) {
-                alert('密码错误，将返回主页！');
-                location.href = '/';
-            }
-        }
-    })();
-</script>
-
 
 
 
@@ -531,7 +518,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    17 分
+                    18 分
                 </div>
                 
 
@@ -549,10 +536,12 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="0x00-前言"><a href="#0x00-前言" class="headerlink" title="0x00 前言"></a>0x00 前言</h2><p>其实想玩 DN42 也有一段时间了，正好最近群友也在聊 DN42，动不动就「<strong>来 Peer！</strong>」。</p>
+                <h2 id="0x00-前言">0x00 前言</h2>
+<p>其实想玩 DN42 也有一段时间了，正好最近群友也在聊 DN42，动不动就「<strong>来 Peer！</strong>」。</p>
 <p>那咱就来整一个好了！</p>
 <p>请注意，本文<strong>不是</strong>一篇完整的介绍性文章，只是记录一下配置过程中遇到的坑啊什么的。</p>
-<h2 id="0x01-What-is-DN42"><a href="#0x01-What-is-DN42" class="headerlink" title="0x01 What is DN42?"></a>0x01 What is DN42?</h2><p><img src="/2021/03/25/Server_DN42/dn42.png"></p>
+<h2 id="0x01-What-is-DN42">0x01 What is DN42?</h2>
+<p><img src="/2021/03/25/Server_DN42/dn42.png" alt=""></p>
 <blockquote>
 <p>dn42 is a big dynamic <a target="_blank" rel="noopener" href="http://en.wikipedia.org/wiki/Virtual_private_network">VPN</a>, which employs Internet technologies (<a target="_blank" rel="noopener" href="http://en.wikipedia.org/wiki/Bgp">BGP</a>, whois database, <a target="_blank" rel="noopener" href="http://en.wikipedia.org/wiki/Domain_Name_System">DNS</a>, etc).  Participants connect to each other using network tunnels (<a target="_blank" rel="noopener" href="https://dn42.eu/howto/GRE-on-FreeBSD">GRE</a>, <a target="_blank" rel="noopener" href="https://dn42.eu/howto/openvpn">OpenVPN</a>, <a target="_blank" rel="noopener" href="https://dn42.eu/howto/tinc">Tinc</a>, <a target="_blank" rel="noopener" href="https://dn42.eu/howto/IPsec-with-PublicKeys">IPsec</a>) and exchange routes thanks to the Border Gateway Protocol.  Network addresses are assigned in the <code>172.20.0.0/14</code> range and private AS numbers are used (see <a target="_blank" rel="noopener" href="https://dn42.eu/services/Whois">registry</a>) as well as IPv6 addresses from the ULA-Range (<code>fd00::/8</code>) - see <a target="_blank" rel="noopener" href="https://dn42.eu/FAQ#frequently-asked-questions_what-about-ipv6-in-dn42">FAQ</a>.</p>
 <p>A number of services are provided on the network: see <a target="_blank" rel="noopener" href="https://dn42.eu/internal/Internal-Services">internal</a> (only available from within dn42).  Also, dn42 is interconnected with other networks, such as <a target="_blank" rel="noopener" href="http://wiki.hamburg.ccc.de/ChaosVPN">ChaosVPN</a> or some <a target="_blank" rel="noopener" href="http://en.wikipedia.org/wiki/Freifunk">Freifunk</a> networks.</p>
@@ -570,13 +559,14 @@
 <p><em>Via <a target="_blank" rel="noopener" href="https://lantian.pub/article/modify-website/dn42-experimental-network-2020.lantian/">Lan Tian’s Blog</a></em></p>
 </blockquote>
 <p>其实就是说，DN42 是一个大型 VPN 网络，模拟了现实生活中的真实互联网。</p>
-<p>目前 DN42 已经与 <a target="_blank" rel="noopener" href="https://neocloud.tw/">NeoNetwork</a>、<a target="_blank" rel="noopener" href="https://wiki.hamburg.ccc.de/ChaosVPN">ChaosVPN</a> 等网络实现了互联，加入就能体验到其他网络内的资源。</p>
+<p>目前 DN42 已经与 <a target="_blank" rel="noopener" href="https://neocloud.tw">NeoNetwork</a>、<a target="_blank" rel="noopener" href="https://wiki.hamburg.ccc.de/ChaosVPN">ChaosVPN</a> 等网络实现了互联，加入就能体验到其他网络内的资源。</p>
 <p><strong>那为什么要加入 DN42 呢？</strong></p>
 <p><strong>当然是好玩啦 w</strong></p>
-<p>你想想，只需要动动手动动脑，就能免费拥有属于自己的 ASN (Autonomous system number，自治系统编号)，能宣告一段 IPv4 和 IPv6，体验各种路由协议，还能和别人尽情地 <del>py</del> Peer（对接）。</p>
+<p>你想想，只需要动动手动动脑，就能免费拥有属于自己的 ASN (Autonomous system number，自治系统编号)，能宣告一段 IPv4 和 IPv6，体验各种路由协议，还能和别人尽情地 <s>py</s> Peer（对接）。</p>
 <p>这可比普通的计算机网络实验好玩多了！</p>
 <p>当然，为了折腾 DN42，你至少需要一台能不间断联网的设备以及对它的 root 权限，当然还需要花不少时间……<em>（喵喵好菜啊，别骂了别骂了</em></p>
-<h2 id="0x02-大概的步骤"><a href="#0x02-大概的步骤" class="headerlink" title="0x02 大概的步骤"></a>0x02 大概的步骤</h2><p><strong>TL;DR</strong></p>
+<h2 id="0x02-大概的步骤">0x02 大概的步骤</h2>
+<p><strong>TL;DR</strong></p>
 <ol>
 <li>在 Git 仓库申请账号，申请好你需要的 ASN，IP 段（，域名以及反向解析服务器），然后给仓库提PR</li>
 <li>寻找一个可能的 Peer 节点，按照他留下的联系方式给他发邮件/IRC/Telegram/etc.</li>
@@ -584,7 +574,8 @@
 <li>建立 VPN 通信隧道，确保能互相连通</li>
 <li>建立路由（一般是 BGP）</li>
 </ol>
-<h2 id="0x03-注册过程"><a href="#0x03-注册过程" class="headerlink" title="0x03 注册过程"></a>0x03 注册过程</h2><p>这部分主要参考 Lan Tian 师祖的 <a target="_blank" rel="noopener" href="https://lantian.pub/article/modify-website/dn42-experimental-network-2020.lantian/#%E6%B3%A8%E5%86%8C%E8%BF%87%E7%A8%8B">DN42 实验网络介绍及注册教程（2020-10-01 更新）</a> 一文进行。</p>
+<h2 id="0x03-注册过程">0x03 注册过程</h2>
+<p>这部分主要参考 Lan Tian 师祖的 <a target="_blank" rel="noopener" href="https://lantian.pub/article/modify-website/dn42-experimental-network-2020.lantian/#%E6%B3%A8%E5%86%8C%E8%BF%87%E7%A8%8B">DN42 实验网络介绍及注册教程（2020-10-01 更新）</a> 一文进行。</p>
 <p>目前 DN42 采用 git 仓库进行管理，可以参考 <a target="_blank" rel="noopener" href="https://dn42.dev/howto/Getting-started">DN42 官方 Wiki howto/Getting Started</a> 来进行配置。</p>
 <p>也可以参考 <a target="_blank" rel="noopener" href="https://git.dn42.dev/dn42/registry/pulls/632">喵喵的 PR</a>，喵~ （需要登录 git）</p>
 <hr>
@@ -594,15 +585,16 @@
 <p>如果想要用 win 的话，可以使用 WSL2。</p>
 <p>另外就是，找 IP 段很容易碰到冲突，而且自己不容易发现……、</p>
 <p>比如之前找了一段发现被人占了好大一块，又或者整个 /18 保留给 /24 - /21 了，人傻了。</p>
-<p><img src="/2021/03/25/Server_DN42/image-20210325221707325.png"></p>
+<p><img src="/2021/03/25/Server_DN42/image-20210325221707325.png" alt=""></p>
 <p>再比如之前申请的一个段发现被 DN42 官方保留了。</p>
 <pre class="line-numbers language-none"><code class="language-none">INFO: 172.22.222.0/26 (inetnum): Inetnum has different mntners than parent and policy of parent is reserved: [MIAOTONY-MNT] vs [DN42-MNT].<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p><img src="/2021/03/25/Server_DN42/image-20210325220553241.png"></p>
+<p><img src="/2021/03/25/Server_DN42/image-20210325220553241.png" alt=""></p>
 <p>找了半天才发现是有个 172.22.192.0/18，直接好家伙。</p>
-<p><img src="/2021/03/25/Server_DN42/image-20210325220717750.png"></p>
+<p><img src="/2021/03/25/Server_DN42/image-20210325220717750.png" alt=""></p>
 <p>当然，如果有多个 commit 记录，记得先 squash 一下再 push，可以直接用目录下自带的脚本来 push。</p>
 <p>不过其实也没啥关系，PR 上去之后有 CI 自动进行检测，按照要求更改就完事了。</p>
-<h2 id="0x04-首先要进行的系统配置"><a href="#0x04-首先要进行的系统配置" class="headerlink" title="0x04 首先要进行的系统配置"></a>0x04 首先要进行的系统配置</h2><p><strong>在每一台要加入 DN42 的节点都需要进行以下配置！</strong></p>
+<h2 id="0x04-首先要进行的系统配置">0x04 首先要进行的系统配置</h2>
+<p><strong>在每一台要加入 DN42 的节点都需要进行以下配置！</strong></p>
 <ol>
 <li>打开 Linux 内核的数据包转发功能，即 <code>ip_forwarding</code>。</li>
 <li>关闭 Linux 内核 <code>rp_filter</code> 的严格模式。</li>
@@ -619,9 +611,8 @@ net.ipv4.conf.default.rp_filter=2
 net.ipv4.conf.all.rp_filter=2<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>然后应用配置</p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">sysctl -p<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-
-<h2 id="0x05-建立通信隧道"><a href="#0x05-建立通信隧道" class="headerlink" title="0x05 建立通信隧道"></a>0x05 建立通信隧道</h2><p>DN42 是基于 VPN 来建立通信连接的，为了方便，大多数用户都使用 WireGuard 来进行。</p>
+<h2 id="0x05-建立通信隧道">0x05 建立通信隧道</h2>
+<p>DN42 是基于 VPN 来建立通信连接的，为了方便，大多数用户都使用 WireGuard 来进行。</p>
 <p>WireGuard 是 L3 层隧道，目前已经集成到了 Linux 内核中，它配置简单，占用资源少，安全性较高。</p>
 <p>如果不是 OpenVZ 或者 LXC 虚拟化的话，其他应该都能用吧，不支持的话可能需要升级一下内核版本。</p>
 <p>这里可以参考 <a target="_blank" rel="noopener" href="https://dn42.dev/howto/wireguard">官方 Wiki 的 howto/wireguard</a> 来进行。</p>
@@ -649,7 +640,7 @@ Endpoint = &lt;对方的公网地址&gt;:&lt;对方的端口，一般是自己AS
 AllowedIPs = 0.0.0.0/0, ::/0<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>如果 <code>[Interface]</code> 里写了 <code>Address</code> 的话需要在 <code>PostUp</code> 里先删掉 addr 再加上 <code>peer</code>，所以干脆就不配 <code>Address</code> 了。</p>
 <p>注意这里 <code>Table = off</code> 要加上，不然所有的流量，包括公网上的流量就都转发给你的 peer 了，这样可能你就连自己的机器都连不上了。</p>
-<p><img src="/2021/03/25/Server_DN42/image-20210327015332317.png"></p>
+<p><img src="/2021/03/25/Server_DN42/image-20210327015332317.png" alt=""></p>
 <p><em>然后喵喵配完 wg，一启动，SSH 连接断了，喵喵愣住了（还好服务商能起 VNC，然后上去把 wg 连接断了才重新连上 SSH…</em></p>
 <p>这里一般推荐用 <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Link-local_address">link-local 地址</a> 进行配置，除非双方约定好是用 ULA。</p>
 <p>这是<strong>链路本地地址</strong>， IPv6 定义在 <strong>fe80::/10</strong> 地址块。一般就是 <code>fe80::&lt;你的ASN后四位&gt;</code>。</p>
@@ -666,20 +657,22 @@ systemctl <span class="token builtin class-name">enable</span> wg-quick@<span cl
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">wg show 文件名
 <span class="token comment"># 或者直接 wg</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 <p>看到 <code>transfer</code> 里发送接收都有数据了说明就能连上了。</p>
-<p><img src="/2021/03/25/Server_DN42/image-20210325233345851.png"></p>
+<p><img src="/2021/03/25/Server_DN42/image-20210325233345851.png" alt=""></p>
 <p>当然也可以 ping 一下对方。</p>
 <p>WireGuard 接口名就是你配置的文件名。</p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># ping 对方IP%WireGuard接口名</span>
 <span class="token function">ping</span> fe80::xxxx%wg_424242xxxx<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 <p>当然了，也可以手写 systemd 来配 wg，参考 <a target="_blank" rel="noopener" href="https://dn42.dev/howto/wireguard">官方 Wiki</a> 就好了。</p>
-<h2 id="0x06-建立-BGP-会话"><a href="#0x06-建立-BGP-会话" class="headerlink" title="0x06 建立 BGP 会话"></a>0x06 建立 BGP 会话</h2><p>BGP(Border Gateway Protocol，边界网关协议) 是一种路由协议，一般都使用这个来进行 peer。</p>
+<h2 id="0x06-建立-BGP-会话">0x06 建立 BGP 会话</h2>
+<p>BGP(Border Gateway Protocol，边界网关协议) 是一种路由协议，一般都使用这个来进行 peer。</p>
 <p>路由的软件一般使用的是 <strong>BIRD Internet Routing Daemon (v2)</strong> 。</p>
 <p>此处参考</p>
 <ul>
 <li><a target="_blank" rel="noopener" href="https://wiki.dn42.us/howto/Bird2">DN42 Wiki 上的 Bird2 配置教程</a></li>
 <li><a target="_blank" rel="noopener" href="https://wiki.dn42.us/howto/Bird">DN42 Wiki 上的 Bird1 配置教程</a></li>
 </ul>
-<h3 id="bird-conf-与-ROA"><a href="#bird-conf-与-ROA" class="headerlink" title="bird.conf 与 ROA"></a>bird.conf 与 ROA</h3><p>这里要注意 <strong>一定按照教程先配好 <code>/etc/bird/bird.conf</code>，或者 <code>/etc/bird.conf</code>！</strong></p>
+<h3 id="bird-conf-与-ROA">bird.conf 与 ROA</h3>
+<p>这里要注意 <strong>一定按照教程先配好 <code>/etc/bird/bird.conf</code>，或者 <code>/etc/bird.conf</code>！</strong></p>
 <p>此处使用的是 wiki 上的模板，比如喵喵的 Variable header 如下。</p>
 <p><code>OWNIP</code> 和 <code>OWNIPv6</code> 是你本机要分配的地址，<code>OWNNETSET</code> 和 <code>OWNNETSETv6</code> 不用漏了结尾的 <code>+</code>。</p>
 <pre class="line-numbers language-conf" data-language="conf"><code class="language-conf">################################################
@@ -703,7 +696,8 @@ define OWNNETSETv6 = [fd00:feed:ca7::/48+];
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># crontab -e</span>
 */15 * * * * <span class="token function">curl</span> -sfSLR -o /etc/bird/roa_dn42.conf https://dn42.burble.com/roa/dn42_roa_bird2_4.conf <span class="token operator">&amp;&amp;</span> <span class="token function">curl</span> -sfSLR -o /etc/bird/roa_dn42_v6.conf https://dn42.burble.com/roa/dn42_roa_bird2_6.conf <span class="token operator">&amp;&amp;</span> /usr/sbin/birdc configure <span class="token operator"><span class="token file-descriptor important">1</span>&gt;</span> /dev/null<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 <p>可以先执行一次让文件存在，不然后面启动 bird 的时候可能会有问题。</p>
-<h3 id="Peers-文件"><a href="#Peers-文件" class="headerlink" title="Peers 文件"></a>Peers 文件</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">mkdir</span> -p /etc/bird/peers<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h3 id="Peers-文件">Peers 文件</h3>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">mkdir</span> -p /etc/bird/peers<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>每一个 peer 建一个文件 <code>/etc/bird/peers/&lt;NEIGHBOR_NAME&gt;.conf</code>。</p>
 <p>下面是 Lan Tian 师祖的模板。</p>
 <pre class="line-numbers language-none"><code class="language-none">protocol bgp dn42_[PEER_NAME]_v4 from dnpeers {
@@ -729,24 +723,29 @@ protocol bgp dn42_[PEER_NAME]_v6 from dnpeers {
 <ul>
 <li>MY 指的是你自己，而 YOUR 指的是你将要 Peer 的那个人。</li>
 <li>BIRD 中配置的是 DN42 内的 IP 而非公网 IP。</li>
-<li>相比 DN42 Wiki 上的配置，我加了一行 <code>direct;</code>，原因是我发现如果缺少这行，路由信息有可能无法被正确的导入系统路由表。<ul>
+<li>相比 DN42 Wiki 上的配置，我加了一行 <code>direct;</code>，原因是我发现如果缺少这行，路由信息有可能无法被正确的导入系统路由表。
+<ul>
 <li>BIRD 默认会根据系统路由表查找要将数据包转发到哪个网络设备，以此设置系统路由表，但有时查找会失败（表现为 <code>ip route</code> 中出现大片 <code>unreachable</code>）。</li>
 <li>此时指定 <code>direct</code>，让 BIRD 将数据包直接转发到 BGP 连接所在的网卡上。</li>
 <li><code>direct</code> 的含义是连接双方直接连接（即中间没有间隔其它的路由器）。</li>
 </ul>
 </li>
 <li>PEER_NAME 是对方的昵称，这里设置的是 Linux 下的网络设备名，与隧道保持一致。注意整个网络设备名不能超过 15 个字符，否则会被截断。</li>
-<li>在 IPv6 Peering 时，我推荐使用 Link-local IP。<ul>
+<li>在 IPv6 Peering 时，我推荐使用 Link-local IP。
+<ul>
 <li>直接使用对方整个节点的 IPv6 地址（指 <code>fd00::/8</code> 范围中的那个）时，部分系统不会自动添加到对端的路由，需要手动添加一条；见 <code>隧道搭建：WireGuard</code> 一节。</li>
 </ul>
 </li>
-<li>在 BIRDv2 中，强烈推荐在 IPv4 BGP 会话中禁用 IPv6 的路由传递，同时可以在 IPv6 BGP 中禁用 IPv4 路由传递。<ul>
+<li>在 BIRDv2 中，强烈推荐在 IPv4 BGP 会话中禁用 IPv6 的路由传递，同时可以在 IPv6 BGP 中禁用 IPv4 路由传递。
+<ul>
 <li>BIRDv2 支持在一个 BGP 会话中同时传递 IPv4 和 IPv6 的路由。</li>
-<li>在 IPv4 BGP 会话中，BIRDv2 难以正确判断 IPv6 数据包转发目标的地址（Next Hop），会导致 <code>ip -6 route</code> 中出现大片 <code>unreachable</code>。<ul>
+<li>在 IPv4 BGP 会话中，BIRDv2 难以正确判断 IPv6 数据包转发目标的地址（Next Hop），会导致 <code>ip -6 route</code> 中出现大片 <code>unreachable</code>。
+<ul>
 <li>因此直接禁用就好了。</li>
 </ul>
 </li>
-<li>在 IPv6 BGP 会话中传递 IPv4 路由时，如果双方使用特定的 BGP 软件组合，一方或双方的日志中会出现大片 <code>Invalid NEXT_HOP Attribute</code>，指 Next Hop 判断出错。<ul>
+<li>在 IPv6 BGP 会话中传递 IPv4 路由时，如果双方使用特定的 BGP 软件组合，一方或双方的日志中会出现大片 <code>Invalid NEXT_HOP Attribute</code>，指 Next Hop 判断出错。
+<ul>
 <li>但 IPv6 BGP 中同时传递 IPv4 和 IPv6 路由的应用还比较广泛，因此一般建议不要禁用 IPv4 路由传递，除非出现了问题。</li>
 </ul>
 </li>
@@ -768,18 +767,19 @@ protocol bgp dn42_[PEER_NAME]_v6 from dnpeers {
 birdc c  <span class="token comment"># 即 birdc configure</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 <p>然后可以看看连接状态了。</p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">birdc s p <span class="token comment"># 即 birdc show protocol </span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p><img src="/2021/03/25/Server_DN42/image-20210326001444531.png"></p>
+<p><img src="/2021/03/25/Server_DN42/image-20210326001444531.png" alt=""></p>
 <p>如果显示的是 <code>Established</code>，那么连接就建立好了。</p>
 <p><strong>Peer 成功！</strong></p>
 <p>当然还可以查看某条路由配置的详细信息。</p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">birdc s p a dn42_424242xxxx_v6 <span class="token comment"># 即 birdc show protocol all dn42_424242xxxx_v6</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>然后就能 ping 一下 DN42 内的服务了，比如 172.20.0.53 之类的。</p>
-<h3 id="一点点扩展"><a href="#一点点扩展" class="headerlink" title="一点点扩展"></a>一点点扩展</h3><p><strong>2021.3.21 新发布的 BIRD v2.0.8</strong> 新增了许多特性。</p>
+<h3 id="一点点扩展">一点点扩展</h3>
+<p><strong>2021.3.21 新发布的 BIRD v2.0.8</strong> 新增了许多特性。</p>
 <p>其中有一个是支持了 extended next hop，可以实现 IPv4 流量在 IPv6-only 网络上的转发。<em>（反正群友说的我也懒得考证了</em></p>
-<p>参考 BIRD 文档里的 <a target="_blank" rel="noopener" href="https://bird.network.cz/?get_doc&amp;v=20&amp;f=bird-6.html#ss6.3">BGP extended next hop</a> </p>
-<p><img src="/2021/03/25/Server_DN42/image-20210326003544763.png"></p>
+<p>参考 BIRD 文档里的 <a target="_blank" rel="noopener" href="https://bird.network.cz/?get_doc&amp;v=20&amp;f=bird-6.html#ss6.3">BGP extended next hop</a></p>
+<p><img src="/2021/03/25/Server_DN42/image-20210326003544763.png" alt=""></p>
 <p>在 <code>dnpeers</code> 里的 <code>ipv4</code> 中加入 <code>extended next hop on;</code> 即可使用这一特性。</p>
-<p><img src="/2021/03/25/Server_DN42/image-20210326004515058.png"></p>
+<p><img src="/2021/03/25/Server_DN42/image-20210326004515058.png" alt=""></p>
 <p>于是和别人 peer 的时候，WireGuard 只需要 peer 一个 IPv6 link-local address 就完事了，连 DN42 IPv4 都不需要了。</p>
 <p>当然还需要加一个 dummy 接口来写本机的地址，类似于</p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">ip</span> <span class="token function">link</span> <span class="token function">add</span> dummy1 <span class="token builtin class-name">type</span> dummy
@@ -811,18 +811,18 @@ iface dummy0 inet static
 <p>然后重启之后就能自动配上这个 dummy 接口了。</p>
 <p>BTW，喵喵觉得一个一个手动配太麻烦了，于是自己用 Python 糊了个小脚本，只需要输入必要的信息，就能自动生成配置文件，并建立 WireGuard 连接，重新加载 BIRD 配置了，贼舒服！</p>
 <p>（不过脚本太丑了而且是自己用的，就不放出来了吧</p>
-<h2 id="0x07-一些好玩的东西"><a href="#0x07-一些好玩的东西" class="headerlink" title="0x07 一些好玩的东西"></a>0x07 一些好玩的东西</h2><p>大佬们给节点做了可视化，比如以下几个。</p>
+<h2 id="0x07-一些好玩的东西">0x07 一些好玩的东西</h2>
+<p>大佬们给节点做了可视化，比如以下几个。</p>
 <p><a target="_blank" rel="noopener" href="https://map42.0x7f.cc/">https://map42.0x7f.cc/</a></p>
-<p><img src="/2021/03/25/Server_DN42/image-20210326002100613.png"></p>
+<p><img src="/2021/03/25/Server_DN42/image-20210326002100613.png" alt=""></p>
 <p><a target="_blank" rel="noopener" href="https://map.meson.cc/">https://map.meson.cc/</a></p>
-<p><img src="/2021/03/25/Server_DN42/image-20210325215319450.png"></p>
+<p><img src="/2021/03/25/Server_DN42/image-20210325215319450.png" alt=""></p>
 <p><a target="_blank" rel="noopener" href="https://nixnodes.net/dn42/graph/">https://nixnodes.net/dn42/graph/</a></p>
-<p><img src="/2021/03/25/Server_DN42/image-20210325201121252.png"></p>
+<p><img src="/2021/03/25/Server_DN42/image-20210325201121252.png" alt=""></p>
 <p><a target="_blank" rel="noopener" href="https://bgp42.strexp.net/map2">https://bgp42.strexp.net/map2</a></p>
-<p><img src="/2021/03/25/Server_DN42/image-20210326010204433.png"></p>
-<p>啊啊啊，毛线好多缠住喵喵了<em>（大雾</em></p>
+<p><img src="/2021/03/25/Server_DN42/image-20210326010204433.png" alt=""></p>
+<p>啊啊啊，毛线好多缠住喵喵了*（大雾*</p>
 <br>
-
 <hr>
 <p>当然还有很多 dn42 / NeoNetwork NOC 的 looking glass，比如：</p>
 <ul>
@@ -836,10 +836,14 @@ iface dummy0 inet static
 <p>当然还可以绑定 .dn42 域名，设置反向解析 rDNS，当然还有 .dn42 的 CA 证书……</p>
 <p>为了给自己的多个设备组网，还可以 iBGP、iGP、Babel、OSPF 等路由协议综合来使用。</p>
 <p>反正还能慢慢玩呢（</p>
-<h2 id="0x08-Peer-with-MeowNet"><a href="#0x08-Peer-with-MeowNet" class="headerlink" title="0x08 Peer with MeowNet"></a>0x08 Peer with MeowNet</h2><p>什么？你想和我 Peer 了？<strong>快来 Peer！</strong></p>
-<p><strong>AS4242422688</strong><br><strong>MeowNet</strong><br><em>MiaoTony’s DN42 Network</em></p>
+<h2 id="0x08-Peer-with-MeowNet">0x08 Peer with MeowNet</h2>
+<p>什么？你想和我 Peer 了？<strong>快来 Peer！</strong></p>
+<p><strong>AS4242422688</strong><br>
+<strong>MeowNet</strong><br>
+<em>MiaoTony’s DN42 Network</em></p>
 <p><strong>DN42 IP:</strong></p>
-<p>172.23.6.0/26<br>fd00:feed:ca7::/48</p>
+<p>172.23.6.0/26<br>
+fd00:feed:ca7::/48</p>
 <p><strong>Nodes:</strong></p>
 <ul>
 <li>LV1 - Las Vegas, US, <a target="_blank" rel="noopener" href="https://my.frantech.ca/aff.php?aff=4525">BuyVM</a></li>
@@ -854,37 +858,44 @@ iface dummy0 inet static
 <p><strong>You should send me some info like follows.</strong></p>
 <ul>
 <li>Your ASN</li>
-<li>Public IP <ul>
+<li>Public IP
+<ul>
 <li>IPv4 is preferred, but you can send v4/v6 both</li>
 </ul>
 </li>
-<li>DN42 IPv4 and IPv6 <ul>
+<li>DN42 IPv4 and IPv6
+<ul>
 <li>Link-local address is preferred</li>
 </ul>
 </li>
-<li>Your WireGuard Port <ul>
+<li>Your WireGuard Port
+<ul>
 <li>22688 by default</li>
 <li>I will use <code>2&lt;Your last 4-digit ASN&gt;</code> for you</li>
 </ul>
 </li>
-<li>Is Multiprotocol BGP supported? <ul>
+<li>Is Multiprotocol BGP supported?
+<ul>
 <li>If yes, I will just use the link-local IPv6 address to set up v4+v6 BGP session</li>
 <li>Yes by default</li>
 </ul>
 </li>
-<li>Something else you want to share with me <ul>
-<li>Extended next hop enabled? </li>
+<li>Something else you want to share with me
+<ul>
+<li>Extended next hop enabled?</li>
 <li>etc.</li>
 </ul>
 </li>
 </ul>
 <p>或者看下面也行。</p>
-<p><img src="/2021/03/25/Server_DN42/image-20210326010342272.png"></p>
-<h2 id="0x09-小结"><a href="#0x09-小结" class="headerlink" title="0x09 小结"></a>0x09 小结</h2><p>这篇文章对申请 ASN、IP、域名，搭建 VPN 通信隧道，配置 BGP 路由，完成和其他网络的 Peer 等内容进行了介绍。</p>
+<p><img src="/2021/03/25/Server_DN42/image-20210326010342272.png" alt=""></p>
+<h2 id="0x09-小结">0x09 小结</h2>
+<p>这篇文章对申请 ASN、IP、域名，搭建 VPN 通信隧道，配置 BGP 路由，完成和其他网络的 Peer 等内容进行了介绍。</p>
 <p>但要注意的是本文<strong>并不是</strong>一篇完整的介绍，还需要参考其他教程来综合进行配置。</p>
 <p>不过刚来玩 DN42，还有很多不熟悉的地方，还得感谢群里的大佬们 Orz。</p>
 <p>如果有错误欢迎指出，喵！</p>
-<h2 id="0xFF-References-amp-Extensive-Reading"><a href="#0xFF-References-amp-Extensive-Reading" class="headerlink" title="0xFF References &amp; Extensive Reading"></a>0xFF References &amp; Extensive Reading</h2><ul>
+<h2 id="0xFF-References-Extensive-Reading">0xFF References &amp; Extensive Reading</h2>
+<ul>
 <li><a target="_blank" rel="noopener" href="https://dn42.dev/howto/Getting-started">DN42 官方 Wiki howto/Getting Started</a></li>
 <li>Lan Tian 师祖的 <a target="_blank" rel="noopener" href="https://lantian.pub/article/modify-website/dn42-experimental-network-2020.lantian">DN42 实验网络介绍及注册教程（2020-10-01 更新）</a></li>
 <li><a target="_blank" rel="noopener" href="https://blog.outv.im/2020/dn42-neonetwork-guide/">接入 dn42 及 NeoNetwork</a></li>
@@ -895,7 +906,6 @@ iface dummy0 inet static
 <li>etc.</li>
 </ul>
 <br>
-
 <p>喵呜！终于扯完这篇文章了！</p>
 <p>好久没写技术文章了，喵喵累死了（</p>
 <p><em>（溜了喵</em></p>
@@ -1458,7 +1468,7 @@ iface dummy0 inet static
             |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
             <br>
                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">308.6k</span>&nbsp;字
+                class="white-color">308.3k</span>&nbsp;字
                                                                                     <span id="busuanzi_container_site_pv">
 			|&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
                     class="white-color"></span>&nbsp;次
@@ -1599,11 +1609,12 @@ $(function () {
                         var data_title = data.title.trim().toLowerCase();
                         var data_content = data.content.trim().replace(/<[^>]+>/g, "").toLowerCase();
                         var data_url = data.url;
+                        data_url = data_url.indexOf('/') === 0 ? data.url : '/' + data_url;
                         var index_title = -1;
                         var index_content = -1;
                         var first_occur = -1;
                         // only match artiles with not empty titles and contents
-                        if (data_title != '' && data_content != '') {
+                        if (data_title !== '' && data_content !== '') {
                             keywords.forEach(function (keyword, i) {
                                 index_title = data_title.indexOf(keyword);
                                 index_content = data_content.indexOf(keyword);
@@ -1613,7 +1624,7 @@ $(function () {
                                     if (index_content < 0) {
                                         index_content = 0;
                                     }
-                                    if (i == 0) {
+                                    if (i === 0) {
                                         first_occur = index_content;
                                     }
                                 }
@@ -1644,12 +1655,12 @@ $(function () {
                         }
                     });
                     str += "</ul>";
-                    str = "<p class=\"search-result-summary\">共找到" + String(cnt-1) + "条结果</p>"  + str;
+                    str = "<p class=\"search-result-summary\">共找到 " + String(cnt-1) + " 条结果</p>"  + str;
                     $resultContent.innerHTML = str;
                 });
             }
         });
-    }
+    };
 
     searchFunc('https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/search.xml', 'searchInput', 'searchResult');
 });

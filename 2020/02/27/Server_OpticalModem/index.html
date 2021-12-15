@@ -336,19 +336,6 @@
 </header>
 
     
-<script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/cryptojs/crypto-js.min.js"></script>
-<script>
-    (function() {
-        let pwd = '';
-        if (pwd && pwd.length > 0) {
-            if (pwd !== CryptoJS.SHA256(prompt('请输入访问本文章的密码')).toString(CryptoJS.enc.Hex)) {
-                alert('密码错误，将返回主页！');
-                location.href = '/';
-            }
-        }
-    })();
-</script>
-
 
 
 
@@ -561,16 +548,17 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="0x00-前言"><a href="#0x00-前言" class="headerlink" title="0x00 前言"></a>0x00 前言</h2><p>最近觉得家里的网速有点慢，上着网课或者看着视频，WiFi 连接的设备同时在用的话就开始卡了 emmm就很难受。🙁</p>
+                <h2 id="0x00-前言">0x00 前言</h2>
+<p>最近觉得家里的网速有点慢，上着网课或者看着视频，WiFi 连接的设备同时在用的话就开始卡了 emmm就很难受。🙁</p>
 <p>然后又听说三大运营商的宽带差不多都分配 IPv6 了，手机的话联通流量分配 IPv6 地址也有一段时间了，开热点还能下发 IPv6 到其他设备（然鹅我这里的移动好像还没有）。</p>
 <p>于是就想折腾一下家里的光猫/路由器，反正就是瞎折腾吧。</p>
 <p>这个光猫是有点年纪的 <strong>HG260GS-U</strong>，烽火家的。 硬件版本 <strong>BCM.V2.0</strong> ，软件版本 <strong>G00Y1.00M0001</strong> 。</p>
 <p>大概的内容就是——</p>
 <p>获取了超级管理员密码，开启了 Telnet 管理，启用了 IPv6，并尝试了宽带桥接的改造等等。</p>
 <br>
-
 <hr>
-<h2 id="0x01-获取超级管理员密码"><a href="#0x01-获取超级管理员密码" class="headerlink" title="0x01 获取超级管理员密码"></a>0x01 获取超级管理员密码</h2><p>通过光猫的管理地址连接到管理页面，一般是 <code>192.168.1.1</code>。登录界面如下。</p>
+<h2 id="0x01-获取超级管理员密码">0x01 获取超级管理员密码</h2>
+<p>通过光猫的管理地址连接到管理页面，一般是 <code>192.168.1.1</code>。登录界面如下。</p>
 <p><img src="/2020/02/27/Server_OpticalModem/login.png" alt="login"></p>
 <p>光猫背面有一个 user 用户的信息，登录之后的界面功能贼少，只能看一下连接状态，设置一下WIFI、静态路由之类的基础配置，连宽带连接都设置不了。</p>
 <p>于是想到通过超级管理员进行登录。</p>
@@ -586,10 +574,12 @@
 <p>哦对了，这个工程账号（据说是隐藏用户）这样开启：</p>
 <p>访问 <a target="_blank" rel="noopener" href="http://192.168.1.1/logoffaccount.html">http://192.168.1.1/logoffaccount.html</a> ，将<strong>隐藏用户</strong>设置为<strong>启用</strong>，而后点击<strong>保存/应用</strong>即可。</p>
 <p><img src="/2020/02/27/Server_OpticalModem/hidden_user.png" alt="hidden_user"></p>
-<p><strong><em>（然而我这里没用</em></strong></p>
+<p><em><strong>（然而我这里没用</strong></em></p>
 <p>于是看了看网上大佬们的骚操作，发现可以通过<strong>备份设置</strong>的办法获取到超级管理员账号及密码。</p>
-<h3 id="Step-1-以普通用户身份登录光猫"><a href="#Step-1-以普通用户身份登录光猫" class="headerlink" title="Step 1 以普通用户身份登录光猫"></a>Step 1 以普通用户身份登录光猫</h3><p>就是光猫背后的那个用户名密码啦。</p>
-<h3 id="Step-2-下载设置备份文件"><a href="#Step-2-下载设置备份文件" class="headerlink" title="Step 2 下载设置备份文件"></a>Step 2 下载设置备份文件</h3><p>访问 <a target="_blank" rel="noopener" href="http://192.168.1.1/backupsettings.conf">http://192.168.1.1/backupsettings.conf</a> ，下载配置文件<code>backupsettings.conf</code>。</p>
+<h3 id="Step-1-以普通用户身份登录光猫">Step 1 以普通用户身份登录光猫</h3>
+<p>就是光猫背后的那个用户名密码啦。</p>
+<h3 id="Step-2-下载设置备份文件">Step 2 下载设置备份文件</h3>
+<p>访问 <a target="_blank" rel="noopener" href="http://192.168.1.1/backupsettings.conf">http://192.168.1.1/backupsettings.conf</a> ，下载配置文件<code>backupsettings.conf</code>。</p>
 <p>注意一定要在登陆后才下载，否则下载得到的文件并没有配置信息，而是一个让你登录界面的 HTML 文件。</p>
 <p><img src="/2020/02/27/Server_OpticalModem/backupsettings_error.png" alt="错误示范"></p>
 <p>正确的文件是一个xml文本，例如下面这样的。</p>
@@ -598,30 +588,35 @@
 <p>而且这个文件没有（明显的）加密，最多只是用了个<code>base64</code>。</p>
 <p><img src="/2020/02/27/Server_OpticalModem/superadmin.png" alt="超级用户"></p>
 <p>超级管理员用户就在<code>DeviceInfo</code>下的<code>X_CMCC_TeleComAccount</code>里。</p>
-<p><strong>用户名为<code>admin</code>**，</strong>密码**通过<code>base64</code>解码可以得到为<code>Cmcc10086#</code>。</p>
+<p><strong>用户名为<code>admin</code></strong>，<strong>密码</strong>通过<code>base64</code>解码可以得到为<code>Cmcc10086#</code>。</p>
 <p>（By the way，user用户的密码在这里啦↓</p>
 <p><img src="/2020/02/27/Server_OpticalModem/userinfo.png" alt="user信息"></p>
-<h3 id="Step3-登录试试"><a href="#Step3-登录试试" class="headerlink" title="Step3 登录试试"></a>Step3 登录试试</h3><p>成功登录，界面比user功能多得多了，可以配置宽带信息、VLAN、USB存储远程下载等等了。</p>
+<h3 id="Step3-登录试试">Step3 登录试试</h3>
+<p>成功登录，界面比user功能多得多了，可以配置宽带信息、VLAN、USB存储远程下载等等了。</p>
 <p><img src="/2020/02/27/Server_OpticalModem/login_main.png" alt="登陆后的界面"></p>
 <br>
-
 <hr>
-<h2 id="0x02-开启-Telnet-管理"><a href="#0x02-开启-Telnet-管理" class="headerlink" title="0x02 开启 Telnet 管理"></a>0x02 开启 Telnet 管理</h2><p>按理说是可以利用工程账号进去开启 Telnet 的，然而我也不知道为啥进不去emmm</p>
+<h2 id="0x02-开启-Telnet-管理">0x02 开启 Telnet 管理</h2>
+<p>按理说是可以利用工程账号进去开启 Telnet 的，然而我也不知道为啥进不去emmm</p>
 <p>找个网上的图↓</p>
 <p><img src="/2020/02/27/Server_OpticalModem/telnet_enable_web.png" alt="开启telnet"></p>
 <p>那就**直接改配置文件好吧 **233333</p>
-<h3 id="Step-1-修改配置文件"><a href="#Step-1-修改配置文件" class="headerlink" title="Step 1 修改配置文件"></a>Step 1 修改配置文件</h3><p>首先<strong>备份一份上面下载的配置文件</strong>（改错了还可以恢复嘛），而后搜索<code>telnet</code>，<strong>把它设为<code>TRUE</code>。</strong></p>
+<h3 id="Step-1-修改配置文件">Step 1 修改配置文件</h3>
+<p>首先<strong>备份一份上面下载的配置文件</strong>（改错了还可以恢复嘛），而后搜索<code>telnet</code>，<strong>把它设为<code>TRUE</code>。</strong></p>
 <p><strong>注意大小写呀！</strong></p>
 <p>当然如果想要开启 FTP 的话可以顺便开启一下hhh。</p>
 <p><img src="/2020/02/27/Server_OpticalModem/telnet_enable.png" alt="开启telnet"></p>
-<h3 id="Step-2-上传配置文件"><a href="#Step-2-上传配置文件" class="headerlink" title="Step 2 上传配置文件"></a>Step 2 上传配置文件</h3><p>访问<strong>更新路由器配置</strong>的页面 <a target="_blank" rel="noopener" href="http://192.168.1.1/updatesettings.html">http://192.168.1.1/updatesettings.html</a></p>
+<h3 id="Step-2-上传配置文件">Step 2 上传配置文件</h3>
+<p>访问<strong>更新路由器配置</strong>的页面 <a target="_blank" rel="noopener" href="http://192.168.1.1/updatesettings.html">http://192.168.1.1/updatesettings.html</a></p>
 <p>（可能需要登录）</p>
 <p><img src="/2020/02/27/Server_OpticalModem/updatesettings.png" alt="updatesettings"></p>
 <p>选择修改后的配置文件，点击 <strong>更新配置</strong>。</p>
-<h3 id="Step-3-重启光猫"><a href="#Step-3-重启光猫" class="headerlink" title="Step 3 重启光猫"></a>Step 3 重启光猫</h3><p>（如果没有自动重启的话</p>
+<h3 id="Step-3-重启光猫">Step 3 重启光猫</h3>
+<p>（如果没有自动重启的话</p>
 <p>可以选择在 <strong>管理-设备管理-设备重启</strong> 里重启，当然也可以直接关掉电源再打开233。怎么喜欢怎么来。</p>
 <p><img src="/2020/02/27/Server_OpticalModem/reboot.png" alt="reboot"></p>
-<h3 id="Step4-telnet-连接光猫"><a href="#Step4-telnet-连接光猫" class="headerlink" title="Step4 telnet 连接光猫"></a>Step4 telnet 连接光猫</h3><p>而后就可以通过 telnet 连接到你的光猫了。</p>
+<h3 id="Step4-telnet-连接光猫">Step4 telnet 连接光猫</h3>
+<p>而后就可以通过 telnet 连接到你的光猫了。</p>
 <p><strong>用户名和密码都是<code>admin</code>。</strong></p>
 <p><img src="/2020/02/27/Server_OpticalModem/telnet.png" alt="telnet"></p>
 <p>它用的是 <strong>BCM96838</strong> 这个芯片。<em>（感兴趣可以搜一搜</em></p>
@@ -888,34 +883,36 @@ ipsconfig.html                       wlwapias.html<span aria-hidden="true" class
 <p>其他的后面再慢慢玩吧（</p>
 <p>还有提醒一下，<strong>telnet 不用的话最好还是关掉</strong>吧，防止别人连上光猫改了你的配置就不好了呢。</p>
 <br>
-
 <hr>
-<h2 id="0x03-再看光猫参数-amp-测速"><a href="#0x03-再看光猫参数-amp-测速" class="headerlink" title="0x03 再看光猫参数 &amp; 测速"></a>0x03 再看光猫参数 &amp; 测速</h2><h3 id="光猫参数"><a href="#光猫参数" class="headerlink" title="光猫参数"></a>光猫参数</h3><p>上网搜了一下这个光猫的参数。（可能有所区别）</p>
+<h2 id="0x03-再看光猫参数-测速">0x03 再看光猫参数 &amp; 测速</h2>
+<h3 id="光猫参数">光猫参数</h3>
+<p>上网搜了一下这个光猫的参数。（可能有所区别）</p>
 <blockquote>
 <p>烽火HG260GS-U</p>
-<p>产品特点   </p>
+<p>产品特点</p>
 <ul>
-<li>支持GPON接口，4FE+2POTS，LAN1口=1G LAN 2.3.4口=100M  </li>
-<li>支持路由/桥混合转发。  </li>
-<li>支持VLAN连接。   </li>
-<li>提供2.4GHz 802.11b/g/n无线接入功能，最高速率可达270Mbps，覆盖范围30m~100m。   </li>
-<li>支持SIP/MGCP/H.248等VOIP协议语音，支持多种语音编码器。   </li>
-<li>强大的QoS能力，保障多业务环境下的VoIP、IPTV等关键业务的服务质量。   </li>
-<li>支持TR-069远程管理：设备配置、版本升级、诊断等。   </li>
-<li>支持WPS。   </li>
-<li>支持Web方式，用户本地管理功能。   </li>
-<li>支持多SSID，提供多个虚拟无线网络。   </li>
-<li>支持VPN穿越 ，基于IPSec/L2TP。   </li>
-<li>支持IPv4/v6,TCP/UDP协议，支持IPv6开启DS-lite和双栈功能。   </li>
-<li>芯片集成度高，功耗小，性能稳定。   </li>
+<li>支持GPON接口，4FE+2POTS，LAN1口=1G LAN 2.3.4口=100M</li>
+<li>支持路由/桥混合转发。</li>
+<li>支持VLAN连接。</li>
+<li>提供2.4GHz 802.11b/g/n无线接入功能，最高速率可达270Mbps，覆盖范围30m~100m。</li>
+<li>支持SIP/MGCP/H.248等VOIP协议语音，支持多种语音编码器。</li>
+<li>强大的QoS能力，保障多业务环境下的VoIP、IPTV等关键业务的服务质量。</li>
+<li>支持TR-069远程管理：设备配置、版本升级、诊断等。</li>
+<li>支持WPS。</li>
+<li>支持Web方式，用户本地管理功能。</li>
+<li>支持多SSID，提供多个虚拟无线网络。</li>
+<li>支持VPN穿越 ，基于IPSec/L2TP。</li>
+<li>支持IPv4/v6,TCP/UDP协议，支持IPv6开启DS-lite和双栈功能。</li>
+<li>芯片集成度高，功耗小，性能稳定。</li>
 </ul>
 </blockquote>
 <p>哇呜，它是<strong>支持千兆</strong>的啊！</p>
-<p>不过<strong>只有1口支持1Gbps，其他都是100Mbps的</strong>emmm </p>
+<p>不过<strong>只有1口支持1Gbps，其他都是100Mbps的</strong>emmm</p>
 <p>于是直接用网线连接光猫测了一下，果然是这样。</p>
 <p>之前都没注意这个问题唉！是不是因为这个问题影响了网速啊啊啊啊嘤嘤嘤。<em>（其实我也不知道我家宽带有多少带宽）</em></p>
 <p>来测个速看看好了。</p>
-<h3 id="测速"><a href="#测速" class="headerlink" title="测速"></a>测速</h3><p>这是 <strong>连接 WiFi</strong> 的测速结果↓。</p>
+<h3 id="测速">测速</h3>
+<p>这是 <strong>连接 WiFi</strong> 的测速结果↓。</p>
 <p><img src="/2020/02/27/Server_OpticalModem/speedtest1.png" alt="WiFi测速"></p>
 <p>通过<strong>网线直连到除1口外的任意一个 LAN 口</strong>，再次测速。</p>
 <p><img src="/2020/02/27/Server_OpticalModem/speedtest2.png" alt="LAN2-4测速"></p>
@@ -930,7 +927,8 @@ ipsconfig.html                       wlwapias.html<span aria-hidden="true" class
 <p><img src="/2020/02/27/Server_OpticalModem/router.png" alt="router"></p>
 <p>不过怎么说好呢，毕竟这光猫和路由器都有些年纪了，那时候千兆还没普及呢，可能用的才是10M/50M最多也不超过100M的宽带呢。</p>
 <p>所以光猫有一个千兆口也很不错了呢233333.（摊手.gif</p>
-<h3 id="网线的讲究"><a href="#网线的讲究" class="headerlink" title="网线的讲究"></a>网线的讲究</h3><p>噢对了，还有一个好玩的事。。。</p>
+<h3 id="网线的讲究">网线的讲究</h3>
+<p>噢对了，还有一个好玩的事。。。</p>
 <p>要用上千兆以太网，不仅需要<strong>光猫、路由器支持</strong>，还要你自己的<strong>设备支持</strong>，如果有线连接的话网线还至少要<strong>超五类线</strong>。</p>
 <p>但是还要注意<strong>距离限制</strong>，超过一定的距离（如100m）也不行了，类别越高传输的频率越高则允许的距离就越小。（啊大佬你用光纤？打扰了。</p>
 <p>我用网线连接的时候，最开始用的是一根比较老的 CAT-5e（超五类）线，可能是端口接触不大好或者线路老化的原因吧，实际网卡只协商到了100Mbps。换了一根新的网线（好像也是CAT-5e）就有1Gbps了。</p>
@@ -939,21 +937,24 @@ ipsconfig.html                       wlwapias.html<span aria-hidden="true" class
 <p>不过现在用的基本就<strong>六类线以上</strong>了吧，买网线还有装修布线什么的时候要注意一下这个问题。</p>
 <p>还有买网线<strong>不要买扁的那种</strong>，剖面圆形那种就好。（感觉算是<strong>传输线理论</strong>？</p>
 <br>
-
 <hr>
-<h2 id="0x04-启用-IPv6"><a href="#0x04-启用-IPv6" class="headerlink" title="0x04 启用 IPv6"></a>0x04 启用 IPv6</h2><p>前面看光猫的参数，发现支持 IPv6 唉！</p>
+<h2 id="0x04-启用-IPv6">0x04 启用 IPv6</h2>
+<p>前面看光猫的参数，发现支持 IPv6 唉！</p>
 <p>听说三大运营商的宽带基本部署 IPv6 了，不过估计设置里没开启，本地也没有分配公网地址，这次就来折腾一下吧。</p>
 <blockquote>
 <p>先说一下，我自己对IPv6这一块都不大了解，这也是第一次尝试设置这个。</p>
 <p>包括前缀分配什么的我都不清楚，所以这里的说法有可能存在错误，<strong>大佬们看到的话欢迎和我交流呀！</strong></p>
 </blockquote>
-<h3 id="Step-1-以超级管理员身份登录光猫"><a href="#Step-1-以超级管理员身份登录光猫" class="headerlink" title="Step 1 以超级管理员身份登录光猫"></a>Step 1 以超级管理员身份登录光猫</h3><p>用上面获取的用户名密码登录。</p>
+<h3 id="Step-1-以超级管理员身份登录光猫">Step 1 以超级管理员身份登录光猫</h3>
+<p>用上面获取的用户名密码登录。</p>
 <p>在设置前，查看<strong>状态-网络侧信息-IPv6 连接信息</strong>，应该是空的。而 <strong>IPv4 连接信息</strong>里有一个连接的描述里是带有<code>INTERNET</code>的。</p>
 <p>（假装这里有截图）</p>
-<h3 id="Step-2-获取当前设置的参数"><a href="#Step-2-获取当前设置的参数" class="headerlink" title="Step 2 获取当前设置的参数"></a>Step 2 获取当前设置的参数</h3><p>首先在<strong>连接名称</strong>里选择带有<code>INTERNET</code>的选项，然后<strong>把这一页截个图或者拍照备份一下</strong>。（重要）</p>
+<h3 id="Step-2-获取当前设置的参数">Step 2 获取当前设置的参数</h3>
+<p>首先在<strong>连接名称</strong>里选择带有<code>INTERNET</code>的选项，然后<strong>把这一页截个图或者拍照备份一下</strong>。（重要）</p>
 <p>最好也备份一下设置文件（同 0x01）！</p>
 <p>这里面的VLAN ID、MTU是后面的依据。</p>
-<h3 id="Step-3-新建宽带连接"><a href="#Step-3-新建宽带连接" class="headerlink" title="Step 3 新建宽带连接"></a>Step 3 新建宽带连接</h3><p>这里前提是<strong>知道宽带的密码</strong>，如果不知道的话，可以在 <strong>0x01</strong> 中获取到的备份文件里找到嘿嘿嘿（仅做了base64加密）。</p>
+<h3 id="Step-3-新建宽带连接">Step 3 新建宽带连接</h3>
+<p>这里前提是<strong>知道宽带的密码</strong>，如果不知道的话，可以在 <strong>0x01</strong> 中获取到的备份文件里找到嘿嘿嘿（仅做了base64加密）。</p>
 <p>新建一个WAN连接，<strong>模式选择<code>Route</code>（路由），协议模式选择<code>IPv4 &amp; IPv6</code>（这就是目的所在喵！）。</strong></p>
 <p>选<code>PPPoE</code>，MTU里填上一步骤的参数；勾选<strong>启用Vlan</strong>，<strong>Vlan ID填上一步参数</strong>。</p>
 <p><strong>IPv6地址分配机制</strong>的话，我这里<strong>自动获取</strong>和<strong>DHCPv6</strong>都行，不过建议选自动获取吧。。。<em>（不大清楚</em></p>
@@ -966,15 +967,18 @@ ipsconfig.html                       wlwapias.html<span aria-hidden="true" class
 <p>大概的界面类似于这样的。不同设备大同小异的啦。</p>
 <p><img src="/2020/02/27/Server_OpticalModem/IPv6_Config.png" alt="IPv6_Config"></p>
 <p>而后点击<strong>保存/应用</strong>。</p>
-<h3 id="Step-4-IPv6-DHCP-配置"><a href="#Step-4-IPv6-DHCP-配置" class="headerlink" title="Step 4 IPv6 DHCP 配置"></a>Step 4 IPv6 DHCP 配置</h3><p><em>（这一块其实我也不大清楚emmm</em></p>
+<h3 id="Step-4-IPv6-DHCP-配置">Step 4 IPv6 DHCP 配置</h3>
+<p><em>（这一块其实我也不大清楚emmm</em></p>
 <p>大概是这样吧</p>
 <p><img src="/2020/02/27/Server_OpticalModem/IPv6_DHCPConfig.png" alt="IPv6_DHCPConfig"></p>
 <p>貌似DHCPv6是私网，Radvd是利用获取的前缀下发公网的地址。</p>
 <p>网上大概这么说的↓。</p>
 <blockquote>
-<p>在IPV6的自动配置中，分为两种技术<br>一种是传统的有状态(stateful),典型代表就是与IPv4时代相对应的DHCPv6，<br>一种是IPv6的无状态(stateless)自动配置，典型代表是Radvd。这是IPv6协议的一个突出特点:支持网络节点的地址自动配置。    </p>
-<p>在无状态地址自动配置方式下，网络接口接收路由器宣告的全局地址前缀，再结合接口ID得到一个可聚集全局单播地址。在有状态地址自动配置的方式下，主要采用动态主机配置协议（DHCP），需要配备专门的DHCP服务器，网络接口通过客户机/服务器模式从DHCP服务器处得到地址配置信息。  </p>
-<p>具体来说，以RADVD为代表的无状态自动配置不需要消耗很多机器资源，也不像传统DHCP一样需要维护一个本地数据库来维护地址分配状态，他只是进行广播前缀地址，客户端收到这种广播后再自己使用EUI64算法生成全球唯一的IPv6地址，进行自我配置。   </p>
+<p>在IPV6的自动配置中，分为两种技术<br>
+一种是传统的有状态(stateful),典型代表就是与IPv4时代相对应的DHCPv6，<br>
+一种是IPv6的无状态(stateless)自动配置，典型代表是Radvd。这是IPv6协议的一个突出特点:支持网络节点的地址自动配置。</p>
+<p>在无状态地址自动配置方式下，网络接口接收路由器宣告的全局地址前缀，再结合接口ID得到一个可聚集全局单播地址。在有状态地址自动配置的方式下，主要采用动态主机配置协议（DHCP），需要配备专门的DHCP服务器，网络接口通过客户机/服务器模式从DHCP服务器处得到地址配置信息。</p>
+<p>具体来说，以RADVD为代表的无状态自动配置不需要消耗很多机器资源，也不像传统DHCP一样需要维护一个本地数据库来维护地址分配状态，他只是进行广播前缀地址，客户端收到这种广播后再自己使用EUI64算法生成全球唯一的IPv6地址，进行自我配置。</p>
 </blockquote>
 <p>还有</p>
 <blockquote>
@@ -982,7 +986,8 @@ ipsconfig.html                       wlwapias.html<span aria-hidden="true" class
 <p>&lt;2&gt;dhcpv6用于有状态自动配置地址，类似于ipv4的dhcp，客户端从服务器的地址池中配置地址，可获取到DNS。</p>
 </blockquote>
 <p>（然后应该还要配置一下 <strong>IPv6 DNS Proxy</strong>，<em>这个我也不大清楚emmm</em></p>
-<h3 id="Step-5-确认连接状态"><a href="#Step-5-确认连接状态" class="headerlink" title="Step 5 确认连接状态"></a>Step 5 确认连接状态</h3><p>返回到<strong>状态-网络侧信息</strong>，分别看看IPv4和v6的连接信息。留意协议中带有IPv4&amp;IPv6的状态。</p>
+<h3 id="Step-5-确认连接状态">Step 5 确认连接状态</h3>
+<p>返回到<strong>状态-网络侧信息</strong>，分别看看IPv4和v6的连接信息。留意协议中带有IPv4&amp;IPv6的状态。</p>
 <p>刚开始可能连不上，过一段时间就连上了。</p>
 <p>如果还连不上的话，将之前带有 <code>INTERNET</code> 的那个WAN连接给禁用或删除就好了。</p>
 <p>（不过如果有个TR069那个运营商配置下发的就自己看着办了，删了可以不受运营商进行配置下发和上报，有影响的话新建一个或者修改上一步的服务模式就好了。</p>
@@ -992,7 +997,7 @@ ipsconfig.html                       wlwapias.html<span aria-hidden="true" class
 <p><img src="/2020/02/27/Server_OpticalModem/IPv6_ConnectInfo.png" alt="IPv6_ConnectInfo"></p>
 <p>连接光猫是可以下发 IPv6 公网地址的。</p>
 <p><img src="/2020/02/27/Server_OpticalModem/IPv6_ConnectInfo2.png" alt="IPv6_ConnectInfo2"></p>
-<p>然后发现那个外接的无线路由器也不支持 IPv6，气死了<em>（后面换一个</em></p>
+<p>然后发现那个外接的无线路由器也不支持 IPv6，气死了*（后面换一个*</p>
 <p>不过也有<strong>解决方案</strong>的，就是把网线连接到无线路由器的<strong>LAN口</strong>而不是WAN口，关闭它的 DHCP 功能，由光猫直接分配 IP 地址就行了。</p>
 <p><br><br></p>
 <p>然而有个大问题，就是我的 IPv6 没有Internet访问权限。手动配置了DNS也不行。</p>
@@ -1002,9 +1007,9 @@ ipsconfig.html                       wlwapias.html<span aria-hidden="true" class
 <p>不知道哪里设置有问题了，很懵（摊手。</p>
 <p><strong>求大佬们指点一下。</strong></p>
 <br>
-
 <hr>
-<h2 id="0x05-宽带桥接改造"><a href="#0x05-宽带桥接改造" class="headerlink" title="0x05 宽带桥接改造"></a>0x05 宽带桥接改造</h2><p>前面说支持多播嘛，然后就想到利用光猫桥接宽带，然后再利用后面的路由器（软路由/硬路由）进行拨号。</p>
+<h2 id="0x05-宽带桥接改造">0x05 宽带桥接改造</h2>
+<p>前面说支持多播嘛，然后就想到利用光猫桥接宽带，然后再利用后面的路由器（软路由/硬路由）进行拨号。</p>
 <p>或者是这种情况，网络流量较大，路由较复杂等光猫难以承受或者不够稳定，也可以试试桥接的方案。</p>
 <p>方法类似于 <strong>0x04</strong>。</p>
 <p>大概就像图里这样吧。</p>
@@ -1014,20 +1019,20 @@ ipsconfig.html                       wlwapias.html<span aria-hidden="true" class
 <p>之后就可以直接通过 LAN1 连接路由器或者电脑进行拨号了。</p>
 <p>拨号后也会分配公网的 IPv6 地址。<em>（然而我这里的 IPv6 还是没有Internet访问权限，估计是运营商的问题吧</em></p>
 <p>（假装这里有截图）</p>
-<p>当然，要实现桥接改造，你还可以尝试<strong>直接修改配置文件</strong>的方案<em>（超硬核）</em>，具体请参考<a target="_blank" rel="noopener" href="https://guanggai.org/thread-459-1-1.html">这里</a>。</p>
+<p>当然，要实现桥接改造，你还可以尝试<strong>直接修改配置文件</strong>的方案*（超硬核）*，具体请参考<a target="_blank" rel="noopener" href="https://guanggai.org/thread-459-1-1.html">这里</a>。</p>
 <br>
-
 <hr>
-<h2 id="0x06-其他玩意"><a href="#0x06-其他玩意" class="headerlink" title="0x06 其他玩意"></a>0x06 其他玩意</h2><p>有次在访问一个光猫的页面时输错了网址，正好发现了光猫用的 HTTP Server 是 micro_httpd。</p>
+<h2 id="0x06-其他玩意">0x06 其他玩意</h2>
+<p>有次在访问一个光猫的页面时输错了网址，正好发现了光猫用的 HTTP Server 是 micro_httpd。</p>
 <p>发现指向的网站还能访问。这是个轻量级的服务器了，正好也适合在这种小设备上跑了。</p>
 <p><img src="/2020/02/27/Server_OpticalModem/404NotFound.png" alt="404"></p>
 <p><img src="/2020/02/27/Server_OpticalModem/acme.png" alt="micro_httpd"></p>
 <p>这个光猫还支持远程下载，可以通过 USB 连接外部设备，开启 FTP 服务器进行访问。</p>
 <p>不过感觉这个 USB 应该也是2.0的，勉强用用还可以吧，也没尝试过233.</p>
 <br>
-
 <hr>
-<h2 id="0x07-小结"><a href="#0x07-小结" class="headerlink" title="0x07 小结"></a>0x07 小结</h2><p>折腾了好久这个有点古老的光猫 emmm嘤嘤嘤</p>
+<h2 id="0x07-小结">0x07 小结</h2>
+<p>折腾了好久这个有点古老的光猫 emmm嘤嘤嘤</p>
 <p>于是乎本文介绍的内容包括：</p>
 <p>通过配置备份文件获取超级管理员密码，开启 Telnet 管理，启用 IPv6，宽带桥接的改造等等。</p>
 <p><em>是时候换个路由器了，只有大概1/3的网速太亏了！</em></p>
@@ -1038,9 +1043,9 @@ ipsconfig.html                       wlwapias.html<span aria-hidden="true" class
 <p><strong>转载记得注明出处呀！</strong></p>
 <p>溜了溜了（</p>
 <br>
-
 <hr>
-<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><p><a target="_blank" rel="noopener" href="http://bbs.mydigit.cn/read.php?tid=1827084">HG260GS-U光猫拆解与登录解码</a></p>
+<h2 id="Reference">Reference</h2>
+<p><a target="_blank" rel="noopener" href="http://bbs.mydigit.cn/read.php?tid=1827084">HG260GS-U光猫拆解与登录解码</a></p>
 <p><a target="_blank" rel="noopener" href="http://dragonbest520.com/2018/03/04/%e5%8c%97%e4%ba%ac%e8%81%94%e9%80%9a%e5%85%89%e5%ae%bd%e5%b8%a6%e5%8f%8aiptv%e6%8a%98%e8%85%be%e7%ac%94%e8%ae%b0%ef%bc%88%e4%ba%8c%ef%bc%89-%e5%8c%97%e4%ba%ac%e8%81%94%e9%80%9ahg260gs-u-wo-37/">北京联通光宽带及IPTV折腾笔记（二）–北京联通HG260GS-U WO-37开启超级管理员的方法</a></p>
 <p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/av45203145">轻松开启中国移动IPV6连接，早入畅游ipv6世界</a></p>
 <p><a target="_blank" rel="noopener" href="https://guanggai.org/thread-459-1-1.html">烽火HG220G-U 2.03+ / HG2201U 5.0+光猫改桥接教程</a></p>
@@ -1633,7 +1638,7 @@ ipsconfig.html                       wlwapias.html<span aria-hidden="true" class
             |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
             <br>
                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">308.6k</span>&nbsp;字
+                class="white-color">308.3k</span>&nbsp;字
                                                                                     <span id="busuanzi_container_site_pv">
 			|&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
                     class="white-color"></span>&nbsp;次
@@ -1774,11 +1779,12 @@ $(function () {
                         var data_title = data.title.trim().toLowerCase();
                         var data_content = data.content.trim().replace(/<[^>]+>/g, "").toLowerCase();
                         var data_url = data.url;
+                        data_url = data_url.indexOf('/') === 0 ? data.url : '/' + data_url;
                         var index_title = -1;
                         var index_content = -1;
                         var first_occur = -1;
                         // only match artiles with not empty titles and contents
-                        if (data_title != '' && data_content != '') {
+                        if (data_title !== '' && data_content !== '') {
                             keywords.forEach(function (keyword, i) {
                                 index_title = data_title.indexOf(keyword);
                                 index_content = data_content.indexOf(keyword);
@@ -1788,7 +1794,7 @@ $(function () {
                                     if (index_content < 0) {
                                         index_content = 0;
                                     }
-                                    if (i == 0) {
+                                    if (i === 0) {
                                         first_occur = index_content;
                                     }
                                 }
@@ -1819,12 +1825,12 @@ $(function () {
                         }
                     });
                     str += "</ul>";
-                    str = "<p class=\"search-result-summary\">共找到" + String(cnt-1) + "条结果</p>"  + str;
+                    str = "<p class=\"search-result-summary\">共找到 " + String(cnt-1) + " 条结果</p>"  + str;
                     $resultContent.innerHTML = str;
                 });
             }
         });
-    }
+    };
 
     searchFunc('https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/search.xml', 'searchInput', 'searchResult');
 });

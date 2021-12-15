@@ -336,19 +336,6 @@
 </header>
 
     
-<script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/cryptojs/crypto-js.min.js"></script>
-<script>
-    (function() {
-        let pwd = '';
-        if (pwd && pwd.length > 0) {
-            if (pwd !== CryptoJS.SHA256(prompt('请输入访问本文章的密码')).toString(CryptoJS.enc.Hex)) {
-                alert('密码错误，将返回主页！');
-                location.href = '/';
-            }
-        }
-    })();
-</script>
-
 
 
 
@@ -537,17 +524,19 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>这几天玩了玩杭州电子科技大学的<strong>Hgame2020</strong>，还别说，有点意思2333。</p>
+                <h2 id="前言">前言</h2>
+<p>这几天玩了玩杭州电子科技大学的<strong>Hgame2020</strong>，还别说，有点意思2333。</p>
 <p><strong>平台网址：</strong></p>
 <p><a target="_blank" rel="noopener" href="https://hgame.vidar.club/">https://hgame.vidar.club/</a></p>
-<p>Flag格式：<code>hgame{.+} </code> </p>
+<p>Flag格式：<code>hgame{.+} </code></p>
 <br>
-
 <p><strong>20200125 更新：</strong></p>
 <p>官方WP地址：<a target="_blank" rel="noopener" href="https://github.com/vidar-team/Hgame2020_writeup">https://github.com/vidar-team/Hgame2020_writeup</a></p>
 <hr>
 <hr>
-<h2 id="MISC"><a href="#MISC" class="headerlink" title="MISC"></a>MISC</h2><h3 id="签到题"><a href="#签到题" class="headerlink" title="签到题"></a>签到题</h3><pre class="line-numbers language-none"><code class="language-none">Li0tIC4uLi0tIC4tLi4gLS4tLiAtLS0tLSAtLSAuIC4uLS0uLSAtIC0tLSAuLi0tLi0gLi4tLS0gLS0tLS0gLi4tLS0gLS0tLS0gLi4tLS4tIC4uLi4gLS0uIC4tIC0tIC4uLi0t<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h2 id="MISC">MISC</h2>
+<h3 id="签到题">签到题</h3>
+<pre class="line-numbers language-none"><code class="language-none">Li0tIC4uLi0tIC4tLi4gLS4tLiAtLS0tLSAtLSAuIC4uLS0uLSAtIC0tLSAuLi0tLi0gLi4tLS0gLS0tLS0gLi4tLS0gLS0tLS0gLi4tLS4tIC4uLi4gLS0uIC4tIC0tIC4uLi0t<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>base64解码得到</p>
 <p><code>.-- ...-- .-.. -.-. ----- -- . ..--.- - --- ..--.- ..--- ----- ..--- ----- ..--.- .... --. .- -- ...--</code></p>
 <p>一看就是摩斯电码，加入分隔符后解码得到flag</p>
@@ -555,7 +544,8 @@
 <blockquote>
 <p>在线解密摩斯密码 <a target="_blank" rel="noopener" href="http://www.atool9.com/morse.php">www.atool9.com/morse.php</a></p>
 </blockquote>
-<h3 id="壁纸"><a href="#壁纸" class="headerlink" title="壁纸"></a>壁纸</h3><p>解压得到图片<code>Pixiv@純白可憐.jpg</code>，foremost提取得到一个zip压缩文件。备注提示 <code>Password is picture ID.</code></p>
+<h3 id="壁纸">壁纸</h3>
+<p>解压得到图片<code>Pixiv@純白可憐.jpg</code>，foremost提取得到一个zip压缩文件。备注提示 <code>Password is picture ID.</code></p>
 <p><img src="/2020/01/23/CTF_Hgame2020/misc_wallpaper.png" alt="misc_wallpaper"></p>
 <p>本来还以为是在图片的文件里，而且还找到了一个id属性，然而并不是。</p>
 <p>上网查了一下<code>純白可憐</code>，发现是P站画家，看了一篇介绍原来每张图片有个编号来着。</p>
@@ -568,8 +558,9 @@
 <p>Unicode啦，转ASCII（用的是<strong>NATIVE转ASCII</strong>来着）得到flag</p>
 <p><code>hgame{Do_y0u_KnOW_uNiC0d3?}</code></p>
 <hr>
-<h3 id="克苏鲁神话"><a href="#克苏鲁神话" class="headerlink" title="克苏鲁神话"></a>克苏鲁神话</h3><p>明文攻击得到了解密后的zip文件。</p>
-<p><img src="/2020/01/23/CTF_Hgame2020/misc_kesulu.png"></p>
+<h3 id="克苏鲁神话">克苏鲁神话</h3>
+<p>明文攻击得到了解密后的zip文件。</p>
+<p><img src="/2020/01/23/CTF_Hgame2020/misc_kesulu.png" alt=""></p>
 <p>得到加密的 <code>The Call of Cthulhu.doc</code>文件。根据 <code>Bacon.txt</code>文件提示寻找密码。</p>
 <pre class="line-numbers language-none"><code class="language-none">of SuCh GrEAt powers OR beiNGS tHere may BE conCEivAbly A SuRvIval oF HuGely REmOTE periOd.
 
@@ -581,8 +572,6 @@
 <span class="token punctuation">[</span><span class="token string">'S'</span><span class="token punctuation">,</span> <span class="token string">'C'</span><span class="token punctuation">,</span> <span class="token string">'G'</span><span class="token punctuation">,</span> <span class="token string">'E'</span><span class="token punctuation">,</span> <span class="token string">'A'</span><span class="token punctuation">,</span> <span class="token string">'O'</span><span class="token punctuation">,</span> <span class="token string">'R'</span><span class="token punctuation">,</span> <span class="token string">'N'</span><span class="token punctuation">,</span> <span class="token string">'G'</span><span class="token punctuation">,</span> <span class="token string">'S'</span><span class="token punctuation">,</span> <span class="token string">'H'</span><span class="token punctuation">,</span> <span class="token string">'B'</span><span class="token punctuation">,</span> <span class="token string">'E'</span><span class="token punctuation">,</span> <span class="token string">'C'</span><span class="token punctuation">,</span> <span class="token string">'E'</span><span class="token punctuation">,</span> <span class="token string">'A'</span><span class="token punctuation">,</span> <span class="token string">'A'</span><span class="token punctuation">,</span> <span class="token string">'S'</span><span class="token punctuation">,</span> <span class="token string">'R'</span><span class="token punctuation">,</span> <span class="token string">'I'</span><span class="token punctuation">,</span> <span class="token string">'F'</span><span class="token punctuation">,</span> <span class="token string">'H'</span><span class="token punctuation">,</span> <span class="token string">'G'</span><span class="token punctuation">,</span> <span class="token string">'R'</span><span class="token punctuation">,</span> <span class="token string">'E'</span><span class="token punctuation">,</span> <span class="token string">'O'</span><span class="token punctuation">,</span> <span class="token string">'T'</span><span class="token punctuation">,</span> <span class="token string">'E'</span><span class="token punctuation">,</span> <span class="token string">'O'</span><span class="token punctuation">]</span>
 <span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> <span class="token string">''</span><span class="token punctuation">.</span>join<span class="token punctuation">(</span>s1<span class="token punctuation">)</span>
 <span class="token string">'SCGEAORNGSHBECEAASRIFHGREOTEO'</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-
 <p><strong>20200125 更新：</strong></p>
 <p>看了官方WP才知道<code>Bancon</code>指的是培根密码，我还以为是咸肉/熏猪肉来着。。</p>
 <p>根据大小写转为a或b，比如小写为a，大写为b。</p>
@@ -591,7 +580,8 @@
 <p>Ctrl+D把隐藏取消掉就看到了。</p>
 <p><code>hgame{Y0u_h@Ve_F0Und_mY_S3cReT}</code></p>
 <hr>
-<h3 id="签到题ProPlus"><a href="#签到题ProPlus" class="headerlink" title="签到题ProPlus"></a>签到题ProPlus</h3><p><code>Password.txt</code>提示了</p>
+<h3 id="签到题ProPlus">签到题ProPlus</h3>
+<p><code>Password.txt</code>提示了</p>
 <pre class="line-numbers language-none"><code class="language-none">Rdjxfwxjfimkn z,ts wntzi xtjrwm xsfjt jm ywt rtntwhf f y   h jnsxf qjFjf jnb  rg fiyykwtbsnkm tm  xa jsdwqjfmkjy wlviHtqzqsGsffywjjyynf yssm xfjypnyihjn.
 
 JRFVJYFZVRUAGMAI<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
@@ -621,10 +611,13 @@ JRFVJYFZVRUAGMAI<span aria-hidden="true" class="line-numbers-rows"><span></span>
 <p><code>hgame{3Nc0dInG_@lL_iN_0Ne!}</code></p>
 <p>真的会玩2333（（<em>好，我也要整一个各种编码的嘻嘻嘻</em></p>
 <blockquote>
-<p><em>Reference:</em><br><a target="_blank" rel="noopener" href="https://www.qqxiuzi.cn/bianma/kaisamima.php">https://www.qqxiuzi.cn/bianma/kaisamima.php</a><br><a target="_blank" rel="noopener" href="https://www.splitbrain.org/services/ook">https://www.splitbrain.org/services/ook</a>   </p>
+<p><em>Reference:</em><br>
+<a target="_blank" rel="noopener" href="https://www.qqxiuzi.cn/bianma/kaisamima.php">https://www.qqxiuzi.cn/bianma/kaisamima.php</a><br>
+<a target="_blank" rel="noopener" href="https://www.splitbrain.org/services/ook">https://www.splitbrain.org/services/ook</a></p>
 </blockquote>
 <hr>
-<h3 id="每日推荐"><a href="#每日推荐" class="headerlink" title="每日推荐"></a>每日推荐</h3><p>得到一个<code>.pcapng</code>抓包文件，用Wireshark打开，查看http，发现应该是与wordpress博客相关。</p>
+<h3 id="每日推荐">每日推荐</h3>
+<p>得到一个<code>.pcapng</code>抓包文件，用Wireshark打开，查看http，发现应该是与wordpress博客相关。</p>
 <p>利用“文件-导出对象-HTTP”，分析其中的对象。</p>
 <p>结合题目提示</p>
 <blockquote>
@@ -650,7 +643,7 @@ mode=stereo, sblim=32, jsbd=32, ch=2
 [Frame    3]OpenTable: could not find tables/huffdec
 Check local directory './tables/'
 Please check huffman table 'huffdec'<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>上网找了一下，下了个音频处理软件**<em>Audacity**</em>。（免费开源跨平台，还不错</p>
+<p>上网找了一下，下了个音频处理软件<em><strong>Audacity</strong></em>。（免费开源跨平台，还不错</p>
 <blockquote>
 <p>Free, open source, cross-platform audio software. <em>Audacity</em> is an easy-to-use, multi-track audio editor and recorder for Windows, Mac OS X, GNU/Linux…</p>
 </blockquote>
@@ -658,12 +651,14 @@ Please check huffman table 'huffdec'<span aria-hidden="true" class="line-numbers
 <p><code>hgame{I_love_EDM233}</code></p>
 <p><img src="/2020/01/23/CTF_Hgame2020/misc_recommendation5.png" alt="查看频谱图得到flag"></p>
 <blockquote>
-<p><strong><em>Electronic Dance Music</em></strong> <em>（电子舞曲）</em>可还行。</p>
+<p><em><strong>Electronic Dance Music</strong></em> *（电子舞曲）*可还行。</p>
 <p>第一次做音频隐写的题，哇脑洞真大，太有意思了233333</p>
 </blockquote>
 <hr>
 <hr>
-<h2 id="Web"><a href="#Web" class="headerlink" title="Web"></a>Web</h2><h3 id="Cosmos-的博客"><a href="#Cosmos-的博客" class="headerlink" title="Cosmos 的博客"></a>Cosmos 的博客</h3><p><a target="_blank" rel="noopener" href="http://cosmos.hgame.n3ko.co/">http://cosmos.hgame.n3ko.co/</a></p>
+<h2 id="Web">Web</h2>
+<h3 id="Cosmos-的博客">Cosmos 的博客</h3>
+<p><a target="_blank" rel="noopener" href="http://cosmos.hgame.n3ko.co/">http://cosmos.hgame.n3ko.co/</a></p>
 <p>先在网页里找了半天没找到emmm</p>
 <p>后来发现，既然说<strong>版本管理工具</strong>，还有<strong>GitHub</strong>嘛。</p>
 <p>那就构造<code>/.git/config</code>试试</p>
@@ -682,39 +677,41 @@ Please check huffman table 'huffdec'<span aria-hidden="true" class="line-numbers
 <p>base64解码得到flag</p>
 <p><code>hgame{g1t_le@k_1s_danger0us_!!!!}</code></p>
 <blockquote>
-<p>/.git目录公开访问是挺危险的emmm  </p>
+<p>/.git目录公开访问是挺危险的emmm</p>
 </blockquote>
 <hr>
-<h3 id="接-头-霸-王"><a href="#接-头-霸-王" class="headerlink" title="接 头 霸 王"></a>接 头 霸 王</h3><p><a target="_blank" rel="noopener" href="http://kyaru.hgame.n3ko.co/">http://kyaru.hgame.n3ko.co/ </a></p>
+<h3 id="接-头-霸-王">接 头 霸 王</h3>
+<p><a target="_blank" rel="noopener" href="http://kyaru.hgame.n3ko.co/">http://kyaru.hgame.n3ko.co/ </a></p>
 <p>直接访问，提示</p>
 <blockquote>
-<p>You need to come from <a target="_blank" rel="noopener" href="https://vidar.club/">https://vidar.club/</a>.                    </p>
+<p>You need to come from <a target="_blank" rel="noopener" href="https://vidar.club/">https://vidar.club/</a>.</p>
 </blockquote>
 <p>增加请求头: <code>Referer: https://vidar.club/</code>，重发后提示</p>
 <blockquote>
-<p>You need to visit it locally.                    </p>
+<p>You need to visit it locally.</p>
 </blockquote>
 <p>增加请求头：<code>X-Forwarded-For: 127.0.0.1</code></p>
 <blockquote>
-<p>You need to use Cosmos Brower to visit.                    </p>
+<p>You need to use Cosmos Brower to visit.</p>
 </blockquote>
 <p>改UA：<code>User-Agent: Cosmos </code></p>
 <blockquote>
-<p>The flag will be updated after 2077, please wait for it patiently.                    </p>
+<p>The flag will be updated after 2077, please wait for it patiently.</p>
 </blockquote>
 <p>根据响应头 <code>Last-Modified: Fri, 01 Jan 2077 00:00:00 GMT</code>，进行修改。把 <code>If-Unmodified-Since</code> 设置在 <code>Last-Modified</code> 之后就可以了。</p>
 <p>增加请求头：<code>If-Unmodified-Since: Fri, 01 Jan 2077 00:00:00 GMT</code></p>
 <p>得到flag</p>
-<p><code>hgame{W0w!Your_heads_@re_s0_many!}</code>                    </p>
+<p><code>hgame{W0w!Your_heads_@re_s0_many!}</code></p>
 <blockquote>
 <p>这题一波三折啊。</p>
 <p>最后这个操作让我想到了ustc的hackgame里<code>信息安全 2077</code>那道题，然后回去看了一下233.</p>
-<p><strong><em>Reference：</em></strong></p>
-<p><a target="_blank" rel="noopener" href="https://github.com/ustclug/hackergame2019-writeups/blob/master/official/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8_2077/README.md">https://github.com/ustclug/hackergame2019-writeups/blob/master/official/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8_2077/README.md</a></p>
+<p><em><strong>Reference：</strong></em></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/ustclug/hackergame2019-writeups/blob/master/official/%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8_2077/README.md">https://github.com/ustclug/hackergame2019-writeups/blob/master/official/信息安全_2077/README.md</a></p>
 </blockquote>
 <hr>
-<h3 id="🐔尼泰玫"><a href="#🐔尼泰玫" class="headerlink" title="🐔尼泰玫"></a>🐔尼泰玫</h3><p>cxk有点好玩2333</p>
-<p><del>随便玩了一下觉得有点无聊（x</del></p>
+<h3 id="🐔尼泰玫">🐔尼泰玫</h3>
+<p>cxk有点好玩2333</p>
+<p><s>随便玩了一下觉得有点无聊（x</s></p>
 <p>看了一下网页源代码，发现是用canvas画布画出来的，交互用的js，有点意思i。</p>
 <p>然后打开了Burp Suite，抓个包看看吧。</p>
 <p>发现游戏结束的时候会POST当前得分。</p>
@@ -726,9 +723,10 @@ Please check huffman table 'huffdec'<span aria-hidden="true" class="line-numbers
 <p><img src="/2020/01/23/CTF_Hgame2020/web_cxk1.png" alt="改包"></p>
 <p>这就出来了呀！</p>
 <p><img src="/2020/01/23/CTF_Hgame2020/web_cxk2.png" alt="cxk2"></p>
-<p>​    <code>hgame{j4vASc1pt_w1ll_tel1_y0u_someth1n9_u5efu1?!}</code></p>
+<p>​	<code>hgame{j4vASc1pt_w1ll_tel1_y0u_someth1n9_u5efu1?!}</code></p>
 <hr>
-<h3 id="Code-World"><a href="#Code-World" class="headerlink" title="Code World"></a>Code World</h3><p><a target="_blank" rel="noopener" href="http://codeworld.hgame.day-day.work/">http://codeworld.hgame.day-day.work/</a></p>
+<h3 id="Code-World">Code World</h3>
+<p><a target="_blank" rel="noopener" href="http://codeworld.hgame.day-day.work/">http://codeworld.hgame.day-day.work/</a></p>
 <p>发现重定向到了 <a target="_blank" rel="noopener" href="http://codeworld.hgame.day-day.work/new.php">http://codeworld.hgame.day-day.work/new.php</a></p>
 <p>同时看到了一句js</p>
 <pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">"This new site is building....But our stupid developer Cosmos did 302 jump to this page..F**k!"</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
@@ -744,18 +742,17 @@ Please check huffman table 'huffdec'<span aria-hidden="true" class="line-numbers
 目前它只支持通过url提交参数来计算两个数的相加，参数为a
 
 现在,需要让结果为10<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
 <p>再构造参数a，根据提示<code>参数a的提交格式为: 两数相加(a=b+c)</code>，考虑到<code>+</code>的Urlencode为%2b</p>
 <p>于是构造<code>/?a=2%2b8</code>，得到flag</p>
 <pre class="line-numbers language-none"><code class="language-none">The result is: 10
 
 hgame{C0d3_1s_s0_S@_sO_C0ol!}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-
-
 </blockquote>
 <hr>
 <hr>
-<h2 id="Crypto"><a href="#Crypto" class="headerlink" title="Crypto"></a>Crypto</h2><h3 id="InfantRSA"><a href="#InfantRSA" class="headerlink" title="InfantRSA"></a>InfantRSA</h3><p>题目给了如下的代码——</p>
+<h2 id="Crypto">Crypto</h2>
+<h3 id="InfantRSA">InfantRSA</h3>
+<p>题目给了如下的代码——</p>
 <pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token comment">#!/usr/bin/env python3</span>
 <span class="token keyword">from</span> secret <span class="token keyword">import</span> flag
 <span class="token keyword">assert</span> flag<span class="token punctuation">.</span>startswith<span class="token punctuation">(</span><span class="token string">b'hgame{'</span><span class="token punctuation">)</span> <span class="token keyword">and</span> flag<span class="token punctuation">.</span>endswith<span class="token punctuation">(</span><span class="token string">b'}'</span><span class="token punctuation">)</span>
@@ -784,10 +781,14 @@ m <span class="token operator">=</span> <span class="token builtin">pow</span><s
 <p>得到flag：</p>
 <p><code>hgame{t3Xt6O0k_R5A!!!}</code></p>
 <blockquote>
-<p><em>Reference:</em>  介绍RSA的<br><a target="_blank" rel="noopener" href="https://www.freebuf.com/articles/others-articles/166049.html">https://www.freebuf.com/articles/others-articles/166049.html</a><br><a target="_blank" rel="noopener" href="https://www.freebuf.com/articles/others-articles/161475.html">https://www.freebuf.com/articles/others-articles/161475.html</a><br><a target="_blank" rel="noopener" href="https://www.k2zone.cn/?p=2157">https://www.k2zone.cn/?p=2157</a></p>
+<p><em>Reference:</em>  介绍RSA的<br>
+<a target="_blank" rel="noopener" href="https://www.freebuf.com/articles/others-articles/166049.html">https://www.freebuf.com/articles/others-articles/166049.html</a><br>
+<a target="_blank" rel="noopener" href="https://www.freebuf.com/articles/others-articles/161475.html">https://www.freebuf.com/articles/others-articles/161475.html</a><br>
+<a target="_blank" rel="noopener" href="https://www.k2zone.cn/?p=2157">https://www.k2zone.cn/?p=2157</a></p>
 </blockquote>
 <hr>
-<h3 id="Reorder"><a href="#Reorder" class="headerlink" title="Reorder"></a>Reorder</h3><p><code>nc 47.98.192.231 25002</code></p>
+<h3 id="Reorder">Reorder</h3>
+<p><code>nc 47.98.192.231 25002</code></p>
 <p>敲个回车就可以得到一个乱序的字符串，刚开始还以为是分组来着，然后试了半天不对emmm。</p>
 <p>后来才发现，原来每次的结果都不一样233，比如下面是一些实验结果。</p>
 <pre class="line-numbers language-none"><code class="language-none">Rua!!!
@@ -803,9 +804,9 @@ $Umm+g{LIe5jphtaAT!ei_m}nR0u!3TP
 5I{eLmt+ha$mgpjU0nmR}eTi3PA!_!uT  
 Lm$jham{pUt+5Ige}!Au3Pem!TTi0n_R<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p><strong>既然是乱序吧，那就看看到底是什么个顺序好了！</strong></p>
-<p>上面字符串的长度为32，于是构造字符串 </p>
+<p>上面字符串的长度为32，于是构造字符串</p>
 <p><code>str1='123456abcdefghijklmnopqrstuvwxyz'</code></p>
-<p>输入后得到 <code>str2='jhca1346ibdefg25zxsqkmnpyrtuvwlo'</code>  </p>
+<p>输入后得到 <code>str2='jhca1346ibdefg25zxsqkmnpyrtuvwlo'</code></p>
 <p>试了发现该顺序不变，于是得到编码的对应关系（正变换逆变换嘛233333）</p>
 <pre class="line-numbers language-python" data-language="python"><code class="language-python">str1<span class="token operator">=</span><span class="token string">'123456abcdefghijklmnopqrstuvwxyz'</span>
 <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token builtin">len</span><span class="token punctuation">(</span>str1<span class="token punctuation">)</span><span class="token punctuation">)</span>
@@ -859,11 +860,12 @@ str_decrypted <span class="token operator">=</span> <span class="token string">'
         <span class="token keyword">print</span><span class="token punctuation">(</span>str_decrypted<span class="token punctuation">)</span>
     str_encrypted <span class="token operator">=</span> str_decrypted
     str_decrypted <span class="token operator">=</span> <span class="token string">''</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p><strong>不对唉！</strong>好像没这么简单。重新试了一下之前的几个<code>Rua!!!</code>之后的结果，发现这个变换不可行emmm。</p>
+<p>**不对唉！**好像没这么简单。重新试了一下之前的几个<code>Rua!!!</code>之后的结果，发现这个变换不可行emmm。</p>
 <p><strong>必须是连续输入上一次出来的结果才行。<em>（可能理解有误</em></strong></p>
 <p><img src="/2020/01/23/CTF_Hgame2020/crypto_Reorder2.png" alt="crypto_Reorder2"></p>
 <hr>
-<h3 id="Affine"><a href="#Affine" class="headerlink" title="Affine"></a>Affine</h3><p>题目给了这段用来加密的代码，现在就想办法还原回去找flag吧。</p>
+<h3 id="Affine">Affine</h3>
+<p>题目给了这段用来加密的代码，现在就想办法还原回去找flag吧。</p>
 <pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token comment">#!/usr/bin/env python3</span>
 <span class="token comment"># -*- coding: utf-8 -*-</span>
 <span class="token keyword">import</span> gmpy2
@@ -914,7 +916,7 @@ i <span class="token operator">=</span> <span class="token number">0</span>
 <span class="token comment"># I 43</span>
 <span class="token comment"># 5 30</span>
 <span class="token comment"># z 0</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>得到了字母对应的i和ii，而**i与ii满足关系 <code>(A*i+B) % 62 = ii</code>**，从而可以把A、B解出来。</p>
+<p>得到了字母对应的i和ii，而<strong>i与ii满足关系 <code>(A*i+B) % 62 = ii</code></strong>，从而可以把A、B解出来。</p>
 <p>查了查<strong>模逆运算</strong>，看了看觉得有点麻烦emmm</p>
 <p>猜想A、B不会太大，干脆直接遍历好了。。</p>
 <pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">for</span> A <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">62</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
@@ -944,7 +946,7 @@ str_decrypt <span class="token operator">=</span> <span class="token string">''<
 <p><code>hgame{M4th_u5Ed_iN_cRYpt0}</code></p>
 <blockquote>
 <p>看来果然是数学啊2333，还想看看大佬们怎么用数学方法解出来的。（（</p>
-<p>如题目所言——  </p>
+<p>如题目所言——</p>
 <blockquote>
 <p>Some basic modular arithmetic…</p>
 </blockquote>
@@ -955,7 +957,9 @@ str_decrypt <span class="token operator">=</span> <span class="token string">''<
 </blockquote>
 <hr>
 <hr>
-<h2 id="Pwn"><a href="#Pwn" class="headerlink" title="Pwn"></a>Pwn</h2><h3 id="Hard-AAAAA"><a href="#Hard-AAAAA" class="headerlink" title="Hard_AAAAA"></a>Hard_AAAAA</h3><p>nc 47.103.214.163 20000</p>
+<h2 id="Pwn">Pwn</h2>
+<h3 id="Hard-AAAAA">Hard_AAAAA</h3>
+<p>nc 47.103.214.163 20000</p>
 <p>IDA分析一波，发现是memcmp比较，<code>backdoor</code>函数里是执行<code>/bin/sh</code>的。</p>
 <p>其中s与v5距离为 -31h-(-ACh)=123，构造payload发了个<code>"0O0o"</code>过去，发现么得。</p>
 <pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">int</span> __cdecl <span class="token function">main</span><span class="token punctuation">(</span><span class="token keyword">int</span> argc<span class="token punctuation">,</span> <span class="token keyword">const</span> <span class="token keyword">char</span> <span class="token operator">*</span><span class="token operator">*</span>argv<span class="token punctuation">,</span> <span class="token keyword">const</span> <span class="token keyword">char</span> <span class="token operator">*</span><span class="token operator">*</span>envp<span class="token punctuation">)</span>
@@ -976,14 +980,13 @@ str_decrypt <span class="token operator">=</span> <span class="token string">''<
     <span class="token function">backdoor</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
   <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-
 <p><strong>20200125更新：</strong></p>
 <p>看了官方WP，草（一种植物），好气啊，<code>\x00</code>把字符串识别隔断了。</p>
 <p><img src="/2020/01/23/CTF_Hgame2020/pwn_Hard_AAAAA.png" alt="image-20200125172242766"></p>
 <hr>
 <hr>
-<h2 id="未完待续"><a href="#未完待续" class="headerlink" title="未完待续"></a><strong>未完待续</strong></h2><p><em>（可能会咕咕咕</em></p>
+<h2 id="未完待续"><strong>未完待续</strong></h2>
+<p><em>（可能会咕咕咕</em></p>
 
                 
             </div>
@@ -1559,7 +1562,7 @@ str_decrypt <span class="token operator">=</span> <span class="token string">''<
             |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
             <br>
                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">308.6k</span>&nbsp;字
+                class="white-color">308.3k</span>&nbsp;字
                                                                                     <span id="busuanzi_container_site_pv">
 			|&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
                     class="white-color"></span>&nbsp;次
@@ -1700,11 +1703,12 @@ $(function () {
                         var data_title = data.title.trim().toLowerCase();
                         var data_content = data.content.trim().replace(/<[^>]+>/g, "").toLowerCase();
                         var data_url = data.url;
+                        data_url = data_url.indexOf('/') === 0 ? data.url : '/' + data_url;
                         var index_title = -1;
                         var index_content = -1;
                         var first_occur = -1;
                         // only match artiles with not empty titles and contents
-                        if (data_title != '' && data_content != '') {
+                        if (data_title !== '' && data_content !== '') {
                             keywords.forEach(function (keyword, i) {
                                 index_title = data_title.indexOf(keyword);
                                 index_content = data_content.indexOf(keyword);
@@ -1714,7 +1718,7 @@ $(function () {
                                     if (index_content < 0) {
                                         index_content = 0;
                                     }
-                                    if (i == 0) {
+                                    if (i === 0) {
                                         first_occur = index_content;
                                     }
                                 }
@@ -1745,12 +1749,12 @@ $(function () {
                         }
                     });
                     str += "</ul>";
-                    str = "<p class=\"search-result-summary\">共找到" + String(cnt-1) + "条结果</p>"  + str;
+                    str = "<p class=\"search-result-summary\">共找到 " + String(cnt-1) + " 条结果</p>"  + str;
                     $resultContent.innerHTML = str;
                 });
             }
         });
-    }
+    };
 
     searchFunc('https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/search.xml', 'searchInput', 'searchResult');
 });

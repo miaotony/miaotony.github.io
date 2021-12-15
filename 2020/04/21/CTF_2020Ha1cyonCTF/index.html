@@ -336,19 +336,6 @@
 </header>
 
     
-<script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/cryptojs/crypto-js.min.js"></script>
-<script>
-    (function() {
-        let pwd = '';
-        if (pwd && pwd.length > 0) {
-            if (pwd !== CryptoJS.SHA256(prompt('请输入访问本文章的密码')).toString(CryptoJS.enc.Hex)) {
-                alert('密码错误，将返回主页！');
-                location.href = '/';
-            }
-        }
-    })();
-</script>
-
 
 
 
@@ -537,16 +524,18 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>看 CTF 群里有大佬引流，说周末西北瓜大（NPU）有个 CTF 比赛，<strong>据说对萌新比较友好</strong>，于是就来看了看。</p>
-<p><strong>官方平台地址：</strong><a target="_blank" rel="noopener" href="http://ha1cyon-ctf.fun:666/">http://ha1cyon-ctf.fun:666/</a></p>
+                <h2 id="前言">前言</h2>
+<p>看 CTF 群里有大佬引流，说周末西北瓜大（NPU）有个 CTF 比赛，<strong>据说对萌新比较友好</strong>，于是就来看了看。</p>
+<p>**官方平台地址：**<a target="_blank" rel="noopener" href="http://ha1cyon-ctf.fun:666/">http://ha1cyon-ctf.fun:666/</a></p>
 <p>周六比赛刚开始，平台就被 DDoS 了，于是那时只下载了一道题目的附件就啥也没了……比赛过程中平台也屡受攻击，端口换了好几次，比如 666-&gt;777-&gt;778-&gt;777-&gt;98x，平台用动态端口还是第一次见呢 23333。</p>
 <p>结果比赛时间一直拖到了周二晚上，题目还越来越多，噢，是<strong>不会的题目越来越多了</strong>！</p>
 <p>随便写点 Writeup 好了，主要是会做的部分吧，顺便记录了一下做题的体会啦。</p>
 <p><em>（后面再看心情会不会按照大佬们的 WP 复现一下</em></p>
 <br>
-
 <hr>
-<h2 id="Misc"><a href="#Misc" class="headerlink" title="Misc"></a>Misc</h2><h3 id="HappyCheckInVerification"><a href="#HappyCheckInVerification" class="headerlink" title="HappyCheckInVerification"></a>HappyCheckInVerification</h3><p>压缩包中的 endLocator 被改到最前面了，挪回去。然后把伪加密去掉。修改如下面红色部分所示。</p>
+<h2 id="Misc">Misc</h2>
+<h3 id="HappyCheckInVerification">HappyCheckInVerification</h3>
+<p>压缩包中的 endLocator 被改到最前面了，挪回去。然后把伪加密去掉。修改如下面红色部分所示。</p>
 <p><img src="/2020/04/21/CTF_2020Ha1cyonCTF/misc_zip.png" alt="misc_zip"></p>
 <p>解压出来一个是黑人抬棺的视频（真的有啊。。），另一个是一个二维码。</p>
 <p><img src="/2020/04/21/CTF_2020Ha1cyonCTF/wklv_lv_iodj.png" alt="wklv_lv_iodj"></p>
@@ -556,22 +545,24 @@
 <pre class="line-numbers language-none"><code class="language-none">?flag{this_is_not_flag}三曳所諳陀怯耶南夜缽得醯怯勝數不知喝盧瑟侄盡遠故隸怯薩不娑羯涅冥伊盧耶諳提度奢道盧冥以朋罰所即栗諳蒙集皤夷夜集諳利顛呐寫無怯依奢竟#￥#%E68BBFE4BD9BE68B89E6A0BCE79A84E5A7BFE58ABFE59CA8E69C80E5908E32333333||254333254242254338254342254231254338254345254432254238254643254236254145254239254441254437254234254232254131254236254245253244253244254343254438254330254341254336254435...sadwq#asdsadasf faf$use$dasdasdafafa_$ba##se64$<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>第一部分</p>
 <pre class="line-numbers language-none"><code class="language-none">三曳所諳陀怯耶南夜缽得醯怯勝數不知喝盧瑟侄盡遠故隸怯薩不娑羯涅冥伊盧耶諳提度奢道盧冥以朋罰所即栗諳蒙集皤夷夜集諳利顛呐寫無怯依奢竟<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p> 这一段扔去<a target="_blank" rel="noopener" href="http://keyfc.net/bbs/tools/tudoucode.aspx">佛曰</a>，得到：</p>
+<p>这一段扔去<a target="_blank" rel="noopener" href="http://keyfc.net/bbs/tools/tudoucode.aspx">佛曰</a>，得到：</p>
 <blockquote>
 <p>说了这不是佛拉格，你还来转？给爷爪巴</p>
 </blockquote>
 <p>佛拉格 flag 可还行…看来不是了。</p>
-<p>中间一段 </p>
+<p>中间一段</p>
 <pre class="line-numbers language-none"><code class="language-none">E68BBFE4BD9BE68B89E6A0BCE79A84E5A7BFE58ABFE59CA8E69C80E5908E32333333<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>拿去 base16 一下得到：</p>
 <blockquote>
 <p>拿佛拉格的姿势在最后2333</p>
 </blockquote>
-<p>下一部分 </p>
+<p>下一部分</p>
 <pre class="line-numbers language-none"><code class="language-none">254333254242254338254342254231254338254345254432254238254643254236254145254239254441254437254234254232254131254236254245253244253244254343254438254330254341254336254435<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>base16 得到：</p>
 <blockquote>
-<p>%C3%BB%C8%CB%B1%C8%CE%D2%B8%FC<br>%B6%AE%B9%DA%D7%B4%B2%A1%B6%BE<br>%2D%2D%CC%D8%C0%CA%C6%D5</p>
+<p>%C3%BB%C8%CB%B1%C8%CE%D2%B8%FC<br>
+%B6%AE%B9%DA%D7%B4%B2%A1%B6%BE<br>
+%2D%2D%CC%D8%C0%CA%C6%D5</p>
 </blockquote>
 <p>看上去是 urlencode，解码得到：</p>
 <p>（这里气死我了，居然用的 gb2312 编码而不是 UTF-8，我以为假的半天解不出来，虽然的确没啥用…</p>
@@ -593,7 +584,8 @@
 <th>1633 Hz</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>697 Hz</td>
 <td>1</td>
 <td>2</td>
@@ -621,14 +613,15 @@
 <td>#</td>
 <td>D</td>
 </tr>
-</tbody></table>
-<p>对照表格得到 <code>418070885</code>。<em>（<del>可能有误，应该是个手机号码，可能漏了几位</del></em>  </p>
+</tbody>
+</table>
+<p>对照表格得到 <code>418070885</code>。<em>（<s>可能有误，应该是个手机号码，可能漏了几位</s></em></p>
 <p><strong>（是 <code>13418070885</code></strong></p>
-<p>base64 -&gt; <del><code>NDE4MDcwODg1</code></del> <code>MTM0MTgwNzA4ODU=</code></p>
-<p>套上flag，<del><code>flag{nde4mdcwodg1}</code></del></p>
+<p>base64 -&gt; <s><code>NDE4MDcwODg1</code></s> <code>MTM0MTgwNzA4ODU=</code></p>
+<p>套上flag，<s><code>flag{nde4mdcwodg1}</code></s></p>
 <p>发现<strong>不对！！！！！</strong>  <em>（然后做不下去了嘤嘤嘤</em></p>
 <blockquote>
-<p>赛后找到了一个软件可以分析 DTMF 信号，就是 *<em><code>dtmf2num.exe</code>**，<a target="_blank" rel="noopener" href="https://dl.pconline.com.cn/download/462419-1.html">在这里</a>可以下载。这里是它 sourceforge 的<a target="_blank" rel="noopener" href="http://freshmeat.sourceforge.net/projects/dtmf2num">项目地址</a>。</em>（好古老一个软件了*</p>
+<p>赛后找到了一个软件可以分析 DTMF 信号，就是 <strong><code>dtmf2num.exe</code></strong>，<a target="_blank" rel="noopener" href="https://dl.pconline.com.cn/download/462419-1.html">在这里</a>可以下载。这里是它 sourceforge 的<a target="_blank" rel="noopener" href="http://freshmeat.sourceforge.net/projects/dtmf2num">项目地址</a>。<em>（好古老一个软件了</em></p>
 <p>不过这题要用软件的话需要截取对应的片段才行，毕竟 BGM 太杂了而且频率信号比较有规律……</p>
 </blockquote>
 <blockquote>
@@ -638,14 +631,14 @@
 <p>（真想不出来，啊是无线电大佬！Misc 真的杂。</p>
 <p><img src="/2020/04/21/CTF_2020Ha1cyonCTF/gzh.png" alt="公众号回复"></p>
 <br>
-
-<h3 id="抽象带师"><a href="#抽象带师" class="headerlink" title="抽象带师"></a>抽象带师</h3><p><img src="/2020/04/21/CTF_2020Ha1cyonCTF/image-20200421135805788.png" alt="题目"></p>
+<h3 id="抽象带师">抽象带师</h3>
+<p><img src="/2020/04/21/CTF_2020Ha1cyonCTF/image-20200421135805788.png" alt="题目"></p>
 <p><code>NPUCTF{欢迎来到西北工业大学CTF比赛世界上最简单的比赛}</code></p>
 <p>您也是<strong>抽象带师</strong>？</p>
 <p>再也不信什么 Easy/(Real) Ez/Baby/Basic/Not Hard/… 都是假的假的。</p>
 <br>
-
-<h3 id="parts"><a href="#parts" class="headerlink" title="parts"></a>parts</h3><p>好几个parts，zde0, zde1, zfr0, …</p>
+<h3 id="parts">parts</h3>
+<p>好几个parts，zde0, zde1, zfr0, …</p>
 <p>看文件头是一堆压缩包，解出来有个 hint</p>
 <pre class="line-numbers language-none"><code class="language-none">Here's the hint:
 33 * 33 = 1089
@@ -656,8 +649,8 @@ And everything is inside the image<span aria-hidden="true" class="line-numbers-r
 <p>foremost 提取不出来，看 Hex 文件是有点问题。</p>
 <p>图片文件名看上去像是 B站的 BV 号，上去看了一下没找到什么线索……</p>
 <br>
-
-<h3 id="吃了它"><a href="#吃了它" class="headerlink" title="吃了它"></a>吃了它</h3><p><code>may be hint.txt</code>提示</p>
+<h3 id="吃了它">吃了它</h3>
+<p><code>may be hint.txt</code>提示</p>
 <pre class="line-numbers language-none"><code class="language-none">emmmmm...
 something important was hidden in secret, but I can't find it!<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 <p><code>lookatme.txt</code></p>
@@ -667,22 +660,24 @@ something important was hidden in secret, but I can't find it!<span aria-hidden=
 <p><code>secret</code>文件头是 <code>MPE1</code>（4D 50 45 31），搜了一下没找到相关的文件格式呢。</p>
 <p>蹲 WP。</p>
 <br>
-
 <hr>
-<h2 id="Web"><a href="#Web" class="headerlink" title="Web"></a>Web</h2><h3 id="查源码"><a href="#查源码" class="headerlink" title="查源码"></a>查源码</h3><p>终于看到有送分题了！</p>
+<h2 id="Web">Web</h2>
+<h3 id="查源码">查源码</h3>
+<p>终于看到有送分题了！</p>
 <p>就是查源码完事。</p>
 <p>F12 禁掉了，用 <code>Ctrl + Shift + C</code> 或者点浏览器的 Web 开发者 之类的就行。</p>
 <br>
-
 <hr>
-<h2 id="Crypto"><a href="#Crypto" class="headerlink" title="Crypto"></a>Crypto</h2><h3 id="Classical-Cipher"><a href="#Classical-Cipher" class="headerlink" title="Classical_Cipher"></a>Classical_Cipher</h3><p><code>key.txt</code> 中提示：</p>
+<h2 id="Crypto">Crypto</h2>
+<h3 id="Classical-Cipher">Classical_Cipher</h3>
+<p><code>key.txt</code> 中提示：</p>
 <pre class="line-numbers language-none"><code class="language-none">解密后的flag请用flag{}包裹
 
 压缩包密码：gsv_pvb_rh_zgyzhs
 
 对应明文：   ***_key_**_******<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>看了一下，不是凯撒。于是丢到 <a target="_blank" rel="noopener" href="https://quipqiup.com/"><em>quipqiup</em></a> 去解密，已知 pvb=key。</p>
-<p>根据得到的答案，大概形式是 the_key_is_??????，后面这个不大对，于是改变 clues 为 <code>pvb=key rh=is gs=th</code>，得到合理的解为 <code>the_key_is_atbash</code>。</p>
+<p>根据得到的答案，大概形式是 the_key_is_???，后面这个不大对，于是改变 clues 为 <code>pvb=key rh=is gs=th</code>，得到合理的解为 <code>the_key_is_atbash</code>。</p>
 <p><img src="/2020/04/21/CTF_2020Ha1cyonCTF/quipquip.png" alt="quipquip"></p>
 <blockquote>
 <p>噢，赛后发现这是 <code>atbash</code> 编码（埃特巴什码），一种古典的密码。</p>
@@ -699,7 +694,7 @@ something important was hidden in secret, but I can't find it!<span aria-hidden=
 <p>找了个识别字体的网站，比如<a target="_blank" rel="noopener" href="https://www.likefont.com/">这个</a>，然后对应一波发现真的有！</p>
 <p><img src="/2020/04/21/CTF_2020Ha1cyonCTF/image-20200418221049215.png" alt="识别字体"></p>
 <p>在 <strong>Egypt0 Regular</strong> 里没找到，倒是在 <strong>ROSETTA STONE Regular</strong> 里找到了。</p>
-<p><img src="/2020/04/21/CTF_2020Ha1cyonCTF/image-20200418221125237.png"></p>
+<p><img src="/2020/04/21/CTF_2020Ha1cyonCTF/image-20200418221125237.png" alt=""></p>
 <p>于是就是 <code>CLASSICALCODE</code>（其实对应上D就猜到是<code>code</code>了）。<code>flag{CLASSICALCODE}</code>交上去发现不对，要换成小写。</p>
 <p><code>flag{classicalcode}</code></p>
 <blockquote>
@@ -710,9 +705,8 @@ something important was hidden in secret, but I can't find it!<span aria-hidden=
 <p>更多密码可以看这篇文章：<a target="_blank" rel="noopener" href="http://www.tuicool.com/articles/2E3INnm">http://www.tuicool.com/articles/2E3INnm</a></p>
 </blockquote>
 <br>
-
-
-<h3 id="这是什么觅🐎"><a href="#这是什么觅🐎" class="headerlink" title="这是什么觅🐎"></a>这是什么觅🐎</h3><p><img src="/2020/04/21/CTF_2020Ha1cyonCTF/flag.jpg" alt="flag"></p>
+<h3 id="这是什么觅🐎">这是什么觅🐎</h3>
+<p><img src="/2020/04/21/CTF_2020Ha1cyonCTF/flag.jpg" alt="flag"></p>
 <blockquote>
 <p>2020年4月</p>
 <p>F1 W1 S22 S21 T12 S11 W1 S13</p>
@@ -727,14 +721,23 @@ s<span class="token operator">=</span><span class="token string">''</span>
 <p>得到 <code>CALENDAR</code></p>
 <p><code>flag{calendar}</code></p>
 <blockquote>
-<p><strong>日历密码原则：</strong>  </p>
-<p>（1）1—26代表a—z26个英文字母；（2）M,T1,W,T2,F,S1,S2分别代表周一到周日七天（英文首字母代替，1，2为了有别，也人为增加密度）；（3）密钥即密码表  </p>
-<p>以2007年11月份的日历为密码表，我们来加密这个单词：dictionary<br>第一步，用数字代替明文中的字母，即D I  C  T  I  O  N  A  R  Y;<br>                     4  9 3 20  9 15  14 1  18 25<br>第二步，写密文。<br>方法：例如单词首字母D用4代替，则在日历中找到4号，发现是本月第一个星期日，所以用S21表示；又如第七个字母N用数字14代表，找到14号，发现是本月第二个星期三，用W2代表。如此类推，得到密文如下：<br>S21 F2 S11 T13 F2 T23 W2 T21 S23 S24  </p>
-<p><strong>此类密码的解法如下：</strong><br>（1）首先要知道密钥，即密码表；<br>（2）其次分解密码中的星期 i，即变成星期+数字的形式；<br>（3）去寻找对应的是第几个出现的星期 i，对应日期；<br>（4）对应字母，练成单词，短语或句子。  </p>
+<p><strong>日历密码原则：</strong></p>
+<p>（1）1—26代表a—z26个英文字母；（2）M,T1,W,T2,F,S1,S2分别代表周一到周日七天（英文首字母代替，1，2为了有别，也人为增加密度）；（3）密钥即密码表</p>
+<p>以2007年11月份的日历为密码表，我们来加密这个单词：dictionary<br>
+第一步，用数字代替明文中的字母，即D I  C  T  I  O  N  A  R  Y;<br>
+4  9 3 20  9 15  14 1  18 25<br>
+第二步，写密文。<br>
+方法：例如单词首字母D用4代替，则在日历中找到4号，发现是本月第一个星期日，所以用S21表示；又如第七个字母N用数字14代表，找到14号，发现是本月第二个星期三，用W2代表。如此类推，得到密文如下：<br>
+S21 F2 S11 T13 F2 T23 W2 T21 S23 S24</p>
+<p><strong>此类密码的解法如下：</strong><br>
+（1）首先要知道密钥，即密码表；<br>
+（2）其次分解密码中的星期 i，即变成星期+数字的形式；<br>
+（3）去寻找对应的是第几个出现的星期 i，对应日期；<br>
+（4）对应字母，练成单词，短语或句子。</p>
 </blockquote>
 <br>
-
-<h3 id="认清形势，建立信心"><a href="#认清形势，建立信心" class="headerlink" title="认清形势，建立信心"></a>认清形势，建立信心</h3><p>题目如下，看上去就是 RSA 之类的吧。</p>
+<h3 id="认清形势，建立信心">认清形势，建立信心</h3>
+<p>题目如下，看上去就是 RSA 之类的吧。</p>
 <pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> Crypto<span class="token punctuation">.</span>Util<span class="token punctuation">.</span>number <span class="token keyword">import</span> <span class="token operator">*</span>
 <span class="token keyword">from</span> gmpy2 <span class="token keyword">import</span> <span class="token operator">*</span>
 <span class="token keyword">from</span> secret <span class="token keyword">import</span> flag
@@ -761,9 +764,10 @@ c <span class="token operator">=</span> <span class="token builtin">pow</span><s
 <p>（<code>Crypto</code>模块都不大熟有哪些现成方法，<code>gmpy2</code> 模块装了半天还没装好。。</p>
 <p>题目应该叫 <code>认清形势，放弃幻想</code> 才对吧。</p>
 <br>
-
 <hr>
-<h2 id="Reverse"><a href="#Reverse" class="headerlink" title="Reverse"></a>Reverse</h2><h3 id="machine（不记得题目了"><a href="#machine（不记得题目了" class="headerlink" title="machine（不记得题目了"></a>machine（不记得题目了</h3><p><img src="/2020/04/21/CTF_2020Ha1cyonCTF/image-20200422011349867.png" alt="GUI 界面"></p>
+<h2 id="Reverse">Reverse</h2>
+<h3 id="machine（不记得题目了">machine（不记得题目了</h3>
+<p><img src="/2020/04/21/CTF_2020Ha1cyonCTF/image-20200422011349867.png" alt="GUI 界面"></p>
 <p>这题是个 Java 写的应用，拿去 Java Decompiler 反编译了一下，得到：</p>
 <p><img src="/2020/04/21/CTF_2020Ha1cyonCTF/image-20200422011720335.png" alt="反编译结果"></p>
 <p>虽然也没学过 Java，但大概意思还是能看个大概的。</p>
@@ -829,7 +833,7 @@ c <span class="token operator">=</span> <span class="token builtin">pow</span><s
     f<span class="token punctuation">.</span><span class="token function">setDefaultCloseOperation</span><span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     f<span class="token punctuation">.</span><span class="token function">setVisible</span><span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
   <span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>这上面的代码都是控制 GUI 的，给输入框绑定了函数，如果不是数字（’0’-‘9’）的话就销毁（输入不显示在框里）。</p>
+<p>这上面的代码都是控制 GUI 的，给输入框绑定了函数，如果不是数字（‘0’-‘9’）的话就销毁（输入不显示在框里）。</p>
 <p>给 button 绑定了执行函数，首先判断输入字符是不是数字，再比较输入的数字是否 &gt;100，如果都不成立就输出 <code>逗爷玩呢,给爷爪巴,再玩下去团长就要唱希望之花了</code>。</p>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token class-name">Lib</span> f <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Lib</span><span class="token punctuation">(</span>s<span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token class-name">BigInteger</span> b <span class="token operator">=</span> f<span class="token punctuation">.</span><span class="token function">e</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -918,25 +922,24 @@ l<span class="token punctuation">.</span><span class="token function">setText</s
 <p><em>（做到这里后面有事就没看下去了</em></p>
 <p>蹲个大佬的 WP 看看。</p>
 <br>
-
 <hr>
-<h2 id="其他题"><a href="#其他题" class="headerlink" title="其他题"></a>其他题</h2><p>这次还有挺多有意思的题目吧。</p>
+<h2 id="其他题">其他题</h2>
+<p>这次还有挺多有意思的题目吧。</p>
 <p>比如 Misc 有道 Minecraft 的题目，看截图还有红石电路的，不过倒是没人做出来罢了。</p>
 <p>Reverse 里有个 <code>R_E_5_E_T.exe</code> 是用 VB 写的，神器 IDA 就直接用不了了，貌似还加了壳，给了一堆 hint 然而并不会做。</p>
 <p>有道题 <code>are-you-a-fan</code> 用了一堆位运算，hint 是 NAND（数电里的？），哇呜难顶。</p>
 <p>Crypto 里有个 <code>EzRSA</code>，文件名是 <code>difficultrsa.py</code>，噢暴露真相了2333。</p>
-<p>到最后还出了 OI 的题<em>（没玩过，再见）</em>……目睹了问号<code>？</code>大佬疯狂秒题，？？？</p>
+<p>到最后还出了 OI 的题*（没玩过，再见）*……目睹了问号<code>？</code>大佬疯狂秒题，？？？</p>
 <br>
-
 <hr>
-<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>这次比赛平台是用 docker 部署的 CTFd，上了动态 flag 和独立环境，从这个角度而言做题感受挺好的。只是独立环境直接绑定到了同一个域名 ha1cyon-ctf.fun 下的不同端口，不像之前见过的动态域名，可能比较容易被扫描，从而容易被攻击吧（猜的。</p>
+<h2 id="小结">小结</h2>
+<p>这次比赛平台是用 docker 部署的 CTFd，上了动态 flag 和独立环境，从这个角度而言做题感受挺好的。只是独立环境直接绑定到了同一个域名 ha1cyon-ctf.fun 下的不同端口，不像之前见过的动态域名，可能比较容易被扫描，从而容易被攻击吧（猜的。</p>
 <p>看了一下平台是直接用 Gunicorn 搭建的 web 服务就上公网了，没套 Nginx 之类的反代，也没加 WAF 来着。不过没怎么了解也不大清楚 Gunicorn 应对高并发的能力如何。</p>
-<p>总体感觉这次 CTF <del>运维赛</del> <strong>题目好多啊，难度好大啊，基本没见过的套路呢</strong>。题目质量还不错，就是啥都不会，嘤嘤嘤。</p>
+<p>总体感觉这次 CTF <s>运维赛</s> <strong>题目好多啊，难度好大啊，基本没见过的套路呢</strong>。题目质量还不错，就是啥都不会，嘤嘤嘤。</p>
 <p>虽说算是业余玩玩的，但也想好好学点东西呢。</p>
 <p>看了大佬们的WP，膜一波。</p>
 <p>顺便再膜一下用学生机灵活应对高并发的运维大佬。</p>
 <br>
-
 <hr>
 <p>周日还打了个虎符 CTF（<strong>2020数字中国创新大赛-虎符网络安全赛道</strong>），发现题目大都新鲜出炉的。果然爆零，题目做到自闭。。</p>
 <p>Misc 题一堆密码题，哇呜不会做……</p>
@@ -1506,7 +1509,7 @@ l<span class="token punctuation">.</span><span class="token function">setText</s
             |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
             <br>
                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">308.6k</span>&nbsp;字
+                class="white-color">308.3k</span>&nbsp;字
                                                                                     <span id="busuanzi_container_site_pv">
 			|&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
                     class="white-color"></span>&nbsp;次
@@ -1647,11 +1650,12 @@ $(function () {
                         var data_title = data.title.trim().toLowerCase();
                         var data_content = data.content.trim().replace(/<[^>]+>/g, "").toLowerCase();
                         var data_url = data.url;
+                        data_url = data_url.indexOf('/') === 0 ? data.url : '/' + data_url;
                         var index_title = -1;
                         var index_content = -1;
                         var first_occur = -1;
                         // only match artiles with not empty titles and contents
-                        if (data_title != '' && data_content != '') {
+                        if (data_title !== '' && data_content !== '') {
                             keywords.forEach(function (keyword, i) {
                                 index_title = data_title.indexOf(keyword);
                                 index_content = data_content.indexOf(keyword);
@@ -1661,7 +1665,7 @@ $(function () {
                                     if (index_content < 0) {
                                         index_content = 0;
                                     }
-                                    if (i == 0) {
+                                    if (i === 0) {
                                         first_occur = index_content;
                                     }
                                 }
@@ -1692,12 +1696,12 @@ $(function () {
                         }
                     });
                     str += "</ul>";
-                    str = "<p class=\"search-result-summary\">共找到" + String(cnt-1) + "条结果</p>"  + str;
+                    str = "<p class=\"search-result-summary\">共找到 " + String(cnt-1) + " 条结果</p>"  + str;
                     $resultContent.innerHTML = str;
                 });
             }
         });
-    }
+    };
 
     searchFunc('https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/search.xml', 'searchInput', 'searchResult');
 });

@@ -336,19 +336,6 @@
 </header>
 
     
-<script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/cryptojs/crypto-js.min.js"></script>
-<script>
-    (function() {
-        let pwd = '';
-        if (pwd && pwd.length > 0) {
-            if (pwd !== CryptoJS.SHA256(prompt('请输入访问本文章的密码')).toString(CryptoJS.enc.Hex)) {
-                alert('密码错误，将返回主页！');
-                location.href = '/';
-            }
-        }
-    })();
-</script>
-
 
 
 
@@ -550,8 +537,10 @@
         <div class="card-content article-card-content">
             <div id="articleContent">
                 <p><img src="/2020/02/02/Server_Docker/docker.gif" alt="docker图标"></p>
-<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><blockquote>
-<p>Building and deploying new applications is faster with containers.<br>Docker containers wrap up software and its dependencies into a  standardized unit for software development that includes everything it  needs to run: code, runtime, system tools and libraries. This guarantees that your application will always run the same and makes collaboration  as simple as sharing a container image.</p>
+<h2 id="简介">简介</h2>
+<blockquote>
+<p>Building and deploying new applications is faster with containers.<br>
+Docker containers wrap up software and its dependencies into a  standardized unit for software development that includes everything it  needs to run: code, runtime, system tools and libraries. This guarantees that your application will always run the same and makes collaboration  as simple as sharing a container image.</p>
 </blockquote>
 <blockquote>
 <p>Docker 是一个开源的应用容器引擎，基于 Go 语言 并遵从 Apache2.0 协议开源。</p>
@@ -563,38 +552,44 @@
 <p>反正用起来贼方便就是了。</p>
 <p><img src="/2020/02/02/Server_Docker/docker2.png" alt="图标"></p>
 <p>感觉docker的图标就挺好看的（</p>
-<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">curl</span> -fsSL get.docker.com -o get-docker.sh
+<h2 id="安装">安装</h2>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">curl</span> -fsSL get.docker.com -o get-docker.sh
 <span class="token function">sudo</span> <span class="token function">sh</span> get-docker.sh --mirror Aliyun<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 <p>Windows下下载Docker Desktop</p>
 <p><a target="_blank" rel="noopener" href="https://www.docker.com/products/docker-desktop">https://www.docker.com/products/docker-desktop</a></p>
 <p>（要登陆）</p>
-<h2 id="换源"><a href="#换源" class="headerlink" title="换源"></a>换源</h2><p>Linux下，编辑此文件，如果没有则新建。</p>
+<h2 id="换源">换源</h2>
+<p>Linux下，编辑此文件，如果没有则新建。</p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">vim</span> /etc/docker/daemon.json<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>Windows下文件为：</p>
 <pre class="line-numbers language-none"><code class="language-none">%programdata%\docker\config\daemon.json<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-
-<h3 id="USTC-中科大源（推荐！）"><a href="#USTC-中科大源（推荐！）" class="headerlink" title="USTC 中科大源（推荐！）"></a>USTC 中科大源<strong>（推荐！）</strong></h3><p><a target="_blank" rel="noopener" href="https://lug.ustc.edu.cn/wiki/mirrors/help/docker">https://lug.ustc.edu.cn/wiki/mirrors/help/docker</a></p>
+<h3 id="USTC-中科大源-（推荐！）">USTC 中科大源**（推荐！）**</h3>
+<p><a target="_blank" rel="noopener" href="https://lug.ustc.edu.cn/wiki/mirrors/help/docker">https://lug.ustc.edu.cn/wiki/mirrors/help/docker</a></p>
 <pre class="line-numbers language-json" data-language="json"><code class="language-json"><span class="token punctuation">{</span>
   <span class="token property">"registry-mirrors"</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">"https://docker.mirrors.ustc.edu.cn"</span><span class="token punctuation">]</span>
 <span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-<h3 id="Azure-中国镜像"><a href="#Azure-中国镜像" class="headerlink" title="Azure 中国镜像"></a>Azure 中国镜像</h3><p><a target="_blank" rel="noopener" href="https://github.com/Azure/container-service-for-azure-china/blob/master/aks/README.md#22-container-registry-proxy">https://github.com/Azure/container-service-for-azure-china/blob/master/aks/README.md#22-container-registry-proxy</a></p>
+<h3 id="Azure-中国镜像">Azure 中国镜像</h3>
+<p><a target="_blank" rel="noopener" href="https://github.com/Azure/container-service-for-azure-china/blob/master/aks/README.md#22-container-registry-proxy">https://github.com/Azure/container-service-for-azure-china/blob/master/aks/README.md#22-container-registry-proxy</a></p>
 <pre class="line-numbers language-json" data-language="json"><code class="language-json"><span class="token punctuation">{</span>
   <span class="token property">"registry-mirrors"</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">"https://dockerhub.azk8s.cn"</span><span class="token punctuation">]</span>
 <span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-<h3 id="DaoCloud-源"><a href="#DaoCloud-源" class="headerlink" title="DaoCloud 源"></a>DaoCloud 源</h3><p><a target="_blank" rel="noopener" href="https://www.daocloud.io/mirror">https://www.daocloud.io/mirror</a></p>
+<h3 id="DaoCloud-源">DaoCloud 源</h3>
+<p><a target="_blank" rel="noopener" href="https://www.daocloud.io/mirror">https://www.daocloud.io/mirror</a></p>
 <pre class="line-numbers language-json" data-language="json"><code class="language-json"><span class="token punctuation">{</span>
   <span class="token property">"registry-mirrors"</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">"http://f1361db2.m.daocloud.io"</span><span class="token punctuation">]</span>
 <span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 <p>或者 直接执行这个就可以一键修改</p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">curl</span> -sSL https://get.daocloud.io/daotools/set_mirror.sh <span class="token operator">|</span> <span class="token function">sh</span> -s http://f1361db2.m.daocloud.io<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<h3 id="163网易源"><a href="#163网易源" class="headerlink" title="163网易源"></a>163网易源</h3><pre class="line-numbers language-json" data-language="json"><code class="language-json"><span class="token punctuation">{</span>
+<h3 id="163网易源">163网易源</h3>
+<pre class="line-numbers language-json" data-language="json"><code class="language-json"><span class="token punctuation">{</span>
   <span class="token property">"registry-mirrors"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
     <span class="token string">"http://hub-mirror.c.163.com"</span>
   <span class="token punctuation">]</span>
 <span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<h3 id="阿里源"><a href="#阿里源" class="headerlink" title="阿里源"></a>阿里源</h3><p>要注册，略。</p>
-<h3 id="配置多个镜像"><a href="#配置多个镜像" class="headerlink" title="配置多个镜像"></a>配置多个镜像</h3><pre class="line-numbers language-json" data-language="json"><code class="language-json"><span class="token punctuation">{</span>
+<h3 id="阿里源">阿里源</h3>
+<p>要注册，略。</p>
+<h3 id="配置多个镜像">配置多个镜像</h3>
+<pre class="line-numbers language-json" data-language="json"><code class="language-json"><span class="token punctuation">{</span>
   <span class="token property">"registry-mirrors"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
     <span class="token string">"https://docker.mirrors.ustc.edu.cn"</span><span class="token punctuation">,</span>
     <span class="token string">"https://dockerhub.azk8s.cn/"</span><span class="token punctuation">,</span>
@@ -602,64 +597,90 @@
   <span class="token punctuation">]</span>
 <span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>注意遵循<code>json</code>格式。</p>
-<h3 id="配置完之后重启服务"><a href="#配置完之后重启服务" class="headerlink" title="配置完之后重启服务"></a>配置完之后重启服务</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> systemctl daemon-reload
+<h3 id="配置完之后重启服务">配置完之后重启服务</h3>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> systemctl daemon-reload
 <span class="token function">sudo</span> systemctl restart docker<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-<h3 id="检查加速器是否生效"><a href="#检查加速器是否生效" class="headerlink" title="检查加速器是否生效"></a>检查加速器是否生效</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">docker info<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h3 id="检查加速器是否生效">检查加速器是否生效</h3>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">docker info<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>有如下信息则配置成功。</p>
 <p><img src="/2020/02/02/Server_Docker/mirror.png" alt="mirrors"></p>
 <hr>
-<h2 id="Portainer"><a href="#Portainer" class="headerlink" title="Portainer"></a>Portainer</h2><blockquote>
+<h2 id="Portainer">Portainer</h2>
+<blockquote>
 <p>Portainer 是 Docker 的图形化管理工具，提供状态显示面板、应用模板快速部署、容器镜像网络数据卷的基本操作（包括上传下载镜像，创建容器等操作）、事件日志显示、容器控制台操作、Swarm集群和服务等集中管理和操作、登录用户管理和控制等功能。功能十分全面，基本能满足中小型单位对容器管理的全部需求。</p>
 </blockquote>
-<h3 id="部署"><a href="#部署" class="headerlink" title="部署"></a>部署</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 拉取镜像</span>
+<h3 id="部署">部署</h3>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 拉取镜像</span>
 docker pull portainer/portainer
 
 <span class="token comment"># 一键部署</span>
 docker volume create portainer_data
 docker run -d -p <span class="token number">9000</span>:9000 --name portainer --restart always -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data portainer/portainer<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>访问 <a target="_blank" rel="noopener" href="http://127.0.0.1:9000/">http://127.0.0.1:9000</a> 即可访问图形化面板。配置好用户名、密码后登录。</p>
+<p>访问 <a target="_blank" rel="noopener" href="http://127.0.0.1:9000">http://127.0.0.1:9000</a> 即可访问图形化面板。配置好用户名、密码后登录。</p>
 <p><img src="/2020/02/02/Server_Docker/portainer.png" alt="登录界面"></p>
 <p>连接到Local，登录后的主界面如下。</p>
 <p><img src="/2020/02/02/Server_Docker/portainer2.png" alt="Home"></p>
-<h3 id="通过远程访问"><a href="#通过远程访问" class="headerlink" title="通过远程访问"></a>通过远程访问</h3><p>需要在防火墙放行9000端口。</p>
+<h3 id="通过远程访问">通过远程访问</h3>
+<p>需要在防火墙放行9000端口。</p>
 <p>Ubuntu:</p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> ufw allow <span class="token number">9000</span>  <span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>CentOS:（其实也可以装个 ufw 的）</p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> firewall-cmd --zone<span class="token operator">=</span>public --add-port<span class="token operator">=</span><span class="token number">9000</span>/tcp --permanent  <span class="token comment"># 开放端口</span>
 <span class="token function">sudo</span> systemctl restart firewalld.service    <span class="token comment"># 重启firewall</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-<h3 id="开机自启"><a href="#开机自启" class="headerlink" title="开机自启"></a>开机自启</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">docker update --restart<span class="token operator">=</span>always portainer<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h3 id="开机自启">开机自启</h3>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">docker update --restart<span class="token operator">=</span>always portainer<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>其实在上面的一键部署命令中已经加了，这里不需要了。（记录一下而已）</p>
 <hr>
-<h2 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h2><h3 id="系统相关"><a href="#系统相关" class="headerlink" title="系统相关"></a>系统相关</h3><h4 id="查看系统信息"><a href="#查看系统信息" class="headerlink" title="查看系统信息"></a>查看系统信息</h4><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">docker info<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<h4 id="查看镜像、容器、数据卷所占用的空间"><a href="#查看镜像、容器、数据卷所占用的空间" class="headerlink" title="查看镜像、容器、数据卷所占用的空间"></a>查看镜像、容器、数据卷所占用的空间</h4><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">docker system <span class="token function">df</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<hr>
-<h3 id="容器相关"><a href="#容器相关" class="headerlink" title="容器相关"></a>容器相关</h3><h4 id="查看当前容器"><a href="#查看当前容器" class="headerlink" title="查看当前容器"></a>查看当前容器</h4><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">docker <span class="token function">ps</span> -a<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h2 id="常用命令">常用命令</h2>
+<h3 id="系统相关">系统相关</h3>
+<h4 id="查看系统信息">查看系统信息</h4>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">docker info<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h4 id="查看镜像、容器、数据卷所占用的空间">查看镜像、容器、数据卷所占用的空间</h4>
+<h2 id="code￼16"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">docker system <span class="token function">df</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></h2>
+<h3 id="容器相关">容器相关</h3>
+<h4 id="查看当前容器">查看当前容器</h4>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">docker <span class="token function">ps</span> -a<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>有<code>-a</code>则显示所有的容器，包括启动的和未启动的。没有<code>-a</code>的话则只显示运行着的。</p>
-<h4 id="创建-amp-使用容器"><a href="#创建-amp-使用容器" class="headerlink" title="创建&amp;使用容器"></a>创建&amp;使用容器</h4><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">docker run -it --name 容器名 镜像名/镜像ID /bin/bash<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h4 id="创建-使用容器">创建&amp;使用容器</h4>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">docker run -it --name 容器名 镜像名/镜像ID /bin/bash<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>使用 <code>-d</code> 参数运行容器，可以让容器在后台运行而不把STDOUT输出到宿主机上。</p>
 <p>（用<code>docker logs [container ID or NAMES]</code>查看）</p>
 <p>当 <code>-i</code> <code>-t</code> 参数一起使用时，可以看到 Linux 命令提示符，如<code>root@69d137adef7a:/#</code>。只有 <code>-i</code>则没有命令提示符。</p>
-<h4 id="启动容器"><a href="#启动容器" class="headerlink" title="启动容器"></a>启动容器</h4><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">docker start 容器名/容器ID<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<h4 id="重启容器"><a href="#重启容器" class="headerlink" title="重启容器"></a>重启容器</h4><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">docker restart 容器名/容器ID<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<h4 id="终止容器"><a href="#终止容器" class="headerlink" title="终止容器"></a>终止容器</h4><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">docker stop 容器名/容器ID<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<h4 id="查看容器信息"><a href="#查看容器信息" class="headerlink" title="查看容器信息"></a>查看容器信息</h4><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">docker container <span class="token function">ls</span> -a<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<h4 id="容器统计信息"><a href="#容器统计信息" class="headerlink" title="容器统计信息"></a>容器统计信息</h4><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">docker stats<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<h4 id="启动已终止容器"><a href="#启动已终止容器" class="headerlink" title="启动已终止容器"></a>启动已终止容器</h4><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">docker container start<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<h4 id="获取容器的输出信息"><a href="#获取容器的输出信息" class="headerlink" title="获取容器的输出信息"></a>获取容器的输出信息</h4><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">docker container logs <span class="token punctuation">[</span>container ID or NAMES<span class="token punctuation">]</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<h4 id="进入容器（连接容器）"><a href="#进入容器（连接容器）" class="headerlink" title="进入容器（连接容器）"></a>进入容器（连接容器）</h4><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">docker <span class="token builtin class-name">exec</span> -it 容器名/容器ID /bin/bash<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h4 id="启动容器">启动容器</h4>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">docker start 容器名/容器ID<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h4 id="重启容器">重启容器</h4>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">docker restart 容器名/容器ID<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h4 id="终止容器">终止容器</h4>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">docker stop 容器名/容器ID<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h4 id="查看容器信息">查看容器信息</h4>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">docker container <span class="token function">ls</span> -a<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h4 id="容器统计信息">容器统计信息</h4>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">docker stats<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h4 id="启动已终止容器">启动已终止容器</h4>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">docker container start<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h4 id="获取容器的输出信息">获取容器的输出信息</h4>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">docker container logs <span class="token punctuation">[</span>container ID or NAMES<span class="token punctuation">]</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h4 id="进入容器（连接容器）">进入容器（连接容器）</h4>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">docker <span class="token builtin class-name">exec</span> -it 容器名/容器ID /bin/bash<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>从这个 stdin 中 exit，不会导致容器的停止。<strong>（推荐↑）</strong></p>
 <p>而下面这个，从这个 stdin 中 exit，会导致容器的停止。</p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">docker attach 容器名/容器ID<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<h4 id="删除容器"><a href="#删除容器" class="headerlink" title="删除容器"></a>删除容器</h4><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">docker <span class="token function">rm</span> 容器名/容器ID<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<hr>
-<h3 id="镜像相关"><a href="#镜像相关" class="headerlink" title="镜像相关"></a>镜像相关</h3><h4 id="搜索镜像"><a href="#搜索镜像" class="headerlink" title="搜索镜像"></a>搜索镜像</h4><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">docker search 关键词<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<h4 id="下载镜像"><a href="#下载镜像" class="headerlink" title="下载镜像"></a>下载镜像</h4><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">docker pull 镜像名<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h4 id="删除容器">删除容器</h4>
+<h2 id="code￼28"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">docker <span class="token function">rm</span> 容器名/容器ID<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></h2>
+<h3 id="镜像相关">镜像相关</h3>
+<h4 id="搜索镜像">搜索镜像</h4>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">docker search 关键词<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h4 id="下载镜像">下载镜像</h4>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">docker pull 镜像名<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p><code>镜像名:Tag</code> 可以下载不同标签的镜像。</p>
-<h4 id="查看已下载镜像"><a href="#查看已下载镜像" class="headerlink" title="查看已下载镜像"></a>查看已下载镜像</h4><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">docker images -a
+<h4 id="查看已下载镜像">查看已下载镜像</h4>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">docker images -a
 <span class="token comment"># 或者 docker image ls</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-<h4 id="删除镜像"><a href="#删除镜像" class="headerlink" title="删除镜像"></a>删除镜像</h4><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">docker rmi <span class="token punctuation">[</span>Image ID<span class="token punctuation">]</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<hr>
-<h3 id="端口相关"><a href="#端口相关" class="headerlink" title="端口相关"></a>端口相关</h3><h4 id="端口映射"><a href="#端口映射" class="headerlink" title="端口映射"></a>端口映射</h4><p>将docker内的80端口映射到宿主机的8000端口上</p>
+<h4 id="删除镜像">删除镜像</h4>
+<h2 id="code￼32"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">docker rmi <span class="token punctuation">[</span>Image ID<span class="token punctuation">]</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></h2>
+<h3 id="端口相关">端口相关</h3>
+<h4 id="端口映射">端口映射</h4>
+<p>将docker内的80端口映射到宿主机的8000端口上</p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 可以使用--name自定义部署的容器名</span>
 docker run -d -p <span class="token number">8000</span>:80 --name 容器名 镜像名
 
@@ -667,7 +688,8 @@ docker run -d -p <span class="token number">8000</span>:80 --name 容器名 镜�
 docker run -d -p <span class="token number">8000</span>:80 镜像名<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p><em>（别急，慢慢学好了啦……</em></p>
 <hr>
-<h2 id="拓展阅读"><a href="#拓展阅读" class="headerlink" title="拓展阅读"></a>拓展阅读</h2><p><strong>Docker从入门到实践 GitBook</strong>  <a target="_blank" rel="noopener" href="https://yeasy.gitbooks.io/docker_practice/content/">https://yeasy.gitbooks.io/docker_practice/content/</a></p>
+<h2 id="拓展阅读">拓展阅读</h2>
+<p><strong>Docker从入门到实践 GitBook</strong>  <a target="_blank" rel="noopener" href="https://yeasy.gitbooks.io/docker_practice/content/">https://yeasy.gitbooks.io/docker_practice/content/</a></p>
 <p>Docker-镜像常用命令 <a target="_blank" rel="noopener" href="https://blog.csdn.net/y472360651/article/details/81289088">https://blog.csdn.net/y472360651/article/details/81289088</a></p>
 <p>Docker温故知新 <a target="_blank" rel="noopener" href="https://www.sqlsec.com/2019/10/docker2.html">https://www.sqlsec.com/2019/10/docker2.html</a></p>
 
@@ -1265,7 +1287,7 @@ docker run -d -p <span class="token number">8000</span>:80 镜像名<span aria-h
             |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
             <br>
                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">308.6k</span>&nbsp;字
+                class="white-color">308.3k</span>&nbsp;字
                                                                                     <span id="busuanzi_container_site_pv">
 			|&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
                     class="white-color"></span>&nbsp;次
@@ -1406,11 +1428,12 @@ $(function () {
                         var data_title = data.title.trim().toLowerCase();
                         var data_content = data.content.trim().replace(/<[^>]+>/g, "").toLowerCase();
                         var data_url = data.url;
+                        data_url = data_url.indexOf('/') === 0 ? data.url : '/' + data_url;
                         var index_title = -1;
                         var index_content = -1;
                         var first_occur = -1;
                         // only match artiles with not empty titles and contents
-                        if (data_title != '' && data_content != '') {
+                        if (data_title !== '' && data_content !== '') {
                             keywords.forEach(function (keyword, i) {
                                 index_title = data_title.indexOf(keyword);
                                 index_content = data_content.indexOf(keyword);
@@ -1420,7 +1443,7 @@ $(function () {
                                     if (index_content < 0) {
                                         index_content = 0;
                                     }
-                                    if (i == 0) {
+                                    if (i === 0) {
                                         first_occur = index_content;
                                     }
                                 }
@@ -1451,12 +1474,12 @@ $(function () {
                         }
                     });
                     str += "</ul>";
-                    str = "<p class=\"search-result-summary\">共找到" + String(cnt-1) + "条结果</p>"  + str;
+                    str = "<p class=\"search-result-summary\">共找到 " + String(cnt-1) + " 条结果</p>"  + str;
                     $resultContent.innerHTML = str;
                 });
             }
         });
-    }
+    };
 
     searchFunc('https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/search.xml', 'searchInput', 'searchResult');
 });

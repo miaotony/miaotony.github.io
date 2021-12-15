@@ -336,19 +336,6 @@
 </header>
 
     
-<script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/cryptojs/crypto-js.min.js"></script>
-<script>
-    (function() {
-        let pwd = '';
-        if (pwd && pwd.length > 0) {
-            if (pwd !== CryptoJS.SHA256(prompt('请输入访问本文章的密码')).toString(CryptoJS.enc.Hex)) {
-                alert('密码错误，将返回主页！');
-                location.href = '/';
-            }
-        }
-    })();
-</script>
-
 
 
 
@@ -540,25 +527,27 @@
                 <blockquote>
 <p><strong>本文谢绝转载！</strong></p>
 </blockquote>
-<p><img src="/2021/07/29/Life_2021RedHatFinal_trip/13.jpg"></p>
-<h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>前几天去广东省广州市打了个 <strong>第四届 红帽杯 网络安全大赛总决赛</strong>，顺便就在广州随便转了转。</p>
+<p><img src="/2021/07/29/Life_2021RedHatFinal_trip/13.jpg" alt=""></p>
+<h2 id="引言">引言</h2>
+<p>前几天去广东省广州市打了个 <strong>第四届 红帽杯 网络安全大赛总决赛</strong>，顺便就在广州随便转了转。</p>
 <p>难得有机会进了线下，可惜队友因为疫情都在南京出不来了，只有喵喵没南京旅居史，于是就一个人去摸鱼了 2333.</p>
 <p>这篇主要就是喵喵在广州的游记啦！</p>
 <p><strong>！！！多 图 预 警！！！</strong></p>
 <p><strong>！！！流 量 预 警！！！</strong></p>
 <br>
-
 <hr>
 <br>
-
-<h2 id="比赛"><a href="#比赛" class="headerlink" title="比赛"></a>比赛</h2><h3 id="赛制"><a href="#赛制" class="headerlink" title="赛制"></a>赛制</h3><p>比赛的话就 24 号一天，从早上 11:15 打到 下午 17:15，时长 6h，这个比赛时间就很迷，想不到吧。</p>
+<h2 id="比赛">比赛</h2>
+<h3 id="赛制">赛制</h3>
+<p>比赛的话就 24 号一天，从早上 11:15 打到 下午 17:15，时长 6h，这个比赛时间就很迷，想不到吧。</p>
 <p>这次是喵喵第一次打 <strong>AWD plus 赛制</strong>，攻击分和防御分分别计算而后加在一起，选手没有对靶机的控制权，全程不接触 ssh。</p>
 <p>就是觉得没那么有意思，其实就和解题 break + 修复 fix 差不多了，缺少了点对抗的味道了。只不过多了个轮次的概念，每个战队初始积分 5000 分，20 min/轮次，如果提交 flag 正确即 break 成功的话，平台每轮会自动攻击其他未修补漏洞的战队，把动态的积分给本队。与其说是攻击，平台技术层面感觉其实就是看有多少队没 fix 罢了。这里的动态积分和解出 flag 的队伍数、难度系数、解题时间有关。</p>
 <p>Fix 的话，是通过 ftp 上传一个带有 <code>update.sh</code> 文件的 <code>xxx.tar.gz</code> 压缩包进行的，通过类似 <code>mv -f xxx /var/www/html/xxx</code> 的操作把文件覆盖掉从而进行修改。申请验证之后平台会用 check 和 exp  去测试这个环境，如果 check 成功而 exp 失败，就认为 fix 成功了；如果二者都成功，说明 fix 失败；如果 check 失败了，就说明修炸了，还反而会每轮扣 200 分。</p>
 <p>其实这样的赛制对平台而言就很友好了，毕竟少了队伍之间直接的激烈的流量交互，资源消耗就大幅度减少了。每个战队每题一个独享环境，fix 的 check 环节整几个公共环境，大家排个队验证就完事了，break、fix 的成功与否整几个标志位，再加上一套判分逻辑就差不多了。</p>
 <p><em>（当然这里只是咱随便猜想而已啦，真实场景肯定要比这个复杂</em></p>
 <p><img src="/2021/07/29/Life_2021RedHatFinal_trip/19.jpg" alt="比赛现场"></p>
-<h3 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h3><p>说完了赛制下面就要说 <strong>比赛题目</strong> 了。瞎鸡儿唠嗑几句，不想看的话就跳过吧。</p>
+<h3 id="题目">题目</h3>
+<p>说完了赛制下面就要说 <strong>比赛题目</strong> 了。瞎鸡儿唠嗑几句，不想看的话就跳过吧。</p>
 <p>这次算是 3 web + 3 pwn 吧，虽然不知道有个 golang 的 web 是不是也和 binary 有关。</p>
 <p>可惜的是比赛开始前几天南京突发了新冠疫情，正好队友 pwn👴🏻们都在南京出不来，最后只剩下喵喵一个人自己摸鱼了，没人一起聊天一起🤺，硬是坐了一天，也太难受了。（摊手</p>
 <p><strong>Web</strong> 的话，出了个 upload 上传，其中有个从 SESSION 中取出函数名执行，寻思着可能是命令执行，咱就过滤了几个 命令执行 的关键函数然后就 fix 成功了。有的师傅 过滤掉 <code>../</code> 也修成功了。 break 的话比赛的时候还在想是不是类似于 TCTF 2021 那个 session 上传，但又不会玩……最后确实是这样，通过 <code>../</code> 目录穿越直接构造 session 上传写到 <code>/tmp</code> 下然后调用吧。</p>
@@ -582,45 +571,44 @@
 <span class="token function">cp</span> ./修改后编译好的文件 /编译文件的目录
 <span class="token function">ps</span> -ef <span class="token operator">|</span><span class="token function">grep</span> 编译的名字<span class="token operator">|</span> <span class="token function">awk</span> <span class="token string">'{print <span class="token variable">$2</span>}'</span> <span class="token operator">|</span> <span class="token function">xargs</span> <span class="token function">kill</span> -9
 <span class="token builtin class-name">cd</span> /编译文件目录 <span class="token operator">&amp;&amp;</span>./执行编译文件 <span class="token operator">&gt;</span> /dev/null <span class="token operator"><span class="token file-descriptor important">2</span>&gt;</span><span class="token file-descriptor important">&amp;1</span> <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-<p>后面有环境有可能的话再复现一下写篇博客吧，如果不咕的话。 </p>
+<p>后面有环境有可能的话再复现一下写篇博客吧，如果不咕的话。</p>
 <hr>
 <p><strong>Pwn</strong> 题的话，喵喵不会 binary 啊啊啊啊啊啊！有个 rust 逆向，有个 python 写的编译器，还有个 http 服务的堆题（还是赛后问别的师傅才知道是个堆题，只不过把菜单换成了 HTTP server 罢了），唉。</p>
 <p>噢，这个比赛线下是收了手机不能上网的，难受死了啊啊啊啊啊啊！（虽然听说照样有队伍成功出到外网去了</p>
 <p><em>看着就绝望（</em></p>
 <p><em>还好没爆零（摊手</em></p>
 <p><img src="/2021/07/29/Life_2021RedHatFinal_trip/61.jpg" alt="比赛现场"></p>
-<h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><p>比赛结束后有个 <strong>舞蹈表演</strong>，舞台灯光啥的还是挺到位的，其他比赛快学一学。</p>
+<h3 id="其他">其他</h3>
+<p>比赛结束后有个 <strong>舞蹈表演</strong>，舞台灯光啥的还是挺到位的，其他比赛快学一学。</p>
 <p><em>（可惜就这一个节目 233</em></p>
-<p><img src="/2021/07/29/Life_2021RedHatFinal_trip/46.jpg"></p>
-<p><img src="/2021/07/29/Life_2021RedHatFinal_trip/35.jpg"></p>
+<p><img src="/2021/07/29/Life_2021RedHatFinal_trip/46.jpg" alt=""></p>
+<p><img src="/2021/07/29/Life_2021RedHatFinal_trip/35.jpg" alt=""></p>
 <p>以及，大家打开手机的闪光灯，原来这个就叫做 <strong>星空大合影</strong> 啊。</p>
 <p><img src="/2021/07/29/Life_2021RedHatFinal_trip/29.jpg" alt="原来这个叫做星空大合影"></p>
 <p>最关键是嫖键盘喵！ <strong>红帽杯限量版机械键盘！</strong></p>
 <p>是黑轴，用起来感觉还是挺香的，现在就用这个键盘码字呢（</p>
 <p><img src="/2021/07/29/Life_2021RedHatFinal_trip/1.jpg" alt="定制键盘"></p>
 <br>
-
 <hr>
 <br>
-
-<h2 id="面基"><a href="#面基" class="headerlink" title="面基"></a>面基</h2><p>这次面基了 水函、T4rn、keer、芋头、batkiz、Nohn…</p>
+<h2 id="面基">面基</h2>
+<p>这次面基了 水函、T4rn、keer、芋头、batkiz、Nohn…</p>
 <p>可惜比赛结束得太快，有几个师傅约了但没面上，呜呜。</p>
 <p>线下和师傅们面基的时候倒没啥合影，只有 tg 这边神秘的面基仪式了。</p>
 <p><img src="/2021/07/29/Life_2021RedHatFinal_trip/66.jpg" alt="神秘的面基仪式"></p>
 <br>
-
 <hr>
 <br>
-
-<h2 id="游玩"><a href="#游玩" class="headerlink" title="游玩"></a>游玩</h2><p>下面就凌乱地写一下游记吧。</p>
+<h2 id="游玩">游玩</h2>
+<p>下面就凌乱地写一下游记吧。</p>
 <p>在路边发现了有一定年纪的 <strong>IC 卡公用电话</strong>，可惜貌似无法使用了。</p>
 <p><img src="/2021/07/29/Life_2021RedHatFinal_trip/44.jpg" alt="IC卡公用电话"></p>
 <p>晚上去了市中心，顺着<strong>花城广场</strong>一路逛到了<strong>广州塔</strong>，也就是小蛮腰，顺便看了<strong>珠江</strong>。</p>
-<p><img src="/2021/07/29/Life_2021RedHatFinal_trip/50.jpg"></p>
-<p><img src="/2021/07/29/Life_2021RedHatFinal_trip/65.jpg"></p>
+<p><img src="/2021/07/29/Life_2021RedHatFinal_trip/50.jpg" alt=""></p>
+<p><img src="/2021/07/29/Life_2021RedHatFinal_trip/65.jpg" alt=""></p>
 <p><img src="/2021/07/29/Life_2021RedHatFinal_trip/12.jpg" alt="花城广场"></p>
-<p><img src="/2021/07/29/Life_2021RedHatFinal_trip/26.jpg"></p>
-<p><img src="/2021/07/29/Life_2021RedHatFinal_trip/45.jpg"></p>
+<p><img src="/2021/07/29/Life_2021RedHatFinal_trip/26.jpg" alt=""></p>
+<p><img src="/2021/07/29/Life_2021RedHatFinal_trip/45.jpg" alt=""></p>
 <p><img src="/2021/07/29/Life_2021RedHatFinal_trip/64.jpg" alt="小蛮腰"></p>
 <p><img src="/2021/07/29/Life_2021RedHatFinal_trip/62.jpg" alt="近一点"></p>
 <p><img src="/2021/07/29/Life_2021RedHatFinal_trip/55.jpg" alt="再近一点"></p>
@@ -632,17 +620,17 @@
 <p>广州塔观光门票挺贵的（</p>
 <p><img src="/2021/07/29/Life_2021RedHatFinal_trip/58.jpg" alt="观光门票"></p>
 <p>打卡了 <strong>主办方投的大屏广告</strong>。</p>
-<p><img src="/2021/07/29/Life_2021RedHatFinal_trip/59.jpg"></p>
-<p><img src="/2021/07/29/Life_2021RedHatFinal_trip/11.jpg"></p>
-<p><img src="/2021/07/29/Life_2021RedHatFinal_trip/47.jpg"></p>
+<p><img src="/2021/07/29/Life_2021RedHatFinal_trip/59.jpg" alt=""></p>
+<p><img src="/2021/07/29/Life_2021RedHatFinal_trip/11.jpg" alt=""></p>
+<p><img src="/2021/07/29/Life_2021RedHatFinal_trip/47.jpg" alt=""></p>
 <p><strong>珠江</strong>。</p>
 <p><img src="/2021/07/29/Life_2021RedHatFinal_trip/63.jpg" alt="珠江"></p>
-<p><img src="/2021/07/29/Life_2021RedHatFinal_trip/36.jpg"></p>
+<p><img src="/2021/07/29/Life_2021RedHatFinal_trip/36.jpg" alt=""></p>
 <p><img src="/2021/07/29/Life_2021RedHatFinal_trip/43.jpg" alt="珠江"></p>
 <p>这个 <strong>APM 自动旅客输送系统</strong> 挺有意思的。</p>
 <p>其实也是地铁，只是就两节车厢，算是自动驾驶吧。不过其实还是有个师傅在车上看着的，师傅还说，要是有一天不需要有人在车上守着了，那才是真正的自动驾驶了。2333</p>
 <p><img src="/2021/07/29/Life_2021RedHatFinal_trip/32.jpg" alt="APM"></p>
-<p><img src="/2021/07/29/Life_2021RedHatFinal_trip/54.jpg"></p>
+<p><img src="/2021/07/29/Life_2021RedHatFinal_trip/54.jpg" alt=""></p>
 <p>广州塔前的<strong>有轨电车</strong></p>
 <p><img src="/2021/07/29/Life_2021RedHatFinal_trip/5.jpg" alt="有轨电车"></p>
 <p>路上的公交<strong>无轨电车</strong></p>
@@ -659,36 +647,35 @@
 <p><img src="/2021/07/29/Life_2021RedHatFinal_trip/15.jpg" alt="北京路"></p>
 <p><img src="/2021/07/29/Life_2021RedHatFinal_trip/23.jpg" alt="北京路"></p>
 <p><img src="/2021/07/29/Life_2021RedHatFinal_trip/22.jpg" alt="北京路"></p>
-<p><img src="/2021/07/29/Life_2021RedHatFinal_trip/7.jpg"></p>
-<p><img src="/2021/07/29/Life_2021RedHatFinal_trip/17.jpg"></p>
+<p><img src="/2021/07/29/Life_2021RedHatFinal_trip/7.jpg" alt=""></p>
+<p><img src="/2021/07/29/Life_2021RedHatFinal_trip/17.jpg" alt=""></p>
 <p><img src="/2021/07/29/Life_2021RedHatFinal_trip/37.jpg" alt="这家店排队还挺长"></p>
-<p><img src="/2021/07/29/Life_2021RedHatFinal_trip/57.jpg"></p>
-<p><img src="/2021/07/29/Life_2021RedHatFinal_trip/60.jpg"></p>
+<p><img src="/2021/07/29/Life_2021RedHatFinal_trip/57.jpg" alt=""></p>
+<p><img src="/2021/07/29/Life_2021RedHatFinal_trip/60.jpg" alt=""></p>
 <p>饱经历史沧桑的 <strong>沙面岛</strong>，挺多来这拍照打卡的，还有带着各种摄影大炮的。</p>
 <p>波兰驻广州总领事馆现在就在岛上，门口左右还有俩战士执勤的，那门口不能拍照</p>
 <p><img src="/2021/07/29/Life_2021RedHatFinal_trip/18.jpg" alt="沙面"></p>
-<p><img src="/2021/07/29/Life_2021RedHatFinal_trip/6.jpg"></p>
-<p><img src="/2021/07/29/Life_2021RedHatFinal_trip/8.jpg"></p>
+<p><img src="/2021/07/29/Life_2021RedHatFinal_trip/6.jpg" alt=""></p>
+<p><img src="/2021/07/29/Life_2021RedHatFinal_trip/8.jpg" alt=""></p>
 <p><img src="/2021/07/29/Life_2021RedHatFinal_trip/9.jpg" alt="星巴克"></p>
-<p><img src="/2021/07/29/Life_2021RedHatFinal_trip/20.jpg"></p>
-<p><img src="/2021/07/29/Life_2021RedHatFinal_trip/27.jpg"></p>
-<p><img src="/2021/07/29/Life_2021RedHatFinal_trip/34.jpg"></p>
-<p><img src="/2021/07/29/Life_2021RedHatFinal_trip/51.jpg"></p>
-<p><img src="/2021/07/29/Life_2021RedHatFinal_trip/41.jpg"></p>
-<p>还有外国人在唱英文歌<em>（唱的啥忘了</em></p>
-<p><img src="/2021/07/29/Life_2021RedHatFinal_trip/31.jpg"></p>
+<p><img src="/2021/07/29/Life_2021RedHatFinal_trip/20.jpg" alt=""></p>
+<p><img src="/2021/07/29/Life_2021RedHatFinal_trip/27.jpg" alt=""></p>
+<p><img src="/2021/07/29/Life_2021RedHatFinal_trip/34.jpg" alt=""></p>
+<p><img src="/2021/07/29/Life_2021RedHatFinal_trip/51.jpg" alt=""></p>
+<p><img src="/2021/07/29/Life_2021RedHatFinal_trip/41.jpg" alt=""></p>
+<p>还有外国人在唱英文歌*（唱的啥忘了*</p>
+<p><img src="/2021/07/29/Life_2021RedHatFinal_trip/31.jpg" alt=""></p>
 <p>当然还少不了 <strong>吸喵喵</strong> 啦~</p>
 <p>（是两只在 <em>喵呜</em> 的喵喵</p>
 <p><img src="/2021/07/29/Life_2021RedHatFinal_trip/24.jpg" alt="左顾"></p>
 <p><img src="/2021/07/29/Life_2021RedHatFinal_trip/10.jpg" alt="右盼"></p>
-<p><img src="/2021/07/29/Life_2021RedHatFinal_trip/2.jpg"></p>
-<p><img src="/2021/07/29/Life_2021RedHatFinal_trip/53.jpg"></p>
+<p><img src="/2021/07/29/Life_2021RedHatFinal_trip/2.jpg" alt=""></p>
+<p><img src="/2021/07/29/Life_2021RedHatFinal_trip/53.jpg" alt=""></p>
 <br>
-
 <hr>
 <br>
-
-<h2 id="恰饭"><a href="#恰饭" class="headerlink" title="恰饭"></a>恰饭</h2><p>各种好吃的，广东茶点（没拍多少）、鱼皮、云吞面、双皮奶、烧鸭饭……</p>
+<h2 id="恰饭">恰饭</h2>
+<p>各种好吃的，广东茶点（没拍多少）、鱼皮、云吞面、双皮奶、烧鸭饭……</p>
 <p><img src="/2021/07/29/Life_2021RedHatFinal_trip/25.jpg" alt="茶点"></p>
 <p>凉拌鱼皮吧，还挺有味道的，真没想到专门做鱼皮也能做得挺大的了。</p>
 <p><img src="/2021/07/29/Life_2021RedHatFinal_trip/48.jpg" alt="鱼皮"></p>
@@ -700,22 +687,20 @@
 <p>不行，码着字现在看着肚子饿了。</p>
 <p>那就先这样吧啊啊啊。</p>
 <br>
-
 <hr>
 <br>
-
-<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>大概就是——</p>
+<h2 id="小结">小结</h2>
+<p>大概就是——</p>
 <p><strong>打比赛 x</strong></p>
 <p><strong>划水摸鱼嫖键盘面基旅游 sqrt</strong></p>
 <p>其实玩得还是挺开心的喵~</p>
 <p><em>（咕咕咕，终于写完了</em></p>
 <p>当然如果哪里写的有问题，还希望师傅们带带弟弟（</p>
 <br>
-
 <hr>
 <br>
-
-<h2 id="Extensive-Reading"><a href="#Extensive-Reading" class="headerlink" title="Extensive Reading"></a>Extensive Reading</h2><ul>
+<h2 id="Extensive-Reading">Extensive Reading</h2>
+<ul>
 <li><a href="https://miaotony.xyz/2021/05/24/CTF_2021RedHat/">CTF | 2021 红帽杯 WriteUp</a></li>
 <li><a href="https://miaotony.xyz/2021/07/19/Life_2021QiangwangFinal_trip/">碎碎念 | 2021 强网杯S5 全国网络安全挑战赛线下赛 郑州游记</a></li>
 <li><a href="https://miaotony.xyz/2020/12/10/Life_2020XNUCA_trip/">碎碎念 | X-NUCA 2020 全国高校网安联赛总决赛 深圳游记</a></li>
@@ -1272,7 +1257,7 @@
             |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
             <br>
                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">308.6k</span>&nbsp;字
+                class="white-color">308.3k</span>&nbsp;字
                                                                                     <span id="busuanzi_container_site_pv">
 			|&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
                     class="white-color"></span>&nbsp;次
@@ -1413,11 +1398,12 @@ $(function () {
                         var data_title = data.title.trim().toLowerCase();
                         var data_content = data.content.trim().replace(/<[^>]+>/g, "").toLowerCase();
                         var data_url = data.url;
+                        data_url = data_url.indexOf('/') === 0 ? data.url : '/' + data_url;
                         var index_title = -1;
                         var index_content = -1;
                         var first_occur = -1;
                         // only match artiles with not empty titles and contents
-                        if (data_title != '' && data_content != '') {
+                        if (data_title !== '' && data_content !== '') {
                             keywords.forEach(function (keyword, i) {
                                 index_title = data_title.indexOf(keyword);
                                 index_content = data_content.indexOf(keyword);
@@ -1427,7 +1413,7 @@ $(function () {
                                     if (index_content < 0) {
                                         index_content = 0;
                                     }
-                                    if (i == 0) {
+                                    if (i === 0) {
                                         first_occur = index_content;
                                     }
                                 }
@@ -1458,12 +1444,12 @@ $(function () {
                         }
                     });
                     str += "</ul>";
-                    str = "<p class=\"search-result-summary\">共找到" + String(cnt-1) + "条结果</p>"  + str;
+                    str = "<p class=\"search-result-summary\">共找到 " + String(cnt-1) + " 条结果</p>"  + str;
                     $resultContent.innerHTML = str;
                 });
             }
         });
-    }
+    };
 
     searchFunc('https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/search.xml', 'searchInput', 'searchResult');
 });

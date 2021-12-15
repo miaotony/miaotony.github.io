@@ -1600,14 +1600,20 @@
         
         <div class="card">
             <div class="card-content">
-                <h2 id="本站信息"><a href="#本站信息" class="headerlink" title="本站信息"></a>本站信息</h2><p><strong>名字：</strong> MiaoTony’s 小窝</p>
+                <h2 id="本站信息">本站信息</h2>
+<p><strong>名字：</strong> MiaoTony’s 小窝</p>
 <p><strong>链接：</strong> <a href="https://miaotony.xyz/">https://miaotony.xyz/</a></p>
 <p><strong>头像：</strong> <a target="_blank" rel="noopener" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/medias/avatar.jpg">https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/medias/avatar.jpg</a></p>
 <p><strong>banner：</strong> <a target="_blank" rel="noopener" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/medias/banner.jpg">https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io/medias/banner.jpg</a></p>
 <p><strong>简介：</strong> 仰望星空，脚踏实地，未来可期</p>
-<h2 id="欢迎各位大佬来交换友链呀"><a href="#欢迎各位大佬来交换友链呀" class="headerlink" title="欢迎各位大佬来交换友链呀~"></a><strong>欢迎各位大佬来交换友链呀~</strong></h2><p>请大佬留下<strong>链接、头像、一句话简介、联系方式</strong><br>或者私戳我也行啦。<br>当然也可以邮箱联系:  <code>bWlhb3RvbnlAb3V0bG9vay5jb20=</code><br> (base64 懂的都懂 嘿嘿嘿    </p>
-<h3 id="一点小要求"><a href="#一点小要求" class="headerlink" title="一点小要求"></a>一点小要求</h3><ol>
-<li>前提至少是<strong>我们认识</strong>8 <em>（不认识的话和我 <del>py</del> 交流一下就好了喵</em></li>
+<h2 id="欢迎各位大佬来交换友链呀"><strong>欢迎各位大佬来交换友链呀~</strong></h2>
+<p>请大佬留下<strong>链接、头像、一句话简介、联系方式</strong><br>
+或者私戳我也行啦。<br>
+当然也可以邮箱联系:  <code>bWlhb3RvbnlAb3V0bG9vay5jb20=</code><br>
+(base64 懂的都懂 嘿嘿嘿</p>
+<h3 id="一点小要求">一点小要求</h3>
+<ol>
+<li>前提至少是<strong>我们认识</strong>8 <em>（不认识的话和我 <s>py</s> 交流一下就好了喵</em></li>
 <li>这边建议先加上本站友链喵~</li>
 <li>最好保证一下质量，至少<strong>能较长时间维护下去</strong>吧~</li>
 <li>还有，记得<strong>上 HTTPS</strong> 呢！</li>
@@ -1683,7 +1689,7 @@
             |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
             <br>
                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">308.6k</span>&nbsp;字
+                class="white-color">308.3k</span>&nbsp;字
                                                                                     <span id="busuanzi_container_site_pv">
 			|&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
                     class="white-color"></span>&nbsp;次
@@ -1824,11 +1830,12 @@ $(function () {
                         var data_title = data.title.trim().toLowerCase();
                         var data_content = data.content.trim().replace(/<[^>]+>/g, "").toLowerCase();
                         var data_url = data.url;
+                        data_url = data_url.indexOf('/') === 0 ? data.url : '/' + data_url;
                         var index_title = -1;
                         var index_content = -1;
                         var first_occur = -1;
                         // only match artiles with not empty titles and contents
-                        if (data_title != '' && data_content != '') {
+                        if (data_title !== '' && data_content !== '') {
                             keywords.forEach(function (keyword, i) {
                                 index_title = data_title.indexOf(keyword);
                                 index_content = data_content.indexOf(keyword);
@@ -1838,7 +1845,7 @@ $(function () {
                                     if (index_content < 0) {
                                         index_content = 0;
                                     }
-                                    if (i == 0) {
+                                    if (i === 0) {
                                         first_occur = index_content;
                                     }
                                 }
@@ -1869,12 +1876,12 @@ $(function () {
                         }
                     });
                     str += "</ul>";
-                    str = "<p class=\"search-result-summary\">共找到" + String(cnt-1) + "条结果</p>"  + str;
+                    str = "<p class=\"search-result-summary\">共找到 " + String(cnt-1) + " 条结果</p>"  + str;
                     $resultContent.innerHTML = str;
                 });
             }
         });
-    }
+    };
 
     searchFunc('https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/search.xml', 'searchInput', 'searchResult');
 });

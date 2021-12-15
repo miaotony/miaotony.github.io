@@ -336,19 +336,6 @@
 </header>
 
     
-<script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/cryptojs/crypto-js.min.js"></script>
-<script>
-    (function() {
-        let pwd = '';
-        if (pwd && pwd.length > 0) {
-            if (pwd !== CryptoJS.SHA256(prompt('请输入访问本文章的密码')).toString(CryptoJS.enc.Hex)) {
-                alert('密码错误，将返回主页！');
-                location.href = '/';
-            }
-        }
-    })();
-</script>
-
 
 
 
@@ -537,8 +524,9 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p><img src="/2021/05/25/CTF_2021CISCN_preliminary/image-20210525205134237.png"></p>
-<h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><blockquote>
+                <p><img src="/2021/05/25/CTF_2021CISCN_preliminary/image-20210525205134237.png" alt=""></p>
+<h2 id="引言">引言</h2>
+<blockquote>
 <p><strong>2021 全国大学生信息安全竞赛创新实践能力赛 (CISCN)</strong></p>
 <p>比赛时间: 2021-05-15 09:00 ~ 2021-05-16 09:00</p>
 <p>比赛官网: <a target="_blank" rel="noopener" href="http://www.ciscn.cn/">http://www.ciscn.cn/</a></p>
@@ -546,11 +534,13 @@
 <p>一年一度的国赛又来了，连续打 24h 太难受啦！</p>
 <p>今年国赛正好碰上咱 ddl，打完国赛又去赶 ddl 去了，太难顶了。</p>
 <p>于是一直也没时间来整理 WriteUp，今天摸鱼，就来写几道 misc 题目好了。</p>
-<h2 id="第一阶段"><a href="#第一阶段" class="headerlink" title="第一阶段"></a>第一阶段</h2><h3 id="tiny-traffic"><a href="#tiny-traffic" class="headerlink" title="tiny traffic"></a>tiny traffic</h3><p>抓包文件导出 http 对象</p>
-<p><img src="/2021/05/25/CTF_2021CISCN_preliminary/image-20210515152049089.png"></p>
+<h2 id="第一阶段">第一阶段</h2>
+<h3 id="tiny-traffic">tiny traffic</h3>
+<p>抓包文件导出 http 对象</p>
+<p><img src="/2021/05/25/CTF_2021CISCN_preliminary/image-20210515152049089.png" alt=""></p>
 <p>192.168.2.1 是路由器，192.168.2.193 是台 NAS，5000端口开了个 python web 服务。看上去最后的是个 rpc</p>
 <p><code>flag_wrapper</code> 导出内容，解压之后得到</p>
-<p><img src="/2021/05/25/CTF_2021CISCN_preliminary/image-20210515144137795.png"></p>
+<p><img src="/2021/05/25/CTF_2021CISCN_preliminary/image-20210515144137795.png" alt=""></p>
 <p><code>test</code> 和 <code>secret</code> 用 brotli 解压</p>
 <pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> brotli
 
@@ -567,7 +557,7 @@ y <span class="token operator">=</span> brotli<span class="token punctuation">.<
 <span class="token keyword">with</span> <span class="token builtin">open</span><span class="token punctuation">(</span><span class="token string">'secret1'</span><span class="token punctuation">,</span> <span class="token string">'wb'</span><span class="token punctuation">)</span> <span class="token keyword">as</span> fout<span class="token punctuation">:</span>
     fout<span class="token punctuation">.</span>write<span class="token punctuation">(</span>y<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>发现 <code>test</code> 是 <a target="_blank" rel="noopener" href="https://developers.google.com/protocol-buffers">Protocol Buffzers</a></p>
-<p>参考 <a target="_blank" rel="noopener" href="https://github.com/MonsterMeng92/protobuf/blob/master/docs/%E5%AD%A6%E4%B9%A0%E6%8C%87%E5%8D%97(proto3).md">https://github.com/MonsterMeng92/protobuf/blob/master/docs/%E5%AD%A6%E4%B9%A0%E6%8C%87%E5%8D%97(proto3).md</a></p>
+<p>参考 <a target="_blank" rel="noopener" href="https://github.com/MonsterMeng92/protobuf/blob/master/docs/%E5%AD%A6%E4%B9%A0%E6%8C%87%E5%8D%97(proto3).md">https://github.com/MonsterMeng92/protobuf/blob/master/docs/学习指南(proto3).md</a></p>
 <pre class="line-numbers language-protobuf" data-language="protobuf"><code class="language-protobuf"><span class="token keyword">syntax</span> <span class="token operator">=</span> <span class="token string">"proto3"</span><span class="token punctuation">;</span>
 
 <span class="token keyword">message</span> <span class="token class-name">PBResponse</span> <span class="token punctuation">{</span>
@@ -592,7 +582,7 @@ y <span class="token operator">=</span> brotli<span class="token punctuation">.<
 <p>参考 <a target="_blank" rel="noopener" href="https://www.yuanrenxue.com/app-crawl/parse-protobuf.html">Protobuf协议逆向解析-APP爬虫</a></p>
 <p>先下载 Protobuf 编译器和调用编译器的接口，这里直接用 python 了</p>
 <p><a target="_blank" rel="noopener" href="https://github.com/protocolbuffers/protobuf/releases/">https://github.com/protocolbuffers/protobuf/releases/</a></p>
-<p><img src="/2021/05/25/CTF_2021CISCN_preliminary/image-20210515143119110.png"></p>
+<p><img src="/2021/05/25/CTF_2021CISCN_preliminary/image-20210515143119110.png" alt=""></p>
 <p>解码得到</p>
 <pre class="line-numbers language-none"><code class="language-none">1: 200
 2: 15100450
@@ -632,8 +622,9 @@ flag_part_plz_convert_to_hex: 16453958
 flag_last_part: "d172a38dc"<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>拼成 flag，其中 <code>junk_data</code> 是垃圾数据不要</p>
 <p><code>CISCN{e66a22e23457889b0fb1146d172a38dc}</code></p>
-<p><img src="/2021/05/25/CTF_2021CISCN_preliminary/image-20210515150924012.png"></p>
-<h3 id="running-pixel"><a href="#running-pixel" class="headerlink" title="running_pixel"></a>running_pixel</h3><p>开局一张动图</p>
+<p><img src="/2021/05/25/CTF_2021CISCN_preliminary/image-20210515150924012.png" alt=""></p>
+<h3 id="running-pixel">running_pixel</h3>
+<p>开局一张动图</p>
 <p><img src="/2021/05/25/CTF_2021CISCN_preliminary/running_pixel.gif" alt="running_pixel"></p>
 <p>一共有 382 帧，逐帧查看，导出每一帧。</p>
 <pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> os
@@ -664,7 +655,7 @@ flag_last_part: "d172a38dc"<span aria-hidden="true" class="line-numbers-rows"><s
     parseGIF<span class="token punctuation">(</span><span class="token string">"running_pixel.gif"</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>随意看前几帧，放大来看，发现有个像素点在动。</p>
 <p>所以题目名称中的跑动的像素应该就是这个了。</p>
-<p><img src="/2021/05/25/CTF_2021CISCN_preliminary/image-20210525212257022.png"></p>
+<p><img src="/2021/05/25/CTF_2021CISCN_preliminary/image-20210525212257022.png" alt=""></p>
 <p>提取得到这个像素点颜色 RGB 为 (233, 233, 233)，而背景色是 (247, 247, 247)</p>
 <p>另外发现每隔一定帧数，这个像素点会消失，然后在另一个地方出现。</p>
 <p>于是写个脚本跑所有的帧，把这个像素点的轨迹画出来，每消失一次保存一张图片。</p>
@@ -703,7 +694,7 @@ last_cnt <span class="token operator">=</span> <span class="token number">0</spa
 im2<span class="token punctuation">.</span>show<span class="token punctuation">(</span><span class="token punctuation">)</span>
 im2<span class="token punctuation">.</span>save<span class="token punctuation">(</span><span class="token string">'final.png'</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>最后的图是这样的。</p>
-<p><img src="/2021/05/25/CTF_2021CISCN_preliminary/final.png"></p>
+<p><img src="/2021/05/25/CTF_2021CISCN_preliminary/final.png" alt=""></p>
 <p>手动按顺序把出来的图片各个字母提取出来。</p>
 <p>（其实更好的思路是每次像素点消失的时候新建一张图的……看的要眼瞎了</p>
 <p>出来是个 UUID 的格式。</p>
@@ -712,23 +703,26 @@ im2<span class="token punctuation">.</span>save<span class="token punctuation">(
 <p>心态炸了！！！</p>
 <p>（后来看大佬 wp 说这里还要转成小写再交上去</p>
 <p><code>CISCN{12504d0f-9de1-4b00-87a5-a5fdd0986a00}</code></p>
-<h2 id="第二阶段"><a href="#第二阶段" class="headerlink" title="第二阶段"></a>第二阶段</h2><h3 id="隔空传话"><a href="#隔空传话" class="headerlink" title="隔空传话"></a>隔空传话</h3><blockquote>
-<p>题目描述：Alice 和 Bob 进行隔空传话的时候被我“偷听”到了，你能帮我分析分析他们在交流什么吗？<br>注意：flag形式：CISCN{XXXXX}</p>
+<h2 id="第二阶段">第二阶段</h2>
+<h3 id="隔空传话">隔空传话</h3>
+<blockquote>
+<p>题目描述：Alice 和 Bob 进行隔空传话的时候被我“偷听”到了，你能帮我分析分析他们在交流什么吗？<br>
+注意：flag形式：CISCN{XXXXX}</p>
 </blockquote>
 <p>你们又在加密通信！！！</p>
-<p>（这题复现的，然而过去有一段时间了，当时找的资料忘记记录了，<del>现在又懒得再找了，就佛系写一写8</del></p>
+<p>（这题复现的，然而过去有一段时间了，当时找的资料忘记记录了，<s>现在又懒得再找了，就佛系写一写8</s></p>
 <p>（还是去找了下资料 唉</p>
 <p>开局给了一堆格式类似的数据。</p>
-<p><img src="/2021/05/25/CTF_2021CISCN_preliminary/image-20210525222938369.png"></p>
+<p><img src="/2021/05/25/CTF_2021CISCN_preliminary/image-20210525222938369.png" alt=""></p>
 <p>查了一下发现是 SMS 短信里用的 PDU 编码。</p>
 <blockquote>
 <p><a target="_blank" rel="noopener" href="https://mirokaku.github.io/Blog/2017/PDU-Encode/">PDU 编码规则</a></p>
 <p>还找到了 在线 PDU 格式编码/解码的网站</p>
 <p><a target="_blank" rel="noopener" href="https://tool.letmetellyou.xyz/pdu/">https://tool.letmetellyou.xyz/pdu/</a> 或者 <a target="_blank" rel="noopener" href="http://www.sendsms.cn/pdu/">http://www.sendsms.cn/pdu/</a></p>
-<p>在 pypi 找到了一个 python 的 module： <a target="_blank" rel="noopener" href="https://pypi.org/project/smspdu/">smspdu</a> </p>
+<p>在 pypi 找到了一个 python 的 module： <a target="_blank" rel="noopener" href="https://pypi.org/project/smspdu/">smspdu</a></p>
 </blockquote>
 <p>手动解码前几条</p>
-<p><img src="/2021/05/25/CTF_2021CISCN_preliminary/image-20210525224211606.png"></p>
+<p><img src="/2021/05/25/CTF_2021CISCN_preliminary/image-20210525224211606.png" alt=""></p>
 <p>发现是</p>
 <pre class="line-numbers language-none"><code class="language-none">hello,bob!what is the flag?
 the first part of the flag is the first 8 digits of your phone number
@@ -769,7 +763,7 @@ y <span class="token operator">=</span> unhexlify<span class="token punctuation"
 <p>然而发现打不开……</p>
 <p>然后比赛的时候试了用 PCRT 来修复，但没成功。网上找了个工具然后要收钱，气死喵喵了！！！</p>
 <p>后来发现需要按照时间顺序排序。</p>
-<p><img src="/2021/05/25/CTF_2021CISCN_preliminary/image-20210525232953543.png"></p>
+<p><img src="/2021/05/25/CTF_2021CISCN_preliminary/image-20210525232953543.png" alt=""></p>
 <p>唉好烦（</p>
 <pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token triple-quoted-string string">"""
 MiaoTony
@@ -803,14 +797,16 @@ y <span class="token operator">=</span> unhexlify<span class="token punctuation"
 <span class="token keyword">with</span> <span class="token builtin">open</span><span class="token punctuation">(</span><span class="token string">'decode2.dat'</span><span class="token punctuation">,</span> <span class="token string">'wb'</span><span class="token punctuation">)</span> <span class="token keyword">as</span> fout<span class="token punctuation">:</span>
     fout<span class="token punctuation">.</span>write<span class="token punctuation">(</span>y<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>得到一张图，终于能打开了，而且整个数据就是一整张图片。然而还是没思路。</p>
-<p><img src="/2021/05/25/CTF_2021CISCN_preliminary/image-20210526000029763.png"></p>
+<p><img src="/2021/05/25/CTF_2021CISCN_preliminary/image-20210526000029763.png" alt=""></p>
 <p>看了大佬们的 wp 才发现，<code>w465</code> 是宽度为 465 的意思……草！</p>
 <p>改了之后得到</p>
-<p><img src="/2021/05/25/CTF_2021CISCN_preliminary/00000000.png"></p>
+<p><img src="/2021/05/25/CTF_2021CISCN_preliminary/00000000.png" alt=""></p>
 <p>于是 flag 就是</p>
 <p><code>CISCN{15030442_b586_4c9e_b436_26def12293e4}</code></p>
-<h2 id="第三阶段"><a href="#第三阶段" class="headerlink" title="第三阶段"></a>第三阶段</h2><h3 id="robot"><a href="#robot" class="headerlink" title="robot"></a>robot</h3><blockquote>
-<p>题目描述：分析给出的机器人仿真程序和流量包，提取机器人控制程序控制机器人写出的字符串，flag为”CISCN{md5(机器人绘制的字符串)}”（md5值小写）</p>
+<h2 id="第三阶段">第三阶段</h2>
+<h3 id="robot">robot</h3>
+<blockquote>
+<p>题目描述：分析给出的机器人仿真程序和流量包，提取机器人控制程序控制机器人写出的字符串，flag为"CISCN{md5(机器人绘制的字符串)}"（md5值小写）</p>
 </blockquote>
 <p><code>Robot.rspag</code> 是 RobotStudio 文件，<code>cap.pcapng</code> 是网络流量抓包，<code>Control</code> 目录下是一个图形化的基于 C# 写的一个图形化上位机，以及对应的 dll 文件。</p>
 <p>用 ILSPY 反汇编 exe，发现其实都是调用底层 dll 提供的 SDK 接口，并没有自己去实现网络通信相关的功能。</p>
@@ -820,7 +816,7 @@ y <span class="token operator">=</span> unhexlify<span class="token punctuation"
 <p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/62390089?ivk_sa=1024320u">https://zhuanlan.zhihu.com/p/62390089?ivk_sa=1024320u</a></p>
 <p><a target="_blank" rel="noopener" href="https://developercenter.robotstudio.com/">https://developercenter.robotstudio.com/</a></p>
 <p>之后在流量里发现有一系列设置坐标的，盲猜这个就是机器人画的东西了。</p>
-<p><img src="/2021/05/25/CTF_2021CISCN_preliminary/image-20210516024416682.png"></p>
+<p><img src="/2021/05/25/CTF_2021CISCN_preliminary/image-20210516024416682.png" alt=""></p>
 <p>于是写个脚本提取一下，画张图。</p>
 <pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token triple-quoted-string string">"""
 MiaoTony
@@ -857,12 +853,13 @@ im<span class="token punctuation">.</span>show<span class="token punctuation">(<
 im<span class="token punctuation">.</span>save<span class="token punctuation">(</span><span class="token string">'info.png'</span><span class="token punctuation">)</span>
 <span class="token comment"># easy_robo_xx</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>还原出来机器人绘制的字符串为 <code>easy_robo_xx</code></p>
-<p><img src="/2021/05/25/CTF_2021CISCN_preliminary/info.png"></p>
+<p><img src="/2021/05/25/CTF_2021CISCN_preliminary/info.png" alt=""></p>
 <p>md5  <code>d4f1fb80bc11ffd722861367747c0f10</code></p>
 <p><code>CISCN{d4f1fb80bc11ffd722861367747c0f10}</code></p>
-<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>感谢 360 首次将 CTF 靶场变成了考场。</p>
+<h2 id="小结">小结</h2>
+<p>感谢 360 首次将 CTF 靶场变成了考场。</p>
 <p><img src="/2021/05/25/CTF_2021CISCN_preliminary/ciscn.png" alt="比赛环境"></p>
-<p><img src="/2021/05/25/CTF_2021CISCN_preliminary/image-20210525215412840.png"></p>
+<p><img src="/2021/05/25/CTF_2021CISCN_preliminary/image-20210525215412840.png" alt=""></p>
 <p>初赛就这么肝也太顶了，打不动了 Orz</p>
 <p>华东北赛区也太卷了吧，喵呜呜呜。</p>
 <p>唉，不过咱没进复赛，喵呜呜呜呜。</p>
@@ -1419,7 +1416,7 @@ im<span class="token punctuation">.</span>save<span class="token punctuation">(<
             |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
             <br>
                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">308.6k</span>&nbsp;字
+                class="white-color">308.3k</span>&nbsp;字
                                                                                     <span id="busuanzi_container_site_pv">
 			|&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
                     class="white-color"></span>&nbsp;次
@@ -1560,11 +1557,12 @@ $(function () {
                         var data_title = data.title.trim().toLowerCase();
                         var data_content = data.content.trim().replace(/<[^>]+>/g, "").toLowerCase();
                         var data_url = data.url;
+                        data_url = data_url.indexOf('/') === 0 ? data.url : '/' + data_url;
                         var index_title = -1;
                         var index_content = -1;
                         var first_occur = -1;
                         // only match artiles with not empty titles and contents
-                        if (data_title != '' && data_content != '') {
+                        if (data_title !== '' && data_content !== '') {
                             keywords.forEach(function (keyword, i) {
                                 index_title = data_title.indexOf(keyword);
                                 index_content = data_content.indexOf(keyword);
@@ -1574,7 +1572,7 @@ $(function () {
                                     if (index_content < 0) {
                                         index_content = 0;
                                     }
-                                    if (i == 0) {
+                                    if (i === 0) {
                                         first_occur = index_content;
                                     }
                                 }
@@ -1605,12 +1603,12 @@ $(function () {
                         }
                     });
                     str += "</ul>";
-                    str = "<p class=\"search-result-summary\">共找到" + String(cnt-1) + "条结果</p>"  + str;
+                    str = "<p class=\"search-result-summary\">共找到 " + String(cnt-1) + " 条结果</p>"  + str;
                     $resultContent.innerHTML = str;
                 });
             }
         });
-    }
+    };
 
     searchFunc('https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/search.xml', 'searchInput', 'searchResult');
 });

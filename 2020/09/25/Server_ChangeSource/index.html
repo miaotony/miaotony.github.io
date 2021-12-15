@@ -336,19 +336,6 @@
 </header>
 
     
-<script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/cryptojs/crypto-js.min.js"></script>
-<script>
-    (function() {
-        let pwd = '';
-        if (pwd && pwd.length > 0) {
-            if (pwd !== CryptoJS.SHA256(prompt('请输入访问本文章的密码')).toString(CryptoJS.enc.Hex)) {
-                alert('密码错误，将返回主页！');
-                location.href = '/';
-            }
-        }
-    })();
-</script>
-
 
 
 
@@ -549,14 +536,15 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>众所周知，很多官方软件源默认都在国外，在国内下载不是一般的慢……</p>
+                <h2 id="前言">前言</h2>
+<p>众所周知，很多官方软件源默认都在国外，在国内下载不是一般的慢……</p>
 <p>于是我们想到了通过国内的镜像站，来加速访问或下载等。</p>
 <p>最近搭建环境，又折腾了一堆换源，于是又到处找觉得挺麻烦的。</p>
 <p>正好这次就来汇总一下各种常用的换源好了。</p>
 <br>
-
 <hr>
-<h2 id="系统-apt-换源"><a href="#系统-apt-换源" class="headerlink" title="系统 apt 换源"></a>系统 apt 换源</h2><p><strong>以 Ubuntu 为例：</strong></p>
+<h2 id="系统-apt-换源">系统 apt 换源</h2>
+<p><strong>以 Ubuntu 为例：</strong></p>
 <p>首先备份原文件</p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">cp</span> /etc/apt/sources.list /etc/apt/sources.list.bak<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>（有可能需要修改文件权限为可编辑）</p>
@@ -564,14 +552,16 @@
 <p>而后编辑文件</p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">vim</span> /etc/apt/sources.list
 <span class="token comment"># 或 sudo gedit /etc/apt/sources.list</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-<p>都没有的话可以先装个编辑器，或者 </p>
+<p>都没有的话可以先装个编辑器，或者</p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token builtin class-name">echo</span> <span class="token string">"balabala"</span> <span class="token operator">&gt;</span> /etc/apt/sources.list<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>其中的 <code>balabala</code> 是下面的内容。</p>
-<h3 id="清华-tuna-源"><a href="#清华-tuna-源" class="headerlink" title="清华 tuna 源"></a>清华 tuna 源</h3><blockquote>
+<h3 id="清华-tuna-源">清华 tuna 源</h3>
+<blockquote>
 <p>详见 <a target="_blank" rel="noopener" href="https://mirrors.tuna.tsinghua.edu.cn/help/ubuntu/">https://mirrors.tuna.tsinghua.edu.cn/help/ubuntu/</a></p>
-<p>本镜像仅包含 32/64 位 x86 架构处理器的软件包，在 ARM(arm64, armhf)、PowerPC(ppc64el)、RISC-V(riscv64) 和 S390x 等架构的设备上（对应官方源为ports.ubuntu.com）请使用 <a target="_blank" rel="noopener" href="https://mirrors.tuna.tsinghua.edu.cn/ubuntu-ports/">ubuntu-ports 镜像</a>。</p>
+<p>本镜像仅包含 32/64 位 x86 架构处理器的软件包，在 ARM(arm64, armhf)、PowerPC(ppc64el)、RISC-V(riscv64) 和 S390x 等架构的设备上（<a target="_blank" rel="noopener" href="http://xn--ports-dq1hn21ffwa45pvwui3w.ubuntu.com">对应官方源为ports.ubuntu.com</a>）请使用 <a target="_blank" rel="noopener" href="https://mirrors.tuna.tsinghua.edu.cn/ubuntu-ports/">ubuntu-ports 镜像</a>。</p>
 </blockquote>
-<h4 id="Ubuntu-18-04-LTS"><a href="#Ubuntu-18-04-LTS" class="headerlink" title="Ubuntu 18.04 LTS"></a>Ubuntu 18.04 LTS</h4><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 默认注释了源码镜像以提高 apt update 速度，如有需要可自行取消注释</span>
+<h4 id="Ubuntu-18-04-LTS">Ubuntu 18.04 LTS</h4>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 默认注释了源码镜像以提高 apt update 速度，如有需要可自行取消注释</span>
 deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ bionic main restricted universe multiverse
 <span class="token comment"># deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ bionic main restricted universe multiverse</span>
 deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ bionic-updates main restricted universe multiverse
@@ -584,7 +574,8 @@ deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ bionic-security main restricted
 <span class="token comment"># 预发布软件源，不建议启用</span>
 <span class="token comment"># deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ bionic-proposed main restricted universe multiverse</span>
 <span class="token comment"># deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ bionic-proposed main restricted universe multiverse</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<h4 id="Ubuntu-16-04-LTS"><a href="#Ubuntu-16-04-LTS" class="headerlink" title="Ubuntu 16.04 LTS"></a>Ubuntu 16.04 LTS</h4><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 默认注释了源码镜像以提高 apt update 速度，如有需要可自行取消注释</span>
+<h4 id="Ubuntu-16-04-LTS">Ubuntu 16.04 LTS</h4>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 默认注释了源码镜像以提高 apt update 速度，如有需要可自行取消注释</span>
 deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ xenial main restricted universe multiverse
 <span class="token comment"># deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ xenial main restricted universe multiverse</span>
 deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ xenial-updates main restricted universe multiverse
@@ -597,7 +588,8 @@ deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ xenial-security main restricted
 <span class="token comment"># 预发布软件源，不建议启用</span>
 <span class="token comment"># deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ xenial-proposed main restricted universe multiverse</span>
 <span class="token comment"># deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ xenial-proposed main restricted universe multiverse</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<h4 id="Ubuntu-20-04-LTS"><a href="#Ubuntu-20-04-LTS" class="headerlink" title="Ubuntu 20.04 LTS"></a>Ubuntu 20.04 LTS</h4><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 默认注释了源码镜像以提高 apt update 速度，如有需要可自行取消注释</span>
+<h4 id="Ubuntu-20-04-LTS">Ubuntu 20.04 LTS</h4>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 默认注释了源码镜像以提高 apt update 速度，如有需要可自行取消注释</span>
 deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal main restricted universe multiverse
 <span class="token comment"># deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal main restricted universe multiverse</span>
 deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-updates main restricted universe multiverse
@@ -610,11 +602,12 @@ deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-security main restricted 
 <span class="token comment"># 预发布软件源，不建议启用</span>
 <span class="token comment"># deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-proposed main restricted universe multiverse</span>
 <span class="token comment"># deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ focal-proposed main restricted universe multiverse 	</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<h4 id="Ubuntu-Ports"><a href="#Ubuntu-Ports" class="headerlink" title="Ubuntu Ports"></a>Ubuntu Ports</h4><blockquote>
+<h4 id="Ubuntu-Ports">Ubuntu Ports</h4>
+<blockquote>
 <p>本镜像仅包含 arm64 armhf ppc64el riscv64 s390x 架构的软件包。</p>
 <p>（比如在 NVIDIA Jetson TX2 等嵌入式系统上跑的）</p>
 </blockquote>
-<p><strong>Ubuntu 18.04 LTS:</strong> </p>
+<p><strong>Ubuntu 18.04 LTS:</strong></p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 默认注释了源码镜像以提高 apt update 速度，如有需要可自行取消注释</span>
 deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu-ports/ bionic main restricted universe multiverse
 <span class="token comment"># deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu-ports/ bionic main restricted universe multiverse</span>
@@ -629,9 +622,12 @@ deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu-ports/ bionic-security main rest
 <span class="token comment"># deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu-ports/ bionic-proposed main restricted universe multiverse</span>
 <span class="token comment"># deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu-ports/ bionic-proposed main restricted universe multiverse</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>其他版本也类似，加个 <code>/ubuntu-ports/</code> 即可。</p>
-<h4 id="Alpine-Linux"><a href="#Alpine-Linux" class="headerlink" title="Alpine Linux"></a>Alpine Linux</h4><p>在终端执行下面的语句。</p>
+<h4 id="Alpine-Linux">Alpine Linux</h4>
+<p>在终端执行下面的语句。</p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sed</span> -i <span class="token string">'s/dl-cdn.alpinelinux.org/mirrors.tuna.tsinghua.edu.cn/g'</span> /etc/apk/repositories<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<h3 id="阿里源"><a href="#阿里源" class="headerlink" title="阿里源"></a>阿里源</h3><h4 id="Ubuntu-18-04-LTS-1"><a href="#Ubuntu-18-04-LTS-1" class="headerlink" title="Ubuntu 18.04 LTS"></a>Ubuntu 18.04 LTS</h4><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">deb http://mirrors.aliyun.com/ubuntu/ bionic main restricted universe multiverse
+<h3 id="阿里源">阿里源</h3>
+<h4 id="Ubuntu-18-04-LTS-2">Ubuntu 18.04 LTS</h4>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">deb http://mirrors.aliyun.com/ubuntu/ bionic main restricted universe multiverse
 deb http://mirrors.aliyun.com/ubuntu/ bionic-security main restricted universe multiverse
 deb http://mirrors.aliyun.com/ubuntu/ bionic-updates main restricted universe multiverse
 deb http://mirrors.aliyun.com/ubuntu/ bionic-backports main restricted universe multiverse
@@ -641,7 +637,9 @@ deb-src http://mirrors.aliyun.com/ubuntu/ bionic-security main restricted univer
 deb-src http://mirrors.aliyun.com/ubuntu/ bionic-updates main restricted universe multiverse
 deb-src http://mirrors.aliyun.com/ubuntu/ bionic-backports main restricted universe multiverse
 deb-src http://mirrors.aliyun.com/ubuntu/ bionic-proposed main restricted universe multiverse<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<h3 id="163源"><a href="#163源" class="headerlink" title="163源"></a>163源</h3><h4 id="Ubuntu-18-04-LTS-2"><a href="#Ubuntu-18-04-LTS-2" class="headerlink" title="Ubuntu 18.04 LTS"></a>Ubuntu 18.04 LTS</h4><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">deb http://mirrors.163.com/ubuntu/ bionic main restricted universe multiverse
+<h3 id="163源">163源</h3>
+<h4 id="Ubuntu-18-04-LTS-3">Ubuntu 18.04 LTS</h4>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">deb http://mirrors.163.com/ubuntu/ bionic main restricted universe multiverse
 deb http://mirrors.163.com/ubuntu/ bionic-security main restricted universe multiverse
 deb http://mirrors.163.com/ubuntu/ bionic-updates main restricted universe multiverse
 deb http://mirrors.163.com/ubuntu/ bionic-proposed main restricted universe multiverse
@@ -651,8 +649,6 @@ deb-src http://mirrors.163.com/ubuntu/ bionic-security main restricted universe 
 deb-src http://mirrors.163.com/ubuntu/ bionic-updates main restricted universe multiverse
 deb-src http://mirrors.163.com/ubuntu/ bionic-proposed main restricted universe multiverse
 deb-src http://mirrors.163.com/ubuntu/ bionic-backports main restricted universe multiverse<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-
 <hr>
 <p>换好源后更新源</p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">apt-get</span> update<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
@@ -662,7 +658,9 @@ deb-src http://mirrors.163.com/ubuntu/ bionic-backports main restricted universe
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">apt-get</span> upgrade<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>或者安装软件……</p>
 <hr>
-<h2 id="Pypi-pip-换源"><a href="#Pypi-pip-换源" class="headerlink" title="Pypi (pip) 换源"></a>Pypi (pip) 换源</h2><h3 id="清华-tuna-源-1"><a href="#清华-tuna-源-1" class="headerlink" title="清华 tuna 源"></a>清华 tuna 源</h3><p><strong>临时安装时：</strong></p>
+<h2 id="Pypi-pip-换源">Pypi (pip) 换源</h2>
+<h3 id="清华-tuna-源-2">清华 tuna 源</h3>
+<p><strong>临时安装时：</strong></p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">pip <span class="token function">install</span> -i https://pypi.tuna.tsinghua.edu.cn/simple some-package<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p><code>some-package</code> 为模块名。</p>
 <p><strong>设为默认：</strong></p>
@@ -676,10 +674,12 @@ pip config <span class="token builtin class-name">set</span> global.index-url ht
 <blockquote>
 <ol>
 <li>文件管理器文件路径地址栏敲：<code>%HOMEPATH%</code> 回车，快速进入 <code>C:\Users\用户名\</code> 文件夹中（用户目录）</li>
-<li>新建 <code>pip</code> 文件夹并在文件夹中新建 <code>pip.ini</code> 配置文件</li>
-<li>新增 <code>pip.ini</code> 配置文件内容 </li>
 </ol>
 </blockquote>
+<ol start="2">
+<li>新建 <code>pip</code> 文件夹并在文件夹中新建 <code>pip.ini</code> 配置文件</li>
+<li>新增 <code>pip.ini</code> 配置文件内容</li>
+</ol>
 <p>文件内容如下。</p>
 <pre class="line-numbers language-ini" data-language="ini"><code class="language-ini"><span class="token selector">[global]</span>
 <span class="token constant">index-url</span> <span class="token attr-value"><span class="token punctuation">=</span> https://pypi.tuna.tsinghua.edu.cn/simple</span>
@@ -687,7 +687,8 @@ pip config <span class="token builtin class-name">set</span> global.index-url ht
 <span class="token constant">use-mirrors</span> <span class="token attr-value"><span class="token punctuation">=</span> true</span>
 <span class="token constant">mirrors</span> <span class="token attr-value"><span class="token punctuation">=</span> https://pypi.tuna.tsinghua.edu.cn/simple</span>
 <span class="token constant">trusted-host</span> <span class="token attr-value"><span class="token punctuation">=</span> pypi.tuna.tsinghua.edu.cn</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<h3 id="其他源"><a href="#其他源" class="headerlink" title="其他源"></a>其他源</h3><blockquote>
+<h3 id="其他源">其他源</h3>
+<blockquote>
 <ul>
 <li>清华：<a target="_blank" rel="noopener" href="https://pypi.tuna.tsinghua.edu.cn/simple">https://pypi.tuna.tsinghua.edu.cn/simple</a></li>
 <li>阿里云：<a target="_blank" rel="noopener" href="https://mirrors.aliyun.com/pypi/simple">https://mirrors.aliyun.com/pypi/simple</a></li>
@@ -696,7 +697,8 @@ pip config <span class="token builtin class-name">set</span> global.index-url ht
 </ul>
 </blockquote>
 <hr>
-<h2 id="Anaconda-换源"><a href="#Anaconda-换源" class="headerlink" title="Anaconda 换源"></a>Anaconda 换源</h2><blockquote>
+<h2 id="Anaconda-换源">Anaconda 换源</h2>
+<blockquote>
 <p>参考 <a target="_blank" rel="noopener" href="https://mirrors.tuna.tsinghua.edu.cn/help/anaconda/">https://mirrors.tuna.tsinghua.edu.cn/help/anaconda/</a></p>
 </blockquote>
 <p>Anaconda 安装包可以到 <a target="_blank" rel="noopener" href="https://mirrors.tuna.tsinghua.edu.cn/anaconda/archive/">https://mirrors.tuna.tsinghua.edu.cn/anaconda/archive/</a> 下载。</p>
@@ -740,13 +742,13 @@ conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/
 conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/menpo/
 <span class="token comment"># 设置搜索时显示通道地址</span>
 conda config --set show_channel_urls <span class="token function">yes</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-
 <hr>
-<h2 id="Docker-换源"><a href="#Docker-换源" class="headerlink" title="Docker 换源"></a>Docker 换源</h2><blockquote>
+<h2 id="Docker-换源">Docker 换源</h2>
+<blockquote>
 <p>参考之前写的 <a href="https://miaotony.xyz/2020/02/02/Server_Docker/#%E6%8D%A2%E6%BA%90">Docker 安装及常用命令</a>。</p>
 </blockquote>
-<h3 id="编辑文件"><a href="#编辑文件" class="headerlink" title="编辑文件"></a>编辑文件</h3><p>Linux 下，编辑此文件，如果没有则新建。</p>
+<h3 id="编辑文件">编辑文件</h3>
+<p>Linux 下，编辑此文件，如果没有则新建。</p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">vim</span> /etc/docker/daemon.json<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>Windows 下文件为</p>
 <pre class="line-numbers language-none"><code class="language-none">%programdata%\docker\config\daemon.json<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
@@ -758,9 +760,11 @@ conda config --set show_channel_urls <span class="token function">yes</span><spa
     <span class="token string">"http://hub-mirror.c.163.com"</span>
   <span class="token punctuation">]</span>
 <span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<h3 id="配置完之后重启服务"><a href="#配置完之后重启服务" class="headerlink" title="配置完之后重启服务"></a>配置完之后重启服务</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> systemctl daemon-reload
+<h3 id="配置完之后重启服务">配置完之后重启服务</h3>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> systemctl daemon-reload
 <span class="token function">sudo</span> systemctl restart docker<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-<h3 id="检查是否生效"><a href="#检查是否生效" class="headerlink" title="检查是否生效"></a>检查是否生效</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">docker info<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h3 id="检查是否生效">检查是否生效</h3>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">docker info<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>看最后的 Registry Mirrors 里有没有添加成功。</p>
 <hr>
 <p>大概就先收集这么多吧（</p>
@@ -1327,7 +1331,7 @@ conda config --set show_channel_urls <span class="token function">yes</span><spa
             |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
             <br>
                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">308.6k</span>&nbsp;字
+                class="white-color">308.3k</span>&nbsp;字
                                                                                     <span id="busuanzi_container_site_pv">
 			|&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
                     class="white-color"></span>&nbsp;次
@@ -1468,11 +1472,12 @@ $(function () {
                         var data_title = data.title.trim().toLowerCase();
                         var data_content = data.content.trim().replace(/<[^>]+>/g, "").toLowerCase();
                         var data_url = data.url;
+                        data_url = data_url.indexOf('/') === 0 ? data.url : '/' + data_url;
                         var index_title = -1;
                         var index_content = -1;
                         var first_occur = -1;
                         // only match artiles with not empty titles and contents
-                        if (data_title != '' && data_content != '') {
+                        if (data_title !== '' && data_content !== '') {
                             keywords.forEach(function (keyword, i) {
                                 index_title = data_title.indexOf(keyword);
                                 index_content = data_content.indexOf(keyword);
@@ -1482,7 +1487,7 @@ $(function () {
                                     if (index_content < 0) {
                                         index_content = 0;
                                     }
-                                    if (i == 0) {
+                                    if (i === 0) {
                                         first_occur = index_content;
                                     }
                                 }
@@ -1513,12 +1518,12 @@ $(function () {
                         }
                     });
                     str += "</ul>";
-                    str = "<p class=\"search-result-summary\">共找到" + String(cnt-1) + "条结果</p>"  + str;
+                    str = "<p class=\"search-result-summary\">共找到 " + String(cnt-1) + " 条结果</p>"  + str;
                     $resultContent.innerHTML = str;
                 });
             }
         });
-    }
+    };
 
     searchFunc('https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/search.xml', 'searchInput', 'searchResult');
 });
