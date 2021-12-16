@@ -519,14 +519,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    826
+                    833
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    2 分
+                    3 分
                 </div>
                 
 
@@ -544,54 +544,49 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="缘由">缘由</h2>
-<p>这两天看空间各种发【我的2019年终报告】，然后我也去测了一下，没想到啥也不用填，申请获取个人信息的权限，报告就出来了。</p>
-<p>然而弹出一个遮罩层让你先看个15s的广告……</p>
-<p>超想吐槽，包括页面下面的广告。。</p>
+                <h2 id="缘由"><a href="#缘由" class="headerlink" title="缘由"></a>缘由</h2><p>这两天看空间各种发【我的2019年终报告】，然后我也去测了一下，没想到啥也不用填，申请获取个人信息的权限，报告就出来了。  </p>
+<p>然而弹出一个遮罩层让你先看个15s的广告……  </p>
+<p>超想吐槽，包括页面下面的广告。。  </p>
 <p><img src="/2019/12/04/Scrapy_2019Year-end_Report/movie.png" alt="movie"></p>
-<p>然后看完广告，终于出来了。</p>
-<p>正当我截了图返回之后，噫换个性别试试。</p>
-<p>好，这回不一样了呀！</p>
-<p>然后再来一次，噫，又不一样了……这让我怀疑他就是假的几张图片而已吧。</p>
-<p>我兴趣来了，不如来折腾一下，分析一下这个小程序吧。</p>
+<p>然后看完广告，终于出来了。  </p>
+<p>正当我截了图返回之后，噫换个性别试试。  </p>
+<p>好，这回不一样了呀！  </p>
+<p>然后再来一次，噫，又不一样了……这让我怀疑他就是假的几张图片而已吧。  </p>
+<p>我兴趣来了，不如来折腾一下，分析一下这个小程序吧。  </p>
 <p>（不折腾会死……</p>
-<h2 id="开始折腾">开始折腾</h2>
- <a id="more"></a> 
-<h3 id="1">1</h3>
-<p>先来看一看这个小程序的设置，发现只获取了<strong>用户信息</strong>。看一眼<strong>更多资料</strong>——</p>
+<h2 id="开始折腾"><a href="#开始折腾" class="headerlink" title="开始折腾"></a>开始折腾</h2> <a id="more"></a> 
+
+<h3 id="1"><a href="#1" class="headerlink" title="1"></a>1</h3><p>先来看一看这个小程序的设置，发现只获取了<strong>用户信息</strong>。看一眼<strong>更多资料</strong>——  </p>
 <p><img src="/2019/12/04/Scrapy_2019Year-end_Report/image1.png" alt="image1"></p>
-<p>先确定了这是个个人开发的小程序，看相关的域名除了Tencent家的，主要就是<code>wxa.game-a1.cn</code> 和<code>free-api.heweather.com</code>。</p>
-<p>查了一下，后者是一个查天气的API（需要的话可以用一波）<em>（就是很迷惑为啥这里会有这个</em></p>
+<p>先确定了这是个个人开发的小程序，看相关的域名除了Tencent家的，主要就是<code>wxa.game-a1.cn</code> 和<code>free-api.heweather.com</code>。  </p>
+<p>查了一下，后者是一个查天气的API（需要的话可以用一波）<em>（就是很迷惑为啥这里会有这个</em>  </p>
 <p>前者是一个个人的域名吧，看样子是用的一个开发小程序的平台。根域名还是个博客，里面还有搭建微信小程序的经历。</p>
 <hr>
-<h3 id="2">2</h3>
-<p>ping了一下这个域名，得到IP：<code>47.105.42.112</code></p>
-<p>然后抓了个包，过滤只看关于这个IP的数据包。发现有两个。</p>
+<h3 id="2"><a href="#2" class="headerlink" title="2"></a>2</h3><p>ping了一下这个域名，得到IP：<code>47.105.42.112</code>  </p>
+<p>然后抓了个包，过滤只看关于这个IP的数据包。发现有两个。  </p>
 <p><img src="/2019/12/04/Scrapy_2019Year-end_Report/Inked.jpg" alt="Inked"></p>
 <p><img src="/2019/12/04/Scrapy_2019Year-end_Report/image2.png" alt="2"></p>
 <p>前面一个不懂什么鬼填了个表，估计收集了一波使用数据，先不管。重点是后面这个。</p>
 <p>很明显是访问了<code>http://wxa.game-a1.cn/wxa/qqnz2019/index.php</code>这个网址。</p>
 <hr>
-<h3 id="3">3</h3>
-<p>浏览器启动，F12大法好呀。</p>
+<h3 id="3"><a href="#3" class="headerlink" title="3"></a>3</h3><p>浏览器启动，F12大法好呀。  </p>
 <p><img src="/2019/12/04/Scrapy_2019Year-end_Report/image3.png" alt="image-20191204143118444"></p>
-<p>好一个JSON字符串，来分析一下吧。</p>
+<p>好一个JSON字符串，来分析一下吧。  </p>
 <p><code>qrcode</code>很明显是二维码啦，下载下来解码发现调用了qq小程序的接口吧，访问会跳转到这个小程序。</p>
 <p><img src="/2019/12/04/Scrapy_2019Year-end_Report/image4.png" alt="image-20191204143437363"></p>
 <p><code>url</code>和<code>url1</code>都是一样的，指向了一个阿里云的对象存储。↓</p>
-<p><a target="_blank" rel="noopener" href="https://oos-pic.oss-cn-beijing.aliyuncs.com/2019%E5%B9%B4%E7%BB%88%E6%80%BB%E7%BB%93/1.png">https://oos-pic.oss-cn-beijing.aliyuncs.com/2019年终总结/1.png</a></p>
+<p><a target="_blank" rel="noopener" href="https://oos-pic.oss-cn-beijing.aliyuncs.com/2019%E5%B9%B4%E7%BB%88%E6%80%BB%E7%BB%93/1.png">https://oos-pic.oss-cn-beijing.aliyuncs.com/2019%E5%B9%B4%E7%BB%88%E6%80%BB%E7%BB%93/1.png</a></p>
 <p><img src="/2019/12/04/Scrapy_2019Year-end_Report/image5.png" alt="image-20191204143738991"></p>
-<p>多次刷新发现好像的确就那几张图片，改变了一下<code>x.png</code>而已。</p>
-<p>而且的确这就是假的图啦。<em>（不然哪来的用户数据可以分析</em></p>
+<p>多次刷新发现好像的确就那几张图片，改变了一下<code>x.png</code>而已。  </p>
+<p>而且的确这就是假的图啦。<em>（不然哪来的用户数据可以分析</em>  </p>
 <hr>
-<h3 id="4">4</h3>
-<p>既然都知道是几张图片而已了，那顺便就爬下来吧。</p>
-<p>PyCharm 启动，来写一写jio本。</p>
+<h3 id="4"><a href="#4" class="headerlink" title="4"></a>4</h3><p>既然都知道是几张图片而已了，那顺便就爬下来吧。  </p>
+<p>PyCharm 启动，来写一写jio本。  </p>
 <p><img src="/2019/12/04/Scrapy_2019Year-end_Report/code.png" alt="image-20191204150348574"></p>
 <p>写range是因为随便试了一下，本来就没有几张图片而已，然而懒得手动下载。</p>
 <p><img src="/2019/12/04/Scrapy_2019Year-end_Report/download_imgs.png" alt="image-20191204144246023"></p>
 <p>看结果的确就7张图片。。</p>
-<p>呐就这几张了↓</p>
+<p>呐就这几张了↓  </p>
 <p><img src="/2019/12/04/Scrapy_2019Year-end_Report/1.png" alt="1"></p>
 <p><img src="/2019/12/04/Scrapy_2019Year-end_Report/2.png" alt="2"></p>
 <p><img src="/2019/12/04/Scrapy_2019Year-end_Report/3.png" alt="3"></p>
@@ -600,12 +595,10 @@
 <p><img src="/2019/12/04/Scrapy_2019Year-end_Report/6.png" alt="6"></p>
 <p><img src="/2019/12/04/Scrapy_2019Year-end_Report/7.png" alt="7"></p>
 <hr>
-<h3 id="5">5</h3>
-<p>看样子小程序获取个人头像，然后再和二维码、上面的任意一张图拼接在一起而已吧。</p>
+<h3 id="5"><a href="#5" class="headerlink" title="5"></a>5</h3><p>看样子小程序获取个人头像，然后再和二维码、上面的任意一张图拼接在一起而已吧。   </p>
 <p>就是这个<code>form.php</code>，看样子是用来统计使用数据的吧emmm问题不大。</p>
 <p><img src="/2019/12/04/Scrapy_2019Year-end_Report/image6.png" alt="image-20191204144935029"></p>
-<h2 id="小结">小结</h2>
-<p>哇呜折腾了一个中午好气啊，<s><em>（有毒 不折腾会死</em></s></p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>哇呜折腾了一个中午好气啊，<del><em>（有毒 不折腾会死</em></del></p>
 <p>不管怎么说这个小程序还是有点意思的，至少做的那几张图片还挺不错的哈哈哈。</p>
 <p>不过要吐槽这个广告超级讨厌emmm</p>
 <p>就这样吧。</p>
@@ -1195,7 +1188,7 @@
             |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
             <br>
                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">308.3k</span>&nbsp;字
+                class="white-color">308.1k</span>&nbsp;字
                                                                                     <span id="busuanzi_container_site_pv">
 			|&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
                     class="white-color"></span>&nbsp;次

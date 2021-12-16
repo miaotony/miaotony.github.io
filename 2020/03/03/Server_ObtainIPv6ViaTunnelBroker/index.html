@@ -540,25 +540,23 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="0x00-前言">0x00 前言</h2>
-<p>目前 IPv6 用得挺广了吧，很多应用都支持 IPv6 了，三大运营商基本都支持了，联通的流量自带 IPv6，而且开热点的话还支持下发给其他设备。</p>
+                <h2 id="0x00-前言"><a href="#0x00-前言" class="headerlink" title="0x00 前言"></a>0x00 前言</h2><p>目前 IPv6 用得挺广了吧，很多应用都支持 IPv6 了，三大运营商基本都支持了，联通的流量自带 IPv6，而且开热点的话还支持下发给其他设备。</p>
 <p>不过其实很多服务器都没上 IPv6，比如阿里云的 ECS 一般公网只有 IPv4 地址（想拥有一个 IPv6 地址还得再花钱）。</p>
 <p>于是最近就折腾了一下，利用 Hurricane Electric 提供的<strong>免费 IPv6 Tunnel Broker</strong>，让阿里云的 ECS 拥有了 IPv6 地址（非原生），理论上大部分服务器都适用的。</p>
-<p>这里用到的是 IPv6 Tunnel，基于 <strong>protocol-41 (6in4)</strong>，其实是把 IPv6 包通过 IPv4 包来传输，相当于建立在网络层上的代理，需要你的服务器的操作系统支持，而且要有一个<strong>相对固定的公网 IPv4 地址</strong>。</p>
+<p>这里用到的是 IPv6 Tunnel，基于 <strong>protocol-41 (6in4)<strong>，其实是把 IPv6 包通过 IPv4 包来传输，相当于建立在网络层上的代理，需要你的服务器的操作系统支持，而且要有一个</strong>相对固定的公网 IPv4 地址</strong>。</p>
 <blockquote>
 <p>When using 6to4, you do not transmit IPv6 packets. Instead, special IPv4 packets are wrapped around IPv6 payloads. These packets have IPv4  protocol 41, as defined by RFC 2473.</p>
 </blockquote>
 <p>当然，性能的话肯定比不上原生的 IPv6 了，不过自己玩玩还好，问题不大吧。</p>
 <hr>
-<h2 id="0x01-申请-IPv6-Tunnel-Broker">0x01 申请 IPv6 Tunnel Broker</h2>
-<p>前往 <a target="_blank" rel="noopener" href="https://tunnelbroker.net">https://tunnelbroker.net</a>，注册一个你自己的账号。</p>
+<h2 id="0x01-申请-IPv6-Tunnel-Broker"><a href="#0x01-申请-IPv6-Tunnel-Broker" class="headerlink" title="0x01 申请 IPv6 Tunnel Broker"></a>0x01 申请 IPv6 Tunnel Broker</h2><p>前往 <a target="_blank" rel="noopener" href="https://tunnelbroker.net/">https://tunnelbroker.net</a>，注册一个你自己的账号。</p>
 <p><img src="/2020/03/03/Server_ObtainIPv6ViaTunnelBroker/register.png" alt="注册账号"></p>
 <p>登录之后，点击左侧的 <a target="_blank" rel="noopener" href="https://www.tunnelbroker.net/new_tunnel.php">Create Regular Tunnel</a>。</p>
 <p>一个账号最多可以创建5条tunnel。</p>
 <p><img src="/2020/03/03/Server_ObtainIPv6ViaTunnelBroker/create_tunnel.png" alt="创建隧道"></p>
 <p>IPv4 Endpoint 里填<strong>服务器的公网地址</strong>，输入后会自动检查是否支持。</p>
 <p>You are viewing from 显示的是你访问网站的公网 IPv4 地址，如果是在服务器上访问的话 Endpoint 就是这个了。</p>
-<p><strong>注意：<strong>服务器要</strong>允许来自 HE 的 ICMP 请求</strong>，也就是说不能禁止来自 HE 的 ping。</p>
+<p><strong>注意：</strong>服务器要<strong>允许来自 HE 的 ICMP 请求</strong>，也就是说不能禁止来自 HE 的 ping。</p>
 <p>（这里借一张网上的图，比如下面这样的↓</p>
 <p><img src="/2020/03/03/Server_ObtainIPv6ViaTunnelBroker/ICMP_blocked.png" alt="icmp_block"></p>
 <p>Available Tunnel Servers 里选择离你服务器较近的，可以在服务器上ping试一试。</p>
@@ -572,8 +570,7 @@
 <p>可见分配的是 <code>/64</code>，即 IPv6 地址的前缀长度为64位。后（128-64=）64位为网络接口ID（可理解为设备在网络上的唯一ID），因此你有2^64（1844亿亿）个可用的IP地址了。😉</p>
 <p>当然你还可以申请一个<code>/48</code>前缀的路由，这样可用的地址更多了。（2^80个）</p>
 <hr>
-<h2 id="0x02-阿里云-ECS-开启-IPv6">0x02 阿里云 ECS 开启 IPv6</h2>
-<p>阿里云的硬盘镜像默认是把 IPv6 给关掉的，这里就手动打开好了。</p>
+<h2 id="0x02-阿里云-ECS-开启-IPv6"><a href="#0x02-阿里云-ECS-开启-IPv6" class="headerlink" title="0x02 阿里云 ECS 开启 IPv6"></a>0x02 阿里云 ECS 开启 IPv6</h2><p>阿里云的硬盘镜像默认是把 IPv6 给关掉的，这里就手动打开好了。</p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">vim</span> /etc/sysctl.conf<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>在文件末尾的位置把ipv6设置中的1改成0，变成类似如下的亚子。</p>
 <pre class="line-numbers language-none"><code class="language-none">net.ipv6.conf.all.disable_ipv6 = 0
@@ -584,16 +581,16 @@ net.ipv6.conf.eth0.disable_ipv6 = 0<span aria-hidden="true" class="line-numbers-
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">sysctl -p<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>然后使用<code>ifconfig</code>看一看，就会发现支持 IPv6 了。</p>
 <p>比如下面这个，有了<code>inet6</code>这一项。</p>
-<h2 id="code￼3"><pre class="line-numbers language-none"><code class="language-none">eth0: flags=4163&lt;UP,BROADCAST,RUNNING,MULTICAST&gt;  mtu 1500
+<pre class="line-numbers language-none"><code class="language-none">eth0: flags=4163&lt;UP,BROADCAST,RUNNING,MULTICAST&gt;  mtu 1500
         inet 172.xxx.xxx.xxx  netmask 255.255.240.0  broadcast 172.xxx.xxx.xxx
         inet6 fe80::xxxx:xxxx:xxxx:xxxx  prefixlen 64  scopeid 0x20&lt;link&gt;
         ether 00:16:xx:xx:xx:xx  txqueuelen 1000  (以太网)
         RX packets 1688753  bytes 328028654 (328.0 MB)
         RX errors 0  dropped 0  overruns 0  frame 0
         TX packets 1837158  bytes 637871915 (637.8 MB)
-        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></h2>
-<h2 id="0x03-给-ECS-配置-IPv6-隧道">0x03 给 ECS 配置 IPv6 隧道</h2>
-<p>在Example Configuration 里有很多示例。</p>
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<hr>
+<h2 id="0x03-给-ECS-配置-IPv6-隧道"><a href="#0x03-给-ECS-配置-IPv6-隧道" class="headerlink" title="0x03 给 ECS 配置 IPv6 隧道"></a>0x03 给 ECS 配置 IPv6 隧道</h2><p>在Example Configuration 里有很多示例。</p>
 <p>比如Ubuntu的。</p>
 <p><img src="/2020/03/03/Server_ObtainIPv6ViaTunnelBroker/interface_configuration.png" alt="interface_configuration"></p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">vim</span> /etc/network/interfaces<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
@@ -606,7 +603,7 @@ iface he-ipv6 inet6 v4tunnel
         ttl 255
         gateway 2001:470:xxxx:xxxx::1<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>将上面的配置粘贴到文件的最后。</p>
-<p>注意一下，**内网环境要用内网的IP！**他这里也写清楚了的。</p>
+<p>注意一下，<strong>内网环境要用内网的IP！</strong>他这里也写清楚了的。</p>
 <blockquote>
 <p><strong>NOTE:</strong> When behind a firewall appliance that passes protocol 41,  use the IPv4 address you get from your appliance’s DHCP service instead  of the IPv4 endpoint you provided to our broker.</p>
 </blockquote>
@@ -623,6 +620,8 @@ iface he-ipv6 inet6 v4tunnel
           RX errors 0  dropped 0  overruns 0  frame 0
           TX packets 13811  bytes 2403522 (2.4 MB)
           TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
 <p><em>P.S.:</em></p>
 <p>如果想<strong>让隧道失效</strong>（没有删除的话重启后还是会自动启用）：</p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">ifdown</span> he-ipv6<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
@@ -654,8 +653,7 @@ netsh interface ipv6 add address interface=IP6Tunnel address=2001:470:xx:xxxx::2
 netsh interface ipv6 add route prefix=::/0 interface=IP6Tunnel nexthop=2001:470:xx:xxxx::1<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 <p>注意修改对应的IP地址。</p>
 <hr>
-<h2 id="0x04-一些问题的解决">0x04 一些问题的解决</h2>
-<p><strong>按照上面一番配置好</strong>之后，有可能还是访问不了 IPv6 的网站。</p>
+<h2 id="0x04-一些问题的解决"><a href="#0x04-一些问题的解决" class="headerlink" title="0x04 一些问题的解决"></a>0x04 一些问题的解决</h2><p><strong>按照上面一番配置好</strong>之后，有可能还是访问不了 IPv6 的网站。</p>
 <p><strong>有可能</strong>需要如下处理吧。<em>（谁知道会这么麻烦呢</em></p>
 <p>要是没事了就直接往下看了。</p>
 <ul>
@@ -671,7 +669,7 @@ iptables -t filter -I OUTPUT -p <span class="token number">41</span> -j ACCEPT<s
 <li>配置好 IPv6 的 DNS</li>
 </ul>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">vim</span> /etc/resolv.conf<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>在最后添加谷歌的DNS服务器</p>
+<p>在最后添加谷歌的DNS服务器 </p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">nameserver <span class="token number">2001</span>:4860:4860::8888
 nameserver <span class="token number">2001</span>:4860:4860::8844<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 <p>或者国内的公共DNS：<code>240c::6666</code> 或 <code>240c::6644</code></p>
@@ -682,8 +680,7 @@ nameserver <span class="token number">2001</span>:4860:4860::8844<span aria-hidd
 <p>再 ping 一下应该可以了吧（</p>
 <p>不行再重启试试（重启解决绝大部分问题呢</p>
 <hr>
-<h2 id="0x05-Nginx-支持-IPv6-访问">0x05 Nginx 支持 IPv6 访问</h2>
-<p>修改配置文件，监听 IPv6 端口。</p>
+<h2 id="0x05-Nginx-支持-IPv6-访问"><a href="#0x05-Nginx-支持-IPv6-访问" class="headerlink" title="0x05 Nginx 支持 IPv6 访问"></a>0x05 Nginx 支持 IPv6 访问</h2><p>修改配置文件，监听 IPv6 端口。</p>
 <pre class="line-numbers language-none"><code class="language-none">server {
   listen 80;
   listen [::]:80; // 监听 IPv6 的 80 端口
@@ -695,7 +692,7 @@ server {
   listen [::]:443 ssl http2; // 监听 IPv6 的 443 端口
   # ...
 }<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>然而，发现一个情况，只有当服务器访问IPv6的网站的时候，或者说有 IPv6 流量的时候，外网才能通过这个公网的IPv6地址访问到服务器emmm。（懵</p>
+<p>然而，发现一个情况，只有当服务器访问IPv6的网站的时候，或者说有 IPv6 流量的时候，外网才能通过这个公网的IPv6地址访问到服务器emmm。（懵 </p>
 <p>于是加一个 cron 计划，定时ping一下好了。</p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">crontab</span> -e<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>添加一个计划。</p>
@@ -705,24 +702,18 @@ server {
 <p>每分钟执行一次 ping 操作，这样访问就没问题了。</p>
 <p><em>（不过想不大明白为啥这个通道会自动断开。有人说与 ip6tables 有关，不大清楚。。 emmm</em></p>
 <hr>
-<h2 id="0x06-配置-DNS">0x06 配置 DNS</h2>
-<p>配置一条<strong>AAAA记录指向公网的 IPv6 地址</strong>即可。可以试试开启CDN。</p>
+<h2 id="0x06-配置-DNS"><a href="#0x06-配置-DNS" class="headerlink" title="0x06 配置 DNS"></a>0x06 配置 DNS</h2><p>配置一条<strong>AAAA记录指向公网的 IPv6 地址</strong>即可。可以试试开启CDN。</p>
 <p>而后就可以通过域名访问网站了。</p>
 <p>不过没有 CDN 的话只能通过 IPv6 进行访问。</p>
 <hr>
-<h2 id="0x07-检查网站是否支持-IPv6">0x07 检查网站是否支持 IPv6</h2>
-<p>利用 <a target="_blank" rel="noopener" href="http://ipv6-test.com/validate.php">http://ipv6-test.com/validate.php</a></p>
+<h2 id="0x07-检查网站是否支持-IPv6"><a href="#0x07-检查网站是否支持-IPv6" class="headerlink" title="0x07 检查网站是否支持 IPv6"></a>0x07 检查网站是否支持 IPv6</h2><p>利用 <a target="_blank" rel="noopener" href="http://ipv6-test.com/validate.php">http://ipv6-test.com/validate.php</a></p>
 <p><img src="/2020/03/03/Server_ObtainIPv6ViaTunnelBroker/ipv6test.png" alt="ipv6test"></p>
 <hr>
-<h2 id="0x08-自动更新-Endpoint-IP">0x08 自动更新 Endpoint IP</h2>
-<p>前面说只要公网的IPv4地址<strong>相对固定</strong>就好了，这里就这个意思啦。</p>
+<h2 id="0x08-自动更新-Endpoint-IP"><a href="#0x08-自动更新-Endpoint-IP" class="headerlink" title="0x08 自动更新 Endpoint IP"></a>0x08 自动更新 Endpoint IP</h2><p>前面说只要公网的IPv4地址<strong>相对固定</strong>就好了，这里就这个意思啦。</p>
 <p>HE 还支持<strong>为动态 IPv4 地址建立 IPv6 通道</strong>，这里要用到他提供的API了。</p>
 <blockquote>
 <p>We’ve added support for Dyn-compliant endpoint updates so that equipment talking this spec can very easily update your tunnel endpoint.</p>
-<p><strong>Update URL:</strong> <a target="_blank" rel="noopener" href="https://ipv4.tunnelbroker.net/nic/update">https://ipv4.tunnelbroker.net/nic/update</a>  (<em>ipv4 is important here, don’t remove it</em>)<br>
-<strong>Username:</strong> Your <a target="_blank" rel="noopener" href="http://Tunnelbroker.net">Tunnelbroker.net</a> username<br>
-<strong>Password:</strong> Tunnel specific authentication key (under Advanced on the tunnel  information page) if one is set, otherwise your <a target="_blank" rel="noopener" href="http://Tunnelbroker.net">Tunnelbroker.net</a>  password.<br>
-<strong>Hostname:</strong></p>
+<p><strong>Update URL:</strong> <a target="_blank" rel="noopener" href="https://ipv4.tunnelbroker.net/nic/update">https://ipv4.tunnelbroker.net/nic/update</a>  (<em>ipv4 is important here, don’t remove it</em>)<br><strong>Username:</strong> Your Tunnelbroker.net username<br><strong>Password:</strong> Tunnel specific authentication key (under Advanced on the tunnel  information page) if one is set, otherwise your Tunnelbroker.net  password.<br><strong>Hostname:</strong></p>
 <ul>
 <li>Numeric tunnel ID</li>
 <li>Numeric tunnel ID in “tunnel#.tunnelbroker.net” (<em>This host does not actually exist</em>)</li>
@@ -741,17 +732,16 @@ https://ipv4.tunnelbroker.net/nic/update?username=&lt;USERNAME&gt;&amp;password=
 <pre class="line-numbers language-none"><code class="language-none">https://&lt;USERNAME&gt;:&lt;PASSWORD&gt;@ipv4.tunnelbroker.net/nic/update?hostname=&lt;TUNNEL_ID&gt;&amp;myip=&lt;IP ADDRESS&gt;
 https://ipv4.tunnelbroker.net/nic/update?username=&lt;USERNAME&gt;&amp;password=&lt;PASSWORD&gt;&amp;hostname=&lt;TUNNEL_ID&gt;&amp;myip=&lt;IP ADDRESS&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 <p><strong>当然不想看的话就看完整版：</strong></p>
-<p><strong>TL;DR:</strong>（<code>Too long; Don't read</code>/ <code>Too long; Didn't read</code>）</p>
+<p>**TL;DR:**（<code>Too long; Don't read</code>/ <code>Too long; Didn't read</code>）</p>
 <pre class="line-numbers language-none"><code class="language-none">http[s]://[TB_USER:TB_PASS@]tunnelbroker.net/nic/update?[username=TB_USER&amp;password=TB_PASS&amp;]hostname=&lt;TUNNEL_ID|tunnelTUNNEL_ID.tunnelbroker.net|TB_USER-TUNNEL_LABEL.tserv#.LOC#.ipv6.he.net&gt;[&amp;myip=IPV4]<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>后面可以试一试这个功能 hhhh</p>
 <p>当然了，HE还自带了 DNS 解析，可以尝试一下呢。</p>
 <p>下面还有一些关于 IPv6 的拓展的链接。</p>
 <p>好了就这样吧。</p>
 <p>（溜了溜了</p>
-<h2 id="Reference-Extensive-Reading">Reference &amp; Extensive Reading</h2>
-<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/kaikai0803/article/details/94615666">记一次给线上服务器添加IPv6支持的步骤</a></p>
+<h2 id="Reference-amp-Extensive-Reading"><a href="#Reference-amp-Extensive-Reading" class="headerlink" title="Reference &amp; Extensive Reading"></a>Reference &amp; Extensive Reading</h2><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/kaikai0803/article/details/94615666">记一次给线上服务器添加IPv6支持的步骤</a></p>
 <p><a target="_blank" rel="noopener" href="https://wzfou.com/he-net-dns/">He.net DNS域名解析申请使用-免费DDNS、IPv6 地址和Slave DNS</a></p>
-<p><a target="_blank" rel="noopener" href="https://www.uulucky.com/show-224057.html">申请 HE.NET IPv6 隧道以使主机支持 IPv6</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.uulucky.com/show-224057.html">申请 HE.NET IPv6 隧道以使主机支持 IPv6</a>  </p>
 <p><a target="_blank" rel="noopener" href="https://www.yorkchou.com/servarica.html">Servarica IPv6 Only VPS折腾体验</a></p>
 <p><a target="_blank" rel="noopener" href="https://www.bobobk.com/377.html">如何给阿里云ecs开启ipv6访问</a></p>
 <p><a target="_blank" rel="noopener" href="http://www.yaocheap.com/phptec/817.html">阿里云centos6.8开启ipv6通过appstore审核的方法</a></p>
@@ -1345,7 +1335,7 @@ https://ipv4.tunnelbroker.net/nic/update?username=&lt;USERNAME&gt;&amp;password=
             |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
             <br>
                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">308.3k</span>&nbsp;字
+                class="white-color">308.1k</span>&nbsp;字
                                                                                     <span id="busuanzi_container_site_pv">
 			|&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
                     class="white-color"></span>&nbsp;次

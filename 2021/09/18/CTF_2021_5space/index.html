@@ -499,7 +499,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    588
+                    586
                 </div>
                 
 
@@ -524,9 +524,8 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p><img src="/2021/09/18/CTF_2021_5space/103040wps6w6xp03xz0xff.jpg" alt=""></p>
-<h2 id="引言">引言</h2>
-<blockquote>
+                <p><img src="/2021/09/18/CTF_2021_5space/103040wps6w6xp03xz0xff.jpg"></p>
+<h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><blockquote>
 <p><strong>2021 第三届“第五空间”网络安全大赛</strong></p>
 <p>比赛时间：2021-09-16 09:00 ~ 2021-09-16 21:00</p>
 <p><a target="_blank" rel="noopener" href="https://5space.360.net/">https://5space.360.net/</a></p>
@@ -534,11 +533,8 @@
 <p>喵呜，要上课啊，烦烦，只能在上课和搬砖的闲暇时间摸鱼打打比赛了。</p>
 <p>这个 第五空间 CTF 比赛时间还安排在周四，不是周末，看了眼 Web 发现已经被队友 AK 了，只能随意看看 Misc 题好了。</p>
 <p>貌似好久没水文章了，那这就是一篇水文，只有三道 Misc，大家随意看看就完事了。</p>
-<h2 id="Misc">Misc</h2>
-<h3 id="签到题">签到题</h3>
-<p><code>flag{welcometo5space}</code></p>
-<h3 id="alpha10">alpha10</h3>
-<p>foremost 提取出来两张图片</p>
+<h2 id="Misc"><a href="#Misc" class="headerlink" title="Misc"></a>Misc</h2><h3 id="签到题"><a href="#签到题" class="headerlink" title="签到题"></a>签到题</h3><p><code>flag{welcometo5space}</code></p>
+<h3 id="alpha10"><a href="#alpha10" class="headerlink" title="alpha10"></a>alpha10</h3><p>foremost 提取出来两张图片</p>
 <p><img src="/2021/09/18/CTF_2021_5space/00001404.jpg" alt="jpg"></p>
 <p><img src="/2021/09/18/CTF_2021_5space/00001537.png" alt="png"></p>
 <p>png 明显比 jpg 多了些噪声，sub 看一下</p>
@@ -548,11 +544,10 @@
 <p>试了发现是 <a target="_blank" rel="noopener" href="https://github.com/chishaxie/BlindWaterMark">chishaxie 的 BlindWaterMark</a></p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">python3 bwmforpy3.py decode 00001404.jpg 00001537.png <span class="token number">1</span>.png --alpha <span class="token number">10</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>水印里就是 flag</p>
-<p><img src="/2021/09/18/CTF_2021_5space/upload_7165b14bacc9e1a36c883ffdd4cd81bf.png" alt=""></p>
-<p><code>flag{XqAe3QzK2ehD5fWv8jfBitPqHUw0}</code></p>
-<h3 id="BabyMi">BabyMi</h3>
-<p>给了个 USB 流量，看上去里面包含有文件传输</p>
-<p><img src="/2021/09/18/CTF_2021_5space/upload_46cba5c13c2d2e752cd37722c0e56309.png" alt=""></p>
+<p><img src="/2021/09/18/CTF_2021_5space/upload_7165b14bacc9e1a36c883ffdd4cd81bf.png"></p>
+<p> <code>flag{XqAe3QzK2ehD5fWv8jfBitPqHUw0}</code></p>
+<h3 id="BabyMi"><a href="#BabyMi" class="headerlink" title="BabyMi"></a>BabyMi</h3><p>给了个 USB 流量，看上去里面包含有文件传输</p>
+<p><img src="/2021/09/18/CTF_2021_5space/upload_46cba5c13c2d2e752cd37722c0e56309.png"></p>
 <p>先用 tshark 导出流量数据</p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">tshark -r usb.pcap -T fields -e usb.capdata <span class="token operator">&gt;</span> data.txt<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>然后写个脚本把里面的非空 非全零 <em>（后来觉得好像没必要，不过问题不大）</em> 字符串 unhex 一下，合并为一个文件。</p>
@@ -580,12 +575,11 @@ cnt <span class="token operator">=</span> <span class="token number">1</span>
         cnt <span class="token operator">+=</span> <span class="token number">1</span>
         <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>拿 diskgenius 恢复一下文件，得到一个 mp4，播放就发现里面输入了 flag</p>
-<p><img src="/2021/09/18/CTF_2021_5space/upload_2671b8c08acafa8611c0dd467507d777.png" alt=""></p>
+<p><img src="/2021/09/18/CTF_2021_5space/upload_2671b8c08acafa8611c0dd467507d777.png"></p>
 <p><code>flag{A good hacker do not need any mi?}</code></p>
-<h2 id="小结">小结</h2>
-<p>喵呜呜呜，其实就做了俩 Misc，签到题还被队友抢了（x</p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>喵呜呜呜，其实就做了俩 Misc，签到题还被队友抢了（x</p>
 <p>心得就是：上课，下课，来到实验室，打开电脑做了一题 Misc，吃饭，上课，下课，回宿舍，打开电脑做了另一题 Misc。</p>
-<p><em><s>（好烦啊还要上课</s></em></p>
+<p><em><del>（好烦啊还要上课</del></em></p>
 <p>又是个卷卷卷的比赛，这次倒是多了几个奇怪分区的题目，比如 云安全、个人信息保护、人工智能，balabala，但其实感觉好多还是和 crypto 有关的，喵喵不会啊。（摊手.gif</p>
 <p>最后和队友一起打到了总榜第39，社企组第11，进决赛了喵~</p>
 <p><strong>队友 tql！感谢队友带飞！</strong></p>
@@ -1141,7 +1135,7 @@ cnt <span class="token operator">=</span> <span class="token number">1</span>
             |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
             <br>
                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">308.3k</span>&nbsp;字
+                class="white-color">308.1k</span>&nbsp;字
                                                                                     <span id="busuanzi_container_site_pv">
 			|&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
                     class="white-color"></span>&nbsp;次

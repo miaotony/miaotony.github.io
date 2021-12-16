@@ -524,33 +524,30 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p><img src="/2020/05/04/CTF_2020De1CTF/b1532fb9c0444888a6b2ce5d56cbf1f5.png" alt=""></p>
-<h2 id="引言">引言</h2>
-<p>**奔涌吧，后浪！**今天是五四青年节，<strong>节日快乐呀！</strong></p>
+                <p><img src="/2020/05/04/CTF_2020De1CTF/b1532fb9c0444888a6b2ce5d56cbf1f5.png"></p>
+<h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p><strong>奔涌吧，后浪！</strong>今天是五四青年节，<strong>节日快乐呀！</strong></p>
 <p>这几天有个 De1CTF，五一前几天出去玩了，考虑到今天早上比赛就结束了，于是昨晚来看了一眼题目，做了个 <strong>Misc 杂烩题</strong>来感受一下，还是挺有意思的。</p>
 <blockquote>
 <p><strong>De1CTF 2020</strong></p>
-<p>竞赛时间： 2020-05-02 09:00:00——2020-05-04 09:00:00<br>
-参赛方式：组队</p>
+<p>竞赛时间： 2020-05-02 09:00:00——2020-05-04 09:00:00<br>参赛方式：组队</p>
 <p>本届De1CTF是由XCTF联赛的合作单位De1ta战队组织，由赛宁网安提供技术支持。作为第六届XCTF国际联赛的分站赛，本次比赛将采用在线网络安全夺旗挑战赛的形式，面向全球开放。</p>
 <p>此次比赛冠军队伍将直接晋级第六届XCTF总决赛（总决赛具体地点时间待定，将在确定后通知获得资格的国际和国内队伍）。其他参赛的队伍也将获得积分，来竞争XCTF决赛的其他席位。</p>
 <p>大多数情况下，flag的形式为De1CTF{this_is_a_sample_flag}，请提交包含De1CTF{}的完整flag，来进行得分；如果flag是其他形式，题目中会阐明。</p>
-<p>比赛平台： <a target="_blank" rel="noopener" href="https://adworld.xctf.org.cn">https://adworld.xctf.org.cn</a></p>
+<p>比赛平台： <a target="_blank" rel="noopener" href="https://adworld.xctf.org.cn/">https://adworld.xctf.org.cn</a></p>
 </blockquote>
 <p>面向全球开放可还行，于是乎比赛题目都双语的，还用了 Google Drive 做附件存储。看了一下排行榜，歪果师傅们贼厉害啊。</p>
 <p>最后顺便<strong>总结了一下关于 NTFS 交换数据流的相关应用</strong>吧。</p>
 <br>
+
 <hr>
-<h2 id="Misc杂烩-Misc-Chowder">Misc杂烩/Misc Chowder</h2>
-<blockquote>
+<h2 id="Misc杂烩-Misc-Chowder"><a href="#Misc杂烩-Misc-Chowder" class="headerlink" title="Misc杂烩/Misc Chowder"></a>Misc杂烩/Misc Chowder</h2><blockquote>
 <p><a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1-SrQ8JbD8zAQNVlvuwu3T2Lbu_o1knRQ/view?usp=sharing">https://drive.google.com/file/d/1-SrQ8JbD8zAQNVlvuwu3T2Lbu_o1knRQ/view?usp=sharing</a></p>
 <p><strong>Hints:</strong></p>
 <p>流量包中的网络连接对解题没有帮助 The network connection in pcap is not helping to the challenge</p>
 <p>不需要访问流量里任何一个的服务器地址，所有数据都可以从流量包里直接提取 Do not need to connect the network, every data can be extracted from the pcap</p>
 <p>In the burst test point of compressed packet password, the length of the  password is 6, and the first two characters are “D” and “E”.  压缩包密码暴破考点中，密码的长度为6位，前两位为DE。</p>
 </blockquote>
-<h3 id="网络流量提取">网络流量提取</h3>
-<p>首先 Google Drive 下载下来是个流量抓包文件 <code>Misc_Chowder.pcap</code>。</p>
+<h3 id="网络流量提取"><a href="#网络流量提取" class="headerlink" title="网络流量提取"></a>网络流量提取</h3><p>首先 Google Drive 下载下来是个流量抓包文件 <code>Misc_Chowder.pcap</code>。</p>
 <p>根据提示，网络连接和服务器地址都没用的，那直接导出 HTTP 对象好了。</p>
 <p><img src="/2020/05/04/CTF_2020De1CTF/image-20200504174624485.png" alt="http对象"></p>
 <p>按照大小排序发现是上传文件的页面，表格里是上传的文件。</p>
@@ -563,17 +560,15 @@
 <p><a target="_blank" rel="noopener" href="https://drive.google.com/file/d/1JBdPj7eRaXuLCTFGn7AluAxmxQ4k1jvX/view">https://drive.google.com/file/d/1JBdPj7eRaXuLCTFGn7AluAxmxQ4k1jvX/view</a></p>
 </blockquote>
 <p>（这里最开始我数字<code>1</code>和字母<code>l</code>没分清楚，于是访问了没分享文件，仔细看了才发现……</p>
-<h3 id="Word-隐写">Word 隐写</h3>
-<p>下载后解压得到一个 <code>readme.docx</code>，打开报错，看来文件里改了啥东西。</p>
-<p><img src="/2020/05/04/CTF_2020De1CTF/image-20200504175546409.png" alt=""></p>
+<h3 id="Word-隐写"><a href="#Word-隐写" class="headerlink" title="Word 隐写"></a>Word 隐写</h3><p>下载后解压得到一个 <code>readme.docx</code>，打开报错，看来文件里改了啥东西。</p>
+<p><img src="/2020/05/04/CTF_2020De1CTF/image-20200504175546409.png"></p>
 <p>选择<code>是</code>后得到以下内容，看起来好像是没啥关系（确定）。</p>
 <p><img src="/2020/05/04/CTF_2020De1CTF/image-20200504175819109.png" alt="word内容"></p>
 <p>看了一下文本也没有隐藏文字，看来是 word 内容用处不大。</p>
 <p>我们都知道，<code>.docx</code>格式的 word 其实对应着一个压缩包，那就用压缩文件打开看看。</p>
 <p><img src="/2020/05/04/CTF_2020De1CTF/image-20200504180118698.png" alt="word隐写"></p>
 <p>发现直接就在目录下，简单干脆真好。</p>
-<h3 id="压缩包密码暴破">压缩包密码暴破</h3>
-<p><code>You_found_me_Orz.zip</code> 里有一个 <code>You_found_me_Orz.jpg</code>，题目中有 hint 说 密码的长度为6位，前两位为<code>DE</code>。于是就来爆破好了。</p>
+<h3 id="压缩包密码暴破"><a href="#压缩包密码暴破" class="headerlink" title="压缩包密码暴破"></a>压缩包密码暴破</h3><p><code>You_found_me_Orz.zip</code> 里有一个 <code>You_found_me_Orz.jpg</code>，题目中有 hint 说 密码的长度为6位，前两位为<code>DE</code>。于是就来爆破好了。</p>
 <p>使用 <code>DE????</code> 进行掩码爆破，最开始先试了一下纯大写字母、纯小写字母、纯数字、大小写字母组合，发现都不对，后来试了大写字母和数字组合，跑了一阵子密码出来了。就是 <code>DE34Q1</code>.</p>
 <p><img src="/2020/05/04/CTF_2020De1CTF/image-20200504180549996.png" alt="压缩包密码爆破"></p>
 <p>话说为啥这个不能跑满 CPU，感觉爆破好慢……</p>
@@ -585,8 +580,7 @@
 <p>不过对于掩码爆破，估计要先生成一个字典再来爆破。</p>
 <p>解压后得到了这张图片。</p>
 <p><img src="/2020/05/04/CTF_2020De1CTF/You_found_me_Orz.jpg" alt="You_found_me_Orz"></p>
-<h3 id="图像隐写">图像隐写</h3>
-<p>拖进 010editor 里看了一下，发现文件拼接了一个rar压缩包。</p>
+<h3 id="图像隐写"><a href="#图像隐写" class="headerlink" title="图像隐写"></a>图像隐写</h3><p>拖进 010editor 里看了一下，发现文件拼接了一个rar压缩包。</p>
 <p><img src="/2020/05/04/CTF_2020De1CTF/image-20200504181706421.png" alt="图像隐写"></p>
 <p>foremost 没提取出来，于是手动提取一波得到了这个压缩包。</p>
 <p><img src="/2020/05/04/CTF_2020De1CTF/image-20200504181912463.png" alt="rar"></p>
@@ -604,9 +598,8 @@
 <p><img src="/2020/05/04/CTF_2020De1CTF/666.jpg" alt="666"></p>
 <p>假的 jpg，实际上是 png 啦。</p>
 <p>看了半天这个图片，都没找到哪里有隐写……常见的图像隐写都不起作用。</p>
-<h3 id="NTFS-交换数据流隐写">NTFS 交换数据流隐写</h3>
-<p>最后又去看了看压缩包的 Hex，发现最后这里有个奇妙的东西看着就不对劲。</p>
-<p><img src="/2020/05/04/CTF_2020De1CTF/image-20200504205717969.png" alt=""></p>
+<h3 id="NTFS-交换数据流隐写"><a href="#NTFS-交换数据流隐写" class="headerlink" title="NTFS 交换数据流隐写"></a>NTFS 交换数据流隐写</h3><p>最后又去看了看压缩包的 Hex，发现最后这里有个奇妙的东西看着就不对劲。</p>
+<p><img src="/2020/05/04/CTF_2020De1CTF/image-20200504205717969.png"></p>
 <p>你看它多像 flag 呀！</p>
 <p>再看这个冒号<code>:</code>，突然想起来之前看师傅们关于内存取证的 WP 里提到过 <strong>NTFS 交换数据流隐写</strong>，虽然没细看，但说不定这里就是呢！</p>
 <p>于是查了一下相关的资料。</p>
@@ -616,7 +609,7 @@
 <p>ADS 也被用于一些恶意文件隐藏自身,作为后门。</p>
 </blockquote>
 <p>要查看 ADS 内容，可以使用 Ntfs Streams Editor 软件，或者 LADS，或者用 <code>dir /r</code>。</p>
-<p>要<strong>注意</strong>的是，这里有个坑，<strong>使用除 WinRAR 以外的软件进行提取会造成数据流丢失。<strong>所以</strong>必须要用 WinRAR 来解压才行！</strong></p>
+<p>要<strong>注意</strong>的是，这里有个坑，<strong>使用除 WinRAR 以外的软件进行提取会造成数据流丢失。</strong>所以<strong>必须要用 WinRAR 来解压才行！</strong></p>
 <p>这里坑死我了，我用 Bandizip 解压后找了半天都没找到这个 txt 文件，最后迫不得已下了个 WinRAR，广告烦死了（（</p>
 <p>解压后通过 <code>dir /r</code> 可以看到哪里有 ADS。</p>
 <p><img src="/2020/05/04/CTF_2020De1CTF/image-20200504215546635.png" alt="dir"></p>
@@ -627,12 +620,10 @@
 <p>于是 flag 就是</p>
 <p><code>De1CTF{E4Sy_M1sc_By_Jaivy_31b229908cb9bb}</code></p>
 <br>
+
 <hr>
-<h2 id="关于-NTFS-ADS-的一些总结">关于 NTFS ADS 的一些总结</h2>
-<p>这里顺便再整理一下吧，方便后面需要的时候来找。</p>
-<h3 id="查看-ADS">查看 ADS</h3>
-<h4 id="LADS">LADS</h4>
-<p>除了使用上面的方法查看外，还可以使用 LADS 工具。</p>
+<h2 id="关于-NTFS-ADS-的一些总结"><a href="#关于-NTFS-ADS-的一些总结" class="headerlink" title="关于 NTFS ADS 的一些总结"></a>关于 NTFS ADS 的一些总结</h2><p>这里顺便再整理一下吧，方便后面需要的时候来找。</p>
+<h3 id="查看-ADS"><a href="#查看-ADS" class="headerlink" title="查看 ADS"></a>查看 ADS</h3><h4 id="LADS"><a href="#LADS" class="headerlink" title="LADS"></a>LADS</h4><p>除了使用上面的方法查看外，还可以使用 LADS 工具。</p>
 <p><strong>下载地址：</strong> <a target="_blank" rel="noopener" href="https://files.cnblogs.com/files/rainbow7/lads.zip">戳这里</a></p>
 <p><strong>使用方法：</strong></p>
 <p>搜索 <code>File</code> 所在目录及其子目录下的所有数据流：（<code>/S</code>表示递归子目录）</p>
@@ -646,28 +637,23 @@
 <span class="token comment"># 其实就是 Get-Content .\666.jpg -Stream fffffffflllll.txt</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 <p><img src="/2020/05/04/CTF_2020De1CTF/image-20200504223649771.png" alt="powershell"></p>
 <p>不过怎么说呢，这个软件挺老了，<a target="_blank" rel="noopener" href="http://www.heysoft.de/">作者网站</a>上说Windows下用 <code>dir /r</code> 都有这个功能了，于是不再需要 LADS 了，也因此不提供下载了，妙啊 2333.</p>
-<h4 id="AlternateStreamView">AlternateStreamView</h4>
-<p>这个网上一搜就有下载了。</p>
+<h4 id="AlternateStreamView"><a href="#AlternateStreamView" class="headerlink" title="AlternateStreamView"></a>AlternateStreamView</h4><p>这个网上一搜就有下载了。</p>
 <p>使用起来也简单方便。支持数据流的查看和提取。</p>
 <p><img src="/2020/05/04/CTF_2020De1CTF/image-20200504222903711.png" alt="AlternateStreamView"></p>
-<h4 id="Ntfs-Streams-Editor">Ntfs Streams Editor</h4>
-<p><strong>下载地址：</strong> <a target="_blank" rel="noopener" href="https://ntfs-streams-info.en.softonic.com/">https://ntfs-streams-info.en.softonic.com/</a></p>
+<h4 id="Ntfs-Streams-Editor"><a href="#Ntfs-Streams-Editor" class="headerlink" title="Ntfs Streams Editor"></a>Ntfs Streams Editor</h4><p><strong>下载地址：</strong> <a target="_blank" rel="noopener" href="https://ntfs-streams-info.en.softonic.com/">https://ntfs-streams-info.en.softonic.com/</a></p>
 <p>或者 <a target="_blank" rel="noopener" href="http://pan.baidu.com/s/1c2zbNaC">http://pan.baidu.com/s/1c2zbNaC</a></p>
 <p>使用起来也很方便，搜索文件所在目录就可以了，而且直接就把隐藏在 ADS 中的内容显示出来了。</p>
 <p>（就是这个软件报毒说有广告啥的，emmm 看个人吧，也是个老软件了</p>
 <p><img src="/2020/05/04/CTF_2020De1CTF/image-20200504220908382.png" alt="Ntfs Streams Editor"></p>
 <p>当然，貌似用一些内存取证的工具也能提取，这里不说了啦。</p>
-<h3 id="写入-ADS">写入 ADS</h3>
-<h4 id="echo">echo</h4>
-<p>首先创建一个文件，再写入隐藏的信息。</p>
+<h3 id="写入-ADS"><a href="#写入-ADS" class="headerlink" title="写入 ADS"></a>写入 ADS</h3><h4 id="echo"><a href="#echo" class="headerlink" title="echo"></a>echo</h4><p>首先创建一个文件，再写入隐藏的信息。</p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token builtin class-name">echo</span> <span class="token string">"hello"</span> <span class="token operator">&gt;</span> <span class="token number">1</span>.txt
 <span class="token builtin class-name">echo</span> <span class="token string">"miaotony"</span> <span class="token operator">&gt;</span> <span class="token number">1</span>.txt:2.txt<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 <p><img src="/2020/05/04/CTF_2020De1CTF/image-20200504224344130.png" alt="写入ADS"></p>
 <p>注意一下，用<code>dir</code>是看不到这个隐藏的数据流哒。</p>
 <p><img src="/2020/05/04/CTF_2020De1CTF/image-20200504224556651.png" alt="dir"></p>
 <p>同理使用 binwalk / foremost 也不能看到隐写的数据。</p>
-<h4 id="type">type</h4>
-<p>还可以使用<code>type</code>命令，将已经存在的文件附加上去。</p>
+<h4 id="type"><a href="#type" class="headerlink" title="type"></a>type</h4><p>还可以使用<code>type</code>命令，将已经存在的文件附加上去。</p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># type "要隐藏的附加文件"&gt;"宿主文件":"要隐藏的附加文件"</span>
 <span class="token builtin class-name">type</span> <span class="token string">"2.txt"</span> <span class="token operator">&gt;</span> <span class="token string">"1.txt"</span><span class="token builtin class-name">:</span><span class="token string">"2.txt"</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 <p>可以用它来向 ADS 中写入图像/音频/可执行文件。</p>
@@ -676,8 +662,7 @@
 <span class="token builtin class-name">type</span> <span class="token string">"hidden.exe"</span><span class="token operator">&gt;&gt;</span><span class="token string">"targe.txt"</span><span class="token builtin class-name">:</span><span class="token string">"hidden.exe"</span>
 <span class="token builtin class-name">type</span> <span class="token string">"hidden.exe"</span><span class="token operator">&gt;&gt;</span><span class="token string">"targe.exe"</span><span class="token builtin class-name">:</span><span class="token string">"hidden.exe"</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 <p>不过在 Windows Vista 及后续系统中已经无法直接运行 ADS 中的可执行文件了。</p>
-<h3 id="删除-ADS">删除 ADS</h3>
-<p>可以使用 Ntfs Streams Editor，搜索到勾选删除就好。</p>
+<h3 id="删除-ADS"><a href="#删除-ADS" class="headerlink" title="删除 ADS"></a>删除 ADS</h3><p>可以使用 Ntfs Streams Editor，搜索到勾选删除就好。</p>
 <p><img src="/2020/05/04/CTF_2020De1CTF/image-20200504224924332.png" alt="删除ADS"></p>
 <p>也可以使用<code>streams.exe</code>这个软件删除。</p>
 <p>下载地址：<a target="_blank" rel="noopener" href="https://files.cnblogs.com/files/rainbow7/streams.zip">戳这里</a></p>
@@ -687,21 +672,21 @@
 <p>如果报错就先把相关的进程结束掉再执行。</p>
 <p>注意不要在根目录下执行，以防删除有用的数据流呀。</p>
 <br>
+
 <hr>
-<h2 id="小结">小结</h2>
-<p>再说个有意思的事，浏览器下载文件的时候，会向文件添加一个数据流，标记该文件来源于外部，即可能带有风险。</p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>再说个有意思的事，浏览器下载文件的时候，会向文件添加一个数据流，标记该文件来源于外部，即可能带有风险。</p>
 <p>估计 office 提示也是根据这个来的吧，嘻嘻。<em>（之前还想过这个问题呢 233</em></p>
 <p><img src="/2020/05/04/CTF_2020De1CTF/image-20200504230628501.png" alt="受保护的视图"></p>
 <p><img src="/2020/05/04/CTF_2020De1CTF/image-20200504230819269.png" alt="文件中包含的ADS"></p>
 <p>主要蹭这个机会理了一下 NTFS 交换数据流的相关应用。</p>
 <p>这次 De1CTF 题目质量还是很不错的，Misc 签到题 Telegram Channel 看一眼就能拿分，问卷题访问就拿到手了，还是很友好的呢。</p>
-<p>至于出现一堆 <code>mc_*</code>与 minecraft 有关的题，出题人是多喜欢 MC 啊，emmm 太难了没搞懂*（虽然没细看*。 <s>什么 easybgm 噢真没找到隐写在哪里。。</s></p>
+<p>至于出现一堆 <code>mc_*</code>与 minecraft 有关的题，出题人是多喜欢 MC 啊，emmm 太难了没搞懂<em>（虽然没细看</em>。 <del>什么 easybgm 噢真没找到隐写在哪里。。</del></p>
 <p>大概就是这些内容了吧。</p>
 <p><em>（溜了溜了  结课论文要写不完了</em></p>
 <br>
+
 <hr>
-<h2 id="Reference">Reference</h2>
-<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/Chesky/p/ALTERNATE_DATA_STREAMS.html">NTFS交换数据流隐写的应用</a></p>
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/Chesky/p/ALTERNATE_DATA_STREAMS.html">NTFS交换数据流隐写的应用</a></p>
 <p><a target="_blank" rel="noopener" href="https://www.freebuf.com/column/205245.html">NTFS交换数据流隐写（上）</a></p>
 
                 
@@ -1274,7 +1259,7 @@
             |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
             <br>
                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">308.3k</span>&nbsp;字
+                class="white-color">308.1k</span>&nbsp;字
                                                                                     <span id="busuanzi_container_site_pv">
 			|&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
                     class="white-color"></span>&nbsp;次

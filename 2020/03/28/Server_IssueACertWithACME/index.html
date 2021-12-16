@@ -540,27 +540,23 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="0x00-前言">0x00 前言</h2>
-<p>3月26日，一堆 GitHub Pages 以及 <a target="_blank" rel="noopener" href="http://jd.com">jd.com</a> 等网站的 SSL 证书被一个自签名证书 （<code>C=CN; ST=GD; L=SZ; O=COM; OU=NSP; CN=SERVER; emailAddress=346608453@qq.com</code> ）劫持了，开启了 HSTS 则会被浏览器拦下来。不过套了 CF 的 CDN 则不受影响。27日发现 <code>*.github.io</code> 好了，GitHub 主站被劫持了……（真狠啊</p>
+                <h2 id="0x00-前言"><a href="#0x00-前言" class="headerlink" title="0x00 前言"></a>0x00 前言</h2><p>3月26日，一堆 GitHub Pages 以及 jd.com 等网站的 SSL 证书被一个自签名证书 （<code>C=CN; ST=GD; L=SZ; O=COM; OU=NSP; CN=SERVER; emailAddress=346608453@qq.com</code> ）劫持了，开启了 HSTS 则会被浏览器拦下来。不过套了 CF 的 CDN 则不受影响。27日发现 <code>*.github.io</code> 好了，GitHub 主站被劫持了……（真狠啊</p>
 <blockquote>
 <p>具体参考这几篇：</p>
-<p><a target="_blank" rel="noopener" href="https://www.v2ex.com/t/656367">https://www.v2ex.com/t/656367</a><br>
-<a target="_blank" rel="noopener" href="https://www.v2ex.com/t/656394">https://www.v2ex.com/t/656394</a><br>
-<a target="_blank" rel="noopener" href="https://m.cnbeta.com/view/960295.htm">https://m.cnbeta.com/view/960295.htm</a><br>
-<a target="_blank" rel="noopener" href="https://blog.netlab.360.com/ongoing-websites-hijacking/">一些网站https证书出现问题的情况分析</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.v2ex.com/t/656367">https://www.v2ex.com/t/656367</a><br><a target="_blank" rel="noopener" href="https://www.v2ex.com/t/656394">https://www.v2ex.com/t/656394</a><br><a target="_blank" rel="noopener" href="https://m.cnbeta.com/view/960295.htm">https://m.cnbeta.com/view/960295.htm</a><br><a target="_blank" rel="noopener" href="https://blog.netlab.360.com/ongoing-websites-hijacking/">一些网站https证书出现问题的情况分析</a>  </p>
 <p><em>（最后这篇说很多大站都受影响了</em></p>
 </blockquote>
 <p>HTTPS 加密通信挺重要的，之前也听说过 MITM（中间人攻击），不过这还是第一次听说证书被劫持的……</p>
 <p>怎么说好呢，应该可以说网络上不能保证绝对安全吧，或者说绝对安全是不存在的。</p>
-<p>想起来之前搭建的一个服务还没上 HTTPS，然而想不起来之前是怎么配置 SSL 证书的了，*然后又得去找资料<s>烦死了</s>，*于是这回顺便来记录一下好了啦。（摊手</p>
-<p><strong>通过 Let’s encrypt 可以获得 90 天免费且可续期的 SSL 证书，而利用 <a target="_blank" rel="noopener" href="http://acme.sh">acme.sh</a> 可以自动生成和更新</strong>，就来介绍一下<strong>配置的过程</strong>吧。</p>
+<p>想起来之前搭建的一个服务还没上 HTTPS，然而想不起来之前是怎么配置 SSL 证书的了，<em>然后又得去找资料<del>烦死了</del>，</em>于是这回顺便来记录一下好了啦。（摊手</p>
+<p><strong>通过 Let’s encrypt 可以获得 90 天免费且可续期的 SSL 证书，而利用 acme.sh 可以自动生成和更新</strong>，就来介绍一下<strong>配置的过程</strong>吧。</p>
 <blockquote>
 <p>当然，你还可以尝试用 Let’s Encrypt 的 <code>certbot</code> 工具来签发证书，不过要装一堆库吧，我也不记得了……</p>
 </blockquote>
-<p>下面的内容涉及 <a target="_blank" rel="noopener" href="http://acme.sh">acme.sh</a> 的安装，证书的签发及认证，如何安装到 nginx，以及自动更新证书、更新 <a target="_blank" rel="noopener" href="http://acme.sh">acme.sh</a> 等。</p>
+<p>下面的内容涉及 acme.sh 的安装，证书的签发及认证，如何安装到 nginx，以及自动更新证书、更新 acme.sh 等。</p>
 <br>
-<h2 id="0x01-安装-acme-sh">0x01 安装 <a target="_blank" rel="noopener" href="http://acme.sh">acme.sh</a></h2>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">curl</span> https://get.acme.sh <span class="token operator">|</span> <span class="token function">sh</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h2 id="0x01-安装-acme-sh"><a href="#0x01-安装-acme-sh" class="headerlink" title="0x01 安装 acme.sh"></a>0x01 安装 acme.sh</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">curl</span> https://get.acme.sh <span class="token operator">|</span> <span class="token function">sh</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>或者</p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">wget</span> -O -  https://get.acme.sh <span class="token operator">|</span> <span class="token function">sh</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>执行上面的命令，它会：</p>
@@ -588,26 +584,22 @@ Commands:
   --install-cert           Install the issued cert to apache/nginx or any other server.
 <span class="token comment"># ......</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <br>
-<h2 id="0x02-签发-SSL-证书">0x02 签发 SSL 证书</h2>
-<p>签发 SSL 证书需要证明这个域名是属于你的，即<strong>域名所有权</strong>，一般有两种方式验证：http 和 dns 验证。</p>
-<p>通过 <a target="_blank" rel="noopener" href="http://acme.sh">acme.sh</a> 可以签发单域名、多域名、泛域名证书，还可以签发 ECC 证书。为了简单起见，这里以<strong>单域名证书</strong>为例，后面再拓展一下好了。</p>
+
+<h2 id="0x02-签发-SSL-证书"><a href="#0x02-签发-SSL-证书" class="headerlink" title="0x02 签发 SSL 证书"></a>0x02 签发 SSL 证书</h2><p>签发 SSL 证书需要证明这个域名是属于你的，即<strong>域名所有权</strong>，一般有两种方式验证：http 和 dns 验证。</p>
+<p>通过 acme.sh 可以签发单域名、多域名、泛域名证书，还可以签发 ECC 证书。为了简单起见，这里以<strong>单域名证书</strong>为例，后面再拓展一下好了。</p>
 <p><strong>下面任意一种方式只要安装成功了就行！</strong></p>
 <p>注意：这一步<strong>只是生成了证书，并没有进行配置</strong>，因此访问网站当然上不了 https。</p>
-<h3 id="2-1-HTTP-验证">2.1 HTTP 验证</h3>
-<p>这种方式 <code>acme.sh</code> 会自动在你的网站根目录下放置一个文件，来验证你的域名所有权，验证之后就签发证书，最后会自动删除验证文件。</p>
+<h3 id="2-1-HTTP-验证"><a href="#2-1-HTTP-验证" class="headerlink" title="2.1 HTTP 验证"></a>2.1 HTTP 验证</h3><p>这种方式 <code>acme.sh</code> 会自动在你的网站根目录下放置一个文件，来验证你的域名所有权，验证之后就签发证书，最后会自动删除验证文件。</p>
 <p><strong>前提是要绑定的域名已经绑定到了所在服务器上，且可以通过公网进行访问！</strong></p>
-<h4 id="2-1-1-Webroot-mode">2.1.1  Webroot mode</h4>
-<p>假设服务器在运行着的，网站域名为 <code>example.com</code>，根目录为 <code>/home/wwwroot/example.com</code>。那么只需要执行下面这条语句就行。</p>
+<h4 id="2-1-1-Webroot-mode"><a href="#2-1-1-Webroot-mode" class="headerlink" title="2.1.1  Webroot mode"></a>2.1.1  Webroot mode</h4><p>假设服务器在运行着的，网站域名为 <code>example.com</code>，根目录为 <code>/home/wwwroot/example.com</code>。那么只需要执行下面这条语句就行。</p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">acme.sh  --issue  -d example.com  -w /home/wwwroot/example.com<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<h4 id="2-1-2-Apache-Nginx-mode">2.1.2 Apache / Nginx mode</h4>
-<p>如果用的是 Apache 或者 Nginx 服务器，可以自动寻找配置文件来进行签发。</p>
+<h4 id="2-1-2-Apache-Nginx-mode"><a href="#2-1-2-Apache-Nginx-mode" class="headerlink" title="2.1.2 Apache / Nginx mode"></a>2.1.2 Apache / Nginx mode</h4><p>如果用的是 Apache 或者 Nginx 服务器，可以自动寻找配置文件来进行签发。</p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">acme.sh  --issue  -d example.com  --apache  <span class="token comment"># Apache</span>
 acme.sh  --issue  -d example.com  --nginx   <span class="token comment"># Nginx</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 <p>如果找不到配置文件的话可以自行配置。</p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">acme.sh  --issue  -d example.com  --nginx /etc/nginx/nginx.conf  <span class="token comment"># 指定nginx的conf</span>
 acme.sh  --issue  -d example.com  --nginx /etc/nginx/conf.d/example.com.conf  <span class="token comment"># 指定网站的conf</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-<h4 id="2-1-3-Standalone-mode">2.1.3 Standalone mode</h4>
-<p>这种方式下，<a target="_blank" rel="noopener" href="http://acme.sh">acme.sh</a> 会自己建立一个服务器来完成签发。主要适合的是没有建立服务器的情况，不过其实有服务器的话只要暂时关闭，不造成端口冲突就能使用。</p>
+<h4 id="2-1-3-Standalone-mode"><a href="#2-1-3-Standalone-mode" class="headerlink" title="2.1.3 Standalone mode"></a>2.1.3 Standalone mode</h4><p>这种方式下，acme.sh 会自己建立一个服务器来完成签发。主要适合的是没有建立服务器的情况，不过其实有服务器的话只要暂时关闭，不造成端口冲突就能使用。</p>
 <p>http 模式，80端口：</p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">acme.sh  --issue  -d example.com  --standalone<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>如果用了反代之类的不是 80 端口，则可以手动指定。</p>
@@ -616,12 +608,13 @@ acme.sh  --issue  -d example.com  --nginx /etc/nginx/conf.d/example.com.conf  <s
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">acme.sh  --issue  -d example.com  --alpn
 acme.sh  --issue  -d example.com  --alpn --tlsport <span class="token number">8443</span>  <span class="token comment"># 自行指定tls端口</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 <br>
-<h3 id="2-2-DNS-验证">2.2 DNS 验证</h3>
-<p>这种方式下，不需要任何服务器，不需要任何公网 ip，只需要 dns 的解析记录即可完成验证。</p>
+
+
+
+<h3 id="2-2-DNS-验证"><a href="#2-2-DNS-验证" class="headerlink" title="2.2 DNS 验证"></a>2.2 DNS 验证</h3><p>这种方式下，不需要任何服务器，不需要任何公网 ip，只需要 dns 的解析记录即可完成验证。</p>
 <p>比如说服务器不能直接公网访问，以及某些 VPS 直接绑定域名没备案的话是上不去的，就需要采用这种方案了。<em>（我的就是了</em></p>
 <p>当然，手里有域名只是想生成一个证书而已也可以这么用。</p>
-<h4 id="2-2-1-DNS-API-mode">2.2.1 DNS API mode</h4>
-<p>这种方式贼强大，直接可以利用域名服务商提供的 API 就可以自动帮你添加 TXT 记录完成验证和证书签发。而且60天后还可以自动完成续期。（我就是用这种方式实现哒~</p>
+<h4 id="2-2-1-DNS-API-mode"><a href="#2-2-1-DNS-API-mode" class="headerlink" title="2.2.1 DNS API mode"></a>2.2.1 DNS API mode</h4><p>这种方式贼强大，直接可以利用域名服务商提供的 API 就可以自动帮你添加 TXT 记录完成验证和证书签发。而且60天后还可以自动完成续期。（我就是用这种方式实现哒~</p>
 <p>比如说 CloudFlare 的，在<a target="_blank" rel="noopener" href="https://dash.cloudflare.com/profile">这里</a>获取你的API Key。可以用全局 API Key，将参数导入到命令行。</p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token builtin class-name">export</span> <span class="token assign-left variable">CF_Token</span><span class="token operator">=</span><span class="token string">"sdfsdfsdfljlbjkljlkjsdfoiwje"</span>
 <span class="token builtin class-name">export</span> <span class="token assign-left variable">CF_Account_ID</span><span class="token operator">=</span><span class="token string">"xxxxxxxxxxxxx"</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
@@ -639,17 +632,17 @@ acme.sh  --issue  -d example.com  --alpn --tlsport <span class="token number">84
 acme.sh --issue --dns dns_dp -d example.com -d www.example.com<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 <p><em>（这个其实就是多域名签发了）</em></p>
 <p>更多例子参考官方 Wiki 好了→ <a target="_blank" rel="noopener" href="https://github.com/acmesh-official/acme.sh/wiki/dnsapi">How to use DNS API</a></p>
-<h4 id="2-2-2-DNS-manual-mode">2.2.2 DNS manual mode</h4>
-<p>适合域名服务商没有提供 API 的情况，需要自己在域名配置一个 TXT 记录，且不能自动续期，每次都需要重新配置。</p>
+<h4 id="2-2-2-DNS-manual-mode"><a href="#2-2-2-DNS-manual-mode" class="headerlink" title="2.2.2 DNS manual mode"></a>2.2.2 DNS manual mode</h4><p>适合域名服务商没有提供 API 的情况，需要自己在域名配置一个 TXT 记录，且不能自动续期，每次都需要重新配置。</p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">acme.sh  --issue  -d example.com  --dns  -d www.example.com<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>更多请参考官方教程 <a target="_blank" rel="noopener" href="https://github.com/acmesh-official/acme.sh/wiki/DNS-manual-mode">DNS manual mode</a>。</p>
-<h4 id="2-2-3-DNS-alias-mode">2.2.3 DNS alias mode</h4>
-<p>如果域名服务商没有提供 API，或者是一个挺重要的域名，为了安全不希望或者不方便直接配置这个域名的解析记录，可以通过另一个没那么重要的域名（可能是专门用来签发证书的）间接进行配置。</p>
+<h4 id="2-2-3-DNS-alias-mode"><a href="#2-2-3-DNS-alias-mode" class="headerlink" title="2.2.3 DNS alias mode"></a>2.2.3 DNS alias mode</h4><p>如果域名服务商没有提供 API，或者是一个挺重要的域名，为了安全不希望或者不方便直接配置这个域名的解析记录，可以通过另一个没那么重要的域名（可能是专门用来签发证书的）间接进行配置。</p>
 <p>实际上还是需要有一个域名来验证所有权啦！</p>
 <p>更多参考官方教程 <a target="_blank" rel="noopener" href="https://github.com/acmesh-official/acme.sh/wiki/DNS-alias-mode">DNS alias mode</a> 好了。</p>
 <br>
-<h3 id="2-3-多域名配置">2.3 多域名配置</h3>
-<p>多个域名签发同一张证书。只需要在验证方式之后添加多个 <code>-d &lt;YourDomainHere&gt;</code> 参数就行。</p>
+
+
+
+<h3 id="2-3-多域名配置"><a href="#2-3-多域名配置" class="headerlink" title="2.3 多域名配置"></a>2.3 多域名配置</h3><p>多个域名签发同一张证书。只需要在验证方式之后添加多个 <code>-d &lt;YourDomainHere&gt;</code> 参数就行。</p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">acme.sh --issue -d example.com -w /home/wwwroot/example.com -d www.example.com
 
 acme.sh  --issue  -d example.com  --standalone  -d www.example.com 
@@ -662,14 +655,14 @@ acme.sh  --issue  -d example.com  --dns  -d www.example.com<span aria-hidden="tr
 -d cc.com  --apache <span class="token punctuation">\</span>
 -d dd.com  -w /home/wwwroot/dd.com<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <br>
-<h3 id="2-4-泛域名配置">2.4 泛域名配置</h3>
-<p>Wildcard certificates</p>
+
+<h3 id="2-4-泛域名配置"><a href="#2-4-泛域名配置" class="headerlink" title="2.4 泛域名配置"></a>2.4 泛域名配置</h3><p>Wildcard certificates</p>
 <p>同理，<strong>只需要加个<code>*</code><strong>就好。不过好像</strong>只适用于 DNS 验证</strong>的方式。</p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">acme.sh  --issue -d example.com  -d <span class="token string">'*.example.com'</span>  --dns dns_cf<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <br>
-<h3 id="2-5-签发-ECC-证书">2.5 签发 ECC 证书</h3>
-<p>默认签发的都是基于 RSA 密钥加密的证书，而 <strong>ECC</strong> (Elliptic Curve Cryptography, 椭圆曲线密码) 密钥的保密性比 RSA 更好，密钥长度更短，更能对抗量子解密等，目前现代的操作系统和浏览器都支持 ECC 证书了（Windows XP 及其之前的就算了）。</p>
-<p><code>Let's Encrypt</code> 提供了 ECDSA 证书的签发，且 <a target="_blank" rel="noopener" href="http://acme.sh">acme.sh</a> 也支持。</p>
+
+<h3 id="2-5-签发-ECC-证书"><a href="#2-5-签发-ECC-证书" class="headerlink" title="2.5 签发 ECC 证书"></a>2.5 签发 ECC 证书</h3><p>默认签发的都是基于 RSA 密钥加密的证书，而 <strong>ECC</strong> (Elliptic Curve Cryptography, 椭圆曲线密码) 密钥的保密性比 RSA 更好，密钥长度更短，更能对抗量子解密等，目前现代的操作系统和浏览器都支持 ECC 证书了（Windows XP 及其之前的就算了）。</p>
+<p><code>Let's Encrypt</code> 提供了 ECDSA 证书的签发，且 acme.sh 也支持。</p>
 <p>我看网上的教程基本没讲 ECC 证书的签发，这里就来整一下呗！</p>
 <p>其实只需要加上一个以 <code>ec-</code> 为前缀的 <code>--keylength</code> 参数（或 <code>-k</code>）就可以了。理论上上面的各种验证方式都适用。</p>
 <p>比如</p>
@@ -684,14 +677,15 @@ acme.sh --issue -w /home/wwwroot/example.com -d example.com -d www.example.com -
 </ol>
 </blockquote>
 <br>
-<h2 id="0x03-安装-copy-证书">0x03 安装(copy)证书</h2>
-<p>签发证书成功后，需要把证书安装或者复制到真正需要的地方，如 nginx / apache 的目录下。</p>
+
+
+
+<h2 id="0x03-安装-copy-证书"><a href="#0x03-安装-copy-证书" class="headerlink" title="0x03 安装(copy)证书"></a>0x03 安装(copy)证书</h2><p>签发证书成功后，需要把证书安装或者复制到真正需要的地方，如 nginx / apache 的目录下。</p>
 <p>官方说<strong>必须</strong>用下面的命令来安装证书，<strong>不能</strong>直接用 <code>~/.acme.sh/</code>目录下的证书文件，因为那只能内部使用，且未来目录结构可能会更改。</p>
 <p>我们只需要使用 <code>--installcert</code> 命令，指定目标位置，然后证书文件就会被 copy 到相应的位置了。</p>
 <p>其中域名是必须的，其他参数是可选的。</p>
 <p>有必要的话，可能需要对证书文件的所属权限进行一些设置。（我这边没有问题呢，就略了吧）</p>
-<h3 id="3-1-Nginx">3.1 Nginx</h3>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">acme.sh --installcert -d example.com <span class="token punctuation">\</span>
+<h3 id="3-1-Nginx"><a href="#3-1-Nginx" class="headerlink" title="3.1 Nginx"></a>3.1 Nginx</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">acme.sh --installcert -d example.com <span class="token punctuation">\</span>
 --key-file       /path/to/keyfile/in/nginx/key.pem  <span class="token punctuation">\</span>
 --fullchain-file /path/to/fullchain/nginx/cert.pem <span class="token punctuation">\</span>
 --reloadcmd     <span class="token string">"service nginx force-reload"</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
@@ -704,8 +698,7 @@ acme.sh --issue -w /home/wwwroot/example.com -d example.com -d www.example.com -
 <p>这里用的是 <code>service nginx force-reload</code>, 不是 <code>service nginx reload</code>, 据测试, <code>reload</code> 并不会重新加载证书, 所以用的 <code>force-reload</code>。</p>
 <p>Nginx 的配置 <code>ssl_certificate</code> 使用 <code>/etc/nginx/ssl/fullchain.cer</code> ，而非 <code>/etc/nginx/ssl/.cer</code> ，否则 <a target="_blank" rel="noopener" href="https://www.ssllabs.com/ssltest/">SSL Labs</a> 的测试会报 <code>Chain issues Incomplete</code> 错误。</p>
 </blockquote>
-<h3 id="3-2-Apache">3.2 Apache</h3>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">acme.sh --install-cert -d example.com <span class="token punctuation">\</span>
+<h3 id="3-2-Apache"><a href="#3-2-Apache" class="headerlink" title="3.2 Apache"></a>3.2 Apache</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">acme.sh --install-cert -d example.com <span class="token punctuation">\</span>
 --cert-file      /path/to/certfile/in/apache/cert.pem  <span class="token punctuation">\</span>
 --key-file       /path/to/keyfile/in/apache/key.pem  <span class="token punctuation">\</span>
 --fullchain-file /path/to/fullchain/certfile/apache/fullchain.pem <span class="token punctuation">\</span>
@@ -713,18 +706,22 @@ acme.sh --issue -w /home/wwwroot/example.com -d example.com -d www.example.com -
 <p>在命令中的 <strong><code>reloadcmd</code> 参数很重要！</strong> 这个用来指定证书更新（Renew）后执行的命令，从而使续期后的证书生效。</p>
 <p>默认 60 天就会续期一次，上面这些参数会记录下来并自动执行。（几好，贼方便</p>
 <br>
-<h2 id="0x04-生成-dhparam-pem-文件（可选）">0x04 生成 dhparam.pem 文件（可选）</h2>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">openssl dhparam -out /etc/nginx/ssl/dhparam.pem <span class="token number">2048</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+
+
+<h2 id="0x04-生成-dhparam-pem-文件（可选）"><a href="#0x04-生成-dhparam-pem-文件（可选）" class="headerlink" title="0x04 生成 dhparam.pem 文件（可选）"></a>0x04 生成 dhparam.pem 文件（可选）</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">openssl dhparam -out /etc/nginx/ssl/dhparam.pem <span class="token number">2048</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>这一步是为了增强 SSL 的安全性。这里生成一个更强壮的 DHE 参数。</p>
 <blockquote>
-<p>**前向安全性（Forward Secrecy）**的概念很简单：客户端和服务器协商一个永不重用的密钥，并在会话结束时销毁它。服务器上的 RSA 私钥用于客户端和服务器之间的 Diffie-Hellman 密钥交换签名。从 Diffie-Hellman  握手中获取的预主密钥会用于之后的编码。因为预主密钥是特定于客户端和服务器之间建立的某个连接，并且只用在一个限定的时间内，所以称作短暂模式（Ephemeral）。</p>
+<p><strong>前向安全性（Forward Secrecy）</strong>的概念很简单：客户端和服务器协商一个永不重用的密钥，并在会话结束时销毁它。服务器上的 RSA 私钥用于客户端和服务器之间的 Diffie-Hellman 密钥交换签名。从 Diffie-Hellman  握手中获取的预主密钥会用于之后的编码。因为预主密钥是特定于客户端和服务器之间建立的某个连接，并且只用在一个限定的时间内，所以称作短暂模式（Ephemeral）。</p>
 <p>使用了前向安全性，如果一个攻击者取得了一个服务器的私钥，他是不能解码之前的通讯信息的。这个私钥仅用于 Diffie Hellman  握手签名，并不会泄露预主密钥。Diffie Hellman 算法会确保预主密钥绝不会离开客户端和服务器，而且不能被中间人攻击所拦截。</p>
 <p>nginx 依赖于 OpenSSL 给 Diffie-Hellman （DH）的输入参数。不幸的是，这意味着  Diffie-Hellman Ephemeral（DHE）将使用 OpenSSL  的默认设置，包括一个用于密钥交换的1024位密钥。因为我们正在使用2048位证书，DHE 客户端就会使用一个要比非 DHE  客户端更弱的密钥交换。</p>
 </blockquote>
 <p>更多参考<a target="_blank" rel="noopener" href="https://weakdh.org/sysadmin.html">这里 Guide to Deploying Diffie-Hellman for TLS</a> 吧。</p>
 <br>
-<h2 id="0x05-配置-Nginx">0x05 配置 Nginx</h2>
-<p>没用过 Apache，这里只说 Nginx 好了。<small>（其实也不怎么会用（小声bb </small></p>
+
+
+
+<h2 id="0x05-配置-Nginx"><a href="#0x05-配置-Nginx" class="headerlink" title="0x05 配置 Nginx"></a>0x05 配置 Nginx</h2><p>没用过 Apache，这里只说 Nginx 好了。<small>（其实也不怎么会用（小声bb </small></p>
 <p>修改网站的 conf 配置文件，加入 SSL 的相关配置。</p>
 <pre class="line-numbers language-nginx" data-language="nginx"><code class="language-nginx"><span class="token keyword">server</span> <span class="token punctuation">{</span>
     <span class="token keyword">server_name</span> example<span class="token punctuation">.</span>com<span class="token punctuation">;</span>
@@ -744,11 +741,9 @@ acme.sh --issue -w /home/wwwroot/example.com -d example.com -d www.example.com -
 <p><code>ssl_dhparam /etc/nginx/ssl/dhparam.pem;</code> 是在 0x04 步骤中生成的，可选。</p>
 <p><code>ssl_ciphers </code>用于指定加密套件，这里采用的是 <a target="_blank" rel="noopener" href="https://github.com/cloudflare/sslconfig/blob/master/conf">CloudFlare 家的</a>，具体也不是很清楚 emmm。可以参考一下 Mozilla 的 Wiki：<a target="_blank" rel="noopener" href="https://wiki.mozilla.org/Security/Server_Side_TLS">Security/Server Side TLS</a></p>
 <p>更多参数可以参考 nginx 的文档：<a target="_blank" rel="noopener" href="http://nginx.org/en/docs/http/ngx_http_ssl_module.html">Module ngx_http_ssl_module</a></p>
-<h3 id="TLSv1-3（可选）">TLSv1.3（可选）</h3>
-<p>现在很多网站都上 <strong>TLSv1.3</strong> 了，证书检测的网站对于 TLSv1、TLSv1.1 都认为不安全了，Firefox 自 74.0 版本开始也完全放弃对加密协议 <em>TLS 1.0</em> 和 <em>TLS 1.1</em> 的支持了。</p>
+<h3 id="TLSv1-3（可选）"><a href="#TLSv1-3（可选）" class="headerlink" title="TLSv1.3（可选）"></a>TLSv1.3（可选）</h3><p>现在很多网站都上 <strong>TLSv1.3</strong> 了，证书检测的网站对于 TLSv1、TLSv1.1 都认为不安全了，Firefox 自 74.0 版本开始也完全放弃对加密协议 <em>TLS 1.0</em> 和 <em>TLS 1.1</em> 的支持了。</p>
 <p>对于 TLSv1.3 的配置，需要安装最新版的 openssl（OpenSSL 1.1.1 built with TLSv1.3或更高），而后重新编译 nginx，是有点麻烦这里懒得弄了，后面需要再折腾吧。</p>
-<h3 id="开启-HSTS（可选）">开启 HSTS（可选）</h3>
-<p>当然，为了更加安全，<strong>可以选择开启 HSTS</strong>（HTTP Strict Transport Security，HTTP严格传输安全协议），强制浏览器通过 https 进行访问。需要在 location 下的设置中加入一个 header。</p>
+<h3 id="开启-HSTS（可选）"><a href="#开启-HSTS（可选）" class="headerlink" title="开启 HSTS（可选）"></a>开启 HSTS（可选）</h3><p>当然，为了更加安全，<strong>可以选择开启 HSTS</strong>（HTTP Strict Transport Security，HTTP严格传输安全协议），强制浏览器通过 https 进行访问。需要在 location 下的设置中加入一个 header。</p>
 <pre class="line-numbers language-nginx" data-language="nginx"><code class="language-nginx"><span class="token keyword">add_header</span> Strict<span class="token operator">-</span>Transport<span class="token operator">-</span>Security <span class="token string">"max-age=31536000; includeSubDomains; preload"</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>接下来的一年（即31536000秒）中，浏览器看到 header 中包含 <code> Strict-Transport-Security</code> 的话就会自动切换到 https。</p>
 <p>但是在首次访问网站时如果被劫持了，浏览器还是可能会通过 HTTP 明文传递信息。为此，Chrome 维护了一个 HSTS preload list，内置在浏览器中，对于 Chrome, Firefox, Opera, Safari, IE 11 and Edge 等主流浏览器也适用。可以<a target="_blank" rel="noopener" href="https://hstspreload.org/">在这里</a>提交你的域名到这个列表里。（不过提交之前要考虑好，全站上 https 噢</p>
@@ -758,11 +753,13 @@ acme.sh --issue -w /home/wwwroot/example.com -d example.com -d www.example.com -
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">nginx -t
 systemctl restart nginx<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 <p>之后就可以试一下能不能通过 https 来访问自己的网站啦！</p>
-<p><strong>到这里 SSL 配置就告一段落了，下面是一些 <a target="_blank" rel="noopener" href="http://acme.sh">acme.sh</a> 的维护相关的了。</strong></p>
+<p><strong>到这里 SSL 配置就告一段落了，下面是一些 acme.sh 的维护相关的了。</strong></p>
 <br>
-<h2 id="0x06-更新证书">0x06 更新证书</h2>
-<p>证书的有效期为 90 天，<a target="_blank" rel="noopener" href="http://acme.sh">acme.sh</a> 会 60 天更新（Renew）一次。</p>
-<p>在安装 <a target="_blank" rel="noopener" href="http://acme.sh">acme.sh</a> 的时候就自动配置了一条 cron 任务了，会每天检查证书的情况。当然可以到 crontab 里看一下。</p>
+
+
+
+<h2 id="0x06-更新证书"><a href="#0x06-更新证书" class="headerlink" title="0x06 更新证书"></a>0x06 更新证书</h2><p>证书的有效期为 90 天，acme.sh 会 60 天更新（Renew）一次。</p>
+<p>在安装 acme.sh 的时候就自动配置了一条 cron 任务了，会每天检查证书的情况。当然可以到 crontab 里看一下。</p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># crontab -l</span>
 <span class="token number">43</span> <span class="token number">0</span> * * * <span class="token string">"/root/.acme.sh"</span>/acme.sh --cron --home <span class="token string">"/root/.acme.sh"</span> <span class="token operator">&gt;</span> /dev/null<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 <p>也可以试着用上面这条命令执行看一下相关的配置是否正确。</p>
@@ -770,55 +767,51 @@ systemctl restart nginx<span aria-hidden="true" class="line-numbers-rows"><span>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">acme.sh --renew -d example.com --force  
 acme.sh --renew -d example.com --force --ecc  <span class="token comment"># 如果用的是ECC证书</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 <br>
-<h2 id="0x07-停止更新证书">0x07 停止更新证书</h2>
-<p>查看证书列表</p>
+
+
+
+<h2 id="0x07-停止更新证书"><a href="#0x07-停止更新证书" class="headerlink" title="0x07 停止更新证书"></a>0x07 停止更新证书</h2><p>查看证书列表</p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">acme.sh --list<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>停止 Renew</p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">acme.sh --remove -d example.com <span class="token punctuation">[</span>--ecc<span class="token punctuation">]</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>之后手动把目录下的证书移除就行。</p>
 <br>
-<h2 id="0x08-升级-acme-sh">0x08 升级 <a target="_blank" rel="noopener" href="http://acme.sh">acme.sh</a></h2>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">acme.sh --upgrade    <span class="token comment"># 手动升级</span>
+
+
+
+<h2 id="0x08-升级-acme-sh"><a href="#0x08-升级-acme-sh" class="headerlink" title="0x08 升级 acme.sh"></a>0x08 升级 acme.sh</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">acme.sh --upgrade    <span class="token comment"># 手动升级</span>
 acme.sh --upgrade --auto-upgrade    <span class="token comment"># 自动升级</span>
 acme.sh --upgrade --auto-upgrade <span class="token number">0</span>  <span class="token comment"># 停止自动升级</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 <br>
-<h2 id="0xFF-小结">0xFF 小结</h2>
-<p>除了上面这些配置之外，<a target="_blank" rel="noopener" href="http://acme.sh">acme.sh</a> 还提供了通知提醒，可以调用其他 API 来推送提醒，具体参考官方Wiki：<a target="_blank" rel="noopener" href="https://github.com/acmesh-official/acme.sh/wiki/notify">notify</a>。</p>
+
+
+
+<h2 id="0xFF-小结"><a href="#0xFF-小结" class="headerlink" title="0xFF 小结"></a>0xFF 小结</h2><p>除了上面这些配置之外，acme.sh 还提供了通知提醒，可以调用其他 API 来推送提醒，具体参考官方Wiki：<a target="_blank" rel="noopener" href="https://github.com/acmesh-official/acme.sh/wiki/notify">notify</a>。</p>
 <p>总之感觉<strong>这个工具还是很实用的，大大降低了 SSL 配置的门槛</strong>呢。</p>
 <p>草（一种植物），感觉我把官方的教程翻译了，然后又找了一些其他的资料整合起来了的亚子emmm。不过大部分还是自己手码的字啦！</p>
 <p>实际上我这次配置的是 ECC 密钥的泛域名证书，用的是 DNS API 的模式。其实几个月前就折腾过 SSL 证书的配置了，然而过了就忘了，当时先是用 HTTP 模式进行验证，发现行不通才换的 DNS 模式。这次干脆一起理一遍好了，过程中发现原来 HTTP 模式验证比我想的还要强大，只是需求（主要是需要泛域名证书）对不上罢了。</p>
 <p>怎么说好呢，绝对安全不大可能，都是想方设法尽可能相对安全一些呢。</p>
 <p>希望这一篇不会浪费您的宝贵时间呢，有用的话欢迎给我买点好吃的/buy me a coffee（饿了喵</p>
 <p>溜了溜了（</p>
-<h2 id="References-Extensive-Reading">References &amp; Extensive Reading</h2>
-<p>下面有的是官方文档，有的是博客之类的，由于时效性有些内容可能不适用了。注意一下就吼。</p>
+<h2 id="References-amp-Extensive-Reading"><a href="#References-amp-Extensive-Reading" class="headerlink" title="References &amp; Extensive Reading"></a>References &amp; Extensive Reading</h2><p>下面有的是官方文档，有的是博客之类的，由于时效性有些内容可能不适用了。注意一下就吼。</p>
 <ul>
-<li>
-<p><a target="_blank" rel="noopener" href="https://github.com/acmesh-official/acme.sh">acme.sh GitHub 仓库</a></p>
+<li><p><a target="_blank" rel="noopener" href="https://github.com/acmesh-official/acme.sh">acme.sh GitHub 仓库</a>  </p>
 </li>
-<li>
-<p><a target="_blank" rel="noopener" href="https://github.com/acmesh-official/acme.sh/wiki/%E8%AF%B4%E6%98%8E">官方中文说明</a></p>
+<li><p><a target="_blank" rel="noopener" href="https://github.com/acmesh-official/acme.sh/wiki/%E8%AF%B4%E6%98%8E">官方中文说明</a>  </p>
 </li>
-<li>
-<p><a target="_blank" rel="noopener" href="https://github.com/acmesh-official/acme.sh/wiki/How-to-issue-a-cert">How to issue a cert（官方Wiki）</a></p>
+<li><p><a target="_blank" rel="noopener" href="https://github.com/acmesh-official/acme.sh/wiki/How-to-issue-a-cert">How to issue a cert（官方Wiki）</a>  </p>
 </li>
-<li>
-<p><a target="_blank" rel="noopener" href="https://github.com/acmesh-official/acme.sh/wiki/dnsapi">How to use DNS API</a></p>
+<li><p><a target="_blank" rel="noopener" href="https://github.com/acmesh-official/acme.sh/wiki/dnsapi">How to use DNS API</a>  </p>
 </li>
-<li>
-<p><a target="_blank" rel="noopener" href="https://wiki.mozilla.org/Security/Server_Side_TLS">Security/Server Side TLS</a></p>
+<li><p><a target="_blank" rel="noopener" href="https://wiki.mozilla.org/Security/Server_Side_TLS">Security/Server Side TLS</a>  </p>
 </li>
-<li>
-<p><a target="_blank" rel="noopener" href="http://nginx.org/en/docs/http/ngx_http_ssl_module.html">（Nginx文档）Module ngx_http_ssl_module</a></p>
+<li><p><a target="_blank" rel="noopener" href="http://nginx.org/en/docs/http/ngx_http_ssl_module.html">（Nginx文档）Module ngx_http_ssl_module</a>  </p>
 </li>
-<li>
-<p><a target="_blank" rel="noopener" href="https://imququ.com/post/ecc-certificate.html">开始使用ECC证书部署HTTPS</a></p>
+<li><p><a target="_blank" rel="noopener" href="https://imququ.com/post/ecc-certificate.html">开始使用ECC证书部署HTTPS</a>  </p>
 </li>
-<li>
-<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/xueweihan/p/10057656.html">MySSL HTTPS 评级 B 升 A+</a></p>
+<li><p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/xueweihan/p/10057656.html">MySSL HTTPS 评级 B 升 A+</a>  </p>
 </li>
-<li>
-<p><a target="_blank" rel="noopener" href="https://www.acgist.com/article/541.html">Nginx开启TLSv1.3和HTTP/2</a></p>
+<li><p><a target="_blank" rel="noopener" href="https://www.acgist.com/article/541.html">Nginx开启TLSv1.3和HTTP/2</a>  </p>
 <p>etc.</p>
 </li>
 </ul>
@@ -1393,7 +1386,7 @@ acme.sh --upgrade --auto-upgrade <span class="token number">0</span>  <span clas
             |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
             <br>
                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">308.3k</span>&nbsp;字
+                class="white-color">308.1k</span>&nbsp;字
                                                                                     <span id="busuanzi_container_site_pv">
 			|&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
                     class="white-color"></span>&nbsp;次

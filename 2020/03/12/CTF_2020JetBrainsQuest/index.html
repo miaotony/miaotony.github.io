@@ -524,8 +524,7 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="前言">前言</h2>
-<p>昨晚在 Telegram 里看到朋友发了一个 JetBrains Quest 的 twitter 链接，据说难度不大，还可以白嫖他家的产品授权。</p>
+                <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>昨晚在 Telegram 里看到朋友发了一个 JetBrains Quest 的 twitter 链接，据说难度不大，还可以白嫖他家的产品授权。</p>
 <p>感兴趣就来体验一下吧！</p>
 <p>于是体验了 Quest1 和 2 白嫖了 3+3 个月的 JB 家全产品授权，这里记录一下<strong>通关过程</strong>，也算是<strong>攻略 / WriteUp</strong> 吧。</p>
 <p>感觉也是 CTF, Capture The Flag 的范畴吧，暂且就归类为 CTF 好了（</p>
@@ -534,21 +533,22 @@
 <p><strong>PAY ATTENTION! 注意！</strong></p>
 <p>如果没有玩过的话</p>
 <p style="color:red">本文下面的内容 <strong>全 是 剧 透</strong>！</p>
+
 <p><strong>如果想自己做的话，就暂时不要往下看了！</strong></p>
 </blockquote>
 <p>这个 Quest <strong>在 2020-03-15 12:00 CET （欧洲中部时间）之前都有效</strong>。</p>
 <br>
-<h2 id="Quest-1">Quest 1</h2>
-<p><a target="_blank" rel="noopener" href="https://twitter.com/jetbrains/status/1236986174075482113">https://twitter.com/jetbrains/status/1236986174075482113</a></p>
+
+<h2 id="Quest-1"><a href="#Quest-1" class="headerlink" title="Quest 1"></a>Quest 1</h2><p><a target="_blank" rel="noopener" href="https://twitter.com/jetbrains/status/1236986174075482113">https://twitter.com/jetbrains/status/1236986174075482113</a></p>
 <p><img src="/2020/03/12/CTF_2020JetBrainsQuest/Quest1.png" alt="Quest1"></p>
 <pre class="line-numbers language-none"><code class="language-none">48 61 76 65 20 79 6f 75 20 73 65 65 6e 20 74 68 65 20 73 6f 75 72 63 65 20 63 6f 64 65 20 6f 66 20 74 68 65 20 4a 65 74 42 72 61 69 6e 73 20 77 65 62 73 69 74 65 3f<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>一看是 hex，于是转成 ASCII，得到：</p>
 <pre class="line-numbers language-none"><code class="language-none">Have you seen the source code of the JetBrains website?<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <br>
-<h3 id="Step-1">Step 1</h3>
-<p>去官网上找呗。传送门：<a target="_blank" rel="noopener" href="https://www.jetbrains.com/">https://www.jetbrains.com/</a></p>
+
+<h3 id="Step-1"><a href="#Step-1" class="headerlink" title="Step 1"></a>Step 1</h3><p>去官网上找呗。传送门：<a target="_blank" rel="noopener" href="https://www.jetbrains.com/">https://www.jetbrains.com/</a></p>
 <p>（还别说，挺久没上 JetBrains 官网了，感觉又多了不少工具，界面也变得更好看了唉。</p>
-<p>提示了看源码，既然是 <code>JetBrainsQuest</code> 了，当然就<strong>搜一下<code>quest</code></strong>。</p>
+<p>提示了看源码，既然是 <code>JetBrainsQuest</code> 了，当然就**搜一下<code>quest</code>**。</p>
 <p>果然看到了提示。</p>
 <p><img src="/2020/03/12/CTF_2020JetBrainsQuest/Step1-1.png" alt="Step1"></p>
 <pre class="line-numbers language-html" data-language="html"><code class="language-html"><span class="token comment">&lt;!--
@@ -572,8 +572,8 @@ It’s dangerous to go alone take this key: Good luck! == Jrrg#oxfn$
 <p>这里提示了<code>hint: use Chrome Incognito mode</code>。</p>
 <p><strong>建议用 Chrome 的无痕模式。</strong></p>
 <br>
-<h3 id="Step-2">Step 2</h3>
-<p>于是就<strong>去 products 里找</strong>了呗。</p>
+
+<h3 id="Step-2"><a href="#Step-2" class="headerlink" title="Step 2"></a>Step 2</h3><p>于是就<strong>去 products 里找</strong>了呗。</p>
 <p>（可能没注意）没找到入口，盲猜就在 <code>/products</code> 目录了，访问后跳转到了 <a target="_blank" rel="noopener" href="https://www.jetbrains.com/products.html">https://www.jetbrains.com/products.html</a> 。</p>
 <blockquote>
 <p>后来发现主页上的链接在 <a target="_blank" rel="noopener" href="https://www.jetbrains.com/products.html">See All Tools</a> 里（</p>
@@ -586,8 +586,8 @@ It’s dangerous to go alone take this key: Good luck! == Jrrg#oxfn$
 <p>后面再来分析一下这个怎么加载出来的8.</p>
 </blockquote>
 <br>
-<h3 id="Step-3">Step 3</h3>
-<p><strong>找一下 500 到 5000 之内有多少素数</strong>，随手写个 py 的 jio 本。</p>
+
+<h3 id="Step-3"><a href="#Step-3" class="headerlink" title="Step 3"></a>Step 3</h3><p><strong>找一下 500 到 5000 之内有多少素数</strong>，随手写个 py 的 jio 本。</p>
 <p>（边界值的话，5000肯定不是素数，不影响结果</p>
 <pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> math <span class="token keyword">import</span> sqrt
 cnt <span class="token operator">=</span> <span class="token number">0</span>
@@ -605,9 +605,9 @@ cnt <span class="token operator">=</span> <span class="token number">0</span>
 <p>发现 301 重定向到了 <a target="_blank" rel="noopener" href="https://www.jetbrains.com/help/pycharm/getting-help.html#quest">https://www.jetbrains.com/help/pycharm/getting-help.html#quest</a> 。</p>
 <p><img src="/2020/03/12/CTF_2020JetBrainsQuest/Step1-3.png" alt="Step3"></p>
 <br>
-<h3 id="Step-4">Step 4</h3>
-<p>Google 上一搜就是了。</p>
-<p>（下面还有 V2EX 上别人的讨论</p>
+
+<h3 id="Step-4"><a href="#Step-4" class="headerlink" title="Step 4"></a>Step 4</h3><p>Google 上一搜就是了。</p>
+<p>（下面还有 V2EX 上别人的讨论 </p>
 <p><small><em>（（不看不看先不看！</em></small></p>
 <p><img src="/2020/03/12/CTF_2020JetBrainsQuest/MPS-31816.png" alt="MPS-31816"></p>
 <p><a target="_blank" rel="noopener" href="https://youtrack.jetbrains.com/issue/MPS-31816">https://youtrack.jetbrains.com/issue/MPS-31816</a></p>
@@ -621,8 +621,8 @@ Qlfh$#Li#|rx#duh#uhdglqj#wklv#|rx#pxvw#kdyh#zrunhg#rxw#krz#wr#ghfu|sw#lw1#Wklv#l
 <p>于是全部往前移3个字符得到：</p>
 <pre class="line-numbers language-none"><code class="language-none">Nice! If you are reading this you must have worked out how to decrypt it. This is our issue tracker designed for agile teams. It is free for up to 3 users in Cloud and for 10 users in Standalone, so if you want to give it a go in your team then we totally recommend it. you have finished the first Quest, now it…s time to redeem your first prize. The code for the first quest is &lt;TheDriveToDevelop&lt;. Go to the Quest Page and use the code to claim your prize. https://www.jetbrains.com/promo/quest/<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <br>
-<h3 id="Beat-The-Quest">Beat The Quest</h3>
-<p>Rua！哇好耶！</p>
+
+<h3 id="Beat-The-Quest"><a href="#Beat-The-Quest" class="headerlink" title="Beat The Quest"></a>Beat The Quest</h3><p>Rua！哇好耶！</p>
 <p><code>TheDriveToDevelop</code></p>
 <p>然后就可以拿着这个 code 去白嫖免费授权了！</p>
 <p><img src="/2020/03/12/CTF_2020JetBrainsQuest/success.png" alt="success"></p>
@@ -631,7 +631,7 @@ Qlfh$#Li#|rx#duh#uhdglqj#wklv#|rx#pxvw#kdyh#zrunhg#rxw#krz#wr#ghfu|sw#lw1#Wklv#l
 <p>这里看到 Twitter 上有人说 Firefox 会报 CORS issue，请使用 Chrome 试试。</p>
 <p><em>(An error occurred while …</em></p>
 </blockquote>
-<p>这里说了会把你的信息提供给他，他会给你的邮箱发推荐信息，可能这是 JetBrains 吸收流量的一个手段吧*（盲猜的*</p>
+<p>这里说了会把你的信息提供给他，他会给你的邮箱发推荐信息，可能这是 JetBrains 吸收流量的一个手段吧<em>（盲猜的</em></p>
 <p>不过他也说了在邮件末尾可以取消订阅。</p>
 <blockquote>
 <p>BTW，发现这里的 Code 并没有上传到后端进行校验，而是直接在前端进行的。</p>
@@ -646,15 +646,14 @@ Qlfh$#Li#|rx#duh#uhdglqj#wklv#|rx#pxvw#kdyh#zrunhg#rxw#krz#wr#ghfu|sw#lw1#Wklv#l
 <p><strong>这是一系列的 Quest！</strong></p>
 <p>下一个 quest 的时间是<strong>1583924400</strong>，转换时间戳发现是 <strong>2020-03-11 19:00:00</strong>.</p>
 <p><br><br></p>
-<h3 id="Step2-中-JK-的加载分析">Step2 中 JK 的加载分析</h3>
-<p>突然有点好奇这个 JK 是怎么被加载出来的，于是简单分析一下吧。</p>
+<h3 id="Step2-中-JK-的加载分析"><a href="#Step2-中-JK-的加载分析" class="headerlink" title="Step2 中 JK 的加载分析"></a>Step2 中 JK 的加载分析</h3><p>突然有点好奇这个 JK 是怎么被加载出来的，于是简单分析一下吧。</p>
 <p>这里搜索<code>quest</code>，在网页末尾处看到了一个加载的<code>dialog-polyfill.js</code>。</p>
 <p><img src="/2020/03/12/CTF_2020JetBrainsQuest/JK_Analysis.png" alt="Elements"></p>
 <p>在 Sources 里这个文件里搜索 <code>JK</code>或者<code>quest</code>，都找不到网页上与 JK 有关信息，倒是定义了一堆相关的属性方法之类的，css 文件中是<code>dialog</code>框的相关样式。</p>
 <p><img src="/2020/03/12/CTF_2020JetBrainsQuest/JK_Analysis2.png" alt="dialogJS"></p>
 <p>在 Network 里看 <code>products.html</code> 的 response，里面并没有 <code>JK</code>，也没有<code>quest</code>。就连上面这个脚本文件也没有。</p>
 <p><strong>那这个 JK 到底是怎么加载出来的呢？</strong></p>
-<p>于是<strong>在 Network 里全局搜索了一下 <code>quest</code></strong>，有了新的收获。</p>
+<p>于是**在 Network 里全局搜索了一下 <code>quest</code>**，有了新的收获。</p>
 <p>原来这些信息都是<strong>通过一个JS脚本来加载</strong>的。</p>
 <p>这个 js 的 response 包含了页面上的所有产品信息，是把网页内容嵌入到 json 里进行数据交互的。</p>
 <p>哇，第一次见唉！😂</p>
@@ -672,10 +671,13 @@ Qlfh$#Li#|rx#duh#uhdglqj#wklv#|rx#pxvw#kdyh#zrunhg#rxw#krz#wr#ghfu|sw#lw1#Wklv#l
 <p>emmm 后面有空感兴趣再折腾吧（</p>
 <p><img src="/2020/03/12/CTF_2020JetBrainsQuest/googletagmanager.png" alt="googletagmanager"></p>
 <br>
+
 <hr>
 <br>
-<h2 id="Quest-2">Quest 2</h2>
-<p>来了来了！第二个 Quest 来了！</p>
+
+
+
+<h2 id="Quest-2"><a href="#Quest-2" class="headerlink" title="Quest 2"></a>Quest 2</h2><p>来了来了！第二个 Quest 来了！</p>
 <p><a target="_blank" rel="noopener" href="https://twitter.com/jetbrains/status/1237694815283879943">https://twitter.com/jetbrains/status/1237694815283879943</a></p>
 <p><img src="/2020/03/12/CTF_2020JetBrainsQuest/Quest2.png" alt="Quest2"></p>
 <pre class="line-numbers language-none"><code class="language-none">.spleh A+lrtC/dmC .thgis fo tuo si ti semitemos ,etihw si txet nehw sa drah kooL .tseretni wohs dluohs uoy ecalp a si ,dessecorp si xat hctuD erehw esac ehT .sedih tseuq fo txen eht erehw si ,deificeps era segaugnal cificeps-niamod tcudorp ehT<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
@@ -683,19 +685,19 @@ Qlfh$#Li#|rx#duh#uhdglqj#wklv#|rx#pxvw#kdyh#zrunhg#rxw#krz#wr#ghfu|sw#lw1#Wklv#l
 <pre class="line-numbers language-none"><code class="language-none">The product domain-specific languages are specified, is where the next of quest hides. The case where Dutch tax is processed, is a place you should show interest. Look hard as when text is white, sometimes it is out of sight. Cmd/Ctrl+A helps.<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>提示了是个与 <code>domain-specific languages</code>有关的产品，quest相关的文字设置为白色的了。</p>
 <br>
-<h3 id="Step-1-2">Step 1</h3>
-<p>谷歌搜一下，直接就得到了 JetBrains 家的 <strong>MPS</strong> (MetaProgrammingSystem)   <em>（之前也没了解过</em></p>
+
+<h3 id="Step-1-1"><a href="#Step-1-1" class="headerlink" title="Step 1"></a>Step 1</h3><p>谷歌搜一下，直接就得到了 JetBrains 家的 <strong>MPS</strong> (MetaProgrammingSystem)   <em>（之前也没了解过</em></p>
 <p><img src="/2020/03/12/CTF_2020JetBrainsQuest/Step2-1.png" alt="谷歌搜索结果"></p>
 <p>访问它的官网吧，传送喵：<a target="_blank" rel="noopener" href="https://www.jetbrains.com/mps/">https://www.jetbrains.com/mps/</a></p>
 <br>
-<h3 id="Step-2-2">Step 2</h3>
-<p>在网页里同样搜一下 <code>quest</code></p>
+
+<h3 id="Step-2-1"><a href="#Step-2-1" class="headerlink" title="Step 2"></a>Step 2</h3><p>在网页里同样搜一下 <code>quest</code></p>
 <p><img src="/2020/03/12/CTF_2020JetBrainsQuest/Step2-2.png" alt="网页里找到pdf"></p>
 <p>发现有个 PDF 文件唉~</p>
 <p>打开来看看吧！</p>
 <br>
-<h3 id="Step-3-2">Step 3</h3>
-<p>于是继续在 PDF 里搜索<code>quest</code>。</p>
+
+<h3 id="Step-3-1"><a href="#Step-3-1" class="headerlink" title="Step 3"></a>Step 3</h3><p>于是继续在 PDF 里搜索<code>quest</code>。</p>
 <p>发现果然是白色的文字23333.</p>
 <p><img src="/2020/03/12/CTF_2020JetBrainsQuest/Step2-3.png" alt="Step3"></p>
 <p>Ctrl + A ，Ctrl + C / V，看一下那一块的文字</p>
@@ -704,22 +706,22 @@ we have shared numbers in our JetBrains
 Annual report, sharing the section with
 18,650 numbers will progress your quest<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 <br>
-<h3 id="Step-4-2">Step 4</h3>
-<p>上面提示了JB 20周年年度报告，想起来官网首页上有个链接来着。</p>
+
+<h3 id="Step-4-1"><a href="#Step-4-1" class="headerlink" title="Step 4"></a>Step 4</h3><p>上面提示了JB 20周年年度报告，想起来官网首页上有个链接来着。</p>
 <p><img src="/2020/03/12/CTF_2020JetBrainsQuest/20Years.png" alt="20周年"></p>
 <p><a target="_blank" rel="noopener" href="https://www.jetbrains.com/company/annualreport/2019/">https://www.jetbrains.com/company/annualreport/2019/</a></p>
 <p>插几句题外话。</p>
 <p>就是个年报吧，看上去 JB 的确挺受欢迎哒！（PyCharm 真挺好用的</p>
 <p>下面这个视频封面的小黄鸭让我想到了 <strong>小黄鸭调试法</strong> 23333</p>
 <p>（这个 <code>Dogfooding</code> 用的有点意思</p>
-<p><img src="/2020/03/12/CTF_2020JetBrainsQuest/20Years2.png" alt=""></p>
+<p><img src="/2020/03/12/CTF_2020JetBrainsQuest/20Years2.png"></p>
 <p>这回再来搜索 <code>quest</code>。</p>
 <p><img src="/2020/03/12/CTF_2020JetBrainsQuest/Step2-4.png" alt="Step4"></p>
 <p>第七届 Hackathon。（emmm</p>
 <pre class="line-numbers language-html" data-language="html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>span</span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>react-js-quick-share<span class="token punctuation">"</span></span> <span class="token attr-name">data-hashtag</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>JetBrainsQuest<span class="token punctuation">"</span></span> <span class="token attr-name">data-text</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>I have found the JetBrains Quest! Sometimes you just need to look closely at the Haskell language, Hello,World! in the hackathon lego brainstorms project https://blog.jetbrains.com/blog/2019/11/22/jetbrains-7th-annual-hackathon/<span class="token punctuation">"</span></span> <span class="token attr-name">data-theme</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>dark<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <br>
-<h3 id="Step-5">Step 5</h3>
-<p>访问 <a target="_blank" rel="noopener" href="https://blog.jetbrains.com/blog/2019/11/22/jetbrains-7th-annual-hackathon/">https://blog.jetbrains.com/blog/2019/11/22/jetbrains-7th-annual-hackathon/</a></p>
+
+<h3 id="Step-5"><a href="#Step-5" class="headerlink" title="Step 5"></a>Step 5</h3><p>访问 <a target="_blank" rel="noopener" href="https://blog.jetbrains.com/blog/2019/11/22/jetbrains-7th-annual-hackathon/">https://blog.jetbrains.com/blog/2019/11/22/jetbrains-7th-annual-hackathon/</a></p>
 <p>重点关注 <code>Haskell language</code>，<code>Hello,World!</code>，<code>hackathon lego brainstorms project</code>。</p>
 <p>看来就与这张图有关了呢！</p>
 <p><img src="/2020/03/12/CTF_2020JetBrainsQuest/Step2-5.png" alt="Step5"></p>
@@ -755,8 +757,8 @@ go further at least<span aria-hidden="true" class="line-numbers-rows"><span></sp
 <p>所以 JB 顺便再来招个聘？</p>
 <p>看来下一个 Step 是个与 job 有关的地方了。</p>
 <br>
-<h3 id="Step-6">Step 6</h3>
-<p>在官网上找到了 Company -&gt; Careers -&gt; Jobs.</p>
+
+<h3 id="Step-6"><a href="#Step-6" class="headerlink" title="Step 6"></a>Step 6</h3><p>在官网上找到了 Company -&gt; Careers -&gt; Jobs.</p>
 <p><a target="_blank" rel="noopener" href="https://www.jetbrains.com/careers/jobs/">https://www.jetbrains.com/careers/jobs/</a></p>
 <p>搜索<code>Quest</code>，发现了一个奇怪的职位。那就是它了！</p>
 <p><img src="/2020/03/12/CTF_2020JetBrainsQuest/Step2-6.png" alt="Step6"></p>
@@ -774,8 +776,8 @@ go further at least<span aria-hidden="true" class="line-numbers-rows"><span></sp
 </blockquote>
 <p>可能是有个游戏啥的？</p>
 <br>
-<h3 id="Step-7">Step 7</h3>
-<p>找了找 game develop，发现了一个<a target="_blank" rel="noopener" href="https://www.jetbrains.com/gamedev/">这个网页</a>。</p>
+
+<h3 id="Step-7"><a href="#Step-7" class="headerlink" title="Step 7"></a>Step 7</h3><p>找了找 game develop，发现了一个<a target="_blank" rel="noopener" href="https://www.jetbrains.com/gamedev/">这个网页</a>。</p>
 <p><img src="/2020/03/12/CTF_2020JetBrainsQuest/game_development.png" alt="game_development"></p>
 <p>然后找死找不到<code>quest</code>，难受死了。</p>
 <p>在 Network 里找个半天也没找到嘤嘤嘤。</p>
@@ -786,8 +788,8 @@ go further at least<span aria-hidden="true" class="line-numbers-rows"><span></sp
 <p>再一搜，发现了相关的 js 文件。</p>
 <p><img src="/2020/03/12/CTF_2020JetBrainsQuest/Step2-7.png" alt="Step7"></p>
 <br>
-<h3 id="Beat-The-Quest-2">Beat The Quest</h3>
-<p>在<code>block-breaker.js</code> 这个文件里搜索<code>quest</code>，发现了第二个 quest 的 code ↓。</p>
+
+<h3 id="Beat-The-Quest-1"><a href="#Beat-The-Quest-1" class="headerlink" title="Beat The Quest"></a>Beat The Quest</h3><p>在<code>block-breaker.js</code> 这个文件里搜索<code>quest</code>，发现了第二个 quest 的 code ↓。</p>
 <p><em>（可能这个也是非预期解了23333</em></p>
 <p><img src="/2020/03/12/CTF_2020JetBrainsQuest/block-breakerJS.png" alt="block-breaker_JS"></p>
 <pre class="line-numbers language-none"><code class="language-none">"\n        |\n        |\n        |   Congratulations you have beat the second quest.\n        |   Use the code key GamesAreFun on the\n        |   quest page https://jb.gg/quest to claim your prize.\n        |     \n    "<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
@@ -810,9 +812,10 @@ go further at least<span aria-hidden="true" class="line-numbers-rows"><span></sp
 <pre class="line-numbers language-none"><code class="language-none">Y0U H4V3 R3C13V3D 7H15 3M41L B3C4U53 Y0U H4V3 P4RT1C1P4T3D 1N J3TBR41N5 QU35T<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>这里还可以取消邮件订阅啥的，应该还算挺友好的吧。</p>
 <br>
+
 <br>
-<h3 id="Step7-中-game-dev-页面的游戏解法">Step7 中 game dev 页面的游戏解法</h3>
-<p>再回去看一下这个游戏到底啥回事。结合再上一步中的提示。</p>
+
+<h3 id="Step7-中-game-dev-页面的游戏解法"><a href="#Step7-中-game-dev-页面的游戏解法" class="headerlink" title="Step7 中 game dev 页面的游戏解法"></a>Step7 中 game dev 页面的游戏解法</h3><p>再回去看一下这个游戏到底啥回事。结合再上一步中的提示。</p>
 <blockquote>
 <p><strong>To progress with your quest what you’ll need:</strong></p>
 <ul>
@@ -830,9 +833,9 @@ go further at least<span aria-hidden="true" class="line-numbers-rows"><span></sp
 <p>把条块消除得差不多就看到 code key 啦！</p>
 <p><img src="/2020/03/12/CTF_2020JetBrainsQuest/game.png" alt="game"></p>
 <br>
+
 <hr>
-<h2 id="小结">小结</h2>
-<p>感觉 JetBrains 的这两个 Quest 难度还好，还是挺友好的。</p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>感觉 JetBrains 的这两个 Quest 难度还好，还是挺友好的。</p>
 <p>于是就白嫖了总共六个月的 JB 全家产品免费授权。</p>
 <p>（不过之前就有教育邮箱的免费授权呢</p>
 <p>所以通过这个 Quest，让我们更深入地了解了 JB？说不定还能顺便招聘？</p>
@@ -1407,7 +1410,7 @@ go further at least<span aria-hidden="true" class="line-numbers-rows"><span></sp
             |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
             <br>
                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">308.3k</span>&nbsp;字
+                class="white-color">308.1k</span>&nbsp;字
                                                                                     <span id="busuanzi_container_site_pv">
 			|&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
                     class="white-color"></span>&nbsp;次

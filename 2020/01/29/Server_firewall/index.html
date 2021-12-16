@@ -526,7 +526,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    7 分
+                    6 分
                 </div>
                 
 
@@ -544,46 +544,36 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="前言">前言</h2>
-<p>最近在配服务器环境的时候，动不动遇到端口无法访问的情况，折腾了老半天，经过分析判断最后基本是防火墙把网络端口给拦了……</p>
+                <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>最近在配服务器环境的时候，动不动遇到端口无法访问的情况，折腾了老半天，经过分析判断最后基本是防火墙把网络端口给拦了……</p>
 <p>于是就来简要记录一下Linux下的防火墙配置，以及端口开放、关闭的配置方法。</p>
 <p>整理自网络啦。</p>
 <hr>
-<h2 id="CentOS">CentOS</h2>
-<p>CentOS下用的是<code>firewall-cmd</code></p>
-<h3 id="常用命令">常用命令</h3>
-<h4 id="启动firewall">启动firewall</h4>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">systemctl start firewalld.service<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<h4 id="开机自启firewall">开机自启firewall</h4>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">systemctl <span class="token builtin class-name">enable</span> firewalld.service<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<h4 id="查看开机自启是否设置成功">查看开机自启是否设置成功</h4>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">systemctl is-enabled firewalld.service<span class="token punctuation">;</span> <span class="token builtin class-name">echo</span> <span class="token variable">$?</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h2 id="CentOS"><a href="#CentOS" class="headerlink" title="CentOS"></a>CentOS</h2><p>CentOS下用的是<code>firewall-cmd</code></p>
+<h3 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h3><h4 id="启动firewall"><a href="#启动firewall" class="headerlink" title="启动firewall"></a>启动firewall</h4><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">systemctl start firewalld.service<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h4 id="开机自启firewall"><a href="#开机自启firewall" class="headerlink" title="开机自启firewall"></a>开机自启firewall</h4><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">systemctl <span class="token builtin class-name">enable</span> firewalld.service<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h4 id="查看开机自启是否设置成功"><a href="#查看开机自启是否设置成功" class="headerlink" title="查看开机自启是否设置成功"></a>查看开机自启是否设置成功</h4><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">systemctl is-enabled firewalld.service<span class="token punctuation">;</span> <span class="token builtin class-name">echo</span> <span class="token variable">$?</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <blockquote>
 <p>返回如下则开启成功</p>
 <pre class="line-numbers language-none"><code class="language-none">&gt;enabled
 &gt;0<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 </blockquote>
-<h4 id="重启firewall">重启firewall</h4>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">systemctl restart firewalld.service<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<h4 id="关闭firewall">关闭firewall</h4>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">systemctl stop firewalld.service<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<h4 id="检测firewall状态">检测firewall状态</h4>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">firewall-cmd --state<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h4 id="重启firewall"><a href="#重启firewall" class="headerlink" title="重启firewall"></a>重启firewall</h4><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">systemctl restart firewalld.service<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h4 id="关闭firewall"><a href="#关闭firewall" class="headerlink" title="关闭firewall"></a>关闭firewall</h4><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">systemctl stop firewalld.service<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h4 id="检测firewall状态"><a href="#检测firewall状态" class="headerlink" title="检测firewall状态"></a>检测firewall状态</h4><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">firewall-cmd --state<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <blockquote>
 <p>例如正在运行：</p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token punctuation">[</span>root@localhost ~<span class="token punctuation">]</span><span class="token comment"># firewall-cmd --state</span>
 running<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
 <p>不在运行则为<code>not running</code></p>
 </blockquote>
-<h3 id="端口配置">端口配置</h3>
-<h4 id="查看开放（监听）的端口">查看开放（监听）的端口</h4>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">firewall-cmd --list-ports<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h3 id="端口配置"><a href="#端口配置" class="headerlink" title="端口配置"></a>端口配置</h3><h4 id="查看开放（监听）的端口"><a href="#查看开放（监听）的端口" class="headerlink" title="查看开放（监听）的端口"></a>查看开放（监听）的端口</h4><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">firewall-cmd --list-ports<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <blockquote>
 <p>example：</p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token punctuation">[</span>root@localhost ~<span class="token punctuation">]</span><span class="token comment"># firewall-cmd --list-ports</span>
 <span class="token number">80</span>/tcp <span class="token number">7650</span>/tcp <span class="token number">3306</span>/tcp<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-</blockquote>
 <p>或</p>
+</blockquote>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">netstat</span> -ntlp<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <blockquote>
 <p>如果没有的话（<em>centos7默认没有 netstat 命令</em>），先安装<code>net-tools</code>。</p>
@@ -597,64 +587,53 @@ running<span aria-hidden="true" class="line-numbers-rows"><span></span><span></s
 <span class="token operator">&gt;</span>tcp6       <span class="token number">0</span>      <span class="token number">0</span> :::22                   :::*                    LISTEN      <span class="token number">1840</span>/sshd
 
 <span class="token operator">&gt;</span>……<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
 <p>其中<code>tcp</code>为ipv4，<code>tcp6</code>为ipv6.</p>
 </blockquote>
 <p>遇到过几次没有开放firewall端口时，只有<code>tcp6</code>而无<code>tcp</code>的情况，导致访问失败。放行端口后访问正常。</p>
 <p>还遇到过只能从本地 127.0.0.1 或 localhost（实际上二者一样的，默认写在了host里）访问，通过（网卡的）IP地址无法访问的情况。表现在 Local Address 上是<code>127.0.0.1:xxxx</code>，通过修改该程序的网络设置把Address修改为对应的IP或 <code>0.0.0.0</code>，即可解决访问的问题。</p>
 <hr>
-<h4 id="以下操作之后都要执行-重载-或-重启-才能生效！！！"><strong>以下操作之后都要执行 重载 或 重启 才能生效</strong>！！！</h4>
-<h4 id="开启特定端口">开启特定端口</h4>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">firewall-cmd --zone<span class="token operator">=</span>public --add-port<span class="token operator">=</span><span class="token number">80</span>/tcp --permanent  <span class="token comment"># 开放端口</span>
+<h4 id="以下操作之后都要执行-重载-或-重启-才能生效！！！"><a href="#以下操作之后都要执行-重载-或-重启-才能生效！！！" class="headerlink" title="以下操作之后都要执行 重载 或 重启 才能生效！！！"></a><strong>以下操作之后都要执行 重载 或 重启 才能生效</strong>！！！</h4><h4 id="开启特定端口"><a href="#开启特定端口" class="headerlink" title="开启特定端口"></a>开启特定端口</h4><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">firewall-cmd --zone<span class="token operator">=</span>public --add-port<span class="token operator">=</span><span class="token number">80</span>/tcp --permanent  <span class="token comment"># 开放端口</span>
 systemctl restart firewalld.service    <span class="token comment"># 重启firewall</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-<p>其中， 参数含义为<br>
-<code>--zone</code> 作用域<br>
-<code>--add-port=80/tcp</code>  添加端口，格式为：端口/通讯协议（<code>tcp</code>或<code>udp</code>）<br>
-<code>--permanent</code>   永久生效，没有此参数重启后失效</p>
+<p>其中， 参数含义为<br><code>--zone</code> 作用域<br><code>--add-port=80/tcp</code>  添加端口，格式为：端口/通讯协议（<code>tcp</code>或<code>udp</code>）<br><code>--permanent</code>   永久生效，没有此参数重启后失效     </p>
 <blockquote>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token punctuation">[</span>root@localhost ~<span class="token punctuation">]</span><span class="token comment"># firewall-cmd --zone=public --add-port=80/tcp --permanent</span>
 success<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
 <p>成功则返回 success</p>
 </blockquote>
-<h4 id="开放多个端口">开放多个端口</h4>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">firewall-cmd --zone<span class="token operator">=</span>public --add-port<span class="token operator">=</span><span class="token number">8080</span>-8083/tcp --permanent
+<h4 id="开放多个端口"><a href="#开放多个端口" class="headerlink" title="开放多个端口"></a>开放多个端口</h4><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">firewall-cmd --zone<span class="token operator">=</span>public --add-port<span class="token operator">=</span><span class="token number">8080</span>-8083/tcp --permanent
 firewall-cmd --reload   <span class="token comment"># 配置立即生效</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-<h4 id="关闭特定端口">关闭特定端口</h4>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">firewall-cmd --zone<span class="token operator">=</span>public --remove-port<span class="token operator">=</span><span class="token number">5672</span>/tcp --permanent  <span class="token comment">#关闭5672端口</span>
+<h4 id="关闭特定端口"><a href="#关闭特定端口" class="headerlink" title="关闭特定端口"></a>关闭特定端口</h4><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">firewall-cmd --zone<span class="token operator">=</span>public --remove-port<span class="token operator">=</span><span class="token number">5672</span>/tcp --permanent  <span class="token comment">#关闭5672端口</span>
 firewall-cmd --reload   <span class="token comment"># 配置立即生效</span>
 <span class="token comment"># 也可以用restart</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-<h4 id="针对某个-IP-开放端口">针对某个 IP 开放端口</h4>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">firewall-cmd --permanent --add-rich-rule<span class="token operator">=</span><span class="token string">"rule family="</span>ipv4<span class="token string">" source  address="</span><span class="token number">192.168</span>.142.166<span class="token string">" port protocol="</span>tcp<span class="token string">" port="</span><span class="token number">6379</span><span class="token string">" accept"</span>
+<h4 id="针对某个-IP-开放端口"><a href="#针对某个-IP-开放端口" class="headerlink" title="针对某个 IP 开放端口"></a>针对某个 IP 开放端口</h4><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">firewall-cmd --permanent --add-rich-rule<span class="token operator">=</span><span class="token string">"rule family="</span>ipv4<span class="token string">" source  address="</span><span class="token number">192.168</span>.142.166<span class="token string">" port protocol="</span>tcp<span class="token string">" port="</span><span class="token number">6379</span><span class="token string">" accept"</span>
 firewall-cmd --permanent --add-rich-rule<span class="token operator">=</span><span class="token string">"rule family="</span>ipv4<span class="token string">" source address="</span><span class="token number">192.168</span>.0.233<span class="token string">" accept"</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-<h4 id="删除某个-IP">删除某个 IP</h4>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">firewall-cmd --permanent --remove-rich-rule<span class="token operator">=</span><span class="token string">"rule family="</span>ipv4<span class="token string">" source address="</span><span class="token number">192.168</span>.1.51<span class="token string">" accept"</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<h4 id="针对一个-IP-段访问">针对一个 IP 段访问</h4>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">firewall-cmd --permanent --add-rich-rule<span class="token operator">=</span><span class="token string">"rule family="</span>ipv4<span class="token string">" source address="</span><span class="token number">192.168</span>.0.0/16<span class="token string">" accept"</span>
+<h4 id="删除某个-IP"><a href="#删除某个-IP" class="headerlink" title="删除某个 IP"></a>删除某个 IP</h4><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">firewall-cmd --permanent --remove-rich-rule<span class="token operator">=</span><span class="token string">"rule family="</span>ipv4<span class="token string">" source address="</span><span class="token number">192.168</span>.1.51<span class="token string">" accept"</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h4 id="针对一个-IP-段访问"><a href="#针对一个-IP-段访问" class="headerlink" title="针对一个 IP 段访问"></a>针对一个 IP 段访问</h4><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">firewall-cmd --permanent --add-rich-rule<span class="token operator">=</span><span class="token string">"rule family="</span>ipv4<span class="token string">" source address="</span><span class="token number">192.168</span>.0.0/16<span class="token string">" accept"</span>
 firewall-cmd --permanent --add-rich-rule<span class="token operator">=</span><span class="token string">"rule family="</span>ipv4<span class="token string">" source  address="</span><span class="token number">192.168</span>.1.0/24<span class="token string">" port protocol="</span>tcp<span class="token string">" port="</span><span class="token number">9200</span><span class="token string">" accept"</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+
+
 <br>
+
 <hr>
 <br>
-<h2 id="Ubuntu">Ubuntu</h2>
-<p>Ubuntu 系统默认提供了一个基于<code>iptables</code>之上的防火墙工具<code>ufw</code>。</p>
-<h3 id="常用命令-2">常用命令</h3>
-<h4 id="安装ufw">安装<code>ufw</code></h4>
-<p>（默认已安装）</p>
+
+<h2 id="Ubuntu"><a href="#Ubuntu" class="headerlink" title="Ubuntu"></a>Ubuntu</h2><p>Ubuntu 系统默认提供了一个基于<code>iptables</code>之上的防火墙工具<code>ufw</code>。</p>
+<h3 id="常用命令-1"><a href="#常用命令-1" class="headerlink" title="常用命令"></a>常用命令</h3><h4 id="安装ufw"><a href="#安装ufw" class="headerlink" title="安装ufw"></a>安装<code>ufw</code></h4><p>（默认已安装）</p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">apt-get</span> <span class="token function">install</span> ufw<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<h4 id="启用ufw，且在系统启动时自启">启用<code>ufw</code>，且在系统启动时自启</h4>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> ufw <span class="token builtin class-name">enable</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<h4 id="关闭ufw">关闭<code>ufw</code></h4>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> ufw disable<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<h4 id="查看防火墙状态">查看防火墙状态</h4>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> ufw status<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<h4 id="日志">日志</h4>
-<p>系统日志保存于<code>/var/log/ufw.log</code>。LEVEL指定不同的级别 ，默认级别是‘低’</p>
+<h4 id="启用ufw，且在系统启动时自启"><a href="#启用ufw，且在系统启动时自启" class="headerlink" title="启用ufw，且在系统启动时自启"></a>启用<code>ufw</code>，且在系统启动时自启</h4><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> ufw <span class="token builtin class-name">enable</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h4 id="关闭ufw"><a href="#关闭ufw" class="headerlink" title="关闭ufw"></a>关闭<code>ufw</code></h4><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> ufw disable<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h4 id="查看防火墙状态"><a href="#查看防火墙状态" class="headerlink" title="查看防火墙状态"></a>查看防火墙状态</h4><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> ufw status<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h4 id="日志"><a href="#日志" class="headerlink" title="日志"></a>日志</h4><p>系统日志保存于<code>/var/log/ufw.log</code>。LEVEL指定不同的级别 ，默认级别是‘低’</p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> ufw logging on<span class="token operator">|</span>off  LEVEL   <span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<h3 id="端口相关">端口相关</h3>
-<h4 id="设置默认策略">设置默认策略</h4>
-<p>（比如 “mostly open” vs “mostly closed”）</p>
+
+
+<h3 id="端口相关"><a href="#端口相关" class="headerlink" title="端口相关"></a>端口相关</h3><h4 id="设置默认策略"><a href="#设置默认策略" class="headerlink" title="设置默认策略"></a>设置默认策略</h4><p>（比如 “mostly open” vs “mostly closed”）</p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> ufw default allow  <span class="token comment"># 允许所有外部对本机的访问，且本机访问外部正常。</span>
 <span class="token function">sudo</span> ufw default deny   <span class="token comment"># 关闭所有外部对本机的访问，但本机访问外部正常。</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-<h4 id="打开某个端口">打开某个端口</h4>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> ufw allow smtp　   <span class="token comment"># 允许所有的外部IP访问本机的25/tcp （smtp）端口</span>
+<h4 id="打开某个端口"><a href="#打开某个端口" class="headerlink" title="打开某个端口"></a>打开某个端口</h4><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> ufw allow smtp　   <span class="token comment"># 允许所有的外部IP访问本机的25/tcp （smtp）端口</span>
 <span class="token function">sudo</span> ufw allow <span class="token number">22</span>/tcp   <span class="token comment"># 允许所有的外部IP访问本机的22/tcp （ssh）端口</span>
 <span class="token function">sudo</span> ufw allow <span class="token number">53</span>       <span class="token comment"># 允许外部访问53端口（tcp/udp）</span>
 <span class="token function">sudo</span> ufw allow from <span class="token number">192.168</span>.1.100  <span class="token comment"># 允许此IP访问所有的本机端口</span>
@@ -662,42 +641,29 @@ firewall-cmd --permanent --add-rich-rule<span class="token operator">=</span><sp
 <span class="token function">sudo</span> ufw allow <span class="token keyword">in</span> on eth0 from <span class="token number">192.168</span>.0.0/16  <span class="token comment"># 允许来自192.168.0.0-192.168.255.255的数据通过eth0网卡进入主机</span>
 <span class="token function">sudo</span> ufw allow out on eth1 to <span class="token number">10.0</span>.0.0/8   <span class="token comment"># 允许指向10.0.0.0-10.255.255.255的数据通过eth1网卡从本机发出</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>可以用<code>less /etc/services</code>列出所有服务信息，其中包括该服务使用了哪个端口和哪种协议</p>
-<h4 id="关闭端口">关闭端口</h4>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> ufw deny smtp          <span class="token comment"># 禁止外部访问smtp服务</span>
+<h4 id="关闭端口"><a href="#关闭端口" class="headerlink" title="关闭端口"></a>关闭端口</h4><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> ufw deny smtp          <span class="token comment"># 禁止外部访问smtp服务</span>
 <span class="token function">sudo</span> ufw delete allow smtp  <span class="token comment"># 删除上面建立的某条规则</span>
 <span class="token function">sudo</span> ufw delete allow <span class="token number">80</span>    <span class="token comment"># 禁止外部访问80端口</span>
 <span class="token function">sudo</span> ufw deny proto tcp from <span class="token number">10.0</span>.0.0/8 to <span class="token number">192.168</span>.0.1 port <span class="token number">25</span>  <span class="token comment"># 拒绝来自10.0.0.0/8域tcp协议指向192.168.0.1端口25的数据进入本机</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-<h4 id="路由">路由</h4>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> ufw route allow <span class="token keyword">in</span> on eth1 out on eth2   <span class="token comment"># 允许经eth1进入，eth2发出的数据经本机路由</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h4 id="路由"><a href="#路由" class="headerlink" title="路由"></a>路由</h4><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> ufw route allow <span class="token keyword">in</span> on eth1 out on eth2   <span class="token comment"># 允许经eth1进入，eth2发出的数据经本机路由</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+
 <hr>
-<h2 id="进程相关命令">进程相关命令</h2>
-<h3 id="查看进程的详细信息">查看进程的详细信息</h3>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token punctuation">[</span>root@localhost ~<span class="token punctuation">]</span><span class="token comment"># ps 1</span>
+<h2 id="进程相关命令"><a href="#进程相关命令" class="headerlink" title="进程相关命令"></a>进程相关命令</h2><h3 id="查看进程的详细信息"><a href="#查看进程的详细信息" class="headerlink" title="查看进程的详细信息"></a>查看进程的详细信息</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token punctuation">[</span>root@localhost ~<span class="token punctuation">]</span><span class="token comment"># ps 1</span>
   PID TTY      STAT   TIME COMMAND
     <span class="token number">1</span> ?        Ss     <span class="token number">7</span>:25 /usr/lib/systemd/systemd --switched-root --system --deserialize <span class="token number">22</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-<h3 id="杀死进程">杀死进程</h3>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">kill</span> -9 <span class="token number">1234</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h3 id="杀死进程"><a href="#杀死进程" class="headerlink" title="杀死进程"></a>杀死进程</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">kill</span> -9 <span class="token number">1234</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>1234为对应的PID</p>
 <blockquote>
-<p>只有第9种信号(SIGKILL)才可以无条件终止进程，其他信号进程都有权利忽略。</p>
-<p>下面是常用的信号：<br>
-HUP    1    终端断线<br>
-INT     2    中断（同 Ctrl + C）<br>
-QUIT    3    退出（同 Ctrl + \）<br>
-TERM   15    终止<br>
-KILL    9    强制终止<br>
-CONT   18    继续（与STOP相反， fg/bg命令）<br>
-STOP    19    暂停（同 Ctrl + Z）</p>
+<p>只有第9种信号(SIGKILL)才可以无条件终止进程，其他信号进程都有权利忽略。    </p>
+<p>下面是常用的信号：<br>HUP    1    终端断线<br>INT     2    中断（同 Ctrl + C）<br>QUIT    3    退出（同 Ctrl + \）<br>TERM   15    终止<br>KILL    9    强制终止<br>CONT   18    继续（与STOP相反， fg/bg命令）<br>STOP    19    暂停（同 Ctrl + Z）  </p>
 </blockquote>
-<p>或者</p>
+<p>或者 </p>
 <p><strong>杀死指定名字的进程</strong>（kill processes by name），可以批量结束某个服务程序带有的全部进程。</p>
 <ol>
-<li>杀死所有同名进程 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">killall</span> nginx
-<span class="token function">killall</span> -9 <span class="token function">bash</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-</li>
-<li>向进程发送指定信号 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">killall</span> -<span class="token environment constant">TERM</span> ngixn  <span class="token comment"># 或者  killall -KILL nginx</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-</li>
-</ol>
+<li>杀死所有同名进程    <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">killall</span> nginx
+<span class="token function">killall</span> -9 <span class="token function">bash</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></li>
+<li>向进程发送指定信号    <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">killall</span> -<span class="token environment constant">TERM</span> ngixn  <span class="token comment"># 或者  killall -KILL nginx</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <blockquote>
 <p>命令参数：</p>
 <pre class="line-numbers language-none"><code class="language-none">-Z 只杀死拥有scontext 的进程
@@ -711,11 +677,11 @@ STOP    19    暂停（同 Ctrl + Z）</p>
 -v 报告信号是否成功发送
 -w 等待进程死亡
 --help 显示帮助信息
---version 显示版本显示<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-</blockquote>
+--version 显示版本显示<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></blockquote>
+</li>
+</ol>
 <hr>
-<h2 id="Reference">Reference</h2>
-<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/zll_0405/article/details/81208606">https://blog.csdn.net/zll_0405/article/details/81208606</a></p>
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/zll_0405/article/details/81208606">https://blog.csdn.net/zll_0405/article/details/81208606</a></p>
 <p><a target="_blank" rel="noopener" href="https://blog.csdn.net/bigdata_mining/article/details/80699180">https://blog.csdn.net/bigdata_mining/article/details/80699180</a></p>
 <p>etc.</p>
 
@@ -1313,7 +1279,7 @@ STOP    19    暂停（同 Ctrl + Z）</p>
             |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
             <br>
                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">308.3k</span>&nbsp;字
+                class="white-color">308.1k</span>&nbsp;字
                                                                                     <span id="busuanzi_container_site_pv">
 			|&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
                     class="white-color"></span>&nbsp;次

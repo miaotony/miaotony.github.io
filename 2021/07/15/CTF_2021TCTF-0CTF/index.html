@@ -526,11 +526,10 @@
             <div id="articleContent">
                 <blockquote>
 <p>这是一篇放在草稿箱里已经长草的文章，清理的时候才想起来这篇由于没环境复现，后面一懒就忘记发了……</p>
-<p>噢，喵喵也不记得有没有写完了，就将就发一下吧*（摊手*</p>
+<p>噢，喵喵也不记得有没有写完了，就将就发一下吧<em>（摊手</em></p>
 </blockquote>
-<p><img src="/2021/07/15/CTF_2021TCTF-0CTF/image-20210729230505889.png" alt=""></p>
-<h2 id="引言">引言</h2>
-<blockquote>
+<p><img src="/2021/07/15/CTF_2021TCTF-0CTF/image-20210729230505889.png"></p>
+<h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><blockquote>
 <p><strong>TCTF/0CTF 2021 Quals</strong></p>
 <p>比赛时间: 2021-07-03 10:00 ~ 2021-07-05 10:00</p>
 <p><a target="_blank" rel="noopener" href="https://tctf.qq.com/">https://tctf.qq.com/</a></p>
@@ -540,34 +539,33 @@
 <p>只不过队里的小师傅们都在准备期末考试，么得办法只有几个老人随便玩了。</p>
 <p>这篇就随便水水吧。</p>
 <br>
+
 <hr>
 <br>
-<h2 id="Misc">Misc</h2>
-<h3 id="welcome">welcome</h3>
-<blockquote>
+
+<h2 id="Misc"><a href="#Misc" class="headerlink" title="Misc"></a>Misc</h2><h3 id="welcome"><a href="#welcome" class="headerlink" title="welcome"></a>welcome</h3><blockquote>
 <p>Welcome to 0CTF/TCTF 2021! Join <a target="_blank" rel="noopener" href="https://discord.gg/RtkhBqVz">Discord</a> for flag</p>
 </blockquote>
 <p><code>flag{welcome_to_0ctf/tctf_2021_have_fun}</code></p>
-<h3 id="GutHib">GutHib</h3>
-<blockquote>
+<h3 id="GutHib"><a href="#GutHib" class="headerlink" title="GutHib"></a>GutHib</h3><blockquote>
 <p>What happens on GutHib, stays on GutHib.</p>
 <p>repo: <a target="_blank" rel="noopener" href="https://github.com/awesome-ctf/TCTF2021-Guthib">awesome-ctf/TCTF2021-Guthib</a></p>
 </blockquote>
 <p>根据 commit 历史可以看到有敏感信息被移除了。</p>
-<p><img src="/2021/07/15/CTF_2021TCTF-0CTF/image-20210704133732701.png" alt=""></p>
+<p><img src="/2021/07/15/CTF_2021TCTF-0CTF/image-20210704133732701.png"></p>
 <p>发现用了 <a target="_blank" rel="noopener" href="https://github.com/rtyley/bfg-repo-cleaner">BFG Repo-Cleaner</a> 来清理 commit 历史里留存的敏感信息。</p>
-<p><img src="/2021/07/15/CTF_2021TCTF-0CTF/image-20210704133655371.png" alt=""></p>
+<p><img src="/2021/07/15/CTF_2021TCTF-0CTF/image-20210704133655371.png"></p>
 <p>其官方的文档：<a target="_blank" rel="noopener" href="https://rtyley.github.io/bfg-repo-cleaner/">https://rtyley.github.io/bfg-repo-cleaner/</a></p>
 <p>使用说明（Usage）</p>
-<p><img src="/2021/07/15/CTF_2021TCTF-0CTF/image-20210704133204755.png" alt=""></p>
+<p><img src="/2021/07/15/CTF_2021TCTF-0CTF/image-20210704133204755.png"></p>
 <p>对比可以发现没有执行 gc 垃圾清理操作，理论上本地的 object 里还存有原始的数据。</p>
 <p>然而直接 git clone 下来的 object pack 中并没有冗余信息，可能传输过程中进行了精简吧……</p>
 <p>不过利用 GitHub API 记录的 events，由于 API 是读的是 GitHub 的 event 数据库，而不是 git repository，本地最后 push 上来的并没有影响服务器上的。而 GitHub 上的也没进行 gc 清理，这就能够恢复了。</p>
-<p><a target="_blank" rel="noopener" href="https://api.github.com/repos/awesome-ctf/TCTF2021-Guthib/events?page=4">https://api.github.com/repos/awesome-ctf/TCTF2021-Guthib/events?page=4</a></p>
+<p><a target="_blank" rel="noopener" href="https://api.github.com/repos/awesome-ctf/TCTF2021-Guthib/events?page=4">https://api.github.com/repos/awesome-ctf/TCTF2021-Guthib/events?page=4</a> </p>
 <p>首先从 event 里拿到之前错误的 commit hash，然后用 commit hash 再去找对应的提交和文件。</p>
 <p><a target="_blank" rel="noopener" href="https://api.github.com/repos/awesome-ctf/TCTF2021-Guthib/commits/da883505ed6754f328296cac1ddb203593473967">https://api.github.com/repos/awesome-ctf/TCTF2021-Guthib/commits/da883505ed6754f328296cac1ddb203593473967</a></p>
 <p><a target="_blank" rel="noopener" href="https://github.com/awesome-ctf/TCTF2021-Guthib/blob/da883505ed6754f328296cac1ddb203593473967/Try.2.md">https://github.com/awesome-ctf/TCTF2021-Guthib/blob/da883505ed6754f328296cac1ddb203593473967/Try.2.md</a></p>
-<p><img src="/2021/07/15/CTF_2021TCTF-0CTF/image-20210704133240996.png" alt=""></p>
+<p><img src="/2021/07/15/CTF_2021TCTF-0CTF/image-20210704133240996.png"></p>
 <p><code>flag{ZJaNicLjnDytwqosX8ebwiMdLGcMBL}</code></p>
 <p>挺有意思的 233.</p>
 <blockquote>
@@ -582,16 +580,14 @@
 <p><a target="_blank" rel="noopener" href="https://developer.aliyun.com/article/716483">.git文件夹探秘，理解git运作机制</a></p>
 <p>（然后把 git 底层咋存储的给摸了一遍 233</p>
 </blockquote>
-<h3 id="Survey">Survey</h3>
-<blockquote>
+<h3 id="Survey"><a href="#Survey" class="headerlink" title="Survey"></a>Survey</h3><blockquote>
 <p><a target="_blank" rel="noopener" href="https://wj.qq.com/s2/8706427/d012/">https://wj.qq.com/s2/8706427/d012/</a></p>
 </blockquote>
-<p><img src="/2021/07/15/CTF_2021TCTF-0CTF/image-20210704234515938.png" alt=""></p>
+<p><img src="/2021/07/15/CTF_2021TCTF-0CTF/image-20210704234515938.png"></p>
 <p><code>flag{im_curious_have_u_viewed_source_before_filling_out_the_survey}</code></p>
 <p>噢是这个意思啊。</p>
-<p><img src="/2021/07/15/CTF_2021TCTF-0CTF/image-20210704234916790.png" alt=""></p>
-<h3 id="Singer">Singer</h3>
-<blockquote>
+<p><img src="/2021/07/15/CTF_2021TCTF-0CTF/image-20210704234916790.png"></p>
+<h3 id="Singer"><a href="#Singer" class="headerlink" title="Singer"></a>Singer</h3><blockquote>
 <p>Sing a song~</p>
 <p>special format: flag{[a-z]*}</p>
 <p><a target="_blank" rel="noopener" href="https://attachment.ctf.0ops.sjtu.cn/singer_0cc09b073ebbbffcc5720d081f42feea">https://attachment.ctf.0ops.sjtu.cn/singer_0cc09b073ebbbffcc5720d081f42feea</a></p>
@@ -636,46 +632,45 @@ C#7,G6
 C#7,A#6,G6
 C#7,A#6-G6<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>寻思着应该是音符。</p>
-<p><img src="/2021/07/15/CTF_2021TCTF-0CTF/image-20210705215854415.png" alt=""></p>
+<p><img src="/2021/07/15/CTF_2021TCTF-0CTF/image-20210705215854415.png"></p>
 <p>想了半天没搞懂啥意思。。</p>
 <p>后来考虑是不是音游的谱子啊，查了查发现也不是吧。</p>
 <p>但后来又看到某音游——</p>
-<p><img src="/2021/07/15/CTF_2021TCTF-0CTF/image-20210705215957738.png" alt=""></p>
+<p><img src="/2021/07/15/CTF_2021TCTF-0CTF/image-20210705215957738.png"></p>
 <p>会不会是这个按键连成的啥字符啊。</p>
 <p>然而比赛的时候就没画出来，草！</p>
 <p>赛后发现有个 <a target="_blank" rel="noopener" href="https://onlinesequencer.net/">Online Sequencer</a>，是一个在线制作音乐的工具，支持模拟多种乐器，可以导出 ogg/mp3/midi，还能分享 sequence。</p>
 <p>然后按照文件里的分块，每个分块是一个字母，<code>-</code> 就是两个键之间连起来，<code>,</code> 就是多个键同时按下。</p>
 <p>于是就可以得到这样的图形。</p>
-<p><img src="/2021/07/15/CTF_2021TCTF-0CTF/image-20210705220344813.png" alt=""></p>
+<p><img src="/2021/07/15/CTF_2021TCTF-0CTF/image-20210705220344813.png"></p>
 <p>于是 flag 就是 <code>flag{musiking}</code></p>
 <p>（脑洞真的大……</p>
-<h3 id="TCTF-Share">TCTF Share</h3>
-<blockquote>
+<h3 id="TCTF-Share"><a href="#TCTF-Share" class="headerlink" title="TCTF Share"></a>TCTF Share</h3><blockquote>
 <p>It is a misc quest absolutely. <a target="_blank" rel="noopener" href="https://bt.hzh.moe/">https://bt.hzh.moe/</a></p>
 <p>Flag format: TCTF{.*}</p>
 </blockquote>
-<p><img src="/2021/07/15/CTF_2021TCTF-0CTF/image-20210707000822651.png" alt=""></p>
+<p><img src="/2021/07/15/CTF_2021TCTF-0CTF/image-20210707000822651.png"></p>
 <p>是个 hugo 建的博客，两篇博文。</p>
 <p>上面那篇 Wonder Egg Priority OP</p>
-<p><img src="/2021/07/15/CTF_2021TCTF-0CTF/image-20210707000947882.png" alt=""></p>
-<p>两个磁力链接分别是</p>
+<p><img src="/2021/07/15/CTF_2021TCTF-0CTF/image-20210707000947882.png"></p>
+<p>两个磁力链接分别是 </p>
 <pre class="line-numbers language-none"><code class="language-none">https://bt.hzh.moe/files/Wonder-Egg-Priority-Safe.torrent
 
 magnet:?xt=urn:btih:CIY7BQVJYC7GXF3AF4OA6SLZTZZAQDBS&amp;dn=%E3%83%AF%E3%83%B3%E3%83%80%E3%83%BC%E3%82%A8%E3%83%83%E3%82%B0%E3%83%BB%E3%83%97%E3%83%A9%E3%82%A4%E3%82%AA%E3%83%AA%E3%83%86%E3%82%A3%20(Wonder%20Egg%20Priority)%20OP.7z<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 <p>看了下有个 txt 文件，链接就是个动漫。<a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=5yN9w_yzH2w">https://www.youtube.com/watch?v=5yN9w_yzH2w</a></p>
 <p>下面那篇 Tencent CTF</p>
-<p><img src="/2021/07/15/CTF_2021TCTF-0CTF/image-20210707001055642.png" alt=""></p>
+<p><img src="/2021/07/15/CTF_2021TCTF-0CTF/image-20210707001055642.png"></p>
 <pre class="line-numbers language-none"><code class="language-none">https://bt.hzh.moe/files/TCTF.torrent
 magnet:?xt=urn:btih:AQEQB7YBOGIMOQARSRXSHGULZUI25EY3&amp;dn=Secret%20of%20TCTF%202021.7z<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 <p>很明显就是这个了，然而上面那个下载下来是全空的，下面那个下载不下来。</p>
 <p>参考磁力链接的结构，btih 是指 BitTorrent Info Hash。</p>
-<p><img src="/2021/07/15/CTF_2021TCTF-0CTF/image-20210707005537705.png" alt=""></p>
-<p><img src="/2021/07/15/CTF_2021TCTF-0CTF/image-20210707005652418.png" alt=""></p>
+<p><img src="/2021/07/15/CTF_2021TCTF-0CTF/image-20210707005537705.png"></p>
+<p><img src="/2021/07/15/CTF_2021TCTF-0CTF/image-20210707005652418.png"></p>
 <p>参考大师傅的 wp，<code>AQEQB7YBOGIMOQARSRXSHGULZUI25EY3</code> 即被 Base32 编码过的 BTIH 散列结果，把它转换为 hex 编码的。</p>
-<p><img src="/2021/07/15/CTF_2021TCTF-0CTF/image-20210707005932376.png" alt=""></p>
+<p><img src="/2021/07/15/CTF_2021TCTF-0CTF/image-20210707005932376.png"></p>
 <pre class="line-numbers language-none"><code class="language-none">%04%09%00%ff%01%71%90%c7%40%11%94%6f%23%9a%8b%cd%11%ae%93%1b<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>再参考第一个 torrent 文件，可以得到 httpseeds</p>
-<p><img src="/2021/07/15/CTF_2021TCTF-0CTF/image-20210707010305533.png" alt=""></p>
+<p><img src="/2021/07/15/CTF_2021TCTF-0CTF/image-20210707010305533.png"></p>
 <blockquote>
 <p>参考</p>
 <p><a target="_blank" rel="noopener" href="http://www.snowywar.top/?p=1118">对于bittorrent协议的深入研究与探讨</a></p>
@@ -684,12 +679,15 @@ magnet:?xt=urn:btih:AQEQB7YBOGIMOQARSRXSHGULZUI25EY3&amp;dn=Secret%20of%20TCTF%2
 <p><strong>PROTOCOL:</strong></p>
 <p>The client calls the URL given, in the following format:</p>
 <pre class="line-numbers language-none"><code class="language-none">&lt;url&gt;?info_hash=[hash]&amp;piece=[piece]{&amp;ranges=[start]-[end]{,[start]-[end]}...}<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
 <p>Examples:</p>
 <pre class="line-numbers language-none"><code class="language-none">http://www.whatever.com/seed.php?info_hash=%9C%D9i%8A%F5Uu%1A%91%86%AE%06lW%EA%21W%235%E0&amp;piece=3
 http://www.whatever.com/seed.php?info_hash=%9C%D9i%8A%F5Uu%1A%91%86%AE%06lW%EA%21W%235%E0&amp;piece=8&amp;ranges=49152-131071,180224-262143<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+
 </blockquote>
 <p>于是可以构造出地址为</p>
-<p><a target="_blank" rel="noopener" href="https://bt.hzh.moe/seeding?info_hash=%04%09%00%FF%01%71%90%C7%40%11%94%6F%23%9A%8B%CD%11%AE%93%1B&amp;piece=0">https://bt.hzh.moe/seeding?info_hash=	�q��%40�o%23�����&amp;piece=0</a></p>
+<p><a target="_blank" rel="noopener" href="https://bt.hzh.moe/seeding?info_hash=%04%09%00%EF%BF%BD%01q%EF%BF%BD%EF%BF%BD@%11%EF%BF%BDo%23%EF%BF%BD%EF%BF%BD%EF%BF%BD%11%EF%BF%BD%EF%BF%BD%1B&amp;piece=0">https://bt.hzh.moe/seeding?info_hash=%04%09%00%FF%01%71%90%C7%40%11%94%6F%23%9A%8B%CD%11%AE%93%1B&amp;piece=0</a></p>
 <p>直接浏览器里打开不行，需要改 UA 为 BT 客户端……</p>
 <p>写个脚本分 piece 下载一下。超过范围会返回 400，判断一下退出。</p>
 <pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> requests
@@ -710,21 +708,21 @@ i <span class="token operator">=</span> <span class="token number">0</span>
 <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">'Download OK!'</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>最后 piece 是 0-46，下载下来解压得到一个 <code>TCTF.vhdx</code>。</p>
 <p>挂载得到一个 <code>hint.bat</code></p>
-<p><img src="/2021/07/15/CTF_2021TCTF-0CTF/image-20210707011500742.png" alt=""></p>
+<p><img src="/2021/07/15/CTF_2021TCTF-0CTF/image-20210707011500742.png"></p>
 <p>最后提示了文件名进行了修改。</p>
 <p>于是可以去查看 NTFS 硬盘历史记录。想起上次强网杯那道 <a href="https://miaotony.xyz/2021/06/28/CTF_2021qiangwang/#EzTime">EzTime 题目</a>了……</p>
 <p>这里试了试用 AXIOM 分析硬盘 <code>$LogFile</code>，发现巨大多修改文件名的记录。</p>
 <p>找了半天确实能找到 flag 了……</p>
-<p><img src="/2021/07/15/CTF_2021TCTF-0CTF/image-20210707170607334.png" alt=""></p>
+<p><img src="/2021/07/15/CTF_2021TCTF-0CTF/image-20210707170607334.png"></p>
 <p><code>TCTF{B7UmV4x8JRHNKBCWxyevXt97tnQJtHjrZ}</code></p>
 <p>或者也可以导出硬盘日志，然后写个脚本整合一下。</p>
 <p>首先用 DiskGenius 把显示元文件（Metafile）勾上，然后才能看到 $LogFile 这些信息，然后导出来。</p>
-<p><img src="/2021/07/15/CTF_2021TCTF-0CTF/image-20210707171559838.png" alt=""></p>
+<p><img src="/2021/07/15/CTF_2021TCTF-0CTF/image-20210707171559838.png"></p>
 <p>用 <a target="_blank" rel="noopener" href="https://github.com/jschicht/LogFileParser">LogFileParser</a> 来解析硬盘日志，可以得到 csv 数据文件。</p>
-<p><img src="/2021/07/15/CTF_2021TCTF-0CTF/image-20210707230216302.png" alt=""></p>
-<p><img src="/2021/07/15/CTF_2021TCTF-0CTF/image-20210707230444619.png" alt=""></p>
+<p><img src="/2021/07/15/CTF_2021TCTF-0CTF/image-20210707230216302.png"></p>
+<p><img src="/2021/07/15/CTF_2021TCTF-0CTF/image-20210707230444619.png"></p>
 <p>根据这个 <code>LogFile_lfUsnJrnl.csv</code> 可以得知文件的修改历史。</p>
-<p><img src="/2021/07/15/CTF_2021TCTF-0CTF/image-20210707233705790.png" alt=""></p>
+<p><img src="/2021/07/15/CTF_2021TCTF-0CTF/image-20210707233705790.png"></p>
 <p>写个脚本，找一下更改为新名字且文件名长度为1的文件名，另外再根据 <code>MFTReference</code> 分别统计并输出。</p>
 <pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">with</span> <span class="token builtin">open</span><span class="token punctuation">(</span><span class="token string">'LogFile_lfUsnJrnl.csv'</span><span class="token punctuation">,</span> <span class="token string">'r'</span><span class="token punctuation">,</span> encoding<span class="token operator">=</span><span class="token string">'utf-8'</span><span class="token punctuation">)</span> <span class="token keyword">as</span> f<span class="token punctuation">:</span>
     s <span class="token operator">=</span> f<span class="token punctuation">.</span>read<span class="token punctuation">(</span><span class="token punctuation">)</span>
@@ -772,11 +770,12 @@ data <span class="token operator">=</span> <span class="token string">''</span>
 <p>最后也可以得到 flag。</p>
 <p><code>WOW0Is1That2Flag3TCTF{B7UmV4x8JRHNKBCWxyevXt97tnQJtHjrZ}4God5Job</code></p>
 <br>
+
+
 <hr>
 <br>
-<h2 id="Crypto">Crypto</h2>
-<h3 id="checkin">checkin</h3>
-<blockquote>
+
+<h2 id="Crypto"><a href="#Crypto" class="headerlink" title="Crypto"></a>Crypto</h2><h3 id="checkin"><a href="#checkin" class="headerlink" title="checkin"></a>checkin</h3><blockquote>
 <p>Welcome to 0CTF/TCTF 2021!</p>
 <p><code>111.186.59.11:16256</code></p>
 <p>Nothing fancy, just do the math.</p>
@@ -804,11 +803,15 @@ sh<span class="token punctuation">.</span>sendlineafter<span class="token punctu
 sh<span class="token punctuation">.</span>recvall<span class="token punctuation">(</span><span class="token punctuation">)</span>
 
 <span class="token comment"># Here is your flag: flag{h0w_m4ny_squar3s_can_u_d0_in_10_sec0nds?}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<h3 id="zer0lfsr">zer0lfsr-</h3>
-<blockquote>
+
+
+
+
+<h3 id="zer0lfsr"><a href="#zer0lfsr" class="headerlink" title="zer0lfsr-"></a>zer0lfsr-</h3><blockquote>
 <p>Much easier than zer0lfsr!</p>
 <pre class="line-numbers language-none"><code class="language-none">nc 111.186.59.28 31337<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p><s><a target="_blank" rel="noopener" href="https://attachment.ctf.0ops.sjtu.cn/zer0lfsrminus_fc09323cb093e58dc50f501b9b743d83.tar.xz">not download</a></s></p>
+
+<p><del><a target="_blank" rel="noopener" href="https://attachment.ctf.0ops.sjtu.cn/zer0lfsrminus_fc09323cb093e58dc50f501b9b743d83.tar.xz">not download</a></del></p>
 <p>NOTICE: the download link is updated. use the link below</p>
 <p><a target="_blank" rel="noopener" href="https://attachment.ctf.0ops.sjtu.cn/zer0lfsrminus_e5da5d38eb808dba5865038605e9f99e.tar.gz">download</a></p>
 </blockquote>
@@ -1005,7 +1008,7 @@ sh<span class="token punctuation">.</span>recvall<span class="token punctuation"
 <p>2019 年的 TCTF 就出过这样一题，<a target="_blank" rel="noopener" href="https://fireshellsecurity.team/0ctf-zer0lfsr/">0CTF/TCTF 2019 Quals - zer0lfsr</a>.</p>
 <p>他那题是静态的文件数据，没有和服务器的交互，写起来比较方便，求解也可以直接拿 Z3 solver 来实现了。</p>
 <p>这题的话 Generator1 和 Generator3 比较简单，然而直接拿 Z3 发现整不通，会提示 <code>unsupported format string passed to BitVecRef.__format__</code>，也就是说 BitVec 不支持 format 操作。</p>
-<p><img src="/2021/07/15/CTF_2021TCTF-0CTF/image-20210706224214881.png" alt=""></p>
+<p><img src="/2021/07/15/CTF_2021TCTF-0CTF/image-20210706224214881.png"></p>
 <p>比赛的时候看了一晚上这题不知道咋整，赛后看了人家大佬的 wp 才发现只需要重写一下 <code>n2l</code> 函数就完事了。</p>
 <p>把这个改成位操作，用位与、移位操作来对每个 BitVec 进行操作，最后形成一个 BitVec 的 list。</p>
 <p>另外在接收数据的处理上，只需要给前 200 位这样的结果建立方程组就能求解了，没必要全部加上。</p>
@@ -1215,7 +1218,7 @@ r<span class="token punctuation">.</span>interactive<span class="token punctuati
 <p>好家伙，原来是你们故意的啊，坏坏！</p>
 <p>另外，发现一个有意思的地方。</p>
 <p>用 latin-1 进行编码不会改变字符的长度，而用 utf-8 编码就可能会使得长度增大。</p>
-<p><img src="/2021/07/15/CTF_2021TCTF-0CTF/image-20210705031504832.png" alt=""></p>
+<p><img src="/2021/07/15/CTF_2021TCTF-0CTF/image-20210705031504832.png"></p>
 <p>这情况在之前也遇到过，于是处理的时候就要特别小心，正好发现 2019 TCTF zer0lfsr 一题也有这个情况。</p>
 <p>原因是进行 utf-8 编码，当 <code>chr</code> 操作的数字 &lt;= 127 时可以正常用 1byte 表示，而 python2 大于 127 会报错，python3 会使用 2bytes 进行表示。</p>
 <pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token comment"># 在区间[128, 192)内,数字的表示形式会加上xc2前缀:</span>
@@ -1253,6 +1256,8 @@ b <span class="token operator">=</span> <span class="token string">b''</span>
         <span class="token keyword">else</span><span class="token punctuation">:</span>
             b <span class="token operator">+=</span> <span class="token builtin">bytes</span><span class="token punctuation">(</span><span class="token punctuation">[</span>data<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
         i <span class="token operator">+=</span> <span class="token number">1</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
 <blockquote>
 <p><strong>Extensive Reading:</strong></p>
 <p><a target="_blank" rel="noopener" href="https://www.anquanke.com/post/id/184828">深入分析CTF中的LFSR类题目（二）</a></p>
@@ -1261,15 +1266,13 @@ b <span class="token operator">=</span> <span class="token string">b''</span>
 <p><a href="https://miaotony.xyz/2020/08/27/CTF_2020CISCN_preliminary/">CTF | 2020 CISCN初赛 Z3&amp;LFSR WriteUp</a></p>
 </blockquote>
 <br>
+
+
 <hr>
 <br>
-<h2 id="Web">Web</h2>
-<h3 id="1linephp">1linephp</h3>
-<blockquote>
-<p><a target="_blank" rel="noopener" href="http://111.186.59.2:50080">http://111.186.59.2:50080</a><br>
-<a target="_blank" rel="noopener" href="http://111.186.59.2:50081">http://111.186.59.2:50081</a><br>
-<a target="_blank" rel="noopener" href="http://111.186.59.2:50082">http://111.186.59.2:50082</a><br>
-The three servers are the same, you can choose any one. server will be reset every 10 minutes.</p>
+
+<h2 id="Web"><a href="#Web" class="headerlink" title="Web"></a>Web</h2><h3 id="1linephp"><a href="#1linephp" class="headerlink" title="1linephp"></a>1linephp</h3><blockquote>
+<p> <a target="_blank" rel="noopener" href="http://111.186.59.2:50080/">http://111.186.59.2:50080</a><br> <a target="_blank" rel="noopener" href="http://111.186.59.2:50081/">http://111.186.59.2:50081</a><br> <a target="_blank" rel="noopener" href="http://111.186.59.2:50082/">http://111.186.59.2:50082</a><br> The three servers are the same, you can choose any one. server will be reset every 10 minutes.</p>
 </blockquote>
 <p>源码：</p>
 <pre class="line-numbers language-php" data-language="php"><code class="language-php"><span class="token php language-php"><span class="token delimiter important">&lt;?php</span>
@@ -1287,7 +1290,7 @@ The three servers are the same, you can choose any one. server will be reset eve
 </blockquote>
 <p>利用 PHP upload_progress 进行文件包含来上传文件并执行。</p>
 <p>先看一看 session 相关的配置。</p>
-<p><img src="/2021/07/15/CTF_2021TCTF-0CTF/image-20210706235431955.png" alt=""></p>
+<p><img src="/2021/07/15/CTF_2021TCTF-0CTF/image-20210706235431955.png"></p>
 <p><code>session.auto_start = Off</code>，代码如果没有 <code>session_start()</code> 也是没有开启 session 的，但是如果在多部分的 POST 数据里加入 <code>PHP_SESSION_UPLOAD_PROGRESS</code> 字段就可以开启 session 了。</p>
 <p><code>session.upload_progress.cleanup = On</code> ，文件上传后，session 文件内容会被立即清空，于是要进行条件竞争，传一个大文件来拖时间，在清空之前包含该文件。</p>
 <p>到这里就是之前那题就可以解了。</p>
@@ -1296,13 +1299,13 @@ The three servers are the same, you can choose any one. server will be reset eve
 <p>由于 PHP 在进行 zip 文件读取的时候是从结尾的部分读偏移量，然后从开头+偏移量的位置开始读取，于是就构造一个 zip，跳过 <code>upload_progress_</code> 来读取就完事了。</p>
 <p>赛后发现有另一种方案，就是先在压缩包里放一个文件，然后通过命令行给压缩包附加上所需的 php 木马文件，也就是说，这样 php🐎 所存储的位置不会被破坏掉，能通过 php zip 协议正常解析。然后打过去就完事了。</p>
 <br>
+
 <hr>
 <p><strong>下面是队友的 Writeup：</strong></p>
 <p>很明显是 hitcon 那个 oneline php ，复习一下 wp ，然后发现多了一个 php 后缀，对于这个点尝试了 phar/zip LFI 都不太行，最后看 zip 格式的时候，发现 zip 是从后往前读的，类似指针的构造，所以我们构造一个 zip 文件，然后修改一下，刚好<code>upload_progress_</code>是 16 字节，只需要把 zip 那几个段的偏移加 16 字节，挪一下就可以了。</p>
 <p>然后用 burp 一边用<code>zip:///tmp/sess_b#index</code>包含这个 zip 文件，一边用 php upload progress 刷新 session ，写马进去就可以了。</p>
-<p><img src="/2021/07/15/CTF_2021TCTF-0CTF/image-20210705003343663.png" alt=""></p>
-<h3 id="worldcup">worldcup</h3>
-<p><em><strong>这题是队友写的 wp，后面环境关了喵喵复现不了了（</strong></em></p>
+<p><img src="/2021/07/15/CTF_2021TCTF-0CTF/image-20210705003343663.png"></p>
+<h3 id="worldcup"><a href="#worldcup" class="headerlink" title="worldcup"></a>worldcup</h3><p><em><strong>这题是队友写的 wp，后面环境关了喵喵复现不了了（</strong></em></p>
 <p>在修改昵称处用<code>/*</code>尝试多行注释的时候，发现得到的内容都被删除了，猜想有可能是服务端渲染，又因为是 golang ，搜了一下发现有： <a target="_blank" rel="noopener" href="https://blog.takemyhand.xyz/2020/05/ssti-breaking-gos-template-engine-to.html">https://blog.takemyhand.xyz/2020/05/ssti-breaking-gos-template-engine-to.html</a></p>
 <p>尝试先用 <code>{{.}}</code> 试试看，发现在主页成功输出</p>
 <pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">const</span> msg <span class="token operator">=</span> <span class="token punctuation">[</span>
@@ -1329,7 +1332,7 @@ The three servers are the same, you can choose any one. server will be reset eve
 <p>就能弹窗了，所以接下来就是 xss 了，直接<code>window.location</code>跳就行了。</p>
 <p>拿到 level1 cookie 之后，访问 level2 ，但是好像可以直接 X ，不知道设置的意义在哪</p>
 <pre class="line-numbers language-none"><code class="language-none">$("#newmsg").text(`"`+alert()+`"`);<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>拿到两个 cookie</p>
+<p>拿到两个 cookie </p>
 <pre class="line-numbers language-none"><code class="language-none">level1=NoQWeCy70QekDB5b; level2=Autx5F53FmmSFayM<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>访问 <a target="_blank" rel="noopener" href="http://111.186.58.249:19260/casino?bet=1">http://111.186.58.249:19260/casino?bet=1</a></p>
 <p>用<code>{{$}}</code>可以看到变量名，然后看了一下 text 模板文档，一开始用</p>
@@ -1339,16 +1342,18 @@ The three servers are the same, you can choose any one. server will be reset eve
 <pre class="line-numbers language-none"><code class="language-none">0{{if%20gt%20.o0ps_u_Do1nt_no_t1%20.o0ps_u_Do1nt_no_t2}}{{call%201}}{{end}}<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>然后就可以稳赢了。</p>
 <br>
+
 <hr>
 <br>
-<h2 id="小结">小结</h2>
-<p>这比赛题目太难了啊！！！</p>
+
+
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>这比赛题目太难了啊！！！</p>
 <p>喵喵好菜啊，喵呜呜呜！！！</p>
 <p>哭了，队友大多在准备期末考试，都没什么师傅来一起玩。。</p>
 <p>最后只打到了 RisingStar Scoreboard 第13，然而前 12 进决赛，太难受啦，喵呜呜呜！</p>
-<p><img src="/2021/07/15/CTF_2021TCTF-0CTF/image-20210705213228769.png" alt=""></p>
+<p><img src="/2021/07/15/CTF_2021TCTF-0CTF/image-20210705213228769.png"></p>
 <p>总榜</p>
-<p><img src="/2021/07/15/CTF_2021TCTF-0CTF/image-20210705213349136.png" alt=""></p>
+<p><img src="/2021/07/15/CTF_2021TCTF-0CTF/image-20210705213349136.png"></p>
 <p><em>（溜了溜了喵</em></p>
 
                 
@@ -1905,7 +1910,7 @@ The three servers are the same, you can choose any one. server will be reset eve
             |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
             <br>
                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">308.3k</span>&nbsp;字
+                class="white-color">308.1k</span>&nbsp;字
                                                                                     <span id="busuanzi_container_site_pv">
 			|&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
                     class="white-color"></span>&nbsp;次

@@ -549,42 +549,35 @@
         <div class="card-content article-card-content">
             <div id="articleContent">
                 <blockquote>
-<p>搬运自之前的小脑洞小想法啦</p>
+<p>搬运自之前的小脑洞小想法啦      </p>
 </blockquote>
-<p>又是个小脑洞<br>
-最近有个比赛要统计一下各组信息，信息来自Word版的申请表。</p>
+<p>又是个小脑洞<br>最近有个比赛要统计一下各组信息，信息来自Word版的申请表。</p>
 <p><img src="/2019/03/21/Idea_python-docx/1.jpg" alt="1"></p>
 <p>考虑到Word要一个一个打开，再复制粘贴。</p>
-<p>简单重复，太难受了8，不如干脆py一下，写个小程序来弄吧。</p>
-<h2 id="大致思路">大致思路</h2>
-<p>一查发现.docx是以类似xml格式来存放信息的，刚开始思路就想直接解压.docx，从中解析文件然后暴力匹配。。</p>
-<p>而后发现有个<strong>第三方库<code>python-docx</code></strong>，于是乎不想造轮子了，直接拿来用吧。</p>
+<p>简单重复，太难受了8，不如干脆py一下，写个小程序来弄吧。  </p>
+<h2 id="大致思路"><a href="#大致思路" class="headerlink" title="大致思路"></a>大致思路</h2><p>一查发现.docx是以类似xml格式来存放信息的，刚开始思路就想直接解压.docx，从中解析文件然后暴力匹配。。</p>
+<p>而后发现有个**第三方库<code>python-docx</code>**，于是乎不想造轮子了，直接拿来用吧。</p>
 <p>然而并没有那么简单，合并的单元格变成独立重复的内容，加个去重吧。</p>
-<h2 id="提取信息">提取信息</h2>
-<p>文字都解析出来了，接下来，来点简单的正则匹配，单独拿个文件来试试，没毛病，挺好的。</p>
-<h2 id="批量读取">批量读取</h2>
-<p>遍历文件夹下所有文件，筛选<code>.docx</code>且排除临时文件，噫少了俩。</p>
-<p>原来还有.doc格式的，另存为.docx <em>(docx库只支持.docx)</em>。</p>
+<h2 id="提取信息"><a href="#提取信息" class="headerlink" title="提取信息"></a>提取信息</h2><p>文字都解析出来了，接下来，来点简单的正则匹配，单独拿个文件来试试，没毛病，挺好的。</p>
+<h2 id="批量读取"><a href="#批量读取" class="headerlink" title="批量读取"></a>批量读取</h2><p>遍历文件夹下所有文件，筛选<code>.docx</code>且排除临时文件，噫少了俩。</p>
+<p>原来还有.doc格式的，另存为.docx *(docx库只支持.docx)*。</p>
 <p>依次读取每个文件，拼接string列表，得到所需信息。</p>
 <p><img src="/2019/03/21/Idea_python-docx/2.jpg" alt="2"></p>
-<h2 id="写入文件">写入文件</h2>
-<p>将infolist按照<code>.csv</code>的格式写入文件。</p>
+<h2 id="写入文件"><a href="#写入文件" class="headerlink" title="写入文件"></a>写入文件</h2><p>将infolist按照<code>.csv</code>的格式写入文件。</p>
 <blockquote>
 <p>其实可以调用第三方库来实现的。</p>
 </blockquote>
-<h2 id="debug">debug</h2>
-<p>实际情况还是挺复杂的，比如表格哪里没填空缺了，或者哪个里面多加几个分隔符什么的，还是出了不少bug，于是继续完善程序，加入相应的处理呗！</p>
-<p><strong>生产环境真复杂</strong></p>
-<p><img src="/2019/03/21/Idea_python-docx/3.jpg" alt="遇到的情况"></p>
-<p><img src="/2019/03/21/Idea_python-docx/4.jpg" alt="4"></p>
-<p>如果用Excel打开<code>.csv</code>，发现学号前的0自动丢失，还是觉得不爽emmm （程序猿的自我修养</p>
-<p>又查了查资料，新建<code>.xlsx</code>，从文本导入到Excel，设置好属性。</p>
+<h2 id="debug"><a href="#debug" class="headerlink" title="debug"></a>debug</h2><p>实际情况还是挺复杂的，比如表格哪里没填空缺了，或者哪个里面多加几个分隔符什么的，还是出了不少bug，于是继续完善程序，加入相应的处理呗！  </p>
+<p><strong>生产环境真复杂</strong>  </p>
+<p><img src="/2019/03/21/Idea_python-docx/3.jpg" alt="遇到的情况">  </p>
+<p><img src="/2019/03/21/Idea_python-docx/4.jpg" alt="4">  </p>
+<p>如果用Excel打开<code>.csv</code>，发现学号前的0自动丢失，还是觉得不爽emmm （程序猿的自我修养  </p>
+<p>又查了查资料，新建<code>.xlsx</code>，从文本导入到Excel，设置好属性。  </p>
 <p>几好，完事！</p>
-<p><img src="/2019/03/21/Idea_python-docx/5.jpg" alt="修正后的匹配代码"></p>
-<p><img src="/2019/03/21/Idea_python-docx/6.jpg" alt="最终得到的Excel"></p>
+<p><img src="/2019/03/21/Idea_python-docx/5.jpg" alt="修正后的匹配代码">  </p>
+<p><img src="/2019/03/21/Idea_python-docx/6.jpg" alt="最终得到的Excel">  </p>
 <blockquote>
-<p>于是乎边查资料边debug边改代码 花了一个多两个小时<br>
-估计几个人同时手动做早都做完了</p>
+<p>于是乎边查资料边debug边改代码 花了一个多两个小时<br>估计几个人同时手动做早都做完了  </p>
 </blockquote>
 <p>（其实早就想过用py读取Excel了，但是一直还没试过，这次就先拿py读取Word试试水吧</p>
 
@@ -1194,7 +1187,7 @@
             |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
             <br>
                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">308.3k</span>&nbsp;字
+                class="white-color">308.1k</span>&nbsp;字
                                                                                     <span id="busuanzi_container_site_pv">
 			|&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
                     class="white-color"></span>&nbsp;次
