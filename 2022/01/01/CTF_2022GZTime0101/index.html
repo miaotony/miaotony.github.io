@@ -1,0 +1,1512 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="CTF | 2022 GZTime&#39;s 元旦红包解谜 WriteUp, MiaoTony,blog">
+    <meta name="description" content="2022新年快乐！来看了看GZTime的元旦解谜，随便写了写题解啦。">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-159946730-1"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+        dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+    gtag('config', 'UA-159946730-1');
+</script>
+
+
+    <title>CTF | 2022 GZTime&#39;s 元旦红包解谜 WriteUp | MiaoTony&#39;s小窝</title>
+    <link rel="icon" type="image/x-icon, image/vnd.microsoft.icon" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/favicon.ico">
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/awesome/css/all.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/css/matery.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/css/my.css">
+	
+    <script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/jquery/jquery.min.js"></script>
+    <script>
+        //来个特效玩玩喵 20200123
+        var titleTime;
+        var OriginTitile = document.title;
+        document.addEventListener('visibilitychange', function() {
+            if (document.hidden) {
+                document.title = '|ω·) 喵~快回来呀！';
+                clearTimeout(titleTime);
+            } else {
+                document.title = '(/≧▽≦)/ Meow！';
+                titleTime = setTimeout(function() {
+        	    document.title = OriginTitile;
+        }, 800);
+    }
+        });
+    </script>
+<meta name="generator" content="Hexo 5.3.0">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+<link rel="alternate" href="/atom.xml" title="MiaoTony's小窝" type="application/atom+xml">
+</head>
+
+
+
+
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">MiaoTony&#39;s小窝</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>首页</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>标签</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>分类</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/archives" class="waves-effect waves-light">
+      
+      <i class="fas fa-archive" style="zoom: 0.6;"></i>
+      
+      <span>归档</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>关于</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/contact" class="waves-effect waves-light">
+      
+      <i class="fas fa-comments" style="zoom: 0.6;"></i>
+      
+      <span>留言</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/friends" class="waves-effect waves-light">
+      
+      <i class="fas fa-address-book" style="zoom: 0.6;"></i>
+      
+      <span>友链</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="搜索" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">MiaoTony&#39;s小窝</div>
+        <div class="logo-desc">
+            
+            喵~欢迎各位大佬的来访呀！
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			首页
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			标签
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			分类
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/archives" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-archive"></i>
+			
+			归档
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			关于
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/contact" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-comments"></i>
+			
+			留言
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/friends" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-address-book"></i>
+			
+			友链
+		</a>
+          
+        </li>
+        
+        
+        <li><div class="divider"></div></li>
+        <li>
+            <a href="https://github.com/miaotony" class="waves-effect waves-light" target="_blank">
+                <i class="fab fa-github-square fa-fw"></i>Fork Me
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+
+        </div>
+
+        
+            <style>
+    .nav-transparent .github-corner {
+        display: none !important;
+    }
+
+    .github-corner {
+        position: absolute;
+        z-index: 10;
+        top: 0;
+        right: 0;
+        border: 0;
+        transform: scale(1.1);
+    }
+
+    .github-corner svg {
+        color: #0f9d58;
+        fill: #fff;
+        height: 64px;
+        width: 64px;
+    }
+
+    .github-corner:hover .octo-arm {
+        animation: a 0.56s ease-in-out;
+    }
+
+    .github-corner .octo-arm {
+        animation: none;
+    }
+
+    @keyframes a {
+        0%,
+        to {
+            transform: rotate(0);
+        }
+        20%,
+        60% {
+            transform: rotate(-25deg);
+        }
+        40%,
+        80% {
+            transform: rotate(10deg);
+        }
+    }
+</style>
+
+<a href="https://github.com/miaotony" class="github-corner tooltipped hide-on-med-and-down" target="_blank"
+   data-tooltip="Fork Me" data-position="left" data-delay="50">
+    <svg viewBox="0 0 250 250" aria-hidden="true">
+        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+        <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2"
+              fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
+        <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z"
+              fill="currentColor" class="octo-body"></path>
+    </svg>
+</a>
+        
+    </nav>
+
+</header>
+
+    
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/medias/featureimages/10.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <h1 class="description center-align post-title">CTF | 2022 GZTime&#39;s 元旦红包解谜 WriteUp</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        min-width: 240px;
+        padding-left: 15px;
+        padding-bottom: 30px;
+    }
+
+    .toc-widget .toc-title {
+        padding: 30px 0 15px 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content {
+	    max-height: 450px;
+        overflow: auto;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #42b983;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+
+        position: absolute;
+        right: 23.5vw;
+        display: block;
+    }
+
+    #toc-content .is-active-link {
+        color: #42b983;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 15px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/CTF/">
+                                <span class="chip bg-color">CTF</span>
+                            </a>
+                        
+                            <a href="/tags/WriteUp/">
+                                <span class="chip bg-color">WriteUp</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/CTF/" class="post-category">
+                                CTF
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2022-01-01
+                </div>
+                
+
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
+                    4.1k
+                </div>
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
+                    22 分
+                </div>
+                
+
+                
+            </div>
+        </div>
+        <hr class="clearfix">
+
+        
+        <!-- 是否加载使用自带的 prismjs. -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/prism/prism.css">
+        
+
+        
+
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>时间总是过得那么快，这几周忙着各种期末 ddl，直到实验室年底聚餐了才意识到已经年末了。</p>
+<p>转眼间 2022 年就到啦！</p>
+<p>新年第一篇，<strong>先祝大家新年快乐，新的一年里都能 flag 多多，都能有新的收获喵~</strong></p>
+<hr>
+<p>跨年的时候听 GZTime 说准备了元旦解谜红包，于是就来瞄了一眼。</p>
+<p>严格来说这应该不叫 CTF 吧，不过懒了，就姑且这么归类吧。</p>
+<p>题目如下。</p>
+<blockquote>
+<p>TimeAxis, [2022/1/1 1:41]<br>这是一份元旦红包。<br>虽然也就只有一些编解码的东西罢了.jpg<br>有效期大约 2022-01-02 00:00</p>
+<p><a target="_blank" rel="noopener" href="http://redpack.gz.wtf/2022.bin">http://redpack.gz.wtf/2022.bin</a><br>After Base64:<br><a target="_blank" rel="noopener" href="http://redpack.gz.wtf/2022.b64.txt">http://redpack.gz.wtf/2022.b64.txt</a></p>
+</blockquote>
+<p>喵喵顺便丢了一份 binary 文件 <a href="2022.bin">在这里</a>。</p>
+<p>之后给出了一系列 hint。</p>
+<blockquote>
+<p>TimeAxis, [2022/1/1 12:54]<br>HINT 1: 最开始是个 deflate 压缩</p>
+<p>TimeAxis, [2022/1/1 15:27]<br>HINT 2: 第二层是个可以运行的程序，但并不是 binary（</p>
+<p>TimeAxis, [2022/1/1 15:44]<br>HINT 3: 以及有一次会用到 xor 加密</p>
+<p>TimeAxis, [2022/1/1 18:08]<br>HINT 4: malbolge</p>
+<p>TimeAxis, [2022/1/1 18:40]<br>HINT 5: prod[]与后面是分离的</p>
+<p>TimeAxis, [2022/1/1 19:44]<br>HINT 6: 如果你得到了Key，你会知道一定是它的</p>
+</blockquote>
+<h2 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h2><h3 id="Step-1"><a href="#Step-1" class="headerlink" title="Step 1"></a>Step 1</h3><p><a target="_blank" rel="noopener" href="http://redpack.gz.wtf/2022.bin">http://redpack.gz.wtf/2022.bin</a><br>After Base64:<br><a target="_blank" rel="noopener" href="http://redpack.gz.wtf/2022.b64.txt">http://redpack.gz.wtf/2022.b64.txt</a></p>
+<p>首先拿到一个 二进制文件，或者这个 base64 编码后的文件。</p>
+<p><img src="/2022/01/01/CTF_2022GZTime0101/image-20220101212342895.png"></p>
+<p>看了下用到了 <a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/DEFLATE">deflate 压缩</a>（后面 hint 也给了），inflate 一下。</p>
+<p><img src="/2022/01/01/CTF_2022GZTime0101/image-20220101212434916.png"></p>
+<p>得到的东西长这样……</p>
+<pre class="line-numbers language-none"><code class="language-none">D'`$#]\~mlGjzhwfv3,+=`LLKm[Z(4EVfB@!a&gt;O_)([wvo5slTjihmfe+Lbg`ed]\"`_AWV[Tx;QPUNr5KPONGFjD,HAF?&gt;bBA@?&gt;7};:3W7wv4-,10)M-ml*)(!E%|#"y?w|u;yxwYXtsl2pRhgle+Lbg`ed]\"`_^@\Uy&lt;XQuUTSR43ImMLKDIHGF?cCB;:?&gt;7[|{92V05.R210)o-&amp;J*)('g%${Ay~w=^]sxqputml2poQmf,dLhgf_%cbDCY}]\[T&lt;RvVUT6LpPIHMLEDhHAF?cCB;#?8\&lt;|{321U5u-Q10po'&amp;+*#G'~%$#z@~}|utyxwp6tVlkpi/mfkd*hgfe^c\"`_A@Vz=SXWPOsMLKPImGFKJCHGF?c&amp;%A@9]7};4X87wv4-,10)M'm%$)(!E%$#"!a}v&lt;zsrqp6Wmrqpih.lkjihg`&amp;d]E[!_^@?UTSw:VONMqQP2HlLEiCgGFE&gt;=aA@"!=&lt;5Yz210T4ts1*No',%$)(!~D$dc!x}vu;srwp6WVl2johglkd*ba`_^]#a`_XW\[ZYRvVU76LpP2NMLEiCBAFE&gt;bB;:?&gt;=6Z{9870Tu3,P0/.'m+$H(h&amp;%$#z@~}|{ts9wvuWmrqjoh.lkjc)gIedcb[!_X]\UTxXWVO7SLpP2HMFKDhBAF?&gt;b%A@?&gt;7[;43W76v.3,P0/o-&amp;J*j(!~}C#"bx&gt;|utyrq7oWslkjong-edchgfe^]#aC_^]\Uy&lt;;WPUTSRQJn10LKJCBG@d&gt;=&lt;A:^!7&lt;5:3Wx05.-,+O/on,+*#Gh&amp;%${zy?}|u]yxwp6tVl2pRh.lNjchg`_%Fb[`YX|\[ZYXWVUTSRQP2HMFEDhHAFE&gt;=a;@9&gt;7&lt;5Yz876/S-s10/.-&amp;J*)i!&amp;}${A!a`|u;yrwvo5slTpong-kMiha'Hdc\"`_X@\Uy&lt;;WPUTSRKJOHl/KJIHAF?c=BA:?8\&lt;|{321Uvu3,P0/.'&amp;J*)"'~D$#"!a}|u;yxwYun4rkjih.lNjihg`_%]ba`_^WVz=YRWPt76RQPONGkE-CgGF(D=aA@"!7[|{98765.R2r*No-,+$Hi!&amp;}$#z@xw|uzyxwp6Wmrqpi/mlkjib(Ie^]\"`Y^W{[Z&lt;;WVOsSRQP2NGLEDhHG)(D=aA#9]7&lt;5Y9y1Uvu-,10/(L,%k#(!E%|dz@xw|uzyxwp6tVrkji/Ple+iKgf_%]\a`_^]\UTxXWP8NMLpJINMFEi,BGF?cCB$:^!7&lt;5:3276/S32+*)(L&amp;%*#(!~D$#"yx}|u;\[q7utsrqpi/glkdc)aI_dcb[Z~^@\UTYRv9OTMLpPON0/EJCgA)?cCB$@98=&lt;;4X870v.32+O)(-,+*#G'&amp;%$dz@a}|{t:rwputml2ponglkd*hJ`edcb[Z~X]\[Tx;:PONrLKPONGFj-CHG@?c&amp;BA:?&gt;76Z:9yx65.R2r0/('&amp;J*ji'~%|#"y?`|{tsr8vuWmrqpingf,jiKgf_%cbD`Y}@?UZYRvVUT6LpP2NMLEiIBGFED=aA@"!76;4X87w5.R2+q).'&amp;J*ji!&amp;}${Aba}v{t:xZpotm3kjih.Oedihg`&amp;G]\a`_X|\[Z&lt;;WPUTSRQJnN0/EJCgGFE&gt;&amp;&lt;`@?&gt;7};:3Wx05.3,P0/.-,%Ij('~%|#"y?w_{zyr8putsrkj0hgfkjc)JI_d]\"ZY}WV[TSRWPtTS54JIHMFjD,BGF?&gt;bBA@?8\&lt;|43W765u-Q10/o'Kl$)"!E%$#"!a}v&lt;]yxwpunsl2joh.lkjiKa'_G]#aC_^WVzZSRQu8TMRKPImMLEDIBf)E&gt;=B;_?&gt;~&lt;5Y987654321q)M-,+*ji!Ef${Aba}|{zyxwp6nsrk1Rhglkd*hgf_G]#aCBX]VUy&lt;;WPUTSRKJOHlLEDCBGF?cCB$@98=&lt;;4X81w/S3210)M-,+k)(!E%${z!x&gt;|{]\xqpo5slTjihmfe+LKgf_%cbaZY}@\[TSXWPt76LKJnNG/Ei,HGFED=a;:9&gt;7&lt;;:32V6v4-,P0).-,+$#G'~f${A!~w_u;yxwp6nslkj0nmledcbgf_%cbDZ_^WVz=SRWPtNMLQPOHlL.DIHGF?cCB$:^!=&lt;;:981U54-21*N.'m%$)('~D${c!x&gt;_^tyxqp6WVlqji/glejc)g`Hd]#a`_^@\Uy&lt;XWPt7MLpPO1GFKDhHGF('C&lt;`@"8=&lt;5Yzy10/S32+*).-&amp;J*)i!E%|{A!~w_utyxq7utVrkji/gOe+LKgf_%cba`BX]VUy&lt;XQuUTSR43ImMFKJCHAeE'&amp;&lt;`#9&gt;7&lt;;:981Uvu-,10/(L,%k#(!Ef${"yx&gt;v{t:rZvun4Uqj0nmlkjc)gfHG]#D`Y^W\Uy&lt;XWPt7SLQJn1MFEJCgA@d'CB;:9]7};:3W7wv432+O/.-&amp;J*ji!Efe#z@x}|{zyxwp6WVlqjoh.leMib(fHGcb[ZY}|\[ZYR:PtNSLKJnN0/EJCg*F?cC%;:?8\&lt;|432V6/u-Q10/.'&amp;+$)"F&amp;%e{"yx}|ut:xwputm3Tpihmf,jibJ`&amp;^F\a`_X|\[=YXWPOs65KPOHGk.JIHG@d'&amp;&lt;`@?!~&lt;5Y981w5.R2r*N.-,+k#(!E}${A!~}v{t:xZpunsl2pongOe+LKgf_%Fba`_^]VzT&lt;XWVOs65KPImML.DhHGFE'&amp;&lt;`:?&gt;76;:3Wx654-,P0).-,+$#G'~}${z@a}vuzs9Zvo5Vlqji/mle+LKafedcb[Z~^]\[Z&lt;RvVONMRQPIm0/EJCgGFED=aA:9&gt;7[|{98765.R2+q).'&amp;J*ji'~%|#"y?w_{zyr8vuWVrk1ohmf,jLha'e^Fb[Z_X|V&gt;ZSw:VUNMqQJONMLEDhBGFED=aA#9]~&lt;;:9876/S32r*N.-,%k)"F&amp;%$d"y?wv{tyr8vXWsrk1Rnmle+LKgf_%cbD`YXW\UZSwW9OTSLKoONG/KDCBf@(&gt;=aA@?87[543W70T432r0)M-,lk)"Fg%$#zy~w=^]yxqpo5mrkpohmlkd*hgf_Gcb[!_^@?[ZYRv9OTMRQPIm0/EDCBGF?cCB$#?8\&lt;|{321U543sr*N.n,+*)"F&amp;f${Ab~w|uzs9qvonm3kSong-kjc)gIHdcbaZ~^@?UZYRvVUT6LpP2NGkE-CHAF?cCB;#?8\&lt;|{321U5u-Q+*/(-&amp;+*#(!E%${A!a}v&lt;]\rqp6Wmrqpih.lNd*ha`e^cb[!YXW{[T&lt;RvP8TMRQPIHGkEJCBfF('C&lt;`#9&gt;7&lt;5Y9y10/S3,r*N.-&amp;%$#GF&amp;f|{"y?`v{tyr8Yotml2pingfkjc)gfed]b[!_^@VUTxX:VOsSRKJn10FEiCgGFE'&amp;&lt;`:987[549870/St,+*/(L&amp;l$#(!Efe{zy?w_utyxq7onml2poQg-Njchgf_d]#DC_^WVzZSRQPOsS54PINGkKD,HAe(DCBA:^!~&lt;5Y981w543,P0/o-,%*)(!~D$#"bx&gt;|{zs[q7uWsrkj0ngfkjib(f_Gcb[!B^WVzTx;QPUNr54JONGFEi,HG@d'&amp;&lt;`:"8=&lt;54X87w5.-210/(L,%k#(!E%$#cbx&gt;|u]yxwp6WVlqjoh.ONjiha'edFEaZ~X@\[TxXWP8NrLQPONGLEDhHGFE&gt;&amp;&lt;`@9&gt;=6Z:9y10/S32+q)M-&amp;+*#G'&amp;}|{z@~w_utyxq7otmrqji/mlejihg`&amp;dcbDZ_^WVzZSwQVUNMq4JIHMLEi,BAF?&gt;=aA#9]76;:9870/Sts+*)Mn&amp;+*#('~De#"!x}|{t:xwvunml2Sihg-kdiba`&amp;G]\a`_X|?UZSRvVU76LpJOHl/EDCBAeEDCBA#9]=6|49810/.R2r*N.n,%I)('g}C#c!~}v{t:[wvunml2johgle+LKgf_%F\[`_^]VzT&lt;XWVOs65KPImMFKJCgG@?&gt;=a;_9&gt;=&lt;;:981Uv.32+O/.-ml$Hi'&amp;%$#z@x}v{tyxwvo5Vrqpi/g-kjibJ`&amp;G]baZY}]\[ZYRWVUNrRQ3IHMLEiI+*F?&gt;b%A@9]=&lt;5:32V6/4-Q10/(L,+$#(!E%e#z@a}v{t:[wvonm3qpongOe+LKgf_%FE[!_X@\[TxXWV8NrR43IHGkKDCgA)?&gt;C&lt;`@"&gt;76Z:9yx65.R,10/(Lm%$#G'&amp;f|{"y?`_{tyrwp6Wmrqpi/g-kMLhg`&amp;^]\[!_^@?UTSw:VONMq4JIHMLEiIBGF?c=%;_?&gt;7&lt;543Wx05.R2+q/('&amp;J*#"Fg%$#"!x&gt;|ut:[Zvutmlkj0nPOkd*hJ`edcb[Z~^@\UTxXWVU7Mq4JIHMLEiIH*)?&gt;=a;@?&gt;=6Z:9yx65.RQ10/.',%$#Gh~D$#"!x}v&lt;z\r8vutVlkj0QPfejc)gI_d]b[!_^@VzTSRQPtT6LQJIm0/KDCHAF?cCB$#?8\&lt;|{321U5u321*No-,%$#G'g}${z!x&gt;|u]yxwp6WVrk1onPle+iKgf_%]\a`_^]\UTxXWP8NMLpJINMFEiI+*F?cCB$:^&gt;=&lt;|4Xy165.-Qrq/('&amp;Jk)"!&amp;}Cd"!x&gt;v{zyxwp6Wsrkji/mOedihg`&amp;Gc\[`_X|\[Z&lt;;WVUNMq4JIHMLEiCBGF?cC&lt;$@9]=6;4381U5u-Q10po'&amp;+*#Gh&amp;}|#"y?}|utyxwp6tVrkj0hglkd*hg`Hd]#[ZY^W{[TYXQVUNrRQPO1Gk.JCHAFE&gt;bBA#9]=&lt;;:zy1U5432r*N.'m+$H('~%$#"!x&gt;|{z\r8vuWsrqpi/gOe+LKgf_%Fb[!_X@\[TxR:PtNMRKPIm0/EJCg*)?&gt;=aA@"!7[|:921U5u3,P0/o-,%*)(!~De{zy~w={z\xwp6Wmrqpi/gfkjib(feG]\[!B^WVzZ&lt;;WVOsSR43ImMLK-IBfF?&gt;C&lt;;_?!=6Z4981Uvu3,P0/o-,+$Hi'&amp;%$#z@?}|^]s9Zvotml2pohmf,Mib(f_Gcb[!B^WVzZSXQVOsSRKJOHMFjJC+G@?&gt;b%$:^&gt;7};:3Wx6/4-,P0po-&amp;%*#G'&amp;}|B"yx}|ut:xwputm3Tjohmf,jcb(`H^$E[ZY}W\[TSRvP8TSRQJnN0/EJCgA)E&gt;bB$@?&gt;=&lt;5Y9216543,Pq/.'&amp;%Ij('~%|#"y?`|{tsr8vXtsl2piQmfkd*hgI_^]#aZ_XW{[=YXWPOsSLQJOHlFEDIHGF?c&amp;%A@9]=}5Yzy1054-,P0/(L&amp;l$#('&amp;}C#"!a}v&lt;zsxwpunsl2poQg-Njiha`ed]#DCYXW{UTYXQPtNMq43Im0LKDhHGFE'&amp;&lt;`:"8=&lt;54X87654321q)M-,+*ji!E%${"y?&gt;|u]sxwp6tsrqpoQg-kjiKgf_%FEaZY^]Vz=YXQVUNrRQ3ONMFj-CBGFED=a;:?87[5{9810/St2+0).'Kl$)"'~De#zyx&gt;_{zsrwvun4Uqj0nmlkjc)JI_dc\[!B^WVUy&lt;XWPtT65KJOHMLEi,BGF?&gt;bB;#?8\&lt;;:z870T4ts1*N.-,+k#G'~}${z@~wv{t:[Zpotsl2Sinmlkjiba'H^]\[Z~^@VUTSXQVOsM5KJONGkE-CHAF?cCB;#?8\&lt;|{92765.-Qrq/('&amp;Jk)('~D$dc!x}vu;srwp6tVlkpi/mfkd*hg`Hd]#a`_A]\[TxXQVOs65KJImMFEDhH*)ED=aA:?&gt;76;:981U5432r*N.-m+$H"!~}C#c!~}v{t:[wvonm3qjinmled*Kg`edcb[Z~^@\Uy&lt;XWVOs65QPIHlLKDIBf)(DCB;_9&gt;=&lt;5Y9y10/S32+q/('&amp;J*#"F&amp;fe#"!~w={tsxqp6tsrqji/glejchgf_%cbDZ_^WVz=SRWPtNMLKPImGLEiIHGFE&gt;&amp;&lt;`#?&gt;76;:981U5.3,P0).'K+*ji'~%|#"y?}vutsxqvun4rkSonmlkdihg`&amp;G]b[`_X|\[T&lt;RvP8NSRQJImGFEiI+*@dDC&lt;;:?&gt;7[5{9270/S-2+O/.'m+*)(!E}$#"!xwv&lt;zyxwputsl2pRQmf,dc)gIHdcb[!_^@?UZYRvVUT6Lp3OHMFKDhBAFE&gt;=aA@"!=&lt;;:3W1w/Sts+*)M'&amp;%$)(!~}${A!xw=u]srqvo5slTpong-Njchgf_d]#DZ_^]VUTx;QPUNrLKPONGFj-CBGFED=a;:?&gt;7&lt;;4Xyx65.R2+q/.'&amp;%Ij('~%|#"y?w_{zyr8von4Uqji/mONd*hgf_Gcb[!_^@VUTxXQ9OTSLKoOHGFKDhHA@E&gt;=&lt;A:^8=6;4X8xw5.R2r*N.n,%I)(!&amp;%|B"yx&gt;_{zyxwvun4Uqji/gOejc)a`_%cbaZY}WVzZYRWVUTMqQPONMLEiIH*)?&gt;=aA@"!7[|:921U5u3,P0/o-,%*)(!~De{zy~w=^]yrqpo5Vrqji/g-NMiha'e^Fba`Y^WVzTSwQ9UTMqQPIHGkEDIHGF?cCB$#?8\&lt;|{321U54-s+Op.-&amp;+$)"F&amp;f|#"yx&gt;v^tyxwvon4Uqji/gOejc)gIe^]ba`Y}@\[TSXWPt7SLQPImMFKJIHAF?c=&lt;A:?8\&lt;|{321U5u-,10/(L,l*#G'g%${A!~`|u;yxwYun4rkjih.lNjihg`_%]ba`_^WVz=SRWPtNMLQPOHlLKJIBG@dDCB$:^&gt;=&lt;|4X87wv.R210/.'&amp;J$j('~D${z!x}v&lt;tyrwvutml2pohg-ejcba'H^]\[Z~^@VUTSXQVOsSRQJONGkE-CHAF?c&amp;BA@?&gt;=&lt;5Y92x6/Sts1*No'Kl$)"!E%$#"!a}v&lt;]yxwvonm3kpohglkd*hJfed]#DCY^]\UTxRQVUNr54JnN0/EJCgGFEDCBA#9]7&lt;;4X81w/S-s+O)o-&amp;J*)('g%${A!x}v{ts9wYun4rqji/mONdcha'ed]\[Z~^@\UTYRvVUNMRQJIm0/EJCg*F?D=BA@?8\}54381U54t,1*)M'm+*)(!Efe{z!x&gt;|{tsxqp6tmrqji/mlkjibJ`&amp;dcbaZY}WVzTx;QVUNSLpJ2NMLKDhHGFE'&amp;&lt;`@?!~&lt;5Y32765.-Q+*/.'&amp;+$)"F&amp;f|{"y?}_{t:xqYo5Vrqjih.lNjiha`ed]#aCY^W\[TxXQVUTSLpP2NMLEiIHAFE&gt;bBA#"8=6Z4921Uvu3,P0p(L&amp;+$#G!g%|{"y?}|u]yxwp6tVrqpoh.ledcbaf_%c\aZYXW{&gt;=SRWPtT6LKJn1MLEDIBfFE'=a$@?&gt;=&lt;5Y981w54-,Pq).-&amp;%I#('~D$d"!x}|ut:xwvuWmrqjoh.lejc)g`edc\"CY}W?UTSwWVUT6LpP2HMFEDIHAeEDCB$:^&gt;=&lt;|:3W70v.32+O)(-,+*#G!g}|#"!x&gt;|^]sxqputml2pohmlkjc)g`Hd]\aZ~X@\[TxR:VOs65QPIHMLEiI+*@dDCB$#?8\}|49810T4-,P*/(-&amp;+$Hi'&amp;%$#z@~w_{zyr8YXtmlk1Rhgfkjc)JI_d]\"ZB^]\[TxXW9ONMLpP2NGLEi,BGF?&gt;b%$@987[Z4z270/S32r*N.'m+$H('gf|Bz!~wv&lt;zyxZpunsl2poQmfkdcba'_^cbaZ~A@\[TSRvP8NSLQPImGFKJCHGF?cC%$:^&gt;7};:3Wx05.-2+0/(L,lk)(!E}|B"!~}|{t:xqYo5srTSohgle+LKgf_%]b[!Y^]Vz=YRWPt7MRQJnH0LKDhHAF?c&amp;&lt;;@9]=&lt;|43W765u-Q+*/('&amp;+*#G'~}${z@xwv{t:xqvotm3qpohglkd*hg`Hd]#a`_A]\[TxXQVUTSLpP2NMLEiCBAFE&gt;bBA#9]~}5:9810Tu3,Pq).'&amp;+$)(!E%edzy~w=utyrwvun4rTSong-kjchgfed]#D`_XW{UTSXWPtNMLKPImMLKDCgA@E&gt;=BA:^&gt;7};:3W7wv4-,10)M-,+*#('&amp;}Cdz@a}v{t:rwpo5mrqjing-ediba'Hdcb[!_X@\[TxXWP8Nr54JIHMFjJI+*@d&gt;&amp;&lt;`@?&gt;7};:3Wx05432+Op(-,%$Hi'&amp;%$#z@x}v{tyxwvo5Vlkjongf,jihg`_%FE[`_X]VzT&lt;RvV8TSLKoO10FEi,BfFE&gt;CBA:^8=6;4X8165432+*No-,%$)"!~De{zy?`_u;yxwp6nsrkj0QPfejc)gI_d]b[!YA]\[TxXQVOs65QPIHGkKJI+G@d'&amp;&lt;`#"&gt;7&lt;;43W705.3,P0p.-,%$H('g%${Aba}|{zyxwp6tVrqpoh.fedc)afedcb[!_^]\U=Sw:POTMLpJ2NGkEJIHG@dD&amp;&lt;;@?&gt;76Z{9870T.3,+0/('K+k)"F~}|{"y~w={zy[Zvo5srqpoQgf,dcbgfe^]#aCY}]\[T&lt;RQVOs65QPIHMLEiI+G@ED=&lt;`@98\}|:9876/.R2r0)M'&amp;+$)"F&amp;%ed"y~w=^]yxwvun4rqSing-kjiKgfed]#[Z_^WVUTxRWVUTSLKo2NGLEDCgGF?'C&lt;`@?&gt;~654X87wv4-,10)M-&amp;%*#(!E}${"yxwv&lt;zyxqpon4lkpohg-ejc)g`Hd]\aZ~X]VUZSwQVUTMq4JOHlLEDIHAe?DCB;_?&gt;~&lt;;:3Wx0/S321*p(Lm%$)"F~%|{"y?}_utsxwpo5srkjih.lkjihJI_%cbD`Y^WVUyY;WPt7MRKJIHlFKDIHAe?'=B;:^87&lt;;432V6vu3,Pqp(',+*#G!~%$#zy?w_{zyr8ponsrqj0Qgfkjib(`Hdc\[`Y}@\[TxXWPOs65QJnHlLE-CHAF?c=&lt;;@?&gt;=6Z498765.R21q/('K+*ji!&amp;}${A@awvuzyxq7uWmrqpi/gfed*bJ`ed]b[!_A@\UySXWPt7MLQJOHlLEJIBAe?DCB;_"876Z:z8165.-Q10/(-&amp;Jk)"!&amp;}C#zb~w|{t:rwpun4Uqjohg-kdcba'e^Fb[!BXW{[Z&lt;;QVONMq4PONGLEDhHGF?'C&lt;`@"8=6;:3W7654321*p(Lm%*#"F~%|{"y?w_{zyxwp6nslkj0nmlkjihJI_%cbDCYX]VzTYXQuUNSLKoOHGkK-,Bf@(D=&lt;`@"!=&lt;;:981U5ut,P*p(L,%$#(!E%$d"y?}vutyrqp6tsrTpoh.Okdibgf_%FE[ZY^]VUySXQPOs65KJOHMLEiI+*FE&gt;=aA#"&gt;=65Y9816/4-,P0/.-m+$H(!~}C{"yx&gt;|{ts9wvotsl2poQgf,dcbgfe^]#DZYX|V[ZSXQu87SLKoONMFj-CBG@dDCBA#"&gt;765Yz870T4t,10)M-,+*)i!E%|#"y~w={tsr8potsrkj0Qgfkjib(I_d]\"`B^WVUyYXWPOs65KJImG/EiIBGFE&gt;=&lt;`@?&gt;=&lt;|{92Vwv4-,+O/.'m+$Hi'&amp;}|#"!x&gt;_{zyr8YXtmlk1iQmfed*bJ`ed]b[!BX]\UTx;:PONrRQ3IHGLEiIHAF?c&amp;%A:98\}|49810T4-s+O/.nm+$H"!~}C{z!x}|u;yxwpo5srqpoQgf,dcbgfe^]#DZYX|\&gt;ZSRQu8NSRKJOHl/.DhBG@dDCBA#"&gt;765Yz870T4321qp('K%$)('~De{z!x&gt;|^]srwvun4lTji/POkdibgf_%cba`BXW{UTYXWPOs65KPONMFEiIB*@dD&amp;BA:^&gt;7&lt;;4Xy70Tu321*N.-&amp;%$)"F&amp;%edzy~w=utsxwvun4Ukji/mfkdcb(`Hd]\aZ~^]?&gt;ZYXQuOTSLpP2NMFKJCBf@E&gt;=&lt;`#"&gt;=&lt;5Y3W16543,P0p.-&amp;J$#"'~De#"!~w={zy[Zvo5srqpoQgf,dcbgfe^]#a`BA]\UyYR:VOs6LQJONMFjJCHGF?cC&lt;A@9]=}|:9876/St2+*/.'K+*)i!~Ded"y~w=^]yxwvun4rqSing-kdLha'eGcba`Y}@V[TSw:POsMRKPImM/.JCBG@dD&amp;BA:^&gt;7&lt;;4Xy70T43,r*N.-,+k#(!E%edzy~}|u;yxwYutm3qjoh.fNdc)gfHG]#DZ_XW{[ZYRWVONrRKPONGkKJC+AF?cCB;:?8\&lt;|{92Vwv.-210)Mnm%$#G'&amp;%$d"y?}|ut:xwpXn4rqSRnmf,jLha'e^F\[`_X|V[ZSXQuOTSRKJImM/.DhBG@dDCBA#"&gt;765Yzy76/432+Op(',+*)"Fgf${"!x&gt;|{tyrq7XWsrk1Rng-ed*ba`_^]#aZBXW{[Z&lt;Rv9OTMRQPImMFEJCBf)?DC&lt;;:9]~};:9870Tu321*Non&amp;%*)(!E%|d"!x}|ut:xwYutm3qjoh.ledc)gfHdc\"Z_^W{[ZSRQVONrRKPONGkKJC+AF?cC&lt;`#"&gt;7[;:z870Tut,10)Mn,%$#Gh&amp;%${zy?w_u;yxq7utsrk1Rngfkd*bg`e^c\"CB^]\UySXQPUNrRQJOHl/EDIHA@?c&amp;&lt;`#"&gt;765Y9810T4-s+O/.nm+$H('g%${Ab~}|u;yxqYunm3kjihmf,dcba'HGcbaZ~AW\UZYXWVOs65KPINMFEiI+G@dD&amp;&lt;;:9&gt;7[5{9870Tu-2+O/o-,%$#G!&amp;}C#zb~w|{t:rwputm3kpihg-kdcbgf_%cba`BXW{UTYXWPOsSLKJIm0FEJIHAeED=BA@9]=&lt;|:981Uvu3,Pqp(Lm+$Hih&amp;%$#zy?`_utyxq7unsrk1oQPlkd*hgIHdcb[!BX]\UTx;:PONr54JINGLKDhB*FE&gt;b&lt;$@987[;43870T4-s+O/.nm+$H(h~D|d"y?}|^]yxq7otsrqpi/mlNd*hg`H^$\D`_^]Vz=YRQPOsS5QPIHGkKDCgGFED=%;_?8=&lt;5:9810Tut,+0/(Lm+*)"!&amp;%${Abaw|utsr8vuWmrkj0ngf,dcbgf_%cba`BXW{UTYXWPOsSLQJOHlLKDIHAeE'=B;@?&gt;7[;:981w/.R21*p(L&amp;+$)('~}C#"bx&gt;|{z\xwp6tVrkpih.lkjihJI_%cbD`Y^WVUySRWVUTMqQP2NGLEiCHAFE&gt;b&lt;$:?8765Y327654-Q10/o-,%Ij('~De{"y~w|{zs9ZYutsl2pRQmf,jibJ`&amp;G]ba`YX|\[ZYXW9ONrLQJOHlLEJIHGF?c=&lt;;:^&gt;=&lt;|4Xy765.R2r0/.'K+*)i!~D$#cyxw=&lt;zsr8Yonsl2ponPled*hJ`_d]#a`_A@VzZ&lt;;WVUNrLQJOHlLEJIBAe?'=a;:9&gt;=6Z:9876vu-Q10/o-,%$#G!&amp;}C#zb~w|{t:xqvutsrk1onmlkd*bg`_d]#a`BXW{UTYXWPOsSR4JINGkKD,HAe?'C&lt;;@9]=&lt;|:981U5432+O/(',+*#G'&amp;%$d"y?}_{tsxwvo5Vlkjongf,Mib(fH^c\aZ~^@?UZYXWPtT6LKJINMFj-CBG@dDCBA#"&gt;765Yz870T4t,+O/(-&amp;J*j"!E%${"!~w=^zyxwvun4lTj0hPfed*Kafed]\"`_XW\[TSw:VUNSLQJnHGFKDh+*FE&gt;bB$@98=&lt;;4X876/.3210)(L,+k)('&amp;}C{c!x}|ut:xwYutm3qjoh.ledc)JIedcb[ZY}]\[=&lt;RvP8TSRQJONMLEiIHA)?cCB$@98=&lt;;4X870v.32+O)o-,+*#G!&amp;%|#"!~w={tsr8potsrkj0nPf,jLhg`&amp;^F\[Z~XW\[TSw:VUNrLKPImG/EiIB*FE&gt;bB$@9&gt;=&lt;54X87654ts+O/.-m%Ij(!~%${Aba}|{zs9wp6nVrqj0nPfkjc)Jf_%cba`BXW{UTYXWPOs6LKJnN0FjJIHG)?cCBA@"8=6;:3W7654321*p(Lm%*#"F&amp;f$#"!~}v&lt;tyrwvutml2jingf,jihJI_%cbD`Y^WVUyYXW9ONr54PINGkKDIHAe?'=B;:^87&lt;;432Vwv.3,+O).-,+*#G'~f${zy?}_{tsxwvo5Vlkjongf,Mchg`_%Fb[Z_X|\&gt;=YXWVONr54PIm0/KJCg*FE&gt;=&lt;`:"8=&lt;54Xy765.R2r0/.'K+*j(!~D|#z!~}|u;sr8vo5srTSong-ed*Kg`_%cbD`_X|VUTxXQVUNrR4JINGkKD,HAeE'=B;@?&gt;7[;:981w/.R21*p(L,l*#G!~}|Bc!xwv&lt;]yxwp6tsrqjoh.fNdc)gfHG]#a`BX]VUyYXQPUTSLKPImMLEDCBAeEDCBA#9]=};:981U5ut210)(L&amp;%*)('&amp;}Cdcy?}_{zsxqp6tml2pRQmle+ihgIedcb[!_^WVUZSwW9UNSLKo2NGFEDIBf)?DC&lt;;:9]~};:9870Tu321*N(n,%I)('~%$#"!x&gt;|{zyxwYutm3qjoh.fNdc)gfHG]#[`_X|\[ZYXWVUTSRQP2HMFEDhBGF?c=&lt;`#"&gt;7&lt;;43W7wv432+O/.'&amp;%*)"F~%|Bzb~}|uts9wYXnml2poQgfkd*hJI_%]\aZ_X|\U=SwWV8Nr54PIHl/.DhBG@dDCBA@?&gt;=&lt;;:9876v.3,P0p.-&amp;J$)"!E%|#"!~w=^]yxwvun4rqSing-Ndcb(IHdcb[!B^W\UTxXW9ONrLQJOHlFEJIBAeE'C&lt;`@?&gt;=}5Yz8105.R2r0/.'K+*)i!~D$#zb~w=^]srqpo5slkpi/POedcbgf_%cbaZBXW{[=YXWVOsM5KJONGkKDIHG@dD&amp;&lt;A:?87[;:z870T.3,1*)M-,+k)"F&amp;%|#z@~`_{zs9Zvutmlk1Rhgf,jiKg`&amp;dFb[!_^@?UZYRvPOTMLQJnN0FEi,BA@dDC&lt;;:?&gt;7[54X81w/.R21*p(Lm%*#"F&amp;%e#"y?w_uzsxq7XWsrk1ihgle+Lbg`e^]#a`_XWVz=YXWVUTMqQJ2NMLKDhHGF('C&lt;`:"8=&lt;54Xy765.R2r0/.'K+*j(!~D|#z!~}|u;sr8vonslk1RQmle+ihgIedcb[!_^WVUTxXWVONrRKPONMLEiCHAFE&gt;bBA:"8\&lt;|{981U/.32+0)M-m%Ij(!~%${Aba}|{zs9wp6nml2piQmf,jcha`e^$ba`BXW{UTYXWPOs65QJn1GLEDhHG)?cCBA@"8=6;:3W7654321*p(Lm%*#"F&amp;%e#"y?w_uzsxq7uWslkj0nmlkjihJI_%cbD`Y^WVUyYXWVUNrR43INMLEiIBAFED=aA@"!7&lt;5:3W70v43,P0/.'m%I#"'~}|{A!awv{zs9ZYutsl2poQmlejc)aI_^c\"ZB^]Vz=YRQPOsS5QPIHGkKDCgGFE'C&lt;`@?&gt;=}5Yz8105.R2r0/.'K+*)i!~De#"y?w_{zyxwp6tml2pRQmle+ihgIedcb[!YXW{&gt;ZSXQVOsSRQ32NGk.JIHAFE&gt;bBA:"8\&lt;;:9870/S3sr0)M',%$#G'~f$#z@xw|uzs9wvunVl2pongfed*hgIH^]b[!_^@?UZYRvPOTMLQJnN0FEiI+*F?&gt;b%;@?&gt;7&lt;;:981Uv43,+*N.nm%$#G'&amp;%$d"y?}vutyrqp6Wsl2Sinmled*bgfe^$b[`_X|\[ZYXWVUTSRQP2NMFKJCBfFEDCBA#9]=&lt;|:981U/.3,1*N.-m+$H(!~}Cd"!~}v&lt;zsxwp6tVrkpi/mlkjihgfed]#[`_^W{[ZSRWVONrRQJ2NGkEDCBf)(&gt;=BA@?8\&lt;;43W70v.3,P0/.n,+$Hi!&amp;}$#z@~}|u]s9Zpotm3TSoh.Okjiha'eG]\[!_^@Vz=YRQVOsSRQJImM/EiI+G@dD&amp;&lt;A:?87[;:z870T4t2+0).-&amp;Jk)"!~}|B"baw|{t:xwYutm3qjoh.fNdc)g`Hd]#a`Y^W{UZYXWPOsMRQJIHMLEiIBG@E&gt;=aA:?&gt;7&lt;5Y3216/4-,P0/.-m+$H(!~}C#"b~}|u;y[qvutslk1RQmf,jibJfe^c\aZ~XW\[TSw:VUNSLQJn10FEJCg*F?&gt;bB$@98=&lt;;4X870/S-s10/.-&amp;Jk#('&amp;%|{A!~`_{zs9Zvutmlk1Rhgf,Mchgf_^$bDC_XWVzZYRvPOTMLQJnN0FEiC+GFED=a$#?8\&lt;5{3WD<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+
+<h3 id="Step-2"><a href="#Step-2" class="headerlink" title="Step 2"></a>Step 2</h3><p>先拿 python 分析一波这个巨长的字符串</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">s <span class="token operator">=</span> <span class="token triple-quoted-string string">r"""..."""</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token builtin">len</span><span class="token punctuation">(</span>s<span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token comment"># 13644</span>
+x <span class="token operator">=</span> <span class="token builtin">set</span><span class="token punctuation">(</span>s<span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span>x<span class="token punctuation">)</span>
+x1 <span class="token operator">=</span> <span class="token builtin">sorted</span><span class="token punctuation">(</span><span class="token string">''</span><span class="token punctuation">.</span>join<span class="token punctuation">(</span>x<span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span>x1<span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token builtin">len</span><span class="token punctuation">(</span>x<span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token comment"># 94</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">''</span><span class="token punctuation">.</span>join<span class="token punctuation">(</span>x1<span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token comment"># !"#$%&amp;'()*+,-./0123456789:;&lt;=&gt;?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>看着这堆用到的字符，寻思着是不是 base94 啊……</p>
+<p>于是对比了下，base94 的 alphabet 为</p>
+<pre class="line-numbers language-none"><code class="language-none">!"#$%&amp;\'()*+,-./0123456789:;&lt;=&gt;?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>看起来是啊，于是拿 basehash 里的 base94 解密一下试试。</p>
+<p>可以参考 <a target="_blank" rel="noopener" href="https://www.cnblogs.com/pcat/p/11625834.html">base全家桶的安装使用方法</a></p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> basehash <span class="token keyword">import</span> <span class="token operator">*</span>
+<span class="token keyword">from</span> Crypto<span class="token punctuation">.</span>Util<span class="token punctuation">.</span>number <span class="token keyword">import</span> bytes_to_long<span class="token punctuation">,</span> long_to_bytes
+
+s2 <span class="token operator">=</span> base94<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>decode<span class="token punctuation">(</span>s<span class="token punctuation">)</span>
+s3 <span class="token operator">=</span> long_to_bytes<span class="token punctuation">(</span>s2<span class="token punctuation">)</span>
+
+<span class="token keyword">with</span> <span class="token builtin">open</span><span class="token punctuation">(</span><span class="token string">'4.bin'</span><span class="token punctuation">,</span> <span class="token string">'wb'</span><span class="token punctuation">)</span> <span class="token keyword">as</span> f<span class="token punctuation">:</span>
+    f<span class="token punctuation">.</span>write<span class="token punctuation">(</span>s3<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>结果发现这是啥玩意啊，怎么也解释不通啊……</p>
+<p><img src="/2022/01/01/CTF_2022GZTime0101/image-20220101213104006.png"></p>
+<p>于是暂时摸了。</p>
+<p>下午放了 hint ——</p>
+<blockquote>
+<p>第二层是个可以运行的程序，但并不是 binary（</p>
+<p>malbolge</p>
+</blockquote>
+<blockquote>
+<p><strong>Malbolge</strong> 是由Ben Olmstead在1998年开发的一种深奥的编程语言，属于公共领域。其名字来自于但丁的《神曲》中的第八层地狱Malebolge，意大利语中意为“邪恶的沟渠”（male bolge）。Malbolge虽然具备图灵完备性，但并非实用的编程语言。Malbolge的特别之处就在于，它被故意设计得极其繁琐难解。 </p>
+<p><strong>用Malbolge编写的Hello, world程序</strong></p>
+<p>以下为Malbolge程序输出“Hello，world”的代码。</p>
+<pre class="line-numbers language-none"><code class="language-none">(=&lt;`:9876Z4321UT.-Q+*)M'&amp;%$H"!~}|Bzy?=|{z]KwZY44Eq0/{mlk**
+hKs_dG5[m_BA{?-Y;;Vb'rR5431M}/.zHGwEDCBA@98\6543W10/.R,+O&lt;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<p><em>via <a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/Malbolge">https://zh.wikipedia.org/wiki/Malbolge</a></em></p>
+</blockquote>
+<p>干脆直接找了个在线的 Malbolge 执行工具，比如 <a target="_blank" rel="noopener" href="https://malbolge.doleczek.pl/">https://malbolge.doleczek.pl/</a> 或者 <a target="_blank" rel="noopener" href="https://www.tutorialspoint.com/execute_malbolge_online.php">https://www.tutorialspoint.com/execute_malbolge_online.php</a></p>
+<p>执行得到</p>
+<p><img src="/2022/01/01/CTF_2022GZTime0101/image-20220101213734687.png"></p>
+<pre class="line-numbers language-none"><code class="language-none">c82YzKDMqW_Mhs2MzavMiy7Mi82XLsyQzYzNps2vzLguzZLNqcyIzITNrs2DzaLMrc2OzJ7Mqs2JzLIg8J-HvCDwn4etIPCfh7QgZ82mzZvNo8yqzK9hzYLMh82jzYPNiM2FzK_NhcyzdsyMzZnNh8ypZc2lzajMvcyLzYDMpc2azLnMpiDNks2nzYnMmMytzJ7Mq8yqeW_NqMyazI7MlMyJzKHMrsy7zLHNjcy8zZN1zJPNp8yNzazNo8yizLHMo8yjzZbMoMyxINKJzZp0za3MtMy5aMyDzI3Nm82cacyHza7Mjc2QzIHMi8y9zLrMo8y5zK9zzJTMvcyjzJzMq82HIMyAzKDMmcyWzKnMrMyrbcyHzajMhMyNzKLNiGXMhMyRzafMi8y9zYHMo8yYzLrMpsykzZbNmnPMv8yPzYzNr8yRzYHMs82IzYlzzKPMrsylzJzMls2NYc2bzIPNgsy9zIbNrM2vzLHMnc2UzKlnzahlzYHMpcyxzLnMsyjNrM2lzIfMisyDzYLMksyVzKPNls2UzYjMqcyzP82CzJXMncykzZbMs8yszK_MswrNrM2bzILNrs2kzIfMq8yyzZXNls2JCs2kzKx0zL3MvcyvzLrMncyXzKDMvGjNpc2EzarMj8yOzL_NgcyXzJzMqc2OzLrMr82NacyxzYdzzaPMjM2MzYTMvsyezLMgzYbMgs2XzJTNkM2pzL_MsMymbcyGza_Mn8yzzKbMrMyszKTNjmHMucy5zYfMus2Uec2ozYrMkc2vzabMj82XzJvMnSDMhM2pzYLNm8yAzZ3Nlsy7zY7MsWLNpMyNzJPMj8ySzIzNpM2YzKzMsMyXzK_MmMyrZc2pzYbMjM2hzYXMqc2OzLDMsiDMi8ykzJnMvM2WzKZqzajMkM2FzZp1zLTNlXPNpc2LzavMjcyTzZvMuMywzJ7MpMyrzLrMo3TNo82qzYLNnMyWzKogza_Nq82rYc2nzYTMvcyQzJHNm8y1IMyUzIDNr8yPzKXNk8y8zKnMrc2OzZZqzL3Nm82RzZTMnG_MgsygzKBrzJHNqsyKzabNqsyszKTMpc2NzJ7MqmXMj82Lza7NlM2TzYfNls2JIc2bzYLNqs2tzIfMkM2MzY_MnAoK8J-Zg_CfkrXwn4y_8J-OpPCfmqrwn4yP8J-QjvCfpYvwn5qr8J-YhuKchfCflKzwn5qq8J-PjvCfjKrwn5iO8J-MifCfkYnwn4yP8J-QhfCfmIbwn5K18J-QjfCfmI3wn5iN8J-Yh_CfjbTimLrinZPwn42N8J-YhvCfmKHwn5iA4oS58J-QjfCfjqTimIPwn46D8J-Og_CflKrwn5W58J-YoeKchfCflKrwn5iC8J-li_CfjoXimIPwn5GR4piA8J-asPCfj7nwn46k8J-NtfCfmIDinIXwn5W58J-Mj-KMqPCfmI3wn5K18J-MieKYgvCfjojwn5iO8J-QheKYgPCfjbXwn5qw8J-TgvCfmIrwn5iO8J-li-KPqfCfmILwn5qq8J-YgvCfkrXwn5CY8J-YgeKPqfCfjY3wn5iH8J-YhvCfkZHinInwn4y_4piD8J-YivCfmIbimIPwn4-58J-Zg_CfkaPwn5CN8J-UqvCfkI3ij6nwn4214pyF8J-YgvCfjYzwn5iH4pyW4oS58J-aqvCfjI_wn5ih8J-ko_CfkYninZPwn4-58J-QjvCfjL_wn5up8J-YofCfkZHwn5GR8J-OpPCfkZHij6ninInwn4218J-mk_CfkaPwn42O8J-li_CfkZHwn5mD8J-QheKMqPCfjL_wn5Kn8J-MivCfjYzwn46I8J-PjvCfm6nwn4yK8J-asPCfjoPwn5Ss4pyW8J-NtfCfmYPwn5aQ4pyF8J-OpPCfkaPijKjwn5eS8J-Xkg<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+
+<h3 id="Step-3"><a href="#Step-3" class="headerlink" title="Step 3"></a>Step 3</h3><p>base64 解密一下，当然 alphabet 换成了 <code>A-Za-z0-9-_</code></p>
+<p><img src="/2022/01/01/CTF_2022GZTime0101/image-20220101214030021.png"></p>
+<pre class="line-numbers language-none"><code class="language-none">s̠̩͘ŏ͌ͫ̋.̋͗.̸̐͌ͦͯ.̭͎̞̪͉̲͒ͩ̈̄ͮ̓͢ 🇼 🇭 🇴 g̪̯ͦ͛ͣa͈̯̳͂̇ͣ̓ͅͅv͙͇̩̌e̥͚̹̦ͥͨ̽̋̀ ͉̘̭̞̫̪͒ͧyo̡̮̻̱͍̼͓ͨ̎̔̉̚u̢̱̣̣͖̠̱̓ͧ̍ͬͣ ҉͚t̴̹ͭh̃̍͛͜i̺̣̹̯̇ͮ̍͐́̋̽ṣ̜̫͇̔̽ ̠̙̖̩̬̫̀ṁ̢͈ͨ̄̍ẹ̘̺̦̤͖͚̄̑ͧ̋̽́s̳͈͉̿̏͌ͯ̑́ṣ̮̥̜̖͍a̱̝͔̩͛̃͂̽̆ͬͯgͨé̥̱̹̳(̣͖͔͈̩̳ͬͥ̇̊̃͂̒̕?̝̤͖̳̬̯̳͂̕
+̫̲͕͖͉ͬ͛̂ͮͤ̇
+̬ͤt̯̺̝̗̠̼̽̽h̗̜̩͎̺̯͍ͥ̈́ͪ̏̎̿́i̱͇s̞̳ͣ̌͌̈́̾ ̰̦͆̂͗̔͐ͩ̿m̟̳̦̬̬̤͎̆ͯa̹̹͇̺͔y̛̝ͨ͊̑ͯͦ̏͗ ͖̻͎̱̄ͩ͂͛̀͝b̬̰̗̯̘̫ͤ̍̓̏̒̌ͤ͘e̩͎̰̲ͩ͆̌͡ͅ ̤̙̼͖̦̋j͚ͨ̐ͅu̴͕s̸̰̞̤̫̺̣ͥ͋ͫ̍̓͛t̖̪ͣͪ͂͜ ͯͫͫa̵ͧ̈́̽̐̑͛ ̥͓̼̩̭͎͖̔̀ͯ̏j͔̜̽͛͑ô̠̠k̬̤̥͍̞̪̑ͪ̊ͦͪȅ͔͓͇͖͉͋ͮ!͛͂ͪͭ̇̐͌͏̜
+
+🙃💵🌿🎤🚪🌏🐎🥋🚫😆✅🔬🚪🏎🌪😎🌉👉🌏🐅😆💵🐍😍😍😇🍴☺❓🍍😆😡😀ℹ🐍🎤☃🎃🎃🔪🕹😡✅🔪😂🥋🎅☃👑☀🚰🏹🎤🍵😀✅🕹🌏⌨😍💵🌉☂🎈😎🐅☀🍵🚰📂😊😎🥋⏩😂🚪😂💵🐘😁⏩🍍😇😆👑✉🌿☃😊😆☃🏹🙃👣🐍🔪🐍⏩🍵✅😂🍌😇✖ℹ🚪🌏😡🤣👉❓🏹🐎🌿🛩😡👑👑🎤👑⏩✉🍵🦓👣🍎🥋👑🙃🐅⌨🌿💧🌊🍌🎈🏎🛩🌊🚰🎃🔬✖🍵🙃🖐✅🎤👣⌨🗒🗒<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>上面好多奇妙的 Unicode 字符，下面很明显是 <a target="_blank" rel="noopener" href="https://emoji-aes.miaotony.xyz/">emoji-aes</a>，那么 key 是啥呢？</p>
+<p><img src="/2022/01/01/CTF_2022GZTime0101/image-20220101214915779.png"></p>
+<p>会不会藏在这堆 Unicode 里啊？仔细看了看，没有啊……</p>
+<p>又在想，是 <code>joke</code>？不是。</p>
+<p>是 <code>WHO</code>？不是。</p>
+<p>突然一想，草， <strong>那不就是他嘛！是 <code>GZTime</code>！</strong> （还注意大小写呢</p>
+<p><img src="/2022/01/01/CTF_2022GZTime0101/image-20220101214252656.png"></p>
+<pre class="line-numbers language-none"><code class="language-none">cHJvZFsvGQddFBVwexVDZg4VeFZjFXgSVRVscHsWeXR7FRREc3pWbk16SU5tQQpqclZTUk5IY1pPVwpib1dlQhwq<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+
+<h3 id="Step-4"><a href="#Step-4" class="headerlink" title="Step 4"></a>Step 4</h3><p>继续 base64 解密</p>
+<pre class="line-numbers language-none"><code class="language-none">prod[/..]..p{.Cf..xVc.x.U.lp{.yt{..DszVnMzINmA
+jrVSRNHcZOW
+boWeB.*<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p>嗯？这是什么？</p>
+<p>输出了 <code>.</code> 是因为那不是 ASCII 可打印字符，hexdump 看一眼。</p>
+<pre class="line-numbers language-none"><code class="language-none">00000000  70 72 6f 64 5b 2f 19 07 5d 14 15 70 7b 15 43 66  |prod[/..]..p{.Cf|
+00000010  0e 15 78 56 63 15 78 12 55 15 6c 70 7b 16 79 74  |..xVc.x.U.lp{.yt|
+00000020  7b 15 14 44 73 7a 56 6e 4d 7a 49 4e 6d 41 0a 6a  |{..DszVnMzINmA.j|
+00000030  72 56 53 52 4e 48 63 5a 4f 57 0a 62 6f 57 65 42  |rVSRNHcZOW.boWeB|
+00000040  1c 2a                                            |.*|<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<blockquote>
+<p>HINT 5: prod[]与后面是分离的</p>
+</blockquote>
+<p>prod 是啥？？？</p>
+<p>production？生产环境？不像。</p>
+<p>问了下 GZTime，说是乘积，也就是 $\LaTeX$ 里的 $\prod$</p>
+<p>于是想着是不是后面那堆是乘上前面这个数，或者相除再或者怎么着。</p>
+<p>那怎么读取的呢？是当成一整个 byte，bytes 转 int 还是？</p>
+<p>先不管吧，写个脚本都试试。</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> base64
+
+s <span class="token operator">=</span> <span class="token string">"cHJvZFsvGQddFBVwexVDZg4VeFZjFXgSVRVscHsWeXR7FRREc3pWbk16SU5tQQpqclZTUk5IY1pPVwpib1dlQhwq"</span>
+r <span class="token operator">=</span> base64<span class="token punctuation">.</span>b64decode<span class="token punctuation">(</span>s<span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span>r<span class="token punctuation">)</span>
+x <span class="token operator">=</span> r<span class="token punctuation">.</span>split<span class="token punctuation">(</span><span class="token string">b']'</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span>
+prod <span class="token operator">=</span> r<span class="token punctuation">.</span>split<span class="token punctuation">(</span><span class="token string">b']'</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span>split<span class="token punctuation">(</span><span class="token string">b'['</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span>x<span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span>prod<span class="token punctuation">)</span>
+prod <span class="token operator">=</span> <span class="token builtin">int</span><span class="token punctuation">.</span>from_bytes<span class="token punctuation">(</span>prod<span class="token punctuation">,</span> byteorder<span class="token operator">=</span><span class="token string">'big'</span><span class="token punctuation">)</span>
+y <span class="token operator">=</span> <span class="token builtin">int</span><span class="token punctuation">.</span>from_bytes<span class="token punctuation">(</span>x<span class="token punctuation">,</span> byteorder<span class="token operator">=</span><span class="token string">'big'</span><span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span>prod<span class="token punctuation">,</span> y<span class="token punctuation">)</span>
+z <span class="token operator">=</span> y <span class="token operator">*</span> prod
+d <span class="token operator">=</span> <span class="token builtin">bytes</span><span class="token punctuation">.</span>fromhex<span class="token punctuation">(</span><span class="token builtin">hex</span><span class="token punctuation">(</span>z<span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">:</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span>d<span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span>base64<span class="token punctuation">.</span>b64encode<span class="token punctuation">(</span>d<span class="token punctuation">)</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>结果跑出来唯一一个没报错的，看上去啥也不是……</p>
+<p>最后很迷茫，问了一下。</p>
+<p>具体上应该是那三个 bytes 逐字节相乘。</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">prod <span class="token operator">=</span> <span class="token number">0x07</span><span class="token operator">*</span><span class="token number">0x19</span><span class="token operator">*</span><span class="token number">0x2f</span>
+<span class="token comment"># 8225</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>也就是 0x2021，噢，就是这个啦！</p>
+<blockquote>
+<p>这个后面也放了 hint</p>
+<p>HINT 6: 如果你得到了Key，你会知道一定是它的</p>
+</blockquote>
+<p>那最后咋弄？还有个 hint 没用到。</p>
+<blockquote>
+<p>HINT 3: 以及有一次会用到 xor 加密</p>
+</blockquote>
+<p>好，终于有都是可打印字符的了。</p>
+<p><img src="/2022/01/01/CTF_2022GZTime0101/image-20220101215600527.png"></p>
+<pre class="line-numbers language-none"><code class="language-none">44PZ5bF/5YvB5Y2t5MPZ6XTZ55dRZwNlZhnLa+JSvrrohBznw+BNwDb=<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+
+<h3 id="Step-5"><a href="#Step-5" class="headerlink" title="Step 5"></a>Step 5</h3><p>换表 base64，或者说是 ROT13 + base64</p>
+<p><img src="/2022/01/01/CTF_2022GZTime0101/image-20220101215705139.png"></p>
+<pre class="line-numbers language-none"><code class="language-none">「愿与你同行的2022星光相随」<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>好耶！终于出了！</p>
+<p>爱啦！</p>
+<p><img src="/2022/01/01/CTF_2022GZTime0101/love.webp"></p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>虽然但是，怎么这么套啊，这做得咋心情跌宕起伏的……</p>
+<p>好想打 GZTime 啊（</p>
+<p><img src="/2022/01/01/CTF_2022GZTime0101/sticker.webp"></p>
+<p>顺便，看了下是二血，总共也只有两解 hhh</p>
+<p>不过毕竟是很小范围的解谜，也就这样啦。</p>
+<p>感谢 GZTime 的出题，辛苦了（贴贴！</p>
+<br>
+
+
+
+<p>最后，<strong>2022 啦，祝大家新年快乐喵~</strong></p>
+<p>新的一年里师傅们也要多多带带喵喵呀！</p>
+<br>
+
+<p>水完了，继续赶期末 ddl 去了，喵呜！</p>
+<p><em>（溜了溜了喵~</em></p>
+
+                
+            </div>
+            <hr/>
+
+            
+
+    <div class="reprint" id="reprint-statement">
+        
+            <div class="reprint__author">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-user">
+                        文章作者:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="https://miaotony.xyz" rel="external nofollow noreferrer">MiaoTony</a>
+                </span>
+            </div>
+            <div class="reprint__type">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-link">
+                        文章链接:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="https://miaotony.xyz/2022/01/01/CTF_2022GZTime0101/">https://miaotony.xyz/2022/01/01/CTF_2022GZTime0101/</a>
+                </span>
+            </div>
+            <div class="reprint__notice">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-copyright">
+                        版权声明:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    本博客所有文章除特别声明外，均采用
+                    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY-NC-SA 4.0</a>
+                    许可协议。转载请注明来源
+                    <a href="https://miaotony.xyz" target="_blank">MiaoTony</a>
+                    !
+                </span>
+            </div>
+        
+    </div>
+
+    <script async defer>
+      document.addEventListener("copy", function (e) {
+        let toastHTML = '<span>复制成功，请遵循本文的转载规则</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">查看</a>';
+        M.toast({html: toastHTML})
+      });
+
+      function navToReprintStatement() {
+        $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
+      }
+    </script>
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            
+                                <a href="/tags/CTF/">
+                                    <span class="chip bg-color">CTF</span>
+                                </a>
+                            
+                                <a href="/tags/WriteUp/">
+                                    <span class="chip bg-color">WriteUp</span>
+                                </a>
+                            
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/share/css/share.min.css">
+<div id="article-share">
+
+    
+    <div class="social-share" data-sites="qq,qzone,wechat,weibo,twitter,facebook,google,douban,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
+    <script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/share/js/social-share.min.js"></script>
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+                <style>
+    #reward {
+        margin: 40px 0;
+        text-align: center;
+    }
+
+    #reward .reward-link {
+        font-size: 1.4rem;
+        line-height: 38px;
+    }
+
+    #reward .btn-floating:hover {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    #rewardModal {
+        width: 320px;
+        height: 350px;
+    }
+
+    #rewardModal .reward-title {
+        margin: 15px auto;
+        padding-bottom: 5px;
+    }
+
+    #rewardModal .modal-content {
+        padding: 10px;
+    }
+
+    #rewardModal .close {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+        color: rgba(0, 0, 0, 0.5);
+        font-size: 1.3rem;
+        line-height: 20px;
+        cursor: pointer;
+    }
+
+    #rewardModal .close:hover {
+        color: #ef5350;
+        transform: scale(1.3);
+        -moz-transform:scale(1.3);
+        -webkit-transform:scale(1.3);
+        -o-transform:scale(1.3);
+    }
+
+    #rewardModal .reward-tabs {
+        margin: 0 auto;
+        width: 210px;
+    }
+
+    .reward-tabs .tabs {
+        height: 38px;
+        margin: 10px auto;
+        padding-left: 0;
+    }
+
+    .reward-content ul {
+        padding-left: 0 !important;
+    }
+
+    .reward-tabs .tabs .tab {
+        height: 38px;
+        line-height: 38px;
+    }
+
+    .reward-tabs .tab a {
+        color: #fff;
+        background-color: #ccc;
+    }
+
+    .reward-tabs .tab a:hover {
+        background-color: #ccc;
+        color: #fff;
+    }
+
+    .reward-tabs .wechat-tab .active {
+        color: #fff !important;
+        background-color: #22AB38 !important;
+    }
+
+    .reward-tabs .alipay-tab .active {
+        color: #fff !important;
+        background-color: #019FE8 !important;
+    }
+
+    .reward-tabs .reward-img {
+        width: 210px;
+        height: 210px;
+    }
+</style>
+
+<div id="reward">
+    <a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-medium waves-effect waves-light red">赏</a>
+
+    <!-- Modal Structure -->
+    <div id="rewardModal" class="modal">
+        <div class="modal-content">
+            <a class="close modal-close"><i class="fas fa-times"></i></a>
+            <h4 class="reward-title">打赏一下让我来点好吃好玩的呗~</h4>
+            <div class="reward-content">
+                <div class="reward-tabs">
+                    <ul class="tabs row">
+                        <!-- 
+                            <li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li> 
+                        -->
+                        <li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li>
+                    </ul>
+                    <!-- 
+                        <div id="alipay">
+                        <img src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/" class="reward-img" alt="支付宝打赏二维码">
+                        </div> 
+                -->
+                    <div id="wechat">
+                        <img src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/medias/reward/wechat.png" class="reward-img" alt="微信打赏二维码">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.tabs').tabs();
+    });
+</script>
+
+            
+        </div>
+    </div>
+
+    
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/gitalk/gitalk.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/css/my-gitalk.css">
+
+<div class="card gitalk-card" data-aos="fade-up">
+    <div class="comment_headling" style="font-size: 20px; font-weight: 700; position: relative; padding-left: 20px; top: 15px; padding-bottom: 5px;">
+        <i class="fas fa-comments fa-fw" aria-hidden="true"></i>
+        <span>评论</span>
+    </div>
+    <div id="gitalk-container" class="card-content"></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/gitalk/gitalk.min.js"></script>
+<script>
+    let gitalk = new Gitalk({
+        clientID: '116343b4650fce4789b6',
+        clientSecret: '3e9be2ad6c9b693af1753290c7c059b1e4f34d5d',
+        repo: 'miaotony.github.io',
+        owner: 'miaotony',
+        admin: "miaotony",
+        id: '2022-01-01T21-00-00',
+        distractionFreeMode: false  // Facebook-like distraction free mode
+    });
+
+    gitalk.render('gitalk-container');
+</script>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
+            <div class="card">
+                <a href="/2022/01/01/CTF_2022GZTime0101/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/medias/featureimages/10.jpg" class="responsive-img" alt="CTF | 2022 GZTime&#39;s 元旦红包解谜 WriteUp">
+                        
+                        <span class="card-title">CTF | 2022 GZTime&#39;s 元旦红包解谜 WriteUp</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            2022新年快乐！来看了看GZTime的元旦解谜，随便写了写题解啦。
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2022-01-01
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/CTF/" class="post-category">
+                                    CTF
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/CTF/">
+                        <span class="chip bg-color">CTF</span>
+                    </a>
+                    
+                    <a href="/tags/WriteUp/">
+                        <span class="chip bg-color">WriteUp</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2021/12/16/CTF_2021AsuriCTF_NUAACTF_Misc/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/medias/featureimages/15.jpg" class="responsive-img" alt="CTF | 2021 AsuriCTF / NUAACTF Misc 部分官方 WriteUp">
+                        
+                        <span class="card-title">CTF | 2021 AsuriCTF / NUAACTF Misc 部分官方 WriteUp</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            上周末和Asuri战队的师傅们一起办了个AsuriCTF/NUAACTF，喵喵出了两道Misc题目，这里来写写题解和出题思路，顺便复盘一下比赛运维的故事，记录一下心得体会。
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-12-16
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/CTF/" class="post-category">
+                                    CTF
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/CTF/">
+                        <span class="chip bg-color">CTF</span>
+                    </a>
+                    
+                    <a href="/tags/WriteUp/">
+                        <span class="chip bg-color">WriteUp</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+<script>
+    $('#articleContent').on('copy', function (e) {
+        // IE8 or earlier browser is 'undefined'
+        if (typeof window.getSelection === 'undefined') return;
+
+        var selection = window.getSelection();
+        // if the selection is short let's not annoy our users.
+        if (('' + selection).length < Number.parseInt('200')) {
+            return;
+        }
+
+        // create a div outside of the visible area and fill it with the selected text.
+        var bodyElement = document.getElementsByTagName('body')[0];
+        var newdiv = document.createElement('div');
+        newdiv.style.position = 'absolute';
+        newdiv.style.left = '-99999px';
+        bodyElement.appendChild(newdiv);
+        newdiv.appendChild(selection.getRangeAt(0).cloneContents());
+
+        // we need a <pre> tag workaround.
+        // otherwise the text inside "pre" loses all the line breaks!
+        if (selection.getRangeAt(0).commonAncestorContainer.nodeName === 'PRE' || selection.getRangeAt(0).commonAncestorContainer.nodeName === 'CODE') {
+            newdiv.innerHTML = "<pre>" + newdiv.innerHTML + "</pre>";
+        }
+
+        var url = document.location.href;
+        newdiv.innerHTML += '<br />'
+            + '来源: MiaoTony&#39;s小窝<br />'
+            + '文章作者: MiaoTony<br />'
+            + '文章链接: <a href="' + url + '">' + url + '</a><br />'
+            + '本文章著作权归作者MiaoTony所有，任何形式的转载都请注明出处。';
+
+        selection.selectAllChildren(newdiv);
+        window.setTimeout(function () {bodyElement.removeChild(newdiv);}, 200);
+    });
+</script>
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/codeBlock/codeBlockFuction.js"></script>
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/codeBlock/codeLang.js"></script>
+
+
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/codeBlock/codeShrink.js"></script>
+
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget card" style="background-color: white;">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('1'),
+            headingSelector: 'h2, h3, h4, h5'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h2, h3, h4, h5').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+<script src="https://cdn.bootcss.com/mathjax/2.7.9/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script>
+    MathJax.Hub.Config({
+        tex2jax: {inlineMath: [['$', '$']]},  //, ['\\(', '\\)']
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    });
+</script>
+
+
+
+    <footer class="page-footer bg-color">
+        <div class="container row center-align" style="margin-bottom: 15px !important;">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            
+                <span id="year">2019-2022</span>
+            
+            <a href="/about" target="_blank">MiaoTony</a>
+            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+            |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
+            <br>
+                        &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
+                class="white-color">323.9k</span>&nbsp;字
+                                                                                    <span id="busuanzi_container_site_pv">
+			|&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
+                    class="white-color"></span>&nbsp;次
+            </span>
+                                    <span id="busuanzi_container_site_uv">
+                |&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;<span id="busuanzi_value_site_uv"
+                    class="white-color"></span>&nbsp;人
+            </span>
+                        <br>
+                        <span id="sitetime">载入运行时间...</span>
+            <script>
+                function siteTime() {
+                    var seconds = 1000;
+                    var minutes = seconds * 60;
+                    var hours = minutes * 60;
+                    var days = hours * 24;
+                    var years = days * 365;
+                    var today = new Date();
+                    var startYear = "2019";
+                    var startMonth = "11";
+                    var startDate = "28";
+                    var startHour = "0";
+                    var startMinute = "0";
+                    var startSecond = "0";
+                    var todayYear = today.getFullYear();
+                    var todayMonth = today.getMonth() + 1;
+                    var todayDate = today.getDate();
+                    var todayHour = today.getHours();
+                    var todayMinute = today.getMinutes();
+                    var todaySecond = today.getSeconds();
+                    var t1 = Date.UTC(startYear, startMonth, startDate, startHour, startMinute, startSecond);
+                    var t2 = Date.UTC(todayYear, todayMonth, todayDate, todayHour, todayMinute, todaySecond);
+                    var diff = t2 - t1;
+                    var diffYears = Math.floor(diff / years);
+                    var diffDays = Math.floor((diff / days) - diffYears * 365);
+                    var diffHours = Math.floor((diff - (diffYears * 365 + diffDays) * days) / hours);
+                    var diffMinutes = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours) /
+                        minutes);
+                    var diffSeconds = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours -
+                        diffMinutes * minutes) / seconds);
+                    if (startYear == todayYear) {
+                        document.getElementById("year").innerHTML = todayYear;
+                        document.getElementById("sitetime").innerHTML = "本站已安全运行 " + diffDays + " 天 " + diffHours +
+                            " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒";
+                    } else {
+                        document.getElementById("year").innerHTML = startYear + " - " + todayYear;
+                        document.getElementById("sitetime").innerHTML = "本站已安全运行 " + diffYears + " 年 " + diffDays +
+                            " 天 " + diffHours + " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒";
+                    }
+                }
+                setInterval(siteTime, 1000);
+            </script>
+                        <br>
+                    </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+    <a href="https://t.me/MiaoTonyChannel" class="tooltipped" target="_blank" data-tooltip="关注我的TelegramChannel: @MiaoTonyChannel" data-position="top" data-delay="50">
+        <i class="fab fa-telegram"></i>
+    </a>
+
+
+
+    <a href="https://github.com/miaotony" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+        <i class="fab fa-github"></i>
+    </a>
+
+
+
+    <a href="mailto:miaotony@outlook.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fas fa-envelope-open"></i>
+    </a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
+        <i class="fas fa-rss"></i>
+    </a>
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+$(function () {
+    var searchFunc = function (path, search_id, content_id) {
+        'use strict';
+        $.ajax({
+            url: path,
+            dataType: "xml",
+            success: function (xmlResponse) {
+                // get the contents from search data
+                var datas = $("entry", xmlResponse).map(function () {
+                    return {
+                        title: $("title", this).text(),
+                        content: $("content", this).text(),
+                        url: $("url", this).text()
+                    };
+                }).get();
+                var $input = document.getElementById(search_id);
+                var $resultContent = document.getElementById(content_id);
+                $input.addEventListener('input', function () {
+                    var str = '<ul class=\"search-result-list\">';
+                    var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                    $resultContent.innerHTML = "";
+                    if (this.value.trim().length <= 0) {
+                        return;
+                    }
+                    // perform local searching
+                    var cnt = 1;
+                    datas.forEach(function (data) {
+                        var isMatch = true;
+                        var content_index = [];
+                        var data_title_origin = data.title.trim();
+                        var data_title = data.title.trim().toLowerCase();
+                        var data_content = data.content.trim().replace(/<[^>]+>/g, "").toLowerCase();
+                        var data_url = data.url;
+                        data_url = data_url.indexOf('/') === 0 ? data.url : '/' + data_url;
+                        var index_title = -1;
+                        var index_content = -1;
+                        var first_occur = -1;
+                        // only match artiles with not empty titles and contents
+                        if (data_title !== '' && data_content !== '') {
+                            keywords.forEach(function (keyword, i) {
+                                index_title = data_title.indexOf(keyword);
+                                index_content = data_content.indexOf(keyword);
+                                if (index_title < 0 && index_content < 0) {
+                                    isMatch = false;
+                                } else {
+                                    if (index_content < 0) {
+                                        index_content = 0;
+                                    }
+                                    if (i === 0) {
+                                        first_occur = index_content;
+                                    }
+                                }
+                            });
+                        }
+                        // show search results
+                        if (isMatch) {
+                            str += "<li><a href='" + data_url + "' class='search-result-title'>" + String(cnt) + ". " + data_title_origin + "</a>";
+                            cnt += 1;
+    
+                            var content = data.content.trim().replace(/<[^>]+>/g, "");
+                            if (first_occur >= 0) {
+                                // cut out 300 characters
+                                var start = first_occur - 30;
+                                if (start < 0) {
+                                    start = 0;
+                                }
+                                var match_content = content.substr(start, 300);
+                                // highlight all keywords
+                                keywords.forEach(function (keyword) {
+                                    var regS = new RegExp(keyword, "gi");
+                                    match_content = match_content.replace(regS, "<em class=\"search-keyword\">" + keyword + "</em>");
+                                });
+    
+                                str += "<p class=\"search-result\">" + match_content + "...</p>"
+                            }
+                            str += "</li>";
+                        }
+                    });
+                    str += "</ul>";
+                    str = "<p class=\"search-result-summary\">共找到 " + String(cnt-1) + " 条结果</p>"  + str;
+                    $resultContent.innerHTML = str;
+                });
+            }
+        });
+    };
+
+    searchFunc('https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/search.xml', 'searchInput', 'searchResult');
+});
+</script>
+
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/materialize/materialize.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/aos/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/js/matery.min.js"></script>
+
+    
+
+    
+<script>
+    var _hmt = _hmt || [];
+    (function () {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?40e312a1eec109cf96e30988cf3bfe70";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+    
+    
+    <script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/others/clicklove.js" async="async"></script>
+    
+    
+    <script async src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/others/busuanzi.pure.mini.js"></script>
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+    <script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+</body>
+
+</html>
