@@ -499,7 +499,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    7.1k
+                    7.2k
                 </div>
                 
 
@@ -1672,7 +1672,10 @@ decode_str2 <span class="token operator">=</span> <span class="token string">''<
 <p><code>{45EF6FFC-F0B6-4000-A7C0-8D1549355A8C}.png</code></p>
 <h3 id="问卷题"><a href="#问卷题" class="headerlink" title="问卷题"></a>问卷题</h3><p><code>flag{Welc0me_tO_qwbS5_Hope_you_play_h4ppily}</code></p>
 <h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>好几次比赛都出了内存取证的题目了，这里正好就整理一下吧。</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">volatility -f winxp.raw imageinfo                      <span class="token comment"># 查询镜像基本信息</span>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">volatility -f winxp.raw imageinfo                      <span class="token comment"># 查询镜像基本信息，确定当前系统</span>
+volatility -f winxp.raw --profile<span class="token operator">=</span>WinXPSP3x86 filescan <span class="token operator">|</span> <span class="token function">grep</span> Desktop    <span class="token comment"># 检索文件并查找位于桌面上的</span>
+volatility -f winxp.raw --profile<span class="token operator">=</span>WinXPSP3x86 dumpfiles -Q 0x000000003fa4b450 -D <span class="token builtin class-name">.</span> -u    <span class="token comment"># 导出指定的文件到当前目录</span>
+
 volatility -f winxp.raw --profile<span class="token operator">=</span>WinXPSP3x86 pstree   <span class="token comment"># 查运行进程进程树</span>
 volatility -f winxp.raw --profile<span class="token operator">=</span>WinXPSP3x86 pslist   <span class="token comment"># 查正在运行的进程</span>
 volatility -f winxp.raw --profile<span class="token operator">=</span>WinXPSP3x86 memdump -p <span class="token number">324</span> --dump-dir <span class="token builtin class-name">.</span>    <span class="token comment"># 将PID=324的进程dump出来</span>
@@ -1690,6 +1693,7 @@ volatility -f winxp.raw --profile<span class="token operator">=</span>WinXPSP3x8
 volatility -f winxp.raw --profile<span class="token operator">=</span>WinXPSP3x86 cmdscan   <span class="token comment"># 只能检索命令行历史</span>
 volatility -f winxp.raw --profile<span class="token operator">=</span>WinXPSP3x86 consoles  <span class="token comment"># 抓取控制台下执行的命令以及回显数据</span>
 volatility -f winxp.raw --profile<span class="token operator">=</span>WinXPSP3x86 cmdline   <span class="token comment"># 列出所有命令行下运行的程序</span>
+volatility -f mem.data --profile<span class="token operator">=</span>WinXPSP3x86 screenshot -D <span class="token builtin class-name">.</span>   <span class="token comment"># 屏幕截图，显示各个窗口之间的关系</span>
 
 volatility -f winxp.raw --profile<span class="token operator">=</span>WinXPSP3x86 connscan    <span class="token comment"># 检索已经建立的网络链接</span>
 volatility -f winxp.raw --profile<span class="token operator">=</span>WinXPSP3x86 connections <span class="token comment"># 检索已经建立的网络链接</span>
@@ -1705,7 +1709,8 @@ volatility -f winxp.raw --profile<span class="token operator">=</span>WinXPSP3x8
 volatility -f winxp.raw --profile<span class="token operator">=</span>WinXPSP3x86 hashdump -y system地址 -s SAM地址               <span class="token comment"># dump目标账号Hash值</span>
 volatility -f winxp.raw --profile<span class="token operator">=</span>WinXPSP3x86 printkey -K <span class="token string">"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon"</span>  <span class="token comment"># 查最后登录的用户</span>
 
-volatility -f winxp.raw --profile<span class="token operator">=</span>WinXPSP3x86 userassist                                     <span class="token comment"># 查询程序运行次数</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+volatility -f winxp.raw --profile<span class="token operator">=</span>WinXPSP3x86 userassist                                     <span class="token comment"># 查询程序运行次数</span>
+volatility --plugins<span class="token operator">=</span>plugins/bitlocker -f memdump.mem --profile<span class="token operator">=</span>Win7SP1x64 bitlocker    <span class="token comment"># 导出 bitlocker 密钥，需要安装插件</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>（参考了 <a target="_blank" rel="noopener" href="https://www.cnblogs.com/LyShark/p/12484763.html">Volatility 内存数字取证方法</a>, thx</p>
 <hr>
 <p>这比赛太卷啦太卷啦！</p>
@@ -2269,7 +2274,7 @@ volatility -f winxp.raw --profile<span class="token operator">=</span>WinXPSP3x8
             |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
             <br>
                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">323.9k</span>&nbsp;字
+                class="white-color">324k</span>&nbsp;字
                                                                                     <span id="busuanzi_container_site_pv">
 			|&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
                     class="white-color"></span>&nbsp;次
