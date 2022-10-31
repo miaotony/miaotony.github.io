@@ -499,14 +499,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    18.9k
+                    19k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    85 分
+                    86 分
                 </div>
                 
 
@@ -531,6 +531,7 @@
 <li>0x02（本文）：火眼金睛的小 E，安全的在线测评，杯窗鹅影，蒙特卡罗轮盘赌，片上系统，看不见的彼方，二次元神经网络，你先别急，惜字如金，量子藏宝图</li>
 </ul>
 <p>这是 2022 Hackergame 的 wp 第二部分，主要包括一些难度稍大的题目以及喵喵的碎碎念。</p>
+<p><em><del>（好像分完篇之后还是太长了</del></em></p>
 <h2 id="火眼金睛的小-E"><a href="#火眼金睛的小-E" class="headerlink" title="火眼金睛的小 E"></a>火眼金睛的小 E</h2><blockquote>
 <p>小 E 有很多的 ELF 文件，它们里面的函数有点像，能把它们匹配起来吗？</p>
 <p>小 A：这不是用 BinDiff 就可以了吗，很简单吧？</p>
@@ -1187,6 +1188,7 @@ Read the Wine Developers Guide on how to set up winedbg or another debugger<span
 <p>From <code>CreateProcess()</code> to <code>NtCreateUserProcess()</code> 实现了 native APIs，PoC 在 <a target="_blank" rel="noopener" href="https://github.com/capt-meelo/NtCreateUserProcess">NtCreateUserProcess</a>，但是不懂为啥咱好像跑不起来，可能因为系统版本不同？</p>
 <p>GitHub: <a target="_blank" rel="noopener" href="https://github.com/D0pam1ne705/Direct-NtCreateUserProcess">Direct-NtCreateUserProcess</a></p>
 <p><a target="_blank" rel="noopener" href="https://introspelliam.github.io/2017/08/07/pwn/linux%E4%B8%8Bsystem-execve-execl-%E5%87%BD%E6%95%B0%E4%BD%BF%E7%94%A8%E8%AF%A6%E8%A7%A3/">linux下system()/execve()/execl()函数使用详解</a></p>
+<p>还有个有意思的 <a target="_blank" rel="noopener" href="https://schlafwandler.github.io/series/attacking-wine/">Attacking WINE 系列</a>，<a target="_blank" rel="noopener" href="https://github.com/schlafwandler/attacking_wine">GitHub repo</a></p>
 </blockquote>
 <h2 id="蒙特卡罗轮盘赌"><a href="#蒙特卡罗轮盘赌" class="headerlink" title="蒙特卡罗轮盘赌"></a>蒙特卡罗轮盘赌</h2><blockquote>
 <p>这个估算圆周率的经典算法你一定听说过：往一个 1 x 1 大小的方格里随机撒 N 个点，统计落在以方格某个顶点为圆心、1 为半径的 1/4 扇形区域中撒落的点数为 M，那么 M / N 就将接近于 π/4 。</p>
@@ -1938,37 +1940,41 @@ For bug reporting instructions, please see:
 <p>赛后，看到 <a target="_blank" rel="noopener" href="https://blog.cubercsl.site/post/hackergame-2022-write-ups/#%E4%BC%A0%E8%BE%BE%E4%B8%8D%E5%88%B0%E7%9A%84%E6%96%87%E4%BB%B6">cubercsl 蔡队的 wp</a>，啥？？？</p>
 <blockquote>
 <p><a target="_blank" rel="noopener" href="https://man7.org/linux/man-pages/man8/ld.so.8.html">https://man7.org/linux/man-pages/man8/ld.so.8.html</a></p>
-<p> LD_PRELOAD<br>        A list of additional, user-specified, ELF shared objects<br>        to be loaded before all others.  This feature can be used<br>        to selectively override functions in other shared objects.</p>
-<pre><code>    The items of the list can be separated by spaces or
-    colons, and there is no support for escaping either
-    separator.  The objects are searched for using the rules
-    given under DESCRIPTION.  Objects are searched for and
-    added to the link map in the left-to-right order specified
-    in the list.
-                
-    In secure-execution mode, preload pathnames containing
-    slashes are ignored.  Furthermore, shared objects are
-    preloaded only from the standard search directories and
-    only if they have set-user-ID mode bit enabled (which is
-    not typical).
-                
-    Within the names specified in the LD_PRELOAD list, the
-    dynamic linker understands the tokens $ORIGIN, $LIB, and
-    $PLATFORM (or the versions using curly braces around the
-    names) as described above in Dynamic string tokens.  (See
-    also the discussion of quoting under the description of
-    LD_LIBRARY_PATH.)
-                
-    There are various methods of specifying libraries to be
-    preloaded, and these are handled in the following order:
-                
-    (1) The LD_PRELOAD environment variable.
-                
-    (2) The --preload command-line option when invoking the
-        dynamic linker directly.
-                
-    (3) The /etc/ld.so.preload file (described below).
-</code></pre>
+<pre class="line-numbers language-none"><code class="language-none">LD_PRELOAD
+ A list of additional, user-specified, ELF shared objects
+ to be loaded before all others.  This feature can be used
+ to selectively override functions in other shared objects.
+
+ The items of the list can be separated by spaces or
+ colons, and there is no support for escaping either
+ separator.  The objects are searched for using the rules
+ given under DESCRIPTION.  Objects are searched for and
+ added to the link map in the left-to-right order specified
+ in the list.
+
+ In secure-execution mode, preload pathnames containing
+ slashes are ignored.  Furthermore, shared objects are
+ preloaded only from the standard search directories and
+ only if they have set-user-ID mode bit enabled (which is
+ not typical).
+
+ Within the names specified in the LD_PRELOAD list, the
+ dynamic linker understands the tokens $ORIGIN, $LIB, and
+ $PLATFORM (or the versions using curly braces around the
+ names) as described above in Dynamic string tokens.  (See
+ also the discussion of quoting under the description of
+ LD_LIBRARY_PATH.)
+
+ There are various methods of specifying libraries to be
+ preloaded, and these are handled in the following order:
+
+ (1) The LD_PRELOAD environment variable.
+
+ (2) The --preload command-line option when invoking the
+     dynamic linker directly.
+
+ (3) The /etc/ld.so.preload file (described below).<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
 <p><img src="/2022/10/30/CTF_2022Hackergame_0x02/image-20221031043839898.png"></p>
 </blockquote>
 <blockquote>
@@ -2737,6 +2743,12 @@ bits <span class="token operator">=</span> <span class="token punctuation">[</sp
 <p><strong>总之，学到许多就是了！</strong></p>
 <p>希望明年还能有空来瞄眼题目，喵喵~</p>
 <p>以及，感谢屏幕前的你能看到这里！</p>
+<blockquote>
+<p>当然，还可以去看看 <strong>USTC hackergame 2022 官方题解</strong>，还包括文件、源代码，以及一些其他选手的 wp 等：</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/USTC-Hackergame/hackergame2022-writeups">https://github.com/USTC-Hackergame/hackergame2022-writeups</a></p>
+<p>写得挺详细的，好评！</p>
+</blockquote>
+<p>终于写完了，怎么这个 wp 写了这么久。。</p>
 <p><em>（溜了溜了喵</em></p>
 
                 
@@ -3291,7 +3303,7 @@ bits <span class="token operator">=</span> <span class="token punctuation">[</sp
             |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
             <br>
                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">388.2k</span>&nbsp;字
+                class="white-color">388.3k</span>&nbsp;字
                                                                                     <span id="busuanzi_container_site_pv">
 			|&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
                     class="white-color"></span>&nbsp;次
