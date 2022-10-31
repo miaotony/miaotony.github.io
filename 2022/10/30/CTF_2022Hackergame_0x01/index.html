@@ -506,7 +506,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    49 分
+                    50 分
                 </div>
                 
 
@@ -1001,10 +1001,16 @@ win32api<span class="token punctuation">.</span>SendMessage<span class="token pu
     <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<p>所以其实可以魔改下之前直接操作 win32api 的写法</p>
-<pre class="line-numbers language-none"><code class="language-none"><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-
+<p>所以其实可以魔改下之前直接操作 win32api 的写法（比如 cubercsl 就这样解的</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> win32con
+<span class="token keyword">import</span> win32gui
+hwnd <span class="token operator">=</span> win32gui<span class="token punctuation">.</span>FindWindow<span class="token punctuation">(</span><span class="token boolean">None</span><span class="token punctuation">,</span> <span class="token string">"flag 自动机"</span><span class="token punctuation">)</span>
+win32gui<span class="token punctuation">.</span>SendMessage<span class="token punctuation">(</span>
+    hwnd<span class="token punctuation">,</span>                           <span class="token comment"># hWnd</span>
+    win32con<span class="token punctuation">.</span>WM_COMMAND<span class="token punctuation">,</span>            <span class="token comment"># Msg</span>
+    win32con<span class="token punctuation">.</span>BN_CLICKED <span class="token operator">&lt;&lt;</span> <span class="token number">16</span> <span class="token operator">|</span> <span class="token number">3</span><span class="token punctuation">,</span>  <span class="token comment"># wParam</span>
+    <span class="token number">0x1bf52</span>                         <span class="token comment"># lParam</span>
+<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 
 
@@ -2229,7 +2235,7 @@ bp_app <span class="token operator">=</span> BPApp<span class="token punctuation
             |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
             <br>
                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">388.2k</span>&nbsp;字
+                class="white-color">388.3k</span>&nbsp;字
                                                                                     <span id="busuanzi_container_site_pv">
 			|&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
                     class="white-color"></span>&nbsp;次
