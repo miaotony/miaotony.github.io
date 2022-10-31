@@ -264,7 +264,7 @@
         <li><div class="divider"></div></li>
         <li>
             <a href="https://github.com/miaotony" class="waves-effect waves-light" target="_blank">
-                <i class="fab fa-github-square fa-fw"></i>Fork Me
+                <i class="fab fa-github-square fa-fw"></i>Follow Me
             </a>
         </li>
         
@@ -321,7 +321,7 @@
 </style>
 
 <a href="https://github.com/miaotony" class="github-corner tooltipped hide-on-med-and-down" target="_blank"
-   data-tooltip="Fork Me" data-position="left" data-delay="50">
+   data-tooltip="Follow Me" data-position="left" data-delay="50">
     <svg viewBox="0 0 250 250" aria-hidden="true">
         <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
         <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2"
@@ -642,27 +642,32 @@ wpa_cli -iwlan0 status <span aria-hidden="true" class="line-numbers-rows"><span>
 
 <p>网上的说法是需要<strong>注意：wifi名以及wifi密码的字符串需要用一个单引号加一个双引号包住</strong></p>
 </blockquote>
-<h2 id="0x04-更换软件源-换源"><a href="#0x04-更换软件源-换源" class="headerlink" title="0x04 更换软件源 / 换源"></a>0x04 更换软件源 / 换源</h2><p>默认的是官方的 ftp，这里可以换成国内的镜像站。</p>
+<h2 id="0x04-更换软件源-x2F-换源"><a href="#0x04-更换软件源-x2F-换源" class="headerlink" title="0x04 更换软件源 / 换源"></a>0x04 更换软件源 / 换源</h2><p>默认的是官方的 ftp，这里可以换成国内的镜像站。</p>
 <p>用你喜欢的编辑器打开，比如 <code>nano</code></p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">nano</span> /etc/apt/sources.list <span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
 <p>比如换成阿里的：</p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">deb https://mirrors.aliyun.com/debian-ports/ sid main 
 deb https://mirrors.aliyun.com/debian-ports/ unreleased main 
 <span class="token comment"># deb http://ftp.ports.debian.org/debian-ports/ sid main </span>
 <span class="token comment"># deb http://ftp.ports.debian.org/debian-ports/ unreleased main </span>
 <span class="token comment"># deb-src http://ftp.ports.debian.org/debian-ports/ sid main</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
 <p>或者 <a target="_blank" rel="noopener" href="https://mirror.sjtu.edu.cn/docs/debian-ports">上交 SJTU</a> 的：</p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">deb <span class="token punctuation">[</span>arch<span class="token operator">=</span>riscv64<span class="token punctuation">]</span> http://mirror.sjtu.edu.cn/debian-ports unstable main
 deb <span class="token punctuation">[</span>arch<span class="token operator">=</span>riscv64<span class="token punctuation">]</span> http://mirror.sjtu.edu.cn/debian-ports unreleased main<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
 <p><em>（然而上交的源咱用的时候 expire 了，估计是太久没同步的原因 吧</em></p>
 <p>而后需要手动 <strong>添加 public key</strong>，不然会提示由于公钥不可用导致签名无法验证，从而无法更新。</p>
 <pre class="line-numbers language-none"><code class="language-none">The following signatures couldn't be verified because the public key is not available: NO_PUBKEY E852514F5DF312F6<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
 <p><img src="/2022/03/20/EE_LicheeRV_1_getting_started/image-20220319050558594.png"></p>
 <p><strong>第一种方法：</strong></p>
 <p>可以直接把下载好的 <code>archive_2022.key</code> 通过 SD 卡或者 <code>scp</code> 或者其他你喜欢的方式传到板子上，然后 add。</p>
 <p>下载地址： <a href="archive_2022.key">咱这里</a>，或者 <a target="_blank" rel="noopener" href="https://pan.baidu.com/link/zhihu/7VhmzbuNhpijdvFUZjc3AXBVR3as52QQUDFD==">百度网盘</a> </p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> apt-key <span class="token function">add</span> archive_2022.key 
 <span class="token function">sudo</span> <span class="token function">apt</span> update<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
 
 
 <p><strong>或者</strong>，<strong>第二种方法：</strong></p>
@@ -676,6 +681,7 @@ deb <span class="token punctuation">[</span>arch<span class="token operator">=</
 <span class="token function">sudo</span> <span class="token function">apt</span> update<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 
 
+
 <p>再或者，<strong>第三种方法：</strong></p>
 <p>从 gpg keyserver 接收公钥</p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> apt-key adv --keyserver keys.gnupg.net --recv-keys <span class="token operator">&lt;</span>PUBKEY<span class="token operator">&gt;</span>
@@ -687,13 +693,16 @@ deb <span class="token punctuation">[</span>arch<span class="token operator">=</
 <span class="token comment"># gpg -a --export &lt;PUBKEY&gt; | sudo apt-key add -</span>
 
 <span class="token function">sudo</span> <span class="token function">apt</span> update<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
 <p>别忘了 <code>update</code>。</p>
 <h2 id="0x05-修改时区"><a href="#0x05-修改时区" class="headerlink" title="0x05 修改时区"></a>0x05 修改时区</h2><p>咱这里用的 Asia/Shanghai (CST, +0800)</p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token assign-left variable">TZ</span><span class="token operator">=</span>Asia/Shanghai
 <span class="token function">sudo</span> <span class="token function">ln</span> -sf /usr/share/zoneinfo/<span class="token variable">${TZ}</span> /etc/localtime<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
 <p>或者也可以用 <code>timedatectl</code> </p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">timedatectl set-timezone Asia/Shanghai
 timedatectl<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
 <p>再 <code>date</code> 看下时间就发现变成 CST 时区了。</p>
 <h2 id="0x06-扩容-SD-卡中的-rootfs"><a href="#0x06-扩容-SD-卡中的-rootfs" class="headerlink" title="0x06 扩容 SD 卡中的 rootfs"></a>0x06 扩容 SD 卡中的 rootfs</h2><p>安装了一些东西之后，发现装不下啦！</p>
 <p>看了看发现 根目录 / 下只剩下 200多 MiB 可用空间了，这不对啊，这可是张 64GB 的 SD 卡啊！</p>
@@ -804,6 +813,7 @@ configfs           <span class="token number">0</span>     <span class="token nu
 tmpfs            50M   24K   50M   <span class="token number">1</span>% /run/user/110
 tmpfs            50M   20K   50M   <span class="token number">1</span>% /run/user/1000
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
 <p><strong>扩容完成啦！</strong></p>
 <blockquote>
 <p>说一下尝试过的方法，<strong>请注意这里的方法不可行！不可行！不可行！</strong></p>
@@ -826,6 +836,7 @@ tmpfs            50M   20K   50M   <span class="token number">1</span>% /run/use
 <h2 id="0x07-停止系统日志错误显示"><a href="#0x07-停止系统日志错误显示" class="headerlink" title="0x07 停止系统日志错误显示"></a>0x07 停止系统日志错误显示</h2><p>在 ssh 界面，会不停地提示 kernel 错误的信息。</p>
 <pre class="line-numbers language-none"><code class="language-none">Message from syslogd@sipeed at Mar 20 07:05:09 ...
  kernel:[  386.031121] Oops [#17]<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
 <p>虽然不影响正常使用，但让喵喵看得非常难受，比如在 nano 下编辑着东西或者 htop 下看着监控（咋监控室老大爷啊。。），动不动来个内核错误的消息弹出来，啊，忍不了！</p>
 <p><img src="/2022/03/20/EE_LicheeRV_1_getting_started/image-20220320203920272.png"></p>
 <p>查了下，也有人遇到了这问题，<a target="_blank" rel="noopener" href="https://twitter.com/Yaito1216/status/1486133865110405120">官方在 twitter 上的回复</a> 说是 8723 WiFi 芯片驱动的问题，但是他能正常工作，忽略就完事了。</p>
@@ -835,16 +846,19 @@ tmpfs            50M   20K   50M   <span class="token number">1</span>% /run/use
 <p>用你喜欢的编辑器打开 <code>/etc/rsyslog.conf</code> 文件，修改最后一行，将 <code>*</code> 改成 <code>root</code>。</p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># *.emerg             :omusrmsg:* </span>
 *.emerg             :omusrmsg:root  <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
 <p>重启之后再 ssh 上去就不会再弹 message 了。</p>
 <blockquote>
 <p>BTW，丢个日志截图在这里。</p>
 <p><img src="/2022/03/20/EE_LicheeRV_1_getting_started/image-20220320204101958.png"></p>
 </blockquote>
 <h2 id="0x08-修改密码"><a href="#0x08-修改密码" class="headerlink" title="0x08 修改密码"></a>0x08 修改密码</h2><pre class="line-numbers language-none"><code class="language-none">passwd<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
 <p>按提示输入两次密码就完事了。</p>
 <h2 id="0x09-安装-neofetch"><a href="#0x09-安装-neofetch" class="headerlink" title="0x09 安装 neofetch"></a>0x09 安装 neofetch</h2><p>咱装系统都喜欢整个 neofetch 看看，哈哈（</p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> neofetch
 neofetch<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
 <p><img src="/2022/03/20/EE_LicheeRV_1_getting_started/image-20220319052256898.png" alt="neofetch"></p>
 <p>好耶！</p>
 <blockquote>
@@ -857,6 +871,7 @@ neofetch --ascii <span class="token variable">$LFILE</span>
 </blockquote>
 <h2 id="0x0A-安装-curl-wget-git"><a href="#0x0A-安装-curl-wget-git" class="headerlink" title="0x0A 安装 curl wget git"></a>0x0A 安装 curl wget git</h2><p>默认这个镜像里没有啥方便的网络请求工具，于是顺手装一下。</p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> <span class="token function">curl</span> <span class="token function">wget</span> <span class="token function">git</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
 <p>顺便感叹一下在这上面装东西确实挺慢的……</p>
 <p>好耶，在 RV 板子上访问咱博客！</p>
 <p><img src="/2022/03/20/EE_LicheeRV_1_getting_started/image-20220319052620625.png"></p>
@@ -864,6 +879,7 @@ neofetch --ascii <span class="token variable">$LFILE</span>
 <h2 id="0x0B-安装-speedtest"><a href="#0x0B-安装-speedtest" class="headerlink" title="0x0B 安装 speedtest"></a>0x0B 安装 speedtest</h2><p>还是先拿 speedtest-cli 凑合用一下吧……</p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> speedtest-cli
 speedtest<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
 <p>啊，这 WiFi 连接确实不大稳。。<del>又不是不能用</del></p>
 <blockquote>
 <p>其实喵喵不大喜欢 python 编写的那个 speedtest-cli，还是习惯官方的 <a target="_blank" rel="noopener" href="https://www.speedtest.net/apps/cli">Speedtest® CLI</a>。</p>
@@ -886,6 +902,7 @@ speedtest<span aria-hidden="true" class="line-numbers-rows"><span></span><span><
 <p><img src="/2022/03/20/EE_LicheeRV_1_getting_started/image-20220320213623080.png"></p>
 </blockquote>
 <h2 id="0x0C-安装-pip3"><a href="#0x0C-安装-pip3" class="headerlink" title="0x0C 安装 pip3"></a>0x0C 安装 pip3</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> python3-pip<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
 <p>之后就能 <code>pip3 install xxx</code> 啦！</p>
 <h2 id="0x0D-一些其他问题"><a href="#0x0D-一些其他问题" class="headerlink" title="0x0D 一些其他问题"></a>0x0D 一些其他问题</h2><h3 id="Broken-packages"><a href="#Broken-packages" class="headerlink" title="Broken packages"></a>Broken packages</h3><p><code>sudo apt upgrade</code> 的时候发现锅了</p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">sipeed@sipeed:~$ <span class="token function">sudo</span> <span class="token function">apt</span> upgrade
@@ -902,8 +919,10 @@ The following information may <span class="token builtin class-name">help</span>
 The following packages have unmet dependencies:
  libwacom9 <span class="token builtin class-name">:</span> Depends: libwacom-common <span class="token punctuation">(</span><span class="token operator">=</span> <span class="token number">2.1</span>.0-2<span class="token punctuation">)</span> but <span class="token number">1.8</span>-2 is to be installed
 E: Broken packages<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
 <p>参考 <a target="_blank" rel="noopener" href="https://answers.launchpad.net/ubuntu/+source/libwacom/+question/700653">Package blocking upgrades on Jammy</a> 这个，把 libwacom2 移除就好了。（草</p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">apt</span> remove libwacom2<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
 <p><img src="/2022/03/20/EE_LicheeRV_1_getting_started/image-20220320212645776.png"></p>
 <p>之后就能执行  <code>sudo apt upgrade</code> 了。</p>
 <h2 id="0x0E-小结"><a href="#0x0E-小结" class="headerlink" title="0x0E 小结"></a>0x0E 小结</h2><p>由于喵喵经验不足，也是第一次碰这板子，可能说的有错误的地方，希望大家能多多指正哈！</p>
@@ -921,9 +940,9 @@ E: Broken packages<span aria-hidden="true" class="line-numbers-rows"><span></spa
 <li><a target="_blank" rel="noopener" href="https://bbs.sipeed.com/thread/1330">licheeRV 86开发板之三：外设–点灯</a></li>
 <li><a target="_blank" rel="noopener" href="https://bbs.sipeed.com/thread/1331">licheeRV 86开发板之四：外设–音频功能</a> </li>
 <li><a target="_blank" rel="noopener" href="https://bbs.sipeed.com/thread/1332">licheeRV 86开发板之五：外设–USB及网络</a></li>
-<li> <a target="_blank" rel="noopener" href="https://bbs.sipeed.com/thread/1333">licheeRV 86开发板之六：外设–屏显触摸</a></li>
-<li> <a target="_blank" rel="noopener" href="https://bbs.sipeed.com/thread/1334">licheeRV 86开发板之七：Debian镜像体验</a></li>
-<li> <a target="_blank" rel="noopener" href="https://bbs.sipeed.com/thread/1335">licheeRV 86开发板之八：BSP SDK 开发</a></li>
+<li><a target="_blank" rel="noopener" href="https://bbs.sipeed.com/thread/1333">licheeRV 86开发板之六：外设–屏显触摸</a></li>
+<li><a target="_blank" rel="noopener" href="https://bbs.sipeed.com/thread/1334">licheeRV 86开发板之七：Debian镜像体验</a></li>
+<li><a target="_blank" rel="noopener" href="https://bbs.sipeed.com/thread/1335">licheeRV 86开发板之八：BSP SDK 开发</a></li>
 </ol>
 </li>
 <li><a target="_blank" rel="noopener" href="http://bbs.eeworld.com.cn/thread-1193436-1-1.html">【平头哥Sipeed LicheeRV 86 Panel测评】7-Waft图形界面开发测试（下）</a></li>
@@ -1361,7 +1380,7 @@ E: Broken packages<span aria-hidden="true" class="line-numbers-rows"><span></spa
             + '来源: MiaoTony&#39;s小窝<br />'
             + '文章作者: MiaoTony<br />'
             + '文章链接: <a href="' + url + '">' + url + '</a><br />'
-            + '本文章著作权归作者MiaoTony所有，任何形式的转载都请注明出处。';
+            + '本文章著作权归作者 MiaoTony 所有，任何形式的转载都请注明出处。';
 
         selection.selectAllChildren(newdiv);
         window.setTimeout(function () {bodyElement.removeChild(newdiv);}, 200);
@@ -1727,8 +1746,6 @@ $(function () {
 </script>
 
     
-    
-    <script src="/libs/others/clicklove.js" async="async"></script>
     
     
     <script async src="/libs/others/busuanzi.pure.mini.js"></script>

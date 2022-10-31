@@ -264,7 +264,7 @@
         <li><div class="divider"></div></li>
         <li>
             <a href="https://github.com/miaotony" class="waves-effect waves-light" target="_blank">
-                <i class="fab fa-github-square fa-fw"></i>Fork Me
+                <i class="fab fa-github-square fa-fw"></i>Follow Me
             </a>
         </li>
         
@@ -321,7 +321,7 @@
 </style>
 
 <a href="https://github.com/miaotony" class="github-corner tooltipped hide-on-med-and-down" target="_blank"
-   data-tooltip="Fork Me" data-position="left" data-delay="50">
+   data-tooltip="Follow Me" data-position="left" data-delay="50">
     <svg viewBox="0 0 250 250" aria-hidden="true">
         <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
         <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2"
@@ -631,6 +631,7 @@ C#7-G6
 C#7,G6
 C#7,A#6,G6
 C#7,A#6-G6<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
 <p>寻思着应该是音符。</p>
 <p><img src="/2021/07/15/CTF_2021TCTF-0CTF/image-20210705215854415.png"></p>
 <p>想了半天没搞懂啥意思。。</p>
@@ -657,11 +658,13 @@ C#7,A#6-G6<span aria-hidden="true" class="line-numbers-rows"><span></span><span>
 <pre class="line-numbers language-none"><code class="language-none">https://bt.hzh.moe/files/Wonder-Egg-Priority-Safe.torrent
 
 magnet:?xt=urn:btih:CIY7BQVJYC7GXF3AF4OA6SLZTZZAQDBS&amp;dn=%E3%83%AF%E3%83%B3%E3%83%80%E3%83%BC%E3%82%A8%E3%83%83%E3%82%B0%E3%83%BB%E3%83%97%E3%83%A9%E3%82%A4%E3%82%AA%E3%83%AA%E3%83%86%E3%82%A3%20(Wonder%20Egg%20Priority)%20OP.7z<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
 <p>看了下有个 txt 文件，链接就是个动漫。<a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=5yN9w_yzH2w">https://www.youtube.com/watch?v=5yN9w_yzH2w</a></p>
 <p>下面那篇 Tencent CTF</p>
 <p><img src="/2021/07/15/CTF_2021TCTF-0CTF/image-20210707001055642.png"></p>
 <pre class="line-numbers language-none"><code class="language-none">https://bt.hzh.moe/files/TCTF.torrent
 magnet:?xt=urn:btih:AQEQB7YBOGIMOQARSRXSHGULZUI25EY3&amp;dn=Secret%20of%20TCTF%202021.7z<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
 <p>很明显就是这个了，然而上面那个下载下来是全空的，下面那个下载不下来。</p>
 <p>参考磁力链接的结构，btih 是指 BitTorrent Info Hash。</p>
 <p><img src="/2021/07/15/CTF_2021TCTF-0CTF/image-20210707005537705.png"></p>
@@ -669,6 +672,7 @@ magnet:?xt=urn:btih:AQEQB7YBOGIMOQARSRXSHGULZUI25EY3&amp;dn=Secret%20of%20TCTF%2
 <p>参考大师傅的 wp，<code>AQEQB7YBOGIMOQARSRXSHGULZUI25EY3</code> 即被 Base32 编码过的 BTIH 散列结果，把它转换为 hex 编码的。</p>
 <p><img src="/2021/07/15/CTF_2021TCTF-0CTF/image-20210707005932376.png"></p>
 <pre class="line-numbers language-none"><code class="language-none">%04%09%00%ff%01%71%90%c7%40%11%94%6f%23%9a%8b%cd%11%ae%93%1b<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
 <p>再参考第一个 torrent 文件，可以得到 httpseeds</p>
 <p><img src="/2021/07/15/CTF_2021TCTF-0CTF/image-20210707010305533.png"></p>
 <blockquote>
@@ -706,6 +710,7 @@ i <span class="token operator">=</span> <span class="token number">0</span>
     i <span class="token operator">+=</span> <span class="token number">1</span>
 
 <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">'Download OK!'</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
 <p>最后 piece 是 0-46，下载下来解压得到一个 <code>TCTF.vhdx</code>。</p>
 <p>挂载得到一个 <code>hint.bat</code></p>
 <p><img src="/2021/07/15/CTF_2021TCTF-0CTF/image-20210707011500742.png"></p>
@@ -767,6 +772,7 @@ data <span class="token operator">=</span> <span class="token string">''</span>
 <span class="token comment"># 65 ngnv2GZ6UD9aJnfnuFBIx1Mo084lND4}Oom7x{rbT7mTHl6OtNM9CrOjZGD4Lce</span>
 <span class="token comment"># 62 L61ulkKDvC7Kh}FYXwslD0jp{auQstMN5S2hIXmSMkdZtYTVmltslyLPCTOdF1ysG</span>
 <span class="token comment"># 61 yrOyO9XJK13Pbnr2Msym{NzdA5mbyhKL5cgbO2moJC90f92B7Q0lGIucN2XAXj}MQ</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
 <p>最后也可以得到 flag。</p>
 <p><code>WOW0Is1That2Flag3TCTF{B7UmV4x8JRHNKBCWxyevXt97tnQJtHjrZ}4God5Job</code></p>
 <br>
@@ -803,6 +809,7 @@ sh<span class="token punctuation">.</span>sendlineafter<span class="token punctu
 sh<span class="token punctuation">.</span>recvall<span class="token punctuation">(</span><span class="token punctuation">)</span>
 
 <span class="token comment"># Here is your flag: flag{h0w_m4ny_squar3s_can_u_d0_in_10_sec0nds?}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
 
 
 
@@ -1003,6 +1010,7 @@ sh<span class="token punctuation">.</span>recvall<span class="token punctuation"
     server <span class="token operator">=</span> ThreadedServer<span class="token punctuation">(</span><span class="token punctuation">(</span>HOST<span class="token punctuation">,</span> PORT<span class="token punctuation">)</span><span class="token punctuation">,</span> Task<span class="token punctuation">)</span>
     server<span class="token punctuation">.</span>allow_reuse_address <span class="token operator">=</span> <span class="token boolean">True</span>
     server<span class="token punctuation">.</span>serve_forever<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
 <p>是辣个 线性反馈移位寄存器（LFSR），但又不是咱之前见过的那种。</p>
 <p>这个貌似可以用 Fast Correlation Attacks（<a target="_blank" rel="noopener" href="http://pubs.cs.uct.ac.za/honsproj/cgi-bin/view/2011/desai.zip/crypto_desai/dl/">project</a>）。</p>
 <p>2019 年的 TCTF 就出过这样一题，<a target="_blank" rel="noopener" href="https://fireshellsecurity.team/0ctf-zer0lfsr/">0CTF/TCTF 2019 Quals - zer0lfsr</a>.</p>
@@ -1213,6 +1221,7 @@ r<span class="token punctuation">.</span>sendlineafter<span class="token punctua
 
 r<span class="token punctuation">.</span>interactive<span class="token punctuation">(</span><span class="token punctuation">)</span>
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
 <p><img src="/2021/07/15/CTF_2021TCTF-0CTF/image-20210706223931614.png" alt="flag"></p>
 <p><code>flag{we_have_tried_our_best_to_prevent_the_use_of_z3}</code></p>
 <p>好家伙，原来是你们故意的啊，坏坏！</p>
@@ -1228,6 +1237,7 @@ r<span class="token punctuation">.</span>interactive<span class="token punctuati
 <span class="token comment"># 在区间[192, 255)内,数字的表示形式会加上xc3前缀,同时数字本身减去64:</span>
 <span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> <span class="token builtin">chr</span><span class="token punctuation">(</span><span class="token number">200</span><span class="token punctuation">)</span><span class="token punctuation">.</span>encode<span class="token punctuation">(</span><span class="token punctuation">)</span>
 <span class="token string">b'\xc3\x88'</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
 <p>解码脚本：</p>
 <p>最简单的就是直接以 bytes 都进来，直接 <code>decode</code> 即可。</p>
 <pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token comment"># python3环境下</span>
@@ -1239,6 +1249,7 @@ data <span class="token operator">=</span> data<span class="token punctuation">.
 <span class="token keyword">import</span> codecs
 <span class="token keyword">with</span> codecs<span class="token punctuation">.</span><span class="token builtin">open</span><span class="token punctuation">(</span><span class="token string">'keystream'</span><span class="token punctuation">,</span> <span class="token string">'rb'</span><span class="token punctuation">,</span> <span class="token string">'utf8'</span><span class="token punctuation">)</span> <span class="token keyword">as</span> f<span class="token punctuation">:</span>
     data <span class="token operator">=</span> f<span class="token punctuation">.</span>read<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
 <p>复杂一点就手动根据前缀来解码（参考网上的）</p>
 <pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token comment">#!/usr/bin/python3</span>
 b <span class="token operator">=</span> <span class="token string">b''</span>
@@ -1256,6 +1267,7 @@ b <span class="token operator">=</span> <span class="token string">b''</span>
         <span class="token keyword">else</span><span class="token punctuation">:</span>
             b <span class="token operator">+=</span> <span class="token builtin">bytes</span><span class="token punctuation">(</span><span class="token punctuation">[</span>data<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
         i <span class="token operator">+=</span> <span class="token number">1</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
 
 
 <blockquote>
@@ -1277,9 +1289,11 @@ b <span class="token operator">=</span> <span class="token string">b''</span>
 <p>源码：</p>
 <pre class="line-numbers language-php" data-language="php"><code class="language-php"><span class="token php language-php"><span class="token delimiter important">&lt;?php</span>
 <span class="token punctuation">(</span><span class="token variable">$_</span><span class="token operator">=</span>@<span class="token variable">$_GET</span><span class="token punctuation">[</span><span class="token string single-quoted-string">'yxxx'</span><span class="token punctuation">]</span><span class="token operator">.</span><span class="token string single-quoted-string">'.php'</span><span class="token punctuation">)</span> <span class="token operator">&amp;&amp;</span> @<span class="token function">substr</span><span class="token punctuation">(</span><span class="token function">file</span><span class="token punctuation">(</span><span class="token variable">$_</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">,</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token number">6</span><span class="token punctuation">)</span> <span class="token operator">===</span> <span class="token string single-quoted-string">'@&lt;?php'</span> <span class="token operator">?</span> <span class="token keyword">include</span><span class="token punctuation">(</span><span class="token variable">$_</span><span class="token punctuation">)</span> <span class="token punctuation">:</span> <span class="token class-name return-type">highlight_file</span><span class="token punctuation">(</span><span class="token constant">__FILE__</span><span class="token punctuation">)</span> <span class="token operator">&amp;&amp;</span> <span class="token keyword">include</span><span class="token punctuation">(</span><span class="token string single-quoted-string">'phpinfo.html'</span><span class="token punctuation">)</span><span class="token punctuation">;</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
 <p>这题是 HITCON2018 One Line PHP Challenge 的升级版。</p>
 <p>那题的源码是</p>
 <pre class="line-numbers language-php" data-language="php"><code class="language-php">($_=@$_GET['orange']) &amp;&amp; @substr(file($_)[0],0,6) === '@&lt;?php' ? include($_) : highlight_file(__FILE__);<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
 <p>这题其实就文件名加了个 <code>.php</code> 。</p>
 <blockquote>
 <p>参考</p>
@@ -1310,7 +1324,7 @@ b <span class="token operator">=</span> <span class="token string">b''</span>
 <p>尝试先用 <code>{{.}}</code> 试试看，发现在主页成功输出</p>
 <pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">const</span> msg <span class="token operator">=</span> <span class="token punctuation">[</span>
       <span class="token punctuation">{</span>
-        name<span class="token operator">:</span> <span class="token string">"map[_nonce:ttJVZSLyh5Us2Gx1gLzALQ code:fadc1d lv:1 msg:\u0022\u0027*\/`s name:zedd1]"</span><span class="token punctuation">,</span>
+        <span class="token literal-property property">name</span><span class="token operator">:</span> <span class="token string">"map[_nonce:ttJVZSLyh5Us2Gx1gLzALQ code:fadc1d lv:1 msg:\u0022\u0027*\/`s name:zedd1]"</span><span class="token punctuation">,</span>
       <span class="token punctuation">}</span>
     <span class="token punctuation">]</span>
 
@@ -1771,7 +1785,7 @@ b <span class="token operator">=</span> <span class="token string">b''</span>
             + '来源: MiaoTony&#39;s小窝<br />'
             + '文章作者: MiaoTony<br />'
             + '文章链接: <a href="' + url + '">' + url + '</a><br />'
-            + '本文章著作权归作者MiaoTony所有，任何形式的转载都请注明出处。';
+            + '本文章著作权归作者 MiaoTony 所有，任何形式的转载都请注明出处。';
 
         selection.selectAllChildren(newdiv);
         window.setTimeout(function () {bodyElement.removeChild(newdiv);}, 200);
@@ -2137,8 +2151,6 @@ $(function () {
 </script>
 
     
-    
-    <script src="/libs/others/clicklove.js" async="async"></script>
     
     
     <script async src="/libs/others/busuanzi.pure.mini.js"></script>

