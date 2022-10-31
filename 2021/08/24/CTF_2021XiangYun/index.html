@@ -264,7 +264,7 @@
         <li><div class="divider"></div></li>
         <li>
             <a href="https://github.com/miaotony" class="waves-effect waves-light" target="_blank">
-                <i class="fab fa-github-square fa-fw"></i>Fork Me
+                <i class="fab fa-github-square fa-fw"></i>Follow Me
             </a>
         </li>
         
@@ -321,7 +321,7 @@
 </style>
 
 <a href="https://github.com/miaotony" class="github-corner tooltipped hide-on-med-and-down" target="_blank"
-   data-tooltip="Fork Me" data-position="left" data-delay="50">
+   data-tooltip="Follow Me" data-position="left" data-delay="50">
     <svg viewBox="0 0 250 250" aria-hidden="true">
         <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
         <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2"
@@ -575,6 +575,7 @@ result <span class="token operator">=</span> <span class="token string">''</span
 <span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token builtin">len</span><span class="token punctuation">(</span>result<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token number">8</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
     byte <span class="token operator">=</span> result<span class="token punctuation">[</span>i<span class="token punctuation">:</span>i<span class="token operator">+</span><span class="token number">8</span><span class="token punctuation">]</span>
     <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token builtin">chr</span><span class="token punctuation">(</span><span class="token builtin">int</span><span class="token punctuation">(</span>byte<span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span> end<span class="token operator">=</span><span class="token string">""</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
 <p><img src="/2021/08/24/CTF_2021XiangYun/upload_bc39a553828fad8dcc9cd6718cff8a8d.png"></p>
 <p><code>flag{57dd74fb21bb1aee50f19421bf836f23}</code></p>
 <h3 id="层层取证"><a href="#层层取证" class="headerlink" title="层层取证"></a>层层取证</h3><blockquote>
@@ -591,8 +592,10 @@ Address <span class="token builtin class-name">:</span> 0xfa800d12e7e0
 Cipher  <span class="token builtin class-name">:</span> AES-128
 FVEK    <span class="token builtin class-name">:</span> 0ff9192acdbf1df3c6dc36fb58cf76ce
 TWEAK   <span class="token builtin class-name">:</span> b423bd84872ff72b583bb9bdee1762ac<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
 <p>取证大师挂载磁盘，解开 bitlocker，xiaoming 桌面上有个 <code>flag.txt</code> ，和内存 notepad 进程里的内容一致</p>
 <pre class="line-numbers language-none"><code class="language-none">hint: 你连电脑都不能仿真打开，还想要flag ?<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
 <p>加密盘里发现有个 <code>2.pcapng</code> 流量包</p>
 <p>大部分流量是在搜 CTF、flag、黑客 啥的，不过 strings 发现有个 <code>flag.docx</code>，在一堆 udp 流量里发现了这个 rar</p>
 <p><img src="https://hackmd.summershrimp.com/uploads/upload_d19cf7835911098f31db5993ff8ff95b.png"></p>
@@ -636,6 +639,7 @@ Cmd <span class="token comment">#14 @ 0x522d88: "C:\Documents and Settings\Admin
 Cmd <span class="token comment">#15 @ 0x5224b8: fuc</span>
 **************************************************
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
 <p>这个 <code>Oneclickcleanup.exe</code> 很可疑，于是 dump 出来看一下逆一下。</p>
 <p><img src="/2021/08/24/CTF_2021XiangYun/upload_b51ff175d441c7c8d23276d657fe7798.png"></p>
 <p><img src="/2021/08/24/CTF_2021XiangYun/upload_673fb7085bd7dbe7ae28b9790933b49c.png"></p>
@@ -665,6 +669,7 @@ data_decode <span class="token operator">=</span> <span class="token builtin">by
 
 <span class="token keyword">with</span> <span class="token builtin">open</span><span class="token punctuation">(</span><span class="token string">'1.doc'</span><span class="token punctuation">,</span> <span class="token string">'wb'</span><span class="token punctuation">)</span> <span class="token keyword">as</span> f<span class="token punctuation">:</span>
     f<span class="token punctuation">.</span>write<span class="token punctuation">(</span>data_decode<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
 <blockquote>
 <p>赛后问了问队里 binary 爷爷，才知道 IDA 里直接按 Shift + E 就能直接导出数据，这样就不用复制粘贴然后自己手动处理这个原始数据了……</p>
 <p><img src="/2021/08/24/CTF_2021XiangYun/image-20210825224343206.png"></p>
@@ -688,6 +693,7 @@ filename_decode <span class="token operator">=</span> <span class="token builtin
     filename_decode<span class="token punctuation">.</span>append<span class="token punctuation">(</span>filename<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">^</span> key<span class="token punctuation">[</span>i <span class="token operator">%</span> <span class="token builtin">len</span><span class="token punctuation">(</span>key<span class="token punctuation">)</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
 <span class="token keyword">print</span><span class="token punctuation">(</span>filename_decode<span class="token punctuation">)</span>
 <span class="token comment"># bytearray(b'C:\\Documents and Settings\\All Users\\Templates')</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
 <p>发现文件是个 doc，里面就一句话</p>
 <p><img src="/2021/08/24/CTF_2021XiangYun/upload_5dcb9201bf66d0fb1ad11d9dfb073a30.png"></p>
 <p>查看文件 hex，发现这句话后面还有点东西，参考前面的异或逻辑，这里爆破了一下 key，最后发现 key 是 <code>-</code>。。</p>
@@ -709,6 +715,7 @@ l <span class="token operator">=</span> <span class="token punctuation">[</span>
         <span class="token keyword">print</span><span class="token punctuation">(</span>x<span class="token punctuation">)</span>
     <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">'======================='</span><span class="token punctuation">)</span>
     <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
 <p>顺便和原始文件对比一下。</p>
 <p><img src="/2021/08/24/CTF_2021XiangYun/upload_e5943718bf57f966a7203fb628a497e6.png"></p>
 <p><img src="/2021/08/24/CTF_2021XiangYun/upload_d527bcf51d68c2983e64e99180c6c340.png"></p>
@@ -767,6 +774,7 @@ angle2 <span class="token operator">=</span> np<span class="token punctuation">.
 plt<span class="token punctuation">.</span>plot<span class="token punctuation">(</span>angle2<span class="token punctuation">)</span>
 plt<span class="token punctuation">.</span>grid<span class="token punctuation">(</span><span class="token boolean">True</span><span class="token punctuation">)</span>
 plt<span class="token punctuation">.</span>show<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
 
 <p><img src="/2021/08/24/CTF_2021XiangYun/upload_9255eee4ca410bebe846c2c1308c2658.png"></p>
 <p>由于超过了180度中间的角度会反而减小，要加回去。。</p>
@@ -1223,7 +1231,7 @@ https://panda0s.top/2021/08/24/LightningSystem/
             + '来源: MiaoTony&#39;s小窝<br />'
             + '文章作者: MiaoTony<br />'
             + '文章链接: <a href="' + url + '">' + url + '</a><br />'
-            + '本文章著作权归作者MiaoTony所有，任何形式的转载都请注明出处。';
+            + '本文章著作权归作者 MiaoTony 所有，任何形式的转载都请注明出处。';
 
         selection.selectAllChildren(newdiv);
         window.setTimeout(function () {bodyElement.removeChild(newdiv);}, 200);
@@ -1589,8 +1597,6 @@ $(function () {
 </script>
 
     
-    
-    <script src="/libs/others/clicklove.js" async="async"></script>
     
     
     <script async src="/libs/others/busuanzi.pure.mini.js"></script>

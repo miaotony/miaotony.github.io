@@ -264,7 +264,7 @@
         <li><div class="divider"></div></li>
         <li>
             <a href="https://github.com/miaotony" class="waves-effect waves-light" target="_blank">
-                <i class="fab fa-github-square fa-fw"></i>Fork Me
+                <i class="fab fa-github-square fa-fw"></i>Follow Me
             </a>
         </li>
         
@@ -321,7 +321,7 @@
 </style>
 
 <a href="https://github.com/miaotony" class="github-corner tooltipped hide-on-med-and-down" target="_blank"
-   data-tooltip="Fork Me" data-position="left" data-delay="50">
+   data-tooltip="Follow Me" data-position="left" data-delay="50">
     <svg viewBox="0 0 250 250" aria-hidden="true">
         <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
         <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2"
@@ -553,6 +553,7 @@
 <p><img src="/2021/12/16/CTF_2021AsuriCTF_NUAACTF_Misc/image-20211217035317361.png"></p>
 <p>pyc 字节码反编译可以用 uncompyle6 或者 decompyle3</p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">uncompyle6 -o <span class="token number">1</span>.py <span class="token number">1</span>.pyc<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
 <p>甚至这里可以用 <a target="_blank" rel="noopener" href="https://tool.lu/pyc/">在线的反编译</a>（</p>
 <p>源码如下</p>
 <pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> Crypto<span class="token punctuation">.</span>Cipher <span class="token keyword">import</span> AES
@@ -581,6 +582,7 @@
 
 <span class="token keyword">if</span> __name__ <span class="token operator">==</span> <span class="token string">'__main__'</span><span class="token punctuation">:</span>
     main<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
 <p>发现还差了 AES 加解密用到的 key 的一部分。</p>
 <p>根据提示，考虑是 pyc 隐写 <a target="_blank" rel="noopener" href="https://github.com/AngelKitty/stegosaurus">https://github.com/AngelKitty/stegosaurus</a></p>
 <p>然而直接跑可能会跑不出来，会报错 <code>ValueError: bad marshal data</code></p>
@@ -591,10 +593,12 @@
 <p>运行得到隐写的结果</p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ python3 stegosaurus.py <span class="token number">1</span>.pyc -x         
 Extracted payload: bytearray<span class="token punctuation">(</span>b<span class="token string">'k5fgb2eur5sty'</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
 <p>cipher: <code>29426dfee9b0f158983ad996b0b7a25e3fdf85c3df187b697e3b639c64f452f21c95a941542aa530199083baf296d805</code></p>
 <p>input 为 pyc 隐写的 <code>k5fgb2eur5sty</code></p>
 <p>直接运行 py / pyc 需要 Crypto 库，最好用 <a target="_blank" rel="noopener" href="https://github.com/pyenv/pyenv">pyenv</a> 新建一个 python 3.7.11 的虚拟环境，然后在里面装。</p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">pip3 <span class="token function">install</span> pycryptodome<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
 <p>比赛的时候有选手反馈跑出来发现还是 <code>Oh no!!!</code>，看了一下发现可能是 python 以及依赖版本不对应，str 处理的时候出了点锅。</p>
 <p>于是放了个 hint 说可以找个在线工具来解。</p>
 <p>按照代码的意思拼接得到 AES key: <code>k5fgb2eur5styn0lve3t6r1s</code></p>
@@ -625,9 +629,11 @@ Extracted payload: bytearray<span class="token punctuation">(</span>b<span class
 <p>那自然想到是 TXT 解析了，后面也放了 hint。</p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ <span class="token function">dig</span> itismath2.asurictf2021.miaotony.xyz TXT +short @1.0.0.1 <span class="token operator">|</span> <span class="token function">sed</span> <span class="token string">'s/[" ]//g'</span>
 <span class="token assign-left variable">OBUSA4DJEBYGSIDQNEQHA2JAOBUSA4DJEBYGSIDQNEQHA2JAOBUWWYJAOBUXA2JAOBUSA4DJOBUSA4DJEBYGSIDQNEQHA2LQNEQHA2JAOBUSA4DJEBYGSIDQNEQHA2JAOBUSA4DJOBUSA4DJEBYGSIDQNEQHA2JAOBUSA4DJEBYGSIDQNEQHA2JAOBUSA4DJMNUHKIDQNFRWQ5JAOBUWG2DVEBYGSY3IOUQGWYJAMNUHKIDQNFYGSIDQNFYGSIDQNFYGSIDQNFYGSIDQNEQHA2JAOBUSA4DJEBYGSIDQNFVWCY3IOUQHA2JAOBUSA4DJEBYGSIDQNEQHA2JAOBUSA4DJEBYGSIDQNEQHA2JAOBUWWYLDNB2SA23BEBVWCIDLMEQGWYJANNQSA23BEBVWCIDLMEQGWYJANNQSA23BEBYGS23BMNUHKIDQNEQHA2JAOBUSA4DJEBYGSIDQNEQHA2JAOBUSA4DJEBYGSIDQNFVWCY3IOUQGWYJANNQSA23BEBVWCIDLMEQGWYJAOBUWWYLDNB2SA23BEBVWCIDLMEQGWYJANNQSA23BEBVWCIDLMEQGWYJANNQSA23BEBVWCIDQNFVWCY3IOUQHA2JAOBUSA4DJEBYGSIDQNEQHA2JAOBUSA4DJEBYGSIDQNEQHA2JAOBUSA4DJEBYGSIDQNEQHA2JAOBUSA4DJEBYGSIDQNFVWCY3IOUQGWYJANNQSA23BEBVWCIDLMEQGWYJANNQSA23BEBVWCIDLMEQGWYJANNQSA4DJNNQWG2DVEBYGSY3IOUQHA2LDNB2SA4DJEBYGSIDQNEQHA2JAOBUSA4DJEBYGSIDQNEQHA2JAOBUSA4DJEBYGSIDQNEQHA2JAOBUSA4DJEBYGS23BMNUHKIDQNFYGSIDQNFYGSIDQNEQHA2JAOBUSA4DJEBYGSIDQNEQHA2JAOBUSA4DJEBYGSIDQNEQHA2JAOBUSA4DJEBYGS23BMNUHKIDLMEQGWYJANNQSA23BEBVWCIDLMEQGWYJANNQSA23BEBVWCIDLMEQGWYJANNQSA23BEBVWCIDLMEQGWYJAOBUWWYLDNB2SA4DJEBYGSIDQNEQHA2JAOBUSA4DJEBYGSIDQNEQHA2JAOBUSA4DJEBYGSIDQNEQHA2LLMFRWQ5JANNQSA23BEBVWCIDLMEQGWYJANNQSA23BEBVWCIDLMEQGWYJANNQSA23BEBVWCIDLMEQGWYJAOBUWWYLDNB2SA4DJEBYGSIDQNFVWCY3IOUQHA2JAOBUSA4DJEBYGSIDQNEQHA2JAOBUSA4DJNNQWG2DVEBYGSY3IOUQHA2LDNB2SA4DJNNQWG2DVEBYGS4DJEBYGS4DJEBVWCIDLMEQGWYJANNQSA23BEBVWCIDLMEQGWYJANNQSA23BEBVWCIDQNFVWCY3IOUQHA2JAOBUSA4DJEBYGSIDQNEQHA2JAOBUSA4DJEBYGSIDQNEQHA2JAOBUSA4DJEBYGSIDQNEQHA2LLMFRWQ5JAOBUWWYLDNB2SA</span><span class="token operator">==</span><span class="token operator">=</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
 <p>很明显是 base32，解密一下</p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ <span class="token function">dig</span> itismath2.asurictf2021.miaotony.xyz TXT +short @1.0.0.1 <span class="token operator">|</span> <span class="token function">sed</span> <span class="token string">'s/[" ]//g'</span> <span class="token operator">|</span> base32 -d
 pi pi pi pi pi pi pi pi pi pi pika pipi pi pipi pi pi pi pipi pi pi pi pi pi pi pi pipi pi pi pi pi pi pi pi pi pi pi pichu pichu pichu pichu ka chu pipi pipi pipi pipi pi pi pi pi pi pikachu pi pi pi pi pi pi pi pi pi pi pi pikachu ka ka ka ka ka ka ka ka ka ka ka pikachu pi pi pi pi pi pi pi pi pi pi pikachu ka ka ka ka ka ka pikachu ka ka ka ka ka ka ka ka ka ka ka ka pikachu pi pi pi pi pi pi pi pi pi pi pi pi pi pi pi pi pi pi pi pikachu ka ka ka ka ka ka ka ka ka ka ka ka pikachu pichu pichu pi pi pi pi pi pi pi pi pi pi pi pi pi pi pi pi pikachu pipi pipi pi pi pi pi pi pi pi pi pi pi pi pi pi pi pikachu ka ka ka ka ka ka ka ka ka ka ka ka ka ka ka ka ka pikachu pi pi pi pi pi pi pi pi pi pi pi pi pi pikachu ka ka ka ka ka ka ka ka ka ka ka ka ka ka ka pikachu pi pi pikachu pi pi pi pi pi pi pi pikachu pichu pichu pikachu pipi pipi ka ka ka ka ka ka ka ka ka ka ka pikachu pi pi pi pi pi pi pi pi pi pi pi pi pi pi pi pikachu pikachu<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
 <p>啊，是一堆的 pikachu！</p>
 <p>于是想到是 <a target="_blank" rel="noopener" href="https://www.dcode.fr/pikalang-language">Pikalang / pikalang-language</a>，这个比赛的时候也在比赛群里放了 hint。</p>
 <blockquote>
@@ -693,6 +699,7 @@ pi pi pi pi pi pi pi pi pi pi pika pipi pi pipi pi pi pi pipi pi pi pi pi pi pi 
 [(20, 1098.278), (455, 22848.531), (131, 6648.615), (488, 24500.666), (48, 2498.193), (276, 13899.408), (28, 1498.131), (86, 4398.853), (196, 9898.668), (326, 16398.231), (381, 19148.7), (63, 3248.501), (27, 1448.238), (386, 19399.918), (240, 12098.565), (239, 12048.603), (293, 14749.701), (363, 18248.92), (172, 8698.375), (181, 9148.851), (340, 17099.405), (265, 13349.585), (389, 19548.138), (469, 23548.322), (401, 20148.573), (353, 17749.481), (441, 22150.277), (163, 8248.245), (62, 3198.467), (436, 21899.306)]
 [(341, 23924.127), (184, 12933.254), (281, 19723.718), (428, 30013.631), (176, 12373.595), (364, 25533.587), (205, 14403.129), (60, 4253.335), (487, 34145.59), (112, 7893.573), (78, 5513.743), (472, 33094.006), (95, 6703.269), (199, 13984.079), (98, 6913.618), (66, 4673.34), (196, 13773.778), (104, 7333.186), (169, 11883.735), (274, 19234.415), (194, 13634.025), (266, 18673.773), (258, 18114.224), (166, 11673.939), (59, 4183.159), (413, 28964.462), (210, 14753.414), (155, 10903.648), (303, 21264.794), (390, 27353.912)]
 [(266, 17416.256), (417, 27231.231), (226, 14815.612), (154, 10135.945), (387, 25281.883), (232, 15205.465), (239, 15660.331), (17, 1230.284), (68, 4545.643), (20, 1425.137), (168, 11045.438), (93, 6170.171), (166, 10915.611), (26, 1815.332), (426, 27816.6), (81, 5390.485), (183, 12020.856), (156, 10265.989), (463, 30221.854), (45, 3050.258), (257, 16830.757), (271, 17740.921), (345, 22551.32), (289, 18910.733), (198, 12996.069), (332, 21705.53), (485, 31652.224), (203, 13320.834), (295, 19301.314), (14, 1035.21)]<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
 <p>18 行数据，每行一个 list，里面包含 30 个 tuple。</p>
 <p>结合题目名字和描述 <code>ItIsMath</code>，应该就是和数学有点关系，把数据当成坐标点，画一画可以发现每一行的点连起来都近似一条直线。</p>
 <p>后面也提示了是线性回归。</p>
@@ -719,6 +726,7 @@ ans <span class="token operator">=</span> <span class="token punctuation">[</spa
     ans<span class="token punctuation">.</span>append<span class="token punctuation">(</span><span class="token builtin">round</span><span class="token punctuation">(</span>y<span class="token punctuation">)</span><span class="token punctuation">)</span>
 
 <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token builtin">bytes</span><span class="token punctuation">(</span>ans<span class="token punctuation">)</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
 <p>得到 flag </p>
 <p><code>flag{9D4f8e0f-1a5B9E35-aef0fBd2bF5A}</code></p>
 <p>当然也可以直接用 numpy 的 polyfit 来</p>
@@ -736,6 +744,7 @@ data <span class="token operator">=</span> <span class="token punctuation">[</sp
     k<span class="token punctuation">,</span> b <span class="token operator">=</span> np<span class="token punctuation">.</span>polyfit<span class="token punctuation">(</span>x<span class="token punctuation">,</span> y<span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span>
     <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token builtin">chr</span><span class="token punctuation">(</span><span class="token builtin">int</span><span class="token punctuation">(</span>k<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span> end<span class="token operator">=</span><span class="token string">''</span><span class="token punctuation">)</span>
     <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token builtin">chr</span><span class="token punctuation">(</span><span class="token builtin">int</span><span class="token punctuation">(</span>b<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span> end<span class="token operator">=</span><span class="token string">''</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
 
 
 <h3 id="出题思路-1"><a href="#出题思路-1" class="headerlink" title="出题思路"></a>出题思路</h3><p>这题其实是比赛前一天晚上到比赛当天凌晨出的。本来这题是可有可无的，毕竟 misc 题目已经不少了，可是喵喵想着就出了一题太少了，虽然那道题放在校赛可能有点难，但万一被秒了可不好，再出道难一点的吧。</p>
@@ -1199,7 +1208,7 @@ data <span class="token operator">=</span> <span class="token punctuation">[</sp
             + '来源: MiaoTony&#39;s小窝<br />'
             + '文章作者: MiaoTony<br />'
             + '文章链接: <a href="' + url + '">' + url + '</a><br />'
-            + '本文章著作权归作者MiaoTony所有，任何形式的转载都请注明出处。';
+            + '本文章著作权归作者 MiaoTony 所有，任何形式的转载都请注明出处。';
 
         selection.selectAllChildren(newdiv);
         window.setTimeout(function () {bodyElement.removeChild(newdiv);}, 200);
@@ -1565,8 +1574,6 @@ $(function () {
 </script>
 
     
-    
-    <script src="/libs/others/clicklove.js" async="async"></script>
     
     
     <script async src="/libs/others/busuanzi.pure.mini.js"></script>

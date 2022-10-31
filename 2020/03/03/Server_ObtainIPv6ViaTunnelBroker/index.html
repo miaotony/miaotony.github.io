@@ -264,7 +264,7 @@
         <li><div class="divider"></div></li>
         <li>
             <a href="https://github.com/miaotony" class="waves-effect waves-light" target="_blank">
-                <i class="fab fa-github-square fa-fw"></i>Fork Me
+                <i class="fab fa-github-square fa-fw"></i>Follow Me
             </a>
         </li>
         
@@ -321,7 +321,7 @@
 </style>
 
 <a href="https://github.com/miaotony" class="github-corner tooltipped hide-on-med-and-down" target="_blank"
-   data-tooltip="Fork Me" data-position="left" data-delay="50">
+   data-tooltip="Follow Me" data-position="left" data-delay="50">
     <svg viewBox="0 0 250 250" aria-hidden="true">
         <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
         <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2"
@@ -572,13 +572,16 @@
 <hr>
 <h2 id="0x02-阿里云-ECS-开启-IPv6"><a href="#0x02-阿里云-ECS-开启-IPv6" class="headerlink" title="0x02 阿里云 ECS 开启 IPv6"></a>0x02 阿里云 ECS 开启 IPv6</h2><p>阿里云的硬盘镜像默认是把 IPv6 给关掉的，这里就手动打开好了。</p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">vim</span> /etc/sysctl.conf<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
 <p>在文件末尾的位置把ipv6设置中的1改成0，变成类似如下的亚子。</p>
 <pre class="line-numbers language-none"><code class="language-none">net.ipv6.conf.all.disable_ipv6 = 0
 net.ipv6.conf.default.disable_ipv6 = 0
 net.ipv6.conf.lo.disable_ipv6 = 0
 net.ipv6.conf.eth0.disable_ipv6 = 0<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
 <p>而后重新载入配置。</p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">sysctl -p<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
 <p>然后使用<code>ifconfig</code>看一看，就会发现支持 IPv6 了。</p>
 <p>比如下面这个，有了<code>inet6</code>这一项。</p>
 <pre class="line-numbers language-none"><code class="language-none">eth0: flags=4163&lt;UP,BROADCAST,RUNNING,MULTICAST&gt;  mtu 1500
@@ -589,11 +592,13 @@ net.ipv6.conf.eth0.disable_ipv6 = 0<span aria-hidden="true" class="line-numbers-
         RX errors 0  dropped 0  overruns 0  frame 0
         TX packets 1837158  bytes 637871915 (637.8 MB)
         TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
 <hr>
 <h2 id="0x03-给-ECS-配置-IPv6-隧道"><a href="#0x03-给-ECS-配置-IPv6-隧道" class="headerlink" title="0x03 给 ECS 配置 IPv6 隧道"></a>0x03 给 ECS 配置 IPv6 隧道</h2><p>在Example Configuration 里有很多示例。</p>
 <p>比如Ubuntu的。</p>
 <p><img src="/2020/03/03/Server_ObtainIPv6ViaTunnelBroker/interface_configuration.png" alt="interface_configuration"></p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">vim</span> /etc/network/interfaces<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
 <pre class="line-numbers language-none"><code class="language-none">auto he-ipv6
 iface he-ipv6 inet6 v4tunnel
         address 2001:470:xxxx:xxxx::2
@@ -602,6 +607,7 @@ iface he-ipv6 inet6 v4tunnel
         local 172.16.xxx.xxx
         ttl 255
         gateway 2001:470:xxxx:xxxx::1<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
 <p>将上面的配置粘贴到文件的最后。</p>
 <p>注意一下，<strong>内网环境要用内网的IP！</strong>他这里也写清楚了的。</p>
 <blockquote>
@@ -611,6 +617,7 @@ iface he-ipv6 inet6 v4tunnel
 <p>不清楚的话还可以参考<strong>Ubuntu的Wiki</strong>，<a target="_blank" rel="noopener" href="https://wiki.ubuntu.com/IPv6#Get_connected_with_Hurricane_Electric">戳这里</a>。</p>
 <p>而后<strong>让IPv6生效</strong>。</p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">ifup</span> he-ipv6<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
 <p>再看一下 <code>ifconfig</code>，这时应该有一个 <code>he-ipv6</code>的了！类似这样的。</p>
 <pre class="line-numbers language-none"><code class="language-none">he-ipv6: flags=209&lt;UP,POINTOPOINT,RUNNING,NOARP&gt;  mtu 1480
           inet6 2001:470:xxxx:xxxx::2  prefixlen 64  scopeid 0x0&lt;global&gt;
@@ -622,11 +629,14 @@ iface he-ipv6 inet6 v4tunnel
           TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 
+
 <p><em>P.S.:</em></p>
 <p>如果想<strong>让隧道失效</strong>（没有删除的话重启后还是会自动启用）：</p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">ifdown</span> he-ipv6<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
 <p>如果想<strong>删除隧道</strong>：</p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">ip</span> tunnel del he-ipv6<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
 <p>如果已经生效了会提示：<code>ifup: interface he-ipv6 already configured</code>。</p>
 <p>如果设置出错了，或者想修改配置，需要先删除隧道，再重新生效就好。</p>
 <p>现在就来<strong>测试一下</strong>吧！</p>
@@ -641,6 +651,7 @@ PING ipv6.google.com<span class="token punctuation">(</span>tsa03s02-in-x0e.1e10
 --- ipv6.google.com <span class="token function">ping</span> statistics ---
 <span class="token number">5</span> packets transmitted, <span class="token number">5</span> received, <span class="token number">0</span>% packet loss, <span class="token function">time</span> 4003ms
 rtt min/avg/max/mdev <span class="token operator">=</span> <span class="token number">388.107</span>/391.132/393.213/1.914 ms<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
 <p>当然也可以 <code>ping6 ipv6.baidu.com</code>。</p>
 <p>如果不成功可以重启系统试试。</p>
 <hr>
@@ -651,6 +662,7 @@ rtt min/avg/max/mdev <span class="token operator">=</span> <span class="token nu
 netsh interface ipv6 add v6v4tunnel interface=IP6Tunnel localaddress=172.16.xxx.xxx remoteaddress=216.218.xxx.xxx
 netsh interface ipv6 add address interface=IP6Tunnel address=2001:470:xx:xxxx::2
 netsh interface ipv6 add route prefix=::/0 interface=IP6Tunnel nexthop=2001:470:xx:xxxx::1<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
 <p>注意修改对应的IP地址。</p>
 <hr>
 <h2 id="0x04-一些问题的解决"><a href="#0x04-一些问题的解决" class="headerlink" title="0x04 一些问题的解决"></a>0x04 一些问题的解决</h2><p><strong>按照上面一番配置好</strong>之后，有可能还是访问不了 IPv6 的网站。</p>
@@ -661,22 +673,27 @@ netsh interface ipv6 add route prefix=::/0 interface=IP6Tunnel nexthop=2001:470:
 </ul>
 <p>例如：</p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">ufw allow <span class="token number">41</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
 <p>或者</p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">iptables -t filter -I INPUT -p <span class="token number">41</span> -j ACCEPT
 iptables -t filter -I OUTPUT -p <span class="token number">41</span> -j ACCEPT<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
 <p>同时要记得在（阿里云的）<strong>安全组里放行</strong>。</p>
 <ul>
 <li>配置好 IPv6 的 DNS</li>
 </ul>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">vim</span> /etc/resolv.conf<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
 <p>在最后添加谷歌的DNS服务器 </p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">nameserver <span class="token number">2001</span>:4860:4860::8888
 nameserver <span class="token number">2001</span>:4860:4860::8844<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
 <p>或者国内的公共DNS：<code>240c::6666</code> 或 <code>240c::6644</code></p>
 <ul>
 <li>添加路由</li>
 </ul>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">route -A inet6 <span class="token function">add</span> ::/0 dev he-ipv6<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
 <p>再 ping 一下应该可以了吧（</p>
 <p>不行再重启试试（重启解决绝大部分问题呢</p>
 <hr>
@@ -692,13 +709,17 @@ server {
   listen [::]:443 ssl http2; // 监听 IPv6 的 443 端口
   # ...
 }<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
 <p>然而，发现一个情况，只有当服务器访问IPv6的网站的时候，或者说有 IPv6 流量的时候，外网才能通过这个公网的IPv6地址访问到服务器emmm。（懵 </p>
 <p>于是加一个 cron 计划，定时ping一下好了。</p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">crontab</span> -e<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
 <p>添加一个计划。</p>
 <pre class="line-numbers language-none"><code class="language-none">*/1 * * * * ping6 -c 1 he.net<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
 <p>重启 cron 使其生效。</p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">systemctl restart <span class="token function">cron</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
 <p>每分钟执行一次 ping 操作，这样访问就没问题了。</p>
 <p><em>（不过想不大明白为啥这个通道会自动断开。有人说与 ip6tables 有关，不大清楚。。 emmm</em></p>
 <hr>
@@ -727,13 +748,16 @@ server {
 <p>To auto-detect your IPv4 address:</p>
 <pre class="line-numbers language-none"><code class="language-none">https://&lt;USERNAME&gt;:&lt;PASSWORD&gt;@ipv4.tunnelbroker.net/nic/update?hostname=&lt;TUNNEL_ID&gt;
 https://ipv4.tunnelbroker.net/nic/update?username=&lt;USERNAME&gt;&amp;password=&lt;PASSWORD&gt;&amp;hostname=&lt;TUNNEL_ID&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
 <p><strong>手动指定更新的IPv4地址：</strong></p>
 <p>To manually specific your IPv4 address:</p>
 <pre class="line-numbers language-none"><code class="language-none">https://&lt;USERNAME&gt;:&lt;PASSWORD&gt;@ipv4.tunnelbroker.net/nic/update?hostname=&lt;TUNNEL_ID&gt;&amp;myip=&lt;IP ADDRESS&gt;
 https://ipv4.tunnelbroker.net/nic/update?username=&lt;USERNAME&gt;&amp;password=&lt;PASSWORD&gt;&amp;hostname=&lt;TUNNEL_ID&gt;&amp;myip=&lt;IP ADDRESS&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
 <p><strong>当然不想看的话就看完整版：</strong></p>
 <p>**TL;DR:**（<code>Too long; Don't read</code>/ <code>Too long; Didn't read</code>）</p>
 <pre class="line-numbers language-none"><code class="language-none">http[s]://[TB_USER:TB_PASS@]tunnelbroker.net/nic/update?[username=TB_USER&amp;password=TB_PASS&amp;]hostname=&lt;TUNNEL_ID|tunnelTUNNEL_ID.tunnelbroker.net|TB_USER-TUNNEL_LABEL.tserv#.LOC#.ipv6.he.net&gt;[&amp;myip=IPV4]<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
 <p>后面可以试一试这个功能 hhhh</p>
 <p>当然了，HE还自带了 DNS 解析，可以尝试一下呢。</p>
 <p>下面还有一些关于 IPv6 的拓展的链接。</p>
@@ -1131,12 +1155,12 @@ https://ipv4.tunnelbroker.net/nic/update?username=&lt;USERNAME&gt;&amp;password=
                         <span class="chip bg-color">Tech</span>
                     </a>
                     
-                    <a href="/tags/%E5%B0%8F%E6%83%B3%E6%B3%95/">
-                        <span class="chip bg-color">小想法</span>
-                    </a>
-                    
                     <a href="/tags/Configuration/">
                         <span class="chip bg-color">Configuration</span>
+                    </a>
+                    
+                    <a href="/tags/%E5%B0%8F%E6%83%B3%E6%B3%95/">
+                        <span class="chip bg-color">小想法</span>
                     </a>
                     
                     <a href="/tags/Web/">
@@ -1147,12 +1171,12 @@ https://ipv4.tunnelbroker.net/nic/update?username=&lt;USERNAME&gt;&amp;password=
                         <span class="chip bg-color">Server</span>
                     </a>
                     
-                    <a href="/tags/IPv6/">
-                        <span class="chip bg-color">IPv6</span>
-                    </a>
-                    
                     <a href="/tags/Modem/">
                         <span class="chip bg-color">Modem</span>
+                    </a>
+                    
+                    <a href="/tags/IPv6/">
+                        <span class="chip bg-color">IPv6</span>
                     </a>
                     
                 </div>
@@ -1196,7 +1220,7 @@ https://ipv4.tunnelbroker.net/nic/update?username=&lt;USERNAME&gt;&amp;password=
             + '来源: MiaoTony&#39;s小窝<br />'
             + '文章作者: MiaoTony<br />'
             + '文章链接: <a href="' + url + '">' + url + '</a><br />'
-            + '本文章著作权归作者MiaoTony所有，任何形式的转载都请注明出处。';
+            + '本文章著作权归作者 MiaoTony 所有，任何形式的转载都请注明出处。';
 
         selection.selectAllChildren(newdiv);
         window.setTimeout(function () {bodyElement.removeChild(newdiv);}, 200);
@@ -1562,8 +1586,6 @@ $(function () {
 </script>
 
     
-    
-    <script src="/libs/others/clicklove.js" async="async"></script>
     
     
     <script async src="/libs/others/busuanzi.pure.mini.js"></script>

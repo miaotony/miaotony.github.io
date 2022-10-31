@@ -264,7 +264,7 @@
         <li><div class="divider"></div></li>
         <li>
             <a href="https://github.com/miaotony" class="waves-effect waves-light" target="_blank">
-                <i class="fab fa-github-square fa-fw"></i>Fork Me
+                <i class="fab fa-github-square fa-fw"></i>Follow Me
             </a>
         </li>
         
@@ -321,7 +321,7 @@
 </style>
 
 <a href="https://github.com/miaotony" class="github-corner tooltipped hide-on-med-and-down" target="_blank"
-   data-tooltip="Fork Me" data-position="left" data-delay="50">
+   data-tooltip="Follow Me" data-position="left" data-delay="50">
     <svg viewBox="0 0 250 250" aria-hidden="true">
         <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
         <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2"
@@ -543,6 +543,7 @@
 <p><code>photo.jpg</code> 经过提取得到一个zip文件。</p>
 <p>里面有一个 <code>ctf.txt</code> 文件，里面是</p>
 <pre class="line-numbers language-none"><code class="language-none">./.--./../-.././--/../-.-./.../../-/..-/.-/-/../---/-./---/..-./..-/-./../...-/./.-./.../../-/-.--/.--/.-/.-.<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
 <p>一看是摩斯密码，解密得到</p>
 <p><code>EPIDEMICSITUATIONOFUNIVERSITYWAR</code></p>
 <p>（嗯 EPIDEMIC  SITUATION  OF  UNIVERSITY  WAR 嘛。高校战疫啦。</p>
@@ -559,6 +560,7 @@
 <p><img src="/2020/03/15/CTF_2020XCTF_gxzy/QRcode2.jpg" alt="二维码_修复后"></p>
 <p>扫码得到（可能补得不是很好，但发现手机 QQ 的扫码真的强</p>
 <pre class="line-numbers language-none"><code class="language-none">flag{this_is_also_not_flag} 解压密码不在这里0.0！<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
 <p>假的flag！发现并不能解压。</p>
 <p>同时在十六进制编辑器里看到最后有一段字符串：<code>TOGETYOURFLAG</code>。<em>（有点懵，好像没啥用的亚子</em></p>
 <p>再看回压缩包，根据文件名 <code>纯数字</code>，于是暴力跑了一波，然而并不行。</p>
@@ -752,6 +754,7 @@ app <span class="token operator">=</span> Flask<span class="token punctuation">(
 
 <span class="token keyword">if</span> __name__ <span class="token operator">==</span> <span class="token string">'__main__'</span><span class="token punctuation">:</span>
     app<span class="token punctuation">.</span>run<span class="token punctuation">(</span>host<span class="token operator">=</span><span class="token string">'0.0.0.0'</span><span class="token punctuation">,</span> port<span class="token operator">=</span><span class="token number">5000</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
 <p><em>（可能有些地方被我不小心改了</em></p>
 <p>看到 pickle 想到了反序列化，之前只听说过 PHP 有反序列化漏洞，这里才知道原来 python 也有。</p>
 <p>这次正好就来了解一下 pickle 反序列化吧。</p>
@@ -780,6 +783,7 @@ app <span class="token operator">=</span> Flask<span class="token punctuation">(
    <span class="token number">77</span>: b    BUILD                        Finish building an object, via __setstate__ or dict update.
    <span class="token number">78</span>: <span class="token builtin class-name">.</span>    STOP                         Stop the unpickling machine.
 highest protocol among opcodes <span class="token operator">=</span> <span class="token number">2</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
 <p>看了半天反序列化漏洞，大部分都是<strong>利用<code>__reduce__</code>方法来实现任意代码的执行</strong>。</p>
 <p>如果没有输出的话，可以反弹 shell 到自己的服务器上，利用网站访问日志来得到需要的信息。</p>
 <p>（这时我看了看服务器的 nginx log，发现日常被扫，常见的 admin、phpmyadmin 目录，甚至还有想跨站执行 <code>rm -rf /</code> 的…… </p>
@@ -801,8 +805,8 @@ highest protocol among opcodes <span class="token operator">=</span> <span class
 
 <span class="token comment"># base64</span>
 Y19fbWFpbl9fCnNlY3JldApwMAowZzAKKH0oUyduYW1lJwpTJ2FzZCcKZHRiZzAKKH0oUydjYXRlZ29yeScKUycxMjMnCmR0YoAElT0AAAAAAAAAjAhfX21haW5fX5SMBkFuaW1hbJSTlCmBlH2UKIwEbmFtZZSMA2FzZJSMCGNhdGVnb3J5lIwDMTIzlHViLg<span class="token operator">==</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-<p><strong>下面这个链接里有关于 pickle 及其反序列化漏洞的更完整的介绍。</strong></p>
 </blockquote>
+<p><strong>下面这个链接里有关于 pickle 及其反序列化漏洞的更完整的介绍。</strong></p>
 <p><a target="_blank" rel="noopener" href="https://hackmd.io/@2KUYNtTcQ7WRyTsBT7oePg/BycZwjKNX#"><span class="github-emoji"><span>🐍</span><img src="https://github.githubassets.com/images/icons/emoji/unicode/1f40d.png?v8" aria-hidden="true" onerror="this.parent.classList.add('github-emoji-fallback')"></span> Security Issues in Python Pickle</a></p>
 <p><em>（Scientific Network needed</em></p>
 <blockquote>
@@ -821,9 +825,9 @@ Y19fbWFpbl9fCnNlY3JldApwMAowZzAKKH0oUyduYW1lJwpTJ2FzZCcKZHRiZzAKKH0oUydjYXRlZ29y
 </li>
 <li><p><a target="_blank" rel="noopener" href="http://blog.nsfocus.net/%e7%bb%95%e8%bf%87-restrictedunpickler/">绕过 RestrictedUnpickler</a></p>
 </li>
-<li><p> <a target="_blank" rel="noopener" href="http://www.bendawang.site/2018/04/18/Python%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E7%9A%84%E8%8A%B1%E5%BC%8F%E5%88%A9%E7%94%A8/">Python反序列化漏洞的花式利用</a></p>
+<li><p><a target="_blank" rel="noopener" href="http://www.bendawang.site/2018/04/18/Python%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E7%9A%84%E8%8A%B1%E5%BC%8F%E5%88%A9%E7%94%A8/">Python反序列化漏洞的花式利用</a></p>
 </li>
-<li><p> <a target="_blank" rel="noopener" href="http://www.bendawang.site/2018/03/01/%E5%85%B3%E4%BA%8EPython-sec%E7%9A%84%E4%B8%80%E4%BA%9B%E6%80%BB%E7%BB%93/">关于Python sec的一些简单的总结</a></p>
+<li><p><a target="_blank" rel="noopener" href="http://www.bendawang.site/2018/03/01/%E5%85%B3%E4%BA%8EPython-sec%E7%9A%84%E4%B8%80%E4%BA%9B%E6%80%BB%E7%BB%93/">关于Python sec的一些简单的总结</a></p>
 </li>
 </ul>
 </blockquote>
@@ -1257,7 +1261,7 @@ Y19fbWFpbl9fCnNlY3JldApwMAowZzAKKH0oUyduYW1lJwpTJ2FzZCcKZHRiZzAKKH0oUydjYXRlZ29y
             + '来源: MiaoTony&#39;s小窝<br />'
             + '文章作者: MiaoTony<br />'
             + '文章链接: <a href="' + url + '">' + url + '</a><br />'
-            + '本文章著作权归作者MiaoTony所有，任何形式的转载都请注明出处。';
+            + '本文章著作权归作者 MiaoTony 所有，任何形式的转载都请注明出处。';
 
         selection.selectAllChildren(newdiv);
         window.setTimeout(function () {bodyElement.removeChild(newdiv);}, 200);
@@ -1623,8 +1627,6 @@ $(function () {
 </script>
 
     
-    
-    <script src="/libs/others/clicklove.js" async="async"></script>
     
     
     <script async src="/libs/others/busuanzi.pure.mini.js"></script>
