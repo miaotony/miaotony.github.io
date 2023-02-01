@@ -511,14 +511,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    4.4k
+                    4.9k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    18 分
+                    20 分
                 </div>
                 
 
@@ -536,7 +536,17 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="0x00-前言"><a href="#0x00-前言" class="headerlink" title="0x00 前言"></a>0x00 前言</h2><p>其实想玩 DN42 也有一段时间了，正好最近群友也在聊 DN42，动不动就「<strong>来 Peer！</strong>」。</p>
+                <h2 id="更新记录-x2F-Changelog"><a href="#更新记录-x2F-Changelog" class="headerlink" title="更新记录 / Changelog"></a>更新记录 / Changelog</h2><ul>
+<li>20230201：<ul>
+<li>wireguard 配置中 <code>AllowedIPs</code> 由 <code>0.0.0.0/0, ::/0</code> 更改为 DN42 所在网段 <code>10.0.0.0/8, 172.20.0.0/14, 172.31.0.0/16, fd00::/8, fe80::/64</code>，限制一下 IP 段防止数据包被转发到公网</li>
+<li>扩展中 extended next hop 新增 wg 配置模板 <em><del>（太多人问了，不想解释了</del></em></li>
+<li>完善了一下和喵喵 peer 的信息</li>
+</ul>
+</li>
+<li>20220423：系统配置中 <code>rp_filter</code> 由 2 改为 0.</li>
+<li>20210325：首次发布</li>
+</ul>
+<h2 id="0x00-前言"><a href="#0x00-前言" class="headerlink" title="0x00 前言"></a>0x00 前言</h2><p>其实想玩 DN42 也有一段时间了，正好最近群友也在聊 DN42，动不动就「<strong>来 Peer！</strong>」。</p>
 <p>那咱就来整一个好了！</p>
 <p>请注意，本文<strong>不是</strong>一篇完整的介绍性文章，只是记录一下配置过程中遇到的坑啊什么的。</p>
 <h2 id="0x01-What-is-DN42"><a href="#0x01-What-is-DN42" class="headerlink" title="0x01 What is DN42?"></a>0x01 What is DN42?</h2><p><img src="/2021/03/25/Server_DN42/dn42.png"></p>
@@ -647,7 +657,7 @@ Table = off
 [Peer]
 PublicKey = &lt;对方的公钥&gt;
 Endpoint = &lt;对方的公网地址&gt;:&lt;对方的端口，一般是自己ASN后五位&gt;
-AllowedIPs = 0.0.0.0/0, ::/0<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+AllowedIPs = 10.0.0.0/8, 172.20.0.0/14, 172.31.0.0/16, fd00::/8, fe80::/64<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p>如果 <code>[Interface]</code> 里写了 <code>Address</code> 的话需要在 <code>PostUp</code> 里先删掉 addr 再加上 <code>peer</code>，所以干脆就不配 <code>Address</code> 了。</p>
 <p>注意这里 <code>Table = off</code> 要加上，不然所有的流量，包括公网上的流量就都转发给你的 peer 了，这样可能你就连自己的机器都连不上了。</p>
@@ -677,6 +687,16 @@ systemctl <span class="token builtin class-name">enable</span> wg-quick@<span cl
 <span class="token function">ping</span> fe80::xxxx%wg_424242xxxx<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 
 <p>当然了，也可以手写 systemd 来配 wg，参考 <a target="_blank" rel="noopener" href="https://dn42.dev/howto/wireguard">官方 Wiki</a> 就好了。</p>
+<blockquote>
+<p><strong>20230201 Update:</strong></p>
+<p>将 <code>AllowedIPs</code> 由原来的 <code>0.0.0.0/0, ::/0</code> 改成 DN42 所在的网段  <code>10.0.0.0/8, 172.20.0.0/14, 172.31.0.0/16, fd00::/8, fe80::/64</code> 了，这样可以直接用 wireguard 自带的 IP 限制功能，防止数据包被转发到公网。</p>
+<p>如果你要把原来的配置文件都改了，可以执行下面的命令替换，记得改成你自己的路径</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sed</span> -i <span class="token string">'s|0.0.0.0/0, ::/0|10.0.0.0/8, 172.20.0.0/14, 172.31.0.0/16, fd00::/8, fe80::/64|g'</span> /etc/wireguard/wg_*.conf
+systemctl restart wg-quick@wg_*<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<p><del>然后咱发现有些 peer 的 wg 域名可能已经失效，于是起不来了（</del> <strong>跑 路 了</strong></p>
+<p><em>（摊手.jpg</em></p>
+</blockquote>
 <h2 id="0x06-建立-BGP-会话"><a href="#0x06-建立-BGP-会话" class="headerlink" title="0x06 建立 BGP 会话"></a>0x06 建立 BGP 会话</h2><p>BGP(Border Gateway Protocol，边界网关协议) 是一种路由协议，一般都使用这个来进行 peer。</p>
 <p>路由的软件一般使用的是 <strong>BIRD Internet Routing Daemon (v2)</strong> 。</p>
 <p>此处参考</p>
@@ -793,7 +813,19 @@ birdc c  <span class="token comment"># 即 birdc configure</span><span aria-hidd
 <p><img src="/2021/03/25/Server_DN42/image-20210326003544763.png"></p>
 <p>在 <code>dnpeers</code> 里的 <code>ipv4</code> 中加入 <code>extended next hop on;</code> 即可使用这一特性。</p>
 <p><img src="/2021/03/25/Server_DN42/image-20210326004515058.png"></p>
-<p>于是和别人 peer 的时候，WireGuard 只需要 peer 一个 IPv6 link-local address 就完事了，连 DN42 IPv4 都不需要了。</p>
+<p>于是和别人 peer 的时候，WireGuard <strong>只需要 peer 一个 IPv6 link-local address 就完事了</strong>，连 DN42 IPv4 都不需要了。</p>
+<p>也就是改成下面这样，这个 <code>link-local</code> 是你自己的，比如咱这里一般是 <code>fe80::2688</code></p>
+<pre class="line-numbers language-conf" data-language="conf"><code class="language-conf">[Interface]
+PrivateKey = &lt;自己的私钥&gt;
+ListenPort = &lt;自己监听的端口，一般是对方ASN后五位&gt;
+PostUp = ip addr add &lt;link-local&gt;/64 dev %i
+Table = off
+
+[Peer]
+PublicKey = &lt;对方的公钥&gt;
+Endpoint = &lt;对方的公网地址&gt;:&lt;对方的端口，一般是自己ASN后五位&gt;
+AllowedIPs = 10.0.0.0/8, 172.20.0.0/14, 172.31.0.0/16, fd00::/8, fe80::/64<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
 <p>当然还需要加一个 dummy 接口来写本机的地址，类似于</p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">ip</span> <span class="token function">link</span> <span class="token function">add</span> dummy1 <span class="token builtin class-name">type</span> dummy
 <span class="token function">ip</span> addr <span class="token function">add</span> <span class="token operator">&lt;</span>你的DN42 IPv<span class="token operator"><span class="token file-descriptor important">4</span>&gt;</span>/32 dev dummy1
@@ -866,32 +898,47 @@ iface dummy0 inet static
 <p><strong>Welcome to peer with me!</strong></p>
 <p><strong>Telegram: (Recommended)</strong> Just PM <a target="_blank" rel="noopener" href="https://t.me/meow_portal_bot">@meow_portal_bot</a> and tell me you are from DN42.</p>
 <p><strong>Email:</strong> <a href="mailto:dn42@miaotony.xyz">dn42@miaotony.xyz</a></p>
+<p>可以直接用中文来 peer，记得说一声来自 DN42<em>（当然如果你想用英语都行</em></p>
 <hr>
 <p><strong>You should send me some info like follows.</strong></p>
 <ul>
-<li>Your ASN</li>
-<li>Public IP <ul>
+<li><p>Your ASN</p>
+</li>
+<li><p>Public IP </p>
+<ul>
 <li>IPv4 is preferred, but you can send v4/v6 both</li>
 </ul>
 </li>
-<li>DN42 IPv4 and IPv6 <ul>
-<li>Link-local address is preferred</li>
+<li><p>DN42 IPv4 and IPv6 </p>
+<ul>
+<li>Link-local address is preferred, usually <code>fe80::&lt;Your last 4-digit ASN&gt;</code></li>
 </ul>
 </li>
-<li>Your WireGuard Port <ul>
+<li><p>Your WireGuard Port </p>
+<ul>
 <li>22688 by default</li>
 <li>I will use <code>2&lt;Your last 4-digit ASN&gt;</code> for you</li>
 </ul>
 </li>
-<li>Is Multiprotocol BGP supported? <ul>
+<li><p>Your WireGuard public key</p>
+</li>
+<li><p>Features</p>
+<ul>
+<li><p>Is Multiprotocol BGP supported? </p>
+<ul>
 <li>If yes, I will just use the link-local IPv6 address to set up v4+v6 BGP session</li>
 <li>Yes by default</li>
 </ul>
 </li>
-<li>Something else you want to share with me <ul>
-<li>Extended next hop enabled? </li>
-<li>etc.</li>
+<li><p>Is extended next hop enabled? </p>
+<ul>
+<li>If yes, I will omit DN42 IPv4 in WireGuard</li>
+<li>Yes by default</li>
 </ul>
+</li>
+</ul>
+</li>
+<li><p>Something else you want to share with me</p>
 </li>
 </ul>
 <p>或者看下面也行。</p>
@@ -1474,7 +1521,7 @@ iface dummy0 inet static
             |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
             <br>
                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">408.9k</span>&nbsp;字
+                class="white-color">409.4k</span>&nbsp;字
                                                                                     <span id="busuanzi_container_site_pv">
 			|&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
                     class="white-color"></span>&nbsp;次
