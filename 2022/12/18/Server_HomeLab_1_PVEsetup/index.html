@@ -1,0 +1,1766 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="HomeLab | 1 Proxmox Virtual Environment(PVE) 安装及配置, MiaoTony,blog">
+    <meta name="description" content="哪个男孩子不想整个自己的HomeLab呢？这个系列就来说一说喵喵搞机的故事，这篇博客主要记录一下PVE安装和配置的过程喵~">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-159946730-1"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+        dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+    gtag('config', 'UA-159946730-1');
+</script>
+
+
+    <title>HomeLab | 1 Proxmox Virtual Environment(PVE) 安装及配置 | MiaoTony&#39;s小窝</title>
+    <link rel="icon" type="image/x-icon, image/vnd.microsoft.icon" href="/favicon.ico">
+
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
+	
+    <script src="/libs/jquery/jquery.min.js"></script>
+    <script>
+        //来个特效玩玩喵 20200123
+        var titleTime;
+        var OriginTitile = document.title;
+        document.addEventListener('visibilitychange', function() {
+            if (document.hidden) {
+                document.title = '|ω·) 喵~快回来呀！';
+                clearTimeout(titleTime);
+            } else {
+                document.title = '(/≧▽≦)/ Meow！';
+                titleTime = setTimeout(function() {
+        	    document.title = OriginTitile;
+        }, 800);
+    }
+        });
+    </script>
+<meta name="generator" content="Hexo 6.2.0">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+<link rel="alternate" href="/atom.xml" title="MiaoTony's小窝" type="application/atom+xml">
+</head>
+
+
+
+
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">MiaoTony&#39;s小窝</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>首页</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>标签</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>分类</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/archives" class="waves-effect waves-light">
+      
+      <i class="fas fa-archive" style="zoom: 0.6;"></i>
+      
+      <span>归档</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>关于</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/contact" class="waves-effect waves-light">
+      
+      <i class="fas fa-comments" style="zoom: 0.6;"></i>
+      
+      <span>留言</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/friends" class="waves-effect waves-light">
+      
+      <i class="fas fa-address-book" style="zoom: 0.6;"></i>
+      
+      <span>友链</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="搜索" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">MiaoTony&#39;s小窝</div>
+        <div class="logo-desc">
+            
+            喵~欢迎各位大佬的来访呀！
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			首页
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			标签
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			分类
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/archives" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-archive"></i>
+			
+			归档
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			关于
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/contact" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-comments"></i>
+			
+			留言
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/friends" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-address-book"></i>
+			
+			友链
+		</a>
+          
+        </li>
+        
+        
+        <li><div class="divider"></div></li>
+        <li>
+            <a href="https://github.com/miaotony" class="waves-effect waves-light" target="_blank">
+                <i class="fab fa-github-square fa-fw"></i>Follow Me
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+
+        </div>
+
+        
+            <style>
+    .nav-transparent .github-corner {
+        display: none !important;
+    }
+
+    .github-corner {
+        position: absolute;
+        z-index: 10;
+        top: 0;
+        right: 0;
+        border: 0;
+        transform: scale(1.1);
+    }
+
+    .github-corner svg {
+        color: #0f9d58;
+        fill: #fff;
+        height: 64px;
+        width: 64px;
+    }
+
+    .github-corner:hover .octo-arm {
+        animation: a 0.56s ease-in-out;
+    }
+
+    .github-corner .octo-arm {
+        animation: none;
+    }
+
+    @keyframes a {
+        0%,
+        to {
+            transform: rotate(0);
+        }
+        20%,
+        60% {
+            transform: rotate(-25deg);
+        }
+        40%,
+        80% {
+            transform: rotate(10deg);
+        }
+    }
+</style>
+
+<a href="https://github.com/miaotony" class="github-corner tooltipped hide-on-med-and-down" target="_blank"
+   data-tooltip="Follow Me" data-position="left" data-delay="50">
+    <svg viewBox="0 0 250 250" aria-hidden="true">
+        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+        <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2"
+              fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
+        <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z"
+              fill="currentColor" class="octo-body"></path>
+    </svg>
+</a>
+        
+    </nav>
+
+</header>
+
+    
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/21.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <h1 class="description center-align post-title">HomeLab | 1 Proxmox Virtual Environment(PVE) 安装及配置</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        min-width: 240px;
+        padding-left: 15px;
+        padding-bottom: 30px;
+    }
+
+    .toc-widget .toc-title {
+        padding: 30px 0 15px 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content {
+	    max-height: 450px;
+        overflow: auto;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #42b983;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+
+        position: absolute;
+        right: 23.5vw;
+        display: block;
+    }
+
+    #toc-content .is-active-link {
+        color: #42b983;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 15px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/Tech/">
+                                <span class="chip bg-color">Tech</span>
+                            </a>
+                        
+                            <a href="/tags/Configuration/">
+                                <span class="chip bg-color">Configuration</span>
+                            </a>
+                        
+                            <a href="/tags/Server/">
+                                <span class="chip bg-color">Server</span>
+                            </a>
+                        
+                            <a href="/tags/HomeLab/">
+                                <span class="chip bg-color">HomeLab</span>
+                            </a>
+                        
+                            <a href="/tags/PVE/">
+                                <span class="chip bg-color">PVE</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/Tech/" class="post-category">
+                                Tech
+                            </a>
+                        
+                            <a href="/categories/Tech/Server/" class="post-category">
+                                Server
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2022-12-18
+                </div>
+                
+
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
+                    4.2k
+                </div>
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
+                    18 分
+                </div>
+                
+
+                
+            </div>
+        </div>
+        <hr class="clearfix">
+
+        
+        <!-- 是否加载使用自带的 prismjs. -->
+        <link rel="stylesheet" href="/libs/prism/prism.css">
+        
+
+        
+
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <h2 id="0x00-引言"><a href="#0x00-引言" class="headerlink" title="0x00 引言"></a>0x00 引言</h2><p><strong>哪个男孩子不想整个自己的 HomeLab 呢？</strong></p>
+<p>说来一直想玩好久了，蹭着暑假回家有空，直接花了点钱组了台鸡鸡，<del>折腾着折腾着时间一下过去了</del>。</p>
+<p>干脆开个新的 HomeLab 专题，这个系列具体说说喵喵折腾机器（搞机）的故事。</p>
+<p>这一篇博客算是开篇，主要就记录一下咱折腾 <strong>PVE 安装和配置的过程</strong> 喵~</p>
+<blockquote>
+<p><strong>请注意！！！</strong></p>
+<p>本系列的文章是断断续续写的，<strong>最早写于2022年9月，可能有些信息已经过时！</strong></p>
+<p><em><del>（咕咕咕，喵喵是大鸽子</del></em></p>
+</blockquote>
+<h2 id="0x01-PVE-简介-amp-硬件配置"><a href="#0x01-PVE-简介-amp-硬件配置" class="headerlink" title="0x01 PVE 简介 &amp; 硬件配置"></a>0x01 PVE 简介 &amp; 硬件配置</h2><p><strong>PVE</strong> 的全称是 Proxmox Virtual Environment，是一个基于 QEMU/KVM 的 Linux 下的虚拟机。</p>
+<p>主要的好处就是可以拿来跑虚拟化开一堆的虚拟机（<del>生小鸡</del>），还能支持硬件直通，几个节点放一起组集群等等。</p>
+<p>Proxmox 支持的虚拟化：</p>
+<ul>
+<li>硬件抽象层全虚拟化，基于内核的 KVM（Kernel-based Virtual Machine）</li>
+<li>基于容器的虚拟化技术 LXC（Linux Containers）</li>
+</ul>
+<p>喵喵的预算比较有限，最初是想当 NAS 用想要挺多存储，于是大概的配置如下：</p>
+<ul>
+<li>主板: 华硕 H610M-E</li>
+<li>CPU: Intel i5-12400</li>
+<li>GPU: 核显，暂无独显</li>
+<li>RAM: 8G 2666MHz * 2 </li>
+<li>SSD: SN570 500GB</li>
+<li>HDD: 西数紫盘/监控盘 4TB * 4 （大存储捏</li>
+<li>电源: 技嘉 P450B</li>
+<li>机箱: 挑战者H6（硬盘位贼多，不过买来发现贼大贼厚重</li>
+</ul>
+<p>除了内存条是二手的之外，其他是全新采购的，没记错的话大概加起来四五k（硬盘都2k了）？（懒得查订单了</p>
+<p><em>（后来一想感觉为了节约预算更好的方案应该是做垃圾佬，去海鲜市场淘点垃圾？或者整点服务器的 板U 貌似也不错。但是质量不敢保证就是了</em></p>
+<p><em><del>（算了，买都买了，大不了再加</del></em></p>
+<h2 id="0x02-下载并刷写-PVE-镜像"><a href="#0x02-下载并刷写-PVE-镜像" class="headerlink" title="0x02 下载并刷写 PVE 镜像"></a>0x02 下载并刷写 PVE 镜像</h2><p>直接去 Proxmox 官网下载 <a target="_blank" rel="noopener" href="https://www.proxmox.com/en/downloads/category/proxmox-virtual-environment">Proxmox Virtual Environment</a> ISO 镜像</p>
+<p><a target="_blank" rel="noopener" href="https://www.proxmox.com/en/downloads/category/iso-images-pve">https://www.proxmox.com/en/downloads/category/iso-images-pve</a></p>
+<p>目前（2022年9月）最新的版本是 7.2-1，这是基于 Debian GNU/Linux 11 (bullseye) 进行构建的。</p>
+<blockquote>
+<p>Update: 2023年4月，最新版本是 7.4-1 了。</p>
+</blockquote>
+<p>准备一个 U 盘，喵喵这里用了 <a target="_blank" rel="noopener" href="https://github.com/pbatard/rufus">Rufus</a> 这个开源工具来刷新镜像</p>
+<blockquote>
+<p>Rufus是一个帮助格式化和创建可启动USB闪存驱动器的工具，如USB钥匙/软盘、记忆棒等。</p>
+<p>在如下场景中会非常有用：			</p>
+<ul>
+<li>你需要把一些可引导的ISO格式的镜像（Windows，Linux，UEFI等）创建成USB安装盘的时候</li>
+<li>你需要使用一个还没有安装操作系统的设备的时候</li>
+<li>你需要从DOS系统刷写BIOS或者其他固件的时候</li>
+<li>你需要运行一个底层的工具的时候</li>
+</ul>
+<p>Rufus 麻雀虽小，五脏俱全，体积虽小，功能全面，提供了一切你所需要的功能。</p>
+<p><a target="_blank" rel="noopener" href="https://rufus.ie/zh/">https://rufus.ie/zh/</a></p>
+</blockquote>
+<p>选择你的 U 盘，选择下载好的镜像文件，然后发现会有下面这样的提示，说强制使用 DD 镜像写入模式。</p>
+<p><img src="/2022/12/18/Server_HomeLab_1_PVEsetup/image-20220829183934938.png"></p>
+<p>然后点开始，等他刷完就完事了。</p>
+<p>当然你也可以直接 dd 命令来操作（</p>
+<blockquote>
+<p>其实之前喵喵用的 Rufus 老版本，先试了试用 iso 模式刷写，但是发现后续的步骤启动不起来，进到 grub rescue mode 了。</p>
+<p>之后升级了新版本，用 dd 模式就成功进安装界面了。</p>
+</blockquote>
+<h2 id="0x03-安装-PVE-系统"><a href="#0x03-安装-PVE-系统" class="headerlink" title="0x03 安装 PVE 系统"></a>0x03 安装 PVE 系统</h2><p>插上 U 盘，然后上电，开机。</p>
+<p>根据主板的不同，不停按键盘上的类似于 F2 或者 DEL 这样的按键，进入 BIOS，修改 U 盘为优先启动。</p>
+<p>当然还要打开 CPU 的虚拟化，比如 Intel® Virtualization Technology for Directed I/O (VT-d)</p>
+<p>如果你的盘之前没装过系统，那就直接进入到安装 PVE 的界面了。</p>
+<p>但是喵喵之前的盘装过 Windows 10，于是调用 U 盘启动的时候锅了，提示违反了安全启动（Secure Boot Violation）。 </p>
+<p><img src="/2022/12/18/Server_HomeLab_1_PVEsetup/image-20220829201719888.png"></p>
+<p>这应该是主板的 feature 吧，需要在 BIOS 的设置里把安全启动给关了。</p>
+<p>咱用的是 ASUS 的主板，也不确定下面的操作对不对，反正能用就是了。</p>
+<p>在 启动 栏目里，把 操作系统类型 改成 其他系统，Secure Boot Mode 改成 Standard，然后保存配置并退出。</p>
+<p><em>（图中是修改前的配置）</em></p>
+<p><img src="/2022/12/18/Server_HomeLab_1_PVEsetup/image-20220829205520434.png" alt="安全启动"></p>
+<p>这样重启之后再从 U 盘引导，就能成功进入安装 PVE 的界面了。</p>
+<p><img src="/2022/12/18/Server_HomeLab_1_PVEsetup/image-20220829205729883.png" alt="PVE安装界面"></p>
+<p>接下来的就一路顺着安装就完事了。</p>
+<p>选择安装的硬盘，这里的 options 里可以修改硬盘分区的大小 <code>hdsize</code>，比如总共分 100GB 用来装 PVE 这样，那这个 <code>hdsize</code> 就填 100.</p>
+<p><img src="/2022/12/18/Server_HomeLab_1_PVEsetup/image-20220829205908008.png"></p>
+<p>详细的说明可以看 <a target="_blank" rel="noopener" href="https://pve.proxmox.com/wiki/Installation">官方文档的安装这部分</a></p>
+<p><img src="/2022/12/18/Server_HomeLab_1_PVEsetup/image-20220829210657288.png"></p>
+<p>之后配好密码，这个密码就是之后用来登录 web/ssh/ftp 的密码了，用户名默认就是 root。邮箱的话填个自己的就行。</p>
+<p>接下来是 IP、网卡这些信息，网口如果是单网口就没啥问题，如果是还要用来跑 openwrt 系统之类的话就配成管理网口，不要设成 WAN 所在的网口。</p>
+<p>如果你是连接在路由器下，那就填目前获得的那个网口 IP 和网关地址，主机名 hostname 就填个类似于 <code>pve1.miaotony.xyz</code> 这样的域名，这样填的话之后会以 <code>pve1</code> 作为 hostname。</p>
+<p>然后确认好信息，耐心等系统安装完，就会出现个黑乎乎的控制台，里面就提示你管理这台 PVE 的 IP 和 Port 了。</p>
+<p>默认情况下应该有一个类似于 <a target="_blank" rel="noopener" href="https://192.168.1.20:8006/">https://192.168.1.20:8006</a> 的链接，IP 就是之前给机器配的 IP。</p>
+<p><img src="/2022/12/18/Server_HomeLab_1_PVEsetup/image-20220829212043148.png" alt="登录界面"></p>
+<p><img src="/2022/12/18/Server_HomeLab_1_PVEsetup/image-20220829212004949.png" alt="web管理界面"></p>
+<p>登录进来就可以远程管理机器了，点击 Shell 就能远程执行命令了，好耶！</p>
+<p>当然你可以直接用自己设置的密码在 tty 登录，其中用户名是 root</p>
+<p>然后跑个 neofetch 吧。</p>
+<p>先更新一下源，安装脚本（可能这时候还没换源会比较慢）：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">apt</span> update <span class="token operator">&amp;&amp;</span> <span class="token function">apt</span> <span class="token function">install</span> -y neofetch<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>然后执行 <code>neofetch</code></p>
+<p><img src="/2022/12/18/Server_HomeLab_1_PVEsetup/image-20220829212406657.png" alt="neofetch"></p>
+<p>好耶！</p>
+<p>接下来就可以把显示器、键盘、鼠标啥的拔了，直接远程登录来管理了。</p>
+<h2 id="0x04-换源"><a href="#0x04-换源" class="headerlink" title="0x04 换源"></a>0x04 换源</h2><h3 id="去除企业源"><a href="#去除企业源" class="headerlink" title="去除企业源"></a>去除企业源</h3><p><del>（毕竟咱没钱钱也还没必要用企业版</del></p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">rm</span> /etc/apt/sources.list.d/pve-enterprise.list<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>或者把文件里的东西注释掉也行。</p>
+<h3 id="Debian，Proxmox"><a href="#Debian，Proxmox" class="headerlink" title="Debian，Proxmox"></a>Debian，Proxmox</h3><p>喵喵这里使用的是 USTC 的软件源，主要参考的是 <a target="_blank" rel="noopener" href="http://mirrors.ustc.edu.cn/help/proxmox.html">其帮助文档</a></p>
+<p>修改基础系统（Debian）的源文件</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sed</span> -i <span class="token string">'s|^deb http://ftp.debian.org|deb https://mirrors.ustc.edu.cn|g'</span> /etc/apt/sources.list
+<span class="token function">sed</span> -i <span class="token string">'s|^deb http://security.debian.org|deb https://mirrors.ustc.edu.cn/debian-security|g'</span> /etc/apt/sources.list<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<p>修改 Proxmox 的源文件</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token builtin class-name">source</span> /etc/os-release
+<span class="token builtin class-name">echo</span> <span class="token string">"deb https://mirrors.ustc.edu.cn/proxmox/debian/pve <span class="token variable">$VERSION_CODENAME</span> pve-no-subscription"</span> <span class="token operator">&gt;</span> /etc/apt/sources.list.d/pve-no-subscription.list<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<p>然后 <code>apt update</code> 更新索引</p>
+<h3 id="CT-Templates"><a href="#CT-Templates" class="headerlink" title="CT Templates"></a>CT Templates</h3><p>也就是 LXC 的仓库源（？</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">cp</span> /usr/share/perl5/PVE/APLInfo.pm /usr/share/perl5/PVE/APLInfo.pm_back
+<span class="token function">sed</span> -i <span class="token string">'s|http://download.proxmox.com|https://mirrors.ustc.edu.cn/proxmox|g'</span> /usr/share/perl5/PVE/APLInfo.pm<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<p>针对 <code>/usr/share/perl5/PVE/APLInfo.pm</code> 文件的修改，重启后生效。</p>
+<h3 id="ceph"><a href="#ceph" class="headerlink" title="ceph"></a>ceph</h3><p>更换 ceph 软件源</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sed</span> -i <span class="token string">'s|http://download.proxmox.com|https://mirrors.ustc.edu.cn/proxmox|g'</span> /etc/apt/sources.list.d/ceph.list
+
+<span class="token function">cp</span> /usr/share/perl5/PVE/CLI/pveceph.pm /usr/share/perl5/PVE/CLI/pveceph.pm.bak
+<span class="token function">sed</span> -i <span class="token string">"s|http://download.proxmox.com/debian|https://mirrors.ustc.edu.cn/proxmox/debian|g"</span> /usr/share/perl5/PVE/CLI/pveceph.pm<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>这之后正好先更新下系统</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">apt</span> update
+<span class="token function">apt</span> upgrade
+<span class="token function">apt</span> dist-upgrade<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<p>然后 reboot 重启机器。</p>
+<h2 id="0x05-存储相关-amp-扩容-root"><a href="#0x05-存储相关-amp-扩容-root" class="headerlink" title="0x05 存储相关 &amp; 扩容 root"></a>0x05 存储相关 &amp; 扩容 root</h2><h3 id="PVE-存储"><a href="#PVE-存储" class="headerlink" title="PVE 存储"></a>PVE 存储</h3><blockquote>
+<p>通过 ISO 镜像安装 Proxmox 后 Proxmox 会自动创建一个 pve 的 Volume Group，并在其上面创建 root, data 和 swap 三个逻辑卷。</p>
+<p>默认情况下 Proxmox 会自动创建 local(pve) 和 local-lvm(pve) 这两个 Storage，分别用来存放镜像和磁盘：</p>
+<ul>
+<li>local 是 Directory 类型，用来存放 VZDump backup file, ISO Images, Container template</li>
+<li>local-lvm 是 LVM-Thin 类型，用来存放 Disk image, Container</li>
+</ul>
+<p><em>LVM：Logical Volume Manager 逻辑卷管理</em></p>
+</blockquote>
+<p>咱把 PVE 装在了一块 500GB 的 SSD 上，全新安装的系统上可以看到一块硬盘被划分了三个分区</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">root@pve1:~<span class="token comment"># fdisk -l</span>
+Disk /dev/nvme0n1: <span class="token number">465.76</span> GiB, <span class="token number">500107862016</span> bytes, <span class="token number">976773168</span> sectors
+Disk model: WD Blue SN570 500GB SSD                 
+Units: sectors of <span class="token number">1</span> * <span class="token number">512</span> <span class="token operator">=</span> <span class="token number">512</span> bytes
+Sector size <span class="token punctuation">(</span>logical/physical<span class="token punctuation">)</span>: <span class="token number">512</span> bytes / <span class="token number">512</span> bytes
+I/O size <span class="token punctuation">(</span>minimum/optimal<span class="token punctuation">)</span>: <span class="token number">512</span> bytes / <span class="token number">512</span> bytes
+Disklabel type: gpt
+Disk identifier: xxxxxxxxxxx
+
+Device           Start       End   Sectors  Size Type
+/dev/nvme0n1p1      <span class="token number">34</span>      <span class="token number">2047</span>      <span class="token number">2014</span> 1007K BIOS boot
+/dev/nvme0n1p2    <span class="token number">2048</span>   <span class="token number">1050623</span>   <span class="token number">1048576</span>  512M EFI System
+/dev/nvme0n1p3 <span class="token number">1050624</span> <span class="token number">209715200</span> <span class="token number">208664577</span> <span class="token number">99</span>.5G Linux LVM
+
+
+Disk /dev/mapper/pve-swap: <span class="token number">8</span> GiB, <span class="token number">8589934592</span> bytes, <span class="token number">16777216</span> sectors
+Units: sectors of <span class="token number">1</span> * <span class="token number">512</span> <span class="token operator">=</span> <span class="token number">512</span> bytes
+Sector size <span class="token punctuation">(</span>logical/physical<span class="token punctuation">)</span>: <span class="token number">512</span> bytes / <span class="token number">512</span> bytes
+I/O size <span class="token punctuation">(</span>minimum/optimal<span class="token punctuation">)</span>: <span class="token number">512</span> bytes / <span class="token number">512</span> bytes
+
+
+Disk /dev/mapper/pve-root: <span class="token number">24.75</span> GiB, <span class="token number">26575110144</span> bytes, <span class="token number">51904512</span> sectors
+Units: sectors of <span class="token number">1</span> * <span class="token number">512</span> <span class="token operator">=</span> <span class="token number">512</span> bytes
+Sector size <span class="token punctuation">(</span>logical/physical<span class="token punctuation">)</span>: <span class="token number">512</span> bytes / <span class="token number">512</span> bytes
+I/O size <span class="token punctuation">(</span>minimum/optimal<span class="token punctuation">)</span>: <span class="token number">512</span> bytes / <span class="token number">512</span> bytes<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<blockquote>
+<ul>
+<li>BIOS boot 分区是 GNU GRUB 来引导基于 Legacy BIOS 但是启动设备上有 GPT 格式分区表的操作系统时使用的分区。</li>
+<li>EFI System 分区是一块 FAT32 格式的分区，存储 EFI 引导程序以及启动时固件使用的应用程序。</li>
+<li>Linux LVM 分区则是系统真正可以使用的分区。LVM 是逻辑卷管理器，可以用来创建和管理逻辑卷，而不是直接管理磁盘，这就使得我们之后对分区大小进行调整变得可能。对 LVM 逻辑卷的扩大缩小并不会影响其中的已存储的数据。</li>
+</ul>
+</blockquote>
+<p>可见创建了两个逻辑卷分区：</p>
+<ul>
+<li><code> /dev/mapper/pve-swap</code> swap 分区</li>
+<li><code>/dev/mapper/pve-root</code> root 分区</li>
+</ul>
+<p>利用 <code>lvdisplay</code> 命令可以看到逻辑卷的详细信息</p>
+<p><img src="/2022/12/18/Server_HomeLab_1_PVEsetup/image-20220830023255792.png"></p>
+<p>Proxmox 安装的时候实际上创建了一个叫做 <code>pve</code> 的卷组 (Volume Group)，然后在上面分别创建了 swap, root, data 三个逻辑卷 (Logical Volume)。</p>
+<h3 id="扩容分区"><a href="#扩容分区" class="headerlink" title="扩容分区"></a>扩容分区</h3><p>先给 pve 卷组 / Volume Group 扩容，或者说这个 VG 所在的分区扩容</p>
+<p>安装 parted，列出分区信息</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">apt</span> update <span class="token operator">&amp;&amp;</span> <span class="token function">apt</span> <span class="token function">install</span> -y <span class="token function">parted</span>
+<span class="token function">parted</span> -l<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<pre class="line-numbers language-none"><code class="language-none">Model: WD Blue SN570 500GB SSD (nvme)
+Disk /dev/nvme0n1: 500GB
+Sector size (logical/physical): 512B/512B
+Partition Table: gpt
+Disk Flags: 
+
+Number  Start   End     Size    File system  Name  Flags
+ 1      17.4kB  1049kB  1031kB                     bios_grub
+ 2      1049kB  538MB   537MB   fat32              boot, esp
+ 3      538MB   107GB   107GB                      lvm<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>可以看到 PVE 安装在 <code>/dev/nvme0n1</code> 这块盘上</p>
+<p>因为安装的时候改了 <code>hdsize</code>，这里并没有占满整块盘，我们可以对 LVM 这个分区进行扩容。</p>
+<p>然后用 parted 交互式操作分区，<strong>注意小心操作！！！</strong></p>
+<p>这里扩容分区号为 3 的分区</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">root@pve1:~<span class="token comment"># parted /dev/nvme0n1</span>
+GNU Parted <span class="token number">3.4</span>
+Using /dev/nvme0n1
+Welcome to GNU Parted<span class="token operator">!</span> Type <span class="token string">'help'</span> to view a list of commands.
+<span class="token punctuation">(</span>parted<span class="token punctuation">)</span> print
+Model: WD Blue SN570 500GB SSD <span class="token punctuation">(</span>nvme<span class="token punctuation">)</span>
+Disk /dev/nvme0n1: 500GB
+Sector size <span class="token punctuation">(</span>logical/physical<span class="token punctuation">)</span>: 512B/512B
+Partition Table: gpt
+Disk Flags:
+
+Number  Start   End     Size    File system  Name  Flags
+ <span class="token number">1</span>      <span class="token number">17</span>.4kB  1049kB  1031kB                     bios_grub
+ <span class="token number">2</span>      1049kB  538MB   537MB   fat32              boot, esp
+ <span class="token number">3</span>      538MB   107GB   107GB                      lvm
+
+<span class="token punctuation">(</span>parted<span class="token punctuation">)</span> resizepart <span class="token number">3</span> <span class="token number">100</span>%
+<span class="token punctuation">(</span>parted<span class="token punctuation">)</span> print
+Model: WD Blue SN570 500GB SSD <span class="token punctuation">(</span>nvme<span class="token punctuation">)</span>
+Disk /dev/nvme0n1: 500GB
+Sector size <span class="token punctuation">(</span>logical/physical<span class="token punctuation">)</span>: 512B/512B
+Partition Table: gpt
+Disk Flags:
+
+Number  Start   End     Size    File system  Name  Flags
+ <span class="token number">1</span>      <span class="token number">17</span>.4kB  1049kB  1031kB                     bios_grub
+ <span class="token number">2</span>      1049kB  538MB   537MB   fat32              boot, esp
+ <span class="token number">3</span>      538MB   500GB   500GB                      lvm
+
+<span class="token punctuation">(</span>parted<span class="token punctuation">)</span> quit
+Information: You may need to update /etc/fstab.<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>然后 更新物理卷的大小</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">root@pve1:~<span class="token comment"># pvresize /dev/nvme0n1p3</span>
+  Physical volume <span class="token string">"/dev/nvme0n1p3"</span> changed
+  <span class="token number">1</span> physical volume<span class="token punctuation">(</span>s<span class="token punctuation">)</span> resized or updated / <span class="token number">0</span> physical volume<span class="token punctuation">(</span>s<span class="token punctuation">)</span> not resized<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+
+
+<h3 id="扩容逻辑卷"><a href="#扩容逻辑卷" class="headerlink" title="扩容逻辑卷"></a>扩容逻辑卷</h3><p>查看 Proxmox 的逻辑卷内容</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">root@pve1:~<span class="token comment"># cat /etc/pve/storage.cfg</span>
+dir: <span class="token builtin class-name">local</span>
+        path /var/lib/vz
+        content iso,vztmpl,backup
+
+lvmthin: local-lvm
+        thinpool data
+        vgname pve
+        content rootdir,images<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>使用 <code>pvs</code> 查看物理卷的使用情况</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">root@pve1:~<span class="token comment"># pvs</span>
+  PV             VG  Fmt  Attr PSize    PFree
+  /dev/nvme0n1p3 pve lvm2 a--  <span class="token operator">&lt;</span><span class="token number">465</span>.26g <span class="token operator">&lt;</span><span class="token number">378</span>.14g<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<p>可见在 PFree 里面有大量空间没有使用</p>
+<p>而后利用 <code>lvextend</code> 命令进行逻辑卷的扩容</p>
+<p>如果要把全部空间都给 data：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">lvextend -l +100%FREE /dev/pve/data<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>如果指定给 data 增加 10GB：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">lvextend -L +10G /dev/pve/data<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<blockquote>
+<p>如果熟悉 <code>lvresize</code> 也可以：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">lvresize --extents +100%FREE --resizefs /dev/pve/data<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>另外这个 G 试了试发现是 GiB（</p>
+</blockquote>
+<p>当然也可以给 root 增加个 10GiB：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">lvextend -L +10GiB /dev/pve/root<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>可以使用 <code>pvs</code> 和 <code>lvdisplay</code> 进行查看分区情况有没有变化</p>
+<p><img src="/2022/12/18/Server_HomeLab_1_PVEsetup/image-20220830034103033.png"></p>
+<h3 id="重新加载逻辑卷"><a href="#重新加载逻辑卷" class="headerlink" title="重新加载逻辑卷"></a>重新加载逻辑卷</h3><p><code>df</code> 发现 root 的容量还没变，于是需要 <strong>重新加载逻辑卷</strong>，从而使 LV 扩容生效</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">root@pve1:~<span class="token comment"># resize2fs /dev/pve/root</span>
+resize2fs <span class="token number">1.46</span>.5 <span class="token punctuation">(</span><span class="token number">30</span>-Dec-2021<span class="token punctuation">)</span>
+Filesystem at /dev/pve/root is mounted on /<span class="token punctuation">;</span> on-line resizing required
+old_desc_blocks <span class="token operator">=</span> <span class="token number">4</span>, new_desc_blocks <span class="token operator">=</span> <span class="token number">5</span>
+The filesystem on /dev/pve/root is now <span class="token number">9109504</span> <span class="token punctuation">(</span>4k<span class="token punctuation">)</span> blocks long.
+
+root@pve1:~<span class="token comment"># df -h</span>
+Filesystem            Size  Used Avail Use% Mounted on
+udev                  <span class="token number">7</span>.7G     <span class="token number">0</span>  <span class="token number">7</span>.7G   <span class="token number">0</span>% /dev
+tmpfs                 <span class="token number">1</span>.6G  <span class="token number">1</span>.7M  <span class="token number">1</span>.6G   <span class="token number">1</span>% /run
+/dev/mapper/pve-root   35G   12G   22G  <span class="token number">35</span>% /s
+tmpfs                 <span class="token number">7</span>.7G   46M  <span class="token number">7</span>.7G   <span class="token number">1</span>% /dev/shm
+tmpfs                 <span class="token number">5</span>.0M     <span class="token number">0</span>  <span class="token number">5</span>.0M   <span class="token number">0</span>% /run/lock
+/dev/nvme0n1p2        511M  328K  511M   <span class="token number">1</span>% /boot/efi
+/dev/fuse             128M   16K  128M   <span class="token number">1</span>% /etc/pve
+tmpfs                 <span class="token number">1</span>.6G     <span class="token number">0</span>  <span class="token number">1</span>.6G   <span class="token number">0</span>% /run/user/0<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>这样就成功扩容了！</p>
+<p>（看这个数字不太好看，于是又凑了个整数，后面有需要再继续扩容吧</p>
+<p><img src="/2022/12/18/Server_HomeLab_1_PVEsetup/image-20220830035927082.png"></p>
+<h2 id="0x06-PVETools"><a href="#0x06-PVETools" class="headerlink" title="0x06 PVETools"></a>0x06 PVETools</h2><p>搜着搜着正好搜到了个一键配置的工具 PVE Tools</p>
+<blockquote>
+<p>proxmox ve tools script(debian9+ can use it).Including <code>email</code>, <code>samba</code>,<code> NFS  set zfs max ram</code>, <code>nested virtualization</code> ,<code>docker </code>, <code>pci passthrough</code> etc. for english user,please look the end of readme.</p>
+<p>这是一个为proxmox ve写的工具脚本（理论上debian9+可以用）。包括<code>配置邮件</code>，<code>samba</code>，<code>NFS</code>，<code>zfs</code>，<code>嵌套虚拟化</code>，<code>docker</code>，<code>硬盘直通</code>等功能。</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/ivanhao/pvetools">https://github.com/ivanhao/pvetools</a></p>
+</blockquote>
+<p>可以用他这里的一键无脑安装</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token builtin class-name">echo</span> <span class="token string">"nameserver  8.8.8.8"</span> <span class="token operator">&gt;&gt;</span> /etc/resolv.conf <span class="token operator">&amp;&amp;</span> <span class="token function">rm</span> /etc/apt/sources.list.d/pve-enterprise.list <span class="token operator">&amp;&amp;</span> <span class="token builtin class-name">export</span> <span class="token assign-left variable"><span class="token environment constant">LC_ALL</span></span><span class="token operator">=</span>en_US.UTF-8 <span class="token operator">&amp;&amp;</span> <span class="token function">apt</span> update <span class="token operator">&amp;&amp;</span> <span class="token function">apt</span> -y <span class="token function">install</span> <span class="token function">git</span> <span class="token operator">&amp;&amp;</span> <span class="token function">git</span> clone https://github.com/ivanhao/pvetools.git <span class="token operator">&amp;&amp;</span> <span class="token builtin class-name">cd</span> pvetools <span class="token operator">&amp;&amp;</span> <span class="token function">chmod</span> +x pvetools.sh <span class="token operator">&amp;&amp;</span> ./pvetools.sh<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p><em>（咱这里顺便加了个 chmod，可能直接 clone 下来没执行权限</em></p>
+<p><img src="/2022/12/18/Server_HomeLab_1_PVEsetup/image-20220829214302782.png"></p>
+<h3 id="显示传感器温度、CPU-频率"><a href="#显示传感器温度、CPU-频率" class="headerlink" title="显示传感器温度、CPU 频率"></a>显示传感器温度、CPU 频率</h3><p>比如配置显示传感器温度啥的，执行完成之后 Ctrl + F5 强制刷新 web 界面更新缓存，概要里就有相关的信息了</p>
+<p><img src="/2022/12/18/Server_HomeLab_1_PVEsetup/image-20220829214732730.png"></p>
+<h3 id="去除订阅提示"><a href="#去除订阅提示" class="headerlink" title="去除订阅提示"></a>去除订阅提示</h3><p>这个其实就是把前端代码里的那个弹出窗口的部分给干掉了，hhh</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/ivanhao/pvetools/blob/e7404a53a37dd5e082f56bee9c8ad9edf2df291a/pvetools.sh#L1345">https://github.com/ivanhao/pvetools/blob/e7404a53a37dd5e082f56bee9c8ad9edf2df291a/pvetools.sh#L1345</a></p>
+<p><img src="/2022/12/18/Server_HomeLab_1_PVEsetup/image-20220829220426677.png"></p>
+<h3 id="CPU-省电"><a href="#CPU-省电" class="headerlink" title="CPU 省电"></a>CPU 省电</h3><p>噢对了，顺便吐槽一下，现在这个版本（2.3.3）脚本里的 CPU 省电进行配置之后，如果还原配置会发现 CPU 睿频没了，或者说原来的超频回不去了。</p>
+<p>然后在 Issue 里找到了类似的：</p>
+<ul>
+<li>Issue#54: <a target="_blank" rel="noopener" href="https://github.com/ivanhao/pvetools/issues/54">j4125 使用CPU省电后 去掉少电后不能睿频了</a></li>
+<li>Issue#43: <a target="_blank" rel="noopener" href="https://github.com/ivanhao/pvetools/issues/43">还原CPU省电配置后，CPU不能恢复睿频频率</a></li>
+</ul>
+<p><img src="/2022/12/18/Server_HomeLab_1_PVEsetup/image-20220830011907776.png"></p>
+<p>作者修复在 <a target="_blank" rel="noopener" href="https://github.com/ivanhao/pvetools/commit/dbd1532d78cc8ade72a32aab17a6fef9af3b4b3f">https://github.com/ivanhao/pvetools/commit/dbd1532d78cc8ade72a32aab17a6fef9af3b4b3f</a> ，感觉有点奇怪。。</p>
+<p><img src="/2022/12/18/Server_HomeLab_1_PVEsetup/image-20220830012126614.png"></p>
+<p><img src="/2022/12/18/Server_HomeLab_1_PVEsetup/image-20220830012148165.png"></p>
+<p>相当于他把原来的 <code>b)</code> 还原配置改成了重新配置最大频率，但咱试之后并没有什么用，好迷啊。</p>
+<p>么得办法，咱也先不管啥节能了，总得恢复回去吧。</p>
+<p>于是把 cpufrequtils 给卸载了。（得，咱不要你了！）</p>
+<p>再把 <code>/etc/default/grub</code> 里的 <code>intel_pstate=disable</code> 给删了。最后重启宿主机。</p>
+<p><em>查了下，关了 <code>pstate</code> 好像是为了固定频率？或者让 cpufrequtils 来接管？（不大懂</em></p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">cat</span> <span class="token operator">&lt;&lt;</span> <span class="token string">EOF<span class="token bash punctuation"> <span class="token operator">&gt;</span> /etc/default/cpufrequtils</span>
+ENABLE="true"
+GOVERNOR="performance"
+EOF</span>
+systemctl restart cpufrequtils
+<span class="token function">apt</span> -y remove cpufrequtils
+<span class="token function">rm</span> -rf /etc/default/cpufrequtils
+
+<span class="token function">sed</span> -i <span class="token string">'s/ intel_pstate=disable//g'</span> /etc/default/grub
+<span class="token function">update-grub</span>
+
+<span class="token function">reboot</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>重启之后睿频就回来了</p>
+<blockquote>
+<p>不过咱后来为了节能还是把 CPU 省电给打开了，放着吃灰而且产热的话太费电了（x</p>
+</blockquote>
+<h2 id="0x07-监控硬盘温度"><a href="#0x07-监控硬盘温度" class="headerlink" title="0x07 监控硬盘温度"></a>0x07 监控硬盘温度</h2><p>如果跳过了上面的 PVETools，这里可以使用 lm-sensors 监控 CPU 温度，hddtemp 监控硬盘温度。</p>
+<p>（不过 web 界面里还没有 hdd 温度倒是了</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 安装</span>
+<span class="token function">apt</span> <span class="token function">install</span> lm-sensors hddtemp -y
+<span class="token comment"># 查看</span>
+sensors
+hddtemp /dev/sda<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>当然也可以参考 <a target="_blank" rel="noopener" href="https://www.sqlsec.com/2022/04/pve.html#PVE-%E6%B8%A9%E5%BA%A6%E4%BC%A0%E6%84%9F%E5%99%A8">国光大佬的教程</a>，在 web 界面上加一个显示。</p>
+<p><em>（这里略了）</em></p>
+<h2 id="0x08-配置-IPv6"><a href="#0x08-配置-IPv6" class="headerlink" title="0x08 配置 IPv6"></a>0x08 配置 IPv6</h2><p>参考 <a target="_blank" rel="noopener" href="https://www.haiyun.me/archives/1416.html">Proxmox网桥通过SLAAC配置公网ipv6地址</a>，通过修改网口的 <code>accept_ra</code> 来实现。</p>
+<p>Proxmox 使用的是 ifupdown2，非 debian/ubuntu 使用 ifupdown。</p>
+<p>查看内核也已经开启ipv6自动配置：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># cat /proc/sys/net/ipv6/conf/vmbr0/accept_ra</span>
+<span class="token number">1</span>
+<span class="token comment"># cat /proc/sys/net/ipv6/conf/vmbr0/autoconf</span>
+<span class="token number">1</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>查看已开启ipv6转发：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># cat /proc/sys/net/ipv6/conf/vmbr0/forwarding</span>
+<span class="token number">1</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<p>修改 <code>/etc/sysctl.conf</code> 文件，<strong>需要将 <code>accept_ra</code> 值改成 2</strong> 才能自动配置 SLAAC ipv6 地址：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># nano /etc/sysctl.conf</span>
+net.ipv6.conf.all.accept_ra<span class="token operator">=</span><span class="token number">2</span>
+net.ipv6.conf.default.accept_ra<span class="token operator">=</span><span class="token number">2</span>
+net.ipv6.conf.vmbr0.accept_ra<span class="token operator">=</span><span class="token number">2</span>
+net.ipv6.conf.all.autoconf<span class="token operator">=</span><span class="token number">1</span>
+net.ipv6.conf.default.autoconf<span class="token operator">=</span><span class="token number">1</span>
+net.ipv6.conf.vmbr0.autoconf<span class="token operator">=</span><span class="token number">1</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>再应用一下配置</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">sysctl -p<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>可能需要再重启一下，之后就能看到 ipv6 地址了。</p>
+<h2 id="0x09-小结"><a href="#0x09-小结" class="headerlink" title="0x09 小结"></a>0x09 小结</h2><p>这篇博客是喵喵 HomeLab 系列的第一篇，大概介绍了 PVE 系统的大体情况以及初始上手的安装与配置方法。</p>
+<p>后面几篇就来和大家分享一下喵喵在 PVE 系统上 <del>生小鸡</del> 的一些具体应用，可以期待一下（咕</p>
+<h2 id="0xFF-References"><a href="#0xFF-References" class="headerlink" title="0xFF References"></a>0xFF References</h2><ul>
+<li><p><a target="_blank" rel="noopener" href="https://pve.proxmox.com/wiki/Main_Page">PVE 官方文档 / Wiki</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://pve.proxmox.com/pve-docs/pve-admin-guide.html">Proxmox VE Administration Guide</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://pve-doc-cn.readthedocs.io/zh_CN/latest/">Proxmox VE 中文手册 v7.3</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://einverne.github.io/post/2020/03/proxmox-install-and-setup.html">Proxmox 安装和设置</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://einverne.github.io/post/2020/11/extend-proxmox-system-partition-and-pve-file-system.html">扩展 Proxmox 系统分区以及 Proxmox 文件系统初识</a></p>
+</li>
+<li><p>archlinux wiki: <a target="_blank" rel="noopener" href="https://wiki.archlinux.org/title/LVM_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)">LVM (简体中文)</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/4c7acf819046">LV扩容(lvextend)</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/271901267">虚拟机（ESXi）下硬盘性能的探索</a></p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://www.haiyun.me/archives/1416.html">Proxmox网桥通过SLAAC配置公网ipv6地址</a></p>
+</li>
+</ul>
+<p><em>溜了溜了喵（</em></p>
+<!--
+
+---
+
+0x09 benchmark
+
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">root@pve1:~<span class="token comment"># pveperf</span>
+CPU BOGOMIPS:      <span class="token number">59904.00</span>
+REGEX/SECOND:      <span class="token number">6592759</span>
+HD SIZE:           <span class="token number">39.20</span> GB <span class="token punctuation">(</span>/dev/mapper/pve-root<span class="token punctuation">)</span>
+BUFFERED READS:    <span class="token number">2362.50</span> MB/sec
+AVERAGE SEEK TIME: <span class="token number">0.07</span> ms
+FSYNCS/SECOND:     <span class="token number">1987.53</span>
+<span class="token punctuation">..</span>.<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>–&gt;</p>
+-->
+                
+            </div>
+            <hr/>
+
+            
+
+    <div class="reprint" id="reprint-statement">
+        
+            <div class="reprint__author">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-user">
+                        文章作者:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="https://miaotony.xyz" rel="external nofollow noreferrer">MiaoTony</a>
+                </span>
+            </div>
+            <div class="reprint__type">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-link">
+                        文章链接:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="https://miaotony.xyz/2022/12/18/Server_HomeLab_1_PVEsetup/">https://miaotony.xyz/2022/12/18/Server_HomeLab_1_PVEsetup/</a>
+                </span>
+            </div>
+            <div class="reprint__notice">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-copyright">
+                        版权声明:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    本博客所有文章除特别声明外，均采用
+                    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY-NC-SA 4.0</a>
+                    许可协议。转载请注明来源
+                    <a href="https://miaotony.xyz" target="_blank">MiaoTony</a>
+                    !
+                </span>
+            </div>
+        
+    </div>
+
+    <script async defer>
+      document.addEventListener("copy", function (e) {
+        let toastHTML = '<span>复制成功，请遵循本文的转载规则</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">查看</a>';
+        M.toast({html: toastHTML})
+      });
+
+      function navToReprintStatement() {
+        $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
+      }
+    </script>
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            
+                                <a href="/tags/Tech/">
+                                    <span class="chip bg-color">Tech</span>
+                                </a>
+                            
+                                <a href="/tags/Configuration/">
+                                    <span class="chip bg-color">Configuration</span>
+                                </a>
+                            
+                                <a href="/tags/Server/">
+                                    <span class="chip bg-color">Server</span>
+                                </a>
+                            
+                                <a href="/tags/HomeLab/">
+                                    <span class="chip bg-color">HomeLab</span>
+                                </a>
+                            
+                                <a href="/tags/PVE/">
+                                    <span class="chip bg-color">PVE</span>
+                                </a>
+                            
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+<div id="article-share">
+
+    
+    <div class="social-share" data-sites="qq,qzone,wechat,weibo,twitter,facebook,google,douban,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
+    <script src="/libs/share/js/social-share.min.js"></script>
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+                <style>
+    #reward {
+        margin: 40px 0;
+        text-align: center;
+    }
+
+    #reward .reward-link {
+        font-size: 1.4rem;
+        line-height: 38px;
+    }
+
+    #reward .btn-floating:hover {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    #rewardModal {
+        width: 320px;
+        height: 350px;
+    }
+
+    #rewardModal .reward-title {
+        margin: 15px auto;
+        padding-bottom: 5px;
+    }
+
+    #rewardModal .modal-content {
+        padding: 10px;
+    }
+
+    #rewardModal .close {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+        color: rgba(0, 0, 0, 0.5);
+        font-size: 1.3rem;
+        line-height: 20px;
+        cursor: pointer;
+    }
+
+    #rewardModal .close:hover {
+        color: #ef5350;
+        transform: scale(1.3);
+        -moz-transform:scale(1.3);
+        -webkit-transform:scale(1.3);
+        -o-transform:scale(1.3);
+    }
+
+    #rewardModal .reward-tabs {
+        margin: 0 auto;
+        width: 210px;
+    }
+
+    .reward-tabs .tabs {
+        height: 38px;
+        margin: 10px auto;
+        padding-left: 0;
+    }
+
+    .reward-content ul {
+        padding-left: 0 !important;
+    }
+
+    .reward-tabs .tabs .tab {
+        height: 38px;
+        line-height: 38px;
+    }
+
+    .reward-tabs .tab a {
+        color: #fff;
+        background-color: #ccc;
+    }
+
+    .reward-tabs .tab a:hover {
+        background-color: #ccc;
+        color: #fff;
+    }
+
+    .reward-tabs .wechat-tab .active {
+        color: #fff !important;
+        background-color: #22AB38 !important;
+    }
+
+    .reward-tabs .alipay-tab .active {
+        color: #fff !important;
+        background-color: #019FE8 !important;
+    }
+
+    .reward-tabs .reward-img {
+        width: 210px;
+        height: 210px;
+    }
+</style>
+
+<div id="reward">
+    <a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-medium waves-effect waves-light red">赏</a>
+
+    <!-- Modal Structure -->
+    <div id="rewardModal" class="modal">
+        <div class="modal-content">
+            <a class="close modal-close"><i class="fas fa-times"></i></a>
+            <h4 class="reward-title">打赏一下让我来点好吃好玩的呗~</h4>
+            <div class="reward-content">
+                <div class="reward-tabs">
+                    <ul class="tabs row">
+                        <!-- 
+                            <li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li> 
+                        -->
+                        <li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li>
+                    </ul>
+                    <!-- 
+                        <div id="alipay">
+                        <img src="/" class="reward-img" alt="支付宝打赏二维码">
+                        </div> 
+                -->
+                    <div id="wechat">
+                        <img src="/medias/reward/wechat.png" class="reward-img" alt="微信打赏二维码">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.tabs').tabs();
+    });
+</script>
+
+            
+        </div>
+    </div>
+
+    
+        <link rel="stylesheet" href="/libs/gitalk/gitalk.min.css">
+<link rel="stylesheet" href="/css/my-gitalk.css">
+
+<div class="card gitalk-card" data-aos="fade-up">
+    <div class="comment_headling" style="font-size: 20px; font-weight: 700; position: relative; padding-left: 20px; top: 15px; padding-bottom: 5px;">
+        <i class="fas fa-comments fa-fw" aria-hidden="true"></i>
+        <span>评论</span>
+    </div>
+    <div id="gitalk-container" class="card-content"></div>
+</div>
+
+<script src="/libs/gitalk/gitalk.min.js"></script>
+<script>
+    let gitalk = new Gitalk({
+        clientID: '116343b4650fce4789b6',
+        clientSecret: '3e9be2ad6c9b693af1753290c7c059b1e4f34d5d',
+        repo: 'miaotony.github.io',
+        owner: 'miaotony',
+        admin: "miaotony",
+        id: '2022-12-18T23-30-00',
+        distractionFreeMode: false  // Facebook-like distraction free mode
+    });
+
+    gitalk.render('gitalk-container');
+</script>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+            <div class="card">
+                <a href="/2023/02/04/CTF_2022xihulunjian/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/20.jpg" class="responsive-img" alt="CTF | 2022 西湖论剑·中国杭州网络安全技能大赛 WriteUp">
+                        
+                        <span class="card-title">CTF | 2022 西湖论剑·中国杭州网络安全技能大赛 WriteUp</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            农历兔年到来的第一场CTF比赛，和校队的小师傅佛系看了看题目，学习学习练练手写写writeup记录下好了。
+                        
+                    </div>
+                    <div class="publish-info">
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2023-02-04
+                        </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/CTF/" class="post-category">
+                                    CTF
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/CTF/">
+                        <span class="chip bg-color">CTF</span>
+                    </a>
+                    
+                    <a href="/tags/WriteUp/">
+                        <span class="chip bg-color">WriteUp</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2022/11/30/CTF_2022PKUGeekGame/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/15.jpg" class="responsive-img" alt="CTF | 2022 PKU GeekGame 2nd WriteUp">
+                        
+                        <span class="card-title">CTF | 2022 PKU GeekGame 2nd WriteUp</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            第二届PKU GeekGame来了，今年这个时间段事情比较多没啥时间打，再加上比赛题目的难度也不小，只能在结束之前勉强上个总榜了……
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2022-11-30
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/CTF/" class="post-category">
+                                    CTF
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/CTF/">
+                        <span class="chip bg-color">CTF</span>
+                    </a>
+                    
+                    <a href="/tags/WriteUp/">
+                        <span class="chip bg-color">WriteUp</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+<script>
+    $('#articleContent').on('copy', function (e) {
+        // IE8 or earlier browser is 'undefined'
+        if (typeof window.getSelection === 'undefined') return;
+
+        var selection = window.getSelection();
+        // if the selection is short let's not annoy our users.
+        if (('' + selection).length < Number.parseInt('200')) {
+            return;
+        }
+
+        // create a div outside of the visible area and fill it with the selected text.
+        var bodyElement = document.getElementsByTagName('body')[0];
+        var newdiv = document.createElement('div');
+        newdiv.style.position = 'absolute';
+        newdiv.style.left = '-99999px';
+        bodyElement.appendChild(newdiv);
+        newdiv.appendChild(selection.getRangeAt(0).cloneContents());
+
+        // we need a <pre> tag workaround.
+        // otherwise the text inside "pre" loses all the line breaks!
+        if (selection.getRangeAt(0).commonAncestorContainer.nodeName === 'PRE' || selection.getRangeAt(0).commonAncestorContainer.nodeName === 'CODE') {
+            newdiv.innerHTML = "<pre>" + newdiv.innerHTML + "</pre>";
+        }
+
+        var url = document.location.href;
+        newdiv.innerHTML += '<br />'
+            + '来源: MiaoTony&#39;s小窝<br />'
+            + '文章作者: MiaoTony<br />'
+            + '文章链接: <a href="' + url + '">' + url + '</a><br />'
+            + '本文章著作权归作者 MiaoTony 所有，任何形式的转载都请注明出处。';
+
+        selection.selectAllChildren(newdiv);
+        window.setTimeout(function () {bodyElement.removeChild(newdiv);}, 200);
+    });
+</script>
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+
+
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
+
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget card" style="background-color: white;">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('1'),
+            headingSelector: 'h2, h3, h4, h5'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h2, h3, h4, h5').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+
+
+    <footer class="page-footer bg-color">
+        <div class="container row center-align" style="margin-bottom: 15px !important;">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            
+                <span id="year">2019-2023</span>
+            
+            <a href="/about" target="_blank">MiaoTony</a>
+            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+            |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
+            <br>
+                        &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
+                class="white-color">418.5k</span>&nbsp;字
+                                                                                    <span id="busuanzi_container_site_pv">
+			|&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
+                    class="white-color"></span>&nbsp;次
+            </span>
+                                    <span id="busuanzi_container_site_uv">
+                |&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;<span id="busuanzi_value_site_uv"
+                    class="white-color"></span>&nbsp;人
+            </span>
+                        <br>
+                        <span id="sitetime">载入运行时间...</span>
+            <script>
+                function siteTime() {
+                    var seconds = 1000;
+                    var minutes = seconds * 60;
+                    var hours = minutes * 60;
+                    var days = hours * 24;
+                    var years = days * 365;
+                    var today = new Date();
+                    var startYear = "2019";
+                    var startMonth = "11";
+                    var startDate = "28";
+                    var startHour = "0";
+                    var startMinute = "0";
+                    var startSecond = "0";
+                    var todayYear = today.getFullYear();
+                    var todayMonth = today.getMonth() + 1;
+                    var todayDate = today.getDate();
+                    var todayHour = today.getHours();
+                    var todayMinute = today.getMinutes();
+                    var todaySecond = today.getSeconds();
+                    var t1 = Date.UTC(startYear, startMonth, startDate, startHour, startMinute, startSecond);
+                    var t2 = Date.UTC(todayYear, todayMonth, todayDate, todayHour, todayMinute, todaySecond);
+                    var diff = t2 - t1;
+                    var diffYears = Math.floor(diff / years);
+                    var diffDays = Math.floor((diff / days) - diffYears * 365);
+                    var diffHours = Math.floor((diff - (diffYears * 365 + diffDays) * days) / hours);
+                    var diffMinutes = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours) /
+                        minutes);
+                    var diffSeconds = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours -
+                        diffMinutes * minutes) / seconds);
+                    if (startYear == todayYear) {
+                        document.getElementById("year").innerHTML = todayYear;
+                        document.getElementById("sitetime").innerHTML = "本站已安全运行 " + diffDays + " 天 " + diffHours +
+                            " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒";
+                    } else {
+                        document.getElementById("year").innerHTML = startYear + " - " + todayYear;
+                        document.getElementById("sitetime").innerHTML = "本站已安全运行 " + diffYears + " 年 " + diffDays +
+                            " 天 " + diffHours + " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒";
+                    }
+                }
+                setInterval(siteTime, 1000);
+            </script>
+                        <br>
+                    </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+    <a href="https://t.me/MiaoTonyChannel" class="tooltipped" target="_blank" data-tooltip="关注我的TelegramChannel: @MiaoTonyChannel" data-position="top" data-delay="50">
+        <i class="fab fa-telegram"></i>
+    </a>
+
+
+
+    <a href="https://github.com/miaotony" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+        <i class="fab fa-github"></i>
+    </a>
+
+
+
+    <a href="mailto:miaotony@outlook.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fas fa-envelope-open"></i>
+    </a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
+        <i class="fas fa-rss"></i>
+    </a>
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+$(function () {
+    var searchFunc = function (path, search_id, content_id) {
+        'use strict';
+        $.ajax({
+            url: path,
+            dataType: "xml",
+            success: function (xmlResponse) {
+                // get the contents from search data
+                var datas = $("entry", xmlResponse).map(function () {
+                    return {
+                        title: $("title", this).text(),
+                        content: $("content", this).text(),
+                        url: $("url", this).text()
+                    };
+                }).get();
+                var $input = document.getElementById(search_id);
+                var $resultContent = document.getElementById(content_id);
+                $input.addEventListener('input', function () {
+                    var str = '<ul class=\"search-result-list\">';
+                    var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                    $resultContent.innerHTML = "";
+                    if (this.value.trim().length <= 0) {
+                        return;
+                    }
+                    // perform local searching
+                    var cnt = 1;
+                    datas.forEach(function (data) {
+                        var isMatch = true;
+                        var content_index = [];
+                        var data_title_origin = data.title.trim();
+                        var data_title = data.title.trim().toLowerCase();
+                        var data_content = data.content.trim().replace(/<[^>]+>/g, "").toLowerCase();
+                        var data_url = data.url;
+                        data_url = data_url.indexOf('/') === 0 ? data.url : '/' + data_url;
+                        var index_title = -1;
+                        var index_content = -1;
+                        var first_occur = -1;
+                        // only match artiles with not empty titles and contents
+                        if (data_title !== '' && data_content !== '') {
+                            keywords.forEach(function (keyword, i) {
+                                index_title = data_title.indexOf(keyword);
+                                index_content = data_content.indexOf(keyword);
+                                if (index_title < 0 && index_content < 0) {
+                                    isMatch = false;
+                                } else {
+                                    if (index_content < 0) {
+                                        index_content = 0;
+                                    }
+                                    if (i === 0) {
+                                        first_occur = index_content;
+                                    }
+                                }
+                            });
+                        }
+                        // show search results
+                        if (isMatch) {
+                            str += "<li><a href='" + data_url + "' class='search-result-title'>" + String(cnt) + ". " + data_title_origin + "</a>";
+                            cnt += 1;
+    
+                            var content = data.content.trim().replace(/<[^>]+>/g, "");
+                            if (first_occur >= 0) {
+                                // cut out 300 characters
+                                var start = first_occur - 30;
+                                if (start < 0) {
+                                    start = 0;
+                                }
+                                var match_content = content.substr(start, 300);
+                                // highlight all keywords
+                                keywords.forEach(function (keyword) {
+                                    var regS = new RegExp(keyword, "gi");
+                                    match_content = match_content.replace(regS, "<em class=\"search-keyword\">" + keyword + "</em>");
+                                });
+    
+                                str += "<p class=\"search-result\">" + match_content + "...</p>"
+                            }
+                            str += "</li>";
+                        }
+                    });
+                    str += "</ul>";
+                    str = "<p class=\"search-result-summary\">共找到 " + String(cnt-1) + " 条结果</p>"  + str;
+                    $resultContent.innerHTML = str;
+                });
+            }
+        });
+    };
+
+    searchFunc('/search.xml', 'searchInput', 'searchResult');
+});
+</script>
+
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.min.js"></script>
+
+    
+
+    
+<script>
+    var _hmt = _hmt || [];
+    (function () {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?40e312a1eec109cf96e30988cf3bfe70";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+    
+    
+    
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+</body>
+
+</html>
