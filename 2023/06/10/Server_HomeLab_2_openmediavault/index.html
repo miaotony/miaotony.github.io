@@ -1,0 +1,1672 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="HomeLab | 2 OpenMediaVault 安装 &amp; 硬盘直通 &amp; 相关配置, MiaoTony,blog">
+    <meta name="description" content="大概介绍了一下 OpenMediaVault 的安装，硬盘直通，RAID 组建，LVM 配置，文件系统，文件共享，以及 OMV 里一些基本功能的使用等。">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-159946730-1"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+        dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+    gtag('config', 'UA-159946730-1');
+</script>
+
+
+    <title>HomeLab | 2 OpenMediaVault 安装 &amp; 硬盘直通 &amp; 相关配置 | MiaoTony&#39;s小窝</title>
+    <link rel="icon" type="image/x-icon, image/vnd.microsoft.icon" href="/favicon.ico">
+
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
+	
+    <script src="/libs/jquery/jquery.min.js"></script>
+    <script>
+        //来个特效玩玩喵 20200123
+        var titleTime;
+        var OriginTitile = document.title;
+        document.addEventListener('visibilitychange', function() {
+            if (document.hidden) {
+                document.title = '|ω·) 喵~快回来呀！';
+                clearTimeout(titleTime);
+            } else {
+                document.title = '(/≧▽≦)/ Meow！';
+                titleTime = setTimeout(function() {
+        	    document.title = OriginTitile;
+        }, 800);
+    }
+        });
+    </script>
+<meta name="generator" content="Hexo 6.2.0">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+<link rel="alternate" href="/atom.xml" title="MiaoTony's小窝" type="application/atom+xml">
+</head>
+
+
+
+
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">MiaoTony&#39;s小窝</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>首页</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>标签</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>分类</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/archives" class="waves-effect waves-light">
+      
+      <i class="fas fa-archive" style="zoom: 0.6;"></i>
+      
+      <span>归档</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>关于</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/contact" class="waves-effect waves-light">
+      
+      <i class="fas fa-comments" style="zoom: 0.6;"></i>
+      
+      <span>留言</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/friends" class="waves-effect waves-light">
+      
+      <i class="fas fa-address-book" style="zoom: 0.6;"></i>
+      
+      <span>友链</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="搜索" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">MiaoTony&#39;s小窝</div>
+        <div class="logo-desc">
+            
+            喵~欢迎各位大佬的来访呀！
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			首页
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			标签
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			分类
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/archives" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-archive"></i>
+			
+			归档
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			关于
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/contact" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-comments"></i>
+			
+			留言
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/friends" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-address-book"></i>
+			
+			友链
+		</a>
+          
+        </li>
+        
+        
+        <li><div class="divider"></div></li>
+        <li>
+            <a href="https://github.com/miaotony" class="waves-effect waves-light" target="_blank">
+                <i class="fab fa-github-square fa-fw"></i>Follow Me
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+
+        </div>
+
+        
+            <style>
+    .nav-transparent .github-corner {
+        display: none !important;
+    }
+
+    .github-corner {
+        position: absolute;
+        z-index: 10;
+        top: 0;
+        right: 0;
+        border: 0;
+        transform: scale(1.1);
+    }
+
+    .github-corner svg {
+        color: #0f9d58;
+        fill: #fff;
+        height: 64px;
+        width: 64px;
+    }
+
+    .github-corner:hover .octo-arm {
+        animation: a 0.56s ease-in-out;
+    }
+
+    .github-corner .octo-arm {
+        animation: none;
+    }
+
+    @keyframes a {
+        0%,
+        to {
+            transform: rotate(0);
+        }
+        20%,
+        60% {
+            transform: rotate(-25deg);
+        }
+        40%,
+        80% {
+            transform: rotate(10deg);
+        }
+    }
+</style>
+
+<a href="https://github.com/miaotony" class="github-corner tooltipped hide-on-med-and-down" target="_blank"
+   data-tooltip="Follow Me" data-position="left" data-delay="50">
+    <svg viewBox="0 0 250 250" aria-hidden="true">
+        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+        <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2"
+              fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
+        <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z"
+              fill="currentColor" class="octo-body"></path>
+    </svg>
+</a>
+        
+    </nav>
+
+</header>
+
+    
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/6.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <h1 class="description center-align post-title">HomeLab | 2 OpenMediaVault 安装 &amp; 硬盘直通 &amp; 相关配置</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        min-width: 240px;
+        padding-left: 15px;
+        padding-bottom: 30px;
+    }
+
+    .toc-widget .toc-title {
+        padding: 30px 0 15px 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content {
+	    max-height: 450px;
+        overflow: auto;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #42b983;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+
+        position: absolute;
+        right: 23.5vw;
+        display: block;
+    }
+
+    #toc-content .is-active-link {
+        color: #42b983;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 15px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/Tech/">
+                                <span class="chip bg-color">Tech</span>
+                            </a>
+                        
+                            <a href="/tags/Configuration/">
+                                <span class="chip bg-color">Configuration</span>
+                            </a>
+                        
+                            <a href="/tags/Server/">
+                                <span class="chip bg-color">Server</span>
+                            </a>
+                        
+                            <a href="/tags/HomeLab/">
+                                <span class="chip bg-color">HomeLab</span>
+                            </a>
+                        
+                            <a href="/tags/PVE/">
+                                <span class="chip bg-color">PVE</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/Tech/" class="post-category">
+                                Tech
+                            </a>
+                        
+                            <a href="/categories/Tech/Server/" class="post-category">
+                                Server
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2023-06-10
+                </div>
+                
+
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
+                    5.2k
+                </div>
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
+                    19 分
+                </div>
+                
+
+                
+            </div>
+        </div>
+        <hr class="clearfix">
+
+        
+        <!-- 是否加载使用自带的 prismjs. -->
+        <link rel="stylesheet" href="/libs/prism/prism.css">
+        
+
+        
+
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <blockquote>
+<p><strong>请注意！！！</strong></p>
+<p>本系列的文章是断断续续写的，最早写于2022年9月，<strong>可能有些信息已经过时！</strong></p>
+<p><del><em>别问，问就是写了一半然后放草稿箱里长草了。</em></del></p>
+</blockquote>
+<h2 id="0x00-引言"><a href="#0x00-引言" class="headerlink" title="0x00 引言"></a>0x00 引言</h2><p><strong>组 NAS！</strong></p>
+<p><strong>OMV，启动！</strong></p>
+<p>上次喵喵把家里 HomeLab 的鸡鸡跑起来了，搭好了 PVE，详见 <a href="https://miaotony.xyz/2022/12/18/Server_HomeLab_1_PVEsetup/">HomeLab | 1 Proxmox Virtual Environment(PVE) 安装及配置</a></p>
+<p>另外还买了四块 4TB HDD 西数紫盘/监控盘 来做大存储，这次就来把存储用起来吧！</p>
+<p>这里喵喵在 PVE 上开了个 VM 跑 OpenMediaVault/OMV 系统做管理，这篇文章就简单记录一下相关的安装以及配置过程，包括硬盘（控制器）直通、RAID 组建、LVM 配置、文件系统创建、文件共享等等。</p>
+<h2 id="0x01-OpenMediaVault-简介"><a href="#0x01-OpenMediaVault-简介" class="headerlink" title="0x01 OpenMediaVault 简介"></a>0x01 OpenMediaVault 简介</h2><blockquote>
+<p><strong>What is OpenMediaVault ?</strong></p>
+<p>openmediavault is the next generation network attached storage (NAS) solution based on Debian Linux. It contains services like SSH, (S)FTP, SMB/CIFS, DAAP media server, RSync, BitTorrent client and many more. Thanks to the modular design of the framework it can be enhanced via plugins.</p>
+<p>openmediavault is primarily designed to be used in small offices or home offices, but is not limited to those scenarios. It is a simple and easy to use out-of-the-box solution that will allow everyone to install and administrate a Network Attached Storage without deeper knowledge.</p>
+<p><em>via <a target="_blank" rel="noopener" href="https://www.openmediavault.org/">https://www.openmediavault.org/</a></em></p>
+</blockquote>
+<p>OpenMediaVault（OMV）是一个基于 Debian 操作系统的自由开源网络附加存储（NAS）解决方案。它的主要目的是将一台普通计算机或嵌入式设备转变为功能强大的网络存储服务器，使用户能够轻松地管理和共享文件、媒体和其他数据。OpenMediaVault 提供了一个易于使用的 Web 界面，通过该界面可以进行各种设置和管理任务，无需深入了解命令行。</p>
+<p>OpenMediaVault 的功能包括：</p>
+<ol>
+<li>文件共享：您可以设置共享文件夹，支持多种文件共享协议，如 SMB/CIFS、NFS、FTP 等，使您可以在本地网络上轻松访问文件。</li>
+<li>硬盘管理：OpenMediaVault 支持硬盘和 RAID 阵列的管理，允许您添加、删除、扩展和监控存储设备。</li>
+<li>插件支持：您可以通过安装插件来扩展 OpenMediaVault 的功能，例如下载管理、媒体服务器、BitTorrent 客户端等。</li>
+<li>用户和权限控制：您可以创建用户帐户，并精确控制用户对共享文件夹的访问权限。</li>
+<li>远程管理：通过 Web 界面，您可以从任何地方远程管理您的 OpenMediaVault 服务器。</li>
+<li>插件生态系统：OpenMediaVault 社区提供了各种插件，可用于扩展和定制系统的功能。</li>
+</ol>
+<p>总之，OpenMediaVault 是一个强大的 NAS 解决方案，适用于家庭用户、小型办公室和小型企业，它为用户提供了一个相对容易设置和管理的方式，用于创建和维护网络存储服务器和其他相关任务。</p>
+<p><em>（嗯你没说错，上面这几段话是 ChatGPT 说的。</em></p>
+<h2 id="0x02-PVE-安装-openmediavault"><a href="#0x02-PVE-安装-openmediavault" class="headerlink" title="0x02 PVE 安装 openmediavault"></a>0x02 PVE 安装 openmediavault</h2><p><strong>！！！注意！！！</strong></p>
+<p><em><strong>All In One ==&gt; All In Boom ???</strong></em></p>
+<p>在 PVE 这样的虚拟化平台里利用虚拟机搭建 omv 存在一定的风险性。</p>
+<p>比如宿主机锅了，虚拟机没安全关机，这时硬盘的数据可能不能保证安全，特别是一些基于 ZFS 文件系统的发行版（？）。</p>
+<blockquote>
+<p>参考 <a target="_blank" rel="noopener" href="https://www.truenas.com/community/threads/absolutely-must-virtualize-freenas-a-guide-to-not-completely-losing-your-data.12714/">“Absolutely must virtualize FreeNAS!” … a guide to not completely losing your data.</a></p>
+<p>这篇文章用的是 VMware ESXi，说的是坚持要在 VM 里跑 FreeNAS（另一种 NAS 系统发行版），给了一点小建议。</p>
+<p>比如，不要使用原始设备映射（Raw Device Mapping），而应该通过 PCI 直通 SATA 控制器，留给 VM 足够的内存和 CPU 资源，等等。</p>
+</blockquote>
+<p><strong>如果有可能 / 条件允许的情况下，尽量将存储和计算服务分开部署在两台或者多台机器上。</strong></p>
+<p>大概的步骤就是在 PVE 里新建个 VM，然后分配 CPU 内存 硬盘 网络 等等资源，然后挂个 OMV 的镜像上去安装到咱的 SSD 上。</p>
+<p>具体细节就不展开了喵（</p>
+<h2 id="0x03-omv-配置"><a href="#0x03-omv-配置" class="headerlink" title="0x03 omv 配置"></a>0x03 omv 配置</h2><p>OpenMediaVault 的默认登录账户是 <code>admin</code>，默认登录密码是 <code>openmediavault</code></p>
+<p>登录进去之后先修改下密码</p>
+<p><em>其他的看心情配.jpg</em></p>
+<h2 id="0x04-直通硬盘控制器"><a href="#0x04-直通硬盘控制器" class="headerlink" title="0x04 直通硬盘控制器"></a>0x04 直通硬盘控制器</h2><p>既然是当 NAS 用了，为了充分发挥硬盘的性能，我们需要把硬盘给直通到 VM 里。如果不这样而是在 PVE 里新建硬盘的话，那样实际上是在物理磁盘上建了个虚拟硬盘文件，相当于套了个娃，那效率和速度肯定不行……</p>
+<p>但是发现 <strong>网上很多所谓的硬盘直通，其实做的是磁盘映射（Device Mapping）</strong>。</p>
+<p>咱觉得 <strong>真正的直通应该是将硬盘控制器直通</strong>，这样虚拟机才能完整实现对硬盘的控制。</p>
+<p><em>Update: 不过其实也<strong>有利有弊</strong>，一个弊端是如果你又想把 VM 里的存储给其他 VM 用的话，还得走 NFS 或者 SMB，实际性能喵喵用起来感觉非常难受，特别是对于 node_modules 这种一堆小文件的东西，走网络传输性能十分堪忧（不知道是不是我配置的问题？</em></p>
+<p><em>当然如果你只是把这个存储当 NAS 用，那其实直通硬盘控制器就没啥大问题。要是再需要跑啥存储相关的服务，那可以直接把宿主机的资源分多一点给这个 VM，然后服务都跑这里面而不是另外开 VM 走 NFS 文件共享了</em></p>
+<p><em>至于如果要用 Device Mapping 的方式，也有一些需要注意的问题，<del>喵喵还踩坑了把数据给搞坏了呜呜</del>，这个后面有空再写一篇细说吧（</em></p>
+<p>当然这只是喵喵随口说的建议，具体咋用看你自己，你喜欢就好。</p>
+<h3 id="IOMMU"><a href="#IOMMU" class="headerlink" title="IOMMU"></a>IOMMU</h3><p>在 PVE 所在的宿主机，修改 <code>/etc/default/grub</code>，如果是 Intel 的 CPU，增加 <code>intel_iommu</code> 这个</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token assign-left variable">GRUB_CMDLINE_LINUX_DEFAULT</span><span class="token operator">=</span><span class="token string">"quiet intel_iommu=on iommu=pt"</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<blockquote>
+<p>IOMMU (<strong>I</strong>/<strong>O</strong> <strong>M</strong>emory <strong>M</strong>anagement <strong>U</strong>nit)</p>
+<p>其中 <code>iommu=pt</code> 不是必须的，PT 模式只在必要的时候开启设备的 IOMMU 转换，可以提高未直通设备 PCIe 的性能，建议添加。</p>
+</blockquote>
+<p>对于 AMD CPU </p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token assign-left variable">GRUB_CMDLINE_LINUX_DEFAULT</span><span class="token operator">=</span><span class="token string">"quiet amd_iommu=on iommu=pt"</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>运行命令使 grub 修改生效</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">update-grub</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+
+
+<h3 id="Kernel-Modules"><a href="#Kernel-Modules" class="headerlink" title="Kernel Modules"></a>Kernel Modules</h3><p>修改 <code>/etc/modules</code>，添加以下内容（非必需，虚拟机直通时会自动加载相关模块）</p>
+<pre class="line-numbers language-none"><code class="language-none">vfio
+vfio_iommu_type1
+vfio_pci
+vfio_virqfd<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><strong>然后刷新 initramfs，重启 PVE（宿主机）</strong></p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">update-initramfs -u -k all
+<span class="token function">reboot</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<p>重启之后，检查是否启用成功</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">dmesg</span> <span class="token operator">|</span> <span class="token function">grep</span> -e DMAR -e IOMMU -e AMD-Vi<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>应该显示 <code>IOMMU, Directed I/O</code> 或者 <code>Interrupt Remapping</code> 已启用 或者 <code>DMAR: IOMMU enabled</code> 类似的信息，取决于硬件和内核，具体的消息可能会有所不同</p>
+<p>然后确保你想要直通的设备在一个单独的 IOMMU 组里</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">find</span> /sys/kernel/iommu_groups/ -type l<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>如果设备与其功能（例如带有 HDMI 音频设备的 GPU）或其根端口或 PCI(e) 桥接器一起位于 IOMMU 组中，也是可以的。</p>
+<p>比如咱这里的是这样的。</p>
+<p><img src="/2023/06/10/Server_HomeLab_2_openmediavault/image-20220905230901881.png"></p>
+<h3 id="修改-VM-配置"><a href="#修改-VM-配置" class="headerlink" title="修改 VM 配置"></a>修改 VM 配置</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">lspci<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>找到你的硬盘 SATA 控制器，比如咱的这个地址是 <code>00:17.0</code></p>
+<p><img src="/2023/06/10/Server_HomeLab_2_openmediavault/image-20220905231300610.png"></p>
+<p>然后登录 PVE 管理，在 omv 对应的 VM 硬件里，添加 PCI 设备</p>
+<p><img src="/2023/06/10/Server_HomeLab_2_openmediavault/image-20220905231353533.png"></p>
+<p>选择上面找到的那个 SATA 控制器</p>
+<p><img src="/2023/06/10/Server_HomeLab_2_openmediavault/image-20220905231502053.png"></p>
+<p>然后勾一下 All Functions</p>
+<p><img src="/2023/06/10/Server_HomeLab_2_openmediavault/image-20220905231528819.png"></p>
+<p>之后启动 VM，就能在 omv 里看到所有挂在 SATA 控制器接口下的硬盘了。</p>
+<p>这时候这些盘已经完全交给 VM 进行管理了，host 就拿不到这些盘了，比如 <code>lsblk</code> 看看，发现已经看不到这些硬盘了。</p>
+<h2 id="0x05-组建-RAID"><a href="#0x05-组建-RAID" class="headerlink" title="0x05 组建 RAID"></a>0x05 组建 RAID</h2><p>首先在 存储器-硬盘 这下面，把你要组 RAID 的硬盘给擦除了</p>
+<p><strong>注意不要擦除 omv 所在的系统盘</strong>，比如这里的 sda</p>
+<p><img src="/2023/06/10/Server_HomeLab_2_openmediavault/image-20220903041426746.png"></p>
+<p>然后二次确认擦除，一般 快速 擦除就好了。</p>
+<p><img src="/2023/06/10/Server_HomeLab_2_openmediavault/image-20220903041539860.png"></p>
+<p><img src="/2023/06/10/Server_HomeLab_2_openmediavault/image-20220903041549564.png"></p>
+<p>等到出现 <code>END OF LINE</code> 就可以关闭了。</p>
+<p><img src="/2023/06/10/Server_HomeLab_2_openmediavault/image-20220903041616679.png"></p>
+<p>omv 里提供的软 RAID 也就是 Linux 里标准实现的 RAID</p>
+<p><img src="/2023/06/10/Server_HomeLab_2_openmediavault/image-20220901054459641.png"></p>
+<p>级别里可以选择不同的 RAID 类型</p>
+<p><img src="/2023/06/10/Server_HomeLab_2_openmediavault/image-20220901054526760.png"></p>
+<p>各种阵列的对比可以见下表</p>
+<p><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/RAID">https://zh.wikipedia.org/wiki/RAID</a></p>
+<p><img src="/2023/06/10/Server_HomeLab_2_openmediavault/image-20220901055617505.png"></p>
+<p><strong>具体如何选择，得看个人吧</strong>，喵喵在这纠结了老半天，最后用了 RAID5</p>
+<p><del><em>（感觉 RAID0 不安全，直接过；RAID10 太浪费盘了，RAID6 多浪费一块盘但又没镜像，么钱钱，呜呜</em></del></p>
+<p>配置好之后，是下面的状态，需要等 resyncing 跑完才行。</p>
+<p><img src="/2023/06/10/Server_HomeLab_2_openmediavault/image-20220901054723488.png"></p>
+<p>啊，太慢了，HDD 没办法。。于是就放在这干别的去了。</p>
+<p>好了之后是下面这样的。</p>
+<p><img src="/2023/06/10/Server_HomeLab_2_openmediavault/image-20220901183318288.png"></p>
+<p>后面查了一下，<strong>在 resync 的过程中其实是可以干别的事的</strong>，直接当成一个正常的硬盘去操作就好了，只是在重建同步的过程中不能保证故障安全就是了。</p>
+<blockquote>
+<p>参考 <a target="_blank" rel="noopener" href="https://superuser.com/questions/734837/is-it-safe-to-transfer-files-to-a-raid-5-array-while-it-is-re-synching">Is it safe to transfer files to a raid 5 array while it is re-synching?</a></p>
+<p><strong>Friendly answer:</strong> Yes, you can.</p>
+<p>The idea behind any RAID array is that it should act as an usual disk, so if the array is online and available, feel free to use it.  You may experience some performance degradation during the process, but you can overcome this.</p>
+<p><strong>Not so friendly answer:</strong> Understand what the resync process means.</p>
+<p>If you are using a RAID-5, besides other benefits, you probably want to be fail-safe.  While the array is resyncing <strong>you are not safe if some of your drives fail</strong> (they are not in sync).  If you are simple setting up your drives, just go ahead and forget they are resyncing, this is normal behavior.  But  if you are recovering your RAID array from a crash, you probably want to wait them to finish the resync process.</p>
+<p>In any situation, only after the disks finish the resync process you are allowed to say your RAID array is fail-safe.</p>
+</blockquote>
+<p>另外，还找到了些加速 resync 的小技巧：<a target="_blank" rel="noopener" href="https://www.cyberciti.biz/tips/linux-raid-increase-resync-rebuild-speed.html">5 Tips To Speed Up Linux Software Raid Rebuilding And Re-syncing</a></p>
+<p><em>（不过咱这里就放着干别的去了</em></p>
+<p>如果你想直接拿这个 RAID 去用，而不使用 LVM（逻辑卷管理器）加一个中间层，那就直接在 文件系统 里新建文件系统，然后挂载就完事了。</p>
+<p>如果想用 LVM 就建议先别操作，看下一节。</p>
+<h2 id="0x06-安装-amp-配置-LVM"><a href="#0x06-安装-amp-配置-LVM" class="headerlink" title="0x06 安装 &amp; 配置 LVM"></a>0x06 安装 &amp; 配置 LVM</h2><p>在插件里找到 openmediavault-lvm2，点击查询右边那个下载按钮进行安装。</p>
+<p><img src="/2023/06/10/Server_HomeLab_2_openmediavault/image-20220901234515703.png"></p>
+<p>之后在存储器里面就会多一个 逻辑卷管理 了</p>
+<p><img src="/2023/06/10/Server_HomeLab_2_openmediavault/image-20220903032951167.png"></p>
+<p>注意如果要用 LVM，就别在 文件系统 里建立文件系统和挂载，不然在 逻辑卷管理-多个物理卷 下面，找不到你的设备的。。</p>
+<p>除非你把共享文件夹删了，再把文件系统卸载了，然后把文件系统删了……</p>
+<p><em>（因为喵喵就这样过来的，以及后面想了想四块盘里还是单独留了一块盘没组 RAID，其他三块组 RAID5</em></p>
+<h3 id="LVM-简介"><a href="#LVM-简介" class="headerlink" title="LVM 简介"></a>LVM 简介</h3><p>其实 LVM 在 PVE 系统里就用到了，但说来咱之前也不懂啥是 LVM，这里正好复制粘贴学习一下。</p>
+<p>LVM 是 Logical Volume Manager 的缩写，中文一般翻译为 “逻辑卷管理”，它是 Linux 下对磁盘分区进行管理的一种机制。LVM 是建立在磁盘分区和文件系统之间的一个逻辑层，系统管理员可以利用 LVM <strong>在不重新对磁盘分区的情况下动态的调整分区的大小</strong>。如果系统新增了一块硬盘，通过 LVM 就可以将新增的硬盘空间直接扩展到原来的磁盘分区上。</p>
+<p>LVM 利用 Linux 内核的 <a target="_blank" rel="noopener" href="http://sources.redhat.com/dm/">device-mapper</a> 功能来实现存储系统的虚拟化（系统分区独立于底层硬件）。 通过 LVM，你可以实现存储空间的抽象化并在上面建立虚拟分区（virtual partitions），可以更简便地扩大和缩小分区，可以增删分区时无需担心某个硬盘上没有足够的连续空间，避免为正在使用的磁盘重新分区的麻烦、为调整分区而不得不移动其他分区的不便。</p>
+<p><strong>LVM 的基本组成部分</strong>如下：</p>
+<ul>
+<li><p><strong>物理卷 (PV, Physical Volume)</strong></p>
+<p>一个可供存储LVM的块设备. 例如: 一块硬盘, 一个MBR或GPT<a target="_blank" rel="noopener" href="https://wiki.archlinux.org/title/Partitioning_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)">分区</a>, 一个回环文件,  一个被内核映射的设备 (例如 <a target="_blank" rel="noopener" href="https://wiki.archlinux.org/title/Dm-crypt_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)">dm-crypt</a>).它包含一个特殊的LVM头。</p>
+</li>
+<li><p><strong>卷组 (VG, Volume Group)</strong></p>
+<p>物理卷的一个组，作为存放逻辑卷的容器。 PEs are allocated from a VG for a LV.</p>
+</li>
+<li><p><strong>逻辑卷 (LV, Logical Volume)</strong></p>
+<p>“虚拟/逻辑卷”存放在一个卷组中并由物理块组成。是一个类似于物理设备的块设备，例如，你可以直接在它上面创建一个<a target="_blank" rel="noopener" href="https://wiki.archlinux.org/title/File_systems_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)">文件系统</a>。</p>
+</li>
+<li><p><strong>物理块 (PE, Physical Extent)</strong></p>
+<p>一个卷组中最小的连续区域(默认为4 MiB)，多个物理块将被分配给一个逻辑卷。你可以把它看成物理卷的一部分，这部分可以被分配给一个逻辑卷。</p>
+</li>
+</ul>
+<p>顺便，<strong>物理存储设备(Physical Media)：</strong>指系统的存储设备文件，比如 /dev/sda、/dev/sdb 等。</p>
+<p><img src="/2023/06/10/Server_HomeLab_2_openmediavault/image-20220903040224619.png"></p>
+<p>当然，还有别人总结的 LVM 的优点如下：</p>
+<ul>
+<li>文件系统可以跨多个磁盘，因此大小不再受物理磁盘的限制。</li>
+<li>可以在系统运行状态下动态地扩展文件系统大小。</li>
+<li>可以以镜像的方式冗余重要数据到多个物理磁盘上。</li>
+<li>可以很方便地导出整个卷组，并导入到另外一台机器上。</li>
+</ul>
+<p>LVM 缺点：</p>
+<ul>
+<li>在从卷组中移除一个磁盘的时候必须使用 reducevg 命令(这个命令要求root权限，并且不允许在快照卷组中使用)。</li>
+<li>当卷组中的一个磁盘损坏时，整个卷组都会受影响。</li>
+<li>因为增加了一个逻辑层，存储的性能会受影响。</li>
+</ul>
+<p>总之，咱感觉 LVM 用起来非常灵活就是了。</p>
+<h3 id="添加物理卷-x2F-PV"><a href="#添加物理卷-x2F-PV" class="headerlink" title="添加物理卷/PV"></a>添加物理卷/PV</h3><p>新建物理卷，设备里可以选组好的 软 RAID，以及你的其他盘，然后保存配置</p>
+<p><img src="/2023/06/10/Server_HomeLab_2_openmediavault/image-20220903033525950.png"></p>
+<p><img src="/2023/06/10/Server_HomeLab_2_openmediavault/image-20220903033636412.png"></p>
+<h3 id="添加卷组-x2F-VG"><a href="#添加卷组-x2F-VG" class="headerlink" title="添加卷组/VG"></a>添加卷组/VG</h3><p>物理卷就相当于是你所有物理存储设备的大池子，卷组就是你从大池子里取某些特定的物理设备，由一个或者多个物理硬盘组成一个大的存储池，或者说是个大硬盘。</p>
+<p>比如你可以同时勾选多个盘，这些盘组成一个卷组，从而不用在意底层真实硬盘是如何分布的了。</p>
+<p><img src="/2023/06/10/Server_HomeLab_2_openmediavault/image-20220903041021605.png"></p>
+<p>不过咱这里还是想单独这块盘分出来另外用，于是就 sdb 和 md0 分别建了各自的卷组。</p>
+<p><strong>注意这里的名称不能和磁盘描述符相同</strong>，比如不能起 <code>sdb</code> <code>md0</code> 这种。</p>
+<p>别问，问就是这样过来的。。<em>（<a target="_blank" rel="noopener" href="https://unix.stackexchange.com/questions/639295/cant-create-a-vg-dev-sda1-already-exists-in-filesystem">Cant create a VG . /dev/sda1: already exists in filesystem</a></em></p>
+<p>建好之后就像下面这样了。</p>
+<p><img src="/2023/06/10/Server_HomeLab_2_openmediavault/image-20220903044143651.png"></p>
+<p><em><del>哪有 homo（homo 特有的无处不在，跑</del></em></p>
+<h3 id="添加逻辑卷-x2F-LV"><a href="#添加逻辑卷-x2F-LV" class="headerlink" title="添加逻辑卷/LV"></a>添加逻辑卷/LV</h3><p><img src="/2023/06/10/Server_HomeLab_2_openmediavault/image-20220903044714706.png"></p>
+<p><img src="/2023/06/10/Server_HomeLab_2_openmediavault/image-20220903045141293.png"></p>
+<p>逻辑卷就可以当作一个独立的硬盘来使用，还要进行格式化、创建文件系统等步骤。</p>
+<p><del><em>（这个拖动来选 Size 有一点点拖动滑块来填确定数字的感觉</em></del></p>
+<h2 id="0x07-文件系统"><a href="#0x07-文件系统" class="headerlink" title="0x07 文件系统"></a>0x07 文件系统</h2><p>文件系统 里，选择分好的 LV，创建文件系统。</p>
+<p><img src="/2023/06/10/Server_HomeLab_2_openmediavault/image-20220903045303909.png"></p>
+<p><img src="/2023/06/10/Server_HomeLab_2_openmediavault/image-20220903045326892.png"></p>
+<p>这里咱就用 xfs 了。</p>
+<p>可以参考一下 <a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/1768370">云盘文件系统比较：Ext4、XFS和Btrfs</a> 之类的文章。</p>
+<p><img src="/2023/06/10/Server_HomeLab_2_openmediavault/image-20220903045538902.png"></p>
+<p>然后挂载磁盘。</p>
+<p><img src="/2023/06/10/Server_HomeLab_2_openmediavault/image-20220903045607074.png"></p>
+<p>稍微等一阵子，应用变更，容量正常显示，硬盘就挂载完成了。</p>
+<p><img src="/2023/06/10/Server_HomeLab_2_openmediavault/image-20220903045740214.png"></p>
+<p>这时候再用 <code>df</code> 命令看就发现挂载到系统上了。</p>
+<p><img src="/2023/06/10/Server_HomeLab_2_openmediavault/image-20220903050012627.png"></p>
+<h2 id="0x08-设置共享文件夹"><a href="#0x08-设置共享文件夹" class="headerlink" title="0x08 设置共享文件夹"></a>0x08 设置共享文件夹</h2><p>挂载之后为了在局域网内共享，还需要新建 共享文件夹。</p>
+<p>这里的名称就是显示在你网络设备里的文件夹名称了。</p>
+<p><img src="/2023/06/10/Server_HomeLab_2_openmediavault/image-20220903050116264.png"></p>
+<p>权限里可以根据需求具体设置一下，这个也可以在 用户 里进行更详细的配置。</p>
+<p><img src="/2023/06/10/Server_HomeLab_2_openmediavault/image-20220903050327616.png"></p>
+<p>配置好之后需要应用配置才能生效。</p>
+<h2 id="0x09-开启-SMB-x2F-CIFS"><a href="#0x09-开启-SMB-x2F-CIFS" class="headerlink" title="0x09 开启 SMB/CIFS"></a>0x09 开启 SMB/CIFS</h2><p>在 服务 下面这里开启你需要的文件共享服务，比如 Linux 下常用的 NFS，或者 Windows 常用的 SMB 这些。</p>
+<p><img src="/2023/06/10/Server_HomeLab_2_openmediavault/image-20220903051955659.png"></p>
+<p>然后选择 共享文件夹 里创建好的文件夹，配置各种属性，保存就好了。</p>
+<p><img src="/2023/06/10/Server_HomeLab_2_openmediavault/image-20220903052233920.png"></p>
+<p>公开 这个选择这里按需要选，比如你需要用户登录才能读写，那就选 否；如果允许访客（无密码）访问，那就选访客的。</p>
+<p>继承权限 这个可以勾一下。不过看个人了啦 哈哈哈。</p>
+<p><img src="/2023/06/10/Server_HomeLab_2_openmediavault/image-20220903052531855.png"></p>
+<p>创建好之后应用配置。</p>
+<h2 id="0x0A-配置用户-x2F-用户组"><a href="#0x0A-配置用户-x2F-用户组" class="headerlink" title="0x0A 配置用户 / 用户组"></a>0x0A 配置用户 / 用户组</h2><p>新建用户，用户组等</p>
+<p>这里的用户，如果开了 ssh 访问（默认是开的），那就可以登录你的 omv 了。实际上这里就在 Linux 下新建了用户，赋予了一些权限。</p>
+<p><img src="/2023/06/10/Server_HomeLab_2_openmediavault/image-20220903053126688.png"></p>
+<p>这里面可以添加 ssh public key，方便访问哈哈哈</p>
+<p>比如咱建了个 <code>miaotony</code> 账号，在 <code>/etc/passwd</code> 里就可以看到了。</p>
+<p><img src="/2023/06/10/Server_HomeLab_2_openmediavault/image-20220903053412568.png"></p>
+<p><img src="/2023/06/10/Server_HomeLab_2_openmediavault/image-20220903053038128.png"></p>
+<p>当然如果你有多个用户在用的话，可以建个用户组，然后把用户加进去，或者导入进去也行。</p>
+<p>然后点击那个 文件夹锁头 图标，就可以给用户或者用户组赋予共享文件夹的访问权限了。</p>
+<p><img src="/2023/06/10/Server_HomeLab_2_openmediavault/image-20220903053852103.png"></p>
+<p>或者，在 存储器-共享文件夹 下，也可以对特定的共享文件夹设定权限，或者下图框里第二个图标（访问控制列表）</p>
+<p><img src="/2023/06/10/Server_HomeLab_2_openmediavault/image-20220904024029651.png"></p>
+<p><img src="/2023/06/10/Server_HomeLab_2_openmediavault/image-20220904024203107.png"></p>
+<p>访问控制列表（ACL）</p>
+<p><img src="/2023/06/10/Server_HomeLab_2_openmediavault/image-20220904024243368.png"></p>
+<p>当然，需要应用配置才能生效。</p>
+<h2 id="0x0B-远程访问"><a href="#0x0B-远程访问" class="headerlink" title="0x0B 远程访问"></a>0x0B 远程访问</h2><p>如果是 Windows 或者一些机顶盒、智能电视等等，SMB 配好就可以在自己的设备上用自己的账号信息登录进行远程访问啦。</p>
+<p><img src="/2023/06/10/Server_HomeLab_2_openmediavault/image-20220903054046995.png"></p>
+<p>在此基础上还可以映射网络驱动器。</p>
+<p><img src="/2023/06/10/Server_HomeLab_2_openmediavault/image-20220903054205273.png"></p>
+<p>这样就能直接在 我的电脑 里进行访问了。好耶！</p>
+<p><img src="/2023/06/10/Server_HomeLab_2_openmediavault/image-20220903054230451.png"></p>
+<p>内网千兆传输贼舒服啊！</p>
+<p><img src="/2023/06/10/Server_HomeLab_2_openmediavault/image-20220903054619785.png"></p>
+<p>反过来的话，NAS 传给本地，跑满千兆内网了，贼舒服！</p>
+<p><img src="/2023/06/10/Server_HomeLab_2_openmediavault/image-20220903055718102.png"></p>
+<p><del>所以为啥没上光纤或者 10Gbps/2.5Gbps 以太网</del> </p>
+<p><em>没钱，也没预留光纤，物理交换机设备也没跟上，以后有机会再说吧（</em></p>
+<h2 id="0x0C-一些问题及解决方案"><a href="#0x0C-一些问题及解决方案" class="headerlink" title="0x0C 一些问题及解决方案"></a>0x0C 一些问题及解决方案</h2><h3 id="SMB-共享文件夹内的文件无法执行"><a href="#SMB-共享文件夹内的文件无法执行" class="headerlink" title="SMB 共享文件夹内的文件无法执行"></a>SMB 共享文件夹内的文件无法执行</h3><p>使用的时候遇到这样的情况，把本地的一个安装包文件复制到 omv 下的共享文件夹里，然后在另一台电脑上直接点开共享文件夹里的安装包，尝试安装，这时候提示没有权限……</p>
+<p>类似于下面这样</p>
+<p><img src="/2023/06/10/Server_HomeLab_2_openmediavault/image-20220914042341303.png"></p>
+<p>右键查看属性里的 安全，发现当前用户并没有 执行 权限。</p>
+<p><img src="/2023/06/10/Server_HomeLab_2_openmediavault/image-20220914042057448.png"></p>
+<p><strong>手动加上这个 读取和执行 权限，或者 完全控制 权限</strong> 之后，就能执行了……</p>
+<p>或者在 omv 的系统里也可以看到，权限是 <code>-rw-------+</code> 或者 <code>-rw-r--r--</code> 这样的，确实没执行权限。</p>
+<p>于是倒是可以批量 <code>chmod -R u+x *</code> 加个可执行权限。</p>
+<p>但是发现如果再从 Windows 复制新的文件上去，还是没可执行权限……</p>
+<p>网上也有人遇到过这样的问题：<a target="_blank" rel="noopener" href="https://p3terx.com/archives/problems-and-solutions-encountered-in-using-openmediavault-1.html">OpenMediaVault 使用中遇到的问题和解决方案 #1 - permission denied</a>，里面这么说：</p>
+<blockquote>
+<p>Open­Medi­aVault 挂载磁盘默认会使用 <code>noexec</code> 参数，即不允许执行</p>
+</blockquote>
+<p>但是新版的 omv，官方在 2020 年 9 月 21 日发布的新版本中 <a target="_blank" rel="noopener" href="https://p3terx.com/go/aHR0cHM6Ly9naXRodWIuY29tL29wZW5tZWRpYXZhdWx0L29wZW5tZWRpYXZhdWx0L2NvbW1pdC9hNTQ1MTA1NWM0NjU2MzllM2ZmNGVmYjhhNGZmNjZjODc2M2I0Zjk0">已不在使用<code>noexec</code>选项</a></p>
+<p>而且咱这里 <code>/etc/openmediavault/config.xml</code> 文件里也找不到 <code>noexec</code> 这样的关键词了。</p>
+<p>所以按理说应该不是这里的问题吧，唔，不懂了。。</p>
+<p>反正要可执行的时候手动改下权限算了（摊手</p>
+<h3 id="samba-无法多用户访问"><a href="#samba-无法多用户访问" class="headerlink" title="samba 无法多用户访问"></a>samba 无法多用户访问</h3><blockquote>
+<p>不允许一个用户使用一个以上用户名与一个服务器或共享资源的多重连接。中断与此服务器或共享资源的连接，然后再试一次。</p>
+</blockquote>
+<p>参考 <a target="_blank" rel="noopener" href="https://p3terx.com/archives/problems-and-solutions-encountered-in-using-openmediavault-2.html">OpenMediaVault 使用中遇到的问题和解决方案 #2 - samba 无法多用户访问</a></p>
+<p>查看当前与网络资源的连接</p>
+<pre class="line-numbers language-cmd" data-language="cmd"><code class="language-cmd">&gt; net use
+会记录新的网络连接。
+
+
+状态       本地        远程                      网络
+
+-------------------------------------------------------------------------------
+OK           M:        \\192.168.1.22\public  Microsoft Windows Network
+OK           N:        \\192.168.1.22\test  Microsoft Windows Network
+命令成功完成。<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>如果单独断开上面其中一个连接，那就</p>
+<pre class="line-numbers language-cmd" data-language="cmd"><code class="language-cmd">net use \\192.168.1.22\public /del /y<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>如果断开所有连接</p>
+<pre class="line-numbers language-cmd" data-language="cmd"><code class="language-cmd">net use * /del /y<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>然后重新打开共享文件夹，登录即可。</p>
+<p><em><del>（可恶的 Windows</del></em></p>
+<h2 id="0x0D-小结"><a href="#0x0D-小结" class="headerlink" title="0x0D 小结"></a>0x0D 小结</h2><p>这篇博客大概介绍了下 OpenMediaVault 的安装，RAID 组建，LVM 配置，文件系统创建，文件共享，以及 OMV 里一些基本功能的使用方法等等。</p>
+<p>具体的使用喵喵写的仅供参考，有啥需要的自己配一配就行，你喜欢就好（</p>
+<h2 id="0xFF-References"><a href="#0xFF-References" class="headerlink" title="0xFF References"></a>0xFF References</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://geeknote.net/zhuo/posts/433">OMV系统介绍，以及在PVE安装OMV NAS系统</a></li>
+<li><a target="_blank" rel="noopener" href="https://pve.proxmox.com/pve-docs/pve-admin-guide.html#qm_pci_passthrough">PCI(e) Passthrough</a></li>
+<li><a target="_blank" rel="noopener" href="https://pve.proxmox.com/wiki/Pci_passthrough">Pci passthrough</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/Yogile/p/12625058.html">OpenMediaVault 5 进阶配置（五） RAID 磁盘阵列</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/Yogile/p/12631543.html">OpenMediaVault 5 进阶配置（六） 配置 LVM 逻辑卷管理器</a> </li>
+<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/Yogile/p/12632326.html">OpenMediaVault 5 进阶配置（七） LVM 扩容或缩容</a> </li>
+<li>archlinux wiki: <a target="_blank" rel="noopener" href="https://wiki.archlinux.org/title/XFS_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)">XFS (简体中文)</a></li>
+<li><a target="_blank" rel="noopener" href="https://remimin.github.io/2019/07/09/qemu_machine_type/">Qemu虚拟化之Machine Type</a></li>
+<li>etc.</li>
+</ul>
+<p><em>溜了溜了喵（</em> </p>
+<p><em><del>咕咕咕</del></em></p>
+
+                
+            </div>
+            <hr/>
+
+            
+
+    <div class="reprint" id="reprint-statement">
+        
+            <div class="reprint__author">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-user">
+                        文章作者:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="https://miaotony.xyz" rel="external nofollow noreferrer">MiaoTony</a>
+                </span>
+            </div>
+            <div class="reprint__type">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-link">
+                        文章链接:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="https://miaotony.xyz/2023/06/10/Server_HomeLab_2_openmediavault/">https://miaotony.xyz/2023/06/10/Server_HomeLab_2_openmediavault/</a>
+                </span>
+            </div>
+            <div class="reprint__notice">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-copyright">
+                        版权声明:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    本博客所有文章除特别声明外，均采用
+                    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY-NC-SA 4.0</a>
+                    许可协议。转载请注明来源
+                    <a href="https://miaotony.xyz" target="_blank">MiaoTony</a>
+                    !
+                </span>
+            </div>
+        
+    </div>
+
+    <script async defer>
+      document.addEventListener("copy", function (e) {
+        let toastHTML = '<span>复制成功，请遵循本文的转载规则</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">查看</a>';
+        M.toast({html: toastHTML})
+      });
+
+      function navToReprintStatement() {
+        $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
+      }
+    </script>
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            
+                                <a href="/tags/Tech/">
+                                    <span class="chip bg-color">Tech</span>
+                                </a>
+                            
+                                <a href="/tags/Configuration/">
+                                    <span class="chip bg-color">Configuration</span>
+                                </a>
+                            
+                                <a href="/tags/Server/">
+                                    <span class="chip bg-color">Server</span>
+                                </a>
+                            
+                                <a href="/tags/HomeLab/">
+                                    <span class="chip bg-color">HomeLab</span>
+                                </a>
+                            
+                                <a href="/tags/PVE/">
+                                    <span class="chip bg-color">PVE</span>
+                                </a>
+                            
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+<div id="article-share">
+
+    
+    <div class="social-share" data-sites="qq,qzone,wechat,weibo,twitter,facebook,google,douban,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
+    <script src="/libs/share/js/social-share.min.js"></script>
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+                <style>
+    #reward {
+        margin: 40px 0;
+        text-align: center;
+    }
+
+    #reward .reward-link {
+        font-size: 1.4rem;
+        line-height: 38px;
+    }
+
+    #reward .btn-floating:hover {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    #rewardModal {
+        width: 320px;
+        height: 350px;
+    }
+
+    #rewardModal .reward-title {
+        margin: 15px auto;
+        padding-bottom: 5px;
+    }
+
+    #rewardModal .modal-content {
+        padding: 10px;
+    }
+
+    #rewardModal .close {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+        color: rgba(0, 0, 0, 0.5);
+        font-size: 1.3rem;
+        line-height: 20px;
+        cursor: pointer;
+    }
+
+    #rewardModal .close:hover {
+        color: #ef5350;
+        transform: scale(1.3);
+        -moz-transform:scale(1.3);
+        -webkit-transform:scale(1.3);
+        -o-transform:scale(1.3);
+    }
+
+    #rewardModal .reward-tabs {
+        margin: 0 auto;
+        width: 210px;
+    }
+
+    .reward-tabs .tabs {
+        height: 38px;
+        margin: 10px auto;
+        padding-left: 0;
+    }
+
+    .reward-content ul {
+        padding-left: 0 !important;
+    }
+
+    .reward-tabs .tabs .tab {
+        height: 38px;
+        line-height: 38px;
+    }
+
+    .reward-tabs .tab a {
+        color: #fff;
+        background-color: #ccc;
+    }
+
+    .reward-tabs .tab a:hover {
+        background-color: #ccc;
+        color: #fff;
+    }
+
+    .reward-tabs .wechat-tab .active {
+        color: #fff !important;
+        background-color: #22AB38 !important;
+    }
+
+    .reward-tabs .alipay-tab .active {
+        color: #fff !important;
+        background-color: #019FE8 !important;
+    }
+
+    .reward-tabs .reward-img {
+        width: 210px;
+        height: 210px;
+    }
+</style>
+
+<div id="reward">
+    <a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-medium waves-effect waves-light red">赏</a>
+
+    <!-- Modal Structure -->
+    <div id="rewardModal" class="modal">
+        <div class="modal-content">
+            <a class="close modal-close"><i class="fas fa-times"></i></a>
+            <h4 class="reward-title">打赏一下让我来点好吃好玩的呗~</h4>
+            <div class="reward-content">
+                <div class="reward-tabs">
+                    <ul class="tabs row">
+                        <!-- 
+                            <li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li> 
+                        -->
+                        <li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li>
+                    </ul>
+                    <!-- 
+                        <div id="alipay">
+                        <img src="/" class="reward-img" alt="支付宝打赏二维码">
+                        </div> 
+                -->
+                    <div id="wechat">
+                        <img src="/medias/reward/wechat.png" class="reward-img" alt="微信打赏二维码">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.tabs').tabs();
+    });
+</script>
+
+            
+        </div>
+    </div>
+
+    
+        <link rel="stylesheet" href="/libs/gitalk/gitalk.min.css">
+<link rel="stylesheet" href="/css/my-gitalk.css">
+
+<div class="card gitalk-card" data-aos="fade-up">
+    <div class="comment_headling" style="font-size: 20px; font-weight: 700; position: relative; padding-left: 20px; top: 15px; padding-bottom: 5px;">
+        <i class="fas fa-comments fa-fw" aria-hidden="true"></i>
+        <span>评论</span>
+    </div>
+    <div id="gitalk-container" class="card-content"></div>
+</div>
+
+<script src="/libs/gitalk/gitalk.min.js"></script>
+<script>
+    let gitalk = new Gitalk({
+        clientID: '116343b4650fce4789b6',
+        clientSecret: '3e9be2ad6c9b693af1753290c7c059b1e4f34d5d',
+        repo: 'miaotony.github.io',
+        owner: 'miaotony',
+        admin: "miaotony",
+        id: '2023-06-10T22-30-00',
+        distractionFreeMode: false  // Facebook-like distraction free mode
+    });
+
+    gitalk.render('gitalk-container');
+</script>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
+            <div class="card">
+                <a href="/2023/06/10/Server_HomeLab_2_openmediavault/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/6.jpg" class="responsive-img" alt="HomeLab | 2 OpenMediaVault 安装 &amp; 硬盘直通 &amp; 相关配置">
+                        
+                        <span class="card-title">HomeLab | 2 OpenMediaVault 安装 &amp; 硬盘直通 &amp; 相关配置</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            大概介绍了一下 OpenMediaVault 的安装，硬盘直通，RAID 组建，LVM 配置，文件系统，文件共享，以及 OMV 里一些基本功能的使用等。
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2023-06-10
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/Tech/" class="post-category">
+                                    Tech
+                                </a>
+                            
+                            <a href="/categories/Tech/Server/" class="post-category">
+                                    Server
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/Tech/">
+                        <span class="chip bg-color">Tech</span>
+                    </a>
+                    
+                    <a href="/tags/Configuration/">
+                        <span class="chip bg-color">Configuration</span>
+                    </a>
+                    
+                    <a href="/tags/Server/">
+                        <span class="chip bg-color">Server</span>
+                    </a>
+                    
+                    <a href="/tags/HomeLab/">
+                        <span class="chip bg-color">HomeLab</span>
+                    </a>
+                    
+                    <a href="/tags/PVE/">
+                        <span class="chip bg-color">PVE</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2023/06/02/CTF_2023CISCN_preliminary/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/7.jpg" class="responsive-img" alt="CTF | 2023 CISCN 第十六届全国大学生信息安全竞赛 初赛 WriteUp">
+                        
+                        <span class="card-title">CTF | 2023 CISCN 第十六届全国大学生信息安全竞赛 初赛 WriteUp</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            又是一年一度的国赛，非常感谢队友带喵喵进了分区赛，这里来记录一下初赛的writeup。
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2023-06-02
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/CTF/" class="post-category">
+                                    CTF
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/CTF/">
+                        <span class="chip bg-color">CTF</span>
+                    </a>
+                    
+                    <a href="/tags/WriteUp/">
+                        <span class="chip bg-color">WriteUp</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+<script>
+    $('#articleContent').on('copy', function (e) {
+        // IE8 or earlier browser is 'undefined'
+        if (typeof window.getSelection === 'undefined') return;
+
+        var selection = window.getSelection();
+        // if the selection is short let's not annoy our users.
+        if (('' + selection).length < Number.parseInt('200')) {
+            return;
+        }
+
+        // create a div outside of the visible area and fill it with the selected text.
+        var bodyElement = document.getElementsByTagName('body')[0];
+        var newdiv = document.createElement('div');
+        newdiv.style.position = 'absolute';
+        newdiv.style.left = '-99999px';
+        bodyElement.appendChild(newdiv);
+        newdiv.appendChild(selection.getRangeAt(0).cloneContents());
+
+        // we need a <pre> tag workaround.
+        // otherwise the text inside "pre" loses all the line breaks!
+        if (selection.getRangeAt(0).commonAncestorContainer.nodeName === 'PRE' || selection.getRangeAt(0).commonAncestorContainer.nodeName === 'CODE') {
+            newdiv.innerHTML = "<pre>" + newdiv.innerHTML + "</pre>";
+        }
+
+        var url = document.location.href;
+        newdiv.innerHTML += '<br />'
+            + '来源: MiaoTony&#39;s小窝<br />'
+            + '文章作者: MiaoTony<br />'
+            + '文章链接: <a href="' + url + '">' + url + '</a><br />'
+            + '本文章著作权归作者 MiaoTony 所有，任何形式的转载都请注明出处。';
+
+        selection.selectAllChildren(newdiv);
+        window.setTimeout(function () {bodyElement.removeChild(newdiv);}, 200);
+    });
+</script>
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+
+
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
+
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget card" style="background-color: white;">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('1'),
+            headingSelector: 'h2, h3, h4, h5'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h2, h3, h4, h5').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+
+
+    <footer class="page-footer bg-color">
+        <div class="container row center-align" style="margin-bottom: 15px !important;">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            
+                <span id="year">2019-2023</span>
+            
+            <a href="/about" target="_blank">MiaoTony</a>
+            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+            |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
+            <br>
+                        &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
+                class="white-color">452.9k</span>&nbsp;字
+                                                                                    <span id="busuanzi_container_site_pv">
+			|&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
+                    class="white-color"></span>&nbsp;次
+            </span>
+                                    <span id="busuanzi_container_site_uv">
+                |&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;<span id="busuanzi_value_site_uv"
+                    class="white-color"></span>&nbsp;人
+            </span>
+                        <br>
+                        <span id="sitetime">载入运行时间...</span>
+            <script>
+                function siteTime() {
+                    var seconds = 1000;
+                    var minutes = seconds * 60;
+                    var hours = minutes * 60;
+                    var days = hours * 24;
+                    var years = days * 365;
+                    var today = new Date();
+                    var startYear = "2019";
+                    var startMonth = "11";
+                    var startDate = "28";
+                    var startHour = "0";
+                    var startMinute = "0";
+                    var startSecond = "0";
+                    var todayYear = today.getFullYear();
+                    var todayMonth = today.getMonth() + 1;
+                    var todayDate = today.getDate();
+                    var todayHour = today.getHours();
+                    var todayMinute = today.getMinutes();
+                    var todaySecond = today.getSeconds();
+                    var t1 = Date.UTC(startYear, startMonth, startDate, startHour, startMinute, startSecond);
+                    var t2 = Date.UTC(todayYear, todayMonth, todayDate, todayHour, todayMinute, todaySecond);
+                    var diff = t2 - t1;
+                    var diffYears = Math.floor(diff / years);
+                    var diffDays = Math.floor((diff / days) - diffYears * 365);
+                    var diffHours = Math.floor((diff - (diffYears * 365 + diffDays) * days) / hours);
+                    var diffMinutes = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours) /
+                        minutes);
+                    var diffSeconds = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours -
+                        diffMinutes * minutes) / seconds);
+                    if (startYear == todayYear) {
+                        document.getElementById("year").innerHTML = todayYear;
+                        document.getElementById("sitetime").innerHTML = "本站已安全运行 " + diffDays + " 天 " + diffHours +
+                            " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒";
+                    } else {
+                        document.getElementById("year").innerHTML = startYear + " - " + todayYear;
+                        document.getElementById("sitetime").innerHTML = "本站已安全运行 " + diffYears + " 年 " + diffDays +
+                            " 天 " + diffHours + " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒";
+                    }
+                }
+                setInterval(siteTime, 1000);
+            </script>
+                        <br>
+                    </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+    <a href="https://t.me/MiaoTonyChannel" class="tooltipped" target="_blank" data-tooltip="关注我的TelegramChannel: @MiaoTonyChannel" data-position="top" data-delay="50">
+        <i class="fab fa-telegram"></i>
+    </a>
+
+
+
+    <a href="https://github.com/miaotony" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+        <i class="fab fa-github"></i>
+    </a>
+
+
+
+    <a href="mailto:miaotony@outlook.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fas fa-envelope-open"></i>
+    </a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
+        <i class="fas fa-rss"></i>
+    </a>
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+$(function () {
+    var searchFunc = function (path, search_id, content_id) {
+        'use strict';
+        $.ajax({
+            url: path,
+            dataType: "xml",
+            success: function (xmlResponse) {
+                // get the contents from search data
+                var datas = $("entry", xmlResponse).map(function () {
+                    return {
+                        title: $("title", this).text(),
+                        content: $("content", this).text(),
+                        url: $("url", this).text()
+                    };
+                }).get();
+                var $input = document.getElementById(search_id);
+                var $resultContent = document.getElementById(content_id);
+                $input.addEventListener('input', function () {
+                    var str = '<ul class=\"search-result-list\">';
+                    var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                    $resultContent.innerHTML = "";
+                    if (this.value.trim().length <= 0) {
+                        return;
+                    }
+                    // perform local searching
+                    var cnt = 1;
+                    datas.forEach(function (data) {
+                        var isMatch = true;
+                        var content_index = [];
+                        var data_title_origin = data.title.trim();
+                        var data_title = data.title.trim().toLowerCase();
+                        var data_content = data.content.trim().replace(/<[^>]+>/g, "").toLowerCase();
+                        var data_url = data.url;
+                        data_url = data_url.indexOf('/') === 0 ? data.url : '/' + data_url;
+                        var index_title = -1;
+                        var index_content = -1;
+                        var first_occur = -1;
+                        // only match artiles with not empty titles and contents
+                        if (data_title !== '' && data_content !== '') {
+                            keywords.forEach(function (keyword, i) {
+                                index_title = data_title.indexOf(keyword);
+                                index_content = data_content.indexOf(keyword);
+                                if (index_title < 0 && index_content < 0) {
+                                    isMatch = false;
+                                } else {
+                                    if (index_content < 0) {
+                                        index_content = 0;
+                                    }
+                                    if (i === 0) {
+                                        first_occur = index_content;
+                                    }
+                                }
+                            });
+                        }
+                        // show search results
+                        if (isMatch) {
+                            str += "<li><a href='" + data_url + "' class='search-result-title'>" + String(cnt) + ". " + data_title_origin + "</a>";
+                            cnt += 1;
+    
+                            var content = data.content.trim().replace(/<[^>]+>/g, "");
+                            if (first_occur >= 0) {
+                                // cut out 300 characters
+                                var start = first_occur - 30;
+                                if (start < 0) {
+                                    start = 0;
+                                }
+                                var match_content = content.substr(start, 300);
+                                // highlight all keywords
+                                keywords.forEach(function (keyword) {
+                                    var regS = new RegExp(keyword, "gi");
+                                    match_content = match_content.replace(regS, "<em class=\"search-keyword\">" + keyword + "</em>");
+                                });
+    
+                                str += "<p class=\"search-result\">" + match_content + "...</p>"
+                            }
+                            str += "</li>";
+                        }
+                    });
+                    str += "</ul>";
+                    str = "<p class=\"search-result-summary\">共找到 " + String(cnt-1) + " 条结果</p>"  + str;
+                    $resultContent.innerHTML = str;
+                });
+            }
+        });
+    };
+
+    searchFunc('/search.xml', 'searchInput', 'searchResult');
+});
+</script>
+
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.min.js"></script>
+
+    
+
+    
+<script>
+    var _hmt = _hmt || [];
+    (function () {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?40e312a1eec109cf96e30988cf3bfe70";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+    
+    
+    
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+</body>
+
+</html>
