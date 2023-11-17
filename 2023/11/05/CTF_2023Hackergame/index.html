@@ -1796,30 +1796,37 @@ Content-Length: 100
 </blockquote>
 <blockquote>
 <p>这段 Rust 代码实现了一个安全监管程序，利用 Linux 的 <code>seccomp</code> 功能来控制一个子进程可以执行的系统调用。代码中包含了多个模块和函数，用于设置和处理系统调用的过滤和通知。以下是对代码关键部分的解释：</p>
-<h3 id="导入和结构定义"><a href="#导入和结构定义" class="headerlink" title="导入和结构定义"></a>导入和结构定义</h3><ul>
+<p><strong>导入和结构定义</strong></p>
+<ul>
 <li>导入了一系列的 Rust 标准库和第三方库，用于处理文件、线程、网络套接字、日志等。</li>
 <li><code>libseccomp</code> 库被用来与 Linux 的 <code>seccomp</code> 功能交互，它允许限制程序可以执行的系统调用。</li>
 </ul>
-<h3 id="SocketPair-结构"><a href="#SocketPair-结构" class="headerlink" title="SocketPair 结构"></a><code>SocketPair</code> 结构</h3><ul>
+<p><strong><code>SocketPair</code> 结构</strong></p>
+<ul>
 <li>用于在子进程和父进程之间传递文件描述符（fd），通过使用 <code>sendmsg</code>/<code>recvmsg</code> 系统调用和 <code>SCM_RIGHTS</code> 控制消息。</li>
 </ul>
-<h3 id="UNotifyEventRequest-结构"><a href="#UNotifyEventRequest-结构" class="headerlink" title="UNotifyEventRequest 结构"></a><code>UNotifyEventRequest</code> 结构</h3><ul>
+<p><strong><code>UNotifyEventRequest</code> 结构</strong></p>
+<ul>
 <li>封装了 <code>libseccomp</code> 的 <code>ScmpNotifReq</code>，这是一个来自 <code>seccomp</code> 子系统的通知请求，包含了关于系统调用的请求信息。</li>
 </ul>
-<h3 id="RemoteProcess-结构"><a href="#RemoteProcess-结构" class="headerlink" title="RemoteProcess 结构"></a><code>RemoteProcess</code> 结构</h3><ul>
+<p><strong><code>RemoteProcess</code> 结构</strong></p>
+<ul>
 <li>允许监管程序与远程进程（子进程）交互，例如，通过 <code>process_vm_readv</code> 读取远程进程的内存。</li>
 </ul>
-<h3 id="Supervisor-结构"><a href="#Supervisor-结构" class="headerlink" title="Supervisor 结构"></a><code>Supervisor</code> 结构</h3><ul>
+<p><strong><code>Supervisor</code> 结构</strong></p>
+<ul>
 <li>核心结构，用于创建和管理 <code>seccomp</code> 过滤器，设置系统调用处理函数，并执行和监控子进程。</li>
 <li><code>insert_handler</code> 方法用于为特定的系统调用添加用户自定义的处理函数。</li>
 <li><code>exec</code> 方法用于创建子进程，并应用 <code>seccomp</code> 过滤器。</li>
 <li><code>wait</code> 方法用于等待子进程结束，并清理监管线程和线程池。</li>
 </ul>
-<h3 id="opening-handler-函数"><a href="#opening-handler-函数" class="headerlink" title="opening_handler 函数"></a><code>opening_handler</code> 函数</h3><ul>
+<p><strong><code>opening_handler</code> 函数</strong></p>
+<ul>
 <li>是一个示例的用户定义的处理函数，用于处理 <code>open</code> 和 <code>openat</code> 系统调用。</li>
 <li>它读取远程进程的内存来获取文件路径，如果路径中包含 “flag” 字符串，则打开一个虚假的 “flag” 文件并返回新的文件描述符。</li>
 </ul>
-<h3 id="main-函数"><a href="#main-函数" class="headerlink" title="main 函数"></a><code>main</code> 函数</h3><ul>
+<p><strong><code>main</code> 函数</strong></p>
+<ul>
 <li>程序的入口点，设置日志，安装 panic hook 以便在线程崩溃时终止程序。</li>
 <li>解析命令行参数以获取要执行的子程序。</li>
 <li>创建 <code>Supervisor</code> 对象，插入处理函数，执行子程序，并等待其完成。</li>
