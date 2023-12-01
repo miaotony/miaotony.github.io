@@ -1,0 +1,1742 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="HomeLab | 3 下载观影一条龙：NASTool/JellyFin/qBittorrent 半自动化家庭影院搭建指北, MiaoTony,blog">
+    <meta name="description" content="探索如何使用NASTool、JellyFin和qBittorrent等工具搭建一个高效的半自动化家庭影院系统，实现从下载到播放的无缝体验。">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-159946730-1"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+        dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+    gtag('config', 'UA-159946730-1');
+</script>
+
+
+    <title>HomeLab | 3 下载观影一条龙：NASTool/JellyFin/qBittorrent 半自动化家庭影院搭建指北 | MiaoTony&#39;s小窝</title>
+    <link rel="icon" type="image/x-icon, image/vnd.microsoft.icon" href="/favicon.ico">
+
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
+	
+    <script src="/libs/jquery/jquery.min.js"></script>
+    <script>
+        //来个特效玩玩喵 20200123
+        var titleTime;
+        var OriginTitile = document.title;
+        document.addEventListener('visibilitychange', function() {
+            if (document.hidden) {
+                document.title = '|ω·) 喵~快回来呀！';
+                clearTimeout(titleTime);
+            } else {
+                document.title = '(/≧▽≦)/ Meow！';
+                titleTime = setTimeout(function() {
+        	    document.title = OriginTitile;
+        }, 800);
+    }
+        });
+    </script>
+<meta name="generator" content="Hexo 6.2.0">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+<link rel="alternate" href="/atom.xml" title="MiaoTony's小窝" type="application/atom+xml">
+</head>
+
+
+
+
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">MiaoTony&#39;s小窝</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>首页</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>标签</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>分类</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/archives" class="waves-effect waves-light">
+      
+      <i class="fas fa-archive" style="zoom: 0.6;"></i>
+      
+      <span>归档</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>关于</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/contact" class="waves-effect waves-light">
+      
+      <i class="fas fa-comments" style="zoom: 0.6;"></i>
+      
+      <span>留言</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/friends" class="waves-effect waves-light">
+      
+      <i class="fas fa-address-book" style="zoom: 0.6;"></i>
+      
+      <span>友链</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="搜索" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">MiaoTony&#39;s小窝</div>
+        <div class="logo-desc">
+            
+            喵~欢迎各位大佬的来访呀！
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			首页
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			标签
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			分类
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/archives" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-archive"></i>
+			
+			归档
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			关于
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/contact" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-comments"></i>
+			
+			留言
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/friends" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-address-book"></i>
+			
+			友链
+		</a>
+          
+        </li>
+        
+        
+        <li><div class="divider"></div></li>
+        <li>
+            <a href="https://github.com/miaotony" class="waves-effect waves-light" target="_blank">
+                <i class="fab fa-github-square fa-fw"></i>Follow Me
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+
+        </div>
+
+        
+            <style>
+    .nav-transparent .github-corner {
+        display: none !important;
+    }
+
+    .github-corner {
+        position: absolute;
+        z-index: 10;
+        top: 0;
+        right: 0;
+        border: 0;
+        transform: scale(1.1);
+    }
+
+    .github-corner svg {
+        color: #0f9d58;
+        fill: #fff;
+        height: 64px;
+        width: 64px;
+    }
+
+    .github-corner:hover .octo-arm {
+        animation: a 0.56s ease-in-out;
+    }
+
+    .github-corner .octo-arm {
+        animation: none;
+    }
+
+    @keyframes a {
+        0%,
+        to {
+            transform: rotate(0);
+        }
+        20%,
+        60% {
+            transform: rotate(-25deg);
+        }
+        40%,
+        80% {
+            transform: rotate(10deg);
+        }
+    }
+</style>
+
+<a href="https://github.com/miaotony" class="github-corner tooltipped hide-on-med-and-down" target="_blank"
+   data-tooltip="Follow Me" data-position="left" data-delay="50">
+    <svg viewBox="0 0 250 250" aria-hidden="true">
+        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+        <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2"
+              fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
+        <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z"
+              fill="currentColor" class="octo-body"></path>
+    </svg>
+</a>
+        
+    </nav>
+
+</header>
+
+    
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/20.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <h1 class="description center-align post-title">HomeLab | 3 下载观影一条龙：NASTool/JellyFin/qBittorrent 半自动化家庭影院搭建指北</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        min-width: 240px;
+        padding-left: 15px;
+        padding-bottom: 30px;
+    }
+
+    .toc-widget .toc-title {
+        padding: 30px 0 15px 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content {
+	    max-height: 450px;
+        overflow: auto;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #42b983;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+
+        position: absolute;
+        right: 23.5vw;
+        display: block;
+    }
+
+    #toc-content .is-active-link {
+        color: #42b983;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 15px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/Tech/">
+                                <span class="chip bg-color">Tech</span>
+                            </a>
+                        
+                            <a href="/tags/Configuration/">
+                                <span class="chip bg-color">Configuration</span>
+                            </a>
+                        
+                            <a href="/tags/Server/">
+                                <span class="chip bg-color">Server</span>
+                            </a>
+                        
+                            <a href="/tags/HomeLab/">
+                                <span class="chip bg-color">HomeLab</span>
+                            </a>
+                        
+                            <a href="/tags/PVE/">
+                                <span class="chip bg-color">PVE</span>
+                            </a>
+                        
+                            <a href="/tags/NAS/">
+                                <span class="chip bg-color">NAS</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/Tech/" class="post-category">
+                                Tech
+                            </a>
+                        
+                            <a href="/categories/Tech/Server/" class="post-category">
+                                Server
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2023-08-08
+                </div>
+                
+
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
+                    4.9k
+                </div>
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
+                    18 分
+                </div>
+                
+
+                
+            </div>
+        </div>
+        <hr class="clearfix">
+
+        
+        <!-- 是否加载使用自带的 prismjs. -->
+        <link rel="stylesheet" href="/libs/prism/prism.css">
+        
+
+        
+
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <blockquote>
+<p><strong>请注意！！！</strong></p>
+<p>本系列的文章是断断续续写的，本文最早写于 2022 年 12 月，<strong>可能有些信息已经过时！</strong></p>
+<p><del><em>别问，问就是写了一半然后放草稿箱里长草了。</em></del></p>
+<p>请知悉，NASTool 官方已经不再维护了，但是现有版本的大部分功能还是能用的，希望本文对你还是有意义的喵！</p>
+</blockquote>
+<p><img src="/2023/08/08/Server_HomeLab_3_nastools/0af86576-22a7-4937-a376-4dd3261c5918-1701461664434-2.webp"></p>
+<h2 id="0x00-引言"><a href="#0x00-引言" class="headerlink" title="0x00 引言"></a>0x00 引言</h2><blockquote>
+<p><strong>HomeLab 系列回顾：</strong></p>
+<p><a href="https://miaotony.xyz/2022/12/18/Server_HomeLab_1_PVEsetup/">HomeLab | 1 Proxmox Virtual Environment(PVE) 安装及配置</a></p>
+<p><a href="https://miaotony.xyz/2023/06/10/Server_HomeLab_2_openmediavault/">HomeLab | 2 OpenMediaVault 安装 &amp; 硬盘直通 &amp; 相关配置</a></p>
+</blockquote>
+<p>在数字时代，随着流媒体服务的兴起，我们的娱乐方式正发生翻天覆地的变化。想象一下，既然已经有 HomeLab 了，如果你能够在此基础上拥有一个私人定制的家庭影院，不仅能够自动下载你最喜爱的电影和电视剧，还能在任何设备上随心所欲地观看，那会是怎样的体验呢？</p>
+<p>听起来像是科幻电影中的场景，但实际上，这完全可以通过技术实现！</p>
+<p>本文将带你走进 NASTool、JellyFin 和 qBittorrent 等工具的世界，展示如何将这些工具巧妙地组合在一起，构建出一个既高效又用户友好的半自动化家庭娱乐系统，实现下载观影一条龙。我们将一步步探索如何从零开始，把这个看似复杂的技术梦想变成现实。</p>
+<p>这篇博客主要就是记录下搭建的过程，可能不会说太多为啥这么配置的，反正也是喵喵按照自己的感受来的（</p>
+<p>为了部署和迁移方便，主要是基于 docker 进行搭建，而且尽量使用 docker compose 配置文件。</p>
+<p><em>当然了，主要是喵喵随手写的笔记，具体咋用看你自己，你喜欢就好。</em></p>
+<p>准备好了吗？让我们开始这趟激动人心的科技之旅，打造你的个人家庭影院吧！</p>
+<p><small><em>（头图&amp;引言部分 AI 参与创作</em></small></p>
+<h2 id="0x01-存储相关配置"><a href="#0x01-存储相关配置" class="headerlink" title="0x01 存储相关配置"></a>0x01 存储相关配置</h2><p><strong>这么多片子，没存储怎么活？快配！</strong></p>
+<p>在你的 NAS 上建立好存储，喵喵这里用的是 <a href="https://miaotony.xyz/2023/06/10/Server_HomeLab_2_openmediavault/">上一篇里配好的 omv</a>，配置好之后为了方便先挂载一下</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">nano</span> /etc/fstab<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>在最下面加入你的文件系统、挂载点等</p>
+<pre class="line-numbers language-none"><code class="language-none">/srv/dev-disk-by-uuid-xxxxx/media/         /mnt/media     none    bind,nofail     0 0<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>保存，退出，立即应用挂载配置</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">mount</span> -a
+<span class="token function">ls</span> -al /mnt/<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<p>然后就能看到你的 <code>media</code> 目录了。</p>
+<p>新建目录并赋予权限，<del>虽然不一定需要那么多（看个人吧</del></p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">mkdir</span> /mnt/media/<span class="token punctuation">{</span>cache,downloads,links,watch,config,transcodes<span class="token punctuation">}</span>
+<span class="token function">chmod</span> -R <span class="token number">775</span> /mnt/media  <span class="token comment"># 如果没配用户组的话或者不行的话直接 777</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+
+
+<h2 id="0x02-qBittorrent-安装与配置"><a href="#0x02-qBittorrent-安装与配置" class="headerlink" title="0x02 qBittorrent 安装与配置"></a>0x02 qBittorrent 安装与配置</h2><p><strong>影片哪里来？下种子！</strong></p>
+<p>qBittorrent 是一个跨平台的开源、自由的 BitTorrent 客户端，其图形用户界面是通过 Qt 所写，后端使用 libtorrent。</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">mkdir</span> -p ~/docker/qbittorrent
+<span class="token builtin class-name">cd</span> ~/docker/qbittorrent
+<span class="token function">nano</span> docker-compose.yml<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+
+
+<pre class="line-numbers language-docker" data-language="docker"><code class="language-docker">version: "2.1"
+services:
+  qbittorrent:
+    image: linuxserver/qbittorrent:latest
+    container_name: qbittorrent
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Asia/Shanghai
+      - WEBUI_PORT=8080
+    volumes:
+      - /mnt/media/config:/config
+      - /mnt/media/downloads:/downloads
+      - /mnt/media/watch:/watch
+    network_mode: host
+    <span class="token comment">#ports:</span>
+    <span class="token comment">#  - 8080:8080</span>
+    <span class="token comment">#  - 32940:32940</span>
+    <span class="token comment">#  - 32940:32940/udp</span>
+    restart: unless-stopped<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>启动 qbittorrent</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">docker</span> compose up -d<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>默认用户名和密码是 <code>admin</code> / <code>adminadmin</code></p>
+<p>登录后设置下默认存储，喵喵这里默认存在 <code>/downloads/movie</code> 目录下，这里是 docker 映射进去的目录</p>
+<p><code>/watch</code> 目录是咱用来实现自动化下载的，比如从 byr / tjupt / etc. 把 torrents 下载下来，丢到 host 的 <code>/mnt/media/watch</code> 这个目录下，qb 就会自动开始下载了。</p>
+<p><em>（很明显 <code>/mnt/media</code> 这个目录一般人都会走 NFS / SMB 共享出去的吧</em></p>
+<p><em>（噢不好说，说不定直接用下文的 JellyFin 了</em></p>
+<p><img src="/2023/08/08/Server_HomeLab_3_nastools/image-20230105050102705.png"></p>
+<p>其他的设置就根据个人的喜好配置下就好了。</p>
+<h2 id="0x03-JellyFin-安装与配置"><a href="#0x03-JellyFin-安装与配置" class="headerlink" title="0x03 JellyFin 安装与配置"></a>0x03 JellyFin 安装与配置</h2><p><strong>喵喵，我想随时随地看片！</strong></p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://jellyfin.org/">Jellyfin</a> is the volunteer-built media solution that puts <em>you</em> in control of your media. Stream to any device from your own server, with  no strings attached. Your media, your server, your way.</p>
+<p>Jellyfin enables you to collect, manage, and stream your media. Run the  Jellyfin server on your system and gain access to the leading  free-software entertainment system, bells <em>and</em> whistles included.</p>
+<p>Jellyfin 是一套多媒体应用程序软件套装，旨在组织、管理和共享数字媒体文件，是 Emby 的一个自由开源分叉。Jellyfin 分为服务端和客户端应用程序，服务端应用程序安装在运行 Microsoft Windows、MacOS、Linux 等系统的服务器上或 Docker 上，客户端应用程序安装在智能手机、平板电脑、智能电视、网络机顶盒、电子游戏机或网页浏览器上。支持 DLNA 以及插有 Chromecast 的设备也能接收 Jellyfin 服务端发来的文件。 </p>
+</blockquote>
+<h3 id="docker-compose-安装"><a href="#docker-compose-安装" class="headerlink" title="docker-compose 安装"></a>docker-compose 安装</h3><p>这里先不考虑核显或者独显硬解码，后面喵喵另外写一篇，可以期待一下哈哈。</p>
+<p>参考官方文档 <a target="_blank" rel="noopener" href="https://jellyfin.org/docs/general/administration/installing#docker">https://jellyfin.org/docs/general/administration/installing#docker</a></p>
+<p>稍微改一改自己的目录，看你心情</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">mkdir</span> -p ~/docker/jellyfin
+<span class="token builtin class-name">cd</span> ~/docker/jellyfin
+<span class="token function">mkdir</span> config
+<span class="token function">chmod</span> <span class="token number">777</span> config
+<span class="token function">mkdir</span> -p /mnt/media/cache/
+<span class="token function">chmod</span> <span class="token number">777</span> /mnt/media/cache
+<span class="token function">nano</span> docker-compose.yml<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>配置文件</p>
+<pre class="line-numbers language-docker" data-language="docker"><code class="language-docker">version: '3.5'
+services:
+  jellyfin:
+    image: jellyfin/jellyfin
+    container_name: jellyfin
+    user: 1000:1000
+    network_mode: 'host'
+    volumes:
+      - /mnt/media/config/jellyfin:/config
+      - /mnt/media/cache:/cache
+      - /mnt/media/transcodes:/config/transcodes  # ffmpeg转码的缓存目录
+      - /mnt/media/links:/media
+      <span class="token comment"># - /path/to/media2:/media2:ro</span>
+    restart: 'unless-stopped'
+    <span class="token comment"># Optional - alternative address used for autodiscovery</span>
+    environment:
+      - TZ=Asia/Shanghai
+      <span class="token comment"># - JELLYFIN_PublishedServerUrl=http://example.com</span>
+    <span class="token comment"># Optional - may be necessary for docker healthcheck to pass if running in host network mode</span>
+    extra_hosts:
+      - "host.docker.internal:host-gateway"<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>然后启动</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">docker</span> compose up -d<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+
+
+<h3 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h3><p>如果没问题的话，访问这台机器的 8096 端口，比如 <a target="_blank" rel="noopener" href="http://192.168.1.100:8096/">http://192.168.1.100:8096/</a> ，就能进入到配置界面了</p>
+<p><img src="/2023/08/08/Server_HomeLab_3_nastools/image-20221222055006539.png"></p>
+<p>配置管理员信息</p>
+<p><img src="/2023/08/08/Server_HomeLab_3_nastools/image-20221222055151106.png"></p>
+<p>设置你的媒体库，这里喵喵分别新建 电影、电视剧、动漫 三个，当然你也可以按照你的需要自己来建立</p>
+<p><img src="/2023/08/08/Server_HomeLab_3_nastools/image-20221222055226231.png"></p>
+<p>这里先把目录建立一下</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token builtin class-name">cd</span> /mnt/media/links/
+<span class="token function">mkdir</span> <span class="token punctuation">{</span>movie,comic,tv<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<p>添加媒体库，注意下这里的文件夹是挂载进 docker 的，也就是 <code>/media/xxx</code></p>
+<p><img src="/2023/08/08/Server_HomeLab_3_nastools/image-20221222055837692.png"></p>
+<p>这个 文件夹 点一下 +，然后把对应的路径填上，比如电影是 <code>/media/movie</code></p>
+<p><img src="/2023/08/08/Server_HomeLab_3_nastools/image-20221222055441252.png"></p>
+<p>同理，新建 动漫 和 电视剧</p>
+<p><img src="/2023/08/08/Server_HomeLab_3_nastools/image-20221222060310079.png"></p>
+<p><img src="/2023/08/08/Server_HomeLab_3_nastools/image-20221222060324425.png"></p>
+<p>首选元数据语言</p>
+<p><img src="/2023/08/08/Server_HomeLab_3_nastools/image-20221222060353843.png"></p>
+<p><img src="/2023/08/08/Server_HomeLab_3_nastools/image-20221222060438775.png"></p>
+<p>到这里就初始化完成了。</p>
+<p><img src="/2023/08/08/Server_HomeLab_3_nastools/image-20221222061040692.png"></p>
+<p>点击左上角的按钮，找到 控制台</p>
+<p><img src="/2023/08/08/Server_HomeLab_3_nastools/image-20221222061116344.png"></p>
+<p>新建一个 API 密钥，方便后面配置 nas-tools</p>
+<p><img src="/2023/08/08/Server_HomeLab_3_nastools/image-20221222061009104.png"></p>
+<h2 id="0x04-ChineseSubFinder-安装与配置"><a href="#0x04-ChineseSubFinder-安装与配置" class="headerlink" title="0x04 ChineseSubFinder 安装与配置"></a>0x04 ChineseSubFinder 安装与配置</h2><p><strong>喵呜，这个鸟语听不懂咋办啊？上字幕！</strong></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/ChineseSubFinder/ChineseSubFinder/">ChineseSubFinder</a> 项目的初衷仅仅是想自动化搞定<strong>限定条件</strong>下 <strong>中文</strong> 字幕下载。</p>
+<h3 id="docker-compose-安装-1"><a href="#docker-compose-安装-1" class="headerlink" title="docker-compose 安装"></a>docker-compose 安装</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">mkdir</span> -p ~/docker/chinesesubfinder
+<span class="token builtin class-name">cd</span> ~/docker/chinesesubfinder
+<span class="token function">nano</span> docker-compose.yml<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<p>咱这里用的是 lite 版本的容器，感觉能用就行，</p>
+<pre class="line-numbers language-docker" data-language="docker"><code class="language-docker">version: "3"
+services:
+  chinesesubfinder:
+    image: allanpk716/chinesesubfinder:latest-lite
+    volumes:
+      - ./config:/config  # 冒号左边请修改为你想在主机上保存配置、日志等文件的路径
+      - /mnt/media:/media    # 请修改为你的媒体目录，冒号右边可以改成你方便记忆的目录，多个媒体目录需要分别映射进来
+    environment:
+      - PUID=1000         # uid
+      - PGID=1000         # gid
+      - PERMS=false       # 是否重设/media权限
+      - TZ=Asia/Shanghai  # 时区
+      - UMASK=022         # 权限掩码
+    restart: always
+    network_mode: bridge
+    hostname: chinesesubfinder
+    container_name: chinesesubfinder
+    ports:
+      - 19035:19035
+      - 19037:19037  # webui 的视频列表读取图片用，务必设置不要暴露到外网
+    logging:
+        driver: "json-file"
+        options:
+          max-size: "100m" # 限制docker控制台日志大小，可自行调整<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>启动</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">docker</span> compose up -d<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h3 id="配置-1"><a href="#配置-1" class="headerlink" title="配置"></a>配置</h3><p>访问 <a target="_blank" rel="noopener" href="http://ip:19035/">http://ip:19035</a> 进入配置界面</p>
+<p><img src="/2023/08/08/Server_HomeLab_3_nastools/image-20230102055801041.png"></p>
+<p>这个电影和连续剧的目录输入链接后的，也就是 <code>/media/links/movie</code> 和 <code>/media/links/tv</code></p>
+<p><img src="/2023/08/08/Server_HomeLab_3_nastools/image-20230102055926259.png"></p>
+<p>选择媒体服务器 JellyFin	</p>
+<p><img src="/2023/08/08/Server_HomeLab_3_nastools/image-20230102060023415.png"></p>
+<p>应用完配置之后，就可以登录进入系统了。</p>
+<p><img src="/2023/08/08/Server_HomeLab_3_nastools/image-20230102060156773.png"></p>
+<p>为了与接下来的 NasTools 联动，这里在 配置中心 - 实验室 里把 API Key 打开，生成个新的 key</p>
+<p><img src="/2023/08/08/Server_HomeLab_3_nastools/image-20230102061830735.png"></p>
+<p><del>这里顺便注册个 Assrt，借助这个 API 说不定能找到更多字幕</del></p>
+<p><img src="/2023/08/08/Server_HomeLab_3_nastools/image-20230102063836481.png"></p>
+<p><a target="_blank" rel="noopener" href="https://secure.assrt.net/user/register.xml">https://secure.assrt.net/user/register.xml</a></p>
+<p><del>唉，不懂为啥他这里老半天注册不成，提示 wtf，那个验证码还烦的一批，算了</del>（就这样吧</p>
+<p>配置好之后，回到 总览，把守护进程给开启了。</p>
+<p><img src="/2023/08/08/Server_HomeLab_3_nastools/image-20230102202135536.png"></p>
+<p>如果守护进程没有在运行，那么就无法开始字幕的下载的。</p>
+<p>注意，一旦守护进程启动，设置就无法更改，要改设置就停止守护进程。</p>
+<h2 id="0x05-NASTool-安装与配置"><a href="#0x05-NASTool-安装与配置" class="headerlink" title="0x05 NASTool 安装与配置"></a>0x05 NASTool 安装与配置</h2><p><strong>什么，这么多好康的影片能自动搜刮整理？太好了！</strong></p>
+<h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p><strong>NASTool / nas-tools</strong></p>
+<p>NAS 媒体库资源归集、整理自动化工具</p>
+<blockquote>
+<p>本软件的初衷是实现影视资源的自动化管理，释放双手、聚焦观影。需要有良好的网络环境及私有站点才能获得较好的使用体验。</p>
+<p><strong>1、资源检索和订阅</strong></p>
+<ul>
+<li>站点RSS聚合，想看的加入订阅，资源自动实时追新。</li>
+<li>通过微信、Telegram、Slack、Synology Chat或者WEB界面聚合资源搜索下载，最新热门资源一键搜索或者订阅。</li>
+<li>与豆瓣联动，在豆瓣中标记想看后台自动检索下载，未出全的自动加入订阅。</li>
+</ul>
+<p><strong>2、媒体库整理</strong></p>
+<ul>
+<li>监控下载软件，下载完成后自动识别真实名称，硬链接到媒体库并重命名。</li>
+<li>对目录进行监控，文件变化时自动识别媒体信息硬链接到媒体库并重命名。</li>
+<li>解决保种与媒体库整理冲突的问题，专为中文环境优化，支持国产剧集和动漫，重命名准确率高，改名后Emby/Jellyfin/Plex完美刮削海报墙。</li>
+</ul>
+<p><strong>3、站点养护</strong></p>
+<ul>
+<li>全面的站点数据统计，实时监测你的站点流量情况。</li>
+<li>全自动化托管养站，支持远程下载器（本工具内建刷流功能仅为日常养站使用，如果追求数据建议使用更加强大的刷流工具：<a target="_blank" rel="noopener" href="https://github.com/vertex-app/vertex">Vertex</a>）。</li>
+<li>站点每日自动登录保号。</li>
+</ul>
+<p><strong>4、消息服务</strong></p>
+<ul>
+<li>支持微信、Telegram、Slack、Synology Chat、Bark、PushPlus、爱语飞飞等近十种渠道图文消息通知</li>
+<li>支持通过微信、Telegram、Slack、Synology Chat远程控制订阅和下载。</li>
+<li>Emby/Jellyfin/Plex播放状态通知。</li>
+</ul>
+<p><em>Via <del><a target="_blank" rel="noopener" href="https://github.com/jxxghp/nas-tools">https://github.com/jxxghp/nas-tools</a></del></em></p>
+<p><em><a target="_blank" rel="noopener" href="https://github.com/NAStool/nas-tools">https://github.com/NAStool/nas-tools</a></em></p>
+</blockquote>
+<hr>
+<p><em><strong>Update1:</strong> 2023.5.15 NAStool 官方表示该项目停止维护，源代码不再上 GitHub 仓库，且发布了已关闭自动更新的最新版本介质</em></p>
+<p><em>v3.2.3：</em><br><em>Docker：<a target="_blank" rel="noopener" href="https://hub.docker.com/r/nastool/nas-tools">https://hub.docker.com/r/nastool/nas-tools</a></em><br><em>Windows：<a target="_blank" rel="noopener" href="https://github.com/NAStool/nas-tools/releases/tag/v3.2.3">https://github.com/NAStool/nas-tools/releases/tag/v3.2.3</a></em> </p>
+<p><img src="/2023/08/08/Server_HomeLab_3_nastools/image-20231026033427925.png"></p>
+<p><em><strong>Update2:</strong> 不过还是有人做了镜像备份的，比如 <a target="_blank" rel="noopener" href="https://hub.docker.com/r/nastools/nas-tools">https://hub.docker.com/r/nastools/nas-tools</a> 中的 <code>v2.9.1</code> 版本，也就是最后未阉割版，可以使用 <code>nastools/nas-tools:2.9.1</code> 镜像</em></p>
+<hr>
+<p>下面的是 <del>原版的安装配置</del></p>
+<p>改成未阉割版的了，看个人需要吧，<strong>use at your own risk</strong></p>
+<p><del>别没事点更新就行</del></p>
+<h3 id="docker-compose-安装-2"><a href="#docker-compose-安装-2" class="headerlink" title="docker-compose 安装"></a>docker-compose 安装</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">mkdir</span> -p ~/docker/nas-tools
+<span class="token builtin class-name">cd</span> ~/docker/nas-tools
+<span class="token function">nano</span> docker-compose.yml<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+
+
+<pre class="line-numbers language-docker" data-language="docker"><code class="language-docker">version: "3"
+services:
+  nas-tools:
+    image: nastools/nas-tools:2.9.1
+    ports:
+      - 3000:3000        # 默认的webui控制端口
+    volumes:
+      - ./config:/config   # 冒号左边请修改为你想保存配置的路径
+      - /mnt/media:/media   # 媒体目录，多个目录需要分别映射进来，需要满足配置文件说明中的要求
+    environment: 
+      - PUID=1000    # 想切换为哪个用户来运行程序，该用户的uid
+      - PGID=1000    # 想切换为哪个用户来运行程序，该用户的gid
+      - UMASK=000    # 掩码权限，默认000，可以考虑设置为022
+      - NASTOOL_AUTO_UPDATE=false  # 如需在启动容器时自动升级程程序请设置为true
+      <span class="token comment"># - REPO_URL=https://ghproxy.com/https://github.com/jxxghp/nas-tools.git  # 当你访问github网络很差时，可以考虑解释本行注释</span>
+    restart: always
+    network_mode: bridge
+    hostname: nas-tools
+    container_name: nas-tools<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">docker</span> compose up -d<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p><img src="/2023/08/08/Server_HomeLab_3_nastools/image-20221222061735837.png"></p>
+<blockquote>
+<p>看起来这个背景是用的 Bing 每日壁纸，顺便给喵喵写的项目打个广告：</p>
+<p><strong>BingImages</strong></p>
+<p>Bing Homepage Images / Image of the day / Wallpaper</p>
+<p>必应首页壁纸爬取，基于 GitHub Action 实现 Telegram Channel 推送等</p>
+<p>Everyday push channel: <a target="_blank" rel="noopener" href="https://t.me/BingImage">@BingImage</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/miaotony/BingImages/">https://github.com/miaotony/BingImages/</a></p>
+<p><strong>欢迎顺手点个 star 喵~</strong></p>
+</blockquote>
+<p>默认用户名及密码是 admin / password</p>
+<p>登录后提示 请先配置 TMDB API Key，并修改登录密码！</p>
+<p><img src="/2023/08/08/Server_HomeLab_3_nastools/image-20221222061844836.png"></p>
+<p>确定后 在这里把登录密码改一改，然后保存</p>
+<p><img src="/2023/08/08/Server_HomeLab_3_nastools/image-20221222062004997.png"></p>
+<h3 id="申请-TMDB-API-Key"><a href="#申请-TMDB-API-Key" class="headerlink" title="申请 TMDB API Key"></a>申请 TMDB API Key</h3><p>到 <a target="_blank" rel="noopener" href="https://www.themoviedb.org/">https://www.themoviedb.org</a> 注册个账号，然后申请 API Key</p>
+<p><a target="_blank" rel="noopener" href="https://www.themoviedb.org/settings/api">https://www.themoviedb.org/settings/api</a></p>
+<p>申请的时候 url <del>可以写 <a target="_blank" rel="noopener" href="http://localhost/">http://localhost</a></del> ，简介的话最好用英语稍微写长一点，比如描述一下你要用这个 API 来干啥（方便获取电影、剧集的元数据啥的），不然可能不会通过，其他信息的话随你心情填一下就行了</p>
+<p>完成之后这里就会有个 <strong>API 密钥 (v3 auth)</strong> ，这个就是我们需要的 TMDB API Key</p>
+<p><img src="/2023/08/08/Server_HomeLab_3_nastools/image-20221222062332409.png"></p>
+<p>填到 媒体 这里，保存</p>
+<p><img src="/2023/08/08/Server_HomeLab_3_nastools/image-20221222062802260.png"></p>
+<p>其他的设置的话按照个人喜好改一改就完事了。</p>
+<h3 id="配置媒体库"><a href="#配置媒体库" class="headerlink" title="配置媒体库"></a>配置媒体库</h3><p>如图，注意是 links 目录下的</p>
+<p><img src="/2023/08/08/Server_HomeLab_3_nastools/image-20221222063703390.png"></p>
+<p>这个未识别的话也可以看心情建一个目录配一下，如果不能自动识别的影片就会放到这里面。</p>
+<h3 id="配置同步目录"><a href="#配置同步目录" class="headerlink" title="配置同步目录"></a>配置同步目录</h3><p><code>/media/downloads/movie/</code> 同步到 <code>/media/links/movie/</code></p>
+<p><img src="/2023/08/08/Server_HomeLab_3_nastools/image-20221222063809928.png"></p>
+<p>同理配置其他几个</p>
+<p><img src="/2023/08/08/Server_HomeLab_3_nastools/image-20221222063935830.png"></p>
+<p>另外，这里可以配置下加个未识别的目录，比如 <code>/media/links/unrecognized</code>，当然这个目录需要自己事先建立好配好权限。配了这个的话如何没能自动识别出来的话，可以手动进到这个目录里去手动点识别。</p>
+<p><img src="/2023/08/08/Server_HomeLab_3_nastools/image-20230102063332645.png"></p>
+<h3 id="配置下载器"><a href="#配置下载器" class="headerlink" title="配置下载器"></a>配置下载器</h3><p>这里用的是 qBittorrent</p>
+<p>IP 地址不能是 127.0.0.1，因为这个应用跑在 docker 里，可以输入服务器的 IP，比如内网的话一般是 192.168.xxx.xxx</p>
+<p>如果用户名密码没改的话，默认是 admin /  adminadmin </p>
+<p><img src="/2023/08/08/Server_HomeLab_3_nastools/image-20221222064054246.png"></p>
+<p>然后配置下载目录，这个藏在这里我找了老半天才发现。。</p>
+<p><img src="/2023/08/08/Server_HomeLab_3_nastools/image-20221222070622594.png"></p>
+<p><img src="/2023/08/08/Server_HomeLab_3_nastools/image-20221222070914310.png"></p>
+<p>由于在 qb 里我把 <code>/mnt/media/downloads</code> 映射到了 <code>/downloads</code>，这里 下载保存目录要填 qb 那边的目录，访问目录的话就是 nas-tools 这边的目录</p>
+<p><img src="/2023/08/08/Server_HomeLab_3_nastools/image-20221222070831568.png"></p>
+<h3 id="配置媒体服务器"><a href="#配置媒体服务器" class="headerlink" title="配置媒体服务器"></a>配置媒体服务器</h3><p><img src="/2023/08/08/Server_HomeLab_3_nastools/image-20221222065052495.png"></p>
+<p>这里的服务器地址也要填写 nas 所在机器的 IP，不能是 127.0.0.1</p>
+<p>Api Key 就是在 0x03 JellyFin 配置中最后一步里生成的那个</p>
+<p><img src="/2023/08/08/Server_HomeLab_3_nastools/image-20221222065036347.png"></p>
+<h3 id="配置字幕"><a href="#配置字幕" class="headerlink" title="配置字幕"></a>配置字幕</h3><p><img src="/2023/08/08/Server_HomeLab_3_nastools/image-20230102062223278.png"></p>
+<p>服务器地址就是 <a target="_blank" rel="noopener" href="http://ip:19035/">http://ip:19035</a> ，API Key 填写在 ChineseSubFinder 中生成的那个</p>
+<p>本地路径和远程路径的话，因为喵喵这里都是将 <code>/mnt/media</code> 映射到各自容器的 <code>/media</code> 下，所以可以不用填写了。</p>
+<p><img src="/2023/08/08/Server_HomeLab_3_nastools/image-20230102062750300.png"></p>
+<h3 id="自动删种任务"><a href="#自动删种任务" class="headerlink" title="自动删种任务"></a>自动删种任务</h3><p>从公网 BT 下载的种子在做种的时候也一般会消耗大量带宽，于是咱在 下载管理-自动删种 这里加了个任务，当做种 1h 之后自动暂停种子</p>
+<p>60min 执行一次，这里其实还可以匹配下 tracker 关键词，如果是公网 BT 那就执行这个动作这样，不过咱先摸了（<del>能用就行</del></p>
+<p><img src="/2023/08/08/Server_HomeLab_3_nastools/image-20221222211241669.png"></p>
+<p><img src="/2023/08/08/Server_HomeLab_3_nastools/image-20221222211432624.png"></p>
+<p>可以点击那个 闪电 的图标，立即执行任务看看是否满足预期效果。</p>
+<h2 id="0x06-使用示例"><a href="#0x06-使用示例" class="headerlink" title="0x06 使用示例"></a>0x06 使用示例</h2><p><strong>啊，终于可以自动化下载观影一条龙了嘛！（抓爆米花</strong></p>
+<p>在 nastool 资源搜索里搜索你喜欢的电影、电视剧、动漫，或者在推荐里看看有没有你喜欢的，然后点进去</p>
+<p>BTW，继续写这部分的时候（后注：大概是 2023年2月？） nastool 更新到了 2.9.0 版本，前端界面变得好看多了！</p>
+<p><strong>请注意，最新的 3.x 版本的话应该是阉割掉了 BT 索引等功能，而且加入了用户认证等，<del>请根据实际需要谨慎更新。</del></strong></p>
+<p><small><em><del>不更新的话就低调使用吧</del></em></small></p>
+<p><img src="/2023/08/08/Server_HomeLab_3_nastools/image-20230208011926019.png"></p>
+<p><strong>搜索资源</strong> 就会调用索引器进行检索</p>
+<p>然后选择你喜欢的下载站点进行下载，这里的标签清晰地显示出了视频的来源、格式、大小、分辨率等</p>
+<p><img src="/2023/08/08/Server_HomeLab_3_nastools/image-20230208012110145.png"></p>
+<p>然后就可以在 <strong>下载管理</strong> 这里面看到下载的文件，他会自动管理 qBittorrent 进行下载</p>
+<p>当然你也可以直接在这里面添加要下载的种子或者磁链</p>
+<p>噢对了，这里好像是能支持一些 PT 站的搜索，但是适配情况不好说，自己看着用吧<em>（反正喵喵没试过，听说不大好用，而且这个版本不更新了应该缺乏维护了？</em></p>
+<p><img src="/2023/08/08/Server_HomeLab_3_nastools/image-20230208012341848.png" alt="添加种子下载"></p>
+<p><strong>近期下载</strong> 里面就有你下载过的记录</p>
+<p><img src="/2023/08/08/Server_HomeLab_3_nastools/image-20230208012430615.png"></p>
+<p>下载完成后 NAStool 会进行目录同步，比如喵喵这里就会自己重命名，然后按照目录格式硬链接到自己的媒体目录下，然后调用 TMDB 等 API 去生成 nfo 文件</p>
+<p><strong>注意，这个 TMDB 国内有可能上不去</strong>，比如喵喵这里直连访问情况堪忧，<strong>可以的话最好把代理给配好！！！</strong> <em>（或者改改 hosts 之类的缓解措施</em></p>
+<p>然后会调用 ChineseSubFinder 寻找字幕自动下载</p>
+<p>另外，进行媒体同步，调用 JellyFin 的 API 进行同步，这时候再打开 JellyFin，里面就会出现你喜欢的电影墙啦~</p>
+<p>（这里有个坑，JellyFin 自己也会进行刮削，但是吧他也会用 TMDB 这些不一定上得去的资源，喵喵这里扫描媒体库卡老半天，最后看了 log 半天才发现是卡网络问题上了。。</p>
+<p>所以可以只用 NAStool 的刮削，而把 JellyFin 的刮削给关了，步骤如下：</p>
+<p>进入 控制台-媒体库，点击相应的库，然后把 元数据下载器、图片获取程序 里的勾去掉，然后勾选 媒体资料储存方式 里的 Nfo，最后点确定</p>
+<p><img src="/2023/08/08/Server_HomeLab_3_nastools/image-20230208013233282.png"></p>
+<p>然后回到 控制台，点下 扫描所有媒体库</p>
+<p><img src="/2023/08/08/Server_HomeLab_3_nastools/image-20230208013643590.png"></p>
+<p>结束之后你就可以享受你自己的电影墙了！</p>
+<p><img src="/2023/08/08/Server_HomeLab_3_nastools/image-20230208013830204.png"></p>
+<p>当然喵喵这里发现一个不足，NAStool 貌似不会生成电视剧里每一集的预览图，而 JellyFin 的刮削可以，当然这也不是刚需了。</p>
+<p>你也可以在 JellyFin 的 docker compose 配置里加个 http_proxy https_proxy 环境变量，从而让流量走代理，反正看个人了。</p>
+<hr>
+<p>另外，JellyFin 还有 iOS、Android 端 APP，在电视上也有相应的适配版本，于是你还可以不局限于电脑，随时在手机、平板、电视等设备上观看 NAS 上的影片啦~</p>
+<p>啥，你不喜欢安装 APP？那直接访问 web 端就完事了啊！</p>
+<p>再配上内网穿透或者 Cloudflare tunnel 类似物，你还能在外随时随地连回家里看片，心动了嘛？快来动手试试吧！</p>
+<h2 id="0x07-小结"><a href="#0x07-小结" class="headerlink" title="0x07 小结"></a>0x07 小结</h2><p>随着探索的结束，本文不仅揭示了如何利用 NASTool、JellyFin 和 qBittorrent 等工具来搭建一个半自动化的家庭影院系统，还展现了这一系统如何能够融入我们的日常生活，带来更加丰富和个性化的娱乐体验。从自动化下载到在舒适的家庭环境中享受定制化的观影体验，这一系统无疑为电影爱好者和技术爱好者提供了一个新的视角。</p>
+<p>总的来说，希望这篇文章能激发读者对家庭娱乐技术的兴趣，动手去探索和实践，在 homelab 基础上打造出一个既符合个人口味又充满科技感的家庭影院。</p>
+<p>通过整合 NASTool、JellyFin 和 qBittorrent 等，我们不仅可以实现一个高效的媒体下载和管理系统，还能享受到在任何设备上无缝观看的便利。这个半自动化系统不仅节省了寻找和下载媒体内容的时间，还提高了整个观影体验的质量。</p>
+<p>当然了，大家在享受这些技术带来的便利时，应当遵守相关的法律法规，尊重版权和个人隐私。</p>
+<p>喵呜喵呜喵！</p>
+<p><em>（溜了溜了喵~</em></p>
+
+                
+            </div>
+            <hr/>
+
+            
+
+    <div class="reprint" id="reprint-statement">
+        
+            <div class="reprint__author">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-user">
+                        文章作者:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="https://miaotony.xyz" rel="external nofollow noreferrer">MiaoTony</a>
+                </span>
+            </div>
+            <div class="reprint__type">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-link">
+                        文章链接:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="https://miaotony.xyz/2023/08/08/Server_HomeLab_3_nastools/">https://miaotony.xyz/2023/08/08/Server_HomeLab_3_nastools/</a>
+                </span>
+            </div>
+            <div class="reprint__notice">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-copyright">
+                        版权声明:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    本博客所有文章除特别声明外，均采用
+                    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY-NC-SA 4.0</a>
+                    许可协议。转载请注明来源
+                    <a href="https://miaotony.xyz" target="_blank">MiaoTony</a>
+                    !
+                </span>
+            </div>
+        
+    </div>
+
+    <script async defer>
+      document.addEventListener("copy", function (e) {
+        let toastHTML = '<span>复制成功，请遵循本文的转载规则</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">查看</a>';
+        M.toast({html: toastHTML})
+      });
+
+      function navToReprintStatement() {
+        $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
+      }
+    </script>
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            
+                                <a href="/tags/Tech/">
+                                    <span class="chip bg-color">Tech</span>
+                                </a>
+                            
+                                <a href="/tags/Configuration/">
+                                    <span class="chip bg-color">Configuration</span>
+                                </a>
+                            
+                                <a href="/tags/Server/">
+                                    <span class="chip bg-color">Server</span>
+                                </a>
+                            
+                                <a href="/tags/HomeLab/">
+                                    <span class="chip bg-color">HomeLab</span>
+                                </a>
+                            
+                                <a href="/tags/PVE/">
+                                    <span class="chip bg-color">PVE</span>
+                                </a>
+                            
+                                <a href="/tags/NAS/">
+                                    <span class="chip bg-color">NAS</span>
+                                </a>
+                            
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+<div id="article-share">
+
+    
+    <div class="social-share" data-sites="qq,qzone,wechat,weibo,twitter,facebook,google,douban,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
+    <script src="/libs/share/js/social-share.min.js"></script>
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+                <style>
+    #reward {
+        margin: 40px 0;
+        text-align: center;
+    }
+
+    #reward .reward-link {
+        font-size: 1.4rem;
+        line-height: 38px;
+    }
+
+    #reward .btn-floating:hover {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    #rewardModal {
+        width: 320px;
+        height: 350px;
+    }
+
+    #rewardModal .reward-title {
+        margin: 15px auto;
+        padding-bottom: 5px;
+    }
+
+    #rewardModal .modal-content {
+        padding: 10px;
+    }
+
+    #rewardModal .close {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+        color: rgba(0, 0, 0, 0.5);
+        font-size: 1.3rem;
+        line-height: 20px;
+        cursor: pointer;
+    }
+
+    #rewardModal .close:hover {
+        color: #ef5350;
+        transform: scale(1.3);
+        -moz-transform:scale(1.3);
+        -webkit-transform:scale(1.3);
+        -o-transform:scale(1.3);
+    }
+
+    #rewardModal .reward-tabs {
+        margin: 0 auto;
+        width: 210px;
+    }
+
+    .reward-tabs .tabs {
+        height: 38px;
+        margin: 10px auto;
+        padding-left: 0;
+    }
+
+    .reward-content ul {
+        padding-left: 0 !important;
+    }
+
+    .reward-tabs .tabs .tab {
+        height: 38px;
+        line-height: 38px;
+    }
+
+    .reward-tabs .tab a {
+        color: #fff;
+        background-color: #ccc;
+    }
+
+    .reward-tabs .tab a:hover {
+        background-color: #ccc;
+        color: #fff;
+    }
+
+    .reward-tabs .wechat-tab .active {
+        color: #fff !important;
+        background-color: #22AB38 !important;
+    }
+
+    .reward-tabs .alipay-tab .active {
+        color: #fff !important;
+        background-color: #019FE8 !important;
+    }
+
+    .reward-tabs .reward-img {
+        width: 210px;
+        height: 210px;
+    }
+</style>
+
+<div id="reward">
+    <a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-medium waves-effect waves-light red">赏</a>
+
+    <!-- Modal Structure -->
+    <div id="rewardModal" class="modal">
+        <div class="modal-content">
+            <a class="close modal-close"><i class="fas fa-times"></i></a>
+            <h4 class="reward-title">打赏一下让我来点好吃好玩的呗~</h4>
+            <div class="reward-content">
+                <div class="reward-tabs">
+                    <ul class="tabs row">
+                        <!-- 
+                            <li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li> 
+                        -->
+                        <li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li>
+                    </ul>
+                    <!-- 
+                        <div id="alipay">
+                        <img src="/" class="reward-img" alt="支付宝打赏二维码">
+                        </div> 
+                -->
+                    <div id="wechat">
+                        <img src="/medias/reward/wechat.png" class="reward-img" alt="微信打赏二维码">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.tabs').tabs();
+    });
+</script>
+
+            
+        </div>
+    </div>
+
+    
+        <link rel="stylesheet" href="/libs/gitalk/gitalk.min.css">
+<link rel="stylesheet" href="/css/my-gitalk.css">
+
+<div class="card gitalk-card" data-aos="fade-up">
+    <div class="comment_headling" style="font-size: 20px; font-weight: 700; position: relative; padding-left: 20px; top: 15px; padding-bottom: 5px;">
+        <i class="fas fa-comments fa-fw" aria-hidden="true"></i>
+        <span>评论</span>
+    </div>
+    <div id="gitalk-container" class="card-content"></div>
+</div>
+
+<script src="/libs/gitalk/gitalk.min.js"></script>
+<script>
+    let gitalk = new Gitalk({
+        clientID: '116343b4650fce4789b6',
+        clientSecret: '3e9be2ad6c9b693af1753290c7c059b1e4f34d5d',
+        repo: 'miaotony.github.io',
+        owner: 'miaotony',
+        admin: "miaotony",
+        id: '2023-08-08T21-30-00',
+        distractionFreeMode: false  // Facebook-like distraction free mode
+    });
+
+    gitalk.render('gitalk-container');
+</script>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+            <div class="card">
+                <a href="/2023/11/05/CTF_2023Hackergame/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/11.jpg" class="responsive-img" alt="CTF | 2023 USTC Hackergame WriteUp">
+                        
+                        <span class="card-title">CTF | 2023 USTC Hackergame WriteUp</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            又是一年Hackergame，今年题目难度整体偏基础好入门，给这周增添了点娱乐气息，和往年一样比赛中也学到了许多。
+                        
+                    </div>
+                    <div class="publish-info">
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2023-11-05
+                        </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/CTF/" class="post-category">
+                                    CTF
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/CTF/">
+                        <span class="chip bg-color">CTF</span>
+                    </a>
+                    
+                    <a href="/tags/WriteUp/">
+                        <span class="chip bg-color">WriteUp</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2023/06/10/Server_HomeLab_2_openmediavault/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/6.jpg" class="responsive-img" alt="HomeLab | 2 OpenMediaVault 安装 &amp; 硬盘直通 &amp; 相关配置">
+                        
+                        <span class="card-title">HomeLab | 2 OpenMediaVault 安装 &amp; 硬盘直通 &amp; 相关配置</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            大概介绍了一下 OpenMediaVault 的安装，硬盘直通，RAID 组建，LVM 配置，文件系统，文件共享，以及 OMV 里一些基本功能的使用等。
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2023-06-10
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/Tech/" class="post-category">
+                                    Tech
+                                </a>
+                            
+                            <a href="/categories/Tech/Server/" class="post-category">
+                                    Server
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/Tech/">
+                        <span class="chip bg-color">Tech</span>
+                    </a>
+                    
+                    <a href="/tags/Configuration/">
+                        <span class="chip bg-color">Configuration</span>
+                    </a>
+                    
+                    <a href="/tags/Server/">
+                        <span class="chip bg-color">Server</span>
+                    </a>
+                    
+                    <a href="/tags/HomeLab/">
+                        <span class="chip bg-color">HomeLab</span>
+                    </a>
+                    
+                    <a href="/tags/PVE/">
+                        <span class="chip bg-color">PVE</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+<script>
+    $('#articleContent').on('copy', function (e) {
+        // IE8 or earlier browser is 'undefined'
+        if (typeof window.getSelection === 'undefined') return;
+
+        var selection = window.getSelection();
+        // if the selection is short let's not annoy our users.
+        if (('' + selection).length < Number.parseInt('200')) {
+            return;
+        }
+
+        // create a div outside of the visible area and fill it with the selected text.
+        var bodyElement = document.getElementsByTagName('body')[0];
+        var newdiv = document.createElement('div');
+        newdiv.style.position = 'absolute';
+        newdiv.style.left = '-99999px';
+        bodyElement.appendChild(newdiv);
+        newdiv.appendChild(selection.getRangeAt(0).cloneContents());
+
+        // we need a <pre> tag workaround.
+        // otherwise the text inside "pre" loses all the line breaks!
+        if (selection.getRangeAt(0).commonAncestorContainer.nodeName === 'PRE' || selection.getRangeAt(0).commonAncestorContainer.nodeName === 'CODE') {
+            newdiv.innerHTML = "<pre>" + newdiv.innerHTML + "</pre>";
+        }
+
+        var url = document.location.href;
+        newdiv.innerHTML += '<br />'
+            + '来源: MiaoTony&#39;s小窝<br />'
+            + '文章作者: MiaoTony<br />'
+            + '文章链接: <a href="' + url + '">' + url + '</a><br />'
+            + '本文章著作权归作者 MiaoTony 所有，任何形式的转载都请注明出处。';
+
+        selection.selectAllChildren(newdiv);
+        window.setTimeout(function () {bodyElement.removeChild(newdiv);}, 200);
+    });
+</script>
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+
+
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
+
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget card" style="background-color: white;">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('1'),
+            headingSelector: 'h2, h3, h4, h5'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h2, h3, h4, h5').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+
+
+    <footer class="page-footer bg-color">
+        <div class="container row center-align" style="margin-bottom: 15px !important;">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            
+                <span id="year">2019-2023</span>
+            
+            <a href="/about" target="_blank">MiaoTony</a>
+            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+            |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
+            <br>
+                        &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
+                class="white-color">477.7k</span>&nbsp;字
+                                                                                    <span id="busuanzi_container_site_pv">
+			|&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
+                    class="white-color"></span>&nbsp;次
+            </span>
+                                    <span id="busuanzi_container_site_uv">
+                |&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;<span id="busuanzi_value_site_uv"
+                    class="white-color"></span>&nbsp;人
+            </span>
+                        <br>
+                        <span id="sitetime">载入运行时间...</span>
+            <script>
+                function siteTime() {
+                    var seconds = 1000;
+                    var minutes = seconds * 60;
+                    var hours = minutes * 60;
+                    var days = hours * 24;
+                    var years = days * 365;
+                    var today = new Date();
+                    var startYear = "2019";
+                    var startMonth = "11";
+                    var startDate = "28";
+                    var startHour = "0";
+                    var startMinute = "0";
+                    var startSecond = "0";
+                    var todayYear = today.getFullYear();
+                    var todayMonth = today.getMonth() + 1;
+                    var todayDate = today.getDate();
+                    var todayHour = today.getHours();
+                    var todayMinute = today.getMinutes();
+                    var todaySecond = today.getSeconds();
+                    var t1 = Date.UTC(startYear, startMonth, startDate, startHour, startMinute, startSecond);
+                    var t2 = Date.UTC(todayYear, todayMonth, todayDate, todayHour, todayMinute, todaySecond);
+                    var diff = t2 - t1;
+                    var diffYears = Math.floor(diff / years);
+                    var diffDays = Math.floor((diff / days) - diffYears * 365);
+                    var diffHours = Math.floor((diff - (diffYears * 365 + diffDays) * days) / hours);
+                    var diffMinutes = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours) /
+                        minutes);
+                    var diffSeconds = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours -
+                        diffMinutes * minutes) / seconds);
+                    if (startYear == todayYear) {
+                        document.getElementById("year").innerHTML = todayYear;
+                        document.getElementById("sitetime").innerHTML = "本站已安全运行 " + diffDays + " 天 " + diffHours +
+                            " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒";
+                    } else {
+                        document.getElementById("year").innerHTML = startYear + " - " + todayYear;
+                        document.getElementById("sitetime").innerHTML = "本站已安全运行 " + diffYears + " 年 " + diffDays +
+                            " 天 " + diffHours + " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒";
+                    }
+                }
+                setInterval(siteTime, 1000);
+            </script>
+                        <br>
+                    </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+    <a href="https://t.me/MiaoTonyChannel" class="tooltipped" target="_blank" data-tooltip="关注我的TelegramChannel: @MiaoTonyChannel" data-position="top" data-delay="50">
+        <i class="fab fa-telegram"></i>
+    </a>
+
+
+
+    <a href="https://github.com/miaotony" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+        <i class="fab fa-github"></i>
+    </a>
+
+
+
+    <a href="mailto:miaotony@outlook.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fas fa-envelope-open"></i>
+    </a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
+        <i class="fas fa-rss"></i>
+    </a>
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+$(function () {
+    var searchFunc = function (path, search_id, content_id) {
+        'use strict';
+        $.ajax({
+            url: path,
+            dataType: "xml",
+            success: function (xmlResponse) {
+                // get the contents from search data
+                var datas = $("entry", xmlResponse).map(function () {
+                    return {
+                        title: $("title", this).text(),
+                        content: $("content", this).text(),
+                        url: $("url", this).text()
+                    };
+                }).get();
+                var $input = document.getElementById(search_id);
+                var $resultContent = document.getElementById(content_id);
+                $input.addEventListener('input', function () {
+                    var str = '<ul class=\"search-result-list\">';
+                    var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                    $resultContent.innerHTML = "";
+                    if (this.value.trim().length <= 0) {
+                        return;
+                    }
+                    // perform local searching
+                    var cnt = 1;
+                    datas.forEach(function (data) {
+                        var isMatch = true;
+                        var content_index = [];
+                        var data_title_origin = data.title.trim();
+                        var data_title = data.title.trim().toLowerCase();
+                        var data_content = data.content.trim().replace(/<[^>]+>/g, "").toLowerCase();
+                        var data_url = data.url;
+                        data_url = data_url.indexOf('/') === 0 ? data.url : '/' + data_url;
+                        var index_title = -1;
+                        var index_content = -1;
+                        var first_occur = -1;
+                        // only match artiles with not empty titles and contents
+                        if (data_title !== '' && data_content !== '') {
+                            keywords.forEach(function (keyword, i) {
+                                index_title = data_title.indexOf(keyword);
+                                index_content = data_content.indexOf(keyword);
+                                if (index_title < 0 && index_content < 0) {
+                                    isMatch = false;
+                                } else {
+                                    if (index_content < 0) {
+                                        index_content = 0;
+                                    }
+                                    if (i === 0) {
+                                        first_occur = index_content;
+                                    }
+                                }
+                            });
+                        }
+                        // show search results
+                        if (isMatch) {
+                            str += "<li><a href='" + data_url + "' class='search-result-title'>" + String(cnt) + ". " + data_title_origin + "</a>";
+                            cnt += 1;
+    
+                            var content = data.content.trim().replace(/<[^>]+>/g, "");
+                            if (first_occur >= 0) {
+                                // cut out 300 characters
+                                var start = first_occur - 30;
+                                if (start < 0) {
+                                    start = 0;
+                                }
+                                var match_content = content.substr(start, 300);
+                                // highlight all keywords
+                                keywords.forEach(function (keyword) {
+                                    var regS = new RegExp(keyword, "gi");
+                                    match_content = match_content.replace(regS, "<em class=\"search-keyword\">" + keyword + "</em>");
+                                });
+    
+                                str += "<p class=\"search-result\">" + match_content + "...</p>"
+                            }
+                            str += "</li>";
+                        }
+                    });
+                    str += "</ul>";
+                    str = "<p class=\"search-result-summary\">共找到 " + String(cnt-1) + " 条结果</p>"  + str;
+                    $resultContent.innerHTML = str;
+                });
+            }
+        });
+    };
+
+    searchFunc('/search.xml', 'searchInput', 'searchResult');
+});
+</script>
+
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.min.js"></script>
+
+    
+
+    
+<script>
+    var _hmt = _hmt || [];
+    (function () {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?40e312a1eec109cf96e30988cf3bfe70";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+    
+    
+    
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+</body>
+
+</html>
