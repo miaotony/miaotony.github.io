@@ -1,0 +1,1862 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="HomeLab | 4 GPU 硬解新境界：LXC 环境下玩转 JellyFin 核显硬解转码, MiaoTony,blog">
+    <meta name="description" content="在PVE里基于LXC安装JellyFin，并利用GPU核显实现硬解加速转码。本文具体介绍了相关配置步骤，大大提升了homelab观影性能和体验感。">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-159946730-1"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+        dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+    gtag('config', 'UA-159946730-1');
+</script>
+
+
+    <title>HomeLab | 4 GPU 硬解新境界：LXC 环境下玩转 JellyFin 核显硬解转码 | MiaoTony&#39;s小窝</title>
+    <link rel="icon" type="image/x-icon, image/vnd.microsoft.icon" href="/favicon.ico">
+
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
+	
+    <script src="/libs/jquery/jquery.min.js"></script>
+    <script>
+        //来个特效玩玩喵 20200123
+        var titleTime;
+        var OriginTitile = document.title;
+        document.addEventListener('visibilitychange', function() {
+            if (document.hidden) {
+                document.title = '|ω·) 喵~快回来呀！';
+                clearTimeout(titleTime);
+            } else {
+                document.title = '(/≧▽≦)/ Meow！';
+                titleTime = setTimeout(function() {
+        	    document.title = OriginTitile;
+        }, 800);
+    }
+        });
+    </script>
+<meta name="generator" content="Hexo 6.2.0">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+<link rel="alternate" href="/atom.xml" title="MiaoTony's小窝" type="application/atom+xml">
+</head>
+
+
+
+
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">MiaoTony&#39;s小窝</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>首页</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>标签</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>分类</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/archives" class="waves-effect waves-light">
+      
+      <i class="fas fa-archive" style="zoom: 0.6;"></i>
+      
+      <span>归档</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>关于</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/contact" class="waves-effect waves-light">
+      
+      <i class="fas fa-comments" style="zoom: 0.6;"></i>
+      
+      <span>留言</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/friends" class="waves-effect waves-light">
+      
+      <i class="fas fa-address-book" style="zoom: 0.6;"></i>
+      
+      <span>友链</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="搜索" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">MiaoTony&#39;s小窝</div>
+        <div class="logo-desc">
+            
+            喵~欢迎各位大佬的来访呀！
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			首页
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			标签
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			分类
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/archives" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-archive"></i>
+			
+			归档
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			关于
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/contact" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-comments"></i>
+			
+			留言
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/friends" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-address-book"></i>
+			
+			友链
+		</a>
+          
+        </li>
+        
+        
+        <li><div class="divider"></div></li>
+        <li>
+            <a href="https://github.com/miaotony" class="waves-effect waves-light" target="_blank">
+                <i class="fab fa-github-square fa-fw"></i>Follow Me
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+
+        </div>
+
+        
+            <style>
+    .nav-transparent .github-corner {
+        display: none !important;
+    }
+
+    .github-corner {
+        position: absolute;
+        z-index: 10;
+        top: 0;
+        right: 0;
+        border: 0;
+        transform: scale(1.1);
+    }
+
+    .github-corner svg {
+        color: #0f9d58;
+        fill: #fff;
+        height: 64px;
+        width: 64px;
+    }
+
+    .github-corner:hover .octo-arm {
+        animation: a 0.56s ease-in-out;
+    }
+
+    .github-corner .octo-arm {
+        animation: none;
+    }
+
+    @keyframes a {
+        0%,
+        to {
+            transform: rotate(0);
+        }
+        20%,
+        60% {
+            transform: rotate(-25deg);
+        }
+        40%,
+        80% {
+            transform: rotate(10deg);
+        }
+    }
+</style>
+
+<a href="https://github.com/miaotony" class="github-corner tooltipped hide-on-med-and-down" target="_blank"
+   data-tooltip="Follow Me" data-position="left" data-delay="50">
+    <svg viewBox="0 0 250 250" aria-hidden="true">
+        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+        <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2"
+              fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
+        <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z"
+              fill="currentColor" class="octo-body"></path>
+    </svg>
+</a>
+        
+    </nav>
+
+</header>
+
+    
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/8.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <h1 class="description center-align post-title">HomeLab | 4 GPU 硬解新境界：LXC 环境下玩转 JellyFin 核显硬解转码</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        min-width: 240px;
+        padding-left: 15px;
+        padding-bottom: 30px;
+    }
+
+    .toc-widget .toc-title {
+        padding: 30px 0 15px 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content {
+	    max-height: 450px;
+        overflow: auto;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #42b983;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+
+        position: absolute;
+        right: 23.5vw;
+        display: block;
+    }
+
+    #toc-content .is-active-link {
+        color: #42b983;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 15px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/Tech/">
+                                <span class="chip bg-color">Tech</span>
+                            </a>
+                        
+                            <a href="/tags/Configuration/">
+                                <span class="chip bg-color">Configuration</span>
+                            </a>
+                        
+                            <a href="/tags/Server/">
+                                <span class="chip bg-color">Server</span>
+                            </a>
+                        
+                            <a href="/tags/HomeLab/">
+                                <span class="chip bg-color">HomeLab</span>
+                            </a>
+                        
+                            <a href="/tags/PVE/">
+                                <span class="chip bg-color">PVE</span>
+                            </a>
+                        
+                            <a href="/tags/NAS/">
+                                <span class="chip bg-color">NAS</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/Tech/" class="post-category">
+                                Tech
+                            </a>
+                        
+                            <a href="/categories/Tech/Server/" class="post-category">
+                                Server
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2023-11-26
+                </div>
+                
+
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
+                    5.1k
+                </div>
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
+                    22 分
+                </div>
+                
+
+                
+            </div>
+        </div>
+        <hr class="clearfix">
+
+        
+        <!-- 是否加载使用自带的 prismjs. -->
+        <link rel="stylesheet" href="/libs/prism/prism.css">
+        
+
+        
+
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <blockquote>
+<p><strong>请注意！！！</strong></p>
+<p>本系列的文章是断断续续写的，本文大部分内容最早写于2023年1月，<strong>可能有些信息已经过时！</strong></p>
+<p><del><em>别问，问就是写了一半然后放草稿箱里长草了。</em></del></p>
+</blockquote>
+<p><img src="/2023/11/26/Server_HomeLab_4_GPUtranscoding/f132ed01-1f75-45f0-94b1-c4fb5200bc73.webp"></p>
+<h2 id="0x00-引言"><a href="#0x00-引言" class="headerlink" title="0x00 引言"></a>0x00 引言</h2><blockquote>
+<p><strong>HomeLab 系列回顾：</strong></p>
+<p><a href="https://miaotony.xyz/2022/12/18/Server_HomeLab_1_PVEsetup/">HomeLab | 1 Proxmox Virtual Environment(PVE) 安装及配置</a></p>
+<p><a href="https://miaotony.xyz/2023/06/10/Server_HomeLab_2_openmediavault/">HomeLab | 2 OpenMediaVault 安装 &amp; 硬盘直通 &amp; 相关配置</a></p>
+<p><a href="https://miaotony.xyz/2023/08/08/Server_HomeLab_3_nastools/">HomeLab | 3 下载观影一条龙：NASTool/JellyFin/qBittorrent 半自动化家庭影院搭建指北</a></p>
+</blockquote>
+<p>上一篇博客中，我们介绍了 JellyFin，这是一个免费开源的媒体中心软件，可以用来管理和播放您的个人媒体库，实现方便快捷灵活的观影体验。</p>
+<p>其中，JellyFin 串流播放如果编码不适配等情况的话可能涉及转码，需要吃 CPU 的资源，而 GPU 硬件加速可以显着提高 JellyFin 的性能，这对于播放高分辨率视频或转码媒体文件尤其有用。</p>
+<p>你说你没有独显，核显行不行？说得对，喵喵 <del>没钱买独显</del> 也这么想，这就来试试呗！</p>
+<p>那为什么要使用 LXC 安装 JellyFin 呢？</p>
+<p>LXC 是一种轻量级的虚拟化技术，可以让我们在同一台物理服务器上运行多个虚拟机，从而隔离不同的应用程序和服务，便于资源控制和管理。另外，直接使用 LXC 不涉及复杂的显卡直通操作，直接将显卡共享到 LXC 里使用，对于系统的兼容性较好。</p>
+<p>这篇博客就来填一下之前挖的坑，<strong>介绍一下如何在 PVE 环境中使用 LXC 安装 JellyFin，并实现 GPU 核显硬件加速。</strong></p>
+<p>顺便还提了一下 PVE 中 openvswitch 的配置方法。</p>
+<p><small><em>（头图由 AI 参与创作</em></small></p>
+<h2 id="0x01-宿主机上的配置"><a href="#0x01-宿主机上的配置" class="headerlink" title="0x01 宿主机上的配置"></a>0x01 宿主机上的配置</h2><h3 id="升级内核"><a href="#升级内核" class="headerlink" title="升级内核"></a>升级内核</h3><p><strong>首先升级下宿主机的内核和 PVE 版本！</strong></p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">apt</span> update
+<span class="token function">apt</span> upgrade<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<p>比如咱把内核和 PVE 管理器升级到了目前最新的版本。</p>
+<p>手动装了下 pve-kernel 和 pve-headers</p>
+<p><img src="/2023/11/26/Server_HomeLab_4_GPUtranscoding/image-20230103202705043.png" alt="pve-kernel"></p>
+<p><img src="/2023/11/26/Server_HomeLab_4_GPUtranscoding/image-20230103202659307.png" alt="pve-headers"></p>
+<p><em>（这些文字写的比较早但是放在草稿箱里吃灰了， <strong>你看到文章的时候已经不是最新的了，建议还是装你这时候最新的</strong></em></p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">apt</span> <span class="token function">install</span> pve-kernel-6.1.0-1-pve pve-headers-6.1.0-1-pve<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>然后保存好你的配置，重启 PVE</p>
+<pre class="line-numbers language-none"><code class="language-none">内核版本 Linux 6.1.0-1-pve #1 SMP PREEMPT_DYNAMIC PVE 6.1.0-1 (Tue, 13 Dec 2022 15:08:53 +0
+PVE管理器版本 pve-manager/7.3-4/d69b70d4<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+
+
+
+
+<h3 id="开启-GuC-和-HuC"><a href="#开启-GuC-和-HuC" class="headerlink" title="开启 GuC 和 HuC"></a>开启 GuC 和 HuC</h3><p>然后配下显卡的内核选项，<strong>开启 i915 GuC 和 HuC</strong> </p>
+<p>根据 <a target="_blank" rel="noopener" href="https://jellyfin.org/docs/general/administration/hardware-acceleration/">JellyFin 文档</a>，Intel Gen9 and Gen11+ iGPUs 必须开启 <a target="_blank" rel="noopener" href="https://01.org/linuxgraphics/downloads/firmware">Guc/Huc firmware</a></p>
+<p>GuC and HuC 固件是由 <a target="_blank" rel="noopener" href="https://archlinux.org/packages/?name=linux-firmware">linux-firmware</a> 提供的。</p>
+<blockquote>
+<p>submission and power management is enabled by setting the kernel module parameter: i915.enable_guc=1</p>
+<p>HuC authentication only is enabled by setting the kernel module parameter: i915.enable_guc=2</p>
+<p><strong>Combine for both features together: i915.enable_guc=3</strong></p>
+<p>Please note that prior to kernel 4.16, HuC authentication was enabled by setting: i915.enable_guc_loading=1</p>
+<p>Please see kernel documentation at <a target="_blank" rel="noopener" href="https://www.kernel.org/doc/html/latest/gpu/i915.html#guc">https://www.kernel.org/doc/html/latest/gpu/i915.html#guc</a> for more details.</p>
+</blockquote>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">nano</span> /etc/modprobe.d/i915.conf<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>写入</p>
+<pre class="line-numbers language-none"><code class="language-none">options i915 enable_guc=3<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>然后更新内核模块，<strong>重启</strong></p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">update-initramfs -u -k all
+<span class="token function">reboot</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<p><strong>请注意保存好工作</strong>，尽量先把 VM 手动关闭了，不然此处会等待所有 VM 和 LXC 都关了 PVE 才会真正重启，默认的 VM 关闭超时为 180s，超时才会强制关机。</p>
+<p><img src="/2023/11/26/Server_HomeLab_4_GPUtranscoding/image-20230103060352136.png"></p>
+<p>重启后验证低功耗编码 HuC 和 GuC 是否开启</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">journalctl -b -o short-monotonic -k <span class="token operator">|</span> <span class="token function">egrep</span> -i <span class="token string">"i915|dmr|dmc|guc|huc"</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p><img src="/2023/11/26/Server_HomeLab_4_GPUtranscoding/image-20230103224741335.png"></p>
+<h2 id="0x02-配置-PVE-中的内网-openvswitch"><a href="#0x02-配置-PVE-中的内网-openvswitch" class="headerlink" title="0x02 配置 PVE 中的内网(openvswitch)"></a>0x02 配置 PVE 中的内网(openvswitch)</h2><p>这是一个可选步骤，只是懒得单独写一篇博客了，就顺便放在这里了吧</p>
+<p><em>（以后群友问到的话，直接甩一个链接好了，多好</em></p>
+<p>基于 <a target="_blank" rel="noopener" href="https://pve.proxmox.com/wiki/Open_vSwitch">Open vSwitch (openvswitch, OVS)</a>，可以在 PVE 中构建一个虚拟化万兆网卡，从而实现 PVE 上的 VM / LXC 之间高速互联。</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">apt</span> update
+<span class="token function">apt</span> <span class="token function">install</span> openvswitch-switch<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<p>依次点击</p>
+<p><img src="/2023/11/26/Server_HomeLab_4_GPUtranscoding/image-20231228034931831.png"></p>
+<p>创建 <strong>OVS Bridge</strong>，可以直接默认配置然后点击 Create</p>
+<p><img src="/2023/11/26/Server_HomeLab_4_GPUtranscoding/image-20231228034947579.png"></p>
+<p><img src="/2023/11/26/Server_HomeLab_4_GPUtranscoding/image-20231228035135653.png"></p>
+<p>然后创建 <strong>OVS IntPort</strong>，名字比如 <code>internal</code>，IPv4/CIDR 填个你喜欢的私网网段，比如 <code>192.168.200.1/24</code>，OVS Bridge 选择刚刚创建的 <code>vmbr1</code>，其他没有需要的话可以不填</p>
+<p><img src="/2023/11/26/Server_HomeLab_4_GPUtranscoding/image-20231228035224433.png"></p>
+<p>然后 PVE 宿主机端的配置就完成了，如果有需要就另外给 VM / LXC 添加网卡，指定 Bridge: vmbr1 即可</p>
+<p><img src="/2023/11/26/Server_HomeLab_4_GPUtranscoding/image-20231228040055057.png" alt="VM添加内网网卡"></p>
+<p>下面的 LXC 配置里还会提到的。</p>
+<h2 id="0x03-挂载-NAS-NFS"><a href="#0x03-挂载-NAS-NFS" class="headerlink" title="0x03 挂载 NAS NFS"></a>0x03 挂载 NAS NFS</h2><p>喵喵这里的存储是在 VM 的 omv 里的，通过 NFS 共享出来给 JellyFin 用，你的情景很有可能是挂载另一台机器（比如专门一台存储设备 / NAS）的存储，也是一个道理的。</p>
+<p><strong>噢对了，如果你是直接 PVE host 上的文件系统，那这一步就不用配置了，直接往下面一节看。</strong></p>
+<p>咱这里先挂载到 PVE 宿主机上，进而在后续步骤 map 到 LXC 里。</p>
+<p>这么做是因为 NFS 是内核相关的行为，如果要在 LXC 里安装 NFS 并挂载的话，需要开启特权容器并在选项里勾选 NFS 才行。</p>
+<p>按图添加 NFS 存储</p>
+<p><img src="/2023/11/26/Server_HomeLab_4_GPUtranscoding/image-20230103053226862.png"></p>
+<p>Export 是 omv 上 NFS server 配置的，正常来说填了服务器 IP 就会自动出来下拉框可以选了。</p>
+<p><img src="/2023/11/26/Server_HomeLab_4_GPUtranscoding/image-20230103053737007.png"></p>
+<p>配置好了之后会挂载到 <code>/mnt/pve/media</code> 目录下</p>
+<p><img src="/2023/11/26/Server_HomeLab_4_GPUtranscoding/image-20230103053859325.png"></p>
+<h2 id="0x04-LXC-配置"><a href="#0x04-LXC-配置" class="headerlink" title="0x04 LXC 配置"></a>0x04 LXC 配置</h2><p>下载 Debian 11 的 CT 模板</p>
+<p><img src="/2023/11/26/Server_HomeLab_4_GPUtranscoding/image-20230103040845384.png"></p>
+<p>如果这里半天下载不下来，可以手动下载到目录下，喵喵这里直接用 USTC 的镜像加速下载</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token builtin class-name">cd</span> /var/lib/vz/template/cache
+<span class="token function">wget</span> https://mirrors.ustc.edu.cn/proxmox/images/system/debian-11-standard_11.6-1_amd64.tar.zst<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+
+
+<h3 id="新建-LXC-容器"><a href="#新建-LXC-容器" class="headerlink" title="新建 LXC 容器"></a>新建 LXC 容器</h3><p>为了后续安装 docker，这里勾选 <strong>嵌套</strong></p>
+<p><img src="/2023/11/26/Server_HomeLab_4_GPUtranscoding/image-20230103041244823.png"></p>
+<p>这里咱还是试试勾选 <strong>无特权的容器</strong>，不想给他那么高的权限，但可能需要多点 idmap 的麻烦事（</p>
+<p><em><strong>如果你不想折腾的话这里就把 无特权的容器 这个勾给去掉</strong></em></p>
+<blockquote>
+<p><strong>注意这里有点坑</strong>，如果你是配好了系统了再到 PVE 的配置文件里去改这个 unprivileged 参数的值，比如把勾去掉（当然界面上改不了）也就是把 1 改成 0，那么重新起来之后 /root 等目录的所属者就会变成 100000 而不是 root 所对应的 0。意思就是这个 unprivileged 为了和宿主机做隔离，有个 id mapping 的玩意在里面的</p>
+<p>这样的话需要先备份再还原</p>
+<p>It is possible to convert an existing CT into an unprivileged CT by doing a backup, then a restore on console:</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">pct restore <span class="token number">1234</span> /var/lib/vz/dump/vzdump-lxc-1234-2016_03_02-02_31_03.tar.gz -ignore-unpack-errors <span class="token number">1</span> -unprivileged<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>如果没啥数据不想折腾的话，干脆直接删掉 LXC 再重新建个新的就完事了。</p>
+</blockquote>
+<p>选择下载好的 Debian 11 CT template</p>
+<p><del><em>（你想用其他的系统自己玩自己摸索也行</em></del></p>
+<p><img src="/2023/11/26/Server_HomeLab_4_GPUtranscoding/image-20230103051404658.png"></p>
+<p>其他的硬盘啥的自己按心情来就好了。</p>
+<p>CPU 可以分2核，内存稍微大点。</p>
+<p>网络这里先配个静态的 IP，方便后续访问和连接 JellyFin</p>
+<p><img src="/2023/11/26/Server_HomeLab_4_GPUtranscoding/image-20230103051854628.png"></p>
+<p>创建好之后，来到网络这里，添加咱 PVE 内部的网络。</p>
+<p>添加网络设备，桥接 vmbr1，这个看你之前咋配的吧，喵喵这里整了个虚拟路由器（在 0x02 步骤中配置的），在 PVE 里的 VM / LXC 之间可以通过这个网络高速互联。</p>
+<p>这里的网关不用填。</p>
+<p><img src="/2023/11/26/Server_HomeLab_4_GPUtranscoding/image-20230103052223915.png"></p>
+<p><strong>注意，创建完先不要启动！</strong></p>
+<h3 id="挂载存储"><a href="#挂载存储" class="headerlink" title="挂载存储"></a>挂载存储</h3><p>参考官方文档 <a target="_blank" rel="noopener" href="https://pve.proxmox.com/wiki/Linux_Container#_bind_mount_points">https://pve.proxmox.com/wiki/Linux_Container#_bind_mount_points</a> ，将 PVE 宿主机上的 NFS 存储给挂载到 LXC 里。</p>
+<p>如果你是宿主机上的存储的话，这里也可以照样着配置。</p>
+<p><img src="/2023/11/26/Server_HomeLab_4_GPUtranscoding/image-20230103054240585.png"></p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">nano</span> /etc/pve/lxc/109.conf<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>109 是 LXC 的编号，记得改成你自己的。在最下面加入</p>
+<pre class="line-numbers language-none"><code class="language-none">mp0: /mnt/pve/media,mp=/mnt/media<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p><code>mp0</code> 是第一个挂载点，如果需要挂载多个的话，按照顺序就是 mp1，mp2，mp3</p>
+<p><code>/mnt/pve/media</code> 就是宿主机上的存储路径，<code>mp=/mnt/media</code> 就是映射到 LXC 里的路径，后续 JellyFin 就是从这个路径去读文件了。</p>
+<p>保存文件，在资源这里就能看到挂载点了。</p>
+<p><img src="/2023/11/26/Server_HomeLab_4_GPUtranscoding/image-20230103055138620.png"></p>
+<blockquote>
+<p>这样挂载的话，在 LXC 里看到的文件和目录所属都被映射到 nobody (uid 65534)，如果日常用还是可以的，前提是没有设置目录权限（也就是所有人都能读/写），以及不在乎用特定的 uid/gid 写入文件，因为所有文件都将使用高映射 (100000+) uid 来创建。</p>
+<p>有需要的话，可以参考官方文档 <a target="_blank" rel="noopener" href="https://pve.proxmox.com/wiki/Unprivileged_LXC_containers">Unprivileged LXC containers</a>，配置一下 idmap 来让 LXC 里的用户拥有特定的 uid</p>
+<p>咱这里摸了，大不了共享的时候直接 <code>chmod -R 777 .</code> 就行了（（（</p>
+<p><del><em>没想到后面还是要配 id mapping</em></del></p>
+</blockquote>
+<p>然后启动 LXC，用户名 root，密码你自己设的，<strong>登录控制台</strong>，当然也可以直接 ssh 上去</p>
+<p>看一下就能发现存储已经挂载上去了。</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">df</span> -h
+<span class="token function">ls</span> -al /mnt/media<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<p><img src="/2023/11/26/Server_HomeLab_4_GPUtranscoding/image-20230104053926667.png"></p>
+<h3 id="共享核显"><a href="#共享核显" class="headerlink" title="共享核显"></a>共享核显</h3><p>首先继续 <strong>在 LXC 里</strong> 看看 <code>/etc/group</code> 里的 video 和 render 组 id</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># egrep 'video|render' /etc/group</span>
+video:x:44:
+render:x:105:<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<p>然后 <strong>在宿主机上看看显卡、group</strong></p>
+<p>注意这里权限是 0660 的， <strong>咱就是想办法在不改成 0666 也不开特权容器的情况下让 LXC 里的 docker 里的 JellyFin 能调用咱的 GPU。</strong></p>
+<p><em>（可把喵喵折腾坏了，咱就不信 unprivileged 容器不能用！！！</em></p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">root@pve1:/etc/pve<span class="token comment"># lspci | grep -i vga</span>
+00:02.0 VGA compatible controller: Intel Corporation Device <span class="token number">4692</span> <span class="token punctuation">(</span>rev 0c<span class="token punctuation">)</span>
+root@pve1:/etc/pve<span class="token comment"># ll /dev/dri</span>
+total <span class="token number">0</span>
+drwxr-xr-x   <span class="token number">3</span> root root        <span class="token number">100</span> Sep <span class="token number">19</span> 05:49 <span class="token builtin class-name">.</span>
+drwxr-xr-x  <span class="token number">19</span> root root       <span class="token number">4</span>.8K Sep <span class="token number">19</span> 05:49 <span class="token punctuation">..</span>
+drwxr-xr-x   <span class="token number">2</span> root root         <span class="token number">80</span> Sep <span class="token number">19</span> 05:49 by-path
+crw-rw----+  <span class="token number">1</span> root video  <span class="token number">226</span>,   <span class="token number">0</span> Sep <span class="token number">19</span> 05:49 card0
+crw-rw----+  <span class="token number">1</span> root render <span class="token number">226</span>, <span class="token number">128</span> Sep <span class="token number">19</span> 05:49 renderD128
+root@pve1:/etc/pve<span class="token comment"># ll /dev/dri/by-path/</span>
+total <span class="token number">0</span>
+drwxr-xr-x <span class="token number">2</span> root root  <span class="token number">80</span> Sep <span class="token number">19</span> 05:49 <span class="token builtin class-name">.</span>
+drwxr-xr-x <span class="token number">3</span> root root <span class="token number">100</span> Sep <span class="token number">19</span> 05:49 <span class="token punctuation">..</span>
+lrwxrwxrwx <span class="token number">1</span> root root   <span class="token number">8</span> Sep <span class="token number">19</span> 05:49 pci-0000:00:02.0-card -<span class="token operator">&gt;</span> <span class="token punctuation">..</span>/card0
+lrwxrwxrwx <span class="token number">1</span> root root  <span class="token number">13</span> Sep <span class="token number">19</span> 05:49 pci-0000:00:02.0-render -<span class="token operator">&gt;</span> <span class="token punctuation">..</span>/renderD128
+root@pve1:/etc/pve<span class="token comment"># egrep 'video|render' /etc/group</span>
+video:x:44:
+render:x:103:<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>找到 card0，可以看到<strong>设备号</strong> <code>226,0</code>，再找到 renderD128，可以看到<strong>设备号</strong>为 <code>226,128</code>。</p>
+<p>不同设备可能会不同，记下你的设备号。</p>
+<p>然后继续编辑 <strong>host 上的 LXC 配置文件</strong></p>
+<pre class="line-numbers language-BASH" data-language="BASH"><code class="language-BASH">nano /etc/pve/lxc/109.conf<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>这里为了实现咱的目标，<strong>需要配置好 idmap</strong></p>
+<p>参考 <a target="_blank" rel="noopener" href="https://pve.proxmox.com/wiki/Unprivileged_LXC_containers">Unprivileged LXC containers</a> 文档，他这个例子是把 LXC 里的 uid 1005 映射到外面 host 的 1005。他这里的 <code>u 0 100000 1005</code> 是说把 LXC 容器里的 uid 0-1004 这 1005 个 uids 映射到 host 上的 100000-101004，格式也就是 <code>LXC起始uid host起始uid 数量</code>。</p>
+<p><img src="/2023/11/26/Server_HomeLab_4_GPUtranscoding/image-20230104055340211.png"></p>
+<p>结合我们需要改一下，顺便把文件共享的 1000:1000 给映射到 host 上了。</p>
+<p>这里特地把核显所需的 group 给 id map 了</p>
+<p>LXC video 44 -&gt; host video 44</p>
+<p>LXC render 105 -&gt; host render 103</p>
+<p>这个不同系统可能不同，自己算一下就行了（最终要覆盖 0-65535 范围</p>
+<p>在文件最后加入如下内容，注意这里的设备号也要对应上（Intel 核显一般是这个）。</p>
+<pre class="line-numbers language-none"><code class="language-none">lxc.cgroup2.devices.allow: c 226:0 rwm
+lxc.cgroup2.devices.allow: c 226:128 rwm
+lxc.mount.entry: /dev/dri dev/dri none bind,optional,create=dir
+lxc.idmap: u 0 100000 1000
+lxc.idmap: u 1000 1000 1
+lxc.idmap: u 1001 101001 64535
+lxc.idmap: g 0 100000 44
+lxc.idmap: g 44 44 1
+lxc.idmap: g 45 100045 60
+lxc.idmap: g 105 103 1
+lxc.idmap: g 106 100106 894
+lxc.idmap: g 1000 1000 1
+lxc.idmap: g 1001 101001 64535<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>然后 <strong>在 host 上配置 subuid 和 subgid</strong></p>
+<p><code>1000:1</code> 表示允许从 1000 开始的 1 个，注意这里的 id 是 host 上的！（所以是103而不是105）</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token builtin class-name">echo</span> <span class="token string">'root:1000:1'</span> <span class="token operator">&gt;&gt;</span> /etc/subuid
+<span class="token function">cat</span> <span class="token operator">&gt;&gt;</span> /etc/subgid <span class="token operator">&lt;&lt;</span><span class="token string">EOF
+root:44:1
+root:103:1
+root:1000:1
+EOF</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>如果不配的话，LXC 是启动不来的，会有类似这样的提示</p>
+<pre class="line-numbers language-none"><code class="language-none">lxc_map_ids: 3672 newuidmap failed to write mapping "newuidmap: uid range [1000-1001) -&gt; [1000-1001) not allowed": xxx<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>另外，如果 idmap 里的范围没覆盖全的话，有可能出现 ssh 连不上，但控制台能登录的情况，检查并修正 idmap 之后就好了。</p>
+<p>如果没问题的话，启动容器，<code>ls -al /dev/dri</code> 看到的对应组就正确了，而且是 0660 权限！</p>
+<p><img src="/2023/11/26/Server_HomeLab_4_GPUtranscoding/image-20230104063024659.png"></p>
+<p>再看文件目录，这里的默认权限也变成 1000:1000 了</p>
+<p><img src="/2023/11/26/Server_HomeLab_4_GPUtranscoding/image-20230104064130723.png"></p>
+<blockquote>
+<p><strong>下面是一些其他的尝试，就放这参考，不保证可行。</strong></p>
+<p>如果你在前面设的是 <strong>有特权的容器（把无特权容器的勾去掉了）</strong>，那这里就很方便了，理论上直接下面这样就行了，不用管这些复杂的 id mapping。</p>
+<pre class="line-numbers language-none"><code class="language-none">lxc.cgroup2.devices.allow: c 226:0 rwm
+lxc.cgroup2.devices.allow: c 226:128 rwm
+lxc.mount.entry: /dev/dri dev/dri none bind,optional,create=dir<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<hr>
+<p>如果还是 <strong>unprivileged</strong> 的情况下，你不在乎权限大小，可以 <strong>直接给 0666 权限</strong></p>
+<pre class="line-numbers language-none"><code class="language-none">lxc.cgroup2.devices.allow: c 226:0 rwm
+lxc.cgroup2.devices.allow: c 226:128 rwm
+lxc.mount.entry: /dev/dri/card0 dev/dri/card0 none bind,optional,create=file
+lxc.mount.entry: /dev/dri/renderD128 dev/dri/renderD128 none bind,optional,create=file
+lxc.hook.pre-start: sh -c "chmod 0666 /dev/dri/renderD128 /dev/dri/card0"<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>这个 <code>pre-start</code> 命令可以进一步改一改，把外面的 gid 改成映射到里面的，但如果有多个容器同时在用的话不确定会不会有影响，或者对 host 上的正常使用不知道有何影响（</p>
+<pre class="line-numbers language-none"><code class="language-none">lxc.hook.pre-start: sh -c "chown 0:100105 /dev/dri/renderD128 &amp;&amp; chown 0:100044 /dev/dri/card0 &amp;&amp; chmod 0666 /dev/dri/renderD128 /dev/dri/card0"<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<hr>
+<p>还可以用 <code>lxc.hook.autodev</code> 加载脚本</p>
+<pre class="line-numbers language-none"><code class="language-none">lxc.cgroup2.devices.allow: c 226:0 rwm
+lxc.cgroup2.devices.allow: c 226:128 rwm
+lxc.autodev: 1
+lxc.hook.autodev: /var/lib/lxc/109/mount_hook.sh<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>编辑 hook 脚本</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">nano</span> /var/lib/lxc/109/mount_hook.sh<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">mkdir</span> -p <span class="token variable">${LXC_ROOTFS_MOUNT}</span>/dev/dri
+<span class="token function">mknod</span> -m <span class="token number">666</span> <span class="token variable">${LXC_ROOTFS_MOUNT}</span>/dev/dri/card0 c <span class="token number">226</span> <span class="token number">0</span>
+<span class="token function">mknod</span> -m <span class="token number">666</span> <span class="token variable">${LXC_ROOTFS_MOUNT}</span>/dev/dri/renderD128 c <span class="token number">226</span> <span class="token number">128</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<p>给个可执行权限</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">chmod</span> +x /var/lib/lxc/109/mount_hook.sh<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+
+
+<hr>
+<p>当然，如果你不需要把 1000:1000 映射进去，可以改一改 idmap</p>
+<pre class="line-numbers language-none"><code class="language-none">lxc.cgroup2.devices.allow: c 226:0 rwm
+lxc.cgroup2.devices.allow: c 226:128 rwm
+lxc.mount.entry: /dev/dri dev/dri none bind,optional,create=dir
+lxc.idmap = u 0 100000 65536
+lxc.idmap = g 0 100000 44
+lxc.idmap = g 44 44 1
+lxc.idmap = g 45 100045 60
+lxc.idmap = g 105 103 1
+lxc.idmap = g 106 100106 65430<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>并且</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">cat</span> <span class="token operator">&gt;&gt;</span> /etc/subgid <span class="token operator">&lt;&lt;</span><span class="token string">EOF
+root:44:1
+root:103:1
+EOF</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><code>/etc/subuid</code> 就不用加了。</p>
+</blockquote>
+<p>另外，提一句 <strong>NVidia GPU</strong> 的配置，这个是 privileged 容器的情况，来自 <a target="_blank" rel="noopener" href="https://jellyfin.org/docs/general/administration/hardware-acceleration/#va-api-and-qsv-hardware-acceleration-on-lxc-on-proxmox">JellyFin 文档</a></p>
+<pre class="line-numbers language-none"><code class="language-none">lxc.cgroup2.devices.allow: c 195:* rwm
+lxc.cgroup2.devices.allow: c 243:* rwm
+lxc.mount.entry: /dev/nvidia0 dev/nvidia0 none bind,optional,create=file
+lxc.mount.entry: /dev/nvidiactl dev/nvidiactl none bind,optional,create=file
+lxc.mount.entry: /dev/nvidia-uvm dev/nvidia-uvm none bind,optional,create=file
+lxc.mount.entry: /dev/nvidia-modeset dev/nvidia-modeset none bind,optional,create=file
+lxc.mount.entry: /dev/nvidia-uvm-tools dev/nvidia-uvm-tools none bind,optional,create=file<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>这里可能有亿点点乱，希望你多读几遍能理解<em>（反正喵喵重新配的时候又翻出来看了几遍</em></p>
+<h3 id="安装-vainfo"><a href="#安装-vainfo" class="headerlink" title="安装 vainfo"></a>安装 vainfo</h3><p>在 LXC 里安装</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">apt-get</span> <span class="token function">install</span> -y intel-gpu-tools vainfo<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>测试下驱动是否正常，输出类似于以下的内容则正常</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">root@jellyfin:~<span class="token comment"># vainfo</span>
+error: can't connect to X server<span class="token operator">!</span>
+libva info: VA-API version <span class="token number">1.15</span>.0
+libva info: Trying to <span class="token function">open</span> /usr/lib/x86_64-linux-gnu/dri/iHD_drv_video.so
+libva info: Found init <span class="token keyword">function</span> __vaDriverInit_1_10
+libva info: va_openDriver<span class="token punctuation">(</span><span class="token punctuation">)</span> returns <span class="token number">0</span>
+vainfo: VA-API version: <span class="token number">1.15</span> <span class="token punctuation">(</span>libva <span class="token number">2.10</span>.0<span class="token punctuation">)</span>
+vainfo: Driver version: Intel iHD driver <span class="token keyword">for</span> Intel<span class="token punctuation">(</span>R<span class="token punctuation">)</span> Gen Graphics - <span class="token number">21.1</span>.1 <span class="token punctuation">(</span><span class="token punctuation">)</span>
+vainfo: Supported profile and entrypoints
+      VAProfileNone                   <span class="token builtin class-name">:</span> VAEntrypointVideoProc
+      VAProfileNone                   <span class="token builtin class-name">:</span> VAEntrypointStats
+      VAProfileMPEG2Simple            <span class="token builtin class-name">:</span> VAEntrypointVLD
+      VAProfileMPEG2Main              <span class="token builtin class-name">:</span> VAEntrypointVLD
+      VAProfileH264Main               <span class="token builtin class-name">:</span> VAEntrypointVLD
+      VAProfileH264Main               <span class="token builtin class-name">:</span> VAEntrypointEncSliceLP
+      VAProfileH264High               <span class="token builtin class-name">:</span> VAEntrypointVLD
+      VAProfileH264High               <span class="token builtin class-name">:</span> VAEntrypointEncSliceLP
+      VAProfileJPEGBaseline           <span class="token builtin class-name">:</span> VAEntrypointVLD
+      VAProfileJPEGBaseline           <span class="token builtin class-name">:</span> VAEntrypointEncPicture
+      VAProfileH264ConstrainedBaseline: VAEntrypointVLD
+      VAProfileH264ConstrainedBaseline: VAEntrypointEncSliceLP
+      VAProfileHEVCMain               <span class="token builtin class-name">:</span> VAEntrypointVLD
+      VAProfileHEVCMain               <span class="token builtin class-name">:</span> VAEntrypointEncSliceLP
+      VAProfileHEVCMain10             <span class="token builtin class-name">:</span> VAEntrypointVLD
+      VAProfileHEVCMain10             <span class="token builtin class-name">:</span> VAEntrypointEncSliceLP
+      VAProfileVP9Profile0            <span class="token builtin class-name">:</span> VAEntrypointVLD
+      VAProfileVP9Profile0            <span class="token builtin class-name">:</span> VAEntrypointEncSliceLP
+      VAProfileVP9Profile1            <span class="token builtin class-name">:</span> VAEntrypointVLD
+      VAProfileVP9Profile1            <span class="token builtin class-name">:</span> VAEntrypointEncSliceLP
+      VAProfileVP9Profile2            <span class="token builtin class-name">:</span> VAEntrypointVLD
+      VAProfileVP9Profile2            <span class="token builtin class-name">:</span> VAEntrypointEncSliceLP
+      VAProfileVP9Profile3            <span class="token builtin class-name">:</span> VAEntrypointVLD
+      VAProfileVP9Profile3            <span class="token builtin class-name">:</span> VAEntrypointEncSliceLP
+      VAProfileHEVCMain12             <span class="token builtin class-name">:</span> VAEntrypointVLD
+      VAProfileHEVCMain422_10         <span class="token builtin class-name">:</span> VAEntrypointVLD
+      VAProfileHEVCMain422_12         <span class="token builtin class-name">:</span> VAEntrypointVLD
+      VAProfileHEVCMain444            <span class="token builtin class-name">:</span> VAEntrypointVLD
+      VAProfileHEVCMain444            <span class="token builtin class-name">:</span> VAEntrypointEncSliceLP
+      VAProfileHEVCMain444_10         <span class="token builtin class-name">:</span> VAEntrypointVLD
+      VAProfileHEVCMain444_10         <span class="token builtin class-name">:</span> VAEntrypointEncSliceLP
+      VAProfileHEVCMain444_12         <span class="token builtin class-name">:</span> VAEntrypointVLD
+      VAProfileHEVCSccMain            <span class="token builtin class-name">:</span> VAEntrypointVLD
+      VAProfileHEVCSccMain            <span class="token builtin class-name">:</span> VAEntrypointEncSliceLP
+      VAProfileHEVCSccMain10          <span class="token builtin class-name">:</span> VAEntrypointVLD
+      VAProfileHEVCSccMain10          <span class="token builtin class-name">:</span> VAEntrypointEncSliceLP
+      VAProfileHEVCSccMain444         <span class="token builtin class-name">:</span> VAEntrypointVLD
+      VAProfileHEVCSccMain444         <span class="token builtin class-name">:</span> VAEntrypointEncSliceLP
+      VAProfileAV1Profile0            <span class="token builtin class-name">:</span> VAEntrypointVLD
+      VAProfileHEVCSccMain444_10      <span class="token builtin class-name">:</span> VAEntrypointVLD
+      VAProfileHEVCSccMain444_10      <span class="token builtin class-name">:</span> VAEntrypointEncSliceLP<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<blockquote>
+<p>jellyfin-ffmpeg version 4.4.1-2 及以上版本已经包含了 iHD 驱动，所以不用再安装 intel-media-va-driver-non-free 了。</p>
+</blockquote>
+<h2 id="0x05-JellyFin-安装及配置"><a href="#0x05-JellyFin-安装及配置" class="headerlink" title="0x05 JellyFin 安装及配置"></a>0x05 JellyFin 安装及配置</h2><p>进入 LXC 控制台，登录，或者 ssh 上去也行</p>
+<h3 id="换源"><a href="#换源" class="headerlink" title="换源"></a>换源</h3><p>apt 源</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sed</span> -i <span class="token string">'s/deb.debian.org/mirrors.ustc.edu.cn/g'</span> /etc/apt/sources.list
+<span class="token function">sed</span> -i <span class="token string">'s|security.debian.org|mirrors.ustc.edu.cn/debian-security|g'</span> /etc/apt/sources.list
+<span class="token function">apt</span> update
+<span class="token function">apt</span> upgrade -y<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+
+<h3 id="修改语言和时区"><a href="#修改语言和时区" class="headerlink" title="修改语言和时区"></a>修改语言和时区</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">nano</span> /etc/default/locale<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>修改为以下内容</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token assign-left variable"><span class="token environment constant">LANG</span></span><span class="token operator">=</span><span class="token string">"en_US.UTF-8"</span>
+<span class="token assign-left variable"><span class="token environment constant">LANGUAGE</span></span><span class="token operator">=</span><span class="token string">"en_US:en"</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">localectl<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>设置时区为上海时区 / CST，并开启 NTP 时钟同步</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">timedatectl set-timezone Asia/Shanghai
+timedatectl set-ntp <span class="token boolean">true</span>
+timedatectl<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+
+
+<h3 id="安装-docker-及-docker-compose"><a href="#安装-docker-及-docker-compose" class="headerlink" title="安装 docker 及 docker compose"></a>安装 docker 及 docker compose</h3><p>哈哈，喵喵就是喜欢再套一层 docker，而且 JellyFin 拿 docker 镜像来装感觉更方便</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">apt-get</span> update
+<span class="token function">apt-get</span> <span class="token function">install</span> -y ca-certificates <span class="token function">curl</span> gnupg lsb-release
+<span class="token function">mkdir</span> -p /etc/apt/keyrings
+<span class="token function">curl</span> -fsSL https://mirrors.ustc.edu.cn/docker-ce/linux/debian/gpg <span class="token operator">|</span> gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+
+<span class="token builtin class-name">echo</span> <span class="token punctuation">\</span>
+  <span class="token string">"deb [arch=<span class="token variable"><span class="token variable">$(</span>dpkg --print-architecture<span class="token variable">)</span></span> signed-by=/etc/apt/keyrings/docker.gpg] https://mirrors.ustc.edu.cn/docker-ce/linux/debian \
+  <span class="token variable"><span class="token variable">$(</span>lsb_release -cs<span class="token variable">)</span></span> stable"</span> <span class="token operator">|</span> <span class="token function">tee</span> /etc/apt/sources.list.d/docker.list <span class="token operator">&gt;</span> /dev/null
+
+<span class="token function">apt-get</span> update
+<span class="token function">apt-get</span> <span class="token function">install</span> docker-ce docker-ce-cli containerd.io docker-compose-plugin -y
+systemctl start <span class="token function">docker</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+
+<h3 id="拉取-JellyFin-docker-镜像"><a href="#拉取-JellyFin-docker-镜像" class="headerlink" title="拉取 JellyFin docker 镜像"></a>拉取 JellyFin docker 镜像</h3><p>咱这里根据自己需要改了下，供参考。</p>
+<p>据说 <a target="_blank" rel="noopener" href="https://hub.docker.com/r/nyanmisaka/jellyfin">nyanmisaka/jellyfin</a> 这个镜像对驱动、硬解码等做了不少优化，这里试一试。用官方的 jellyfin/jellyfin 镜像也是可行的，咱都试过了。</p>
+<p>VA-API 需要把 render 组加到 docker 权限中，记得改成你系统里对应的 gid</p>
+<pre class="line-numbers language-docker" data-language="docker"><code class="language-docker">version: '3.5'
+services:
+  jellyfin:
+    image: nyanmisaka/jellyfin:latest
+    <span class="token comment"># image: jellyfin/jellyfin</span>
+    container_name: jellyfin
+    user: 1000:1000
+    group_add:
+      - "105"  # render group id can be discovered in /etc/group
+    network_mode: 'host'
+    volumes:
+      - /mnt/media/config/jellyfin:/config
+      - /mnt/media/cache:/cache
+      - /mnt/media/transcodes:/config/transcodes  # ffmpeg转码的缓存目录
+      - /mnt/media/links:/media
+      <span class="token comment"># - /path/to/media2:/media2:ro</span>
+    restart: 'unless-stopped'
+    <span class="token comment"># Optional - alternative address used for autodiscovery</span>
+    environment:
+      - TZ=Asia/Shanghai
+      <span class="token comment"># - JELLYFIN_PublishedServerUrl=http://example.com</span>
+    <span class="token comment"># Optional - may be necessary for docker healthcheck to pass if running in host network mode</span>
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    devices:
+      - /dev/dri:/dev/dri<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><strong>注意这里记得加上 <code>devices</code>，不然调用不了 GPU 的</strong>，别问了，问就是喵喵调了老半天才发现……</p>
+<p>然后，JellyFin，启动！</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">docker</span> compose up -d<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+
+
+<h3 id="转码相关配置"><a href="#转码相关配置" class="headerlink" title="转码相关配置"></a>转码相关配置</h3><p>访问 <a target="_blank" rel="noopener" href="http://ip:8096/">http://ip:8096/</a> ，登录</p>
+<p>控制台-播放-转码，这里可以选择 Intel QuickSync (QSV) 或者 Video Acceleration API (VAAPI)，然后把下面的启用硬件解码都勾上</p>
+<p>再把 启用低电压模式的 Intel H.264 硬件编码器、启用低电压模式的 Intel HEVC 硬件编码器 勾上，这个就是在宿主机上配的内核参数起作用的地方了（</p>
+<p><img src="/2023/11/26/Server_HomeLab_4_GPUtranscoding/image-20230104052531073.png"></p>
+<p><em>建议还是用 QSV</em>，<a target="_blank" rel="noopener" href="https://blog.lishun.me/synology-docker-jellyfin-quicksync">网友</a> 测试如下</p>
+<p><img src="/2023/11/26/Server_HomeLab_4_GPUtranscoding/image-20230104071035734.png"></p>
+<p>另外，参考网上的建议，不要开启 VPP 色调映射，否则 HDR 转 SDR 后颜色会比较暗淡。</p>
+<p>拉到最下面，保存。</p>
+<p>然后找个电影放一放，看一下播放信息，如果需要转码的话，播放方式这里就会显示出来了。</p>
+<p><img src="/2023/11/26/Server_HomeLab_4_GPUtranscoding/image-20230104051727868.png"></p>
+<p>可以看下 jellyfin 日志，如果用 QSV：</p>
+<p><img src="/2023/11/26/Server_HomeLab_4_GPUtranscoding/image-20230104051411257.png" alt="QSV"></p>
+<p>如果用 VAAPI：</p>
+<p><img src="/2023/11/26/Server_HomeLab_4_GPUtranscoding/image-20230104051337048.png" alt="VAAPI"></p>
+<p>另外在宿主机上可以看到已经调用了 igpu 进行解码，如果渲染字幕的话这里的 Render 也会有占用。</p>
+<p><img src="/2023/11/26/Server_HomeLab_4_GPUtranscoding/image-20230104051743075.png"></p>
+<p>现在拖进度条就舒服多了呀！</p>
+<p>喵呜，好耶！！！</p>
+<p>当然还有一些其他问题顺便解决一下。</p>
+<h3 id="解决中文显示框框的问题"><a href="#解决中文显示框框的问题" class="headerlink" title="解决中文显示框框的问题"></a>解决中文显示框框的问题</h3><p>封面图里的中文、ASS 中文字幕显示方框</p>
+<p><img src="/2023/11/26/Server_HomeLab_4_GPUtranscoding/image-20230104071322334.png"></p>
+<p><img src="/2023/11/26/Server_HomeLab_4_GPUtranscoding/image-20230104071310520.png"></p>
+<p>这里下载个字体文件：<a href="msyh.woff2">微软雅黑</a></p>
+<p>当然如果你不喜欢的话还可以用别的字体，最好是 woff2 网页字体格式，比如 <a target="_blank" rel="noopener" href="https://github.com/CodePlayer/webfont-noto/">Noto Subset Font</a>（简体中文应该是 <a target="_blank" rel="noopener" href="https://github.com/CodePlayer/webfont-noto/raw/master/release/NotoSansCJKsc-hinted-standard.zip">NotoSansCJKsc-hinted</a>，或者 <a target="_blank" rel="noopener" href="https://github.com/atelier-anchor/smiley-sans">得意黑 Smiley Sans</a> <em>（如果你喜欢的话</em></p>
+<p>如果您的网站公开使用，请注意字体的版权问题。</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">mkdir</span> -p /mnt/media/config/jellyfin/fonts<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>把字体文件上传到这个文件夹</p>
+<p>进入控制台进行设置，控制台 - 播放 - 备用字体文件路径，设置为 <code>/config/fonts</code>，勾选 启用备用字体</p>
+<p><img src="/2023/11/26/Server_HomeLab_4_GPUtranscoding/image-20230104071939399.png"></p>
+<p>最下面，保存</p>
+<p>然后重启 JellyFin docker，在媒体库右键 修改图片 - 删除图片，重新刷新元数据</p>
+<p><img src="/2023/11/26/Server_HomeLab_4_GPUtranscoding/image-20230104072156667.png"></p>
+<p><img src="/2023/11/26/Server_HomeLab_4_GPUtranscoding/image-20230104072228194.png"></p>
+<p>然后进入控制台-计划任务，触发 提取章节图片、扫描媒体库，重新生成封面图</p>
+<p><img src="/2023/11/26/Server_HomeLab_4_GPUtranscoding/image-20230104201543307.png"></p>
+<p>这样封面图和字幕就正常了。</p>
+<p><img src="/2023/11/26/Server_HomeLab_4_GPUtranscoding/image-20230104201348280.png"></p>
+<p><img src="/2023/11/26/Server_HomeLab_4_GPUtranscoding/image-20230104072452741.png"></p>
+<h2 id="0x06-小结"><a href="#0x06-小结" class="headerlink" title="0x06 小结"></a>0x06 小结</h2><p>喵呜！终于把坑填完了。</p>
+<p>在这篇博客中，喵喵介绍了如何在 PVE 环境中基于 LXC 安装 JellyFin 并配置 GPU 核显实现硬件加速。</p>
+<p>希望这对您有所帮助！</p>
+<p>欢迎点击下面的 <strong>赏</strong> 给喵喵打钱！（饿饿饭饭.gif</p>
+<h2 id="0xFF-References"><a href="#0xFF-References" class="headerlink" title="0xFF References"></a>0xFF References</h2><p><a target="_blank" rel="noopener" href="https://jellyfin.org/docs/general/administration/hardware-acceleration/">JellyFin 官方文档: Hardware Acceleration</a></p>
+<p><a target="_blank" rel="noopener" href="https://wiki.archlinux.org/title/intel_graphics#Enable_GuC_/_HuC_firmware_loading">Arch Wiki: Enable GuC / HuC firmware loading</a></p>
+<p><a target="_blank" rel="noopener" href="https://linuxcontainers.org/lxd/docs/master/userns-idmap/">LXC: Idmaps for user namespace</a></p>
+<p><a target="_blank" rel="noopener" href="https://pve.proxmox.com/wiki/Linux_Container#_bind_mount_points">PVE: Linux Container</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.alainlam.cn/?p=255">Proxmox VE(PVE) 7.x中，使用LXC安装Jellyfin，开启硬解码等</a></p>
+<p><a target="_blank" rel="noopener" href="https://post.smzdm.com/p/apzdlwdw/">LXC安装jellyfin并开启硬件转码</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.lishun.me/synology-docker-jellyfin-quicksync">群晖 Docker 安装 Jellyfin 媒体服务器并开启 Intel Quick Sync 提升性能</a></p>
+<p><a target="_blank" rel="noopener" href="https://post.smzdm.com/p/awzn342p/">(PVE教程）12代核显在LXC容器实现jellyfin硬解码</a></p>
+<p><a target="_blank" rel="noopener" href="https://eightpigs.io/2021/07/05/pve_10g_nic/">PVE 中虚拟化万兆网卡</a></p>
+<hr>
+<p>还有一些 GPU 共享的挺有意思：</p>
+<p><a target="_blank" rel="noopener" href="https://blog.yqxpro.com/2021/10/18/%E9%80%9A%E8%BF%87LXD%E6%90%AD%E5%BB%BA%E5%AE%9E%E9%AA%8C%E5%AE%A4%E5%85%B1%E4%BA%ABGPU%E6%9C%8D%E5%8A%A1%E5%99%A8/">通过LXD搭建实验室共享GPU服务器</a></p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/25710517">为实验室建立公用GPU服务器</a></p>
+<p><a target="_blank" rel="noopener" href="https://deserts.io/lxd-gpu-server/">利用LXD容器构建共享的GPU服务器</a></p>
+<p><em>（溜了溜了喵~</em></p>
+
+                
+            </div>
+            <hr/>
+
+            
+
+    <div class="reprint" id="reprint-statement">
+        
+            <div class="reprint__author">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-user">
+                        文章作者:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="https://miaotony.xyz" rel="external nofollow noreferrer">MiaoTony</a>
+                </span>
+            </div>
+            <div class="reprint__type">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-link">
+                        文章链接:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="https://miaotony.xyz/2023/11/26/Server_HomeLab_4_GPUtranscoding/">https://miaotony.xyz/2023/11/26/Server_HomeLab_4_GPUtranscoding/</a>
+                </span>
+            </div>
+            <div class="reprint__notice">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-copyright">
+                        版权声明:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    本博客所有文章除特别声明外，均采用
+                    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY-NC-SA 4.0</a>
+                    许可协议。转载请注明来源
+                    <a href="https://miaotony.xyz" target="_blank">MiaoTony</a>
+                    !
+                </span>
+            </div>
+        
+    </div>
+
+    <script async defer>
+      document.addEventListener("copy", function (e) {
+        let toastHTML = '<span>复制成功，请遵循本文的转载规则</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">查看</a>';
+        M.toast({html: toastHTML})
+      });
+
+      function navToReprintStatement() {
+        $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
+      }
+    </script>
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            
+                                <a href="/tags/Tech/">
+                                    <span class="chip bg-color">Tech</span>
+                                </a>
+                            
+                                <a href="/tags/Configuration/">
+                                    <span class="chip bg-color">Configuration</span>
+                                </a>
+                            
+                                <a href="/tags/Server/">
+                                    <span class="chip bg-color">Server</span>
+                                </a>
+                            
+                                <a href="/tags/HomeLab/">
+                                    <span class="chip bg-color">HomeLab</span>
+                                </a>
+                            
+                                <a href="/tags/PVE/">
+                                    <span class="chip bg-color">PVE</span>
+                                </a>
+                            
+                                <a href="/tags/NAS/">
+                                    <span class="chip bg-color">NAS</span>
+                                </a>
+                            
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+<div id="article-share">
+
+    
+    <div class="social-share" data-sites="qq,qzone,wechat,weibo,twitter,facebook,google,douban,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
+    <script src="/libs/share/js/social-share.min.js"></script>
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+                <style>
+    #reward {
+        margin: 40px 0;
+        text-align: center;
+    }
+
+    #reward .reward-link {
+        font-size: 1.4rem;
+        line-height: 38px;
+    }
+
+    #reward .btn-floating:hover {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    #rewardModal {
+        width: 320px;
+        height: 350px;
+    }
+
+    #rewardModal .reward-title {
+        margin: 15px auto;
+        padding-bottom: 5px;
+    }
+
+    #rewardModal .modal-content {
+        padding: 10px;
+    }
+
+    #rewardModal .close {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+        color: rgba(0, 0, 0, 0.5);
+        font-size: 1.3rem;
+        line-height: 20px;
+        cursor: pointer;
+    }
+
+    #rewardModal .close:hover {
+        color: #ef5350;
+        transform: scale(1.3);
+        -moz-transform:scale(1.3);
+        -webkit-transform:scale(1.3);
+        -o-transform:scale(1.3);
+    }
+
+    #rewardModal .reward-tabs {
+        margin: 0 auto;
+        width: 210px;
+    }
+
+    .reward-tabs .tabs {
+        height: 38px;
+        margin: 10px auto;
+        padding-left: 0;
+    }
+
+    .reward-content ul {
+        padding-left: 0 !important;
+    }
+
+    .reward-tabs .tabs .tab {
+        height: 38px;
+        line-height: 38px;
+    }
+
+    .reward-tabs .tab a {
+        color: #fff;
+        background-color: #ccc;
+    }
+
+    .reward-tabs .tab a:hover {
+        background-color: #ccc;
+        color: #fff;
+    }
+
+    .reward-tabs .wechat-tab .active {
+        color: #fff !important;
+        background-color: #22AB38 !important;
+    }
+
+    .reward-tabs .alipay-tab .active {
+        color: #fff !important;
+        background-color: #019FE8 !important;
+    }
+
+    .reward-tabs .reward-img {
+        width: 210px;
+        height: 210px;
+    }
+</style>
+
+<div id="reward">
+    <a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-medium waves-effect waves-light red">赏</a>
+
+    <!-- Modal Structure -->
+    <div id="rewardModal" class="modal">
+        <div class="modal-content">
+            <a class="close modal-close"><i class="fas fa-times"></i></a>
+            <h4 class="reward-title">打赏一下让我来点好吃好玩的呗~</h4>
+            <div class="reward-content">
+                <div class="reward-tabs">
+                    <ul class="tabs row">
+                        <!-- 
+                            <li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li> 
+                        -->
+                        <li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li>
+                    </ul>
+                    <!-- 
+                        <div id="alipay">
+                        <img src="/" class="reward-img" alt="支付宝打赏二维码">
+                        </div> 
+                -->
+                    <div id="wechat">
+                        <img src="/medias/reward/wechat.png" class="reward-img" alt="微信打赏二维码">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.tabs').tabs();
+    });
+</script>
+
+            
+        </div>
+    </div>
+
+    
+        <link rel="stylesheet" href="/libs/gitalk/gitalk.min.css">
+<link rel="stylesheet" href="/css/my-gitalk.css">
+
+<div class="card gitalk-card" data-aos="fade-up">
+    <div class="comment_headling" style="font-size: 20px; font-weight: 700; position: relative; padding-left: 20px; top: 15px; padding-bottom: 5px;">
+        <i class="fas fa-comments fa-fw" aria-hidden="true"></i>
+        <span>评论</span>
+    </div>
+    <div id="gitalk-container" class="card-content"></div>
+</div>
+
+<script src="/libs/gitalk/gitalk.min.js"></script>
+<script>
+    let gitalk = new Gitalk({
+        clientID: '116343b4650fce4789b6',
+        clientSecret: '3e9be2ad6c9b693af1753290c7c059b1e4f34d5d',
+        repo: 'miaotony.github.io',
+        owner: 'miaotony',
+        admin: "miaotony",
+        id: '2023-11-26T20-30-00',
+        distractionFreeMode: false  // Facebook-like distraction free mode
+    });
+
+    gitalk.render('gitalk-container');
+</script>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
+            <div class="card">
+                <a href="/2023/11/26/Server_HomeLab_4_GPUtranscoding/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/8.jpg" class="responsive-img" alt="HomeLab | 4 GPU 硬解新境界：LXC 环境下玩转 JellyFin 核显硬解转码">
+                        
+                        <span class="card-title">HomeLab | 4 GPU 硬解新境界：LXC 环境下玩转 JellyFin 核显硬解转码</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            在PVE里基于LXC安装JellyFin，并利用GPU核显实现硬解加速转码。本文具体介绍了相关配置步骤，大大提升了homelab观影性能和体验感。
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2023-11-26
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/Tech/" class="post-category">
+                                    Tech
+                                </a>
+                            
+                            <a href="/categories/Tech/Server/" class="post-category">
+                                    Server
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/Tech/">
+                        <span class="chip bg-color">Tech</span>
+                    </a>
+                    
+                    <a href="/tags/Configuration/">
+                        <span class="chip bg-color">Configuration</span>
+                    </a>
+                    
+                    <a href="/tags/Server/">
+                        <span class="chip bg-color">Server</span>
+                    </a>
+                    
+                    <a href="/tags/HomeLab/">
+                        <span class="chip bg-color">HomeLab</span>
+                    </a>
+                    
+                    <a href="/tags/PVE/">
+                        <span class="chip bg-color">PVE</span>
+                    </a>
+                    
+                    <a href="/tags/NAS/">
+                        <span class="chip bg-color">NAS</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2023/11/05/CTF_2023Hackergame/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/11.jpg" class="responsive-img" alt="CTF | 2023 USTC Hackergame WriteUp">
+                        
+                        <span class="card-title">CTF | 2023 USTC Hackergame WriteUp</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            又是一年Hackergame，今年题目难度整体偏基础好入门，给这周增添了点娱乐气息，和往年一样比赛中也学到了许多。
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2023-11-05
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/CTF/" class="post-category">
+                                    CTF
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/CTF/">
+                        <span class="chip bg-color">CTF</span>
+                    </a>
+                    
+                    <a href="/tags/WriteUp/">
+                        <span class="chip bg-color">WriteUp</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+<script>
+    $('#articleContent').on('copy', function (e) {
+        // IE8 or earlier browser is 'undefined'
+        if (typeof window.getSelection === 'undefined') return;
+
+        var selection = window.getSelection();
+        // if the selection is short let's not annoy our users.
+        if (('' + selection).length < Number.parseInt('200')) {
+            return;
+        }
+
+        // create a div outside of the visible area and fill it with the selected text.
+        var bodyElement = document.getElementsByTagName('body')[0];
+        var newdiv = document.createElement('div');
+        newdiv.style.position = 'absolute';
+        newdiv.style.left = '-99999px';
+        bodyElement.appendChild(newdiv);
+        newdiv.appendChild(selection.getRangeAt(0).cloneContents());
+
+        // we need a <pre> tag workaround.
+        // otherwise the text inside "pre" loses all the line breaks!
+        if (selection.getRangeAt(0).commonAncestorContainer.nodeName === 'PRE' || selection.getRangeAt(0).commonAncestorContainer.nodeName === 'CODE') {
+            newdiv.innerHTML = "<pre>" + newdiv.innerHTML + "</pre>";
+        }
+
+        var url = document.location.href;
+        newdiv.innerHTML += '<br />'
+            + '来源: MiaoTony&#39;s小窝<br />'
+            + '文章作者: MiaoTony<br />'
+            + '文章链接: <a href="' + url + '">' + url + '</a><br />'
+            + '本文章著作权归作者 MiaoTony 所有，任何形式的转载都请注明出处。';
+
+        selection.selectAllChildren(newdiv);
+        window.setTimeout(function () {bodyElement.removeChild(newdiv);}, 200);
+    });
+</script>
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+
+
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
+
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget card" style="background-color: white;">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('1'),
+            headingSelector: 'h2, h3, h4, h5'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h2, h3, h4, h5').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+
+
+    <footer class="page-footer bg-color">
+        <div class="container row center-align" style="margin-bottom: 15px !important;">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            
+                <span id="year">2019-2023</span>
+            
+            <a href="/about" target="_blank">MiaoTony</a>
+            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+            |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
+            <br>
+                        &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
+                class="white-color">482.8k</span>&nbsp;字
+                                                                                    <span id="busuanzi_container_site_pv">
+			|&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
+                    class="white-color"></span>&nbsp;次
+            </span>
+                                    <span id="busuanzi_container_site_uv">
+                |&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;<span id="busuanzi_value_site_uv"
+                    class="white-color"></span>&nbsp;人
+            </span>
+                        <br>
+                        <span id="sitetime">载入运行时间...</span>
+            <script>
+                function siteTime() {
+                    var seconds = 1000;
+                    var minutes = seconds * 60;
+                    var hours = minutes * 60;
+                    var days = hours * 24;
+                    var years = days * 365;
+                    var today = new Date();
+                    var startYear = "2019";
+                    var startMonth = "11";
+                    var startDate = "28";
+                    var startHour = "0";
+                    var startMinute = "0";
+                    var startSecond = "0";
+                    var todayYear = today.getFullYear();
+                    var todayMonth = today.getMonth() + 1;
+                    var todayDate = today.getDate();
+                    var todayHour = today.getHours();
+                    var todayMinute = today.getMinutes();
+                    var todaySecond = today.getSeconds();
+                    var t1 = Date.UTC(startYear, startMonth, startDate, startHour, startMinute, startSecond);
+                    var t2 = Date.UTC(todayYear, todayMonth, todayDate, todayHour, todayMinute, todaySecond);
+                    var diff = t2 - t1;
+                    var diffYears = Math.floor(diff / years);
+                    var diffDays = Math.floor((diff / days) - diffYears * 365);
+                    var diffHours = Math.floor((diff - (diffYears * 365 + diffDays) * days) / hours);
+                    var diffMinutes = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours) /
+                        minutes);
+                    var diffSeconds = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours -
+                        diffMinutes * minutes) / seconds);
+                    if (startYear == todayYear) {
+                        document.getElementById("year").innerHTML = todayYear;
+                        document.getElementById("sitetime").innerHTML = "本站已安全运行 " + diffDays + " 天 " + diffHours +
+                            " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒";
+                    } else {
+                        document.getElementById("year").innerHTML = startYear + " - " + todayYear;
+                        document.getElementById("sitetime").innerHTML = "本站已安全运行 " + diffYears + " 年 " + diffDays +
+                            " 天 " + diffHours + " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒";
+                    }
+                }
+                setInterval(siteTime, 1000);
+            </script>
+                        <br>
+                    </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+    <a href="https://t.me/MiaoTonyChannel" class="tooltipped" target="_blank" data-tooltip="关注我的TelegramChannel: @MiaoTonyChannel" data-position="top" data-delay="50">
+        <i class="fab fa-telegram"></i>
+    </a>
+
+
+
+    <a href="https://github.com/miaotony" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+        <i class="fab fa-github"></i>
+    </a>
+
+
+
+    <a href="mailto:miaotony@outlook.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fas fa-envelope-open"></i>
+    </a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
+        <i class="fas fa-rss"></i>
+    </a>
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+$(function () {
+    var searchFunc = function (path, search_id, content_id) {
+        'use strict';
+        $.ajax({
+            url: path,
+            dataType: "xml",
+            success: function (xmlResponse) {
+                // get the contents from search data
+                var datas = $("entry", xmlResponse).map(function () {
+                    return {
+                        title: $("title", this).text(),
+                        content: $("content", this).text(),
+                        url: $("url", this).text()
+                    };
+                }).get();
+                var $input = document.getElementById(search_id);
+                var $resultContent = document.getElementById(content_id);
+                $input.addEventListener('input', function () {
+                    var str = '<ul class=\"search-result-list\">';
+                    var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                    $resultContent.innerHTML = "";
+                    if (this.value.trim().length <= 0) {
+                        return;
+                    }
+                    // perform local searching
+                    var cnt = 1;
+                    datas.forEach(function (data) {
+                        var isMatch = true;
+                        var content_index = [];
+                        var data_title_origin = data.title.trim();
+                        var data_title = data.title.trim().toLowerCase();
+                        var data_content = data.content.trim().replace(/<[^>]+>/g, "").toLowerCase();
+                        var data_url = data.url;
+                        data_url = data_url.indexOf('/') === 0 ? data.url : '/' + data_url;
+                        var index_title = -1;
+                        var index_content = -1;
+                        var first_occur = -1;
+                        // only match artiles with not empty titles and contents
+                        if (data_title !== '' && data_content !== '') {
+                            keywords.forEach(function (keyword, i) {
+                                index_title = data_title.indexOf(keyword);
+                                index_content = data_content.indexOf(keyword);
+                                if (index_title < 0 && index_content < 0) {
+                                    isMatch = false;
+                                } else {
+                                    if (index_content < 0) {
+                                        index_content = 0;
+                                    }
+                                    if (i === 0) {
+                                        first_occur = index_content;
+                                    }
+                                }
+                            });
+                        }
+                        // show search results
+                        if (isMatch) {
+                            str += "<li><a href='" + data_url + "' class='search-result-title'>" + String(cnt) + ". " + data_title_origin + "</a>";
+                            cnt += 1;
+    
+                            var content = data.content.trim().replace(/<[^>]+>/g, "");
+                            if (first_occur >= 0) {
+                                // cut out 300 characters
+                                var start = first_occur - 30;
+                                if (start < 0) {
+                                    start = 0;
+                                }
+                                var match_content = content.substr(start, 300);
+                                // highlight all keywords
+                                keywords.forEach(function (keyword) {
+                                    var regS = new RegExp(keyword, "gi");
+                                    match_content = match_content.replace(regS, "<em class=\"search-keyword\">" + keyword + "</em>");
+                                });
+    
+                                str += "<p class=\"search-result\">" + match_content + "...</p>"
+                            }
+                            str += "</li>";
+                        }
+                    });
+                    str += "</ul>";
+                    str = "<p class=\"search-result-summary\">共找到 " + String(cnt-1) + " 条结果</p>"  + str;
+                    $resultContent.innerHTML = str;
+                });
+            }
+        });
+    };
+
+    searchFunc('/search.xml', 'searchInput', 'searchResult');
+});
+</script>
+
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.min.js"></script>
+
+    
+
+    
+<script>
+    var _hmt = _hmt || [];
+    (function () {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?40e312a1eec109cf96e30988cf3bfe70";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+    
+    
+    
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+</body>
+
+</html>
