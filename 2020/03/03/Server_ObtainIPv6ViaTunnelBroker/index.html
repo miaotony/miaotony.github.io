@@ -1,0 +1,1611 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="利用TunnelBroker给阿里云ECS配置公网IPv6, MiaoTony,blog">
+    <meta name="description" content="最近折腾了一下，利用Hurricane Electric提供的免费IPv6 Tunnel Broker，让阿里云的ECS拥有了IPv6地址（非原生）。">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-159946730-1"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+        dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+    gtag('config', 'UA-159946730-1');
+</script>
+
+
+    <title>利用TunnelBroker给阿里云ECS配置公网IPv6 | MiaoTony&#39;s小窝</title>
+    <link rel="icon" type="image/x-icon, image/vnd.microsoft.icon" href="/favicon.ico">
+
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
+	
+    <script src="/libs/jquery/jquery.min.js"></script>
+    <script>
+        //来个特效玩玩喵 20200123
+        var titleTime;
+        var OriginTitile = document.title;
+        document.addEventListener('visibilitychange', function() {
+            if (document.hidden) {
+                document.title = '|ω·) 喵~快回来呀！';
+                clearTimeout(titleTime);
+            } else {
+                document.title = '(/≧▽≦)/ Meow！';
+                titleTime = setTimeout(function() {
+        	    document.title = OriginTitile;
+        }, 800);
+    }
+        });
+    </script>
+<meta name="generator" content="Hexo 6.2.0">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+<link rel="alternate" href="/atom.xml" title="MiaoTony's小窝" type="application/atom+xml">
+</head>
+
+
+
+
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">MiaoTony&#39;s小窝</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>首页</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>标签</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>分类</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/archives" class="waves-effect waves-light">
+      
+      <i class="fas fa-archive" style="zoom: 0.6;"></i>
+      
+      <span>归档</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>关于</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/contact" class="waves-effect waves-light">
+      
+      <i class="fas fa-comments" style="zoom: 0.6;"></i>
+      
+      <span>留言</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/friends" class="waves-effect waves-light">
+      
+      <i class="fas fa-address-book" style="zoom: 0.6;"></i>
+      
+      <span>友链</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="搜索" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">MiaoTony&#39;s小窝</div>
+        <div class="logo-desc">
+            
+            喵~欢迎各位大佬的来访呀！
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			首页
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			标签
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			分类
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/archives" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-archive"></i>
+			
+			归档
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			关于
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/contact" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-comments"></i>
+			
+			留言
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/friends" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-address-book"></i>
+			
+			友链
+		</a>
+          
+        </li>
+        
+        
+        <li><div class="divider"></div></li>
+        <li>
+            <a href="https://github.com/miaotony" class="waves-effect waves-light" target="_blank">
+                <i class="fab fa-github-square fa-fw"></i>Follow Me
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+
+        </div>
+
+        
+            <style>
+    .nav-transparent .github-corner {
+        display: none !important;
+    }
+
+    .github-corner {
+        position: absolute;
+        z-index: 10;
+        top: 0;
+        right: 0;
+        border: 0;
+        transform: scale(1.1);
+    }
+
+    .github-corner svg {
+        color: #0f9d58;
+        fill: #fff;
+        height: 64px;
+        width: 64px;
+    }
+
+    .github-corner:hover .octo-arm {
+        animation: a 0.56s ease-in-out;
+    }
+
+    .github-corner .octo-arm {
+        animation: none;
+    }
+
+    @keyframes a {
+        0%,
+        to {
+            transform: rotate(0);
+        }
+        20%,
+        60% {
+            transform: rotate(-25deg);
+        }
+        40%,
+        80% {
+            transform: rotate(10deg);
+        }
+    }
+</style>
+
+<a href="https://github.com/miaotony" class="github-corner tooltipped hide-on-med-and-down" target="_blank"
+   data-tooltip="Follow Me" data-position="left" data-delay="50">
+    <svg viewBox="0 0 250 250" aria-hidden="true">
+        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+        <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2"
+              fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
+        <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z"
+              fill="currentColor" class="octo-body"></path>
+    </svg>
+</a>
+        
+    </nav>
+
+</header>
+
+    
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/23.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <h1 class="description center-align post-title">利用TunnelBroker给阿里云ECS配置公网IPv6</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        min-width: 240px;
+        padding-left: 15px;
+        padding-bottom: 30px;
+    }
+
+    .toc-widget .toc-title {
+        padding: 30px 0 15px 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content {
+	    max-height: 450px;
+        overflow: auto;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #42b983;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+
+        position: absolute;
+        right: 23.5vw;
+        display: block;
+    }
+
+    #toc-content .is-active-link {
+        color: #42b983;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 15px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/Tech/">
+                                <span class="chip bg-color">Tech</span>
+                            </a>
+                        
+                            <a href="/tags/Configuration/">
+                                <span class="chip bg-color">Configuration</span>
+                            </a>
+                        
+                            <a href="/tags/Web/">
+                                <span class="chip bg-color">Web</span>
+                            </a>
+                        
+                            <a href="/tags/Server/">
+                                <span class="chip bg-color">Server</span>
+                            </a>
+                        
+                            <a href="/tags/IPv6/">
+                                <span class="chip bg-color">IPv6</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/Tech/" class="post-category">
+                                Tech
+                            </a>
+                        
+                            <a href="/categories/Tech/Server/" class="post-category">
+                                Server
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2020-03-03
+                </div>
+                
+
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
+                    2.6k
+                </div>
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
+                    11 分
+                </div>
+                
+
+                
+            </div>
+        </div>
+        <hr class="clearfix">
+
+        
+        <!-- 是否加载使用自带的 prismjs. -->
+        <link rel="stylesheet" href="/libs/prism/prism.css">
+        
+
+        
+
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <h2 id="0x00-前言"><a href="#0x00-前言" class="headerlink" title="0x00 前言"></a>0x00 前言</h2><p>目前 IPv6 用得挺广了吧，很多应用都支持 IPv6 了，三大运营商基本都支持了，联通的流量自带 IPv6，而且开热点的话还支持下发给其他设备。</p>
+<p>不过其实很多服务器都没上 IPv6，比如阿里云的 ECS 一般公网只有 IPv4 地址（想拥有一个 IPv6 地址还得再花钱）。</p>
+<p>于是最近就折腾了一下，利用 Hurricane Electric 提供的<strong>免费 IPv6 Tunnel Broker</strong>，让阿里云的 ECS 拥有了 IPv6 地址（非原生），理论上大部分服务器都适用的。</p>
+<p>这里用到的是 IPv6 Tunnel，基于 <strong>protocol-41 (6in4)<strong>，其实是把 IPv6 包通过 IPv4 包来传输，相当于建立在网络层上的代理，需要你的服务器的操作系统支持，而且要有一个</strong>相对固定的公网 IPv4 地址</strong>。</p>
+<blockquote>
+<p>When using 6to4, you do not transmit IPv6 packets. Instead, special IPv4 packets are wrapped around IPv6 payloads. These packets have IPv4  protocol 41, as defined by RFC 2473.</p>
+</blockquote>
+<p>当然，性能的话肯定比不上原生的 IPv6 了，不过自己玩玩还好，问题不大吧。</p>
+<hr>
+<h2 id="0x01-申请-IPv6-Tunnel-Broker"><a href="#0x01-申请-IPv6-Tunnel-Broker" class="headerlink" title="0x01 申请 IPv6 Tunnel Broker"></a>0x01 申请 IPv6 Tunnel Broker</h2><p>前往 <a target="_blank" rel="noopener" href="https://tunnelbroker.net/">https://tunnelbroker.net</a>，注册一个你自己的账号。</p>
+<p><img src="/2020/03/03/Server_ObtainIPv6ViaTunnelBroker/register.png" alt="注册账号"></p>
+<p>登录之后，点击左侧的 <a target="_blank" rel="noopener" href="https://www.tunnelbroker.net/new_tunnel.php">Create Regular Tunnel</a>。</p>
+<p>一个账号最多可以创建5条tunnel。</p>
+<p><img src="/2020/03/03/Server_ObtainIPv6ViaTunnelBroker/create_tunnel.png" alt="创建隧道"></p>
+<p>IPv4 Endpoint 里填<strong>服务器的公网地址</strong>，输入后会自动检查是否支持。</p>
+<p>You are viewing from 显示的是你访问网站的公网 IPv4 地址，如果是在服务器上访问的话 Endpoint 就是这个了。</p>
+<p><strong>注意：</strong>服务器要<strong>允许来自 HE 的 ICMP 请求</strong>，也就是说不能禁止来自 HE 的 ping。</p>
+<p>（这里借一张网上的图，比如下面这样的↓</p>
+<p><img src="/2020/03/03/Server_ObtainIPv6ViaTunnelBroker/ICMP_blocked.png" alt="icmp_block"></p>
+<p>Available Tunnel Servers 里选择离你服务器较近的，可以在服务器上ping试一试。</p>
+<p>现在显示 <code>Los Angeles, CA, US Not Available (Full)</code>，洛杉矶的都满了233.</p>
+<p>Asia 有 HK、SG、JP 这三个节点，不过据网上说貌似速度也不怎么样了，具体自己看看吧。</p>
+<p>选择好之后就点击<strong>创建隧道</strong>就申请好了。</p>
+<p><img src="/2020/03/03/Server_ObtainIPv6ViaTunnelBroker/tunnel_details.png" alt="tunnel_details"></p>
+<p>这里的 Client IPv4 Address 是你之前填的地址，点击可以进行修改，</p>
+<p><strong>Client IPv6 Address</strong> 就是你服务器的<strong>公网IPv6地址</strong>了，如果需要DNS解析的话就给这个地址加个 AAAA 解析就行（注意不需要加上<code>/64</code>）。</p>
+<p>这里的 Routed IPv6 Prefixes 是该隧道可用于分配的 IPv6 地址段，可为内网机器都分配上唯一的 IPv6 地址。</p>
+<p>可见分配的是 <code>/64</code>，即 IPv6 地址的前缀长度为64位。后（128-64=）64位为网络接口ID（可理解为设备在网络上的唯一ID），因此你有2^64（1844亿亿）个可用的IP地址了。😉</p>
+<p>当然你还可以申请一个<code>/48</code>前缀的路由，这样可用的地址更多了。（2^80个）</p>
+<hr>
+<h2 id="0x02-阿里云-ECS-开启-IPv6"><a href="#0x02-阿里云-ECS-开启-IPv6" class="headerlink" title="0x02 阿里云 ECS 开启 IPv6"></a>0x02 阿里云 ECS 开启 IPv6</h2><p>阿里云的硬盘镜像默认是把 IPv6 给关掉的，这里就手动打开好了。</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">vim</span> /etc/sysctl.conf<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>在文件末尾的位置把ipv6设置中的1改成0，变成类似如下的亚子。</p>
+<pre class="line-numbers language-none"><code class="language-none">net.ipv6.conf.all.disable_ipv6 = 0
+net.ipv6.conf.default.disable_ipv6 = 0
+net.ipv6.conf.lo.disable_ipv6 = 0
+net.ipv6.conf.eth0.disable_ipv6 = 0<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>而后重新载入配置。</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">sysctl -p<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>然后使用<code>ifconfig</code>看一看，就会发现支持 IPv6 了。</p>
+<p>比如下面这个，有了<code>inet6</code>这一项。</p>
+<pre class="line-numbers language-none"><code class="language-none">eth0: flags=4163&lt;UP,BROADCAST,RUNNING,MULTICAST&gt;  mtu 1500
+        inet 172.xxx.xxx.xxx  netmask 255.255.240.0  broadcast 172.xxx.xxx.xxx
+        inet6 fe80::xxxx:xxxx:xxxx:xxxx  prefixlen 64  scopeid 0x20&lt;link&gt;
+        ether 00:16:xx:xx:xx:xx  txqueuelen 1000  (以太网)
+        RX packets 1688753  bytes 328028654 (328.0 MB)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 1837158  bytes 637871915 (637.8 MB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<hr>
+<h2 id="0x03-给-ECS-配置-IPv6-隧道"><a href="#0x03-给-ECS-配置-IPv6-隧道" class="headerlink" title="0x03 给 ECS 配置 IPv6 隧道"></a>0x03 给 ECS 配置 IPv6 隧道</h2><p>在Example Configuration 里有很多示例。</p>
+<p>比如Ubuntu的。</p>
+<p><img src="/2020/03/03/Server_ObtainIPv6ViaTunnelBroker/interface_configuration.png" alt="interface_configuration"></p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">vim</span> /etc/network/interfaces<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<pre class="line-numbers language-none"><code class="language-none">auto he-ipv6
+iface he-ipv6 inet6 v4tunnel
+        address 2001:470:xxxx:xxxx::2
+        netmask 64
+        endpoint 216.218.xxx.xxx
+        local 172.16.xxx.xxx
+        ttl 255
+        gateway 2001:470:xxxx:xxxx::1<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>将上面的配置粘贴到文件的最后。</p>
+<p>注意一下，<strong>内网环境要用内网的IP！</strong>他这里也写清楚了的。</p>
+<blockquote>
+<p><strong>NOTE:</strong> When behind a firewall appliance that passes protocol 41,  use the IPv4 address you get from your appliance’s DHCP service instead  of the IPv4 endpoint you provided to our broker.</p>
+</blockquote>
+<p><strong>注意：</strong> 阿里云的 ECS 要<strong>将local中的IP修改为内网的IP</strong>，即私网IP地址，例如<code>172.16.xxx.xxx</code>，而不是公网IP！！！</p>
+<p>不清楚的话还可以参考<strong>Ubuntu的Wiki</strong>，<a target="_blank" rel="noopener" href="https://wiki.ubuntu.com/IPv6#Get_connected_with_Hurricane_Electric">戳这里</a>。</p>
+<p>而后<strong>让IPv6生效</strong>。</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">ifup</span> he-ipv6<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>再看一下 <code>ifconfig</code>，这时应该有一个 <code>he-ipv6</code>的了！类似这样的。</p>
+<pre class="line-numbers language-none"><code class="language-none">he-ipv6: flags=209&lt;UP,POINTOPOINT,RUNNING,NOARP&gt;  mtu 1480
+          inet6 2001:470:xxxx:xxxx::2  prefixlen 64  scopeid 0x0&lt;global&gt;
+          inet6 fe80::xxxx:xxxx  prefixlen 64  scopeid 0x20&lt;link&gt;
+          sit  txqueuelen 1000  (IPv6-in-IPv4)
+          RX packets 11605  bytes 3127821 (3.1 MB)
+          RX errors 0  dropped 0  overruns 0  frame 0
+          TX packets 13811  bytes 2403522 (2.4 MB)
+          TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+
+<p><em>P.S.:</em></p>
+<p>如果想<strong>让隧道失效</strong>（没有删除的话重启后还是会自动启用）：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">ifdown</span> he-ipv6<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>如果想<strong>删除隧道</strong>：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">ip</span> tunnel del he-ipv6<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>如果已经生效了会提示：<code>ifup: interface he-ipv6 already configured</code>。</p>
+<p>如果设置出错了，或者想修改配置，需要先删除隧道，再重新生效就好。</p>
+<p>现在就来<strong>测试一下</strong>吧！</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">root@miaoTony:~<span class="token comment"># ping6 -c 5 ipv6.google.com</span>
+PING ipv6.google.com<span class="token punctuation">(</span>tsa03s02-in-x0e.1e100.net <span class="token punctuation">(</span><span class="token number">2404</span>:6800:4008:803::200e<span class="token punctuation">))</span> <span class="token number">56</span> data bytes
+<span class="token number">64</span> bytes from tsa03s02-in-x0e.1e100.net <span class="token punctuation">(</span><span class="token number">2404</span>:6800:4008:803::200e<span class="token punctuation">)</span>: <span class="token assign-left variable">icmp_seq</span><span class="token operator">=</span><span class="token number">1</span> <span class="token assign-left variable">ttl</span><span class="token operator">=</span><span class="token number">53</span> <span class="token assign-left variable">time</span><span class="token operator">=</span><span class="token number">393</span> ms
+<span class="token number">64</span> bytes from tsa03s02-in-x0e.1e100.net <span class="token punctuation">(</span><span class="token number">2404</span>:6800:4008:803::200e<span class="token punctuation">)</span>: <span class="token assign-left variable">icmp_seq</span><span class="token operator">=</span><span class="token number">2</span> <span class="token assign-left variable">ttl</span><span class="token operator">=</span><span class="token number">53</span> <span class="token assign-left variable">time</span><span class="token operator">=</span><span class="token number">390</span> ms
+<span class="token number">64</span> bytes from tsa03s02-in-x0e.1e100.net <span class="token punctuation">(</span><span class="token number">2404</span>:6800:4008:803::200e<span class="token punctuation">)</span>: <span class="token assign-left variable">icmp_seq</span><span class="token operator">=</span><span class="token number">3</span> <span class="token assign-left variable">ttl</span><span class="token operator">=</span><span class="token number">53</span> <span class="token assign-left variable">time</span><span class="token operator">=</span><span class="token number">390</span> ms
+<span class="token number">64</span> bytes from tsa03s02-in-x0e.1e100.net <span class="token punctuation">(</span><span class="token number">2404</span>:6800:4008:803::200e<span class="token punctuation">)</span>: <span class="token assign-left variable">icmp_seq</span><span class="token operator">=</span><span class="token number">4</span> <span class="token assign-left variable">ttl</span><span class="token operator">=</span><span class="token number">53</span> <span class="token assign-left variable">time</span><span class="token operator">=</span><span class="token number">393</span> ms
+<span class="token number">64</span> bytes from tsa03s02-in-x0e.1e100.net <span class="token punctuation">(</span><span class="token number">2404</span>:6800:4008:803::200e<span class="token punctuation">)</span>: <span class="token assign-left variable">icmp_seq</span><span class="token operator">=</span><span class="token number">5</span> <span class="token assign-left variable">ttl</span><span class="token operator">=</span><span class="token number">53</span> <span class="token assign-left variable">time</span><span class="token operator">=</span><span class="token number">388</span> ms
+
+--- ipv6.google.com <span class="token function">ping</span> statistics ---
+<span class="token number">5</span> packets transmitted, <span class="token number">5</span> received, <span class="token number">0</span>% packet loss, <span class="token function">time</span> 4003ms
+rtt min/avg/max/mdev <span class="token operator">=</span> <span class="token number">388.107</span>/391.132/393.213/1.914 ms<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>当然也可以 <code>ping6 ipv6.baidu.com</code>。</p>
+<p>如果不成功可以重启系统试试。</p>
+<hr>
+<p>当然，你也可以尝试在命令行中进行配置（略）。</p>
+<p><img src="/2020/03/03/Server_ObtainIPv6ViaTunnelBroker/interface_configuration2.png" alt="interface_configuration2"></p>
+<p>Windows 10 下的配置，在 cmd 中执行下面的命令。</p>
+<pre class="line-numbers language-none"><code class="language-none">netsh interface teredo set state disabled
+netsh interface ipv6 add v6v4tunnel interface=IP6Tunnel localaddress=172.16.xxx.xxx remoteaddress=216.218.xxx.xxx
+netsh interface ipv6 add address interface=IP6Tunnel address=2001:470:xx:xxxx::2
+netsh interface ipv6 add route prefix=::/0 interface=IP6Tunnel nexthop=2001:470:xx:xxxx::1<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>注意修改对应的IP地址。</p>
+<hr>
+<h2 id="0x04-一些问题的解决"><a href="#0x04-一些问题的解决" class="headerlink" title="0x04 一些问题的解决"></a>0x04 一些问题的解决</h2><p><strong>按照上面一番配置好</strong>之后，有可能还是访问不了 IPv6 的网站。</p>
+<p><strong>有可能</strong>需要如下处理吧。<em>（谁知道会这么麻烦呢</em></p>
+<p>要是没事了就直接往下看了。</p>
+<ul>
+<li>需要放行服务器的41端口。毕竟流量是通过IPv4传输的啦。</li>
+</ul>
+<p>例如：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">ufw allow <span class="token number">41</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>或者</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">iptables -t filter -I INPUT -p <span class="token number">41</span> -j ACCEPT
+iptables -t filter -I OUTPUT -p <span class="token number">41</span> -j ACCEPT<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<p>同时要记得在（阿里云的）<strong>安全组里放行</strong>。</p>
+<ul>
+<li>配置好 IPv6 的 DNS</li>
+</ul>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">vim</span> /etc/resolv.conf<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>在最后添加谷歌的DNS服务器 </p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">nameserver <span class="token number">2001</span>:4860:4860::8888
+nameserver <span class="token number">2001</span>:4860:4860::8844<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<p>或者国内的公共DNS：<code>240c::6666</code> 或 <code>240c::6644</code></p>
+<ul>
+<li>添加路由</li>
+</ul>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">route -A inet6 <span class="token function">add</span> ::/0 dev he-ipv6<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>再 ping 一下应该可以了吧（</p>
+<p>不行再重启试试（重启解决绝大部分问题呢</p>
+<hr>
+<h2 id="0x05-Nginx-支持-IPv6-访问"><a href="#0x05-Nginx-支持-IPv6-访问" class="headerlink" title="0x05 Nginx 支持 IPv6 访问"></a>0x05 Nginx 支持 IPv6 访问</h2><p>修改配置文件，监听 IPv6 端口。</p>
+<pre class="line-numbers language-none"><code class="language-none">server {
+  listen 80;
+  listen [::]:80; // 监听 IPv6 的 80 端口
+  # ...
+}
+
+server {
+  listen 443 ssl http2; 
+  listen [::]:443 ssl http2; // 监听 IPv6 的 443 端口
+  # ...
+}<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>然而，发现一个情况，只有当服务器访问IPv6的网站的时候，或者说有 IPv6 流量的时候，外网才能通过这个公网的IPv6地址访问到服务器emmm。（懵 </p>
+<p>于是加一个 cron 计划，定时ping一下好了。</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">crontab</span> -e<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>添加一个计划。</p>
+<pre class="line-numbers language-none"><code class="language-none">*/1 * * * * ping6 -c 1 he.net<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>重启 cron 使其生效。</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">systemctl restart <span class="token function">cron</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>每分钟执行一次 ping 操作，这样访问就没问题了。</p>
+<p><em>（不过想不大明白为啥这个通道会自动断开。有人说与 ip6tables 有关，不大清楚。。 emmm</em></p>
+<hr>
+<h2 id="0x06-配置-DNS"><a href="#0x06-配置-DNS" class="headerlink" title="0x06 配置 DNS"></a>0x06 配置 DNS</h2><p>配置一条<strong>AAAA记录指向公网的 IPv6 地址</strong>即可。可以试试开启CDN。</p>
+<p>而后就可以通过域名访问网站了。</p>
+<p>不过没有 CDN 的话只能通过 IPv6 进行访问。</p>
+<hr>
+<h2 id="0x07-检查网站是否支持-IPv6"><a href="#0x07-检查网站是否支持-IPv6" class="headerlink" title="0x07 检查网站是否支持 IPv6"></a>0x07 检查网站是否支持 IPv6</h2><p>利用 <a target="_blank" rel="noopener" href="http://ipv6-test.com/validate.php">http://ipv6-test.com/validate.php</a></p>
+<p><img src="/2020/03/03/Server_ObtainIPv6ViaTunnelBroker/ipv6test.png" alt="ipv6test"></p>
+<hr>
+<h2 id="0x08-自动更新-Endpoint-IP"><a href="#0x08-自动更新-Endpoint-IP" class="headerlink" title="0x08 自动更新 Endpoint IP"></a>0x08 自动更新 Endpoint IP</h2><p>前面说只要公网的IPv4地址<strong>相对固定</strong>就好了，这里就这个意思啦。</p>
+<p>HE 还支持<strong>为动态 IPv4 地址建立 IPv6 通道</strong>，这里要用到他提供的API了。</p>
+<blockquote>
+<p>We’ve added support for Dyn-compliant endpoint updates so that equipment talking this spec can very easily update your tunnel endpoint.</p>
+<p><strong>Update URL:</strong> <a target="_blank" rel="noopener" href="https://ipv4.tunnelbroker.net/nic/update">https://ipv4.tunnelbroker.net/nic/update</a>  (<em>ipv4 is important here, don’t remove it</em>)<br><strong>Username:</strong> Your Tunnelbroker.net username<br><strong>Password:</strong> Tunnel specific authentication key (under Advanced on the tunnel  information page) if one is set, otherwise your Tunnelbroker.net  password.<br><strong>Hostname:</strong></p>
+<ul>
+<li>Numeric tunnel ID</li>
+<li>Numeric tunnel ID in “tunnel#.tunnelbroker.net” (<em>This host does not actually exist</em>)</li>
+<li>Tunnel reverse host, aka “user-#.tunnel.tserv#.loc#.ipv6.he.net”</li>
+</ul>
+</blockquote>
+<p>或者也可以访问更新的URL。</p>
+<p>就可以在服务器上写个脚本检查公网地址有没有更新就好了。</p>
+<p><img src="/2020/03/03/Server_ObtainIPv6ViaTunnelBroker/Dynamic_Update.png" alt="动态更新"></p>
+<p><strong>自动更新IPv4地址：</strong></p>
+<p>To auto-detect your IPv4 address:</p>
+<pre class="line-numbers language-none"><code class="language-none">https://&lt;USERNAME&gt;:&lt;PASSWORD&gt;@ipv4.tunnelbroker.net/nic/update?hostname=&lt;TUNNEL_ID&gt;
+https://ipv4.tunnelbroker.net/nic/update?username=&lt;USERNAME&gt;&amp;password=&lt;PASSWORD&gt;&amp;hostname=&lt;TUNNEL_ID&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<p><strong>手动指定更新的IPv4地址：</strong></p>
+<p>To manually specific your IPv4 address:</p>
+<pre class="line-numbers language-none"><code class="language-none">https://&lt;USERNAME&gt;:&lt;PASSWORD&gt;@ipv4.tunnelbroker.net/nic/update?hostname=&lt;TUNNEL_ID&gt;&amp;myip=&lt;IP ADDRESS&gt;
+https://ipv4.tunnelbroker.net/nic/update?username=&lt;USERNAME&gt;&amp;password=&lt;PASSWORD&gt;&amp;hostname=&lt;TUNNEL_ID&gt;&amp;myip=&lt;IP ADDRESS&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<p><strong>当然不想看的话就看完整版：</strong></p>
+<p>**TL;DR:**（<code>Too long; Don't read</code>/ <code>Too long; Didn't read</code>）</p>
+<pre class="line-numbers language-none"><code class="language-none">http[s]://[TB_USER:TB_PASS@]tunnelbroker.net/nic/update?[username=TB_USER&amp;password=TB_PASS&amp;]hostname=&lt;TUNNEL_ID|tunnelTUNNEL_ID.tunnelbroker.net|TB_USER-TUNNEL_LABEL.tserv#.LOC#.ipv6.he.net&gt;[&amp;myip=IPV4]<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>后面可以试一试这个功能 hhhh</p>
+<p>当然了，HE还自带了 DNS 解析，可以尝试一下呢。</p>
+<p>下面还有一些关于 IPv6 的拓展的链接。</p>
+<p>好了就这样吧。</p>
+<p>（溜了溜了</p>
+<h2 id="Reference-amp-Extensive-Reading"><a href="#Reference-amp-Extensive-Reading" class="headerlink" title="Reference &amp; Extensive Reading"></a>Reference &amp; Extensive Reading</h2><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/kaikai0803/article/details/94615666">记一次给线上服务器添加IPv6支持的步骤</a></p>
+<p><a target="_blank" rel="noopener" href="https://wzfou.com/he-net-dns/">He.net DNS域名解析申请使用-免费DDNS、IPv6 地址和Slave DNS</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.uulucky.com/show-224057.html">申请 HE.NET IPv6 隧道以使主机支持 IPv6</a>  </p>
+<p><a target="_blank" rel="noopener" href="https://www.yorkchou.com/servarica.html">Servarica IPv6 Only VPS折腾体验</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.bobobk.com/377.html">如何给阿里云ecs开启ipv6访问</a></p>
+<p><a target="_blank" rel="noopener" href="http://www.yaocheap.com/phptec/817.html">阿里云centos6.8开启ipv6通过appstore审核的方法</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/gscq073240/articles/7677345.html">阿里云服务器以及CDN支持IPV6的方法</a></p>
+<p><a target="_blank" rel="noopener" href="https://forums.he.net/index.php?topic=1994.msg11842#msg11842">Dyn-compliant Endpoint Updates</a></p>
+<p>etc.</p>
+
+                
+            </div>
+            <hr/>
+
+            
+
+    <div class="reprint" id="reprint-statement">
+        
+            <div class="reprint__author">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-user">
+                        文章作者:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="https://miaotony.xyz" rel="external nofollow noreferrer">MiaoTony</a>
+                </span>
+            </div>
+            <div class="reprint__type">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-link">
+                        文章链接:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="https://miaotony.xyz/2020/03/03/Server_ObtainIPv6ViaTunnelBroker/">https://miaotony.xyz/2020/03/03/Server_ObtainIPv6ViaTunnelBroker/</a>
+                </span>
+            </div>
+            <div class="reprint__notice">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-copyright">
+                        版权声明:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    本博客所有文章除特别声明外，均采用
+                    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY-NC-SA 4.0</a>
+                    许可协议。转载请注明来源
+                    <a href="https://miaotony.xyz" target="_blank">MiaoTony</a>
+                    !
+                </span>
+            </div>
+        
+    </div>
+
+    <script async defer>
+      document.addEventListener("copy", function (e) {
+        let toastHTML = '<span>复制成功，请遵循本文的转载规则</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">查看</a>';
+        M.toast({html: toastHTML})
+      });
+
+      function navToReprintStatement() {
+        $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
+      }
+    </script>
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            
+                                <a href="/tags/Tech/">
+                                    <span class="chip bg-color">Tech</span>
+                                </a>
+                            
+                                <a href="/tags/Configuration/">
+                                    <span class="chip bg-color">Configuration</span>
+                                </a>
+                            
+                                <a href="/tags/Web/">
+                                    <span class="chip bg-color">Web</span>
+                                </a>
+                            
+                                <a href="/tags/Server/">
+                                    <span class="chip bg-color">Server</span>
+                                </a>
+                            
+                                <a href="/tags/IPv6/">
+                                    <span class="chip bg-color">IPv6</span>
+                                </a>
+                            
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+<div id="article-share">
+
+    
+    <div class="social-share" data-sites="qq,qzone,wechat,weibo,twitter,facebook,google,douban,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
+    <script src="/libs/share/js/social-share.min.js"></script>
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+                <style>
+    #reward {
+        margin: 40px 0;
+        text-align: center;
+    }
+
+    #reward .reward-link {
+        font-size: 1.4rem;
+        line-height: 38px;
+    }
+
+    #reward .btn-floating:hover {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    #rewardModal {
+        width: 320px;
+        height: 350px;
+    }
+
+    #rewardModal .reward-title {
+        margin: 15px auto;
+        padding-bottom: 5px;
+    }
+
+    #rewardModal .modal-content {
+        padding: 10px;
+    }
+
+    #rewardModal .close {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+        color: rgba(0, 0, 0, 0.5);
+        font-size: 1.3rem;
+        line-height: 20px;
+        cursor: pointer;
+    }
+
+    #rewardModal .close:hover {
+        color: #ef5350;
+        transform: scale(1.3);
+        -moz-transform:scale(1.3);
+        -webkit-transform:scale(1.3);
+        -o-transform:scale(1.3);
+    }
+
+    #rewardModal .reward-tabs {
+        margin: 0 auto;
+        width: 210px;
+    }
+
+    .reward-tabs .tabs {
+        height: 38px;
+        margin: 10px auto;
+        padding-left: 0;
+    }
+
+    .reward-content ul {
+        padding-left: 0 !important;
+    }
+
+    .reward-tabs .tabs .tab {
+        height: 38px;
+        line-height: 38px;
+    }
+
+    .reward-tabs .tab a {
+        color: #fff;
+        background-color: #ccc;
+    }
+
+    .reward-tabs .tab a:hover {
+        background-color: #ccc;
+        color: #fff;
+    }
+
+    .reward-tabs .wechat-tab .active {
+        color: #fff !important;
+        background-color: #22AB38 !important;
+    }
+
+    .reward-tabs .alipay-tab .active {
+        color: #fff !important;
+        background-color: #019FE8 !important;
+    }
+
+    .reward-tabs .reward-img {
+        width: 210px;
+        height: 210px;
+    }
+</style>
+
+<div id="reward">
+    <a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-medium waves-effect waves-light red">赏</a>
+
+    <!-- Modal Structure -->
+    <div id="rewardModal" class="modal">
+        <div class="modal-content">
+            <a class="close modal-close"><i class="fas fa-times"></i></a>
+            <h4 class="reward-title">打赏一下让我来点好吃好玩的呗~</h4>
+            <div class="reward-content">
+                <div class="reward-tabs">
+                    <ul class="tabs row">
+                        <!-- 
+                            <li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li> 
+                        -->
+                        <li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li>
+                    </ul>
+                    <!-- 
+                        <div id="alipay">
+                        <img src="/" class="reward-img" alt="支付宝打赏二维码">
+                        </div> 
+                -->
+                    <div id="wechat">
+                        <img src="/medias/reward/wechat.png" class="reward-img" alt="微信打赏二维码">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.tabs').tabs();
+    });
+</script>
+
+            
+        </div>
+    </div>
+
+    
+        <link rel="stylesheet" href="/libs/gitalk/gitalk.min.css">
+<link rel="stylesheet" href="/css/my-gitalk.css">
+
+<div class="card gitalk-card" data-aos="fade-up">
+    <div class="comment_headling" style="font-size: 20px; font-weight: 700; position: relative; padding-left: 20px; top: 15px; padding-bottom: 5px;">
+        <i class="fas fa-comments fa-fw" aria-hidden="true"></i>
+        <span>评论</span>
+    </div>
+    <div id="gitalk-container" class="card-content"></div>
+</div>
+
+<script src="/libs/gitalk/gitalk.min.js"></script>
+<script>
+    let gitalk = new Gitalk({
+        clientID: '116343b4650fce4789b6',
+        clientSecret: '3e9be2ad6c9b693af1753290c7c059b1e4f34d5d',
+        repo: 'miaotony.github.io',
+        owner: 'miaotony',
+        admin: "miaotony",
+        id: '2020-03-03T23-30-00',
+        distractionFreeMode: false  // Facebook-like distraction free mode
+    });
+
+    gitalk.render('gitalk-container');
+</script>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+            <div class="card">
+                <a href="/2020/03/12/CTF_2020JetBrainsQuest/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/17.jpg" class="responsive-img" alt="CTF | JetBrains Quest 1&amp;2 WriteUp/攻略">
+                        
+                        <span class="card-title">CTF | JetBrains Quest 1&amp;2 WriteUp/攻略</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            体验了一下JetBrainsQuest1&2，白嫖了3+3个月的JB家全产品授权，这里记录一下通关过程，也算是攻略/WriteUp吧。
+                        
+                    </div>
+                    <div class="publish-info">
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2020-03-12
+                        </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/CTF/" class="post-category">
+                                    CTF
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/CTF/">
+                        <span class="chip bg-color">CTF</span>
+                    </a>
+                    
+                    <a href="/tags/WriteUp/">
+                        <span class="chip bg-color">WriteUp</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2020/02/27/Server_OpticalModem/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/8.jpg" class="responsive-img" alt="光猫折腾记 | 获取超级管理员密码&amp;开启telnet&amp;IPv6&amp;桥接宽带">
+                        
+                        <span class="card-title">光猫折腾记 | 获取超级管理员密码&amp;开启telnet&amp;IPv6&amp;桥接宽带</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            最近折腾了一下家里的光猫，获取了超级管理员密码，开启了Telnet管理，启用IPv6，并尝试了宽带桥接的改造等等。
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-02-27
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/Tech/" class="post-category">
+                                    Tech
+                                </a>
+                            
+                            <a href="/categories/Tech/Server/" class="post-category">
+                                    Server
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/Tech/">
+                        <span class="chip bg-color">Tech</span>
+                    </a>
+                    
+                    <a href="/tags/Configuration/">
+                        <span class="chip bg-color">Configuration</span>
+                    </a>
+                    
+                    <a href="/tags/%E5%B0%8F%E6%83%B3%E6%B3%95/">
+                        <span class="chip bg-color">小想法</span>
+                    </a>
+                    
+                    <a href="/tags/Web/">
+                        <span class="chip bg-color">Web</span>
+                    </a>
+                    
+                    <a href="/tags/Server/">
+                        <span class="chip bg-color">Server</span>
+                    </a>
+                    
+                    <a href="/tags/IPv6/">
+                        <span class="chip bg-color">IPv6</span>
+                    </a>
+                    
+                    <a href="/tags/Modem/">
+                        <span class="chip bg-color">Modem</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+<script>
+    $('#articleContent').on('copy', function (e) {
+        // IE8 or earlier browser is 'undefined'
+        if (typeof window.getSelection === 'undefined') return;
+
+        var selection = window.getSelection();
+        // if the selection is short let's not annoy our users.
+        if (('' + selection).length < Number.parseInt('200')) {
+            return;
+        }
+
+        // create a div outside of the visible area and fill it with the selected text.
+        var bodyElement = document.getElementsByTagName('body')[0];
+        var newdiv = document.createElement('div');
+        newdiv.style.position = 'absolute';
+        newdiv.style.left = '-99999px';
+        bodyElement.appendChild(newdiv);
+        newdiv.appendChild(selection.getRangeAt(0).cloneContents());
+
+        // we need a <pre> tag workaround.
+        // otherwise the text inside "pre" loses all the line breaks!
+        if (selection.getRangeAt(0).commonAncestorContainer.nodeName === 'PRE' || selection.getRangeAt(0).commonAncestorContainer.nodeName === 'CODE') {
+            newdiv.innerHTML = "<pre>" + newdiv.innerHTML + "</pre>";
+        }
+
+        var url = document.location.href;
+        newdiv.innerHTML += '<br />'
+            + '来源: MiaoTony&#39;s小窝<br />'
+            + '文章作者: MiaoTony<br />'
+            + '文章链接: <a href="' + url + '">' + url + '</a><br />'
+            + '本文章著作权归作者 MiaoTony 所有，任何形式的转载都请注明出处。';
+
+        selection.selectAllChildren(newdiv);
+        window.setTimeout(function () {bodyElement.removeChild(newdiv);}, 200);
+    });
+</script>
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+
+
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
+
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget card" style="background-color: white;">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('1'),
+            headingSelector: 'h2, h3, h4, h5'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h2, h3, h4, h5').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+
+
+    <footer class="page-footer bg-color">
+        <div class="container row center-align" style="margin-bottom: 15px !important;">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            
+                <span id="year">2019-2026</span>
+            
+            <a href="/about" target="_blank">MiaoTony</a>
+            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+            |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
+            <br>
+                        &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
+                class="white-color">487.1k</span>&nbsp;字
+                                                                                    <span id="busuanzi_container_site_pv">
+			|&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
+                    class="white-color"></span>&nbsp;次
+            </span>
+                                    <span id="busuanzi_container_site_uv">
+                |&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;<span id="busuanzi_value_site_uv"
+                    class="white-color"></span>&nbsp;人
+            </span>
+                        <br>
+                        <span id="sitetime">载入运行时间...</span>
+            <script>
+                function siteTime() {
+                    var seconds = 1000;
+                    var minutes = seconds * 60;
+                    var hours = minutes * 60;
+                    var days = hours * 24;
+                    var years = days * 365;
+                    var today = new Date();
+                    var startYear = "2019";
+                    var startMonth = "11";
+                    var startDate = "28";
+                    var startHour = "0";
+                    var startMinute = "0";
+                    var startSecond = "0";
+                    var todayYear = today.getFullYear();
+                    var todayMonth = today.getMonth() + 1;
+                    var todayDate = today.getDate();
+                    var todayHour = today.getHours();
+                    var todayMinute = today.getMinutes();
+                    var todaySecond = today.getSeconds();
+                    var t1 = Date.UTC(startYear, startMonth, startDate, startHour, startMinute, startSecond);
+                    var t2 = Date.UTC(todayYear, todayMonth, todayDate, todayHour, todayMinute, todaySecond);
+                    var diff = t2 - t1;
+                    var diffYears = Math.floor(diff / years);
+                    var diffDays = Math.floor((diff / days) - diffYears * 365);
+                    var diffHours = Math.floor((diff - (diffYears * 365 + diffDays) * days) / hours);
+                    var diffMinutes = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours) /
+                        minutes);
+                    var diffSeconds = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours -
+                        diffMinutes * minutes) / seconds);
+                    if (startYear == todayYear) {
+                        document.getElementById("year").innerHTML = todayYear;
+                        document.getElementById("sitetime").innerHTML = "本站已安全运行 " + diffDays + " 天 " + diffHours +
+                            " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒";
+                    } else {
+                        document.getElementById("year").innerHTML = startYear + " - " + todayYear;
+                        document.getElementById("sitetime").innerHTML = "本站已安全运行 " + diffYears + " 年 " + diffDays +
+                            " 天 " + diffHours + " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒";
+                    }
+                }
+                setInterval(siteTime, 1000);
+            </script>
+                        <br>
+                    </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+    <a href="https://t.me/MiaoTonyChannel" class="tooltipped" target="_blank" data-tooltip="关注我的TelegramChannel: @MiaoTonyChannel" data-position="top" data-delay="50">
+        <i class="fab fa-telegram"></i>
+    </a>
+
+
+
+    <a href="https://github.com/miaotony" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+        <i class="fab fa-github"></i>
+    </a>
+
+
+
+    <a href="mailto:miaotony@outlook.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fas fa-envelope-open"></i>
+    </a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
+        <i class="fas fa-rss"></i>
+    </a>
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+$(function () {
+    var searchFunc = function (path, search_id, content_id) {
+        'use strict';
+        $.ajax({
+            url: path,
+            dataType: "xml",
+            success: function (xmlResponse) {
+                // get the contents from search data
+                var datas = $("entry", xmlResponse).map(function () {
+                    return {
+                        title: $("title", this).text(),
+                        content: $("content", this).text(),
+                        url: $("url", this).text()
+                    };
+                }).get();
+                var $input = document.getElementById(search_id);
+                var $resultContent = document.getElementById(content_id);
+                $input.addEventListener('input', function () {
+                    var str = '<ul class=\"search-result-list\">';
+                    var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                    $resultContent.innerHTML = "";
+                    if (this.value.trim().length <= 0) {
+                        return;
+                    }
+                    // perform local searching
+                    var cnt = 1;
+                    datas.forEach(function (data) {
+                        var isMatch = true;
+                        var content_index = [];
+                        var data_title_origin = data.title.trim();
+                        var data_title = data.title.trim().toLowerCase();
+                        var data_content = data.content.trim().replace(/<[^>]+>/g, "").toLowerCase();
+                        var data_url = data.url;
+                        data_url = data_url.indexOf('/') === 0 ? data.url : '/' + data_url;
+                        var index_title = -1;
+                        var index_content = -1;
+                        var first_occur = -1;
+                        // only match artiles with not empty titles and contents
+                        if (data_title !== '' && data_content !== '') {
+                            keywords.forEach(function (keyword, i) {
+                                index_title = data_title.indexOf(keyword);
+                                index_content = data_content.indexOf(keyword);
+                                if (index_title < 0 && index_content < 0) {
+                                    isMatch = false;
+                                } else {
+                                    if (index_content < 0) {
+                                        index_content = 0;
+                                    }
+                                    if (i === 0) {
+                                        first_occur = index_content;
+                                    }
+                                }
+                            });
+                        }
+                        // show search results
+                        if (isMatch) {
+                            str += "<li><a href='" + data_url + "' class='search-result-title'>" + String(cnt) + ". " + data_title_origin + "</a>";
+                            cnt += 1;
+    
+                            var content = data.content.trim().replace(/<[^>]+>/g, "");
+                            if (first_occur >= 0) {
+                                // cut out 300 characters
+                                var start = first_occur - 30;
+                                if (start < 0) {
+                                    start = 0;
+                                }
+                                var match_content = content.substr(start, 300);
+                                // highlight all keywords
+                                keywords.forEach(function (keyword) {
+                                    var regS = new RegExp(keyword, "gi");
+                                    match_content = match_content.replace(regS, "<em class=\"search-keyword\">" + keyword + "</em>");
+                                });
+    
+                                str += "<p class=\"search-result\">" + match_content + "...</p>"
+                            }
+                            str += "</li>";
+                        }
+                    });
+                    str += "</ul>";
+                    str = "<p class=\"search-result-summary\">共找到 " + String(cnt-1) + " 条结果</p>"  + str;
+                    $resultContent.innerHTML = str;
+                });
+            }
+        });
+    };
+
+    searchFunc('/search.xml', 'searchInput', 'searchResult');
+});
+</script>
+
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.min.js"></script>
+
+    
+
+    
+<script>
+    var _hmt = _hmt || [];
+    (function () {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?40e312a1eec109cf96e30988cf3bfe70";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+    
+    
+    
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+</body>
+
+</html>

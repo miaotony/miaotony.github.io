@@ -1,0 +1,1875 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="光猫折腾记 | 获取超级管理员密码&amp;开启telnet&amp;IPv6&amp;桥接宽带, MiaoTony,blog">
+    <meta name="description" content="最近折腾了一下家里的光猫，获取了超级管理员密码，开启了Telnet管理，启用IPv6，并尝试了宽带桥接的改造等等。">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-159946730-1"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+        dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+    gtag('config', 'UA-159946730-1');
+</script>
+
+
+    <title>光猫折腾记 | 获取超级管理员密码&amp;开启telnet&amp;IPv6&amp;桥接宽带 | MiaoTony&#39;s小窝</title>
+    <link rel="icon" type="image/x-icon, image/vnd.microsoft.icon" href="/favicon.ico">
+
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
+	
+    <script src="/libs/jquery/jquery.min.js"></script>
+    <script>
+        //来个特效玩玩喵 20200123
+        var titleTime;
+        var OriginTitile = document.title;
+        document.addEventListener('visibilitychange', function() {
+            if (document.hidden) {
+                document.title = '|ω·) 喵~快回来呀！';
+                clearTimeout(titleTime);
+            } else {
+                document.title = '(/≧▽≦)/ Meow！';
+                titleTime = setTimeout(function() {
+        	    document.title = OriginTitile;
+        }, 800);
+    }
+        });
+    </script>
+<meta name="generator" content="Hexo 6.2.0">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+<link rel="alternate" href="/atom.xml" title="MiaoTony's小窝" type="application/atom+xml">
+</head>
+
+
+
+
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">MiaoTony&#39;s小窝</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>首页</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>标签</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>分类</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/archives" class="waves-effect waves-light">
+      
+      <i class="fas fa-archive" style="zoom: 0.6;"></i>
+      
+      <span>归档</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>关于</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/contact" class="waves-effect waves-light">
+      
+      <i class="fas fa-comments" style="zoom: 0.6;"></i>
+      
+      <span>留言</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/friends" class="waves-effect waves-light">
+      
+      <i class="fas fa-address-book" style="zoom: 0.6;"></i>
+      
+      <span>友链</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="搜索" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">MiaoTony&#39;s小窝</div>
+        <div class="logo-desc">
+            
+            喵~欢迎各位大佬的来访呀！
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			首页
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			标签
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			分类
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/archives" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-archive"></i>
+			
+			归档
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			关于
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/contact" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-comments"></i>
+			
+			留言
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/friends" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-address-book"></i>
+			
+			友链
+		</a>
+          
+        </li>
+        
+        
+        <li><div class="divider"></div></li>
+        <li>
+            <a href="https://github.com/miaotony" class="waves-effect waves-light" target="_blank">
+                <i class="fab fa-github-square fa-fw"></i>Follow Me
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+
+        </div>
+
+        
+            <style>
+    .nav-transparent .github-corner {
+        display: none !important;
+    }
+
+    .github-corner {
+        position: absolute;
+        z-index: 10;
+        top: 0;
+        right: 0;
+        border: 0;
+        transform: scale(1.1);
+    }
+
+    .github-corner svg {
+        color: #0f9d58;
+        fill: #fff;
+        height: 64px;
+        width: 64px;
+    }
+
+    .github-corner:hover .octo-arm {
+        animation: a 0.56s ease-in-out;
+    }
+
+    .github-corner .octo-arm {
+        animation: none;
+    }
+
+    @keyframes a {
+        0%,
+        to {
+            transform: rotate(0);
+        }
+        20%,
+        60% {
+            transform: rotate(-25deg);
+        }
+        40%,
+        80% {
+            transform: rotate(10deg);
+        }
+    }
+</style>
+
+<a href="https://github.com/miaotony" class="github-corner tooltipped hide-on-med-and-down" target="_blank"
+   data-tooltip="Follow Me" data-position="left" data-delay="50">
+    <svg viewBox="0 0 250 250" aria-hidden="true">
+        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+        <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2"
+              fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
+        <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z"
+              fill="currentColor" class="octo-body"></path>
+    </svg>
+</a>
+        
+    </nav>
+
+</header>
+
+    
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/8.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <h1 class="description center-align post-title">光猫折腾记 | 获取超级管理员密码&amp;开启telnet&amp;IPv6&amp;桥接宽带</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        min-width: 240px;
+        padding-left: 15px;
+        padding-bottom: 30px;
+    }
+
+    .toc-widget .toc-title {
+        padding: 30px 0 15px 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content {
+	    max-height: 450px;
+        overflow: auto;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #42b983;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+
+        position: absolute;
+        right: 23.5vw;
+        display: block;
+    }
+
+    #toc-content .is-active-link {
+        color: #42b983;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 15px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/Tech/">
+                                <span class="chip bg-color">Tech</span>
+                            </a>
+                        
+                            <a href="/tags/Configuration/">
+                                <span class="chip bg-color">Configuration</span>
+                            </a>
+                        
+                            <a href="/tags/%E5%B0%8F%E6%83%B3%E6%B3%95/">
+                                <span class="chip bg-color">小想法</span>
+                            </a>
+                        
+                            <a href="/tags/Web/">
+                                <span class="chip bg-color">Web</span>
+                            </a>
+                        
+                            <a href="/tags/Server/">
+                                <span class="chip bg-color">Server</span>
+                            </a>
+                        
+                            <a href="/tags/IPv6/">
+                                <span class="chip bg-color">IPv6</span>
+                            </a>
+                        
+                            <a href="/tags/Modem/">
+                                <span class="chip bg-color">Modem</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/Tech/" class="post-category">
+                                Tech
+                            </a>
+                        
+                            <a href="/categories/Tech/Server/" class="post-category">
+                                Server
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2020-02-27
+                </div>
+                
+
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
+                    5k
+                </div>
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
+                    19 分
+                </div>
+                
+
+                
+            </div>
+        </div>
+        <hr class="clearfix">
+
+        
+        <!-- 是否加载使用自带的 prismjs. -->
+        <link rel="stylesheet" href="/libs/prism/prism.css">
+        
+
+        
+
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <h2 id="0x00-前言"><a href="#0x00-前言" class="headerlink" title="0x00 前言"></a>0x00 前言</h2><p>最近觉得家里的网速有点慢，上着网课或者看着视频，WiFi 连接的设备同时在用的话就开始卡了 emmm就很难受。🙁</p>
+<p>然后又听说三大运营商的宽带差不多都分配 IPv6 了，手机的话联通流量分配 IPv6 地址也有一段时间了，开热点还能下发 IPv6 到其他设备（然鹅我这里的移动好像还没有）。</p>
+<p>于是就想折腾一下家里的光猫/路由器，反正就是瞎折腾吧。</p>
+<p>这个光猫是有点年纪的 <strong>HG260GS-U</strong>，烽火家的。 硬件版本 <strong>BCM.V2.0</strong> ，软件版本 <strong>G00Y1.00M0001</strong> 。</p>
+<p>大概的内容就是——</p>
+<p>获取了超级管理员密码，开启了 Telnet 管理，启用了 IPv6，并尝试了宽带桥接的改造等等。</p>
+<br>
+
+<hr>
+<h2 id="0x01-获取超级管理员密码"><a href="#0x01-获取超级管理员密码" class="headerlink" title="0x01 获取超级管理员密码"></a>0x01 获取超级管理员密码</h2><p>通过光猫的管理地址连接到管理页面，一般是 <code>192.168.1.1</code>。登录界面如下。</p>
+<p><img src="/2020/02/27/Server_OpticalModem/login.png" alt="login"></p>
+<p>光猫背面有一个 user 用户的信息，登录之后的界面功能贼少，只能看一下连接状态，设置一下WIFI、静态路由之类的基础配置，连宽带连接都设置不了。</p>
+<p>于是想到通过超级管理员进行登录。</p>
+<p>在网上搜了各种通用密码，比如用户名、密码分别为</p>
+<blockquote>
+<p>CUAdmin  CUAdmin</p>
+<p>telecomadmin  nE7jA%5m</p>
+<p>CMCCadmin  aDm8H%MdA</p>
+<p>fiberhomehg2x0  hg2x0  （工程账号）</p>
+</blockquote>
+<p>有可能登录是这个网址：<a target="_blank" rel="noopener" href="http://192.168.1.1/cu.html">http://192.168.1.1/cu.html</a></p>
+<p><strong>然而都没有用！</strong></p>
+<p>哦对了，这个工程账号（据说是隐藏用户）这样开启：</p>
+<p>访问 <a target="_blank" rel="noopener" href="http://192.168.1.1/logoffaccount.html">http://192.168.1.1/logoffaccount.html</a> ，将<strong>隐藏用户</strong>设置为<strong>启用</strong>，而后点击<strong>保存/应用</strong>即可。</p>
+<p><img src="/2020/02/27/Server_OpticalModem/hidden_user.png" alt="hidden_user"></p>
+<p><em><strong>（然而我这里没用</strong></em></p>
+<p>于是看了看网上大佬们的骚操作，发现可以通过<strong>备份设置</strong>的办法获取到超级管理员账号及密码。</p>
+<h3 id="Step-1-以普通用户身份登录光猫"><a href="#Step-1-以普通用户身份登录光猫" class="headerlink" title="Step 1 以普通用户身份登录光猫"></a>Step 1 以普通用户身份登录光猫</h3><p>就是光猫背后的那个用户名密码啦。</p>
+<h3 id="Step-2-下载设置备份文件"><a href="#Step-2-下载设置备份文件" class="headerlink" title="Step 2 下载设置备份文件"></a>Step 2 下载设置备份文件</h3><p>访问 <a target="_blank" rel="noopener" href="http://192.168.1.1/backupsettings.conf">http://192.168.1.1/backupsettings.conf</a> ，下载配置文件<code>backupsettings.conf</code>。</p>
+<p>注意一定要在登陆后才下载，否则下载得到的文件并没有配置信息，而是一个让你登录界面的 HTML 文件。</p>
+<p><img src="/2020/02/27/Server_OpticalModem/backupsettings_error.png" alt="错误示范"></p>
+<p>正确的文件是一个xml文本，例如下面这样的。</p>
+<p><img src="/2020/02/27/Server_OpticalModem/backupsettings.png" alt="正确示范"></p>
+<p>可以发现里面保存了所有的配置信息，WAN连接、LAN连接、WiFi及WPS、宽带信息、Loid等等都有，当然，超级用户信息也在。</p>
+<p>而且这个文件没有（明显的）加密，最多只是用了个<code>base64</code>。</p>
+<p><img src="/2020/02/27/Server_OpticalModem/superadmin.png" alt="超级用户"></p>
+<p>超级管理员用户就在<code>DeviceInfo</code>下的<code>X_CMCC_TeleComAccount</code>里。</p>
+<p><strong>用户名为<code>admin</code><strong>，</strong>密码</strong>通过<code>base64</code>解码可以得到为<code>Cmcc10086#</code>。</p>
+<p>（By the way，user用户的密码在这里啦↓</p>
+<p><img src="/2020/02/27/Server_OpticalModem/userinfo.png" alt="user信息"></p>
+<h3 id="Step3-登录试试"><a href="#Step3-登录试试" class="headerlink" title="Step3 登录试试"></a>Step3 登录试试</h3><p>成功登录，界面比user功能多得多了，可以配置宽带信息、VLAN、USB存储远程下载等等了。</p>
+<p><img src="/2020/02/27/Server_OpticalModem/login_main.png" alt="登陆后的界面"></p>
+<br>
+
+<hr>
+<h2 id="0x02-开启-Telnet-管理"><a href="#0x02-开启-Telnet-管理" class="headerlink" title="0x02 开启 Telnet 管理"></a>0x02 开启 Telnet 管理</h2><p>按理说是可以利用工程账号进去开启 Telnet 的，然而我也不知道为啥进不去emmm</p>
+<p>找个网上的图↓</p>
+<p><img src="/2020/02/27/Server_OpticalModem/telnet_enable_web.png" alt="开启telnet"></p>
+<p>那就**直接改配置文件好吧 **233333</p>
+<h3 id="Step-1-修改配置文件"><a href="#Step-1-修改配置文件" class="headerlink" title="Step 1 修改配置文件"></a>Step 1 修改配置文件</h3><p>首先<strong>备份一份上面下载的配置文件</strong>（改错了还可以恢复嘛），而后搜索<code>telnet</code>，<strong>把它设为<code>TRUE</code>。</strong></p>
+<p><strong>注意大小写呀！</strong></p>
+<p>当然如果想要开启 FTP 的话可以顺便开启一下hhh。</p>
+<p><img src="/2020/02/27/Server_OpticalModem/telnet_enable.png" alt="开启telnet"></p>
+<h3 id="Step-2-上传配置文件"><a href="#Step-2-上传配置文件" class="headerlink" title="Step 2 上传配置文件"></a>Step 2 上传配置文件</h3><p>访问<strong>更新路由器配置</strong>的页面 <a target="_blank" rel="noopener" href="http://192.168.1.1/updatesettings.html">http://192.168.1.1/updatesettings.html</a></p>
+<p>（可能需要登录）</p>
+<p><img src="/2020/02/27/Server_OpticalModem/updatesettings.png" alt="updatesettings"></p>
+<p>选择修改后的配置文件，点击 <strong>更新配置</strong>。</p>
+<h3 id="Step-3-重启光猫"><a href="#Step-3-重启光猫" class="headerlink" title="Step 3 重启光猫"></a>Step 3 重启光猫</h3><p>（如果没有自动重启的话</p>
+<p>可以选择在 <strong>管理-设备管理-设备重启</strong> 里重启，当然也可以直接关掉电源再打开233。怎么喜欢怎么来。</p>
+<p><img src="/2020/02/27/Server_OpticalModem/reboot.png" alt="reboot"></p>
+<h3 id="Step4-telnet-连接光猫"><a href="#Step4-telnet-连接光猫" class="headerlink" title="Step4 telnet 连接光猫"></a>Step4 telnet 连接光猫</h3><p>而后就可以通过 telnet 连接到你的光猫了。</p>
+<p><strong>用户名和密码都是<code>admin</code>。</strong></p>
+<p><img src="/2020/02/27/Server_OpticalModem/telnet.png" alt="telnet"></p>
+<p>它用的是 <strong>BCM96838</strong> 这个芯片。<em>（感兴趣可以搜一搜</em></p>
+<p>发现它并没有 cd 这个command。</p>
+<pre class="line-numbers language-none"><code class="language-none"> &gt; help
+?
+help
+logout
+exit
+quit
+reboot
+brctl
+cat
+virtualserver
+ddns
+df
+loglevel
+logdest
+dumpcfg
+dumpmdm
+dumpeid
+mdm
+meminfo
+psp
+kill
+dumpsysinfo
+dnsproxy
+syslog
+echo
+ifconfig
+ping
+ps
+pwd
+sntp
+sysinfo
+tftp
+wlctl
+showOmciStats
+laser
+omci
+omcipm
+dumpOmciVoice
+dumpOmciEnet
+dumpOmciGem
+laser
+arp
+defaultgateway
+dhcpserver
+dns
+lan
+lanhosts
+passwd
+ppp
+restoredefault
+route
+save
+swversion
+uptime
+cfgupdate
+swupdate
+exitOnIdle
+wan
+set
+get
+gendefsettings
+loaddefsettings
+checkdefsettings
+composenewsettings
+create_merge_presetting
+transform_presetting
+upgrade
+ledctl
+usbtest
+ls
+facmode
+simcard
+voipteststart
+voiptestend
+voice_test
+phone_connect
+recordpcmstart
+recordpcmend
+StartCall
+StopCall
+StartRing
+StopRing
+PlayCNGTone
+StopCNGTone
+PlayDTMFTone
+fhvoice
+redirect
+mcpctl
+itms
+wifi
+card<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>不过好像功能也不少的亚子。</p>
+<p>看了一下存储。</p>
+<p><img src="/2020/02/27/Server_OpticalModem/df.png" alt="df"></p>
+<p>内存。</p>
+<p><img src="/2020/02/27/Server_OpticalModem/meminfo.png" alt="meminfo"></p>
+<p>然后发现有一个<strong>隐藏的<code>sh</code>指令</strong>，可以支持大部分的 Linux 指令啦~</p>
+<p>看了一下系统信息。</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># uname -a</span>
+Linux <span class="token punctuation">(</span>none<span class="token punctuation">)</span> <span class="token number">3.4</span>.11-rt19 <span class="token comment">#3 SMP PREEMPT Mon Jul 4 19:17:02 CST 2016 mips GNU/Linux</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<p>webs 目录下为所有的前端网页的文件。</p>
+<p><img src="/2020/02/27/Server_OpticalModem/sh.png" alt="sh"></p>
+<pre class="line-numbers language-none"><code class="language-none">FHFactoryCheck.html                  ipsec.html
+FH_Simple_CloseHideWeb.html          ipsecview.html
+FH_Simple_FactoryRestore.html        ipv6lancfg.html
+FH_Simple_OpenHideWeb.html           itms_right.html
+StaticIpAdd.html                     itms_wrong.html
+StaticIpErr.html                     itmsuploadfinish.html
+areacode.js                          itmsuploadfinish_guangdong.html
+backupsettings.html                  itmsuploadingimage.html
+buildinfo.html                       itmsuploadingimage_guangdong.html
+certadd.html                         itmsuploadreboot.html
+certcaimport.html                    jquery.js
+certcaview.html                      lanvlancfg.html
+certimport.html                      lockerror.html
+certloadsigned.html                  logconfig.html
+certlocalview.html                   login.html
+certreqshow.html                     loginerror.html
+certshow.html                        logintro.html
+cfgepon.html                         logo.html
+cfgeth.html                          logoffaccount.html
+cfggpon.html                         logout.html
+codepassword.html                    logview.html
+colors.css                           macstudy.html
+ctExternalApInfo_user.html           main.html
+ctExternalApInfooffline.html         mainCT.html
+ctStaticIpAdd.html                   menuCT.js
+ctTracerouteresult.html              menuTitle.js
+ctalgcfg.html                        menuTree.js
+ctdhcpcfg.html                       multicast.html
+ctdhcpdevice.html                    password.html
+ctdiag.html                          pic
+ctdiag_ping.html                     platconfig.html
+ctdiag_tracert.html                  portName.js
+ctdiagmng.html                       portalmngr.html
+ctdiagsystem.html                    portmap.html
+ctdiagxPon.html                      portmapadd.html
+ctdms.html                           portmapedit.html
+ctdnsconfig.html                     pradd.html
+cteponinterfaceinfo.html             prmngr.html
+ctexternalApInfo.html                pswdadmin.html
+ctgponinterfaceinfo.html             pswduser.html
+ctigmpproxy.html                     qoscls.html
+ctigmpsnooping.html                  qosclsedit.html
+ctinfo.html                          qosclsview.html
+ctinfo_fujian.html                   qosqmgmt.html
+ctipflt.html                         qosqueue.html
+ctipfltblack.html                    qosqueueadd.html
+ctipfltwhite.html                    qosview.html
+ctlanbind.html                       rebootinfo.html
+ctlogconfig.html                     redirect.html
+ctlogflashview.html                  redirect_cardoffline.html
+ctlogintro.html                      redirect_portal.html
+ctlogview.html                       redirect_portal_confirm.html
+ctloid.html                          redirect_uploadimage.html
+ctmacflt.html                        register.html
+ctmacpolicy.html                     register_anhui.html
+ctmldproxy.html                      register_fail.html
+ctmldsnooping.html                   register_fujian.html
+ctmulticastvlan.html                 register_guangdong.html
+ctpingresult.html                    register_guangdong_fail.html
+ctpswdrelogin.html                   register_hainan.html
+ctroute6add.html                     register_ing.html
+ctstatslan.html                      register_ing_anhui.html
+ctstatslan_user.html                 register_ing_card.html
+ctusererror.html                     register_ing_fujian.html
+ctuserpswd.html                      register_ing_guangdong.html
+ctwan_ethinfo.html                   register_ing_guangdong_1.html
+ctwanconfig.html                     register_ing_guangdong_refresh.html
+ctwanconfig_user.html                register_ing_hainan.html
+ctwaninfo.html                       register_ing_iframe.html
+ctwaninfo6.html                      register_ing_iframe_refresh.html
+ctwaninfo6_user.html                 register_ing_iframe_refresh_1.html
+ctwaninfo_user.html                  register_ing_sichuan.html
+ctwaninfoall.html                    register_limit.html
+ctwaninfoallv6.html                  register_loid.html
+ctwlanInfo.html                      register_restore.html
+ctwlanInfo_user.html                 register_restore_remote.html
+ctwlcfg.html                         register_restore_retry.html
+ctwlsecurity.html                    register_restore_retry_sichuan.html
+ddnsadd.html                         register_restore_sichuan.html
+defaultsettings.html                 register_restoreinfo.html
+dhcpinfo.html                        register_sichuan.html
+diaginform.html                      registered_chongqing.html
+dnscfg.html                          registered_fujian.html
+dnsproxycfg.html                     registered_guangdong.html
+dosprotect.html                      registered_hunan.html
+downloadFile.html                    resetrouter.html
+enableipv6.html                      restoreinfo.html
+engdebug.html                        restoresettings.html
+eponadderr.html                      restrain.html
+epondelerr.html                      ripcfg.html
+ethadderr.html                       routeadd.html
+ethdelerr.html                       routetbl.html
+exporting.js                         rtdefaultcfg.html
+externalapcfg.html                   rtdefaultcfgerr.html
+externalapcfgoffline.html            rtroutecfg.html
+externalapsecurity.html              scdmz.html
+externalapsecurityoffline.html       scinflt.html
+factorymode.html                     scinfltview.html
+fbctwanconfig.html                   scmacflt.html
+fhvoiceh248dsp.html                  scmacfltview.html
+fhvoiceh248mgc.html                  scmacpolicy.html
+fhvoiceh248ngn.html                  scoutflt.html
+fhvoiceh248port.html                 scoutfltview.html
+fhvoiceprotocol.html                 scvrtsrv.html
+fhvoicesettings.html                 servmngr.html
+fhvoicesipadvance.html               simcardoffline.html
+fhvoicesipbasic.html                 sipregstatus.html
+fhvoicesipdigitmap.html              sipteleview.html
+fhvoicesipfax.html                   sntpcfg.html
+fhvoicesipuserline.html              speed.html
+firewall.html                        statsifc.html
+footer.html                          statsifcreset.html
+ftpcfg.html                          statswan.html
+gponadderr.html                      statswanreset.html
+gpondelerr.html                      storageusraccadd.html
+help_manage_device.html              stylemain.css
+help_manage_file.html                stylesCT.css
+help_manage_keep.html                surprise.html
+help_manage_user.html                todadd.html
+help_net_QOS.html                    todmngrview.html
+help_net_WLAN.html                   tr69cfg.html
+help_net_dhcp.html                   tr69cfgview.html
+help_net_externalap.html             tr69connect.html
+help_net_network.html                traffictl.html
+help_net_remote.html                 traffictladd.html
+help_net_route.html                  updatesettings.html
+help_net_time.html                   upload.html
+help_net_voice.html                  upload_chongqing.html
+help_net_voip.html                   uploadinfo.html
+help_safe_firewall.html              upnpcfg.html
+help_safe_mac.html                   url_add.html
+help_safe_port.html                  urlfilter.html
+help_safe_wan.html                   urlfilterErr.html
+help_status_device.html              usbbackup.html
+help_status_net.html                 usbbackuphandle.html
+help_status_remote.html              usbbackupresult.html
+help_status_user.html                usbinfo.html
+help_status_voip.html                usbxdown.html
+help_use_IGMP.html                   util.js
+help_use_MLD.html                    wlcfg.html
+help_use_UPNP.html                   wlcfg_jiangsu.html
+help_use_VOIP.html                   wlcfg_zhejiang.html
+help_use_device.html                 wlcfg_zhejiang_user.html
+help_use_dns.html                    wlcfgadv.html
+help_use_nat.html                    wlrefresh.html
+help_use_usual.html                  wlsecurity.html
+highcharts.js                        wlsecurity_jiangsu.html
+hlpethconn.html                      wlsecurity_zhejiang.html
+hlpwlconn.html                       wlsecurity_zhejiang_user.html
+index.html                           wlshared.html
+ipsconfig.html                       wlwapias.html<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>然后还可以发现之前的配置文件在 <code>/fhconf/backpresettings.conf</code>。</p>
+<p>日志文件在<code>/fhlog/messages</code> 。</p>
+<p><code>/rom/etc/wlan</code> 目录下好像有一些网卡芯片的驱动（？</p>
+<p><img src="/2020/02/27/Server_OpticalModem/rombin.png" alt="rom"></p>
+<p>然后在某个目录下找到了各种默认配置文件emmm</p>
+<p><img src="/2020/02/27/Server_OpticalModem/default_settings.png" alt="default_settings"></p>
+<p>其他的后面再慢慢玩吧（</p>
+<p>还有提醒一下，<strong>telnet 不用的话最好还是关掉</strong>吧，防止别人连上光猫改了你的配置就不好了呢。</p>
+<br>
+
+<hr>
+<h2 id="0x03-再看光猫参数-amp-测速"><a href="#0x03-再看光猫参数-amp-测速" class="headerlink" title="0x03 再看光猫参数 &amp; 测速"></a>0x03 再看光猫参数 &amp; 测速</h2><h3 id="光猫参数"><a href="#光猫参数" class="headerlink" title="光猫参数"></a>光猫参数</h3><p>上网搜了一下这个光猫的参数。（可能有所区别）</p>
+<blockquote>
+<p>烽火HG260GS-U</p>
+<p>产品特点   </p>
+<ul>
+<li>支持GPON接口，4FE+2POTS，LAN1口=1G LAN 2.3.4口=100M  </li>
+<li>支持路由/桥混合转发。  </li>
+<li>支持VLAN连接。   </li>
+<li>提供2.4GHz 802.11b/g/n无线接入功能，最高速率可达270Mbps，覆盖范围30m~100m。   </li>
+<li>支持SIP/MGCP/H.248等VOIP协议语音，支持多种语音编码器。   </li>
+<li>强大的QoS能力，保障多业务环境下的VoIP、IPTV等关键业务的服务质量。   </li>
+<li>支持TR-069远程管理：设备配置、版本升级、诊断等。   </li>
+<li>支持WPS。   </li>
+<li>支持Web方式，用户本地管理功能。   </li>
+<li>支持多SSID，提供多个虚拟无线网络。   </li>
+<li>支持VPN穿越 ，基于IPSec/L2TP。   </li>
+<li>支持IPv4/v6,TCP/UDP协议，支持IPv6开启DS-lite和双栈功能。   </li>
+<li>芯片集成度高，功耗小，性能稳定。</li>
+</ul>
+</blockquote>
+<p>哇呜，它是<strong>支持千兆</strong>的啊！</p>
+<p>不过<strong>只有1口支持1Gbps，其他都是100Mbps的</strong>emmm </p>
+<p>于是直接用网线连接光猫测了一下，果然是这样。</p>
+<p>之前都没注意这个问题唉！是不是因为这个问题影响了网速啊啊啊啊嘤嘤嘤。<em>（其实我也不知道我家宽带有多少带宽）</em></p>
+<p>来测个速看看好了。</p>
+<h3 id="测速"><a href="#测速" class="headerlink" title="测速"></a>测速</h3><p>这是 <strong>连接 WiFi</strong> 的测速结果↓。</p>
+<p><img src="/2020/02/27/Server_OpticalModem/speedtest1.png" alt="WiFi测速"></p>
+<p>通过<strong>网线直连到除1口外的任意一个 LAN 口</strong>，再次测速。</p>
+<p><img src="/2020/02/27/Server_OpticalModem/speedtest2.png" alt="LAN2-4测速"></p>
+<p>差不多跑满100Mbps的带宽了。</p>
+<p>那再来看看 <strong>LAN1 的千兆口</strong>吧。</p>
+<p><img src="/2020/02/27/Server_OpticalModem/speedtest3.png" alt="LAN1测速"></p>
+<p>？？？</p>
+<p>你在逗我嘛？！哇呜原来有差不多150Mbps的啊！</p>
+<p>原来<strong>受限于 LAN 口的带宽</strong>啊！</p>
+<p>气死我了，连接WiFi的话只有差不多1/3的速度啊，草（一种植物）。</p>
+<p>然后把之前连在光猫后的无线路由器接到了 LAN1 口，再登上路由器一看，原来它也只支持百兆带宽emmm</p>
+<p><img src="/2020/02/27/Server_OpticalModem/router.png" alt="router"></p>
+<p>不过怎么说好呢，毕竟这光猫和路由器都有些年纪了，那时候千兆还没普及呢，可能用的才是10M/50M最多也不超过100M的宽带呢。</p>
+<p>所以光猫有一个千兆口也很不错了呢233333.（摊手.gif</p>
+<h3 id="网线的讲究"><a href="#网线的讲究" class="headerlink" title="网线的讲究"></a>网线的讲究</h3><p>噢对了，还有一个好玩的事。。。</p>
+<p>要用上千兆以太网，不仅需要<strong>光猫、路由器支持</strong>，还要你自己的<strong>设备支持</strong>，如果有线连接的话网线还至少要<strong>超五类线</strong>。</p>
+<p>但是还要注意<strong>距离限制</strong>，超过一定的距离（如100m）也不行了，类别越高传输的频率越高则允许的距离就越小。（啊大佬你用光纤？打扰了。</p>
+<p>我用网线连接的时候，最开始用的是一根比较老的 CAT-5e（超五类）线，可能是端口接触不大好或者线路老化的原因吧，实际网卡只协商到了100Mbps。换了一根新的网线（好像也是CAT-5e）就有1Gbps了。</p>
+<p>然而，这根网线不够长，我用连接器把两根都能通千兆的网线连一起再连到电脑，这时网口又协商到100Mbps了emmm</p>
+<p>看来这个网线抗干扰能力不大行呀，千兆网的有线传输要求还是挺严格的。</p>
+<p>不过现在用的基本就<strong>六类线以上</strong>了吧，买网线还有装修布线什么的时候要注意一下这个问题。</p>
+<p>还有买网线<strong>不要买扁的那种</strong>，剖面圆形那种就好。（感觉算是<strong>传输线理论</strong>？</p>
+<br>
+
+<hr>
+<h2 id="0x04-启用-IPv6"><a href="#0x04-启用-IPv6" class="headerlink" title="0x04 启用 IPv6"></a>0x04 启用 IPv6</h2><p>前面看光猫的参数，发现支持 IPv6 唉！</p>
+<p>听说三大运营商的宽带基本部署 IPv6 了，不过估计设置里没开启，本地也没有分配公网地址，这次就来折腾一下吧。</p>
+<blockquote>
+<p>先说一下，我自己对IPv6这一块都不大了解，这也是第一次尝试设置这个。</p>
+<p>包括前缀分配什么的我都不清楚，所以这里的说法有可能存在错误，<strong>大佬们看到的话欢迎和我交流呀！</strong></p>
+</blockquote>
+<h3 id="Step-1-以超级管理员身份登录光猫"><a href="#Step-1-以超级管理员身份登录光猫" class="headerlink" title="Step 1 以超级管理员身份登录光猫"></a>Step 1 以超级管理员身份登录光猫</h3><p>用上面获取的用户名密码登录。</p>
+<p>在设置前，查看<strong>状态-网络侧信息-IPv6 连接信息</strong>，应该是空的。而 <strong>IPv4 连接信息</strong>里有一个连接的描述里是带有<code>INTERNET</code>的。</p>
+<p>（假装这里有截图）</p>
+<h3 id="Step-2-获取当前设置的参数"><a href="#Step-2-获取当前设置的参数" class="headerlink" title="Step 2 获取当前设置的参数"></a>Step 2 获取当前设置的参数</h3><p>首先在<strong>连接名称</strong>里选择带有<code>INTERNET</code>的选项，然后<strong>把这一页截个图或者拍照备份一下</strong>。（重要）</p>
+<p>最好也备份一下设置文件（同 0x01）！</p>
+<p>这里面的VLAN ID、MTU是后面的依据。</p>
+<h3 id="Step-3-新建宽带连接"><a href="#Step-3-新建宽带连接" class="headerlink" title="Step 3 新建宽带连接"></a>Step 3 新建宽带连接</h3><p>这里前提是<strong>知道宽带的密码</strong>，如果不知道的话，可以在 <strong>0x01</strong> 中获取到的备份文件里找到嘿嘿嘿（仅做了base64加密）。</p>
+<p>新建一个WAN连接，<strong>模式选择<code>Route</code>（路由），协议模式选择<code>IPv4 &amp; IPv6</code>（这就是目的所在喵！）。</strong></p>
+<p>选<code>PPPoE</code>，MTU里填上一步骤的参数；勾选<strong>启用Vlan</strong>，<strong>Vlan ID填上一步参数</strong>。</p>
+<p><strong>IPv6地址分配机制</strong>的话，我这里<strong>自动获取</strong>和<strong>DHCPv6</strong>都行，不过建议选自动获取吧。。。<em>（不大清楚</em></p>
+<p>获取前缀勾上吧，好像可以靠这个下发IPv6.<em>（？</em></p>
+<p>服务模式选择<code>INTERNET</code>。</p>
+<p>绑定端口就是你想要通过这个WAN进行连接网络的端口，如果不清楚的话全勾上就行了。如果有IPTV的话注意不要勾对应的端口。当然有其他需求的自己再考虑。它这里注明了的。</p>
+<blockquote>
+<p>注: WAN连接之间不能共享绑定端口，最后绑定端口的WAN连接绑定操作将冲掉之前其它WAN连接对该端口的绑定操作！</p>
+</blockquote>
+<p>大概的界面类似于这样的。不同设备大同小异的啦。</p>
+<p><img src="/2020/02/27/Server_OpticalModem/IPv6_Config.png" alt="IPv6_Config"></p>
+<p>而后点击<strong>保存/应用</strong>。</p>
+<h3 id="Step-4-IPv6-DHCP-配置"><a href="#Step-4-IPv6-DHCP-配置" class="headerlink" title="Step 4 IPv6 DHCP 配置"></a>Step 4 IPv6 DHCP 配置</h3><p><em>（这一块其实我也不大清楚emmm</em></p>
+<p>大概是这样吧</p>
+<p><img src="/2020/02/27/Server_OpticalModem/IPv6_DHCPConfig.png" alt="IPv6_DHCPConfig"></p>
+<p>貌似DHCPv6是私网，Radvd是利用获取的前缀下发公网的地址。</p>
+<p>网上大概这么说的↓。</p>
+<blockquote>
+<p>在IPV6的自动配置中，分为两种技术<br>一种是传统的有状态(stateful),典型代表就是与IPv4时代相对应的DHCPv6，<br>一种是IPv6的无状态(stateless)自动配置，典型代表是Radvd。这是IPv6协议的一个突出特点:支持网络节点的地址自动配置。    </p>
+<p>在无状态地址自动配置方式下，网络接口接收路由器宣告的全局地址前缀，再结合接口ID得到一个可聚集全局单播地址。在有状态地址自动配置的方式下，主要采用动态主机配置协议（DHCP），需要配备专门的DHCP服务器，网络接口通过客户机/服务器模式从DHCP服务器处得到地址配置信息。  </p>
+<p>具体来说，以RADVD为代表的无状态自动配置不需要消耗很多机器资源，也不像传统DHCP一样需要维护一个本地数据库来维护地址分配状态，他只是进行广播前缀地址，客户端收到这种广播后再自己使用EUI64算法生成全球唯一的IPv6地址，进行自我配置。   </p>
+</blockquote>
+<p>还有</p>
+<blockquote>
+<p>&lt;1&gt;radvd用于无状态自动配置地址，客户端通过网络接口接收路由器宣告的全局地址前缀，再结合接口ID形成全球单播地址，但是这种配置不能获取DNS。</p>
+<p>&lt;2&gt;dhcpv6用于有状态自动配置地址，类似于ipv4的dhcp，客户端从服务器的地址池中配置地址，可获取到DNS。</p>
+</blockquote>
+<p>（然后应该还要配置一下 <strong>IPv6 DNS Proxy</strong>，<em>这个我也不大清楚emmm</em></p>
+<h3 id="Step-5-确认连接状态"><a href="#Step-5-确认连接状态" class="headerlink" title="Step 5 确认连接状态"></a>Step 5 确认连接状态</h3><p>返回到<strong>状态-网络侧信息</strong>，分别看看IPv4和v6的连接信息。留意协议中带有IPv4&amp;IPv6的状态。</p>
+<p>刚开始可能连不上，过一段时间就连上了。</p>
+<p>如果还连不上的话，将之前带有 <code>INTERNET</code> 的那个WAN连接给禁用或删除就好了。</p>
+<p>（不过如果有个TR069那个运营商配置下发的就自己看着办了，删了可以不受运营商进行配置下发和上报，有影响的话新建一个或者修改上一步的服务模式就好了。</p>
+<p>到这里我惊喜地发现，貌似<strong>账号支持多播</strong>唉！不过这个光猫里自然不支持<strong>多播叠加</strong>的了。可以使用桥接宽带让后面的路由器做处理啦。（后面再说）</p>
+<p>于是尝试了一下成功连了两个，其中绑定端口设置成不一样的。不过不知道最多可以几播hhh。</p>
+<p><img src="/2020/02/27/Server_OpticalModem/IPv4_ConnectInfo.png" alt="IPv4_ConnectInfo"></p>
+<p><img src="/2020/02/27/Server_OpticalModem/IPv6_ConnectInfo.png" alt="IPv6_ConnectInfo"></p>
+<p>连接光猫是可以下发 IPv6 公网地址的。</p>
+<p><img src="/2020/02/27/Server_OpticalModem/IPv6_ConnectInfo2.png" alt="IPv6_ConnectInfo2"></p>
+<p>然后发现那个外接的无线路由器也不支持 IPv6，气死了<em>（后面换一个</em></p>
+<p>不过也有<strong>解决方案</strong>的，就是把网线连接到无线路由器的<strong>LAN口</strong>而不是WAN口，关闭它的 DHCP 功能，由光猫直接分配 IP 地址就行了。</p>
+<p><br><br></p>
+<p>然而有个大问题，就是我的 IPv6 没有Internet访问权限。手动配置了DNS也不行。</p>
+<p><code>ping -6 ipv6.baidu.com</code>通不了。</p>
+<p><code>tracert 240c::6666</code> 发现到我的光猫就出不去了。</p>
+<p>试了一下在光猫上的诊断里用IPv6进行ping也没有连接。</p>
+<p>不知道哪里设置有问题了，很懵（摊手。</p>
+<p><strong>求大佬们指点一下。</strong></p>
+<br>
+
+<hr>
+<h2 id="0x05-宽带桥接改造"><a href="#0x05-宽带桥接改造" class="headerlink" title="0x05 宽带桥接改造"></a>0x05 宽带桥接改造</h2><p>前面说支持多播嘛，然后就想到利用光猫桥接宽带，然后再利用后面的路由器（软路由/硬路由）进行拨号。</p>
+<p>或者是这种情况，网络流量较大，路由较复杂等光猫难以承受或者不够稳定，也可以试试桥接的方案。</p>
+<p>方法类似于 <strong>0x04</strong>。</p>
+<p>大概就像图里这样吧。</p>
+<p>勾选<strong>启用Vlan</strong>，<code>VLAN ID</code> 也和之前配置<code>INTERNET</code>的一样。</p>
+<p><strong>绑定端口建议选端口1</strong>，毕竟是千兆口嘛！</p>
+<p><img src="/2020/02/27/Server_OpticalModem/bridge.png" alt="桥接设置"></p>
+<p>之后就可以直接通过 LAN1 连接路由器或者电脑进行拨号了。</p>
+<p>拨号后也会分配公网的 IPv6 地址。<em>（然而我这里的 IPv6 还是没有Internet访问权限，估计是运营商的问题吧</em></p>
+<p>（假装这里有截图）</p>
+<p>当然，要实现桥接改造，你还可以尝试<strong>直接修改配置文件</strong>的方案<em>（超硬核）</em>，具体请参考<a target="_blank" rel="noopener" href="https://guanggai.org/thread-459-1-1.html">这里</a>。</p>
+<br>
+
+<hr>
+<h2 id="0x06-其他玩意"><a href="#0x06-其他玩意" class="headerlink" title="0x06 其他玩意"></a>0x06 其他玩意</h2><p>有次在访问一个光猫的页面时输错了网址，正好发现了光猫用的 HTTP Server 是 micro_httpd。</p>
+<p>发现指向的网站还能访问。这是个轻量级的服务器了，正好也适合在这种小设备上跑了。</p>
+<p><img src="/2020/02/27/Server_OpticalModem/404NotFound.png" alt="404"></p>
+<p><img src="/2020/02/27/Server_OpticalModem/acme.png" alt="micro_httpd"></p>
+<p>这个光猫还支持远程下载，可以通过 USB 连接外部设备，开启 FTP 服务器进行访问。</p>
+<p>不过感觉这个 USB 应该也是2.0的，勉强用用还可以吧，也没尝试过233.</p>
+<br>
+
+<hr>
+<h2 id="0x07-小结"><a href="#0x07-小结" class="headerlink" title="0x07 小结"></a>0x07 小结</h2><p>折腾了好久这个有点古老的光猫 emmm嘤嘤嘤</p>
+<p>于是乎本文介绍的内容包括：</p>
+<p>通过配置备份文件获取超级管理员密码，开启 Telnet 管理，启用 IPv6，宽带桥接的改造等等。</p>
+<p><em>是时候换个路由器了，只有大概1/3的网速太亏了！</em></p>
+<p>怎么说好呢，感觉其实并没有干什么正事的亚子。。。</p>
+<p>等我学完通信网络（计算机网络）说不定会有更深入的理解吧233333.</p>
+<p><strong>欢迎大佬们来交流交流呢！</strong></p>
+<p>还有，以上内容<strong>仅供学习研究，请在合理合法范围内使用，禁止商用。</strong></p>
+<p><strong>转载记得注明出处呀！</strong></p>
+<p>溜了溜了（</p>
+<br>
+
+<hr>
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><p><a target="_blank" rel="noopener" href="http://bbs.mydigit.cn/read.php?tid=1827084">HG260GS-U光猫拆解与登录解码</a></p>
+<p><a target="_blank" rel="noopener" href="http://dragonbest520.com/2018/03/04/%e5%8c%97%e4%ba%ac%e8%81%94%e9%80%9a%e5%85%89%e5%ae%bd%e5%b8%a6%e5%8f%8aiptv%e6%8a%98%e8%85%be%e7%ac%94%e8%ae%b0%ef%bc%88%e4%ba%8c%ef%bc%89-%e5%8c%97%e4%ba%ac%e8%81%94%e9%80%9ahg260gs-u-wo-37/">北京联通光宽带及IPTV折腾笔记（二）–北京联通HG260GS-U WO-37开启超级管理员的方法</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/av45203145">轻松开启中国移动IPV6连接，早入畅游ipv6世界</a></p>
+<p><a target="_blank" rel="noopener" href="https://guanggai.org/thread-459-1-1.html">烽火HG220G-U 2.03+ / HG2201U 5.0+光猫改桥接教程</a></p>
+<p>etc.</p>
+<p><em>（大部分都好古老了</em></p>
+
+                
+            </div>
+            <hr/>
+
+            
+
+    <div class="reprint" id="reprint-statement">
+        
+            <div class="reprint__author">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-user">
+                        文章作者:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="https://miaotony.xyz" rel="external nofollow noreferrer">MiaoTony</a>
+                </span>
+            </div>
+            <div class="reprint__type">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-link">
+                        文章链接:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="https://miaotony.xyz/2020/02/27/Server_OpticalModem/">https://miaotony.xyz/2020/02/27/Server_OpticalModem/</a>
+                </span>
+            </div>
+            <div class="reprint__notice">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-copyright">
+                        版权声明:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    本博客所有文章除特别声明外，均采用
+                    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY-NC-SA 4.0</a>
+                    许可协议。转载请注明来源
+                    <a href="https://miaotony.xyz" target="_blank">MiaoTony</a>
+                    !
+                </span>
+            </div>
+        
+    </div>
+
+    <script async defer>
+      document.addEventListener("copy", function (e) {
+        let toastHTML = '<span>复制成功，请遵循本文的转载规则</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">查看</a>';
+        M.toast({html: toastHTML})
+      });
+
+      function navToReprintStatement() {
+        $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
+      }
+    </script>
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            
+                                <a href="/tags/Tech/">
+                                    <span class="chip bg-color">Tech</span>
+                                </a>
+                            
+                                <a href="/tags/Configuration/">
+                                    <span class="chip bg-color">Configuration</span>
+                                </a>
+                            
+                                <a href="/tags/%E5%B0%8F%E6%83%B3%E6%B3%95/">
+                                    <span class="chip bg-color">小想法</span>
+                                </a>
+                            
+                                <a href="/tags/Web/">
+                                    <span class="chip bg-color">Web</span>
+                                </a>
+                            
+                                <a href="/tags/Server/">
+                                    <span class="chip bg-color">Server</span>
+                                </a>
+                            
+                                <a href="/tags/IPv6/">
+                                    <span class="chip bg-color">IPv6</span>
+                                </a>
+                            
+                                <a href="/tags/Modem/">
+                                    <span class="chip bg-color">Modem</span>
+                                </a>
+                            
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+<div id="article-share">
+
+    
+    <div class="social-share" data-sites="qq,qzone,wechat,weibo,twitter,facebook,google,douban,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
+    <script src="/libs/share/js/social-share.min.js"></script>
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+                <style>
+    #reward {
+        margin: 40px 0;
+        text-align: center;
+    }
+
+    #reward .reward-link {
+        font-size: 1.4rem;
+        line-height: 38px;
+    }
+
+    #reward .btn-floating:hover {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    #rewardModal {
+        width: 320px;
+        height: 350px;
+    }
+
+    #rewardModal .reward-title {
+        margin: 15px auto;
+        padding-bottom: 5px;
+    }
+
+    #rewardModal .modal-content {
+        padding: 10px;
+    }
+
+    #rewardModal .close {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+        color: rgba(0, 0, 0, 0.5);
+        font-size: 1.3rem;
+        line-height: 20px;
+        cursor: pointer;
+    }
+
+    #rewardModal .close:hover {
+        color: #ef5350;
+        transform: scale(1.3);
+        -moz-transform:scale(1.3);
+        -webkit-transform:scale(1.3);
+        -o-transform:scale(1.3);
+    }
+
+    #rewardModal .reward-tabs {
+        margin: 0 auto;
+        width: 210px;
+    }
+
+    .reward-tabs .tabs {
+        height: 38px;
+        margin: 10px auto;
+        padding-left: 0;
+    }
+
+    .reward-content ul {
+        padding-left: 0 !important;
+    }
+
+    .reward-tabs .tabs .tab {
+        height: 38px;
+        line-height: 38px;
+    }
+
+    .reward-tabs .tab a {
+        color: #fff;
+        background-color: #ccc;
+    }
+
+    .reward-tabs .tab a:hover {
+        background-color: #ccc;
+        color: #fff;
+    }
+
+    .reward-tabs .wechat-tab .active {
+        color: #fff !important;
+        background-color: #22AB38 !important;
+    }
+
+    .reward-tabs .alipay-tab .active {
+        color: #fff !important;
+        background-color: #019FE8 !important;
+    }
+
+    .reward-tabs .reward-img {
+        width: 210px;
+        height: 210px;
+    }
+</style>
+
+<div id="reward">
+    <a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-medium waves-effect waves-light red">赏</a>
+
+    <!-- Modal Structure -->
+    <div id="rewardModal" class="modal">
+        <div class="modal-content">
+            <a class="close modal-close"><i class="fas fa-times"></i></a>
+            <h4 class="reward-title">打赏一下让我来点好吃好玩的呗~</h4>
+            <div class="reward-content">
+                <div class="reward-tabs">
+                    <ul class="tabs row">
+                        <!-- 
+                            <li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li> 
+                        -->
+                        <li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li>
+                    </ul>
+                    <!-- 
+                        <div id="alipay">
+                        <img src="/" class="reward-img" alt="支付宝打赏二维码">
+                        </div> 
+                -->
+                    <div id="wechat">
+                        <img src="/medias/reward/wechat.png" class="reward-img" alt="微信打赏二维码">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.tabs').tabs();
+    });
+</script>
+
+            
+        </div>
+    </div>
+
+    
+        <link rel="stylesheet" href="/libs/gitalk/gitalk.min.css">
+<link rel="stylesheet" href="/css/my-gitalk.css">
+
+<div class="card gitalk-card" data-aos="fade-up">
+    <div class="comment_headling" style="font-size: 20px; font-weight: 700; position: relative; padding-left: 20px; top: 15px; padding-bottom: 5px;">
+        <i class="fas fa-comments fa-fw" aria-hidden="true"></i>
+        <span>评论</span>
+    </div>
+    <div id="gitalk-container" class="card-content"></div>
+</div>
+
+<script src="/libs/gitalk/gitalk.min.js"></script>
+<script>
+    let gitalk = new Gitalk({
+        clientID: '116343b4650fce4789b6',
+        clientSecret: '3e9be2ad6c9b693af1753290c7c059b1e4f34d5d',
+        repo: 'miaotony.github.io',
+        owner: 'miaotony',
+        admin: "miaotony",
+        id: '2020-02-27T17-00-00',
+        distractionFreeMode: false  // Facebook-like distraction free mode
+    });
+
+    gitalk.render('gitalk-container');
+</script>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+            <div class="card">
+                <a href="/2020/03/03/Server_ObtainIPv6ViaTunnelBroker/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/23.jpg" class="responsive-img" alt="利用TunnelBroker给阿里云ECS配置公网IPv6">
+                        
+                        <span class="card-title">利用TunnelBroker给阿里云ECS配置公网IPv6</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            最近折腾了一下，利用Hurricane Electric提供的免费IPv6 Tunnel Broker，让阿里云的ECS拥有了IPv6地址（非原生）。
+                        
+                    </div>
+                    <div class="publish-info">
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2020-03-03
+                        </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/Tech/" class="post-category">
+                                    Tech
+                                </a>
+                            
+                            <a href="/categories/Tech/Server/" class="post-category">
+                                    Server
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/Tech/">
+                        <span class="chip bg-color">Tech</span>
+                    </a>
+                    
+                    <a href="/tags/Configuration/">
+                        <span class="chip bg-color">Configuration</span>
+                    </a>
+                    
+                    <a href="/tags/Web/">
+                        <span class="chip bg-color">Web</span>
+                    </a>
+                    
+                    <a href="/tags/Server/">
+                        <span class="chip bg-color">Server</span>
+                    </a>
+                    
+                    <a href="/tags/IPv6/">
+                        <span class="chip bg-color">IPv6</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2020/02/18/FrontEnd_HTML_Advanced/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/12.jpg" class="responsive-img" alt="FrontEnd | HTML 进阶学习笔记">
+                        
+                        <span class="card-title">FrontEnd | HTML 进阶学习笔记</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            看完了一些基础的HTML知识，这回来学一点HTML中进阶的内容吧。
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-02-18
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/FrontEnd/" class="post-category">
+                                    FrontEnd
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/FrontEnd/">
+                        <span class="chip bg-color">FrontEnd</span>
+                    </a>
+                    
+                    <a href="/tags/HTML/">
+                        <span class="chip bg-color">HTML</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+<script>
+    $('#articleContent').on('copy', function (e) {
+        // IE8 or earlier browser is 'undefined'
+        if (typeof window.getSelection === 'undefined') return;
+
+        var selection = window.getSelection();
+        // if the selection is short let's not annoy our users.
+        if (('' + selection).length < Number.parseInt('200')) {
+            return;
+        }
+
+        // create a div outside of the visible area and fill it with the selected text.
+        var bodyElement = document.getElementsByTagName('body')[0];
+        var newdiv = document.createElement('div');
+        newdiv.style.position = 'absolute';
+        newdiv.style.left = '-99999px';
+        bodyElement.appendChild(newdiv);
+        newdiv.appendChild(selection.getRangeAt(0).cloneContents());
+
+        // we need a <pre> tag workaround.
+        // otherwise the text inside "pre" loses all the line breaks!
+        if (selection.getRangeAt(0).commonAncestorContainer.nodeName === 'PRE' || selection.getRangeAt(0).commonAncestorContainer.nodeName === 'CODE') {
+            newdiv.innerHTML = "<pre>" + newdiv.innerHTML + "</pre>";
+        }
+
+        var url = document.location.href;
+        newdiv.innerHTML += '<br />'
+            + '来源: MiaoTony&#39;s小窝<br />'
+            + '文章作者: MiaoTony<br />'
+            + '文章链接: <a href="' + url + '">' + url + '</a><br />'
+            + '本文章著作权归作者 MiaoTony 所有，任何形式的转载都请注明出处。';
+
+        selection.selectAllChildren(newdiv);
+        window.setTimeout(function () {bodyElement.removeChild(newdiv);}, 200);
+    });
+</script>
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+
+
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
+
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget card" style="background-color: white;">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('1'),
+            headingSelector: 'h2, h3, h4, h5'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h2, h3, h4, h5').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+
+
+    <footer class="page-footer bg-color">
+        <div class="container row center-align" style="margin-bottom: 15px !important;">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            
+                <span id="year">2019-2026</span>
+            
+            <a href="/about" target="_blank">MiaoTony</a>
+            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+            |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
+            <br>
+                        &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
+                class="white-color">487.1k</span>&nbsp;字
+                                                                                    <span id="busuanzi_container_site_pv">
+			|&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
+                    class="white-color"></span>&nbsp;次
+            </span>
+                                    <span id="busuanzi_container_site_uv">
+                |&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;<span id="busuanzi_value_site_uv"
+                    class="white-color"></span>&nbsp;人
+            </span>
+                        <br>
+                        <span id="sitetime">载入运行时间...</span>
+            <script>
+                function siteTime() {
+                    var seconds = 1000;
+                    var minutes = seconds * 60;
+                    var hours = minutes * 60;
+                    var days = hours * 24;
+                    var years = days * 365;
+                    var today = new Date();
+                    var startYear = "2019";
+                    var startMonth = "11";
+                    var startDate = "28";
+                    var startHour = "0";
+                    var startMinute = "0";
+                    var startSecond = "0";
+                    var todayYear = today.getFullYear();
+                    var todayMonth = today.getMonth() + 1;
+                    var todayDate = today.getDate();
+                    var todayHour = today.getHours();
+                    var todayMinute = today.getMinutes();
+                    var todaySecond = today.getSeconds();
+                    var t1 = Date.UTC(startYear, startMonth, startDate, startHour, startMinute, startSecond);
+                    var t2 = Date.UTC(todayYear, todayMonth, todayDate, todayHour, todayMinute, todaySecond);
+                    var diff = t2 - t1;
+                    var diffYears = Math.floor(diff / years);
+                    var diffDays = Math.floor((diff / days) - diffYears * 365);
+                    var diffHours = Math.floor((diff - (diffYears * 365 + diffDays) * days) / hours);
+                    var diffMinutes = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours) /
+                        minutes);
+                    var diffSeconds = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours -
+                        diffMinutes * minutes) / seconds);
+                    if (startYear == todayYear) {
+                        document.getElementById("year").innerHTML = todayYear;
+                        document.getElementById("sitetime").innerHTML = "本站已安全运行 " + diffDays + " 天 " + diffHours +
+                            " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒";
+                    } else {
+                        document.getElementById("year").innerHTML = startYear + " - " + todayYear;
+                        document.getElementById("sitetime").innerHTML = "本站已安全运行 " + diffYears + " 年 " + diffDays +
+                            " 天 " + diffHours + " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒";
+                    }
+                }
+                setInterval(siteTime, 1000);
+            </script>
+                        <br>
+                    </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+    <a href="https://t.me/MiaoTonyChannel" class="tooltipped" target="_blank" data-tooltip="关注我的TelegramChannel: @MiaoTonyChannel" data-position="top" data-delay="50">
+        <i class="fab fa-telegram"></i>
+    </a>
+
+
+
+    <a href="https://github.com/miaotony" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+        <i class="fab fa-github"></i>
+    </a>
+
+
+
+    <a href="mailto:miaotony@outlook.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fas fa-envelope-open"></i>
+    </a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
+        <i class="fas fa-rss"></i>
+    </a>
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+$(function () {
+    var searchFunc = function (path, search_id, content_id) {
+        'use strict';
+        $.ajax({
+            url: path,
+            dataType: "xml",
+            success: function (xmlResponse) {
+                // get the contents from search data
+                var datas = $("entry", xmlResponse).map(function () {
+                    return {
+                        title: $("title", this).text(),
+                        content: $("content", this).text(),
+                        url: $("url", this).text()
+                    };
+                }).get();
+                var $input = document.getElementById(search_id);
+                var $resultContent = document.getElementById(content_id);
+                $input.addEventListener('input', function () {
+                    var str = '<ul class=\"search-result-list\">';
+                    var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                    $resultContent.innerHTML = "";
+                    if (this.value.trim().length <= 0) {
+                        return;
+                    }
+                    // perform local searching
+                    var cnt = 1;
+                    datas.forEach(function (data) {
+                        var isMatch = true;
+                        var content_index = [];
+                        var data_title_origin = data.title.trim();
+                        var data_title = data.title.trim().toLowerCase();
+                        var data_content = data.content.trim().replace(/<[^>]+>/g, "").toLowerCase();
+                        var data_url = data.url;
+                        data_url = data_url.indexOf('/') === 0 ? data.url : '/' + data_url;
+                        var index_title = -1;
+                        var index_content = -1;
+                        var first_occur = -1;
+                        // only match artiles with not empty titles and contents
+                        if (data_title !== '' && data_content !== '') {
+                            keywords.forEach(function (keyword, i) {
+                                index_title = data_title.indexOf(keyword);
+                                index_content = data_content.indexOf(keyword);
+                                if (index_title < 0 && index_content < 0) {
+                                    isMatch = false;
+                                } else {
+                                    if (index_content < 0) {
+                                        index_content = 0;
+                                    }
+                                    if (i === 0) {
+                                        first_occur = index_content;
+                                    }
+                                }
+                            });
+                        }
+                        // show search results
+                        if (isMatch) {
+                            str += "<li><a href='" + data_url + "' class='search-result-title'>" + String(cnt) + ". " + data_title_origin + "</a>";
+                            cnt += 1;
+    
+                            var content = data.content.trim().replace(/<[^>]+>/g, "");
+                            if (first_occur >= 0) {
+                                // cut out 300 characters
+                                var start = first_occur - 30;
+                                if (start < 0) {
+                                    start = 0;
+                                }
+                                var match_content = content.substr(start, 300);
+                                // highlight all keywords
+                                keywords.forEach(function (keyword) {
+                                    var regS = new RegExp(keyword, "gi");
+                                    match_content = match_content.replace(regS, "<em class=\"search-keyword\">" + keyword + "</em>");
+                                });
+    
+                                str += "<p class=\"search-result\">" + match_content + "...</p>"
+                            }
+                            str += "</li>";
+                        }
+                    });
+                    str += "</ul>";
+                    str = "<p class=\"search-result-summary\">共找到 " + String(cnt-1) + " 条结果</p>"  + str;
+                    $resultContent.innerHTML = str;
+                });
+            }
+        });
+    };
+
+    searchFunc('/search.xml', 'searchInput', 'searchResult');
+});
+</script>
+
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.min.js"></script>
+
+    
+
+    
+<script>
+    var _hmt = _hmt || [];
+    (function () {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?40e312a1eec109cf96e30988cf3bfe70";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+    
+    
+    
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+</body>
+
+</html>
