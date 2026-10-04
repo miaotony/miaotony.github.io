@@ -1,0 +1,1651 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="Tech | Jev：不写一句话的 AI，怎么替程序做决定？, MiaoTony,blog">
+    <meta name="description" content="从客服工单到浏览器操作，很多 AI 任务最终只需要一个选择。本文结合 5 分钟 4K 视频，拆解 Jev 的 Choice、Score、Noul、概率与校准，以及 Awesome Jev 里的真实应用和工程限制。">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="MiaoTony&#39;s小窝">
+    <meta property="og:title" content="Tech | Jev：不写一句话的 AI，怎么替程序做决定？">
+    <meta property="og:description" content="从客服工单到浏览器操作，很多 AI 任务最终只需要一个选择。本文结合 5 分钟 4K 视频，拆解 Jev 的 Choice、Score、Noul、概率与校准，以及 Awesome Jev 里的真实应用和工程限制。">
+    <meta property="og:url" content="https://miaotony.xyz/2026/10/03/Tech_Jev/">
+    <meta property="og:image" content="https://miaotony.xyz/2026/10/03/Tech_Jev/og-jev.jpg">
+    <meta property="og:locale" content="zh_CN">
+    
+    <meta property="article:published_time" content="2026-10-02T19:30:00.000Z">
+    
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Tech | Jev：不写一句话的 AI，怎么替程序做决定？">
+    <meta name="twitter:description" content="从客服工单到浏览器操作，很多 AI 任务最终只需要一个选择。本文结合 5 分钟 4K 视频，拆解 Jev 的 Choice、Score、Noul、概率与校准，以及 Awesome Jev 里的真实应用和工程限制。">
+    <meta name="twitter:image" content="https://miaotony.xyz/2026/10/03/Tech_Jev/og-jev.jpg">
+    
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-159946730-1"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+        dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+    gtag('config', 'UA-159946730-1');
+</script>
+
+
+    <title>Tech | Jev：不写一句话的 AI，怎么替程序做决定？ | MiaoTony&#39;s小窝</title>
+    <link rel="icon" type="image/x-icon, image/vnd.microsoft.icon" href="/favicon.ico">
+
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
+	
+    <script src="/libs/jquery/jquery.min.js"></script>
+    <script>
+        //来个特效玩玩喵 20200123
+        var titleTime;
+        var OriginTitile = document.title;
+        document.addEventListener('visibilitychange', function() {
+            if (document.hidden) {
+                document.title = '|ω·) 喵~快回来呀！';
+                clearTimeout(titleTime);
+            } else {
+                document.title = '(/≧▽≦)/ Meow！';
+                titleTime = setTimeout(function() {
+        	    document.title = OriginTitile;
+        }, 800);
+    }
+        });
+    </script>
+<meta name="generator" content="Hexo 6.2.0">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+<link rel="alternate" href="/atom.xml" title="MiaoTony's小窝" type="application/atom+xml">
+</head>
+
+
+
+
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">MiaoTony&#39;s小窝</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>首页</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>标签</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>分类</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/archives" class="waves-effect waves-light">
+      
+      <i class="fas fa-archive" style="zoom: 0.6;"></i>
+      
+      <span>归档</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>关于</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/contact" class="waves-effect waves-light">
+      
+      <i class="fas fa-comments" style="zoom: 0.6;"></i>
+      
+      <span>留言</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/friends" class="waves-effect waves-light">
+      
+      <i class="fas fa-address-book" style="zoom: 0.6;"></i>
+      
+      <span>友链</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="搜索" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">MiaoTony&#39;s小窝</div>
+        <div class="logo-desc">
+            
+            喵~欢迎各位大佬的来访呀！
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			首页
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			标签
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			分类
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/archives" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-archive"></i>
+			
+			归档
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			关于
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/contact" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-comments"></i>
+			
+			留言
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/friends" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-address-book"></i>
+			
+			友链
+		</a>
+          
+        </li>
+        
+        
+        <li><div class="divider"></div></li>
+        <li>
+            <a href="https://github.com/miaotony" class="waves-effect waves-light" target="_blank">
+                <i class="fab fa-github-square fa-fw"></i>Follow Me
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+
+        </div>
+
+        
+            <style>
+    .nav-transparent .github-corner {
+        display: none !important;
+    }
+
+    .github-corner {
+        position: absolute;
+        z-index: 10;
+        top: 0;
+        right: 0;
+        border: 0;
+        transform: scale(1.1);
+    }
+
+    .github-corner svg {
+        color: #0f9d58;
+        fill: #fff;
+        height: 64px;
+        width: 64px;
+    }
+
+    .github-corner:hover .octo-arm {
+        animation: a 0.56s ease-in-out;
+    }
+
+    .github-corner .octo-arm {
+        animation: none;
+    }
+
+    @keyframes a {
+        0%,
+        to {
+            transform: rotate(0);
+        }
+        20%,
+        60% {
+            transform: rotate(-25deg);
+        }
+        40%,
+        80% {
+            transform: rotate(10deg);
+        }
+    }
+</style>
+
+<a href="https://github.com/miaotony" class="github-corner tooltipped hide-on-med-and-down" target="_blank"
+   data-tooltip="Follow Me" data-position="left" data-delay="50">
+    <svg viewBox="0 0 250 250" aria-hidden="true">
+        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+        <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2"
+              fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
+        <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z"
+              fill="currentColor" class="octo-body"></path>
+    </svg>
+</a>
+        
+    </nav>
+
+</header>
+
+    
+
+
+
+
+
+<style>
+    .post-cover:before,
+    .post-cover:after {
+        -webkit-animation: none !important;
+        animation: none !important;
+    }
+
+    .post-cover:before {
+        background: none !important;
+    }
+
+    .post-cover:after {
+        background: rgba(0, 0, 0, 0.18) !important;
+    }
+</style>
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/2026/10/03/Tech_Jev/banner-jev.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <h1 class="description center-align post-title">Tech | Jev：不写一句话的 AI，怎么替程序做决定？</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        min-width: 240px;
+        padding-left: 15px;
+        padding-bottom: 30px;
+    }
+
+    .toc-widget .toc-title {
+        padding: 30px 0 15px 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content {
+	    max-height: 450px;
+        overflow: auto;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #42b983;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+
+        position: absolute;
+        right: 23.5vw;
+        display: block;
+    }
+
+    #toc-content .is-active-link {
+        color: #42b983;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 15px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/AI/">
+                                <span class="chip bg-color">AI</span>
+                            </a>
+                        
+                            <a href="/tags/Jev/">
+                                <span class="chip bg-color">Jev</span>
+                            </a>
+                        
+                            <a href="/tags/TypeSafe/">
+                                <span class="chip bg-color">TypeSafe</span>
+                            </a>
+                        
+                            <a href="/tags/Agent/">
+                                <span class="chip bg-color">Agent</span>
+                            </a>
+                        
+                            <a href="/tags/RAG/">
+                                <span class="chip bg-color">RAG</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/Tech/" class="post-category">
+                                Tech
+                            </a>
+                        
+                            <a href="/categories/Tech/AI/" class="post-category">
+                                AI
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2026-10-03
+                </div>
+                
+
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
+                    7.7k
+                </div>
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
+                    27 分
+                </div>
+                
+
+                
+            </div>
+        </div>
+        <hr class="clearfix">
+
+        
+        <!-- 是否加载使用自带的 prismjs. -->
+        <link rel="stylesheet" href="/libs/prism/prism.css">
+        
+
+        
+
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <blockquote>
+<p><strong>免责声明</strong></p>
+<p>本文由 LLM 参与创作。视频使用 Opus5.5 创作完成。</p>
+<p>文中引用了官方文档、公开项目及研究材料，性能数据会注明来源。本文未独立实测 Jev API，示例数值仅用于说明。</p>
+</blockquote>
+<h2 id="0x00-引言"><a href="#0x00-引言" class="headerlink" title="0x00 引言"></a>0x00 引言</h2><p>最近整理了一些 Jev 的资料，也翻了翻 Awesome Jev 里收录的项目，发现这个模型的用法还挺有意思的。这里把相关原理、接口和应用例子整理一下，顺便放上做好的介绍视频。</p>
+<p>先看一个很常见的场景：</p>
+<blockquote>
+<p>我已经问了三次，能找个真人吗？</p>
+</blockquote>
+<p>客服系统收到这句话，需要判断分到哪个队列、有多紧急，以及要不要人工接手。</p>
+<p>用大模型处理的话，可以让它分析这段内容，再输出 JSON。不过后面的程序真正用到的，可能就只有一个队列名、一个优先级，以及是否需要人工处理。</p>
+<p>为了得到这几个值，先生成一段文字，再解析回来，这一步能不能省掉呢？</p>
+<p><strong>Jev 就是专门做这类判断的模型。</strong> 给它材料、问题和允许的答案，它返回选项、分数或“是”的概率，程序再根据结果继续处理。至于写回信、生成代码这些工作，还是得交给生成模型。</p>
+<p>这类需求平时其实不少。比如给邮件分类、判断检索结果是否有用，或者给 Agent 选一个工具。纯规则有时候写不全，用通用大模型又要考虑延迟和费用，Jev 提供了另一种选择。</p>
+<p>下面这个 <strong>5 分钟的 4K 介绍视频使用 Opus5.5 创作完成</strong>，可以先看一下。想直接看文字的话，往下翻就好。</p>
+
+<figure class="jev-video" style="margin:1.8rem 0">
+  <video id="jev-intro" controls="" playsinline="" preload="none" poster="/2026/10/03/Tech_Jev/video-poster.jpg" width="3840" height="2160" style="display:block;width:100%;height:auto;aspect-ratio:16/9;background:#0b1520;border-radius:12px" aria-label="Jev 介绍，5 分钟，4K，点击播放">
+    <source src="/2026/10/03/Tech_Jev/jev-intro-4k.mp4" type="video/mp4">
+    您的浏览器不支持 HTML5 视频，请使用下方的 MP4 链接观看。
+  </video>
+  <figcaption style="font-size:.9rem;color:#66757b;margin-top:.65rem;line-height:1.8">Jev 介绍 · 5 分钟 · 3840 × 2160。视频使用 Opus5.5 创作完成。手动点击播放，支持暂停、拖动进度和全屏；不会自动播放。<a href="/2026/10/03/Tech_Jev/jev-intro-4k.mp4">直接打开 MP4</a>。</figcaption>
+</figure>
+
+
+<h2 id="0x01-Jev-简介"><a href="#0x01-Jev-简介" class="headerlink" title="0x01 Jev 简介"></a>0x01 Jev 简介</h2><p><a target="_blank" rel="noopener" href="https://typesafe.ai/blog/introducing-system-one-models-and-jev">TypeSafe AI 于 2026 年 9 月 15 日发布 Jev</a>，把它称作 <strong>System One Model</strong>。名字借用了《思考，快与慢》中的快速、直觉式判断；Jev 则来自经济学家 William Stanley Jevons，呼应效率提高后使用量可能反而增长的“杰文斯悖论”。这里借用的是快速判断的概念，具体能力还是要看任务表现。</p>
+<p>可以把 Jev 理解成一个<strong>用自然语言定义任务的决策服务</strong>。它面向有限答案空间，适合邮件分类、检索重排、内容判断、模型路由和动作选择。要写邮件、解释原因、生成 SQL 或长篇规划，仍然需要生成模型或其他程序。</p>
+<p>先把几个基本情况说明一下：</p>
+<ul>
+<li><strong>只接受文本输入。</strong> <code>state</code> 可以用字符串、JSON 对象等表达，但不原生接收图片、音频或视频。游戏画面和网页截图通常是展示给人看的，送给 Jev 的是外围程序整理出的文字状态。</li>
+<li><strong>模型是闭源托管服务。</strong> 官方公开了 SDK，未提供可自行部署的 Jev 权重或完整训练实现。SDK 开源，不等于模型开源。</li>
+<li><strong>问题与候选由应用提供。</strong> 候选里没有正确答案，模型也不能凭空增加一个。需要的时候，应显式准备“其他”“证据不足”或“转人工”。</li>
+<li><strong>流程状态由应用维护。</strong> 历史、记忆、权限、浏览器操作和结果验证，都不能因为接了 Jev 就省掉。</li>
+</ul>
+<p>文中接口以 <code>jev-1.13.0</code> 为例。版本、价格和容量可能变化，接入时应再核对<a target="_blank" rel="noopener" href="https://docs.typesafe.ai/models">模型文档</a>，不要把 <code>jev-latest</code> 当成永远不变的型号。</p>
+<h2 id="0x02-三种基本接口"><a href="#0x02-三种基本接口" class="headerlink" title="0x02 三种基本接口"></a>0x02 三种基本接口</h2><p>沿用前面的工单，一次请求就可以同时询问队列、紧急程度和是否需要人工。</p>
+<p><img src="/2026/10/03/Tech_Jev/primitives.png" alt="同一工单对应 Choice、Score 与 Noul，图内数值为教学示意"></p>
+<p><em>图：三种问题共享同一份输入材料。图中选择和概率用于讲解，未经 Jev API 实测。</em></p>
+<h3 id="Choice：选哪个"><a href="#Choice：选哪个" class="headerlink" title="Choice：选哪个"></a>Choice：选哪个</h3><p><a target="_blank" rel="noopener" href="https://docs.typesafe.ai/primitives/choice">Choice</a>是在你给定的候选中做选择。例如，把工单分到“人工客服”“售后处理”或“其他”。返回内容包括选中的 <code>choice</code>、候选项的 <code>probabilities</code>，以及 <code>confidence</code>。</p>
+<p>它适合分类和路由，也可以用来选择工具、页面控件或游戏动作。当前文档的候选数量上限是 255，但“能塞进去”不等于“应该塞满”：候选名称含糊、相互重叠时，后面的概率也很难解释。</p>
+<p>如果只是想判断“有没有明确要求人工”，没必要设计十个客服去向；如果动作必须互斥，则用一个 Choice 通常比为每个动作分别问“要不要执行”更清楚。</p>
+<h3 id="Score：打几分"><a href="#Score：打几分" class="headerlink" title="Score：打几分"></a>Score：打几分</h3><p><a target="_blank" rel="noopener" href="https://docs.typesafe.ai/primitives/score">Score</a>先定义一组有顺序的等级，再为这些等级分配概率。例如：</p>
+<ul>
+<li>0 级：普通咨询，可以排队处理。</li>
+<li>1 级：重复追问或问题拖延，需要优先跟进。</li>
+<li>2 级：明确升级诉求，需要尽快人工处理。</li>
+</ul>
+<p>返回的 <code>score</code> 是等级索引的概率加权值，可以落在两档之间。假设三档概率分别为 0.07、0.43、0.50，结果就是：</p>
+<pre class="line-numbers language-text" data-language="text"><code class="language-text">0 × 0.07 + 1 × 0.43 + 2 × 0.50 = 1.43<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>也就是说，<code>1.43</code> 是这些等级的加权结果。这个值可以用来排序或设定处理门槛，但不能直接换算成正确率。</p>
+<p>Score 适合评估紧急度、相关性或风险程度，不适合拿来精确预测金额、计算日期差或数清字符。当前 API 最多接受 10 个等级；等级定义写得越具体，分数才越有业务含义。</p>
+<h3 id="Noul：判断是否成立"><a href="#Noul：判断是否成立" class="headerlink" title="Noul：判断是否成立"></a>Noul：判断是否成立</h3><p><a target="_blank" rel="noopener" href="https://docs.typesafe.ai/primitives/noul">Noul</a>返回某个命题为真的概率，字段名是 <code>noul</code>，取值范围为 0 到 1。例如：“客户是否明确要求真人客服？”</p>
+<p>它的读法很容易弄反：</p>
+<ul>
+<li><code>0.99</code>：模型倾向于“是”。</li>
+<li><code>0.02</code>：模型倾向于“否”，并不表示“只有一点把握”。</li>
+<li>接近 <code>0.5</code>：两种结果难以区分。</li>
+</ul>
+<p><strong>注意，Noul 返回的是概率值，也没有额外的 <code>confidence</code> 字段。</strong> 是否变成 <code>true</code>／<code>false</code>，或者把中间一段划作“需要复核”，由应用自己决定。名字与 Bernoulli（伯努利）有关，这一点可参见 <a target="_blank" rel="noopener" href="https://simonwillison.net/2026/Sep/21/jev/">Simon Willison 的介绍</a>。</p>
+<p>三种问题可以混在一次调用里并行评估。但某个问题如果依赖前一个答案，比如“先选出工具，再依据它的能力生成参数”，仍然要拆阶段。并行提问不会自动建立问题之间的推理顺序。</p>
+<h2 id="0x03-为什么它可以更快"><a href="#0x03-为什么它可以更快" class="headerlink" title="0x03 为什么它可以更快"></a>0x03 为什么它可以更快</h2><p>通用生成模型通常沿着 token 序列一步步产生答案。即使最后只需要一个分类，应用也可能承担提示组织、输出生成、解析和校验的开销。</p>
+<p>按照 <a target="_blank" rel="noopener" href="https://typesafe.ai/blog/introducing-system-one-models-and-jev">TypeSafe 的官方解释</a>，Jev 放弃自由文本输出，使用面向类型化决策的架构与并行采样方式，直接产生这些问题所需的概率。它的训练方法称为 <strong>RLCD，Reinforcement Learning for Calibrated Decisions</strong>，目标包括让输出概率适合后续决策。</p>
+<p>这里和 <code>temperature</code>、<code>top-p</code> 的作用有区别。它们控制的是生成模型的采样；Jev 直接针对事先定义好的答案空间输出概率。接入时，需要调整的主要是问题、候选，以及接受结果的阈值。</p>
+<p>当然，分类器、reranker 和约束解码这些方法早就有了。普通 LLM 也可以借助 JSON Schema、受限解码或短标签输出减少格式错误。Jev 的产品价值要看它能否以合适的效果、延迟和成本，省掉你原本需要自行拼装的那部分实现，不能仅凭“System One”这个名字判断技术先进性。</p>
+<p>公开资料也不足以重建 Jev 的全部内部实现。不要把“非逐 token 生成”继续推导成某个确定的基座、参数量或网络结构；<a target="_blank" rel="noopener" href="https://www.latent.space/p/jev">创建者访谈</a>解释了设计目标，但不等于公开了可复现训练配方。</p>
+<h3 id="一次判断便宜，不代表整条任务一定便宜"><a href="#一次判断便宜，不代表整条任务一定便宜" class="headerlink" title="一次判断便宜，不代表整条任务一定便宜"></a>一次判断便宜，不代表整条任务一定便宜</h3><p>官方公开报价为 <strong>每百万输入 token 0.042 美元，输出免费</strong>。按这个单价，假设每次计费输入恰好是 1,000 token，那么 1,000 次请求的输入费用是 0.042 美元。</p>
+<p>这里只按公开单价换算，未实际调用 API 测试费用。真实输入还包括问题和候选；重试、其他模型、解析、检索、浏览器运行及人工复核的成本也需要另算。</p>
+<p>官方发布文报告过 <strong>70—500 毫秒端到端延迟</strong>，测试主要从美国西海岸发起。网络距离、长输入、候选规模、网关和重试都可能改变你的实际等待时间。所谓“快约两百倍”“便宜约四百倍”，来自特定工作流和对照条件，不能改写成所有任务上的保证。</p>
+<p>读<a target="_blank" rel="noopener" href="https://evals.typesafe.ai/">官方评测</a>时还需要注意：其中部分参考标签来自强模型的共识，测的是与这些标签的一致程度；让对照 LLM 输出完整概率分布，也不等价于让它只回答一个标签。图表可以帮助发现值得试的方向，采购和上线仍要用自己的数据做对照。</p>
+<h3 id="第三方研究里，简单判断和难题的差距"><a href="#第三方研究里，简单判断和难题的差距" class="headerlink" title="第三方研究里，简单判断和难题的差距"></a>第三方研究里，简单判断和难题的差距</h3><p>除了厂商图表，CMU 团队的预印本 <a target="_blank" rel="noopener" href="https://arxiv.org/html/2609.26550v3">JEV-as-a-Judge：Accept When Confident, Escalate When Unsure（v3）</a>也研究了把 Jev 当作裁判的做法。这是第三方的评估研究，主要看裁判效果，不涉及 Jev 本身的训练实现。</p>
+<p>论文主表中，1,500 对 RewardBench 样本上，Jev 1.13 与 GPT-6 Astra 都是 92.5%；到了 350 对 JudgeBench 样本，两者分别为 78.6% 和 93.1%。同一篇论文里的差距，就足以提醒读者：能从文本直接判断的任务，与需要推导的数学、代码和逻辑问题，不能混成一个“模型智力”数字。</p>
+<p>论文的计时面板每个托管裁判测了 120 次判断，Jev 的中位延迟为 0.15 秒，按报告用量估算的费用为每千次 0.044 美元。这些是作者在指定任务、提示和网络条件下测得的结果，费用按报告用量估算。</p>
+<p>作者进一步尝试了“有把握就接受，拿不准就交给更强模型”的级联。这个思路可以借鉴，但有个接口细节不能漏：论文用于路由的 <code>q</code> 是最大标签概率，<strong>与 Jev API 原生的 <code>confidence</code> 字段定义不同</strong>。照搬阈值之前，先确认比较的是同一个量。</p>
+<h2 id="0x04-Awesome-Jev-应用举例"><a href="#0x04-Awesome-Jev-应用举例" class="headerlink" title="0x04 Awesome Jev 应用举例"></a>0x04 Awesome Jev 应用举例</h2><p>相关项目可以从 <a target="_blank" rel="noopener" href="https://github.com/yibie/awesome-jev">yibie/awesome-jev</a> 和 <a target="_blank" rel="noopener" href="https://github.com/logicrw/awesome-jev-projects">logicrw/awesome-jev-projects</a> 这两份清单里找。下面挑几个例子，结合 README 和部分源码看看它们怎么用 Jev。</p>
+<p>其中有些项目还处于实验或 MVP 阶段，可以参考实现思路，实际效果和适用范围在下面分别说明。</p>
+<h3 id="浏览器：让-Jev-选控件，让生成模型填文字"><a href="#浏览器：让-Jev-选控件，让生成模型填文字" class="headerlink" title="浏览器：让 Jev 选控件，让生成模型填文字"></a>浏览器：让 Jev 选控件，让生成模型填文字</h3><p><a target="_blank" rel="noopener" href="https://github.com/browser-use/jev-ultrafast">Browser Use 的 Jev Ultrafast</a>是一个很直观的例子。程序先把页面整理成编号控件列表，例如“1 号是单程按钮，2 号是出发地输入框，3 号是目的地输入框”。Jev 选择操作及目标，浏览器代码负责执行。</p>
+<p><img src="/2026/10/03/Tech_Jev/browser-use.jpg" alt="Jev Ultrafast 在 Google Flights 中填写航班查询的演示截图"></p>
+<p><em>图：项目航班查询演示中的一个中间状态，来源：<a target="_blank" rel="noopener" href="https://github.com/browser-use/jev-ultrafast">Jev Ultrafast</a>。截图里的计时与延迟来自项目演示，本文未独立复现。</em></p>
+<p>当操作是 <code>TYPE_TEXT</code>，它再调用小型生成模型填写城市名等开放文本。一次 Jev 请求可以预先询问不同操作对应的目标，代码只取最终操作用得上的那个答案。</p>
+<p>项目展示过约 7 秒完成航班查询的演示，计时从初次页面观察之后开始，包含模型、生成文本、浏览器操作与等待；它不包含完整冷启动。这不意味着“所有网页任务只要 7 秒”。这个演示只查询航班，不涉及购票。模型返回 <code>DONE</code> 后，也还需要检查航线、日期和结果页。</p>
+<p>默认循环消费的是 DOM 整理出的结构化状态，并非 Jev 直接看截图。iframe、shadow root、canvas、上传、多标签弹窗等也不能因为演示顺畅就假定已经覆盖。</p>
+<h3 id="Coding-Agent：风险判断可以拆开问"><a href="#Coding-Agent：风险判断可以拆开问" class="headerlink" title="Coding Agent：风险判断可以拆开问"></a>Coding Agent：风险判断可以拆开问</h3><p><a target="_blank" rel="noopener" href="https://github.com/leepokai/jev-guard">jev-guard</a>在工具执行前后增加模型辅助检查。执行前分别问：这个操作有什么风险？用户真的授权了吗？有没有被网页或文件里夹带的指令影响？执行后，再检查返回内容里的提示注入。</p>
+<p>这比单独问一句“安全吗”更容易写策略。例如，“操作本身可逆”和“操作由用户要求”是两回事；“用户要求过类似工作”也不代表可以忽略当前操作的影响范围。</p>
+<p>但模型只是门禁的一个输入。此前源码核对发现，该项目的默认 API 故障策略会放行，部分宿主也不能完整实现人工确认。真要用在高风险路径上，必须检查超时、截断、跳过检查和失败回退的行为。<strong>它不能替代沙箱、最小权限或操作授权。</strong></p>
+<p>另一个小工具 <a target="_blank" rel="noopener" href="https://github.com/hemanth/pkg-gate">pkg-gate</a>会检查 npm 的 <code>preinstall</code>、<code>install</code>、<code>postinstall</code> 脚本，把判断汇总为 allow／warn／block。其实现有本地 simulator 和 mock 路径：终端上出现概率，并不自动证明调用了真实 Jev。它检查收到的脚本文本，也不代表已经审计整个依赖树和脚本下载的内容。</p>
+<h3 id="RAG：相关，不等于能当证据"><a href="#RAG：相关，不等于能当证据" class="headerlink" title="RAG：相关，不等于能当证据"></a>RAG：相关，不等于能当证据</h3><p><a target="_blank" rel="noopener" href="https://github.com/hotchpotch/jev-reranker">jev-reranker</a>接在检索后、生成答案前，判断候选文档的相关性或证据价值，再排序、过滤。</p>
+<p>例如，要回答“某版本是否修复了这个漏洞”，一篇反复出现产品名的介绍文章可能高度相关，却不能证明漏洞已经修复。针对版本的发布说明或修复提交，才可能提供有效证据。</p>
+<p>这里分工比较清楚：搜索负责找候选，Jev 判断哪些材料值得送进上下文，生成模型负责组织答案。如果没有文档通过阈值，可以重新搜索、补充信息，或者暂时不回答。硬塞几篇进去，也可能把后面的回答带偏。</p>
+<p>这里的阈值要用自己的问题和文档验证。<code>top-k</code> 如果发生在评分之后，并不会减少已经做完的评分工作。</p>
+<h3 id="文档处理：OCR-取文字，Jev-判断边界"><a href="#文档处理：OCR-取文字，Jev-判断边界" class="headerlink" title="文档处理：OCR 取文字，Jev 判断边界"></a>文档处理：OCR 取文字，Jev 判断边界</h3><p><a target="_blank" rel="noopener" href="https://github.com/jerryjliu/docjev">DocJev</a>处理的是另一类常见麻烦：一份扫描 PDF 里混着合同、发票和说明函，要把它们分类，并按连续页段拆开。</p>
+<p>按项目说明，它先用 LiteParse 或可选 LlamaParse 获取页面内容，再让 Jev 判断类别和文档边界，最后由代码导出 PDF。这里没有“模型直接看着 PDF 就全懂了”：解析、OCR、语义判断、文件操作是不同步骤。</p>
+<p>项目提供了 API、CLI 和评估材料；本文对这一部分主要核对 README，没有独立复现。尤其需要注意，<strong>本地解析不代表全程离线</strong>，提取后的文字仍可能被发送给托管决策服务。含客户资料的文件需要先确认数据处理要求。</p>
+<h3 id="技能路由：接上了，不一定省下了"><a href="#技能路由：接上了，不一定省下了" class="headerlink" title="技能路由：接上了，不一定省下了"></a>技能路由：接上了，不一定省下了</h3><p><a target="_blank" rel="noopener" href="https://github.com/shimo4228/jev-skill-router">jev-skill-router</a>会为 Claude Code 推荐技能：先看用户输入和技能清单缩小候选，再读候选的完整 <code>SKILL.md</code>，最多推荐一个。</p>
+<p>作者保留了一个很有用的提醒：普通 <code>UserPromptSubmit</code> hook 无法删掉主模型原本看到的技能列表。因此，即便 Jev 已经选过一次，主模型仍然会看到那份列表，相关 token 并没有自动消失。默认 <code>shadow</code> 只记日志，启用 <code>inject</code> 才追加建议。</p>
+<p>这适合作为路由实验参考，却不能直接写成“装上就给 Coding Agent 降本”。只有当前一句输入时，连续追问也容易被当作新任务。接入点和输入上下文，往往比模型报价更决定收益。</p>
+<h2 id="0x05-游戏里的-Jev"><a href="#0x05-游戏里的-Jev" class="headerlink" title="0x05 游戏里的 Jev"></a>0x05 游戏里的 Jev</h2><p>除了上面这些工具，游戏类项目也挺有意思的。不过看演示之前，得先弄清楚模型到底拿到了什么输入。</p>
+<p>前面提到，Jev 只接受文本。官方 Doom 演示也一样，先把游戏状态整理成文字化的数据结构，再交给 Jev 选择动作。屏幕画面是给观众看的。</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/milanboers/jev-plays-pokemon">jev-plays-pokemon</a>则把这个分工写得很清楚：PyBoy 运行《宝可梦 红》，程序读取 RAM、碰撞地图和对话 tilemap，整理位置、队伍、背包、附近对象及历史，然后交给 Jev 选择目标。寻路、按键和防止反复撞墙的逻辑留在程序里。</p>
+<p>项目当时自述，开场到取得初始宝可梦的流程较可靠，但首场劲敌战和一般战斗仍不稳定，不能把它写成已经自主通关。</p>
+<p>再放几个例子，看看不同游戏是怎么准备状态和动作的：</p>
+<p><img src="/2026/10/03/Tech_Jev/game-examples.png" alt="Doom、Pacman AI Race 与 TypeSafe Mario 的画面和接入方式"></p>
+<p><em>图：Doom 使用官方演示画面，Pacman 使用项目演示截图，Mario 使用项目 README 截图；图中的性能数值沿用原演示，本文未独立复现。</em></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/MaryNfs/pacman-ai-race">Pacman AI Race</a>会先根据棋盘、幽灵位置和运动规则模拟候选路线，有存活路线时过滤预计致命的路线，再交给 Jev 选择。它还可以让本地 Laya 在同一套游戏规则下并排运行，方便比较。</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/fhshaik/typesafe-mario">TypeSafe Mario</a>则把马里奥的位置、速度、跳跃状态、敌人和地形等信息整理成 JSON，让 Jev 选择向右、跳跃、向右跑跳等按键组合。时间和轨迹计算留在代码里，Jev 根据整理好的状态做判断。这个项目仍属于实验性控制器。</p>
+<p><img src="/2026/10/03/Tech_Jev/decision-loop.png" alt="程序负责观察、候选、权限、执行与验证，Jev 负责有限决策"></p>
+<p><em>图：浏览器、游戏和工具路由可以共享这种分工。不确定的判断不该直接变成高风险动作，异常与低把握结果需要明确的复核路径。</em></p>
+<p><a target="_blank" rel="noopener" href="https://gist.github.com/cablehead/bdf9ad946ceb26d9008976e49c9bfbbb">cablehead 的 2048 实验</a>提供了一个很好的反例：只给棋盘时，Jev 的表现接近随机；外围代码先算好动作后果，再让它从中选择，效果才接近固定启发式规则。</p>
+<p>所以，“模型选了左边”只是其中一步，状态提取、候选准备和动作执行同样会影响结果。现成规则或搜索算法能处理好的部分，可以先保留下来，再比较接入模型后有没有改善。</p>
+<h2 id="0x06-类型安全、概率与使用限制"><a href="#0x06-类型安全、概率与使用限制" class="headerlink" title="0x06 类型安全、概率与使用限制"></a>0x06 类型安全、概率与使用限制</h2><p>官方宣传里提到了“不会产生幻觉”，这个说法容易让人误会。结合文档来看，它保证的是：<strong>输出满足给定的类型和答案空间。</strong></p>
+<p>你只允许“售后”“财务”“人工复核”，模型不会随意返回一个新部门名。但它仍然可能把退款问题分给错误的队列。</p>
+<p><img src="/2026/10/03/Tech_Jev/reliability.png" alt="类型合法、语义正确和业务允许执行是三个不同层次"></p>
+<p><em>图：返回值能被程序读取，只解决了格式层的问题。正确性和执行权限要另外判断。</em></p>
+<p>官方发布文也说明，评测图里的 0% 是根据 schema 保证填入的类型错误率，没有经过大规模事实问答实验来验证“零错误”。用的时候还是需要区分这两件事。</p>
+<h3 id="概率和-confidence"><a href="#概率和-confidence" class="headerlink" title="概率和 confidence"></a>概率和 confidence</h3><p>校准讨论的是一批预测。例如，在一组可比样本里，模型给出约 0.8 概率的事件，实际发生比例是否也接近 0.8。它不能保证眼前这一次就正确，也不能保证换成中文、新领域或新提示之后仍然同样可靠。</p>
+<p><a target="_blank" rel="noopener" href="https://docs.typesafe.ai/confidence">Confidence 文档</a>还有一个重要细节：Choice 和 Score 的 <code>confidence</code> 由已有概率分布计算得到，不能直接理解为“本次答案正确率”。分布很集中，模型也可能很自信地选错。</p>
+<p>目前官方已经公开了计算公式。对有 <code>n</code> 个候选的 Choice，<code>confidence = (p_max - 1/n) / (1 - 1/n)</code>。例如三个候选的最高概率为 <code>0.9</code>，返回的 confidence 是 <code>0.85</code>，和最高概率 <code>0.9</code> 有区别。Score 则还考虑等级之间的距离，不能直接套 Choice 的公式。</p>
+<p>不同问题并行求值，也不代表它们统计独立。分别询问命题 A 及其否定命题，结果不保证严格互补；把同一个业务问题从 Noul 改成 Choice 后，原来的阈值也不应不经测试就沿用。</p>
+<h3 id="官方自己列出的薄弱环节"><a href="#官方自己列出的薄弱环节" class="headerlink" title="官方自己列出的薄弱环节"></a>官方自己列出的薄弱环节</h3><p><a target="_blank" rel="noopener" href="https://docs.typesafe.ai/model-jaggedness/jev-1.13">已知缺陷页</a>比宣传口号更值得在上线前读一遍：</p>
+<ul>
+<li>精确计数、算术和日期比较不可靠，这些交给代码。</li>
+<li>多层间接推理、双重否定和矛盾指令可能影响效果。</li>
+<li>无关内容塞进 <code>state</code> 会干扰判断；支持较长输入不等于应该塞满。</li>
+<li>对抗性文本和提示注入仍然可以改变输出。</li>
+</ul>
+<p>尤其是最后一点：可以用 Jev 辅助识别提示注入，不等于它自己对提示注入免疫。候选即使个个符合 schema，其中也可能有不该执行的动作。</p>
+<h2 id="0x07-接入时有什么需要注意的地方"><a href="#0x07-接入时有什么需要注意的地方" class="headerlink" title="0x07 接入时有什么需要注意的地方"></a>0x07 接入时有什么需要注意的地方</h2><p>一个比较稳妥的起点，是频率高、答案范围有限、允许复核的语义判断。先让 Jev 在影子模式里给结果，业务仍走原流程，再比较差异。</p>
+<h3 id="候选先过硬规则"><a href="#候选先过硬规则" class="headerlink" title="候选先过硬规则"></a>候选先过硬规则</h3><p>权限、签名、金额上限和日期条件能确定计算，就在代码里处理。不要把“当前用户是否有删除权限”变成一道模型语义题。对于 Agent，只把当前确实可执行的候选提供给模型，并在实际执行前重新校验，防止状态已经变化。</p>
+<h3 id="一次请求的实际长相"><a href="#一次请求的实际长相" class="headerlink" title="一次请求的实际长相"></a>一次请求的实际长相</h3><p>原生接口是 <code>POST https://api.typesafe.ai/v1/systemone</code>，使用 Bearer API Key 鉴权。按<a target="_blank" rel="noopener" href="https://docs.typesafe.ai/api">官方 API</a>的格式，前面那张工单可以这样组织请求。下面仅演示请求结构，未实际调用：</p>
+<pre class="line-numbers language-json" data-language="json"><code class="language-json"><span class="token punctuation">{</span>
+  <span class="token property">"model"</span><span class="token operator">:</span> <span class="token string">"jev-1.13.0"</span><span class="token punctuation">,</span>
+  <span class="token property">"state"</span><span class="token operator">:</span> <span class="token string">"我已经问了三次，能找个真人吗？"</span><span class="token punctuation">,</span>
+  <span class="token property">"questions"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+    <span class="token property">"queue"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+      <span class="token property">"type"</span><span class="token operator">:</span> <span class="token string">"choice"</span><span class="token punctuation">,</span>
+      <span class="token property">"instructions"</span><span class="token operator">:</span> <span class="token string">"根据工单内容，选择下一步应进入的处理队列。"</span><span class="token punctuation">,</span>
+      <span class="token property">"criteria"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+        <span class="token property">"human"</span><span class="token operator">:</span> <span class="token string">"明确要求真人介入的人工客服队列"</span><span class="token punctuation">,</span>
+        <span class="token property">"support"</span><span class="token operator">:</span> <span class="token string">"常规售后处理队列"</span><span class="token punctuation">,</span>
+        <span class="token property">"other"</span><span class="token operator">:</span> <span class="token string">"信息不足或不属于上述情况"</span>
+      <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token property">"urgency"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+      <span class="token property">"type"</span><span class="token operator">:</span> <span class="token string">"score"</span><span class="token punctuation">,</span>
+      <span class="token property">"instructions"</span><span class="token operator">:</span> <span class="token string">"依据客户表达的诉求评估跟进优先级。"</span><span class="token punctuation">,</span>
+      <span class="token property">"criteria"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+        <span class="token string">"普通咨询，可以排队处理"</span><span class="token punctuation">,</span>
+        <span class="token string">"重复追问或问题拖延，需要优先跟进"</span><span class="token punctuation">,</span>
+        <span class="token string">"明确升级诉求，需要尽快人工处理"</span>
+      <span class="token punctuation">]</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token property">"needs_human"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+      <span class="token property">"type"</span><span class="token operator">:</span> <span class="token string">"noul"</span><span class="token punctuation">,</span>
+      <span class="token property">"instructions"</span><span class="token operator">:</span> <span class="token string">"客户是否明确要求真人客服？"</span><span class="token punctuation">,</span>
+      <span class="token property">"criteria"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+        <span class="token property">"true"</span><span class="token operator">:</span> <span class="token string">"明确提出需要真人或人工接手"</span><span class="token punctuation">,</span>
+        <span class="token property">"false"</span><span class="token operator">:</span> <span class="token string">"没有提出真人或人工接手的要求"</span>
+      <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>响应通过 <code>answers.queue</code>、<code>answers.urgency</code> 和 <code>answers.needs_human</code> 对应这些问题。Choice 的 <code>criteria</code> 是候选名称到描述的映射，Score 的 <code>criteria</code> 是等级数组，Noul 的 <code>criteria</code> 描述“是”和“否”的含义。</p>
+<p>有两个容易写错的细节：<code>questions</code> 使用对象结构，以问题 ID 为键；<code>needs_human</code> 这样的问题 ID 不进入模型推断，判断条件必须写进 <code>instructions</code>，不能只靠变量名暗示。输出免费也不意味着响应里的 <code>usage.output_tokens</code> 必须为零。</p>
+<h3 id="分数后面要有明确的策略"><a href="#分数后面要有明确的策略" class="headerlink" title="分数后面要有明确的策略"></a>分数后面要有明确的策略</h3><p>拿到 Noul 概率之后，可以用代码决定后面怎么处理，比如下面这样。阈值只是教学示例，实际使用需要自行测试；代码只返回队列名称，不执行外部动作。</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> math
+
+
+<span class="token keyword">def</span> <span class="token function">human_request_policy</span><span class="token punctuation">(</span>p<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token triple-quoted-string string">"""教学示例：p 为 Noul 返回的“明确要求人工”的概率。"""</span>
+    <span class="token keyword">if</span> <span class="token builtin">isinstance</span><span class="token punctuation">(</span>p<span class="token punctuation">,</span> <span class="token builtin">bool</span><span class="token punctuation">)</span> <span class="token keyword">or</span> <span class="token keyword">not</span> <span class="token builtin">isinstance</span><span class="token punctuation">(</span>p<span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token builtin">int</span><span class="token punctuation">,</span> <span class="token builtin">float</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">return</span> <span class="token string">"review"</span>
+    <span class="token keyword">if</span> <span class="token keyword">not</span> math<span class="token punctuation">.</span>isfinite<span class="token punctuation">(</span>p<span class="token punctuation">)</span> <span class="token keyword">or</span> <span class="token keyword">not</span> <span class="token number">0</span> <span class="token operator">&lt;=</span> p <span class="token operator">&lt;=</span> <span class="token number">1</span><span class="token punctuation">:</span>
+        <span class="token keyword">return</span> <span class="token string">"review"</span>
+    <span class="token keyword">if</span> p <span class="token operator">&gt;=</span> <span class="token number">0.90</span><span class="token punctuation">:</span>
+        <span class="token keyword">return</span> <span class="token string">"human_queue"</span>
+    <span class="token keyword">if</span> p <span class="token operator">&lt;=</span> <span class="token number">0.10</span><span class="token punctuation">:</span>
+        <span class="token keyword">return</span> <span class="token string">"normal_queue"</span>
+    <span class="token keyword">return</span> <span class="token string">"review"</span>
+
+
+<span class="token keyword">assert</span> human_request_policy<span class="token punctuation">(</span><span class="token number">0.99</span><span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token string">"human_queue"</span>
+<span class="token keyword">assert</span> human_request_policy<span class="token punctuation">(</span><span class="token number">0.02</span><span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token string">"normal_queue"</span>
+<span class="token keyword">assert</span> human_request_policy<span class="token punctuation">(</span><span class="token number">0.50</span><span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token string">"review"</span>
+<span class="token keyword">assert</span> human_request_policy<span class="token punctuation">(</span><span class="token builtin">float</span><span class="token punctuation">(</span><span class="token string">"nan"</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token string">"review"</span>
+<span class="token keyword">assert</span> human_request_policy<span class="token punctuation">(</span><span class="token boolean">None</span><span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token string">"review"</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>“没有明确要求人工”不代表“所有其他风险都正常”。一个客户没有说“找真人”，仍可能描述紧急故障；队列选择还要结合其他问题和业务规则。接口超时、网络故障或响应解析失败，应在调用层进入明确的异常路径，不要伪造一个 <code>0.0</code> 继续跑。</p>
+<p>如果多个问题会共同决定高风险动作，最好再加互相冲突时的处理规则。不要把几项概率直接相乘，声称那就是执行安全率。</p>
+<h3 id="算完整任务的账"><a href="#算完整任务的账" class="headerlink" title="算完整任务的账"></a>算完整任务的账</h3><p>上线前至少对比规则基线、原有模型方案和 Jev 方案，使用同一批真实任务。除了总体正确率，还要看危险误放、误报、人工复核比例、P95 延迟、重试和完整任务费用。</p>
+<p>特别留意那些看起来“省 token”却破坏了主模型缓存、增加了额外轮次的方案。<a target="_blank" rel="noopener" href="https://github.com/suenot/codex-jev-router">Codex Jev Router</a>就是一个提醒：虽然名字还含 Jev，查阅时的推荐路径已经转向本地确定性的证据筛选，旧模型路由仅保留用于复现。</p>
+<p>版本、提示、候选和阈值应该一起记录。升级模型或换一种提问方式后需要重新评估，只更新别名可能会漏掉行为变化。中文任务也要有自己的测试样本，不能直接套用英文演示的结论。</p>
+<h2 id="0x08-最新的动向：Decisions-API-与开源替代"><a href="#0x08-最新的动向：Decisions-API-与开源替代" class="headerlink" title="0x08 最新的动向：Decisions API 与开源替代"></a>0x08 最新的动向：Decisions API 与开源替代</h2><p>前面都在说 Jev 本身，收尾前补一下最近的相关动态（截至 2026 年 10 月初）。</p>
+<p><a target="_blank" rel="noopener" href="https://openai.com/index/devday-2026-recap/">OpenAI 在 DevDay 2026 上发布了 Decisions API</a>。按官方说明，它把 GPT-6 Luna 用在开发者定义的有限答案问题上，用来分类内容、路由请求或选择 Agent 的下一步动作；上下文支持文本和图片，后面这点和只收文本的 Jev 有明显差别。发布时处于 limited preview，请求格式、返回字段和定价当时都还没有公开，等正式文档出来再做详细对比会更准确。</p>
+<p>Keynote 演示里，Decisions API 驱动的 computer-use agent 操作流畅了不少。OpenAI 自己的幻灯片称单次决策约 150 毫秒，对照同一模型的标准调用约 1.6 秒；这个基线是 OpenAI 自家模型，数字也来自发布会演示，细节可以再看<a target="_blank" rel="noopener" href="https://www.firecrawl.dev/blog/openai-decisions-api-vs-jev">第三方的整理</a>。</p>
+<p>Jev 发布两周后就出现了同类的 API，至少说明「把小判断从生成模型里拆出来」这个方向被更多团队认可，后面的比选和价格战应该还会更热闹。</p>
+<p><strong>Jev 模型本身没有开源。</strong> 可公开取得的官方 <a target="_blank" rel="noopener" href="https://github.com/typesafe-ai/typesafe-sdk-python">Python SDK</a>等工具链，与 Jev 的权重和训练实现是两件事。<a target="_blank" rel="noopener" href="https://github.com/typesafe-ai/system-one-adapter-python">System One Adapter</a>使用其他 LLM API 来提供兼容接口，运行时仍然依赖对应的 LLM 服务。</p>
+<p>开源这边也有不少尝试，<a target="_blank" rel="noopener" href="https://www.datacamp.com/blog/top-open-source-jev-alternatives">DataCamp 做过一轮对比</a>：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/NandhaKishorM/laya">Laya</a>：专门为决策训练的非自回归模型，参数量 322M–421M，有英文和多语言 checkpoint，支持 <code>choice</code>、<code>score</code>、<code>noul</code>；社区还有配套的 <a target="_blank" rel="noopener" href="https://github.com/receptron/laya">ONNX 运行包</a>，可以本地甚至 in 浏览器运行。</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/jaredpalmer/kev">Kev</a>：基于 Qwen3.5 的 0.8B / 4B / 9B 系列，加了 LoRA 和指针头，服务端实现了 TypeSafe 的 <code>/v1/systemone</code> 接口，TypeSafe SDK 的代码可以直接指向本地 Kev 服务。</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/bespokelabsai/nimble">Nimble</a>：用 Qwen3.5-9B 加 LoRA 微调，按 boolean / enum schema 返回选项和概率，训练配方和数据管线也都开放了。</li>
+</ul>
+<p>这些项目接口兼容、权重开放，方便本地部署和研究；效果和校准是否接近 Jev，还是要拿自己的任务实测，本文没有做这部分横向对比。</p>
+<p>从前面的例子来看，Jev 比较适合处理<strong>需要理解语言、答案范围又比较明确的任务</strong>。比如邮件分流、搜索结果筛选，或者从一组合法动作里选择 Agent 的下一步。需要生成文本或做复杂推理时，再配合其他模型使用。</p>
+<p>如果想试试，建议先挑一个容易评估、出错可回退的小任务，对比一下规则、原有模型和 Jev 的效果。能省多少时间和费用，还是要放到自己的使用场景里看。</p>
+<p>相关项目和资料链接都放在文中了，感兴趣的话可以接着翻翻。</p>
+<h2 id="0x09-小结"><a href="#0x09-小结" class="headerlink" title="0x09 小结"></a>0x09 小结</h2><p>这篇主要整理了 Jev 的三种接口，以及它在 Agent、RAG、文档处理和游戏里的用法。Choice 负责从候选里选择，Score 按定义好的等级打分，Noul 返回“是”的概率，后面的处理流程由代码来接。</p>
+<p>看完这些例子，比较适合拿来尝试的还是分类、筛选和路由这类小任务。模型能省去多少时间和费用，需要和现有方案放在一起测试；状态怎么准备、候选怎么列、出错以后怎么处理，也都会影响最终效果。另外，OpenAI 的 Decisions API 和一批开源替代的出现，也说明这类决策接口正在被更多团队跟进。</p>
+<p>另外，类型安全只保证输出形式符合要求，选对答案还得靠评测和验证。把这点分清楚，再结合自己的需求选一个小场景试试，就比较容易判断 Jev 到底能帮上什么忙了。</p>
+<h2 id="0xFF-参考资料"><a href="#0xFF-参考资料" class="headerlink" title="0xFF 参考资料"></a>0xFF 参考资料</h2><h3 id="官方文档与说明"><a href="#官方文档与说明" class="headerlink" title="官方文档与说明"></a>官方文档与说明</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://typesafe.ai/blog/introducing-system-one-models-and-jev">TypeSafe AI：Introducing System One Models &amp; Jev</a></li>
+<li><a target="_blank" rel="noopener" href="https://docs.typesafe.ai/api">API Reference</a></li>
+<li><a target="_blank" rel="noopener" href="https://docs.typesafe.ai/primitives/choice">Choice</a>、<a target="_blank" rel="noopener" href="https://docs.typesafe.ai/primitives/score">Score</a>、<a target="_blank" rel="noopener" href="https://docs.typesafe.ai/primitives/noul">Noul</a></li>
+<li><a target="_blank" rel="noopener" href="https://docs.typesafe.ai/models">模型、价格与上下文限制</a></li>
+<li><a target="_blank" rel="noopener" href="https://docs.typesafe.ai/confidence">Confidence</a> 与 <a target="_blank" rel="noopener" href="https://docs.typesafe.ai/concepts/system-one">System One 概念说明</a></li>
+<li><a target="_blank" rel="noopener" href="https://docs.typesafe.ai/model-jaggedness/jev-1.13">Jev 1.13 已知缺陷</a></li>
+<li><a target="_blank" rel="noopener" href="https://evals.typesafe.ai/">TypeSafe 官方工作流评测</a></li>
+</ul>
+<h3 id="动态与开源替代"><a href="#动态与开源替代" class="headerlink" title="动态与开源替代"></a>动态与开源替代</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://openai.com/index/devday-2026-recap/">OpenAI DevDay 2026 Recap</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.firecrawl.dev/blog/openai-decisions-api-vs-jev">OpenAI’s Decisions API vs Jev（第三方整理）</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.datacamp.com/blog/top-open-source-jev-alternatives">DataCamp：Top Open-Source Jev Alternatives</a></li>
+</ul>
+<h3 id="访谈、项目与实验"><a href="#访谈、项目与实验" class="headerlink" title="访谈、项目与实验"></a>访谈、项目与实验</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://www.latent.space/p/jev">Latent Space：与 TypeSafe 创建者 Diogo Almeida 的访谈</a></li>
+<li><a target="_blank" rel="noopener" href="https://simonwillison.net/2026/Sep/21/jev/">Simon Willison：Jev</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/yibie/awesome-jev">Awesome Jev</a> 与 <a target="_blank" rel="noopener" href="https://github.com/logicrw/awesome-jev-projects/blob/main/README.zh-CN.md">Awesome Jev Projects 中文目录</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/browser-use/jev-ultrafast">Jev Ultrafast</a>、<a target="_blank" rel="noopener" href="https://github.com/leepokai/jev-guard">jev-guard</a>、<a target="_blank" rel="noopener" href="https://github.com/hemanth/pkg-gate">pkg-gate</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/hotchpotch/jev-reranker">jev-reranker</a>、<a target="_blank" rel="noopener" href="https://github.com/jerryjliu/docjev">DocJev</a>、<a target="_blank" rel="noopener" href="https://github.com/shimo4228/jev-skill-router">jev-skill-router</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/milanboers/jev-plays-pokemon">jev-plays-pokemon</a> 与 <a target="_blank" rel="noopener" href="https://gist.github.com/cablehead/bdf9ad946ceb26d9008976e49c9bfbbb">2048 实验记录</a></li>
+</ul>
+<p>项目截图的来源见图注。视频与图文分工不同，API 字段、模型版本和限制请以本文链接的文档为准。</p>
+
+                
+            </div>
+            <hr/>
+
+            
+
+    <div class="reprint" id="reprint-statement">
+        
+            <div class="reprint__author">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-user">
+                        文章作者:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="https://miaotony.xyz" rel="external nofollow noreferrer">MiaoTony</a>
+                </span>
+            </div>
+            <div class="reprint__type">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-link">
+                        文章链接:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="https://miaotony.xyz/2026/10/03/Tech_Jev/">https://miaotony.xyz/2026/10/03/Tech_Jev/</a>
+                </span>
+            </div>
+            <div class="reprint__notice">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-copyright">
+                        版权声明:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    本博客所有文章除特别声明外，均采用
+                    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY-NC-SA 4.0</a>
+                    许可协议。转载请注明来源
+                    <a href="https://miaotony.xyz" target="_blank">MiaoTony</a>
+                    !
+                </span>
+            </div>
+        
+    </div>
+
+    <script async defer>
+      document.addEventListener("copy", function (e) {
+        let toastHTML = '<span>复制成功，请遵循本文的转载规则</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">查看</a>';
+        M.toast({html: toastHTML})
+      });
+
+      function navToReprintStatement() {
+        $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
+      }
+    </script>
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            
+                                <a href="/tags/AI/">
+                                    <span class="chip bg-color">AI</span>
+                                </a>
+                            
+                                <a href="/tags/Jev/">
+                                    <span class="chip bg-color">Jev</span>
+                                </a>
+                            
+                                <a href="/tags/TypeSafe/">
+                                    <span class="chip bg-color">TypeSafe</span>
+                                </a>
+                            
+                                <a href="/tags/Agent/">
+                                    <span class="chip bg-color">Agent</span>
+                                </a>
+                            
+                                <a href="/tags/RAG/">
+                                    <span class="chip bg-color">RAG</span>
+                                </a>
+                            
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+<div id="article-share">
+
+    
+    <div class="social-share" data-sites="qq,qzone,wechat,weibo,twitter,facebook,google,douban,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
+    <script src="/libs/share/js/social-share.min.js"></script>
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+                <style>
+    #reward {
+        margin: 40px 0;
+        text-align: center;
+    }
+
+    #reward .reward-link {
+        font-size: 1.4rem;
+        line-height: 38px;
+    }
+
+    #reward .btn-floating:hover {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    #rewardModal {
+        width: 320px;
+        height: 350px;
+    }
+
+    #rewardModal .reward-title {
+        margin: 15px auto;
+        padding-bottom: 5px;
+    }
+
+    #rewardModal .modal-content {
+        padding: 10px;
+    }
+
+    #rewardModal .close {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+        color: rgba(0, 0, 0, 0.5);
+        font-size: 1.3rem;
+        line-height: 20px;
+        cursor: pointer;
+    }
+
+    #rewardModal .close:hover {
+        color: #ef5350;
+        transform: scale(1.3);
+        -moz-transform:scale(1.3);
+        -webkit-transform:scale(1.3);
+        -o-transform:scale(1.3);
+    }
+
+    #rewardModal .reward-tabs {
+        margin: 0 auto;
+        width: 210px;
+    }
+
+    .reward-tabs .tabs {
+        height: 38px;
+        margin: 10px auto;
+        padding-left: 0;
+    }
+
+    .reward-content ul {
+        padding-left: 0 !important;
+    }
+
+    .reward-tabs .tabs .tab {
+        height: 38px;
+        line-height: 38px;
+    }
+
+    .reward-tabs .tab a {
+        color: #fff;
+        background-color: #ccc;
+    }
+
+    .reward-tabs .tab a:hover {
+        background-color: #ccc;
+        color: #fff;
+    }
+
+    .reward-tabs .wechat-tab .active {
+        color: #fff !important;
+        background-color: #22AB38 !important;
+    }
+
+    .reward-tabs .alipay-tab .active {
+        color: #fff !important;
+        background-color: #019FE8 !important;
+    }
+
+    .reward-tabs .reward-img {
+        width: 210px;
+        height: 210px;
+    }
+</style>
+
+<div id="reward">
+    <a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-medium waves-effect waves-light red">赏</a>
+
+    <!-- Modal Structure -->
+    <div id="rewardModal" class="modal">
+        <div class="modal-content">
+            <a class="close modal-close"><i class="fas fa-times"></i></a>
+            <h4 class="reward-title">打赏一下让我来点好吃好玩的呗~</h4>
+            <div class="reward-content">
+                <div class="reward-tabs">
+                    <ul class="tabs row">
+                        <!-- 
+                            <li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li> 
+                        -->
+                        <li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li>
+                    </ul>
+                    <!-- 
+                        <div id="alipay">
+                        <img src="/" class="reward-img" alt="支付宝打赏二维码">
+                        </div> 
+                -->
+                    <div id="wechat">
+                        <img src="/medias/reward/wechat.png" class="reward-img" alt="微信打赏二维码">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.tabs').tabs();
+    });
+</script>
+
+            
+        </div>
+    </div>
+
+    
+        <link rel="stylesheet" href="/libs/gitalk/gitalk.min.css">
+<link rel="stylesheet" href="/css/my-gitalk.css">
+
+<div class="card gitalk-card" data-aos="fade-up">
+    <div class="comment_headling" style="font-size: 20px; font-weight: 700; position: relative; padding-left: 20px; top: 15px; padding-bottom: 5px;">
+        <i class="fas fa-comments fa-fw" aria-hidden="true"></i>
+        <span>评论</span>
+    </div>
+    <div id="gitalk-container" class="card-content"></div>
+</div>
+
+<script src="/libs/gitalk/gitalk.min.js"></script>
+<script>
+    let gitalk = new Gitalk({
+        clientID: '116343b4650fce4789b6',
+        clientSecret: '3e9be2ad6c9b693af1753290c7c059b1e4f34d5d',
+        repo: 'miaotony.github.io',
+        owner: 'miaotony',
+        admin: "miaotony",
+        id: '2026-10-03T03-30-00',
+        distractionFreeMode: false  // Facebook-like distraction free mode
+    });
+
+    gitalk.render('gitalk-container');
+</script>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
+            <div class="card">
+                <a href="/2026/10/03/Tech_Jev/">
+                    <div class="card-image">
+                        
+                        <img src="/2026/10/03/Tech_Jev/card-jev.jpg" class="responsive-img" alt="Tech | Jev：不写一句话的 AI，怎么替程序做决定？">
+                        
+                        <span class="card-title">Tech | Jev：不写一句话的 AI，怎么替程序做决定？</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            从客服工单到浏览器操作，很多 AI 任务最终只需要一个选择。本文结合 5 分钟 4K 视频，拆解 Jev 的 Choice、Score、Noul、概率与校准，以及 Awesome Jev 里的真实应用和工程限制。
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2026-10-03
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/Tech/" class="post-category">
+                                    Tech
+                                </a>
+                            
+                            <a href="/categories/Tech/AI/" class="post-category">
+                                    AI
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/AI/">
+                        <span class="chip bg-color">AI</span>
+                    </a>
+                    
+                    <a href="/tags/Jev/">
+                        <span class="chip bg-color">Jev</span>
+                    </a>
+                    
+                    <a href="/tags/TypeSafe/">
+                        <span class="chip bg-color">TypeSafe</span>
+                    </a>
+                    
+                    <a href="/tags/Agent/">
+                        <span class="chip bg-color">Agent</span>
+                    </a>
+                    
+                    <a href="/tags/RAG/">
+                        <span class="chip bg-color">RAG</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2026/09/12/Vuln_CVE-2026-85706_GitLab/">
+                    <div class="card-image">
+                        
+                        <img src="/2026/09/12/Vuln_CVE-2026-85706_GitLab/header.png" class="responsive-img" alt="Security | CVE-2026-85706 GitLab 未授权任意文件读取漏洞分析">
+                        
+                        <span class="card-title">Security | CVE-2026-85706 GitLab 未授权任意文件读取漏洞分析</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            九月初 GitLab 放了个 CVSS 10.0 的紧急补丁，仓库 commits API 既漏了鉴权、又直接信了客户端可控的文件路径，未登录就能读服务器上的任意文件。补丁发布第二天就有在野探测，随后进了 CISA KEV 目录。这篇博客就从 patch diff 入手，扒一扒这个洞的两个根因和官方的修复思路。
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2026-09-12
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/Security/" class="post-category">
+                                    Security
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/Web/">
+                        <span class="chip bg-color">Web</span>
+                    </a>
+                    
+                    <a href="/tags/Security/">
+                        <span class="chip bg-color">Security</span>
+                    </a>
+                    
+                    <a href="/tags/CVE/">
+                        <span class="chip bg-color">CVE</span>
+                    </a>
+                    
+                    <a href="/tags/%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/">
+                        <span class="chip bg-color">漏洞分析</span>
+                    </a>
+                    
+                    <a href="/tags/GitLab/">
+                        <span class="chip bg-color">GitLab</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+<script>
+    $('#articleContent').on('copy', function (e) {
+        // IE8 or earlier browser is 'undefined'
+        if (typeof window.getSelection === 'undefined') return;
+
+        var selection = window.getSelection();
+        // if the selection is short let's not annoy our users.
+        if (('' + selection).length < Number.parseInt('200')) {
+            return;
+        }
+
+        // create a div outside of the visible area and fill it with the selected text.
+        var bodyElement = document.getElementsByTagName('body')[0];
+        var newdiv = document.createElement('div');
+        newdiv.style.position = 'absolute';
+        newdiv.style.left = '-99999px';
+        bodyElement.appendChild(newdiv);
+        newdiv.appendChild(selection.getRangeAt(0).cloneContents());
+
+        // we need a <pre> tag workaround.
+        // otherwise the text inside "pre" loses all the line breaks!
+        if (selection.getRangeAt(0).commonAncestorContainer.nodeName === 'PRE' || selection.getRangeAt(0).commonAncestorContainer.nodeName === 'CODE') {
+            newdiv.innerHTML = "<pre>" + newdiv.innerHTML + "</pre>";
+        }
+
+        var url = document.location.href;
+        newdiv.innerHTML += '<br />'
+            + '来源: MiaoTony&#39;s小窝<br />'
+            + '文章作者: MiaoTony<br />'
+            + '文章链接: <a href="' + url + '">' + url + '</a><br />'
+            + '本文章著作权归作者 MiaoTony 所有，任何形式的转载都请注明出处。';
+
+        selection.selectAllChildren(newdiv);
+        window.setTimeout(function () {bodyElement.removeChild(newdiv);}, 200);
+    });
+</script>
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+
+
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
+
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget card" style="background-color: white;">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('1'),
+            headingSelector: 'h2, h3, h4, h5'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h2, h3, h4, h5').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+
+
+    <footer class="page-footer bg-color">
+        <div class="container row center-align" style="margin-bottom: 15px !important;">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            
+                <span id="year">2019-2026</span>
+            
+            <a href="/about" target="_blank">MiaoTony</a>
+            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+            |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
+            <br>
+                        &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
+                class="white-color">500.7k</span>&nbsp;字
+                                                                                    <span id="busuanzi_container_site_pv">
+			|&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
+                    class="white-color"></span>&nbsp;次
+            </span>
+                                    <span id="busuanzi_container_site_uv">
+                |&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;<span id="busuanzi_value_site_uv"
+                    class="white-color"></span>&nbsp;人
+            </span>
+                        <br>
+                        <span id="sitetime">载入运行时间...</span>
+            <script>
+                function siteTime() {
+                    var seconds = 1000;
+                    var minutes = seconds * 60;
+                    var hours = minutes * 60;
+                    var days = hours * 24;
+                    var years = days * 365;
+                    var today = new Date();
+                    var startYear = "2019";
+                    var startMonth = "11";
+                    var startDate = "28";
+                    var startHour = "0";
+                    var startMinute = "0";
+                    var startSecond = "0";
+                    var todayYear = today.getFullYear();
+                    var todayMonth = today.getMonth() + 1;
+                    var todayDate = today.getDate();
+                    var todayHour = today.getHours();
+                    var todayMinute = today.getMinutes();
+                    var todaySecond = today.getSeconds();
+                    var t1 = Date.UTC(startYear, startMonth, startDate, startHour, startMinute, startSecond);
+                    var t2 = Date.UTC(todayYear, todayMonth, todayDate, todayHour, todayMinute, todaySecond);
+                    var diff = t2 - t1;
+                    var diffYears = Math.floor(diff / years);
+                    var diffDays = Math.floor((diff / days) - diffYears * 365);
+                    var diffHours = Math.floor((diff - (diffYears * 365 + diffDays) * days) / hours);
+                    var diffMinutes = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours) /
+                        minutes);
+                    var diffSeconds = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours -
+                        diffMinutes * minutes) / seconds);
+                    if (startYear == todayYear) {
+                        document.getElementById("year").innerHTML = todayYear;
+                        document.getElementById("sitetime").innerHTML = "本站已安全运行 " + diffDays + " 天 " + diffHours +
+                            " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒";
+                    } else {
+                        document.getElementById("year").innerHTML = startYear + " - " + todayYear;
+                        document.getElementById("sitetime").innerHTML = "本站已安全运行 " + diffYears + " 年 " + diffDays +
+                            " 天 " + diffHours + " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒";
+                    }
+                }
+                setInterval(siteTime, 1000);
+            </script>
+                        <br>
+                    </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+    <a href="https://t.me/MiaoTonyChannel" class="tooltipped" target="_blank" data-tooltip="关注我的TelegramChannel: @MiaoTonyChannel" data-position="top" data-delay="50">
+        <i class="fab fa-telegram"></i>
+    </a>
+
+
+
+    <a href="https://github.com/miaotony" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+        <i class="fab fa-github"></i>
+    </a>
+
+
+
+    <a href="mailto:miaotony@outlook.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fas fa-envelope-open"></i>
+    </a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
+        <i class="fas fa-rss"></i>
+    </a>
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+$(function () {
+    var searchFunc = function (path, search_id, content_id) {
+        'use strict';
+        $.ajax({
+            url: path,
+            dataType: "xml",
+            success: function (xmlResponse) {
+                // get the contents from search data
+                var datas = $("entry", xmlResponse).map(function () {
+                    return {
+                        title: $("title", this).text(),
+                        content: $("content", this).text(),
+                        url: $("url", this).text()
+                    };
+                }).get();
+                var $input = document.getElementById(search_id);
+                var $resultContent = document.getElementById(content_id);
+                $input.addEventListener('input', function () {
+                    var str = '<ul class=\"search-result-list\">';
+                    var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                    $resultContent.innerHTML = "";
+                    if (this.value.trim().length <= 0) {
+                        return;
+                    }
+                    // perform local searching
+                    var cnt = 1;
+                    datas.forEach(function (data) {
+                        var isMatch = true;
+                        var content_index = [];
+                        var data_title_origin = data.title.trim();
+                        var data_title = data.title.trim().toLowerCase();
+                        var data_content = data.content.trim().replace(/<[^>]+>/g, "").toLowerCase();
+                        var data_url = data.url;
+                        data_url = data_url.indexOf('/') === 0 ? data.url : '/' + data_url;
+                        var index_title = -1;
+                        var index_content = -1;
+                        var first_occur = -1;
+                        // only match artiles with not empty titles and contents
+                        if (data_title !== '' && data_content !== '') {
+                            keywords.forEach(function (keyword, i) {
+                                index_title = data_title.indexOf(keyword);
+                                index_content = data_content.indexOf(keyword);
+                                if (index_title < 0 && index_content < 0) {
+                                    isMatch = false;
+                                } else {
+                                    if (index_content < 0) {
+                                        index_content = 0;
+                                    }
+                                    if (i === 0) {
+                                        first_occur = index_content;
+                                    }
+                                }
+                            });
+                        }
+                        // show search results
+                        if (isMatch) {
+                            str += "<li><a href='" + data_url + "' class='search-result-title'>" + String(cnt) + ". " + data_title_origin + "</a>";
+                            cnt += 1;
+    
+                            var content = data.content.trim().replace(/<[^>]+>/g, "");
+                            if (first_occur >= 0) {
+                                // cut out 300 characters
+                                var start = first_occur - 30;
+                                if (start < 0) {
+                                    start = 0;
+                                }
+                                var match_content = content.substr(start, 300);
+                                // highlight all keywords
+                                keywords.forEach(function (keyword) {
+                                    var regS = new RegExp(keyword, "gi");
+                                    match_content = match_content.replace(regS, "<em class=\"search-keyword\">" + keyword + "</em>");
+                                });
+    
+                                str += "<p class=\"search-result\">" + match_content + "...</p>"
+                            }
+                            str += "</li>";
+                        }
+                    });
+                    str += "</ul>";
+                    str = "<p class=\"search-result-summary\">共找到 " + String(cnt-1) + " 条结果</p>"  + str;
+                    $resultContent.innerHTML = str;
+                });
+            }
+        });
+    };
+
+    searchFunc('/search.xml', 'searchInput', 'searchResult');
+});
+</script>
+
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.min.js"></script>
+
+    
+
+    
+<script>
+    var _hmt = _hmt || [];
+    (function () {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?40e312a1eec109cf96e30988cf3bfe70";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+    
+    
+    
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+</body>
+
+</html>
