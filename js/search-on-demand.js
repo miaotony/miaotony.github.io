@@ -7,16 +7,35 @@
     if (!modal || !input || !result) return;
     var entries = null, pending = null, timer = null;
 
-    function status(text, retry) {
-        result.textContent = text;
+    function status(text, retry, kind) {
+        kind = kind || (retry ? 'error' : 'loading');
+        result.textContent = '';
+        var card = document.createElement('div');
+        card.className = 'search-state search-state--' + kind;
+        var icon = document.createElement('span');
+        icon.className = 'search-state-icon';
+        icon.setAttribute('aria-hidden', 'true');
+        icon.textContent = kind === 'loading' ? '' : (kind === 'error' ? '!' : '✓');
+        var copy = document.createElement('div');
+        copy.className = 'search-state-copy';
+        var title = document.createElement('strong');
+        title.textContent = text;
+        var detail = document.createElement('p');
+        detail.textContent = kind === 'loading' ? '首次搜索需要下载索引，可以先输入关键词。' :
+            (kind === 'error' ? '可能是网络暂时不稳定，关键词已保留。' : '输入关键词，查找文章标题和正文。');
+        copy.appendChild(title);
+        copy.appendChild(detail);
+        card.appendChild(icon);
+        card.appendChild(copy);
         if (retry) {
             var button = document.createElement('button');
             button.type = 'button';
-            button.className = 'btn-flat';
-            button.textContent = '重试';
+            button.className = 'search-state-retry';
+            button.textContent = '重新加载';
             button.addEventListener('click', loadIndex);
-            result.appendChild(button);
+            card.appendChild(button);
         }
+        result.appendChild(card);
     }
     function highlight(text, keywords) {
         var span = document.createElement('span');
@@ -37,7 +56,7 @@
         if (!entries) return;
         var query = input.value.trim().toLowerCase();
         result.textContent = '';
-        if (!query) return;
+        if (!query) { status('搜索已就绪', false, 'ready'); return; }
         var keywords = query.split(/[\s\-]+/).filter(Boolean);
         if (!keywords.length) return;
         var list = document.createElement('ul');

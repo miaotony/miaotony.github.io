@@ -1455,7 +1455,22 @@ echo %LOCALAPPDATA%<span aria-hidden="true" class="line-numbers-rows"><span></sp
         <div id="searchResult" role="status" aria-live="polite"></div>
     </div>
 </div>
-<script defer src="/js/search-on-demand.js"></script>
+<style>
+#searchModal .search-state { display:flex; align-items:center; gap:18px; margin:24px 0 12px; padding:24px; border:1px solid #dcece6; border-radius:14px; background:#f3f9f6; color:#244b40; }
+#searchModal .search-state-icon { flex:none; width:30px; height:30px; display:flex; align-items:center; justify-content:center; font-size:22px; color:#16855c; }
+#searchModal .search-state--loading .search-state-icon { border:3px solid #d5e9df; border-top-color:#16855c; border-radius:50%; animation:search-loading-spin .85s linear infinite; }
+#searchModal .search-state-copy { flex:1; min-width:0; }
+#searchModal .search-state strong { display:block; font-size:17px; line-height:1.5; }
+#searchModal .search-state p { margin:5px 0 0; color:#62776e; font-size:14px; line-height:1.7; }
+#searchModal .search-state--error { background:#fbf7f1; border-color:#eee0ca; }
+#searchModal .search-state--error .search-state-icon { color:#9a651b; }
+#searchModal .search-state-retry { flex:none; padding:9px 15px; border:0; border-radius:8px; background:#16855c; color:#fff; cursor:pointer; font:inherit; }
+#searchModal .search-state-retry:focus-visible { outline:3px solid #8fcab0; outline-offset:3px; }
+@keyframes search-loading-spin { to { transform:rotate(360deg); } }
+@media(max-width:600px) { #searchModal .search-state { gap:12px; padding:18px 15px; flex-wrap:wrap; } #searchModal .search-state-retry { margin-left:42px; } }
+@media(prefers-reduced-motion:reduce) { #searchModal .search-state--loading .search-state-icon { animation:none; } }
+</style>
+<script defer src="/js/search-on-demand.js?v=2"></script>
 
     <!-- 回到顶部按钮 -->
 <div id="backTop" class="top-scroll">
@@ -1488,7 +1503,7 @@ echo %LOCALAPPDATA%<span aria-hidden="true" class="line-numbers-rows"><span></sp
     
     
     
-    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+    <script defer src="/js/busuanzi-isolated.js"></script>
     
 
     
