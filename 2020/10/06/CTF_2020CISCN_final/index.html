@@ -335,14 +335,11 @@
     }
 </style>
 
-<a href="https://github.com/miaotony" class="github-corner tooltipped hide-on-med-and-down" target="_blank"
-   data-tooltip="Follow Me" data-position="left" data-delay="50">
-    <svg viewBox="0 0 250 250" aria-hidden="true">
-        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
-        <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2"
-              fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
-        <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z"
-              fill="currentColor" class="octo-body"></path>
+<a href="https://github.com/miaotony" class="github-corner tooltipped hide-on-med-and-down" target="_blank" data-tooltip="Follow Me" data-position="left" data-delay="50">
+    <svg viewbox="0 0 250 250" aria-hidden="true">
+        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/>
+        <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/>
+        <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/>
     </svg>
 </a>
         
@@ -718,15 +715,15 @@ d <span class="token operator">=</span> DES<span class="token punctuation">.</sp
 <h3 id="BadPic"><a href="#BadPic" class="headerlink" title="BadPic"></a>BadPic</h3><p>图片残缺了，拖进 010editor 里一看，发现文件最后面有一堆字符串，base64解密发现以 <code>Salted</code>开头，盲猜用了 openssl 什么加密吧。</p>
 <p>另外 <code>PNG_CHUNK chunk[8]</code> 的 length 为 0。</p>
 <p>于是先手动算了算再试了试长度，是 21535。<em>（有没有什么脚本能直接算的唉，手算感觉好蠢</em></p>
-<p><img src="/2020/10/06/CTF_2020CISCN_final/image-20201006022740538.png" alt="修改length"></p>
+<p><img src="/2020/10/06/CTF_2020CISCN_final/image-20201006022740538.png" alt="修改length" loading="eager" decoding="async" width="1019" height="719"></p>
 <p>修改后得到完整的图片。</p>
-<p><img src="/2020/10/06/CTF_2020CISCN_final/image-20201006174706848.png" alt="apache"></p>
+<p><img src="/2020/10/06/CTF_2020CISCN_final/image-20201006174706848.png" alt="apache" loading="eager" decoding="async" width="550" height="503"></p>
 <p><code>apache</code>，这个应该就是加密的密钥了。</p>
 <p>把图片末尾的字符串给提取出来，去掉 <code>IDAT</code> 等标识（还是复现的时候发现要这样整），合并两段 chunk。</p>
 <pre class="line-numbers language-none"><code class="language-none">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<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 <p>然后拿这个去 <a target="_blank" rel="noopener" href="https://tool.oschina.net/encrypt">https://tool.oschina.net/encrypt</a> 在线解密，AES，密钥为 <code>apache</code>。</p>
-<p><img src="/2020/10/06/CTF_2020CISCN_final/image-20201006030709979.png" alt="aes"></p>
+<p><img src="/2020/10/06/CTF_2020CISCN_final/image-20201006030709979.png" alt="aes" loading="lazy" decoding="async" width="1341" height="906"></p>
 <blockquote>
 <p>或者 <strong>openssl 解密</strong> </p>
 <p>（这参数谁知道就是 aes256 呢，难不成爆破？）</p>
@@ -736,7 +733,7 @@ d <span class="token operator">=</span> DES<span class="token punctuation">.</sp
 <blockquote>
 <p>另外大佬提醒说，openssl 1.1版本以上默认的hash不是md5，低版本的是md5。</p>
 </blockquote>
-<p><img src="/2020/10/06/CTF_2020CISCN_final/image-20201006032104223.png" alt="openssl"></p>
+<p><img src="/2020/10/06/CTF_2020CISCN_final/image-20201006032104223.png" alt="openssl" loading="lazy" decoding="async" width="1920" height="653"></p>
 </blockquote>
 <p>得到一堆的01字符串，估计就是二维码了啦！</p>
 <p>统计一下长度为4900，正好70*70.</p>
@@ -759,9 +756,9 @@ qrcode<span class="token punctuation">.</span>show<span class="token punctuation
 qrcode<span class="token punctuation">.</span>save<span class="token punctuation">(</span><span class="token string">r"./qr.png"</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p>得到二维码如下。</p>
-<p><img src="/2020/10/06/CTF_2020CISCN_final/qr.png" alt="qr"></p>
+<p><img src="/2020/10/06/CTF_2020CISCN_final/qr.png" alt="qr" loading="lazy" decoding="async" width="70" height="70"></p>
 <p>扫码得到 flag。</p>
-<p><img src="/2020/10/06/CTF_2020CISCN_final/image-20201006031143135.png" alt="qrcode"></p>
+<p><img src="/2020/10/06/CTF_2020CISCN_final/image-20201006031143135.png" alt="qrcode" loading="lazy" decoding="async" width="1451" height="730"></p>
 <p><code>flag{lakks1qw23eeeaw345tywqiqajsajdwajdai}</code></p>
 <p><em>（寻思着现场断网环境做出来也太强了吧，怕不是 openssl 参数掌握的很熟练，要不然就是偷偷上网了？</em> </p>
 <p><em>（Misc 碰上 Crypto 就很头秃</em>  <small>（小声bb</small></p>
@@ -860,7 +857,7 @@ qrcode<span class="token punctuation">.</span>save<span class="token punctuation
 
 <p>所以大概就遍历一下 x 的取值，从而把 flag 爆破出来。</p>
 <p>比如本地试一试，比如 <code>f</code> 对应 ASCII 为 102，此时只有一个结果。</p>
-<p><img src="/2020/10/06/CTF_2020CISCN_final/image-20201006034849125.png" alt="sql"></p>
+<p><img src="/2020/10/06/CTF_2020CISCN_final/image-20201006034849125.png" alt="sql" loading="lazy" decoding="async" width="1029" height="249"></p>
 <blockquote>
 <p>当然也可以设置 <code>id</code> 为一个不存在的值，在正常情况下查询不到结果。</p>
 <pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">SELECT</span> <span class="token operator">*</span> <span class="token keyword">FROM</span> fake_flag <span class="token keyword">WHERE</span> id <span class="token operator">=</span> <span class="token number">5</span>\tor\t{x}<span class="token operator">-</span><span class="token comment">/*' limit 0, '10\tnana*/</span>ord<span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token keyword">select</span>\tMID<span class="token punctuation">(</span>group_concat<span class="token punctuation">(</span>flag<span class="token punctuation">)</span><span class="token punctuation">,</span><span class="token number">2</span><span class="token punctuation">)</span>\tfrom\treal_flag<span class="token punctuation">)</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
@@ -1096,7 +1093,7 @@ app<span class="token punctuation">.</span><span class="token function">get</spa
     <span class="token punctuation">}</span>
 <span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<p><img src="/2020/10/06/CTF_2020CISCN_final/image-20201006153154041.png" alt="battle"></p>
+<p><img src="/2020/10/06/CTF_2020CISCN_final/image-20201006153154041.png" alt="battle" loading="lazy" decoding="async" width="1440" height="957"></p>
 <h3 id="Web3"><a href="#Web3" class="headerlink" title="Web3"></a>Web3</h3><p><strong>反序列化逃逸</strong></p>
 <p>lib.php 部分源码 User 类</p>
 <pre class="line-numbers language-php" data-language="php"><code class="language-php"><span class="token keyword">private</span> <span class="token keyword">function</span> <span class="token function-definition function">waf</span><span class="token punctuation">(</span><span class="token variable">$string</span><span class="token punctuation">)</span>
@@ -1184,14 +1181,14 @@ app<span class="token punctuation">.</span><span class="token function">get</spa
 <blockquote>
 <p>waf() 造成序列化的字符串长度改变，就可以提前截断了</p>
 <p>逃逸出来一个user对象就行了</p>
-<p><img src="/2020/10/06/CTF_2020CISCN_final/image-20201006032749565.png"></p>
+<p><img src="/2020/10/06/CTF_2020CISCN_final/image-20201006032749565.png" loading="lazy" decoding="async" width="1428" height="261"></p>
 </blockquote>
 <p>u1s1，PHP 是世界上最好的语言，这题后面再看看来复现8<em>（咕咕咕</em></p>
 <p><em>（先溜了喵</em></p>
 
                 
             </div>
-            <hr/>
+            <hr>
 
             
 
@@ -1754,15 +1751,12 @@ app<span class="token punctuation">.</span><span class="token function">get</spa
             |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
             |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
             <br>
-                        &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">500.7k</span>&nbsp;字
+                        &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span class="white-color">500.7k</span>&nbsp;字
                                                                                     <span id="busuanzi_container_site_pv">
-			|&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
-                    class="white-color"></span>&nbsp;次
+			|&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv" class="white-color"></span>&nbsp;次
             </span>
                                     <span id="busuanzi_container_site_uv">
-                |&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;<span id="busuanzi_value_site_uv"
-                    class="white-color"></span>&nbsp;人
+                |&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;<span id="busuanzi_value_site_uv" class="white-color"></span>&nbsp;人
             </span>
                         <br>
                         <span id="sitetime">载入运行时间...</span>
@@ -1850,108 +1844,17 @@ app<span class="token punctuation">.</span><span class="token function">get</spa
 <div class="progress-bar"></div>
 
 
-    <!-- 搜索遮罩框 -->
-<div id="searchModal" class="modal">
+    <!-- 搜索遮罩框：索引在首次打开时加载 -->
+<div id="searchModal" class="modal" data-index-url="/search.xml">
     <div class="modal-content">
         <div class="search-header">
             <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;搜索</span>
-            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字"
-                   class="search-input">
+            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字" class="search-input">
         </div>
-        <div id="searchResult"></div>
+        <div id="searchResult" role="status" aria-live="polite"></div>
     </div>
 </div>
-
-<script type="text/javascript">
-$(function () {
-    var searchFunc = function (path, search_id, content_id) {
-        'use strict';
-        $.ajax({
-            url: path,
-            dataType: "xml",
-            success: function (xmlResponse) {
-                // get the contents from search data
-                var datas = $("entry", xmlResponse).map(function () {
-                    return {
-                        title: $("title", this).text(),
-                        content: $("content", this).text(),
-                        url: $("url", this).text()
-                    };
-                }).get();
-                var $input = document.getElementById(search_id);
-                var $resultContent = document.getElementById(content_id);
-                $input.addEventListener('input', function () {
-                    var str = '<ul class=\"search-result-list\">';
-                    var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
-                    $resultContent.innerHTML = "";
-                    if (this.value.trim().length <= 0) {
-                        return;
-                    }
-                    // perform local searching
-                    var cnt = 1;
-                    datas.forEach(function (data) {
-                        var isMatch = true;
-                        var content_index = [];
-                        var data_title_origin = data.title.trim();
-                        var data_title = data.title.trim().toLowerCase();
-                        var data_content = data.content.trim().replace(/<[^>]+>/g, "").toLowerCase();
-                        var data_url = data.url;
-                        data_url = data_url.indexOf('/') === 0 ? data.url : '/' + data_url;
-                        var index_title = -1;
-                        var index_content = -1;
-                        var first_occur = -1;
-                        // only match artiles with not empty titles and contents
-                        if (data_title !== '' && data_content !== '') {
-                            keywords.forEach(function (keyword, i) {
-                                index_title = data_title.indexOf(keyword);
-                                index_content = data_content.indexOf(keyword);
-                                if (index_title < 0 && index_content < 0) {
-                                    isMatch = false;
-                                } else {
-                                    if (index_content < 0) {
-                                        index_content = 0;
-                                    }
-                                    if (i === 0) {
-                                        first_occur = index_content;
-                                    }
-                                }
-                            });
-                        }
-                        // show search results
-                        if (isMatch) {
-                            str += "<li><a href='" + data_url + "' class='search-result-title'>" + String(cnt) + ". " + data_title_origin + "</a>";
-                            cnt += 1;
-    
-                            var content = data.content.trim().replace(/<[^>]+>/g, "");
-                            if (first_occur >= 0) {
-                                // cut out 300 characters
-                                var start = first_occur - 30;
-                                if (start < 0) {
-                                    start = 0;
-                                }
-                                var match_content = content.substr(start, 300);
-                                // highlight all keywords
-                                keywords.forEach(function (keyword) {
-                                    var regS = new RegExp(keyword, "gi");
-                                    match_content = match_content.replace(regS, "<em class=\"search-keyword\">" + keyword + "</em>");
-                                });
-    
-                                str += "<p class=\"search-result\">" + match_content + "...</p>"
-                            }
-                            str += "</li>";
-                        }
-                    });
-                    str += "</ul>";
-                    str = "<p class=\"search-result-summary\">共找到 " + String(cnt-1) + " 条结果</p>"  + str;
-                    $resultContent.innerHTML = str;
-                });
-            }
-        });
-    };
-
-    searchFunc('/search.xml', 'searchInput', 'searchResult');
-});
-</script>
+<script defer src="/js/search-on-demand.js"></script>
 
     <!-- 回到顶部按钮 -->
 <div id="backTop" class="top-scroll">
