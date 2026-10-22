@@ -1,0 +1,1616 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="Security | PHP2Shell：内存耗尽之后，服务器怎么就被拿下了？, MiaoTony,blog">
+    <meta name="description" content="结合官方公告、补丁源码与公开利用实现，拆解 PHP CVE-2026-109618 / 109619 的三条利用路径、可复用攻击原语与完整武器化链路，兼谈修复与检测。">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="MiaoTony&#39;s小窝">
+    <meta property="og:title" content="Security | PHP2Shell：内存耗尽之后，服务器怎么就被拿下了？">
+    <meta property="og:description" content="结合官方公告、补丁源码与公开利用实现，拆解 PHP CVE-2026-109618 / 109619 的三条利用路径、可复用攻击原语与完整武器化链路，兼谈修复与检测。">
+    <meta property="og:url" content="https://miaotony.xyz/2026/10/22/Vuln_PHP2Shell/">
+    <meta property="og:image" content="https://miaotony.xyz/2026/10/22/Vuln_PHP2Shell/banner-mobile.png">
+    <meta property="og:locale" content="zh_CN">
+    
+    <meta property="article:published_time" content="2026-10-21T19:30:00.000Z">
+    
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Security | PHP2Shell：内存耗尽之后，服务器怎么就被拿下了？">
+    <meta name="twitter:description" content="结合官方公告、补丁源码与公开利用实现，拆解 PHP CVE-2026-109618 / 109619 的三条利用路径、可复用攻击原语与完整武器化链路，兼谈修复与检测。">
+    <meta name="twitter:image" content="https://miaotony.xyz/2026/10/22/Vuln_PHP2Shell/banner-mobile.png">
+    
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-159946730-1"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+        dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+    gtag('config', 'UA-159946730-1');
+</script>
+
+
+    <title>Security | PHP2Shell：内存耗尽之后，服务器怎么就被拿下了？ | MiaoTony&#39;s小窝</title>
+    <link rel="icon" type="image/x-icon, image/vnd.microsoft.icon" href="/favicon.ico">
+
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
+	
+    <script src="/libs/jquery/jquery.min.js"></script>
+    <script>
+        //来个特效玩玩喵 20200123
+        var titleTime;
+        var OriginTitile = document.title;
+        document.addEventListener('visibilitychange', function() {
+            if (document.hidden) {
+                document.title = '|ω·) 喵~快回来呀！';
+                clearTimeout(titleTime);
+            } else {
+                document.title = '(/≧▽≦)/ Meow！';
+                titleTime = setTimeout(function() {
+        	    document.title = OriginTitile;
+        }, 800);
+    }
+        });
+    </script>
+<meta name="generator" content="Hexo 6.2.0">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+<link rel="alternate" href="/atom.xml" title="MiaoTony's小窝" type="application/atom+xml">
+</head>
+
+
+
+
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">MiaoTony&#39;s小窝</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>首页</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>标签</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>分类</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/archives" class="waves-effect waves-light">
+      
+      <i class="fas fa-archive" style="zoom: 0.6;"></i>
+      
+      <span>归档</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>关于</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/contact" class="waves-effect waves-light">
+      
+      <i class="fas fa-comments" style="zoom: 0.6;"></i>
+      
+      <span>留言</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/friends" class="waves-effect waves-light">
+      
+      <i class="fas fa-address-book" style="zoom: 0.6;"></i>
+      
+      <span>友链</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="搜索" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">MiaoTony&#39;s小窝</div>
+        <div class="logo-desc">
+            
+            喵~欢迎各位大佬的来访呀！
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			首页
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			标签
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			分类
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/archives" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-archive"></i>
+			
+			归档
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			关于
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/contact" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-comments"></i>
+			
+			留言
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/friends" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-address-book"></i>
+			
+			友链
+		</a>
+          
+        </li>
+        
+        
+        <li><div class="divider"></div></li>
+        <li>
+            <a href="https://github.com/miaotony" class="waves-effect waves-light" target="_blank">
+                <i class="fab fa-github-square fa-fw"></i>Follow Me
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+
+        </div>
+
+        
+            <style>
+    .nav-transparent .github-corner {
+        display: none !important;
+    }
+
+    .github-corner {
+        position: absolute;
+        z-index: 10;
+        top: 0;
+        right: 0;
+        border: 0;
+        transform: scale(1.1);
+    }
+
+    .github-corner svg {
+        color: #0f9d58;
+        fill: #fff;
+        height: 64px;
+        width: 64px;
+    }
+
+    .github-corner:hover .octo-arm {
+        animation: a 0.56s ease-in-out;
+    }
+
+    .github-corner .octo-arm {
+        animation: none;
+    }
+
+    @keyframes a {
+        0%,
+        to {
+            transform: rotate(0);
+        }
+        20%,
+        60% {
+            transform: rotate(-25deg);
+        }
+        40%,
+        80% {
+            transform: rotate(10deg);
+        }
+    }
+</style>
+
+<a href="https://github.com/miaotony" class="github-corner tooltipped hide-on-med-and-down" target="_blank" data-tooltip="Follow Me" data-position="left" data-delay="50">
+    <svg viewbox="0 0 250 250" aria-hidden="true">
+        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/>
+        <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/>
+        <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/>
+    </svg>
+</a>
+        
+    </nav>
+
+</header>
+
+    
+
+
+
+
+
+<style>
+    .post-cover:before,
+    .post-cover:after {
+        -webkit-animation: none !important;
+        animation: none !important;
+    }
+
+    .post-cover:before {
+        background: none !important;
+    }
+
+    .post-cover:after {
+        background: none !important;
+    }
+</style>
+
+
+
+<style>
+/* Opt-in uncropped artwork; keep the legacy photographic cover unchanged. */
+.post-cover.artwork-cover { height:auto !important; display:block; margin-top:-64px; padding:64px 0 40px; background:#0d1d2b; overflow:visible; }
+.post-cover.artwork-cover:before, .post-cover.artwork-cover:after { display:none; }
+.artwork-cover .artwork-stage { position:relative; max-width:1920px; margin:auto; }
+.artwork-cover picture, .artwork-cover img { display:block; width:100%; }
+.artwork-cover img { height:auto; }
+.artwork-cover .post-title { position:absolute; top:49%; left:50%; transform:translate(-50%,-50%); width:64%; font-size:clamp(22px,2.3vw,42px); line-height:1.45; color:#fff; text-align:center; margin:0; }
+
+.artwork-cover .post-title { position:static; transform:none; width:auto; padding:18px 24px 8px; font-size:clamp(22px,2vw,34px); }
+
+@media(max-width:900px) {
+ .post-cover.artwork-cover { padding-bottom:42px; }
+ .artwork-cover .artwork-stage { max-width:640px; }
+ .artwork-cover .post-title { position:static; transform:none; width:auto; margin:0; padding:18px 24px 8px; font-size:clamp(22px,4vw,30px); }
+}
+@media(max-width:600px) {
+ .post-cover.artwork-cover { margin-top:-56px; padding-top:56px; }
+}
+</style>
+<div class="bg-cover post-cover artwork-cover">
+ <div class="artwork-stage">
+  <picture>
+   <source media="(max-width:900px)" srcset="/2026/10/22/Vuln_PHP2Shell/banner-mobile.png">
+   <img src="/2026/10/22/Vuln_PHP2Shell/banner.png" alt fetchpriority="high" decoding="async">
+  </picture>
+  <h1 class="description center-align post-title">Security | PHP2Shell：内存耗尽之后，服务器怎么就被拿下了？</h1>
+ </div>
+</div>
+
+
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        min-width: 240px;
+        padding-left: 15px;
+        padding-bottom: 30px;
+    }
+
+    .toc-widget .toc-title {
+        padding: 30px 0 15px 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content {
+	    max-height: 450px;
+        overflow: auto;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #42b983;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+
+        position: absolute;
+        right: 23.5vw;
+        display: block;
+    }
+
+    #toc-content .is-active-link {
+        color: #42b983;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 15px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/Security/">
+                                <span class="chip bg-color">Security</span>
+                            </a>
+                        
+                            <a href="/tags/PHP/">
+                                <span class="chip bg-color">PHP</span>
+                            </a>
+                        
+                            <a href="/tags/Vulnerability/">
+                                <span class="chip bg-color">Vulnerability</span>
+                            </a>
+                        
+                            <a href="/tags/Exploit/">
+                                <span class="chip bg-color">Exploit</span>
+                            </a>
+                        
+                            <a href="/tags/CodeAudit/">
+                                <span class="chip bg-color">CodeAudit</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/Security/" class="post-category">
+                                Security
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2026-10-22
+                </div>
+                
+
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
+                    7.5k
+                </div>
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
+                    28 分
+                </div>
+                
+
+                
+            </div>
+        </div>
+        <hr class="clearfix">
+
+        
+        <!-- 是否加载使用自带的 prismjs. -->
+        <link rel="stylesheet" href="/libs/prism/prism.css">
+        
+
+        
+
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <blockquote>
+<p><strong>免责声明</strong></p>
+<p>本文由 LLM 参与创作。内容仅供学习研究与授权环境中的安全分析，请勿对未授权系统开展测试。文中利用机制均来自已公开的安全研究与官方通告，代码片段为简化示意。</p>
+</blockquote>
+<h2 id="0x00-引言：一行-echo-的页面，为什么能被打穿？"><a href="#0x00-引言：一行-echo-的页面，为什么能被打穿？" class="headerlink" title="0x00 引言：一行 echo 的页面，为什么能被打穿？"></a>0x00 引言：一行 echo 的页面，为什么能被打穿？</h2><pre class="line-numbers language-php" data-language="php"><code class="language-php"><span class="token php language-php"><span class="token delimiter important">&lt;?php</span>
+<span class="token keyword">echo</span> <span class="token string double-quoted-string">"OK\n"</span><span class="token punctuation">;</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<p>2026 年 10 月 21 日，PHP 紧急发布 8.5.12 / 8.4.27 / 8.3.36 / 8.2.35，修复两个 CVSS 4.0 均为 <strong>9.2</strong> 的未认证远程代码执行漏洞：<strong>CVE-2026-109618</strong>（OOM corruption）和 <strong>CVE-2026-109619</strong>（stale global state）。社区将这组漏洞称为 <strong>PHP2Shell</strong>。</p>
+<p>上面这个页面没有数据库、没有上传、没调 <code>session_start()</code>，但在公开的利用实现里，它就是标准的攻击目标——纯 HTTP 打进去，拿到 <code>uid=33(www-data)</code> 的命令执行。</p>
+<p>秘密全在 <code>echo</code> 的前后：PHP 处理一个请求，要先解析输入、初始化运行环境，结束后还要做请求清理。业务代码只占中间一小段，而这两个 CVE 恰好埋在准备和收尾的工作里。<strong>内存耗尽（OOM）这个最普通的故障，在特定时序下会变成攻击者的遥控中断源</strong>——这就是整条利用链的起点。</p>
+<h3 id="先补一点背景：上传一个文件，PHP-到底做了什么？"><a href="#先补一点背景：上传一个文件，PHP-到底做了什么？" class="headerlink" title="先补一点背景：上传一个文件，PHP 到底做了什么？"></a>先补一点背景：上传一个文件，PHP 到底做了什么？</h3><p>平时上传头像、提交附件，页面上看起来只有“选择文件”和“提交”两个动作。服务器实际要先拆开整个请求，分清哪些是普通文字、哪些是文件，再为业务代码准备数据。PHP2Shell 涉及的几个关键环节，就藏在这段准备工作和之后的清理工作里。</p>
+<p><strong>第一步：浏览器把表单编码成 multipart。</strong> 一个普通的上传表单大致如下。这只是正常上传功能的示例：</p>
+<pre class="line-numbers language-markup" data-language="markup"><code class="language-markup"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>form</span> <span class="token attr-name">action</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>upload.php<span class="token punctuation">"</span></span> <span class="token attr-name">method</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>post<span class="token punctuation">"</span></span> <span class="token attr-name">enctype</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>multipart/form-data<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>text<span class="token punctuation">"</span></span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>description<span class="token punctuation">"</span></span> <span class="token attr-name">value</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>旅行照片<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>file<span class="token punctuation">"</span></span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>photo<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>button</span> <span class="token attr-name">type</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>submit<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span>上传<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>button</span><span class="token punctuation">&gt;</span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>form</span><span class="token punctuation">&gt;</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><code>multipart/form-data</code> 可以理解为“一个包裹里装了多个小包”。浏览器用 boundary 分隔各个 part；每个 part 的头部说明字段名，文件 part 还带文件名等信息，后面接实际内容。上面的请求包含两部分：<code>description</code> 的文字，以及 <code>photo</code> 的文件数据。这里的 part 指请求体中的一个分段，和一次新的 HTTP 请求是两回事。</p>
+<p><strong>第二步：Web 服务器把请求交给 PHP。</strong> 常见部署有两种：Apache 的 <code>mod_php</code> 把 PHP 嵌在 Apache 进程内运行；PHP-FPM 则维护独立的 PHP 工作进程，由 Nginx 或 Apache 通过 FastCGI 把请求交过去。后文出现的 <strong>SAPI</strong>，就是 PHP 与外部运行环境衔接的接口；<strong>worker</strong> 则是实际处理请求的工作进程。一个 worker 通常会陆续处理多个请求。</p>
+<p>Web 服务器还可能先缓冲请求体，再交给 PHP。因此“浏览器正在上传”和“PHP 正在解析上传数据”这两个时间段，具体如何重叠取决于部署配置。</p>
+<p><strong>第三步：PHP 解析请求，建立业务代码能直接读取的数据。</strong> 在开启自动 POST 解析的常见配置下，PHP 会在执行目标脚本之前处理适用的 POST 请求体。multipart 解析器逐段读取输入：普通字段进入 <code>$_POST</code>；文件内容通常写入上传临时文件；文件的名称、大小、临时路径和上传状态则记录到 <code>$_FILES</code>。</p>
+<pre class="line-numbers language-text" data-language="text"><code class="language-text">浏览器提交 multipart 请求
+  └─ Web 服务器交给 PHP
+      └─ PHP 解析请求体
+          ├─ 普通字段 → $_POST['description']
+          ├─ 文件内容 → 服务器上的上传临时文件
+          └─ 文件信息 → $_FILES['photo']
+      └─ 执行 upload.php
+          └─ 业务校验后，再决定是否保存文件
+      └─ 请求收尾：清理本次请求的数据和剩余临时文件<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><code>$_POST</code>、<code>$_FILES</code> 属于 PHP 的“超全局变量”，脚本可以直接读取。以上面这个表单为例，<code>$_FILES['photo']</code> 里的关键字段包括：</p>
+<ul>
+<li><code>name</code>：客户端提供的原始文件名。</li>
+<li><code>tmp_name</code>：服务器保存上传内容的临时路径。</li>
+<li><code>size</code>、<code>error</code>：文件大小和上传结果。</li>
+<li><code>type</code>：客户端提供的 MIME 类型，业务端仍需验证实际内容。</li>
+<li><code>full_path</code>：客户端提交的路径信息，PHP 8.1 起提供，同样需要按不可信输入处理。</li>
+</ul>
+<p>此时文件还只是被临时接收。业务代码接下来检查身份权限、错误码、大小和实际文件类型，再用 <code>move_uploaded_file()</code> 等操作保存到选定位置。正常请求结束时，未移走的上传临时文件会被清理。<strong>接收与解析发生在前，应用决定接受或拒绝发生在后。</strong> 具体字段与处理流程可以对照 <a target="_blank" rel="noopener" href="https://www.php.net/manual/en/features.file-upload.post-method.php">PHP 官方文件上传手册</a>。</p>
+<h3 id="文件放在临时目录，为什么还会牵涉内存？"><a href="#文件放在临时目录，为什么还会牵涉内存？" class="headerlink" title="文件放在临时目录，为什么还会牵涉内存？"></a>文件放在临时目录，为什么还会牵涉内存？</h3><p>文件内容写入临时文件，PHP 仍要在内存里维护解析缓冲、字段名、字段值，以及描述文件的数组。<code>$_FILES</code> 保存的是文件信息，文件正文通常留在临时文件中。</p>
+<p>PHP 数组在内核里主要由 <strong>HashTable（哈希表）</strong> 实现；其中的元素槽位叫 <strong>Bucket</strong>，值使用 <strong>zval</strong> 表示。可以先把它们理解为“目录”“目录中的一条记录”和“这条记录保存的值”。每条记录除了用户提交的文字，还带类型、长度、引用等管理信息。因此，请求体大小、文件大小和 PHP 分配的内存大小，是三个不同的量。</p>
+<p>几个常见配置也分别负责不同环节：<code>upload_max_filesize</code> 管单个上传文件，<code>post_max_size</code> 管 POST 请求体大小，<code>memory_limit</code> 管 PHP 分配器允许使用的内存。后面提到 <strong>OOM（Out Of Memory）</strong>，指内存分配无法按原有方式继续的情形；触及 PHP 的内存限制时，整台服务器仍可能有空闲内存。</p>
+<h3 id="上传进度条，为什么又和-session-有关系？"><a href="#上传进度条，为什么又和-session-有关系？" class="headerlink" title="上传进度条，为什么又和 session 有关系？"></a>上传进度条，为什么又和 session 有关系？</h3><p>上传大文件时，页面需要知道“已经处理了多少字节”。PHP 的 <strong>Session Upload Progress</strong> 功能可以在解析上传数据的过程中，把进度写入 session，让另一个查询请求读取。</p>
+<p>session 可以理解为服务器保存的一份会话数据，浏览器通常通过 cookie 中的会话标识找到它。除了登录状态，它也可以存放上传进度等临时信息。当上传进度功能开启、请求携带相应标记并满足处理条件时，PHP 会在上传解析阶段更新这些数据。</p>
+<p>这里最值得记住的是 <a target="_blank" rel="noopener" href="https://www.php.net/manual/en/session.upload-progress.php">官方手册的提醒</a>：<strong>上传进度信息在任何脚本执行之前就会写入 session。</strong> 所以，目标脚本是否显式写了 <code>session_start()</code>，和 PHP 内核是否已经接触 session 状态，要分开看。</p>
+<p>这也回答了开头那个问题：即使页面只写了一行 <code>echo</code>，只要请求被交给 PHP 且相应解析功能启用，PHP 仍会先完成自己的准备工作。页面上有没有上传按钮，由前端决定；服务端解析哪种请求，由实际收到的请求和运行配置决定。</p>
+<h3 id="请求结束了，worker-为什么还在？"><a href="#请求结束了，worker-为什么还在？" class="headerlink" title="请求结束了，worker 为什么还在？"></a>请求结束了，worker 为什么还在？</h3><p>为了减少启动开销，worker 通常会复用；但本次请求分配的大量内存会在请求收尾时释放。于是出现了两种不同的寿命：<strong>工作进程可以跨请求存活，请求内存只服务于当前请求。</strong></p>
+<p>如果进程里的某个字段仍保存着已经释放的内存地址，它就成了“悬空指针”；后续通过它访问原对象，就是 <strong>UAF（Use After Free，释放后使用）</strong>。后文的 <strong>RINIT</strong> 和 <strong>RSHUTDOWN</strong>，分别指扩展的请求初始化与请求结束处理；<strong>析构</strong>则是销毁一个值并释放其资源时执行的收尾操作。</p>
+<p><img src="/2026/10/22/Vuln_PHP2Shell/exploit-concepts.png" alt="对象寿命与引用状态的三列快照" loading="eager" decoding="async" width="2100" height="850"></p>
+<p><em>对象释放后，旧引用仍需撤销；访问前也要确认对象有效。</em></p>
+<p>PHP 对许多可共享的数据使用<strong>引用计数</strong>管理寿命，可以理解为“还有多少处在使用它”。释放一个值时，计数会减少；最后一个使用者退出后，底层数据才具备回收条件。这个机制依赖记录正确：如果代码把无效内存误认成正常的值，清理操作也会跟着读错记录。</p>
+<p>后面还有两个容易混淆的词：<strong>序列化</strong>是把数组、对象等数据转换成便于保存或传输的表示，<strong>反序列化</strong>是把它们还原回来。还原复杂数据时，PHP 会维护一个工作上下文，记录已经处理过的值、引用关系和待清理对象；上下文也有自己的初始化与销毁过程。理解这一点，就能看懂后文为何同时讨论业务数据和“负责还原数据的内部状态”。</p>
+<p>带着这几组关系再看源码，就容易抓住重点了：<strong>上传解析会建立数据结构，进度记录会提前接触 session，异常退出会改变清理顺序，而 worker 复用让部分错误状态有机会延续到后续请求。</strong></p>
+<h2 id="0x01-漏洞披露：一条二十年长的伏笔"><a href="#0x01-漏洞披露：一条二十年长的伏笔" class="headerlink" title="0x01 漏洞披露：一条二十年长的伏笔"></a>0x01 漏洞披露：一条二十年长的伏笔</h2><p>PHP2Shell 的时间线本身就是个好故事：</p>
+<ul>
+<li><strong>2004</strong>：Stefan Esser 发现 PHP 首个 memory-limit 远程漏洞，exploit 从未公开；</li>
+<li><strong>2020</strong>：<a target="_blank" rel="noopener" href="https://bugs.php.net/bug.php?id=78876">bug #78876</a> 报告 multipart 长变量导致 OOM 与临时文件残留，当时没深究；</li>
+<li><strong>2024</strong>：OSTIF / Quarkslab 审计 PHP 时重新发现相关问题，利用未证明，未修复；</li>
+<li><strong>2026-08</strong>：安全研究方 Calif 在 OpenAI “Patch the Planet” 项目里重新审视这段历史，几天内找到第一个 OOM-fatal 中断点，随后扩展出针对 mod_php 和 PHP-FPM 的可靠利用；8 月 11 日报告 PHP，<strong>8 月 15 日 PHP 官方确认 RCE PoC 有效</strong>；</li>
+<li><strong>2026-10-21</strong>：补丁发布，同步披露 <a target="_blank" rel="noopener" href="https://github.com/php/php-src/security/advisories/GHSA-w8hw-w9fx-j79w">GHSA-w8hw-w9fx-j79w</a> 与 <a target="_blank" rel="noopener" href="https://github.com/php/php-src/security/advisories/GHSA-6wmf-4rv5-p3rp">GHSA-6wmf-4rv5-p3rp</a>。</li>
+</ul>
+<p>官方确认的利用范围：<strong>mod_php 在默认输入与内存限制、正常 prefork 多 worker 下，已在业务代码运行前验证完整 RCE</strong>，实测目标覆盖 WordPress、Drupal、Joomla、Magento、phpMyAdmin、Nextcloud、Laravel 等；<strong>FPM 侧也有官方验证的 session 生命周期 RCE</strong>，前提是应用存在可达的解码操作。Calif 将已发现路径最早追溯到 PHP 5.4，修复覆盖 8.2–8.5，另放出 7.4 / 8.0 / 8.1 的最小源码回补分支。</p>
+<p>一手研究见 <a target="_blank" rel="noopener" href="https://calif.io/php2shell/">Calif 的 PHP2Shell 研究</a>。</p>
+<h2 id="0x02-先看-patch：PHP-怎么改掉”OOM-即跳转”"><a href="#0x02-先看-patch：PHP-怎么改掉”OOM-即跳转”" class="headerlink" title="0x02 先看 patch：PHP 怎么改掉”OOM 即跳转”"></a>0x02 先看 patch：PHP 怎么改掉”OOM 即跳转”</h2><p>8.4 分支的修复提交是 <a target="_blank" rel="noopener" href="https://github.com/php/php-src/commit/506e87fa7dcdd306975e5b8f8265ee03527aacbf"><code>506e87fa</code></a>（8.5 为 <code>31c0ea7d</code>），提交说明只有两行：</p>
+<pre class="line-numbers language-text" data-language="text"><code class="language-text">Avoid state corruption via bailout
+
+- Replace bailout on OOM with UnwindExit
+- Properly reset various globals that may be accessed during startup<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>完整 diff 的核验结果为：<strong>402 个文件、+11112 / −1032 行</strong>，横跨 Zend、session、序列化、几乎全部扩展和 OPcache。改动密度本身就说明问题：这是一类生命周期缺陷，散布在所有”发布状态 → 干可能失败的活 → 提交”的代码路径上。</p>
+<h3 id="软-OOM：从”立刻跳走”改成”先记账，到安全点再退”"><a href="#软-OOM：从”立刻跳走”改成”先记账，到安全点再退”" class="headerlink" title="软 OOM：从”立刻跳走”改成”先记账，到安全点再退”"></a>软 OOM：从”立刻跳走”改成”先记账，到安全点再退”</h3><p>旧 Zend MM 触发 <code>memory_limit</code> 时走 <code>zend_error_noreturn()</code> → <code>zend_bailout()</code>，一次 <code>longjmp</code> 直接跳出当前执行流。如果此刻某段 C 代码正把内部结构改到一半，跳出去就再没人替它收尾。</p>
+<p>这里的 <strong>Zend MM</strong> 是 PHP 内核的内存管理器。平常调用函数，会沿调用关系逐层返回；<code>longjmp</code> 则直接回到事先保存的执行位置，沿途尚未执行的语句会被跳过。可以把它理解为“紧急撤离”：人已经离开，手头改到一半的记录还留在原地。PHP 的 <code>bailout</code> 就借助这种机制中止当前处理。</p>
+<p>补丁引入了延迟 OOM 状态机：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">typedef</span> <span class="token keyword">enum</span> <span class="token class-name">_zend_oom_state</span> <span class="token punctuation">{</span>
+    ZEND_OOM_STATE_NONE <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">,</span>
+    ZEND_OOM_STATE_PENDING<span class="token punctuation">,</span>
+    ZEND_OOM_STATE_HANDLING<span class="token punctuation">,</span>
+    ZEND_OOM_STATE_HANDLED
+<span class="token punctuation">}</span> zend_oom_state<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>触及软限时先记下错误信息并置 VM 中断标志，等执行器跑到<strong>安全检查点</strong>再统一处理：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token function">EG</span><span class="token punctuation">(</span>delayed_oom<span class="token punctuation">)</span><span class="token punctuation">.</span>filename <span class="token operator">=</span> script_filename<span class="token punctuation">;</span>
+<span class="token function">EG</span><span class="token punctuation">(</span>delayed_oom<span class="token punctuation">)</span><span class="token punctuation">.</span>lineno   <span class="token operator">=</span> script_lineno<span class="token punctuation">;</span>
+<span class="token function">EG</span><span class="token punctuation">(</span>delayed_oom<span class="token punctuation">)</span><span class="token punctuation">.</span>state    <span class="token operator">=</span> ZEND_OOM_STATE_PENDING<span class="token punctuation">;</span>
+<span class="token function">zend_atomic_bool_store_ex</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token function">EG</span><span class="token punctuation">(</span>vm_interrupt<span class="token punctuation">)</span><span class="token punctuation">,</span> true<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><strong>VM</strong> 是负责执行 PHP 指令的虚拟机；<strong>执行帧</strong>记录当前函数执行到哪条指令、有哪些参数和局部变量。补丁在有执行帧时使用 <code>zend_throw_unwind_exit()</code>，让执行器沿受控的退出路径展开；没有执行帧时，处理器仍会在检查点调用 <code>zend_bailout()</code>。这里的“安全点”指显式检查并处理延迟 OOM 的位置，将退出集中在这些位置，可以减少在底层结构更新中途直接跳走的问题。配套还新增了 <code>femalloc</code> 族<strong>可失败分配接口</strong>——分配失败返回 NULL，调用方显式处理半成品，替代旧的”失败即跳转”假设。</p>
+<h3 id="硬-OOM：放弃常规收尾，直接终止进程"><a href="#硬-OOM：放弃常规收尾，直接终止进程" class="headerlink" title="硬 OOM：放弃常规收尾，直接终止进程"></a>硬 OOM：放弃常规收尾，直接终止进程</h3><p>延迟处理也要有底线。内存继续恶化时，<code>zend_mm_check_limit()</code> 走 <code>zend_mm_hard_limit_error()</code>，向 stderr 报告后 <code>_exit(137)</code> 直接退出进程，跳过所有依赖内部状态的请求清理。硬限按分段公式计算（软限 ≤ 1 GiB 时取 2 倍，超过则加 1 GiB，均可显式配置百分比），别把”两倍”当成固定规律。</p>
+<p>两个易读错的点：修复后软 OOM 仍会打印 <code>Allowed memory size ... exhausted</code>，这句报错与补丁有无无关；<code>_exit(137)</code> 是主动带状态退出，和内核 SIGKILL 是两回事。</p>
+<h3 id="跨请求状态：把”遗留”变成”不可能”"><a href="#跨请求状态：把”遗留”变成”不可能”" class="headerlink" title="跨请求状态：把”遗留”变成”不可能”"></a>跨请求状态：把”遗留”变成”不可能”</h3><p>第二类修复针对 109619：请求结束后，进程级结构里指向请求内存的字段必须清空。</p>
+<p>读这些代码时，要区分“保存地址的字段”和“地址指向的数据”。字段所在的结构可以跟随 worker 长期存在，数据却可能只属于当前请求。类似通讯录里还留着旧地址，原住户已经搬走，下一位使用者照着地址寻找，就会认错对象。这里说的内核 globals，也有别于业务脚本里一个普通的全局变量。补丁在 <code>php_request_shutdown()</code> 里对 superglobals 析构后立即置 UNDEF：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">for</span> <span class="token punctuation">(</span>i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> NUM_TRACK_VARS<span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token function">zval_ptr_dtor</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token function">PG</span><span class="token punctuation">(</span>http_globals<span class="token punctuation">)</span><span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment">/* May be accessed before php_request_startup() */</span>
+    <span class="token function">ZVAL_UNDEF</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token function">PG</span><span class="token punctuation">(</span>http_globals<span class="token punctuation">)</span><span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>更关键的一手在启动侧：<code>php_request_startup()</code> 里新增 <code>php_basic_early_rinit()</code>，插在 <code>sapi_activate()</code> <strong>之前</strong>、请求体解析之前，提前清掉反序列化器等模块的全局状态：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token function">BG</span><span class="token punctuation">(</span>serialize_lock<span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token function">memset</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token function">BG</span><span class="token punctuation">(</span>serialize<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token keyword">sizeof</span><span class="token punctuation">(</span><span class="token function">BG</span><span class="token punctuation">(</span>serialize<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">memset</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token function">BG</span><span class="token punctuation">(</span>unserialize<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token keyword">sizeof</span><span class="token punctuation">(</span><span class="token function">BG</span><span class="token punctuation">(</span>unserialize<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">php_url_scanner_early_rinit</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>session 侧还加了 <code>PS(in_rfc1867_update)</code> 标记，上传进度期间的解码强制 <code>incomplete_classes_only</code> 模式——对象一律保持 <code>__PHP_Incomplete_Class</code>，早于业务代码的路径上不再触发 autoload、<code>__wakeup()</code> 等用户代码。</p>
+<p><img src="/2026/10/22/Vuln_PHP2Shell/patch.png" alt="OOM 处理与请求生命周期的补丁前后对比" loading="eager" decoding="async" width="2100" height="2530"></p>
+<p><em>补丁机制概括：退出时机移到安全点，严重故障直接终止进程，跨请求引用在两端都被清理。</em></p>
+<p>看懂补丁的思路，漏洞的形状也就出来了。下面按”公共原语 → 三条路径 → 完整武器化”的顺序拆。</p>
+<h2 id="0x03-公共原语：把-fatal-变成可选时的中断"><a href="#0x03-公共原语：把-fatal-变成可选时的中断" class="headerlink" title="0x03 公共原语：把 fatal 变成可选时的中断"></a>0x03 公共原语：把 fatal 变成可选时的中断</h2><p>所有路径共用同一个前置能力：<strong>精确控制哪一次内存分配触发 fatal</strong>。Calif 公开了三个构造方法，都是”请求体字节数 ≠ PHP 内存消耗”的放大器。</p>
+<p><strong>绕过 <code>post_max_size</code> 预检。</strong> PHP 拿声明里的 <code>Content-Length</code> 和 <code>post_max_size</code> 比较后就开始收 body；chunked 传输、无长度的 HTTP/1.1、HTTP/2，或者配了输入解压过滤器，都能让”声明小、实读大”。预检查的是声明值，真正喂进来的字节数没有同等的闸门。</p>
+<p><strong>空文件条目的元数据放大。</strong> multipart 里 <code>filename=""</code> 的 part 不占 <code>max_file_uploads</code> 名额，但 PHP 照样为它建满 6 个 <code>$_FILES</code> 条目：<code>name / full_path / type / tmp_name / error / size</code>。字段名再套上嵌套：</p>
+<pre class="line-numbers language-text" data-language="text"><code class="language-text">--BOUNDARY
+Content-Disposition: form-data; name="files[a][b][c]...[z]"; filename=""
+
+--BOUNDARY--<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>每个空文件 part 都要为 6 个条目各建一遍嵌套 HashTable / Bucket / key 字符串。几十 KB 的 body 撑出远超自身的堆分配，几 MB 的请求就能打穿默认 128M 的 <code>memory_limit</code>，而且<strong>哪一次分配先爆、什么时候爆，都可以靠调整 part 排布来选</strong>。</p>
+<p>这就把 <code>Allowed memory size exhausted</code> 从偶发故障变成了攻击者手里的定时器。</p>
+<h2 id="0x04-路径①：HashTable-桶的半初始化窗口（CVE-2026-109618）"><a href="#0x04-路径①：HashTable-桶的半初始化窗口（CVE-2026-109618）" class="headerlink" title="0x04 路径①：HashTable 桶的半初始化窗口（CVE-2026-109618）"></a>0x04 路径①：HashTable 桶的半初始化窗口（CVE-2026-109618）</h2><p>Calif 的源码审计在 <code>_zend_hash_str_add_or_update_i</code> 里找到第一个中断点。插入新元素的顺序是：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c">idx <span class="token operator">=</span> ht<span class="token operator">-&gt;</span>nNumUsed<span class="token operator">++</span><span class="token punctuation">;</span>
+ht<span class="token operator">-&gt;</span>nNumOfElements<span class="token operator">++</span><span class="token punctuation">;</span>
+
+p <span class="token operator">=</span> ht<span class="token operator">-&gt;</span>arData <span class="token operator">+</span> idx<span class="token punctuation">;</span>
+p<span class="token operator">-&gt;</span>key <span class="token operator">=</span> <span class="token function">zend_string_init</span><span class="token punctuation">(</span>str<span class="token punctuation">,</span> len<span class="token punctuation">,</span> persistent<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">/* may zend_error_noreturn() */</span>
+
+p<span class="token operator">-&gt;</span>h <span class="token operator">=</span> <span class="token function">ZSTR_H</span><span class="token punctuation">(</span>p<span class="token operator">-&gt;</span>key<span class="token punctuation">)</span> <span class="token operator">=</span> h<span class="token punctuation">;</span>
+<span class="token function">ZVAL_COPY_VALUE</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>p<span class="token operator">-&gt;</span>val<span class="token punctuation">,</span> pData<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><strong>计数先加，key 分配在后</strong>。<code>zend_string_init</code> 触发 OOM bailout 时，桶内容还没写，但 <code>nNumUsed</code> 已经把它划进了”有效”范围。teardown 按计数遍历：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">for</span> <span class="token punctuation">(</span>p <span class="token operator">=</span> ht<span class="token operator">-&gt;</span>arData<span class="token punctuation">;</span> p <span class="token operator">!=</span> ht<span class="token operator">-&gt;</span>arData <span class="token operator">+</span> ht<span class="token operator">-&gt;</span>nNumUsed<span class="token punctuation">;</span> p<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token function">i_zval_ptr_dtor</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>p<span class="token operator">-&gt;</span>val<span class="token punctuation">)</span><span class="token punctuation">;</span>      <span class="token comment">/* 把 stale 字节当 zval 析构 */</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>p<span class="token operator">-&gt;</span>key<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token function">zend_string_release</span><span class="token punctuation">(</span>p<span class="token operator">-&gt;</span>key<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>从清理代码的视角，”有一个元素”成立；从元素自身的视角，它从未完成初始化。半初始化的桶字节被当成 live zval 走析构——UAF 原语到手。</p>
+<p><strong>为什么只有 mod_php</strong>：这条路径的中断发生在 <code>php_request_startup()</code> 阶段，此时 POST 变量注册（<code>php_register_variable_ex()</code> → <code>zend_symtable_str_update_ind()</code> → 上面那个函数）还没轮到业务代码。两个 SAPI 对启动失败的处理不同：</p>
+<pre class="line-numbers language-text" data-language="text"><code class="language-text">mod_php:  php_request_startup() 失败 → 请求清理照常执行
+          → zend_array_destroy($_POST/$_FILES) 消费坏表 → worker 存活复用
+
+PHP-FPM:  php_request_startup() 失败 → php_module_shutdown() + return
+          → worker 直接退出，坏表随进程消失<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>mod_php 的 <code>sapi_apache2.c</code> 里请求构造失败只是 <code>zend_bailout()</code> 到外层 handler，<code>php_apache_request_dtor()</code> 依旧会调 <code>php_request_shutdown(NULL)</code>。这正是官方在 mod_php 上验证 RCE、而对 109618 的 FPM 只给出”源码分析受影响”的原因。</p>
+<p><img src="/2026/10/22/Vuln_PHP2Shell/lifecycle.png" alt="mod_php 与 FPM 在启动失败和运行期异常后的不同处理" loading="lazy" decoding="async" width="2100" height="1940"></p>
+<p><em>SAPI 对失败请求的处理分流：mod_php 清理后复用 worker，FPM 启动失败退进程、运行期异常则复用——后者正是路径③的落脚点。</em></p>
+<h2 id="0x05-路径②：session-全局的悬空指针（CVE-2026-109619，PHP-≥-5-4）"><a href="#0x05-路径②：session-全局的悬空指针（CVE-2026-109619，PHP-≥-5-4）" class="headerlink" title="0x05 路径②：session 全局的悬空指针（CVE-2026-109619，PHP ≥ 5.4）"></a>0x05 路径②：session 全局的悬空指针（CVE-2026-109619，PHP ≥ 5.4）</h2><p>第二类中断点更漂亮：<code>session.upload_progress</code> 这个默认开启的功能，让 multipart 解析在<strong>模块初始化完成之前</strong>就摸到了 session。</p>
+<p>看 <code>main/main.c</code> 的启动顺序：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token function">php_hash_environment</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>   <span class="token comment">/* 解析 $_POST/$_FILES —— multipart 在这里 */</span>
+<span class="token function">zend_activate_modules</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token comment">/* 各扩展的 RINIT */</span>
+<span class="token function">PG</span><span class="token punctuation">(</span>modules_activated<span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<p>multipart 的 <code>FILE_START</code> 事件回调里，upload progress 会调 <code>php_rinit_session(0)</code> 并把 <code>PS(id)</code>、<code>PS(http_session_vars)</code> 写进 session 模块全局——此刻 <code>PG(modules_activated)</code> 还是 0。<strong>状态已经发布，但生命周期标记还没立起来</strong>。</p>
+<p>此后 OOM fatal 发生，请求关闭按 <code>modules_activated</code> 分流：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">PG</span><span class="token punctuation">(</span>modules_activated<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token function">zend_deactivate_modules</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>      <span class="token comment">/* session RSHUTDOWN 被跳过 */</span>
+<span class="token punctuation">}</span>
+<span class="token function">shutdown_memory_manager</span><span class="token punctuation">(</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">)</span><span class="token punctuation">;</span>       <span class="token comment">/* 请求堆照常释放 */</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>session 的 RSHUTDOWN 没跑，<code>PS(id)</code> / <code>PS(http_session_vars)</code> 还指着已经释放的堆内存，而 <strong>mod_php 的 worker 活着接下一个请求</strong>。</p>
+<p>消费端同样藏在 upload progress 里。请求 B 只要带 <code>PHPSESSID</code> 和 <code>PHP_SESSION_UPLOAD_PROGRESS</code> 字段、<strong>不带文件 part</strong>，就只走 <code>MULTIPART_EVENT_END</code> 不走 <code>FILE_START</code>——提前重置被绕过，END 回调的 cleanup 重新进入 <code>php_session_initialize()</code>：</p>
+<pre class="line-numbers language-text" data-language="text"><code class="language-text">请求 A: 文件 part → 提前初始化 session → 状态发布 → OOM fatal
+        → 跳过 session RSHUTDOWN → 请求堆释放 → worker 存活
+
+请求 B: 无文件 part → FILE_START 重置被绕过 → END cleanup
+        → php_session_track_init() → zval_ptr_dtor(悬空的 PS(http_session_vars))<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>一次 <code>zval_ptr_dtor</code> 落在攻击者控制的内存上，后续怎么走完全取决于谁先重占了那块堆——这正是后面 9bie 武器化的主战场。这条路径 PHP 5.4 起就存在，全程默认配置，应用侧零配合。</p>
+<h2 id="0x06-路径③：反序列化器全局悬空（打-FPM-的钥匙）"><a href="#0x06-路径③：反序列化器全局悬空（打-FPM-的钥匙）" class="headerlink" title="0x06 路径③：反序列化器全局悬空（打 FPM 的钥匙）"></a>0x06 路径③：反序列化器全局悬空（打 FPM 的钥匙）</h2><p>FPM 启动失败会退 worker，那就在<strong>启动成功之后</strong>制造中断。Calif 找到的入口是 PHP 通用反序列化器的共享状态：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">BG</span><span class="token punctuation">(</span>serialize_lock<span class="token punctuation">)</span> <span class="token operator">||</span> <span class="token operator">!</span><span class="token function">BG</span><span class="token punctuation">(</span>unserialize<span class="token punctuation">)</span><span class="token punctuation">.</span>level<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    d <span class="token operator">=</span> <span class="token function">emalloc</span><span class="token punctuation">(</span><span class="token keyword">sizeof</span><span class="token punctuation">(</span><span class="token keyword">struct</span> <span class="token class-name">php_unserialize_data</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment">/* 初始化引用表和析构表 */</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span><span class="token function">BG</span><span class="token punctuation">(</span>serialize_lock<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token function">BG</span><span class="token punctuation">(</span>unserialize<span class="token punctuation">)</span><span class="token punctuation">.</span>data <span class="token operator">=</span> d<span class="token punctuation">;</span>
+        <span class="token function">BG</span><span class="token punctuation">(</span>unserialize<span class="token punctuation">)</span><span class="token punctuation">.</span>level <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+    d <span class="token operator">=</span> <span class="token function">BG</span><span class="token punctuation">(</span>unserialize<span class="token punctuation">)</span><span class="token punctuation">.</span>data<span class="token punctuation">;</span>      <span class="token comment">/* 复用全局状态 */</span>
+    <span class="token operator">++</span><span class="token function">BG</span><span class="token punctuation">(</span>unserialize<span class="token punctuation">)</span><span class="token punctuation">.</span>level<span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>应用执行 <code>unserialize()</code> / <code>session_decode()</code>（WordPress 的 <code>maybe_unserialize()</code> 这类封装也算）期间发生 OOM fatal，<code>php_var_unserialize_destroy()</code> 被跳过：<code>BG(unserialize).data</code> 悬空、level 停在非零。因为这次 fatal 在成功启动之后，FPM 的 worker 正常存活。</p>
+<p>下一个 multipart 请求的 upload progress 在 Basic 模块 RINIT 之前进入解码，<code>level != 0</code> 让它把悬空指针当活动状态复用。<strong>此时请求 B 的普通字段分配已经把那块内存重占</strong>，解码器读到的”引用表 / 析构表”全是攻击者数据。Calif 给出的写原语尤其致命——析构块的 <code>used_slots</code> 是有符号数：</p>
+<pre class="line-numbers language-text" data-language="text"><code class="language-text">slot = destructor_block + 16 + 16 × used_slots<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p><code>used_slots</code> 为负时 slot 指向块前任意偏移；序列化数据里的重复 key 触发 <code>var_push_dtor_value()</code>，把一个完整的 zval（指针＋类型）写进选定的位置。<strong>受控地址写受控 zval</strong>，配合堆布局就是完整的类型混淆原语。mod_php / FPM 通吃，也是官方在 FPM 上验证 session 生命周期 RCE 的机理。</p>
+<h2 id="0x07-武器化：9bie-公开利用链逐段拆解"><a href="#0x07-武器化：9bie-公开利用链逐段拆解" class="headerlink" title="0x07 武器化：9bie 公开利用链逐段拆解"></a>0x07 武器化：9bie 公开利用链逐段拆解</h2><p>机理有了，从”UAF 原语”到”一条命令出 uid”之间还隔着 ASLR、堆布局和触发稳定性。<strong>ASLR（Address Space Layout Randomization，地址空间布局随机化）</strong> 是操作系统的一种防护机制：让程序、共享库、堆和栈等区域的装载或分配位置随机化，增加预测内存地址的难度；具体随机化范围取决于平台和构建配置。<a target="_blank" rel="noopener" href="https://github.com/9bie/php2shell-bypass-aslr-exp">9bie/php2shell-bypass-aslr-exp</a> 把这最后一公里也公开了：目标 <code>php:8.4.26-apache</code> 官方镜像 + Apache prefork 单 worker，README 报 3/3 成功。以下结合 <code>exploit.py</code> 与 <code>NOTES.md</code> 做静态分析；成功次数为仓库作者报告，本稿未独立运行其 RCE 实验。</p>
+<p><img src="/2026/10/22/Vuln_PHP2Shell/aslr-concept.png" alt="ASLR 区域位置与堆内对象排列的两层对照" loading="lazy" decoding="async" width="2100" height="1150"></p>
+<p><em>区域基址与堆内对象排列属于不同层次；图中位置与宽度均为示意。</em></p>
+<h3 id="Stage-0：worker-轮换——prefork-白送的地址稳定性"><a href="#Stage-0：worker-轮换——prefork-白送的地址稳定性" class="headerlink" title="Stage 0：worker 轮换——prefork 白送的地址稳定性"></a>Stage 0：worker 轮换——prefork 白送的地址稳定性</h3><p>A 请求（一堆 3KB 存活字段＋12MB OOM 字段）把 child 打到 SIGABRT，prefork master 立即 fork 新 worker。关键性质：<strong>fork 继承父进程的内存映射</strong>，同一个 Apache master 之下，新 worker 的 libphp 基址和 Zend MM 2MB chunk 布局与旧 worker 完全一致。</p>
+<p>于是 ASLR 只在每个 stage 首次需要对付一次，失败重试也只需 <code>rotate()</code> 换个 worker 重来（master 重启后基址才重新随机）。这个”轮换原语”是整条链的工程地基。</p>
+<h3 id="Stage-1：Set-Cookie-堆泄漏——把-zend-string-len-改大"><a href="#Stage-1：Set-Cookie-堆泄漏——把-zend-string-len-改大" class="headerlink" title="Stage 1：Set-Cookie 堆泄漏——把 zend_string.len 改大"></a>Stage 1：Set-Cookie 堆泄漏——把 <code>zend_string.len</code> 改大</h3><p>目标：拿到 Zend MM chunk 基址。A 请求按路径②的配方留下悬空 session 状态，额外加两个条件：</p>
+<ul>
+<li><strong>1001 个字段</strong>触发 <code>max_input_vars</code> 警告。<code>display_errors=On</code> 时警告输出把 <code>headers_sent</code> 置 1，后续 PHP 才有机会在响应里加头；</li>
+<li><strong><code>PHPSESSID=\x00</code></strong> 的非法 SID 逼 PHP 生成新 id 并 <code>send_cookie=1</code>——<code>Set-Cookie</code> 就是外带数据的信道。</li>
+</ul>
+<p>B 请求用 56 字节的字段值缓冲区重占悬空 reference，再补一个 79B 的”伪造字段”，在第 0x10 偏移写入超大的 <code>zend_string.len</code>：</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">forge <span class="token operator">=</span> <span class="token builtin">bytearray</span><span class="token punctuation">(</span><span class="token string">b"A"</span> <span class="token operator">*</span> <span class="token number">79</span><span class="token punctuation">)</span>
+struct<span class="token punctuation">.</span>pack_into<span class="token punctuation">(</span><span class="token string">"&lt;Q"</span><span class="token punctuation">,</span> forge<span class="token punctuation">,</span> <span class="token number">0x10</span><span class="token punctuation">,</span> <span class="token number">0x1000</span><span class="token punctuation">)</span>   <span class="token comment"># 伪 zend_string len=4096</span>
+forge<span class="token punctuation">[</span><span class="token number">0x18</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token builtin">ord</span><span class="token punctuation">(</span><span class="token string">"L"</span><span class="token punctuation">)</span>
+parts<span class="token punctuation">.</span>append<span class="token punctuation">(</span><span class="token punctuation">{</span><span class="token string">"name"</span><span class="token punctuation">:</span> <span class="token string">"1999"</span><span class="token punctuation">,</span> <span class="token string">"data"</span><span class="token punctuation">:</span> <span class="token builtin">bytes</span><span class="token punctuation">(</span>forge<span class="token punctuation">)</span><span class="token punctuation">}</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>session 写 cookie 时对（早已被释放、现被攻击者数据占据的）session id 做 <code>php_url_encode()</code>，按伪造的 4096 字节长度一路越界读，把堆里约 4KB 的内容 urlencode 进 <code>Set-Cookie</code> 带出来。</p>
+<p>解析端做统计恢复：滑窗取 8 字节小端值，落在用户态指针区间的按 2MB 对齐折叠取<strong>众数</strong>——chunk 基址就是出现最多的那个值。一堆堆指针自然聚在同一个 2MB chunk 里，统计比精确定位更稳。</p>
+<h3 id="Stage-2：libphp-泄漏——HashTable-恰好对齐-pDestructor"><a href="#Stage-2：libphp-泄漏——HashTable-恰好对齐-pDestructor" class="headerlink" title="Stage 2：libphp 泄漏——HashTable 恰好对齐 pDestructor"></a>Stage 2：libphp 泄漏——HashTable 恰好对齐 <code>pDestructor</code></h3><p>光有 chunk 基址不够，还需要 libphp 基址。B 请求构造 983 个数组字段，其中第 406 个组 16 元素 × 16B 值——精心定尺寸的一页 HashTable 分配恰好重占悬空的 <code>PS(id)</code>：</p>
+<pre class="line-numbers language-text" data-language="text"><code class="language-text">ZSTR_LEN(PS(id)) 读到的是 HashTable 的 nTableSize=16
+cookie 数据从 PS(id)+0x18 起 = nNextFreeElement | pDestructor
+而 pDestructor = ZVAL_PTR_DTOR，是 libphp 里的固定符号<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<p>解析端双重校验：低 12 位必须等于 <code>zval_ptr_dtor</code> 偏移的低 12 位，且解出的基址 4KB 对齐。两次泄漏拼起来 ASLR 全破，全程只用 HTTP 响应头，不碰 libc。</p>
+<h3 id="Stage-3：fake-析构链——让-PHP-自己调-zif-system"><a href="#Stage-3：fake-析构链——让-PHP-自己调-zif-system" class="headerlink" title="Stage 3：fake 析构链——让 PHP 自己调 zif_system"></a>Stage 3：fake 析构链——让 PHP 自己调 <code>zif_system</code></h3><p>执行阶段不再泄地址，改为直接覆写悬空 reference。A 请求用 6 组 pad 把 reference 钉到 chunk 内固定偏移；B 请求一个 15B 的 carrier（bin-40 <code>zend_string</code> 的字符区正好落在 reference 头上）只改低 7 字节指针、保留高字节规范零，把 <code>val.value</code> 指向一个 167B 存活字符串里的三件套：</p>
+<pre class="line-numbers language-text" data-language="text"><code class="language-text">fake HashTable      pDestructor = libphp + zif_system 偏移
+fake execute_data   num_args=1, arg1 → 指向命令字符串的 IS_STRING zval
+fake zend_string    命令本体（≤14 字节，167 − 0x98 − 1）<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<p>触发完全走 PHP 自身的析构路径，无需任何注入：</p>
+<pre class="line-numbers language-text" data-language="text"><code class="language-text">php_session_track_init()
+  → zval_ptr_dtor(PS(http_session_vars))
+    → zend_reference_destroy(R0)
+      → zend_array_destroy(fake HT)
+        → zend_hash_destroy(fake HT)
+          → pDestructor(&amp;bucket-&gt;val)      # = zif_system(cmd)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><code>zend_hash_destroy</code> 遍历到唯一 bucket 时调 <code>pDestructor(&amp;p-&gt;val)</code>——参数地址恰好就是预制的 fake <code>execute_data</code>，<code>zif_system</code> 按标准内部函数从 call frame 取出参数执行命令。<strong>不 ROP、不碰栈、不依赖 libc</strong>，比 NOTES.md 里早期方案的 <code>pop rdi; ret</code> + <code>popen@plt</code> 干净一个量级。命令上限 14 字节，任意命令用 <code>sh&lt;/out/c</code>（8 字节）从挂载目录读脚本绕过。</p>
+<h3 id="顺手盘点：研究笔记里的可复用部件"><a href="#顺手盘点：研究笔记里的可复用部件" class="headerlink" title="顺手盘点：研究笔记里的可复用部件"></a>顺手盘点：研究笔记里的可复用部件</h3><p><code>NOTES.md</code> 记录了完整的探索过程，几个部件在别的场景同样好使：</p>
+<ul>
+<li><strong><code>stream_bucket_new()</code> 320B 裸喷</strong>：给 stream filter 喂 payload，得到内容完全可控、且被资源保活的裸缓冲——早期 Defect D 线（<code>session_unset()</code> + <code>__destruct</code> 写 <code>$_SESSION</code> 触发 <code>zend_hash_clean</code> 重入 → resize 释放旧 arData → 320B 重占 → fake HT）就是靠它拿下的首个 RCE；</li>
+<li><strong><code>php_serialize</code> 重入泄漏</strong>：<code>__serialize()</code> 里清空 <code>$_SESSION</code> 释放正在序列化的数组，<code>zend_reference</code> 重占 32B 字符串块后 <code>val.type_info</code> 被当 <code>len</code>，一次 775B 越界读带出堆指针；换 4096B 块则伪造 <code>len=32768</code> 读 32KB，固定偏移处捞出 libphp 代码指针。注意默认 <code>php</code> handler 已被 GH-16590 堵住，此路要 <code>php_serialize</code>；</li>
+<li><strong>A/B 请求对</strong>本身就是一个通用模式：A 制造悬空＋内存布局，B 重占＋消费，中间靠 prefork 轮换保证地址连续性。</li>
+</ul>
+<h2 id="0x08-防御：在链条上动刀"><a href="#0x08-防御：在链条上动刀" class="headerlink" title="0x08 防御：在链条上动刀"></a>0x08 防御：在链条上动刀</h2><p>理解了链条，缓解措施的位置就清楚了：</p>
+<p><strong>安装官方修复</strong>：升级到官方已发布的修复版本，或安装发行版明确回补这两个 CVE 的包，并<strong>重启全部 PHP worker</strong>。本次首批修复版本为 8.5.12 / 8.4.27 / 8.3.36 / 8.2.35；实际更新时以官方当前安全公告和发行版维护记录为准。补丁同时调整 OOM 处理、请求结束清理和 early RINIT，分别处理异常退出时机、失效引用和过早访问的问题。</p>
+<p><strong>临时缓解按环节选</strong>：</p>
+<ul>
+<li><code>session.upload_progress.enabled=0</code> 斩断路径②③的<strong>消费者</strong>——B 请求的提前 session 处理直接消失，官方和 Calif 都点名的首选。这功能默认开启而几乎没人用，关了损失很小；</li>
+<li><code>memory_limit=-1</code> 移除 OOM <strong>生产者</strong>，但引入资源耗尽风险，只配合容器 / cgroup 边界短期用。<code>RLIMIT_AS</code> / <code>RLIMIT_DATA</code> 反而会制造底层分配失败，官方明确警告别用；</li>
+<li>关 <code>display_errors</code> 能掐掉 9bie 当前的泄漏信道（依赖警告输出置 <code>headers_sent</code>），但仓库已声明 off 版在路上，这只争取时间。</li>
+</ul>
+<p><strong>检测面</strong>（来自利用代码的具体特征）：异常巨大的 <code>Set-Cookie</code>（约 4KB urlencoded 乱码，最强单点信号）；带 <code>PHP_SESSION_UPLOAD_PROGRESS</code> 却无文件 part 的 multipart 请求；单请求上千字段或单字段十几 MB；worker 反复 SIGABRT 的 502 尖峰；日志里 <code>Session ID is too long or contains illegal characters</code> 与 <code>Failed to read session data</code> 成对出现。</p>
+<p><img src="/2026/10/22/Vuln_PHP2Shell/evidence.png" alt="HashTable、Session 与 Unserializer 的状态及修复对应图" loading="lazy" decoding="async" width="2100" height="2280"></p>
+<p><em>三类问题涉及不同状态，补丁分别处理元素可见性、请求内存引用和共享解码上下文。</em></p>
+<h2 id="0x09-小结"><a href="#0x09-小结" class="headerlink" title="0x09 小结"></a>0x09 小结</h2><p>PHP2Shell 的价值在于它把一条二十年前埋下的线走通了：<strong>内存耗尽从”故障”变成”可控中断”，中断又恰好落在内部状态发布与提交的窗口里</strong>。三条路径共享同一个生产者原语，消费端分别击中 HashTable 计数、session 全局和反序列化器全局；SAPI 的启动失败处理差异决定了 mod_php 先倒下，而应用层解码操作让 FPM 同样失守。</p>
+<p>补丁的修法也值得回味：把软 OOM 的处理移到受控检查点，用硬限约束继续分配的余量，再补齐请求两端的状态清理。对写 C 的工程师来说，这提醒我们重新审视“先更新记录，再执行可能失败的操作”这种常见顺序：操作中断后，后面的代码究竟会把记录当成什么状态？</p>
+<p><a target="_blank" rel="noopener" href="https://x.com/IceSolst/status/2112771812056510756">IceSolst 在 X 上的这段调侃</a>，倒很贴切：</p>
+<blockquote>
+<p>如果你先发布补丁，它会得到一个 PoC。</p>
+<p>如果你不发布补丁，人们会在你身上烧掉数百万个 token，并得到更多 PoC，包含你尚未修补的新漏洞。</p>
+</blockquote>
+<p><strong>这轮修复也值得继续跟踪：同类问题可能仍有遗漏，后续研究还可能找到新的异常路径或变体。</strong> PHP 官方当前将这些版本列为两项已披露漏洞的修复版本；“这类问题是否已经全部找完”，则是另一个需要持续研究的问题。本文尚未验证针对完整官方修复版本的新绕过。先更新，再关注 <a target="_blank" rel="noopener" href="https://www.php.net/archive/2026.php#2026-10-21-5">PHP 官方安全公告</a>、<a target="_blank" rel="noopener" href="https://www.php.net/ChangeLog-8.php">版本更新记录</a>、<a target="_blank" rel="noopener" href="https://watchtowr.com/intelligence/php-remote-code-execution-php2shell/">watchTowr 的 PHP2Shell 跟踪分析</a> 和发行版后续通告，两件事应当一起做。</p>
+<p>对维护者来说，修复、回归测试和后续审计需要持续推进；对使用者来说，及时更新并确认运行中的 worker 已切换，仍然是当下最实际的行动。</p>
+<h2 id="0xFF-参考资料"><a href="#0xFF-参考资料" class="headerlink" title="0xFF 参考资料"></a>0xFF 参考资料</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://www.php.net/archive/2026.php#2026-10-21-5">PHP 官方紧急安全公告与缓解措施</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/php/php-src/security/advisories/GHSA-w8hw-w9fx-j79w">CVE-2026-109618：RCE via OOM corruption（GHSA-w8hw-w9fx-j79w）</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/php/php-src/security/advisories/GHSA-6wmf-4rv5-p3rp">CVE-2026-109619：RCE via stale global state（GHSA-6wmf-4rv5-p3rp）</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/php/php-src/commit/506e87fa7dcdd306975e5b8f8265ee03527aacbf">PHP 8.4 安全提交：Avoid state corruption via bailout</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/php/php-src/commit/31c0ea7d7ff1d1fccb6492e52dab544011628065">PHP 8.5 安全提交：Avoid state corruption via bailout</a></li>
+<li><a target="_blank" rel="noopener" href="https://calif.io/php2shell/">Calif：PHP2Shell 一手研究</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/9bie/php2shell-bypass-aslr-exp">9bie：php2shell-bypass-aslr-exp 公开利用实现</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.wiz.io/blog/php2shell-php-rce">Wiz：PHP2Shell 技术分析</a></li>
+<li><a target="_blank" rel="noopener" href="https://bugs.php.net/bug.php?id=78876">PHP Bug #78876：multipart 长变量 OOM（2020）</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.php.net/manual/en/session.upload-progress.php">PHP：Session Upload Progress 手册</a></li>
+</ul>
+<p><em>资料与代码阅读截止于 2026 年 10 月 22 日。本稿为本地审阅版，未发布。</em></p>
+
+                
+            </div>
+            <hr>
+
+            
+
+    <div class="reprint" id="reprint-statement">
+        
+            <div class="reprint__author">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-user">
+                        文章作者:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="https://miaotony.xyz" rel="external nofollow noreferrer">MiaoTony</a>
+                </span>
+            </div>
+            <div class="reprint__type">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-link">
+                        文章链接:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="https://miaotony.xyz/2026/10/22/Vuln_PHP2Shell/">https://miaotony.xyz/2026/10/22/Vuln_PHP2Shell/</a>
+                </span>
+            </div>
+            <div class="reprint__notice">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-copyright">
+                        版权声明:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    本博客所有文章除特别声明外，均采用
+                    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY-NC-SA 4.0</a>
+                    许可协议。转载请注明来源
+                    <a href="https://miaotony.xyz" target="_blank">MiaoTony</a>
+                    !
+                </span>
+            </div>
+        
+    </div>
+
+    <script async defer>
+      document.addEventListener("copy", function (e) {
+        let toastHTML = '<span>复制成功，请遵循本文的转载规则</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">查看</a>';
+        M.toast({html: toastHTML})
+      });
+
+      function navToReprintStatement() {
+        $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
+      }
+    </script>
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            
+                                <a href="/tags/Security/">
+                                    <span class="chip bg-color">Security</span>
+                                </a>
+                            
+                                <a href="/tags/PHP/">
+                                    <span class="chip bg-color">PHP</span>
+                                </a>
+                            
+                                <a href="/tags/Vulnerability/">
+                                    <span class="chip bg-color">Vulnerability</span>
+                                </a>
+                            
+                                <a href="/tags/Exploit/">
+                                    <span class="chip bg-color">Exploit</span>
+                                </a>
+                            
+                                <a href="/tags/CodeAudit/">
+                                    <span class="chip bg-color">CodeAudit</span>
+                                </a>
+                            
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+<div id="article-share">
+
+    
+    <div class="social-share" data-sites="qq,qzone,wechat,weibo,twitter,facebook,google,douban,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
+    <script src="/libs/share/js/social-share.min.js"></script>
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+                <style>
+    #reward {
+        margin: 40px 0;
+        text-align: center;
+    }
+
+    #reward .reward-link {
+        font-size: 1.4rem;
+        line-height: 38px;
+    }
+
+    #reward .btn-floating:hover {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    #rewardModal {
+        width: 320px;
+        height: 350px;
+    }
+
+    #rewardModal .reward-title {
+        margin: 15px auto;
+        padding-bottom: 5px;
+    }
+
+    #rewardModal .modal-content {
+        padding: 10px;
+    }
+
+    #rewardModal .close {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+        color: rgba(0, 0, 0, 0.5);
+        font-size: 1.3rem;
+        line-height: 20px;
+        cursor: pointer;
+    }
+
+    #rewardModal .close:hover {
+        color: #ef5350;
+        transform: scale(1.3);
+        -moz-transform:scale(1.3);
+        -webkit-transform:scale(1.3);
+        -o-transform:scale(1.3);
+    }
+
+    #rewardModal .reward-tabs {
+        margin: 0 auto;
+        width: 210px;
+    }
+
+    .reward-tabs .tabs {
+        height: 38px;
+        margin: 10px auto;
+        padding-left: 0;
+    }
+
+    .reward-content ul {
+        padding-left: 0 !important;
+    }
+
+    .reward-tabs .tabs .tab {
+        height: 38px;
+        line-height: 38px;
+    }
+
+    .reward-tabs .tab a {
+        color: #fff;
+        background-color: #ccc;
+    }
+
+    .reward-tabs .tab a:hover {
+        background-color: #ccc;
+        color: #fff;
+    }
+
+    .reward-tabs .wechat-tab .active {
+        color: #fff !important;
+        background-color: #22AB38 !important;
+    }
+
+    .reward-tabs .alipay-tab .active {
+        color: #fff !important;
+        background-color: #019FE8 !important;
+    }
+
+    .reward-tabs .reward-img {
+        width: 210px;
+        height: 210px;
+    }
+</style>
+
+<div id="reward">
+    <a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-medium waves-effect waves-light red">赏</a>
+
+    <!-- Modal Structure -->
+    <div id="rewardModal" class="modal">
+        <div class="modal-content">
+            <a class="close modal-close"><i class="fas fa-times"></i></a>
+            <h4 class="reward-title">打赏一下让我来点好吃好玩的呗~</h4>
+            <div class="reward-content">
+                <div class="reward-tabs">
+                    <ul class="tabs row">
+                        <!-- 
+                            <li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li> 
+                        -->
+                        <li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li>
+                    </ul>
+                    <!-- 
+                        <div id="alipay">
+                        <img src="/" class="reward-img" alt="支付宝打赏二维码">
+                        </div> 
+                -->
+                    <div id="wechat">
+                        <img src="/medias/reward/wechat.png" class="reward-img" alt="微信打赏二维码">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.tabs').tabs();
+    });
+</script>
+
+            
+        </div>
+    </div>
+
+    
+        <link rel="stylesheet" href="/libs/gitalk/gitalk.min.css">
+<link rel="stylesheet" href="/css/my-gitalk.css">
+
+<div class="card gitalk-card" data-aos="fade-up">
+    <div class="comment_headling" style="font-size: 20px; font-weight: 700; position: relative; padding-left: 20px; top: 15px; padding-bottom: 5px;">
+        <i class="fas fa-comments fa-fw" aria-hidden="true"></i>
+        <span>评论</span>
+    </div>
+    <div id="gitalk-container" class="card-content"></div>
+</div>
+
+<script src="/libs/gitalk/gitalk.min.js"></script>
+<script>
+    let gitalk = new Gitalk({
+        clientID: '116343b4650fce4789b6',
+        clientSecret: '3e9be2ad6c9b693af1753290c7c059b1e4f34d5d',
+        repo: 'miaotony.github.io',
+        owner: 'miaotony',
+        admin: "miaotony",
+        id: '2026-10-22T03-30-00',
+        distractionFreeMode: false  // Facebook-like distraction free mode
+    });
+
+    gitalk.render('gitalk-container');
+</script>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
+            <div class="card">
+                <a href="/2026/10/22/Vuln_PHP2Shell/">
+                    <div class="card-image">
+                        
+                        <img src="/2026/10/22/Vuln_PHP2Shell/banner-mobile.png" class="responsive-img" alt="Security | PHP2Shell：内存耗尽之后，服务器怎么就被拿下了？">
+                        
+                        <span class="card-title">Security | PHP2Shell：内存耗尽之后，服务器怎么就被拿下了？</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            结合官方公告、补丁源码与公开利用实现，拆解 PHP CVE-2026-109618 / 109619 的三条利用路径、可复用攻击原语与完整武器化链路，兼谈修复与检测。
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2026-10-22
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/Security/" class="post-category">
+                                    Security
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/Security/">
+                        <span class="chip bg-color">Security</span>
+                    </a>
+                    
+                    <a href="/tags/PHP/">
+                        <span class="chip bg-color">PHP</span>
+                    </a>
+                    
+                    <a href="/tags/Vulnerability/">
+                        <span class="chip bg-color">Vulnerability</span>
+                    </a>
+                    
+                    <a href="/tags/Exploit/">
+                        <span class="chip bg-color">Exploit</span>
+                    </a>
+                    
+                    <a href="/tags/CodeAudit/">
+                        <span class="chip bg-color">CodeAudit</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2026/10/03/Tech_Jev/">
+                    <div class="card-image">
+                        
+                        <img src="/2026/10/03/Tech_Jev/card-jev.jpg" class="responsive-img" alt="Tech | Jev：不写一句话的 AI，怎么替程序做决定？">
+                        
+                        <span class="card-title">Tech | Jev：不写一句话的 AI，怎么替程序做决定？</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            从客服工单到浏览器操作，很多 AI 任务最终只需要一个选择。本文结合 5 分钟 4K 视频，拆解 Jev 的 Choice、Score、Noul、概率与校准，以及 Awesome Jev 里的真实应用和工程限制。
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2026-10-03
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/Tech/" class="post-category">
+                                    Tech
+                                </a>
+                            
+                            <a href="/categories/Tech/AI/" class="post-category">
+                                    AI
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/AI/">
+                        <span class="chip bg-color">AI</span>
+                    </a>
+                    
+                    <a href="/tags/Jev/">
+                        <span class="chip bg-color">Jev</span>
+                    </a>
+                    
+                    <a href="/tags/TypeSafe/">
+                        <span class="chip bg-color">TypeSafe</span>
+                    </a>
+                    
+                    <a href="/tags/Agent/">
+                        <span class="chip bg-color">Agent</span>
+                    </a>
+                    
+                    <a href="/tags/RAG/">
+                        <span class="chip bg-color">RAG</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+<script>
+    $('#articleContent').on('copy', function (e) {
+        // IE8 or earlier browser is 'undefined'
+        if (typeof window.getSelection === 'undefined') return;
+
+        var selection = window.getSelection();
+        // if the selection is short let's not annoy our users.
+        if (('' + selection).length < Number.parseInt('200')) {
+            return;
+        }
+
+        // create a div outside of the visible area and fill it with the selected text.
+        var bodyElement = document.getElementsByTagName('body')[0];
+        var newdiv = document.createElement('div');
+        newdiv.style.position = 'absolute';
+        newdiv.style.left = '-99999px';
+        bodyElement.appendChild(newdiv);
+        newdiv.appendChild(selection.getRangeAt(0).cloneContents());
+
+        // we need a <pre> tag workaround.
+        // otherwise the text inside "pre" loses all the line breaks!
+        if (selection.getRangeAt(0).commonAncestorContainer.nodeName === 'PRE' || selection.getRangeAt(0).commonAncestorContainer.nodeName === 'CODE') {
+            newdiv.innerHTML = "<pre>" + newdiv.innerHTML + "</pre>";
+        }
+
+        var url = document.location.href;
+        newdiv.innerHTML += '<br />'
+            + '来源: MiaoTony&#39;s小窝<br />'
+            + '文章作者: MiaoTony<br />'
+            + '文章链接: <a href="' + url + '">' + url + '</a><br />'
+            + '本文章著作权归作者 MiaoTony 所有，任何形式的转载都请注明出处。';
+
+        selection.selectAllChildren(newdiv);
+        window.setTimeout(function () {bodyElement.removeChild(newdiv);}, 200);
+    });
+</script>
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+
+
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
+
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget card" style="background-color: white;">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('1'),
+            headingSelector: 'h2, h3, h4, h5'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h2, h3, h4, h5').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+
+
+    <footer class="page-footer bg-color">
+        <div class="container row center-align" style="margin-bottom: 15px !important;">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            
+                <span id="year">2019-2026</span>
+            
+            <a href="/about" target="_blank">MiaoTony</a>
+            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+            |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
+            <br>
+                        &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span class="white-color">508.2k</span>&nbsp;字
+                                                                                    <span id="busuanzi_container_site_pv">
+			|&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv" class="white-color"></span>&nbsp;次
+            </span>
+                                    <span id="busuanzi_container_site_uv">
+                |&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;<span id="busuanzi_value_site_uv" class="white-color"></span>&nbsp;人
+            </span>
+                        <br>
+                        <span id="sitetime">载入运行时间...</span>
+            <script>
+                function siteTime() {
+                    var seconds = 1000;
+                    var minutes = seconds * 60;
+                    var hours = minutes * 60;
+                    var days = hours * 24;
+                    var years = days * 365;
+                    var today = new Date();
+                    var startYear = "2019";
+                    var startMonth = "11";
+                    var startDate = "28";
+                    var startHour = "0";
+                    var startMinute = "0";
+                    var startSecond = "0";
+                    var todayYear = today.getFullYear();
+                    var todayMonth = today.getMonth() + 1;
+                    var todayDate = today.getDate();
+                    var todayHour = today.getHours();
+                    var todayMinute = today.getMinutes();
+                    var todaySecond = today.getSeconds();
+                    var t1 = Date.UTC(startYear, startMonth, startDate, startHour, startMinute, startSecond);
+                    var t2 = Date.UTC(todayYear, todayMonth, todayDate, todayHour, todayMinute, todaySecond);
+                    var diff = t2 - t1;
+                    var diffYears = Math.floor(diff / years);
+                    var diffDays = Math.floor((diff / days) - diffYears * 365);
+                    var diffHours = Math.floor((diff - (diffYears * 365 + diffDays) * days) / hours);
+                    var diffMinutes = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours) /
+                        minutes);
+                    var diffSeconds = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours -
+                        diffMinutes * minutes) / seconds);
+                    if (startYear == todayYear) {
+                        document.getElementById("year").innerHTML = todayYear;
+                        document.getElementById("sitetime").innerHTML = "本站已安全运行 " + diffDays + " 天 " + diffHours +
+                            " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒";
+                    } else {
+                        document.getElementById("year").innerHTML = startYear + " - " + todayYear;
+                        document.getElementById("sitetime").innerHTML = "本站已安全运行 " + diffYears + " 年 " + diffDays +
+                            " 天 " + diffHours + " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒";
+                    }
+                }
+                setInterval(siteTime, 1000);
+            </script>
+                        <br>
+                    </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+    <a href="https://t.me/MiaoTonyChannel" class="tooltipped" target="_blank" data-tooltip="关注我的TelegramChannel: @MiaoTonyChannel" data-position="top" data-delay="50">
+        <i class="fab fa-telegram"></i>
+    </a>
+
+
+
+    <a href="https://github.com/miaotony" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+        <i class="fab fa-github"></i>
+    </a>
+
+
+
+    <a href="mailto:miaotony@outlook.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fas fa-envelope-open"></i>
+    </a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
+        <i class="fas fa-rss"></i>
+    </a>
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+    <!-- 搜索遮罩框：索引在首次打开时加载 -->
+<div id="searchModal" class="modal" data-index-url="/search.xml">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字" class="search-input">
+        </div>
+        <div id="searchResult" role="status" aria-live="polite"></div>
+    </div>
+</div>
+<style>
+#searchModal .search-state { display:flex; align-items:center; gap:18px; margin:24px 0 12px; padding:24px; border:1px solid #dcece6; border-radius:14px; background:#f3f9f6; color:#244b40; }
+#searchModal .search-state-icon { flex:none; width:30px; height:30px; display:flex; align-items:center; justify-content:center; font-size:22px; color:#16855c; }
+#searchModal .search-state--loading .search-state-icon { border:3px solid #d5e9df; border-top-color:#16855c; border-radius:50%; animation:search-loading-spin .85s linear infinite; }
+#searchModal .search-state-copy { flex:1; min-width:0; }
+#searchModal .search-state strong { display:block; font-size:17px; line-height:1.5; }
+#searchModal .search-state p { margin:5px 0 0; color:#62776e; font-size:14px; line-height:1.7; }
+#searchModal .search-state--error { background:#fbf7f1; border-color:#eee0ca; }
+#searchModal .search-state--error .search-state-icon { color:#9a651b; }
+#searchModal .search-state-retry { flex:none; padding:9px 15px; border:0; border-radius:8px; background:#16855c; color:#fff; cursor:pointer; font:inherit; }
+#searchModal .search-state-retry:focus-visible { outline:3px solid #8fcab0; outline-offset:3px; }
+@keyframes search-loading-spin { to { transform:rotate(360deg); } }
+@media(max-width:600px) { #searchModal .search-state { gap:12px; padding:18px 15px; flex-wrap:wrap; } #searchModal .search-state-retry { margin-left:42px; } }
+@media(prefers-reduced-motion:reduce) { #searchModal .search-state--loading .search-state-icon { animation:none; } }
+</style>
+<script defer src="/js/search-on-demand.js?v=2"></script>
+
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.min.js"></script>
+
+    
+
+    
+<script>
+    var _hmt = _hmt || [];
+    (function () {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?40e312a1eec109cf96e30988cf3bfe70";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+    
+    
+    
+    <script defer src="/js/busuanzi-isolated.js"></script>
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+</body>
+
+</html>
