@@ -562,14 +562,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    7.5k
+                    8.1k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    28 分
+                    30 分
                 </div>
                 
 
@@ -596,7 +596,7 @@
 
 <p>2026 年 10 月 21 日，PHP 紧急发布 8.5.12 / 8.4.27 / 8.3.36 / 8.2.35，修复两个 CVSS 4.0 均为 <strong>9.2</strong> 的未认证远程代码执行漏洞：<strong>CVE-2026-109618</strong>（OOM corruption）和 <strong>CVE-2026-109619</strong>（stale global state）。社区将这组漏洞称为 <strong>PHP2Shell</strong>。</p>
 <p>上面这个页面没有数据库、没有上传、没调 <code>session_start()</code>，但在公开的利用实现里，它就是标准的攻击目标——纯 HTTP 打进去，拿到 <code>uid=33(www-data)</code> 的命令执行。</p>
-<p>秘密全在 <code>echo</code> 的前后：PHP 处理一个请求，要先解析输入、初始化运行环境，结束后还要做请求清理。业务代码只占中间一小段，而这两个 CVE 恰好埋在准备和收尾的工作里。<strong>内存耗尽（OOM）这个最普通的故障，在特定时序下会变成攻击者的遥控中断源</strong>——这就是整条利用链的起点。</p>
+<p>秘密全在 <code>echo</code> 的前后。PHP 处理一个请求，得先把输入解析好、把运行环境初始化好，结束后还要做一遍请求清理，业务代码只占中间一小段。这两个 CVE 恰好埋在准备和收尾这两步里。<strong>内存耗尽（OOM）本来是最普通的故障，但在特定的时序下，它变成了攻击者手里的一个开关</strong>——这就是整条利用链的起点。</p>
 <h3 id="先补一点背景：上传一个文件，PHP-到底做了什么？"><a href="#先补一点背景：上传一个文件，PHP-到底做了什么？" class="headerlink" title="先补一点背景：上传一个文件，PHP 到底做了什么？"></a>先补一点背景：上传一个文件，PHP 到底做了什么？</h3><p>平时上传头像、提交附件，页面上看起来只有“选择文件”和“提交”两个动作。服务器实际要先拆开整个请求，分清哪些是普通文字、哪些是文件，再为业务代码准备数据。PHP2Shell 涉及的几个关键环节，就藏在这段准备工作和之后的清理工作里。</p>
 <p><strong>第一步：浏览器把表单编码成 multipart。</strong> 一个普通的上传表单大致如下。这只是正常上传功能的示例：</p>
 <pre class="line-numbers language-markup" data-language="markup"><code class="language-markup"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>form</span> <span class="token attr-name">action</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>upload.php<span class="token punctuation">"</span></span> <span class="token attr-name">method</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>post<span class="token punctuation">"</span></span> <span class="token attr-name">enctype</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>multipart/form-data<span class="token punctuation">"</span></span><span class="token punctuation">&gt;</span></span>
@@ -606,7 +606,8 @@
 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>form</span><span class="token punctuation">&gt;</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p><code>multipart/form-data</code> 可以理解为“一个包裹里装了多个小包”。浏览器用 boundary 分隔各个 part；每个 part 的头部说明字段名，文件 part 还带文件名等信息，后面接实际内容。上面的请求包含两部分：<code>description</code> 的文字，以及 <code>photo</code> 的文件数据。这里的 part 指请求体中的一个分段，和一次新的 HTTP 请求是两回事。</p>
-<p><strong>第二步：Web 服务器把请求交给 PHP。</strong> 常见部署有两种：Apache 的 <code>mod_php</code> 把 PHP 嵌在 Apache 进程内运行；PHP-FPM 则维护独立的 PHP 工作进程，由 Nginx 或 Apache 通过 FastCGI 把请求交过去。后文出现的 <strong>SAPI</strong>，就是 PHP 与外部运行环境衔接的接口；<strong>worker</strong> 则是实际处理请求的工作进程。一个 worker 通常会陆续处理多个请求。</p>
+<p><strong>第二步：Web 服务器把请求交给 PHP。</strong> 常见部署有两种。一种是 Apache 的 <code>mod_php</code>，PHP 直接嵌在 Apache 进程里跑；另一种是 PHP-FPM，它自己维护一批 PHP 工作进程，由 Nginx 或 Apache 通过 FastCGI 把请求转过去。</p>
+<p>后文反复出现的 <strong>SAPI</strong>，指的就是 PHP 与外部运行环境之间的这层接口；<strong>worker</strong> 则是真正处理请求的工作进程，一个 worker 通常要接连处理很多个请求。</p>
 <p>Web 服务器还可能先缓冲请求体，再交给 PHP。因此“浏览器正在上传”和“PHP 正在解析上传数据”这两个时间段，具体如何重叠取决于部署配置。</p>
 <p><strong>第三步：PHP 解析请求，建立业务代码能直接读取的数据。</strong> 在开启自动 POST 解析的常见配置下，PHP 会在执行目标脚本之前处理适用的 POST 请求体。multipart 解析器逐段读取输入：普通字段进入 <code>$_POST</code>；文件内容通常写入上传临时文件；文件的名称、大小、临时路径和上传状态则记录到 <code>$_FILES</code>。</p>
 <pre class="line-numbers language-text" data-language="text"><code class="language-text">浏览器提交 multipart 请求
@@ -628,19 +629,24 @@
 <li><code>full_path</code>：客户端提交的路径信息，PHP 8.1 起提供，同样需要按不可信输入处理。</li>
 </ul>
 <p>此时文件还只是被临时接收。业务代码接下来检查身份权限、错误码、大小和实际文件类型，再用 <code>move_uploaded_file()</code> 等操作保存到选定位置。正常请求结束时，未移走的上传临时文件会被清理。<strong>接收与解析发生在前，应用决定接受或拒绝发生在后。</strong> 具体字段与处理流程可以对照 <a target="_blank" rel="noopener" href="https://www.php.net/manual/en/features.file-upload.post-method.php">PHP 官方文件上传手册</a>。</p>
-<h3 id="文件放在临时目录，为什么还会牵涉内存？"><a href="#文件放在临时目录，为什么还会牵涉内存？" class="headerlink" title="文件放在临时目录，为什么还会牵涉内存？"></a>文件放在临时目录，为什么还会牵涉内存？</h3><p>文件内容写入临时文件，PHP 仍要在内存里维护解析缓冲、字段名、字段值，以及描述文件的数组。<code>$_FILES</code> 保存的是文件信息，文件正文通常留在临时文件中。</p>
-<p>PHP 数组在内核里主要由 <strong>HashTable（哈希表）</strong> 实现；其中的元素槽位叫 <strong>Bucket</strong>，值使用 <strong>zval</strong> 表示。可以先把它们理解为“目录”“目录中的一条记录”和“这条记录保存的值”。每条记录除了用户提交的文字，还带类型、长度、引用等管理信息。因此，请求体大小、文件大小和 PHP 分配的内存大小，是三个不同的量。</p>
-<p>几个常见配置也分别负责不同环节：<code>upload_max_filesize</code> 管单个上传文件，<code>post_max_size</code> 管 POST 请求体大小，<code>memory_limit</code> 管 PHP 分配器允许使用的内存。后面提到 <strong>OOM（Out Of Memory）</strong>，指内存分配无法按原有方式继续的情形；触及 PHP 的内存限制时，整台服务器仍可能有空闲内存。</p>
+<h3 id="文件放在临时目录，为什么还会牵涉内存？"><a href="#文件放在临时目录，为什么还会牵涉内存？" class="headerlink" title="文件放在临时目录，为什么还会牵涉内存？"></a>文件放在临时目录，为什么还会牵涉内存？</h3><p>文件内容虽然写进了临时文件，PHP 还是得在内存里维护解析缓冲、字段名、字段值，以及描述这些文件的数组。<code>$_FILES</code> 存的是文件信息，文件正文一般留在临时文件里。</p>
+<p>PHP 数组在内核里主要由 <strong>HashTable（哈希表）</strong> 实现，里面每个元素槽位叫 <strong>Bucket</strong>，值用 <strong>zval</strong> 表示。可以先把它们理解成“目录”“目录里的一条记录”“这条记录存的值”。每条记录除了用户提交的文字，还带着类型、长度、引用计数这些管理信息。所以要记住：请求体有多大、文件有多大、PHP 实际占了多少内存，这是三个不同的数字。</p>
+<p>几个常见配置各管一摊：<code>upload_max_filesize</code> 管单个上传文件的大小，<code>post_max_size</code> 管整个 POST 请求体，<code>memory_limit</code> 管 PHP 分配器能用多少内存。</p>
+<p>后面会说到 <strong>OOM（Out Of Memory）</strong>，指的是内存分配按原有方式继续不下去了。要留意，触发 PHP 的内存上限时，整台服务器往往还有大量空闲内存。</p>
 <h3 id="上传进度条，为什么又和-session-有关系？"><a href="#上传进度条，为什么又和-session-有关系？" class="headerlink" title="上传进度条，为什么又和 session 有关系？"></a>上传进度条，为什么又和 session 有关系？</h3><p>上传大文件时，页面需要知道“已经处理了多少字节”。PHP 的 <strong>Session Upload Progress</strong> 功能可以在解析上传数据的过程中，把进度写入 session，让另一个查询请求读取。</p>
 <p>session 可以理解为服务器保存的一份会话数据，浏览器通常通过 cookie 中的会话标识找到它。除了登录状态，它也可以存放上传进度等临时信息。当上传进度功能开启、请求携带相应标记并满足处理条件时，PHP 会在上传解析阶段更新这些数据。</p>
-<p>这里最值得记住的是 <a target="_blank" rel="noopener" href="https://www.php.net/manual/en/session.upload-progress.php">官方手册的提醒</a>：<strong>上传进度信息在任何脚本执行之前就会写入 session。</strong> 所以，目标脚本是否显式写了 <code>session_start()</code>，和 PHP 内核是否已经接触 session 状态，要分开看。</p>
+<p>这里最该记住的是 <a target="_blank" rel="noopener" href="https://www.php.net/manual/en/session.upload-progress.php">官方手册的提醒</a>：<strong>上传进度信息会在任何脚本执行之前就写进 session。</strong></p>
+<p>所以要把两件事分开看：目标脚本里有没有写 <code>session_start()</code>，是一回事；PHP 内核有没有已经碰过 session 状态，是另一回事。</p>
 <p>这也回答了开头那个问题：即使页面只写了一行 <code>echo</code>，只要请求被交给 PHP 且相应解析功能启用，PHP 仍会先完成自己的准备工作。页面上有没有上传按钮，由前端决定；服务端解析哪种请求，由实际收到的请求和运行配置决定。</p>
-<h3 id="请求结束了，worker-为什么还在？"><a href="#请求结束了，worker-为什么还在？" class="headerlink" title="请求结束了，worker 为什么还在？"></a>请求结束了，worker 为什么还在？</h3><p>为了减少启动开销，worker 通常会复用；但本次请求分配的大量内存会在请求收尾时释放。于是出现了两种不同的寿命：<strong>工作进程可以跨请求存活，请求内存只服务于当前请求。</strong></p>
-<p>如果进程里的某个字段仍保存着已经释放的内存地址，它就成了“悬空指针”；后续通过它访问原对象，就是 <strong>UAF（Use After Free，释放后使用）</strong>。后文的 <strong>RINIT</strong> 和 <strong>RSHUTDOWN</strong>，分别指扩展的请求初始化与请求结束处理；<strong>析构</strong>则是销毁一个值并释放其资源时执行的收尾操作。</p>
-<p><img src="/2026/10/22/Vuln_PHP2Shell/exploit-concepts.png" alt="对象寿命与引用状态的三列快照" loading="eager" decoding="async" width="2100" height="850"></p>
+<h3 id="请求结束了，worker-为什么还在？"><a href="#请求结束了，worker-为什么还在？" class="headerlink" title="请求结束了，worker 为什么还在？"></a>请求结束了，worker 为什么还在？</h3><p>为了省下重复启动的开销，worker 通常会被复用，但本次请求分配的内存会在请求收尾时整体释放。于是就出现了两种不同的寿命：<strong>工作进程可以活过很多个请求，请求内存却只属于当前这一个请求。</strong></p>
+<p>进程里某个字段如果还存着已经释放的内存地址，它就是“悬空指针”。之后再有代码顺着它去访问原来的对象，就是 <strong>UAF（Use After Free，释放后使用）</strong>。</p>
+<p>后文还会反复出现几个词，先在这里集中交代一下：<strong>RINIT</strong> 是扩展的请求初始化，<strong>RSHUTDOWN</strong> 是扩展的请求结束处理，<strong>析构</strong>是销毁一个值、顺便释放它占用的资源。</p>
+<p><img src="/2026/10/22/Vuln_PHP2Shell/exploit-concepts.png" alt="对象寿命与引用状态的三列快照" loading="eager" decoding="async" width="1600" height="920"></p>
 <p><em>对象释放后，旧引用仍需撤销；访问前也要确认对象有效。</em></p>
-<p>PHP 对许多可共享的数据使用<strong>引用计数</strong>管理寿命，可以理解为“还有多少处在使用它”。释放一个值时，计数会减少；最后一个使用者退出后，底层数据才具备回收条件。这个机制依赖记录正确：如果代码把无效内存误认成正常的值，清理操作也会跟着读错记录。</p>
-<p>后面还有两个容易混淆的词：<strong>序列化</strong>是把数组、对象等数据转换成便于保存或传输的表示，<strong>反序列化</strong>是把它们还原回来。还原复杂数据时，PHP 会维护一个工作上下文，记录已经处理过的值、引用关系和待清理对象；上下文也有自己的初始化与销毁过程。理解这一点，就能看懂后文为何同时讨论业务数据和“负责还原数据的内部状态”。</p>
+<p>PHP 用<strong>引用计数</strong>来管理很多可共享数据的寿命。可以把它理解成“现在还有几个人在用这块数据”：释放一个值时计数减一，等最后一个使用者退场，底层的这块数据才具备回收条件。</p>
+<p>这套机制的前提是计数和记录本身没错。一旦代码把无效内存误当成正常的值，连清理操作都会跟着读错记录——问题就从这里开始扩散。</p>
+<p>另外还有两个容易混的词：<strong>序列化</strong>是把数组、对象这类数据转成便于保存或传输的形式，<strong>反序列化</strong>是把它们还原回来。</p>
+<p>还原复杂数据时，PHP 要维护一份“还原进度”的上下文，里面记着已经处理过哪些值、彼此是什么引用关系、哪些对象还没清理。这份上下文自己也有初始化和销毁的过程。记住这一点，后面就能理解为什么文章既在谈业务数据，又在谈“负责还原数据的内部状态”。</p>
 <p>带着这几组关系再看源码，就容易抓住重点了：<strong>上传解析会建立数据结构，进度记录会提前接触 session，异常退出会改变清理顺序，而 worker 复用让部分错误状态有机会延续到后续请求。</strong></p>
 <h2 id="0x01-漏洞披露：一条二十年长的伏笔"><a href="#0x01-漏洞披露：一条二十年长的伏笔" class="headerlink" title="0x01 漏洞披露：一条二十年长的伏笔"></a>0x01 漏洞披露：一条二十年长的伏笔</h2><p>PHP2Shell 的时间线本身就是个好故事：</p>
 <ul>
@@ -652,15 +658,16 @@
 </ul>
 <p>官方确认的利用范围：<strong>mod_php 在默认输入与内存限制、正常 prefork 多 worker 下，已在业务代码运行前验证完整 RCE</strong>，实测目标覆盖 WordPress、Drupal、Joomla、Magento、phpMyAdmin、Nextcloud、Laravel 等；<strong>FPM 侧也有官方验证的 session 生命周期 RCE</strong>，前提是应用存在可达的解码操作。Calif 将已发现路径最早追溯到 PHP 5.4，修复覆盖 8.2–8.5，另放出 7.4 / 8.0 / 8.1 的最小源码回补分支。</p>
 <p>一手研究见 <a target="_blank" rel="noopener" href="https://calif.io/php2shell/">Calif 的 PHP2Shell 研究</a>。</p>
-<h2 id="0x02-先看-patch：PHP-怎么改掉”OOM-即跳转”"><a href="#0x02-先看-patch：PHP-怎么改掉”OOM-即跳转”" class="headerlink" title="0x02 先看 patch：PHP 怎么改掉”OOM 即跳转”"></a>0x02 先看 patch：PHP 怎么改掉”OOM 即跳转”</h2><p>8.4 分支的修复提交是 <a target="_blank" rel="noopener" href="https://github.com/php/php-src/commit/506e87fa7dcdd306975e5b8f8265ee03527aacbf"><code>506e87fa</code></a>（8.5 为 <code>31c0ea7d</code>），提交说明只有两行：</p>
+<h2 id="0x02-先看-patch：PHP-怎么改掉“OOM-即跳转”"><a href="#0x02-先看-patch：PHP-怎么改掉“OOM-即跳转”" class="headerlink" title="0x02 先看 patch：PHP 怎么改掉“OOM 即跳转”"></a>0x02 先看 patch：PHP 怎么改掉“OOM 即跳转”</h2><p>8.4 分支的修复提交是 <a target="_blank" rel="noopener" href="https://github.com/php/php-src/commit/506e87fa7dcdd306975e5b8f8265ee03527aacbf"><code>506e87fa</code></a>（8.5 为 <code>31c0ea7d</code>），提交说明只有两行：</p>
 <pre class="line-numbers language-text" data-language="text"><code class="language-text">Avoid state corruption via bailout
 
 - Replace bailout on OOM with UnwindExit
 - Properly reset various globals that may be accessed during startup<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 
-<p>完整 diff 的核验结果为：<strong>402 个文件、+11112 / −1032 行</strong>，横跨 Zend、session、序列化、几乎全部扩展和 OPcache。改动密度本身就说明问题：这是一类生命周期缺陷，散布在所有”发布状态 → 干可能失败的活 → 提交”的代码路径上。</p>
-<h3 id="软-OOM：从”立刻跳走”改成”先记账，到安全点再退”"><a href="#软-OOM：从”立刻跳走”改成”先记账，到安全点再退”" class="headerlink" title="软 OOM：从”立刻跳走”改成”先记账，到安全点再退”"></a>软 OOM：从”立刻跳走”改成”先记账，到安全点再退”</h3><p>旧 Zend MM 触发 <code>memory_limit</code> 时走 <code>zend_error_noreturn()</code> → <code>zend_bailout()</code>，一次 <code>longjmp</code> 直接跳出当前执行流。如果此刻某段 C 代码正把内部结构改到一半，跳出去就再没人替它收尾。</p>
-<p>这里的 <strong>Zend MM</strong> 是 PHP 内核的内存管理器。平常调用函数，会沿调用关系逐层返回；<code>longjmp</code> 则直接回到事先保存的执行位置，沿途尚未执行的语句会被跳过。可以把它理解为“紧急撤离”：人已经离开，手头改到一半的记录还留在原地。PHP 的 <code>bailout</code> 就借助这种机制中止当前处理。</p>
+<p>完整 diff 的核验结果为：<strong>402 个文件、+11112 / −1032 行</strong>，横跨 Zend、session、序列化、几乎全部扩展和 OPcache。改动密度本身就说明问题：这是一类生命周期缺陷，散布在所有“发布状态 → 干可能失败的活 → 提交”的代码路径上。</p>
+<h3 id="软-OOM：从“立刻跳走”改成“先记账，到安全点再退”"><a href="#软-OOM：从“立刻跳走”改成“先记账，到安全点再退”" class="headerlink" title="软 OOM：从“立刻跳走”改成“先记账，到安全点再退”"></a>软 OOM：从“立刻跳走”改成“先记账，到安全点再退”</h3><p>旧 Zend MM 触发 <code>memory_limit</code> 时走 <code>zend_error_noreturn()</code> → <code>zend_bailout()</code>，一次 <code>longjmp</code> 直接跳出当前执行流。如果此刻某段 C 代码正把内部结构改到一半，跳出去就再没人替它收尾。</p>
+<p>这里的 <strong>Zend MM</strong> 是 PHP 内核自带的内存管理器。</p>
+<p>平时调用函数，是一层层往下走、再一层层返回。<code>longjmp</code> 不一样，它直接跳回事先存好的位置，中间没执行的语句全部跳过。可以理解成紧急撤离：人已经跑出去了，手头改到一半的账还摊在原地。PHP 的 <code>bailout</code> 就是借这套机制中止当前处理的。</p>
 <p>补丁引入了延迟 OOM 状态机：</p>
 <pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">typedef</span> <span class="token keyword">enum</span> <span class="token class-name">_zend_oom_state</span> <span class="token punctuation">{</span>
     ZEND_OOM_STATE_NONE <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">,</span>
@@ -675,11 +682,20 @@
 <span class="token function">EG</span><span class="token punctuation">(</span>delayed_oom<span class="token punctuation">)</span><span class="token punctuation">.</span>state    <span class="token operator">=</span> ZEND_OOM_STATE_PENDING<span class="token punctuation">;</span>
 <span class="token function">zend_atomic_bool_store_ex</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token function">EG</span><span class="token punctuation">(</span>vm_interrupt<span class="token punctuation">)</span><span class="token punctuation">,</span> true<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 
-<p><strong>VM</strong> 是负责执行 PHP 指令的虚拟机；<strong>执行帧</strong>记录当前函数执行到哪条指令、有哪些参数和局部变量。补丁在有执行帧时使用 <code>zend_throw_unwind_exit()</code>，让执行器沿受控的退出路径展开；没有执行帧时，处理器仍会在检查点调用 <code>zend_bailout()</code>。这里的“安全点”指显式检查并处理延迟 OOM 的位置，将退出集中在这些位置，可以减少在底层结构更新中途直接跳走的问题。配套还新增了 <code>femalloc</code> 族<strong>可失败分配接口</strong>——分配失败返回 NULL，调用方显式处理半成品，替代旧的”失败即跳转”假设。</p>
-<h3 id="硬-OOM：放弃常规收尾，直接终止进程"><a href="#硬-OOM：放弃常规收尾，直接终止进程" class="headerlink" title="硬 OOM：放弃常规收尾，直接终止进程"></a>硬 OOM：放弃常规收尾，直接终止进程</h3><p>延迟处理也要有底线。内存继续恶化时，<code>zend_mm_check_limit()</code> 走 <code>zend_mm_hard_limit_error()</code>，向 stderr 报告后 <code>_exit(137)</code> 直接退出进程，跳过所有依赖内部状态的请求清理。硬限按分段公式计算（软限 ≤ 1 GiB 时取 2 倍，超过则加 1 GiB，均可显式配置百分比），别把”两倍”当成固定规律。</p>
-<p>两个易读错的点：修复后软 OOM 仍会打印 <code>Allowed memory size ... exhausted</code>，这句报错与补丁有无无关；<code>_exit(137)</code> 是主动带状态退出，和内核 SIGKILL 是两回事。</p>
-<h3 id="跨请求状态：把”遗留”变成”不可能”"><a href="#跨请求状态：把”遗留”变成”不可能”" class="headerlink" title="跨请求状态：把”遗留”变成”不可能”"></a>跨请求状态：把”遗留”变成”不可能”</h3><p>第二类修复针对 109619：请求结束后，进程级结构里指向请求内存的字段必须清空。</p>
-<p>读这些代码时，要区分“保存地址的字段”和“地址指向的数据”。字段所在的结构可以跟随 worker 长期存在，数据却可能只属于当前请求。类似通讯录里还留着旧地址，原住户已经搬走，下一位使用者照着地址寻找，就会认错对象。这里说的内核 globals，也有别于业务脚本里一个普通的全局变量。补丁在 <code>php_request_shutdown()</code> 里对 superglobals 析构后立即置 UNDEF：</p>
+<p><strong>VM</strong> 是执行 PHP 指令的虚拟机；<strong>执行帧</strong>记录着当前函数跑到哪条指令、手上有哪些参数和局部变量。</p>
+<p>补丁在有执行帧时调用 <code>zend_throw_unwind_exit()</code>，让执行器沿着一条受控的路径层层退出；没有执行帧时，处理逻辑仍然会在检查点调用 <code>zend_bailout()</code>。</p>
+<p>所谓“安全点”，就是那些会显式检查并处理延迟 OOM 的位置。把退出集中到这里，就不会再发生“底层结构改到一半直接跳走”的事。</p>
+<p>配套还加了一组 <code>femalloc</code> 族的<strong>可失败分配接口</strong>：分配不到内存就返回 NULL，由调用方自己处理半成品，取代过去“失败即跳转”的假设。</p>
+<h3 id="硬-OOM：放弃常规收尾，直接终止进程"><a href="#硬-OOM：放弃常规收尾，直接终止进程" class="headerlink" title="硬 OOM：放弃常规收尾，直接终止进程"></a>硬 OOM：放弃常规收尾，直接终止进程</h3><p>延迟处理也得有底线。内存继续恶化时，<code>zend_mm_check_limit()</code> 会走 <code>zend_mm_hard_limit_error()</code>，往 stderr 报一声，然后 <code>_exit(137)</code> 直接把进程带走，所有依赖内部状态的请求清理一概跳过。</p>
+<p>硬限按分段公式算：软限不超过 1 GiB 时取两倍，超过就在软限上再加 1 GiB，两者也都能显式配百分比——别把“两倍”当成固定规律。</p>
+<p>有两个地方容易读错。</p>
+<p>一是修复后软 OOM 照样会打印 <code>Allowed memory size ... exhausted</code>，这句报错跟补丁有没有打无关，属于正常现象。</p>
+<p>二是 <code>_exit(137)</code> 是 PHP 自己带着状态码退出，和被内核 SIGKILL 干掉完全是两回事。</p>
+<h3 id="跨请求状态：把“遗留”变成“不可能”"><a href="#跨请求状态：把“遗留”变成“不可能”" class="headerlink" title="跨请求状态：把“遗留”变成“不可能”"></a>跨请求状态：把“遗留”变成“不可能”</h3><p>第二类修复针对 109619：请求结束后，进程级结构里指向请求内存的字段必须清空。</p>
+<p>读这段代码，要先分清“保存地址的字段”和“地址指向的数据”。</p>
+<p>字段所在的那个结构可以跟着 worker 长期存在，它指向的数据却可能只属于当前这个请求。好比通讯录里还留着旧地址，原住户早搬走了，下一个人照着地址找过去，只会敲错门。</p>
+<p>另外这里的 globals 是内核里的全局结构，跟业务脚本里随手写的全局变量不是一回事。</p>
+<p>补丁的做法是在 <code>php_request_shutdown()</code> 里，把 superglobals 析构完立刻置成 UNDEF：</p>
 <pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">for</span> <span class="token punctuation">(</span>i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> NUM_TRACK_VARS<span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
     <span class="token function">zval_ptr_dtor</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token function">PG</span><span class="token punctuation">(</span>http_globals<span class="token punctuation">)</span><span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token comment">/* May be accessed before php_request_startup() */</span>
@@ -692,19 +708,20 @@
 <span class="token function">memset</span><span class="token punctuation">(</span><span class="token operator">&amp;</span><span class="token function">BG</span><span class="token punctuation">(</span>unserialize<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token keyword">sizeof</span><span class="token punctuation">(</span><span class="token function">BG</span><span class="token punctuation">(</span>unserialize<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token function">php_url_scanner_early_rinit</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 
-<p>session 侧还加了 <code>PS(in_rfc1867_update)</code> 标记，上传进度期间的解码强制 <code>incomplete_classes_only</code> 模式——对象一律保持 <code>__PHP_Incomplete_Class</code>，早于业务代码的路径上不再触发 autoload、<code>__wakeup()</code> 等用户代码。</p>
-<p><img src="/2026/10/22/Vuln_PHP2Shell/patch.png" alt="OOM 处理与请求生命周期的补丁前后对比" loading="eager" decoding="async" width="2100" height="2530"></p>
+<p>session 侧还加了个 <code>PS(in_rfc1867_update)</code> 标记：上传进度期间的解码被强制走 <code>incomplete_classes_only</code> 模式，所有对象一律保持 <code>__PHP_Incomplete_Class</code>。这样一来，那些早于业务代码执行的路径上，就不会再触发 autoload 或者 <code>__wakeup()</code> 之类的用户代码了。</p>
+<p><img src="/2026/10/22/Vuln_PHP2Shell/patch.png" alt="OOM 处理与请求生命周期的补丁前后对比" loading="eager" decoding="async" width="1600" height="1010"></p>
 <p><em>补丁机制概括：退出时机移到安全点，严重故障直接终止进程，跨请求引用在两端都被清理。</em></p>
-<p>看懂补丁的思路，漏洞的形状也就出来了。下面按”公共原语 → 三条路径 → 完整武器化”的顺序拆。</p>
-<h2 id="0x03-公共原语：把-fatal-变成可选时的中断"><a href="#0x03-公共原语：把-fatal-变成可选时的中断" class="headerlink" title="0x03 公共原语：把 fatal 变成可选时的中断"></a>0x03 公共原语：把 fatal 变成可选时的中断</h2><p>所有路径共用同一个前置能力：<strong>精确控制哪一次内存分配触发 fatal</strong>。Calif 公开了三个构造方法，都是”请求体字节数 ≠ PHP 内存消耗”的放大器。</p>
-<p><strong>绕过 <code>post_max_size</code> 预检。</strong> PHP 拿声明里的 <code>Content-Length</code> 和 <code>post_max_size</code> 比较后就开始收 body；chunked 传输、无长度的 HTTP/1.1、HTTP/2，或者配了输入解压过滤器，都能让”声明小、实读大”。预检查的是声明值，真正喂进来的字节数没有同等的闸门。</p>
-<p><strong>空文件条目的元数据放大。</strong> multipart 里 <code>filename=""</code> 的 part 不占 <code>max_file_uploads</code> 名额，但 PHP 照样为它建满 6 个 <code>$_FILES</code> 条目：<code>name / full_path / type / tmp_name / error / size</code>。字段名再套上嵌套：</p>
+<p>看懂补丁的思路，漏洞的形状也就出来了。下面按“公共原语 → 三条路径 → 完整武器化”的顺序拆。</p>
+<h2 id="0x03-公共原语：把-fatal-变成可选时的中断"><a href="#0x03-公共原语：把-fatal-变成可选时的中断" class="headerlink" title="0x03 公共原语：把 fatal 变成可选时的中断"></a>0x03 公共原语：把 fatal 变成可选时的中断</h2><p>所有路径都共用同一个前置能力：<strong>能精确指定哪一次内存分配去触发 fatal</strong>。</p>
+<p>Calif 公开了三个构造方法，本质上都是同一个放大器——让“请求体有多少字节”和“PHP 吃掉多少内存”脱钩。</p>
+<p><strong>第一，绕过 <code>post_max_size</code> 预检。</strong> PHP 拿请求头里声明的 <code>Content-Length</code> 跟 <code>post_max_size</code> 比一下，比完就开始收 body。而 chunked 传输、不带长度的 HTTP/1.1、HTTP/2，或者配了输入解压过滤器，都能做出“声明很小、实际喂进来很大”的效果。预检看的只是声明值，真正进来的字节数没有同等强度的闸门。</p>
+<p><strong>第二，用空文件条目放大元数据。</strong> multipart 里写成 <code>filename=""</code> 的 part 不占 <code>max_file_uploads</code> 的名额，但 PHP 照样给它建满 6 个 <code>$_FILES</code> 条目：<code>name / full_path / type / tmp_name / error / size</code>。字段名再套上层层嵌套：</p>
 <pre class="line-numbers language-text" data-language="text"><code class="language-text">--BOUNDARY
 Content-Disposition: form-data; name="files[a][b][c]...[z]"; filename=""
 
 --BOUNDARY--<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 
-<p>每个空文件 part 都要为 6 个条目各建一遍嵌套 HashTable / Bucket / key 字符串。几十 KB 的 body 撑出远超自身的堆分配，几 MB 的请求就能打穿默认 128M 的 <code>memory_limit</code>，而且<strong>哪一次分配先爆、什么时候爆，都可以靠调整 part 排布来选</strong>。</p>
+<p>每来一个空文件 part，这 6 个条目都要各建一遍嵌套的 HashTable、Bucket 和 key 字符串。几十 KB 的 body 就能撑出远超自身体积的堆分配，几 MB 的请求足以打穿默认 128M 的 <code>memory_limit</code>。更关键的是，<strong>哪一次分配先爆、什么时候爆，都可以通过调整 part 的排布来选</strong>。</p>
 <p>这就把 <code>Allowed memory size exhausted</code> 从偶发故障变成了攻击者手里的定时器。</p>
 <h2 id="0x04-路径①：HashTable-桶的半初始化窗口（CVE-2026-109618）"><a href="#0x04-路径①：HashTable-桶的半初始化窗口（CVE-2026-109618）" class="headerlink" title="0x04 路径①：HashTable 桶的半初始化窗口（CVE-2026-109618）"></a>0x04 路径①：HashTable 桶的半初始化窗口（CVE-2026-109618）</h2><p>Calif 的源码审计在 <code>_zend_hash_str_add_or_update_i</code> 里找到第一个中断点。插入新元素的顺序是：</p>
 <pre class="line-numbers language-c" data-language="c"><code class="language-c">idx <span class="token operator">=</span> ht<span class="token operator">-&gt;</span>nNumUsed<span class="token operator">++</span><span class="token punctuation">;</span>
@@ -716,7 +733,7 @@ p<span class="token operator">-&gt;</span>key <span class="token operator">=</sp
 p<span class="token operator">-&gt;</span>h <span class="token operator">=</span> <span class="token function">ZSTR_H</span><span class="token punctuation">(</span>p<span class="token operator">-&gt;</span>key<span class="token punctuation">)</span> <span class="token operator">=</span> h<span class="token punctuation">;</span>
 <span class="token function">ZVAL_COPY_VALUE</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>p<span class="token operator">-&gt;</span>val<span class="token punctuation">,</span> pData<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<p><strong>计数先加，key 分配在后</strong>。<code>zend_string_init</code> 触发 OOM bailout 时，桶内容还没写，但 <code>nNumUsed</code> 已经把它划进了”有效”范围。teardown 按计数遍历：</p>
+<p><strong>顺序是先加计数，后分配 key。</strong> <code>zend_string_init</code> 触发 OOM bailout 时，桶里的内容一个字都还没写，但 <code>nNumUsed</code> 已经把它算进了“有效”的范围。teardown 是按计数遍历的：</p>
 <pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">for</span> <span class="token punctuation">(</span>p <span class="token operator">=</span> ht<span class="token operator">-&gt;</span>arData<span class="token punctuation">;</span> p <span class="token operator">!=</span> ht<span class="token operator">-&gt;</span>arData <span class="token operator">+</span> ht<span class="token operator">-&gt;</span>nNumUsed<span class="token punctuation">;</span> p<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
     <span class="token function">i_zval_ptr_dtor</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>p<span class="token operator">-&gt;</span>val<span class="token punctuation">)</span><span class="token punctuation">;</span>      <span class="token comment">/* 把 stale 字节当 zval 析构 */</span>
     <span class="token keyword">if</span> <span class="token punctuation">(</span>p<span class="token operator">-&gt;</span>key<span class="token punctuation">)</span> <span class="token punctuation">{</span>
@@ -724,16 +741,17 @@ p<span class="token operator">-&gt;</span>h <span class="token operator">=</span
     <span class="token punctuation">}</span>
 <span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<p>从清理代码的视角，”有一个元素”成立；从元素自身的视角，它从未完成初始化。半初始化的桶字节被当成 live zval 走析构——UAF 原语到手。</p>
-<p><strong>为什么只有 mod_php</strong>：这条路径的中断发生在 <code>php_request_startup()</code> 阶段，此时 POST 变量注册（<code>php_register_variable_ex()</code> → <code>zend_symtable_str_update_ind()</code> → 上面那个函数）还没轮到业务代码。两个 SAPI 对启动失败的处理不同：</p>
+<p>在清理代码眼里，“这里有一个元素”是成立的；可对元素自己来说，它从来没被初始化完。这些半初始化的桶字节就这样被当成 live zval 走了一遍析构——一个 UAF 原语到手了。</p>
+<p><strong>为什么只有 mod_php 中招</strong>：这条路径的中断发生在 <code>php_request_startup()</code> 阶段，那时候 POST 变量注册（<code>php_register_variable_ex()</code> → <code>zend_symtable_str_update_ind()</code> → 上面那个函数）还在跑，业务代码根本没轮到。而两种 SAPI 对“启动失败”的处理并不一样：</p>
 <pre class="line-numbers language-text" data-language="text"><code class="language-text">mod_php:  php_request_startup() 失败 → 请求清理照常执行
           → zend_array_destroy($_POST/$_FILES) 消费坏表 → worker 存活复用
 
 PHP-FPM:  php_request_startup() 失败 → php_module_shutdown() + return
           → worker 直接退出，坏表随进程消失<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<p>mod_php 的 <code>sapi_apache2.c</code> 里请求构造失败只是 <code>zend_bailout()</code> 到外层 handler，<code>php_apache_request_dtor()</code> 依旧会调 <code>php_request_shutdown(NULL)</code>。这正是官方在 mod_php 上验证 RCE、而对 109618 的 FPM 只给出”源码分析受影响”的原因。</p>
-<p><img src="/2026/10/22/Vuln_PHP2Shell/lifecycle.png" alt="mod_php 与 FPM 在启动失败和运行期异常后的不同处理" loading="lazy" decoding="async" width="2100" height="1940"></p>
+<p>mod_php 的 <code>sapi_apache2.c</code> 里，请求构造失败只是 <code>zend_bailout()</code> 到外层 handler，<code>php_apache_request_dtor()</code> 照样会去调 <code>php_request_shutdown(NULL)</code>。</p>
+<p>这也正是官方在 mod_php 上验证出了 RCE、而对 109618 的 FPM 只给出“源码分析受影响”的原因。</p>
+<p><img src="/2026/10/22/Vuln_PHP2Shell/lifecycle.png" alt="mod_php 与 FPM 在启动失败和运行期异常后的不同处理" loading="lazy" decoding="async" width="1600" height="900"></p>
 <p><em>SAPI 对失败请求的处理分流：mod_php 清理后复用 worker，FPM 启动失败退进程、运行期异常则复用——后者正是路径③的落脚点。</em></p>
 <h2 id="0x05-路径②：session-全局的悬空指针（CVE-2026-109619，PHP-≥-5-4）"><a href="#0x05-路径②：session-全局的悬空指针（CVE-2026-109619，PHP-≥-5-4）" class="headerlink" title="0x05 路径②：session 全局的悬空指针（CVE-2026-109619，PHP ≥ 5.4）"></a>0x05 路径②：session 全局的悬空指针（CVE-2026-109619，PHP ≥ 5.4）</h2><p>第二类中断点更漂亮：<code>session.upload_progress</code> 这个默认开启的功能，让 multipart 解析在<strong>模块初始化完成之前</strong>就摸到了 session。</p>
 <p>看 <code>main/main.c</code> 的启动顺序：</p>
@@ -741,23 +759,24 @@ PHP-FPM:  php_request_startup() 失败 → php_module_shutdown() + return
 <span class="token function">zend_activate_modules</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>  <span class="token comment">/* 各扩展的 RINIT */</span>
 <span class="token function">PG</span><span class="token punctuation">(</span>modules_activated<span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 
-<p>multipart 的 <code>FILE_START</code> 事件回调里，upload progress 会调 <code>php_rinit_session(0)</code> 并把 <code>PS(id)</code>、<code>PS(http_session_vars)</code> 写进 session 模块全局——此刻 <code>PG(modules_activated)</code> 还是 0。<strong>状态已经发布，但生命周期标记还没立起来</strong>。</p>
+<p>在 multipart 的 <code>FILE_START</code> 事件回调里，upload progress 会调 <code>php_rinit_session(0)</code>，把 <code>PS(id)</code>、<code>PS(http_session_vars)</code> 写进 session 模块的全局变量。<strong>可这一刻 <code>PG(modules_activated)</code> 还是 0</strong>——状态已经发布出去了，标识它生命周期的那个开关却还没立起来。</p>
 <p>此后 OOM fatal 发生，请求关闭按 <code>modules_activated</code> 分流：</p>
 <pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">PG</span><span class="token punctuation">(</span>modules_activated<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
     <span class="token function">zend_deactivate_modules</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>      <span class="token comment">/* session RSHUTDOWN 被跳过 */</span>
 <span class="token punctuation">}</span>
 <span class="token function">shutdown_memory_manager</span><span class="token punctuation">(</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">)</span><span class="token punctuation">;</span>       <span class="token comment">/* 请求堆照常释放 */</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 
-<p>session 的 RSHUTDOWN 没跑，<code>PS(id)</code> / <code>PS(http_session_vars)</code> 还指着已经释放的堆内存，而 <strong>mod_php 的 worker 活着接下一个请求</strong>。</p>
-<p>消费端同样藏在 upload progress 里。请求 B 只要带 <code>PHPSESSID</code> 和 <code>PHP_SESSION_UPLOAD_PROGRESS</code> 字段、<strong>不带文件 part</strong>，就只走 <code>MULTIPART_EVENT_END</code> 不走 <code>FILE_START</code>——提前重置被绕过，END 回调的 cleanup 重新进入 <code>php_session_initialize()</code>：</p>
+<p>session 的 RSHUTDOWN 根本没跑，<code>PS(id)</code> 和 <code>PS(http_session_vars)</code> 就这么继续指着已经释放的堆内存。偏偏 <strong>mod_php 的 worker 还活着，接着去服务下一个请求</strong>。</p>
+<p>消费端也藏在 upload progress 里。请求 B 只要带 <code>PHPSESSID</code> 和 <code>PHP_SESSION_UPLOAD_PROGRESS</code> 字段、<strong>不带文件 part</strong>，就只走 <code>MULTIPART_EVENT_END</code>，不走 <code>FILE_START</code>——提前重置那一步被绕过去了，而 END 回调的 cleanup 会重新进到 <code>php_session_initialize()</code>：</p>
 <pre class="line-numbers language-text" data-language="text"><code class="language-text">请求 A: 文件 part → 提前初始化 session → 状态发布 → OOM fatal
         → 跳过 session RSHUTDOWN → 请求堆释放 → worker 存活
 
 请求 B: 无文件 part → FILE_START 重置被绕过 → END cleanup
         → php_session_track_init() → zval_ptr_dtor(悬空的 PS(http_session_vars))<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<p>一次 <code>zval_ptr_dtor</code> 落在攻击者控制的内存上，后续怎么走完全取决于谁先重占了那块堆——这正是后面 9bie 武器化的主战场。这条路径 PHP 5.4 起就存在，全程默认配置，应用侧零配合。</p>
-<h2 id="0x06-路径③：反序列化器全局悬空（打-FPM-的钥匙）"><a href="#0x06-路径③：反序列化器全局悬空（打-FPM-的钥匙）" class="headerlink" title="0x06 路径③：反序列化器全局悬空（打 FPM 的钥匙）"></a>0x06 路径③：反序列化器全局悬空（打 FPM 的钥匙）</h2><p>FPM 启动失败会退 worker，那就在<strong>启动成功之后</strong>制造中断。Calif 找到的入口是 PHP 通用反序列化器的共享状态：</p>
+<p>一次 <code>zval_ptr_dtor</code> 落在攻击者控制的内存上，接下来会发生什么，全看谁先重新占住那块堆——这正是后面 9bie 武器化的主战场。</p>
+<p>这条路径从 PHP 5.4 起就存在，全程默认配置，应用侧不需要做任何配合。</p>
+<h2 id="0x06-路径③：反序列化器全局悬空（打-FPM-的钥匙）"><a href="#0x06-路径③：反序列化器全局悬空（打-FPM-的钥匙）" class="headerlink" title="0x06 路径③：反序列化器全局悬空（打 FPM 的钥匙）"></a>0x06 路径③：反序列化器全局悬空（打 FPM 的钥匙）</h2><p>FPM 启动失败就直接退 worker，那就在<strong>启动成功之后</strong>制造中断。Calif 找到的入口是 PHP 通用反序列化器维护的共享状态：</p>
 <pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">BG</span><span class="token punctuation">(</span>serialize_lock<span class="token punctuation">)</span> <span class="token operator">||</span> <span class="token operator">!</span><span class="token function">BG</span><span class="token punctuation">(</span>unserialize<span class="token punctuation">)</span><span class="token punctuation">.</span>level<span class="token punctuation">)</span> <span class="token punctuation">{</span>
     d <span class="token operator">=</span> <span class="token function">emalloc</span><span class="token punctuation">(</span><span class="token keyword">sizeof</span><span class="token punctuation">(</span><span class="token keyword">struct</span> <span class="token class-name">php_unserialize_data</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token comment">/* 初始化引用表和析构表 */</span>
@@ -770,36 +789,42 @@ PHP-FPM:  php_request_startup() 失败 → php_module_shutdown() + return
     <span class="token operator">++</span><span class="token function">BG</span><span class="token punctuation">(</span>unserialize<span class="token punctuation">)</span><span class="token punctuation">.</span>level<span class="token punctuation">;</span>
 <span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<p>应用执行 <code>unserialize()</code> / <code>session_decode()</code>（WordPress 的 <code>maybe_unserialize()</code> 这类封装也算）期间发生 OOM fatal，<code>php_var_unserialize_destroy()</code> 被跳过：<code>BG(unserialize).data</code> 悬空、level 停在非零。因为这次 fatal 在成功启动之后，FPM 的 worker 正常存活。</p>
-<p>下一个 multipart 请求的 upload progress 在 Basic 模块 RINIT 之前进入解码，<code>level != 0</code> 让它把悬空指针当活动状态复用。<strong>此时请求 B 的普通字段分配已经把那块内存重占</strong>，解码器读到的”引用表 / 析构表”全是攻击者数据。Calif 给出的写原语尤其致命——析构块的 <code>used_slots</code> 是有符号数：</p>
+<p>应用执行 <code>unserialize()</code> 或 <code>session_decode()</code> 期间（WordPress 的 <code>maybe_unserialize()</code> 这类封装也算）发生 OOM fatal，<code>php_var_unserialize_destroy()</code> 就被跳过了。结果 <code>BG(unserialize).data</code> 悬空、level 停在非零。</p>
+<p>关键在于，这次 fatal 发生在成功启动之后，FPM 的 worker 会照常活下来。</p>
+<p>下一个 multipart 请求的 upload progress，在 Basic 模块 RINIT 之前就进了解码流程；<code>level != 0</code> 让它把那个悬空指针当成仍在使用的状态直接复用。<strong>而此时请求 B 的普通字段分配，早就把那块内存重新占住了</strong>，解码器读到的“引用表 / 析构表”全是攻击者塞进去的数据。</p>
+<p>Calif 给出的写原语尤其致命，问题出在析构块的 <code>used_slots</code> 是有符号数：</p>
 <pre class="line-numbers language-text" data-language="text"><code class="language-text">slot = destructor_block + 16 + 16 × used_slots<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
-<p><code>used_slots</code> 为负时 slot 指向块前任意偏移；序列化数据里的重复 key 触发 <code>var_push_dtor_value()</code>，把一个完整的 zval（指针＋类型）写进选定的位置。<strong>受控地址写受控 zval</strong>，配合堆布局就是完整的类型混淆原语。mod_php / FPM 通吃，也是官方在 FPM 上验证 session 生命周期 RCE 的机理。</p>
-<h2 id="0x07-武器化：9bie-公开利用链逐段拆解"><a href="#0x07-武器化：9bie-公开利用链逐段拆解" class="headerlink" title="0x07 武器化：9bie 公开利用链逐段拆解"></a>0x07 武器化：9bie 公开利用链逐段拆解</h2><p>机理有了，从”UAF 原语”到”一条命令出 uid”之间还隔着 ASLR、堆布局和触发稳定性。<strong>ASLR（Address Space Layout Randomization，地址空间布局随机化）</strong> 是操作系统的一种防护机制：让程序、共享库、堆和栈等区域的装载或分配位置随机化，增加预测内存地址的难度；具体随机化范围取决于平台和构建配置。<a target="_blank" rel="noopener" href="https://github.com/9bie/php2shell-bypass-aslr-exp">9bie/php2shell-bypass-aslr-exp</a> 把这最后一公里也公开了：目标 <code>php:8.4.26-apache</code> 官方镜像 + Apache prefork 单 worker，README 报 3/3 成功。以下结合 <code>exploit.py</code> 与 <code>NOTES.md</code> 做静态分析；成功次数为仓库作者报告，本稿未独立运行其 RCE 实验。</p>
-<p><img src="/2026/10/22/Vuln_PHP2Shell/aslr-concept.png" alt="ASLR 区域位置与堆内对象排列的两层对照" loading="lazy" decoding="async" width="2100" height="1150"></p>
+<p><code>used_slots</code> 为负时，slot 就会指到块前面任意偏移上去。序列化数据里放一组重复 key，就能触发 <code>var_push_dtor_value()</code>，把一个完整的 zval（指针加类型）写进选定的位置。<strong>往受控地址写受控 zval</strong>——配合堆布局，这就是一个完整的类型混淆原语。</p>
+<p>mod_php 和 FPM 通吃，官方在 FPM 上验证出的 session 生命周期 RCE，走的也是这条路。</p>
+<h2 id="0x07-武器化：9bie-公开利用链逐段拆解"><a href="#0x07-武器化：9bie-公开利用链逐段拆解" class="headerlink" title="0x07 武器化：9bie 公开利用链逐段拆解"></a>0x07 武器化：9bie 公开利用链逐段拆解</h2><p>机理有了，可从“UAF 原语”到“敲一条命令拿到 uid”，中间还隔着 ASLR、堆布局和触发稳定性。</p>
+<p><strong>ASLR（Address Space Layout Randomization，地址空间布局随机化）</strong> 是操作系统的一项防护：把程序、共享库、堆、栈这些区域的装载或分配位置随机化，让人没法预先猜到内存地址。具体随机到什么程度，取决于平台和构建配置。</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/9bie/php2shell-bypass-aslr-exp">9bie/php2shell-bypass-aslr-exp</a> 把最后这一公里也公开了：目标为 <code>php:8.4.26-apache</code> 官方镜像，加 Apache prefork 单 worker，README 里报的是 3/3 成功。</p>
+<p>下面结合 <code>exploit.py</code> 和 <code>NOTES.md</code> 做静态分析。成功次数是仓库作者的说法，本文没有独立跑过它的 RCE 实验。</p>
+<p><img src="/2026/10/22/Vuln_PHP2Shell/aslr-concept.png" alt="ASLR 区域位置与堆内对象排列的两层对照" loading="lazy" decoding="async" width="1600" height="1150"></p>
 <p><em>区域基址与堆内对象排列属于不同层次；图中位置与宽度均为示意。</em></p>
-<h3 id="Stage-0：worker-轮换——prefork-白送的地址稳定性"><a href="#Stage-0：worker-轮换——prefork-白送的地址稳定性" class="headerlink" title="Stage 0：worker 轮换——prefork 白送的地址稳定性"></a>Stage 0：worker 轮换——prefork 白送的地址稳定性</h3><p>A 请求（一堆 3KB 存活字段＋12MB OOM 字段）把 child 打到 SIGABRT，prefork master 立即 fork 新 worker。关键性质：<strong>fork 继承父进程的内存映射</strong>，同一个 Apache master 之下，新 worker 的 libphp 基址和 Zend MM 2MB chunk 布局与旧 worker 完全一致。</p>
-<p>于是 ASLR 只在每个 stage 首次需要对付一次，失败重试也只需 <code>rotate()</code> 换个 worker 重来（master 重启后基址才重新随机）。这个”轮换原语”是整条链的工程地基。</p>
+<h3 id="Stage-0：worker-轮换——prefork-白送的地址稳定性"><a href="#Stage-0：worker-轮换——prefork-白送的地址稳定性" class="headerlink" title="Stage 0：worker 轮换——prefork 白送的地址稳定性"></a>Stage 0：worker 轮换——prefork 白送的地址稳定性</h3><p>A 请求（一堆 3KB 的存活字段，外加 12MB 的 OOM 字段）把 child 打到 SIGABRT，prefork master 立刻 fork 一个新的 worker 补上。这里有个关键性质：<strong>fork 出来的子进程继承父进程的内存映射</strong>。同一个 Apache master 底下，新 worker 的 libphp 基址和 Zend MM 的 2MB chunk 布局跟旧 worker 一模一样。</p>
+<p>于是 ASLR 只在每个 stage 首次需要对付一次，失败重试也只需 <code>rotate()</code> 换个 worker 重来（master 重启后基址才重新随机）。这个“轮换原语”是整条链的工程地基。</p>
 <h3 id="Stage-1：Set-Cookie-堆泄漏——把-zend-string-len-改大"><a href="#Stage-1：Set-Cookie-堆泄漏——把-zend-string-len-改大" class="headerlink" title="Stage 1：Set-Cookie 堆泄漏——把 zend_string.len 改大"></a>Stage 1：Set-Cookie 堆泄漏——把 <code>zend_string.len</code> 改大</h3><p>目标：拿到 Zend MM chunk 基址。A 请求按路径②的配方留下悬空 session 状态，额外加两个条件：</p>
 <ul>
 <li><strong>1001 个字段</strong>触发 <code>max_input_vars</code> 警告。<code>display_errors=On</code> 时警告输出把 <code>headers_sent</code> 置 1，后续 PHP 才有机会在响应里加头；</li>
 <li><strong><code>PHPSESSID=\x00</code></strong> 的非法 SID 逼 PHP 生成新 id 并 <code>send_cookie=1</code>——<code>Set-Cookie</code> 就是外带数据的信道。</li>
 </ul>
-<p>B 请求用 56 字节的字段值缓冲区重占悬空 reference，再补一个 79B 的”伪造字段”，在第 0x10 偏移写入超大的 <code>zend_string.len</code>：</p>
+<p>B 请求用 56 字节的字段值缓冲区重占悬空 reference，再补一个 79B 的“伪造字段”，在第 0x10 偏移写入超大的 <code>zend_string.len</code>：</p>
 <pre class="line-numbers language-python" data-language="python"><code class="language-python">forge <span class="token operator">=</span> <span class="token builtin">bytearray</span><span class="token punctuation">(</span><span class="token string">b"A"</span> <span class="token operator">*</span> <span class="token number">79</span><span class="token punctuation">)</span>
 struct<span class="token punctuation">.</span>pack_into<span class="token punctuation">(</span><span class="token string">"&lt;Q"</span><span class="token punctuation">,</span> forge<span class="token punctuation">,</span> <span class="token number">0x10</span><span class="token punctuation">,</span> <span class="token number">0x1000</span><span class="token punctuation">)</span>   <span class="token comment"># 伪 zend_string len=4096</span>
 forge<span class="token punctuation">[</span><span class="token number">0x18</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token builtin">ord</span><span class="token punctuation">(</span><span class="token string">"L"</span><span class="token punctuation">)</span>
 parts<span class="token punctuation">.</span>append<span class="token punctuation">(</span><span class="token punctuation">{</span><span class="token string">"name"</span><span class="token punctuation">:</span> <span class="token string">"1999"</span><span class="token punctuation">,</span> <span class="token string">"data"</span><span class="token punctuation">:</span> <span class="token builtin">bytes</span><span class="token punctuation">(</span>forge<span class="token punctuation">)</span><span class="token punctuation">}</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 
-<p>session 写 cookie 时对（早已被释放、现被攻击者数据占据的）session id 做 <code>php_url_encode()</code>，按伪造的 4096 字节长度一路越界读，把堆里约 4KB 的内容 urlencode 进 <code>Set-Cookie</code> 带出来。</p>
+<p>session 写 cookie 的时候，会对这个 session id 做一次 <code>php_url_encode()</code>。可它早就被释放、现在占着的是攻击者数据，长度字段又被伪造成了 4096——于是编码器一路越界读下去，把堆里约 4KB 的内容 urlencode 完塞进 <code>Set-Cookie</code> 带了出来。</p>
 <p>解析端做统计恢复：滑窗取 8 字节小端值，落在用户态指针区间的按 2MB 对齐折叠取<strong>众数</strong>——chunk 基址就是出现最多的那个值。一堆堆指针自然聚在同一个 2MB chunk 里，统计比精确定位更稳。</p>
-<h3 id="Stage-2：libphp-泄漏——HashTable-恰好对齐-pDestructor"><a href="#Stage-2：libphp-泄漏——HashTable-恰好对齐-pDestructor" class="headerlink" title="Stage 2：libphp 泄漏——HashTable 恰好对齐 pDestructor"></a>Stage 2：libphp 泄漏——HashTable 恰好对齐 <code>pDestructor</code></h3><p>光有 chunk 基址不够，还需要 libphp 基址。B 请求构造 983 个数组字段，其中第 406 个组 16 元素 × 16B 值——精心定尺寸的一页 HashTable 分配恰好重占悬空的 <code>PS(id)</code>：</p>
+<h3 id="Stage-2：libphp-泄漏——HashTable-恰好对齐-pDestructor"><a href="#Stage-2：libphp-泄漏——HashTable-恰好对齐-pDestructor" class="headerlink" title="Stage 2：libphp 泄漏——HashTable 恰好对齐 pDestructor"></a>Stage 2：libphp 泄漏——HashTable 恰好对齐 <code>pDestructor</code></h3><p>光知道 chunk 基址还不够，还得拿到 libphp 基址。B 请求构造 983 个数组字段，其中第 406 个是 16 个元素、每个 16B 的值——这么精心定尺寸分配出来的一页 HashTable，恰好重新占住了悬空的 <code>PS(id)</code>：</p>
 <pre class="line-numbers language-text" data-language="text"><code class="language-text">ZSTR_LEN(PS(id)) 读到的是 HashTable 的 nTableSize=16
 cookie 数据从 PS(id)+0x18 起 = nNextFreeElement | pDestructor
 而 pDestructor = ZVAL_PTR_DTOR，是 libphp 里的固定符号<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 
 <p>解析端双重校验：低 12 位必须等于 <code>zval_ptr_dtor</code> 偏移的低 12 位，且解出的基址 4KB 对齐。两次泄漏拼起来 ASLR 全破，全程只用 HTTP 响应头，不碰 libc。</p>
-<h3 id="Stage-3：fake-析构链——让-PHP-自己调-zif-system"><a href="#Stage-3：fake-析构链——让-PHP-自己调-zif-system" class="headerlink" title="Stage 3：fake 析构链——让 PHP 自己调 zif_system"></a>Stage 3：fake 析构链——让 PHP 自己调 <code>zif_system</code></h3><p>执行阶段不再泄地址，改为直接覆写悬空 reference。A 请求用 6 组 pad 把 reference 钉到 chunk 内固定偏移；B 请求一个 15B 的 carrier（bin-40 <code>zend_string</code> 的字符区正好落在 reference 头上）只改低 7 字节指针、保留高字节规范零，把 <code>val.value</code> 指向一个 167B 存活字符串里的三件套：</p>
+<h3 id="Stage-3：fake-析构链——让-PHP-自己调-zif-system"><a href="#Stage-3：fake-析构链——让-PHP-自己调-zif-system" class="headerlink" title="Stage 3：fake 析构链——让 PHP 自己调 zif_system"></a>Stage 3：fake 析构链——让 PHP 自己调 <code>zif_system</code></h3><p>到了执行阶段，不再泄漏地址，改成直接覆写那块悬空的 reference。A 请求用 6 组 pad 把 reference 钉到 chunk 内的固定偏移上；B 请求给一个 15B 的 carrier（bin-40 的 <code>zend_string</code> 字符区正好落在 reference 头上），只改低 7 字节的指针、保留高字节的规范零，把 <code>val.value</code> 指向某个 167B 存活字符串里预先摆好的三件套：</p>
 <pre class="line-numbers language-text" data-language="text"><code class="language-text">fake HashTable      pDestructor = libphp + zif_system 偏移
 fake execute_data   num_args=1, arg1 → 指向命令字符串的 IS_STRING zval
 fake zend_string    命令本体（≤14 字节，167 − 0x98 − 1）<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
@@ -812,7 +837,8 @@ fake zend_string    命令本体（≤14 字节，167 − 0x98 − 1）<span ari
         → zend_hash_destroy(fake HT)
           → pDestructor(&amp;bucket-&gt;val)      # = zif_system(cmd)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<p><code>zend_hash_destroy</code> 遍历到唯一 bucket 时调 <code>pDestructor(&amp;p-&gt;val)</code>——参数地址恰好就是预制的 fake <code>execute_data</code>，<code>zif_system</code> 按标准内部函数从 call frame 取出参数执行命令。<strong>不 ROP、不碰栈、不依赖 libc</strong>，比 NOTES.md 里早期方案的 <code>pop rdi; ret</code> + <code>popen@plt</code> 干净一个量级。命令上限 14 字节，任意命令用 <code>sh&lt;/out/c</code>（8 字节）从挂载目录读脚本绕过。</p>
+<p><code>zend_hash_destroy</code> 遍历到那唯一一个 bucket 时，会调 <code>pDestructor(&amp;p-&gt;val)</code>。传进去的参数地址恰好就是预先做好的 fake <code>execute_data</code>，<code>zif_system</code> 于是按标准内部函数的规矩，从 call frame 里取出参数执行命令。</p>
+<p><strong>不用 ROP、不碰栈、不依赖 libc</strong>，比 NOTES.md 里早期那套 <code>pop rdi; ret</code> 加 <code>popen@plt</code> 干净了一个量级。命令本身限 14 字节，任意命令可以用 <code>sh&lt;/out/c</code>（8 字节）从挂载目录读脚本绕过去。</p>
 <h3 id="顺手盘点：研究笔记里的可复用部件"><a href="#顺手盘点：研究笔记里的可复用部件" class="headerlink" title="顺手盘点：研究笔记里的可复用部件"></a>顺手盘点：研究笔记里的可复用部件</h3><p><code>NOTES.md</code> 记录了完整的探索过程，几个部件在别的场景同样好使：</p>
 <ul>
 <li><strong><code>stream_bucket_new()</code> 320B 裸喷</strong>：给 stream filter 喂 payload，得到内容完全可控、且被资源保活的裸缓冲——早期 Defect D 线（<code>session_unset()</code> + <code>__destruct</code> 写 <code>$_SESSION</code> 触发 <code>zend_hash_clean</code> 重入 → resize 释放旧 arData → 320B 重占 → fake HT）就是靠它拿下的首个 RCE；</li>
@@ -828,10 +854,12 @@ fake zend_string    命令本体（≤14 字节，167 − 0x98 − 1）<span ari
 <li>关 <code>display_errors</code> 能掐掉 9bie 当前的泄漏信道（依赖警告输出置 <code>headers_sent</code>），但仓库已声明 off 版在路上，这只争取时间。</li>
 </ul>
 <p><strong>检测面</strong>（来自利用代码的具体特征）：异常巨大的 <code>Set-Cookie</code>（约 4KB urlencoded 乱码，最强单点信号）；带 <code>PHP_SESSION_UPLOAD_PROGRESS</code> 却无文件 part 的 multipart 请求；单请求上千字段或单字段十几 MB；worker 反复 SIGABRT 的 502 尖峰；日志里 <code>Session ID is too long or contains illegal characters</code> 与 <code>Failed to read session data</code> 成对出现。</p>
-<p><img src="/2026/10/22/Vuln_PHP2Shell/evidence.png" alt="HashTable、Session 与 Unserializer 的状态及修复对应图" loading="lazy" decoding="async" width="2100" height="2280"></p>
+<p><img src="/2026/10/22/Vuln_PHP2Shell/evidence.png" alt="HashTable、Session 与 Unserializer 的状态及修复对应图" loading="lazy" decoding="async" width="1600" height="920"></p>
 <p><em>三类问题涉及不同状态，补丁分别处理元素可见性、请求内存引用和共享解码上下文。</em></p>
-<h2 id="0x09-小结"><a href="#0x09-小结" class="headerlink" title="0x09 小结"></a>0x09 小结</h2><p>PHP2Shell 的价值在于它把一条二十年前埋下的线走通了：<strong>内存耗尽从”故障”变成”可控中断”，中断又恰好落在内部状态发布与提交的窗口里</strong>。三条路径共享同一个生产者原语，消费端分别击中 HashTable 计数、session 全局和反序列化器全局；SAPI 的启动失败处理差异决定了 mod_php 先倒下，而应用层解码操作让 FPM 同样失守。</p>
-<p>补丁的修法也值得回味：把软 OOM 的处理移到受控检查点，用硬限约束继续分配的余量，再补齐请求两端的状态清理。对写 C 的工程师来说，这提醒我们重新审视“先更新记录，再执行可能失败的操作”这种常见顺序：操作中断后，后面的代码究竟会把记录当成什么状态？</p>
+<h2 id="0x09-小结"><a href="#0x09-小结" class="headerlink" title="0x09 小结"></a>0x09 小结</h2><p>PHP2Shell 的价值在于，它把一条埋了二十年的线走通了：<strong>内存耗尽从“故障”变成了“可控中断”，而中断又恰好落在内部状态发布与提交之间的那道缝里。</strong></p>
+<p>三条路径共用同一个生产者原语，消费端则分别击中 HashTable 计数、session 全局和反序列化器全局。SAPI 对启动失败的处理差异，决定了 mod_php 先倒下；而应用层的解码操作，让 FPM 同样守不住。</p>
+<p>补丁的修法也值得回味：把软 OOM 的处理挪到受控检查点，用硬限约束还能分配多少余量，再把请求两端的状态清理补齐。</p>
+<p>对写 C 的工程师来说，这提醒我们重新审视“先更新记录、再执行可能失败的操作”这种很常见的顺序：一旦操作中断，后面的代码究竟会把这条记录当成什么状态？</p>
 <p><a target="_blank" rel="noopener" href="https://x.com/IceSolst/status/2112771812056510756">IceSolst 在 X 上的这段调侃</a>，倒很贴切：</p>
 <blockquote>
 <p>如果你先发布补丁，它会得到一个 PoC。</p>
@@ -851,7 +879,7 @@ fake zend_string    命令本体（≤14 字节，167 − 0x98 − 1）<span ari
 <li><a target="_blank" rel="noopener" href="https://bugs.php.net/bug.php?id=78876">PHP Bug #78876：multipart 长变量 OOM（2020）</a></li>
 <li><a target="_blank" rel="noopener" href="https://www.php.net/manual/en/session.upload-progress.php">PHP：Session Upload Progress 手册</a></li>
 </ul>
-<p><em>资料与代码阅读截止于 2026 年 10 月 22 日。本稿为本地审阅版，未发布。</em></p>
+<p><em>资料与代码阅读截止于 2026 年 10 月 22 日。</em></p>
 
                 
             </div>
@@ -1442,7 +1470,7 @@ fake zend_string    命令本体（≤14 字节，167 − 0x98 − 1）<span ari
             |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
             |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
             <br>
-                        &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span class="white-color">508.2k</span>&nbsp;字
+                        &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span class="white-color">508.8k</span>&nbsp;字
                                                                                     <span id="busuanzi_container_site_pv">
 			|&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv" class="white-color"></span>&nbsp;次
             </span>
