@@ -562,14 +562,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    12.8k
+                    13.1k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    46 分
+                    47 分
                 </div>
                 
 
@@ -599,7 +599,7 @@
 <p>比停服更值得注意的是另一件事。当晚 20:55，<strong>日本首相高市早苗在 X 上发了一条推文</strong>，标题是「皆様に、今夜に対応して頂きたい大至急のお願いです」——「今晚恳请大家立即应对的紧急请求」。</p>
 <p>国家首脑为一个编程语言的漏洞亲自喊话，这在此前几乎没有先例。她没有停在「请注意安全」这种层面，而是给了非常具体的指令：确认自己的网站是否在用 PHP；当晚 23:00（日本时间）补丁发布后第一时间应用；如果实在来不及打补丁，「暂时关闭网站」也是降低风险的有效手段之一。</p>
 <p><img src="/2026/10/22/Vuln_PHP2Shell/takaichi-tweet.png" alt="高市早苗首相当晚在 X 上的呼吁" loading="eager" decoding="async" width="1100" height="536"></p>
-<p>*<a target="_blank" rel="noopener" href="https://x.com/takaichi_sanae/status/2112890642590564386">高市早苗：皆様に、今夜に対応して頂きたい大至急のお願いです</a>*，发布于北京时间 21 日 20:55。</p>
+<p><a target="_blank" rel="noopener" href="https://x.com/takaichi_sanae/status/2112890642590564386">高市早苗：皆様に、今夜に対応して頂きたい大至急のお願いです</a>，发布于北京时间 21 日 20:55。</p>
 <p>补丁确实在一小时后发布了。而这一小时的窗口里，是什么让一个国家的首相都要出来喊话？原因写在 PHP 官方当天发布的安全公告里。</p>
 <p>PHP 紧急发布 8.5.12 / 8.4.27 / 8.3.36 / 8.2.35，修复两个 CVSS 4.0 均为 <strong>9.2</strong> 的未认证远程代码执行漏洞：<strong>CVE-2026-109618</strong>（OOM corruption）和 <strong>CVE-2026-109619</strong>（stale global state）。社区把这组漏洞称为 <strong>PHP2Shell</strong>。</p>
 <p>CVSS 9.2 是这个量表上的次高档。翻译成人话：不需要账号、不需要受害用户点任何东西、不需要任何前置条件，一个 HTTP 请求就能在服务器上执行任意命令。而 PHP 是 WordPress、Drupal、Joomla、Magento、Nextcloud 这些建站系统共同的底座——按 W3Techs 的统计，在服务端语言已知的网站里它占了七成以上。这就解释了当晚的连锁反应：修复必须换掉运行中的 PHP 进程，而大多数公司没把握在不停机的情况下安全完成，于是只能选择先停下来。</p>
@@ -737,7 +737,7 @@
 <h2 id="0x03-公共原语：让崩溃发生在指定的那一行"><a href="#0x03-公共原语：让崩溃发生在指定的那一行" class="headerlink" title="0x03 公共原语：让崩溃发生在指定的那一行"></a>0x03 公共原语：让崩溃发生在指定的那一行</h2><p>三条路径都靠同一个前提：<strong>不只是把 PHP 的内存撑爆，还得让它在指定的某一次内存分配上爆</strong>。</p>
 <p>这个区别很关键。内存撑爆本身没什么用，顶多是个 500 错误；真正有价值的是“爆在某个函数执行到一半的时候”。那时代码已经把一半的状态写进了全局结构，剩下的收尾代码却再也不会执行——进程带着一份没写完的账继续活下去，后面谁去读这份账，谁就中招。</p>
 <p>所以第一个问题是：能不能挑？答案是能。Calif 公开了两个手法，本质都是同一个放大器——让“请求体有多少字节”和“PHP 吃掉多少内存”脱钩。一旦两者不成比例，把哪一次分配推到临界点，就变成了调参数的事。</p>
-<p><strong>第一，绕过 <code>post_max_size</code> 预检。</strong> 这个配置本来是防止单个请求太大的闸门。但 PHP 的做法是：拿请求头里声明的 <code>Content-Length</code> 跟 <code>post_max_size</code> 比一下，比完就开始收 body，之后不再核对真正收了多少字节。于是只要让“声明的长度”和“实际喂进来的数据”不一致，闸门就形同虚设。chunked 传输、不带长度的 HTTP/1.1、HTTP/2，都能做到不报长度；配了输入解压过滤器也一样，压缩前一小段数据，解开后能膨胀成很大一坨。</p>
+<p><strong>第一，绕过 post_max_size 预检。</strong> 这个配置本来是防止单个请求太大的闸门。但 PHP 的做法是：拿请求头里声明的 <code>Content-Length</code> 跟 <code>post_max_size</code> 比一下，比完就开始收 body，之后不再核对真正收了多少字节。于是只要让“声明的长度”和“实际喂进来的数据”不一致，闸门就形同虚设。chunked 传输、不带长度的 HTTP/1.1、HTTP/2，都能做到不报长度；配了输入解压过滤器也一样，压缩前一小段数据，解开后能膨胀成很大一坨。</p>
 <p><strong>第二，用一个“空壳文件”换来成倍的堆开销。</strong> multipart 里写成 <code>filename=""</code> 的 part 不带任何文件内容，因此也不占 <code>max_file_uploads</code> 的名额——限流对它无效。但 PHP 不会因为它没内容就跳过，照样会为它建满 6 个 <code>$_FILES</code> 条目：<code>name / full_path / type / tmp_name / error / size</code>。更狠的是把字段名写成嵌套结构：</p>
 <pre class="line-numbers language-text" data-language="text"><code class="language-text">--BOUNDARY
 Content-Disposition: form-data; name="files[a][b][c]...[z]"; filename=""
@@ -794,7 +794,7 @@ PHP-FPM:  php_request_startup() 失败 → php_module_shutdown() + return
 <span class="token function">PG</span><span class="token punctuation">(</span>modules_activated<span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 
 <p>注意这个顺序：先解析请求体（multipart 就在这一步），后激活各个模块。而 multipart 解析到第一个文件 part、触发 <code>FILE_START</code> 事件时，upload progress 会立刻调 <code>php_rinit_session(0)</code>，把 <code>PS(id)</code>、<code>PS(http_session_vars)</code> 这些<strong>指向请求内存</strong>的指针，写进 session 模块的全局变量。</p>
-<p><strong>可这一刻 <code>PG(modules_activated)</code> 还是 0。</strong> 状态已经发布出去了，那个决定“要不要做收尾”的开关却还没立起来。</p>
+<p><strong>可这一刻 PG(modules_activated) 还是 0。</strong> 状态已经发布出去了，那个决定“要不要做收尾”的开关却还没立起来。</p>
 <p>如果接下来恰好发生 OOM fatal，请求关闭时就会按 <code>modules_activated</code> 分流——它还是 0，所以走的是下面这条路：</p>
 <pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">PG</span><span class="token punctuation">(</span>modules_activated<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
     <span class="token function">zend_deactivate_modules</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>      <span class="token comment">/* session RSHUTDOWN 被跳过 */</span>
@@ -852,18 +852,26 @@ PHP-FPM:  php_request_startup() 失败 → php_module_shutdown() + return
 <p>仓库自己报的成绩：官方 worker 配置下 <strong>10/10</strong>，单 worker 基线 <strong>20/20</strong>，单次 3–4 秒。</p>
 <p><img src="/2026/10/22/Vuln_PHP2Shell/aslr-concept.png" alt="ASLR 区域位置与堆内对象排列的两层对照" loading="lazy" decoding="async" width="1600" height="1150"></p>
 <p><em>区域基址与堆内对象排列属于不同层次；图中位置与宽度均为示意。</em></p>
-<h3 id="Stage-0：先把并发压成一个-worker"><a href="#Stage-0：先把并发压成一个-worker" class="headerlink" title="Stage 0：先把并发压成一个 worker"></a>Stage 0：先把并发压成一个 worker</h3><p>官方 prefork 默认起 150 个 worker。这对攻击者是致命的：A 请求把某个 child 的 session 状态弄坏，下一个请求却可能被分配到别的 child，悬空指针根本不存在。</p>
-<p>纯 HTTP 的解法很朴素——<strong>把别的 worker 全占住</strong>。</p>
-<p>先开 149 个连接，每个只发 POST 头和 1 字节 body、声明 <code>Content-Length: 1048576</code>，然后就不发了。prefork 会为每个连接分配一个 child，并让它在读 body 的地方一直阻塞（默认 <code>Timeout</code> 60 秒，而整条链只要 3–4 秒）。于是 149 个 child 被钉死，只剩一个空闲。</p>
-<p>接下来所有请求——热身、A1、B1、A2、B2——都必然落到这唯一一个 child 上。每个请求结束后它又变回唯一空闲的那个，所以四步一定在同一个进程里完成。</p>
-<p>早期版本用的是另一招：把 worker 打到崩溃，等 master fork 一个新的，继承的内存映射还是一模一样。那招能用，但要赌 fork 时序；把并发压平则不需要赌。</p>
-<p>有个细节很要命：不能多占。超过 N−1 个连接会排进 accept 队列，A1 结束后它们会抢走刚空出来的 child，反而把 B1 挤到别的进程上，整条链就断了。</p>
-<h3 id="Stage-1：chunked-绕过-post-max-size，先把堆整好形"><a href="#Stage-1：chunked-绕过-post-max-size，先把堆整好形" class="headerlink" title="Stage 1：chunked 绕过 post_max_size，先把堆整好形"></a>Stage 1：chunked 绕过 <code>post_max_size</code>，先把堆整好形</h3><p>堆布局需要往请求里灌远超 8MB 的数据，但默认 <code>post_max_size</code> 就卡在 8M。0x03 提到的绕过办法在这里落地了：<strong>不带 <code>Content-Length</code>，用 <code>Transfer-Encoding: chunked</code> 发</strong>。</p>
+<p>先把这条链看成两轮接力，而不是一串函数名：<strong>第一轮读出地址，第二轮利用这些地址触发命令执行。</strong> 仓库用 A1、B1、A2、B2 给四个关键请求编号，含义如下：</p>
+<ul>
+<li><strong>制造异常（A1）</strong>：让 session 留下指向已释放内存的引用。</li>
+<li><strong>读取地址（B1）</strong>：用新请求的数据占住那片内存，让响应带出堆和 libphp 的地址。</li>
+<li><strong>再次制造异常（A2）</strong>：让 session 的校验状态留下失效引用，为下一次替换对象做准备。</li>
+<li><strong>布置并触发（B2）</strong>：根据已知地址布置假对象，借请求收尾时的析构调用触发命令执行。</li>
+</ul>
+<p>A 表示制造异常，B 表示接着使用坏状态；数字表示第几轮。这四个是关键利用请求，不包括占位连接和热身请求。<strong>请求失败不等于进程退出：这条链恰恰需要 worker 活下来，继续处理下一步。</strong></p>
+<p><img src="/2026/10/22/Vuln_PHP2Shell/9bie-chain.png" alt="9bie 纯 HTTP 链：同一 worker 中的两轮请求接力" loading="lazy" decoding="async" width="1600" height="1510"></p>
+<h3 id="Stage-0：先让后续请求落到同一个-worker"><a href="#Stage-0：先让后续请求落到同一个-worker" class="headerlink" title="Stage 0：先让后续请求落到同一个 worker"></a>Stage 0：先让后续请求落到同一个 worker</h3><p>为什么先处理 worker？因为失效引用留在某个进程自己的内存里。如果「制造异常」的请求由一个 worker 处理，「读取地址」的请求却到了另一个 worker，后者就接不到前者留下的状态。</p>
+<p>仓库使用的官方 prefork 配置是 <code>StartServers=5</code>、<code>MaxRequestWorkers=150</code>：启动时先创建 5 个进程，按负载增加，最多同时处理 150 个请求，并不是一启动就有 150 个 worker。</p>
+<p>9bie 的办法是<strong>用未完成的请求占住其他 worker，只留一个继续工作</strong>。这些连接只提交一部分请求体，接收它们的进程便暂时等待剩余数据。在仓库的 150-worker 测试配置下，149 个这样的占位连接让其他进程都处于等待状态。</p>
+<p>剩下的 worker 依次处理「制造异常 → 读取地址 → 再次制造异常 → 布置并触发」。每次请求结束，它又成为唯一空闲的进程，下一步便能接着使用同一份进程内状态。这种做法叫 <strong>worker pinning（固定处理请求的进程）</strong>，不是修改服务器配置，把 worker 数量真的调成 1。</p>
+<p>这个前提依赖具体部署。代理是否缓冲请求体、读请求体的超时限制，以及并发的正常业务流量，都会影响占位效果；仓库的成功记录不代表任意站点都能照搬。</p>
+<h3 id="Stage-1：chunked-绕过-post-max-size，先把堆整好形"><a href="#Stage-1：chunked-绕过-post-max-size，先把堆整好形" class="headerlink" title="Stage 1：chunked 绕过 post_max_size，先把堆整好形"></a>Stage 1：chunked 绕过 <code>post_max_size</code>，先把堆整好形</h3><p>堆布局需要往请求里灌远超 8MB 的数据，但默认 <code>post_max_size</code> 就卡在 8M。0x03 提到的绕过办法在这里落地了：<strong>不带 Content-Length，用 Transfer-Encoding: chunked 发</strong>。</p>
 <p>这样 <code>SG(request_info).content_length</code> 就是 0，<code>rfc1867_post_handler</code> 入口处那个 <code>post_max_size</code> 比较直接被跳过；而 Apache 的 <code>LimitRequestBody</code> 默认是 0（不限制）。multipart 解析器只管读 dechunk 之后的数据流，不再有任何总量核对。实测 10MB、63MB 的 body 都能正常解析。</p>
 <h3 id="Stage-2：Set-Cookie-越界读，一次拿到两个地址"><a href="#Stage-2：Set-Cookie-越界读，一次拿到两个地址" class="headerlink" title="Stage 2：Set-Cookie 越界读，一次拿到两个地址"></a>Stage 2：Set-Cookie 越界读，一次拿到两个地址</h3><p>这是整条链最精巧的一段。</p>
-<p>先说 <strong>A1</strong>：一个精心配比的 multipart 请求——860 个深度 64 层的嵌套空文件字段、14 个 filler、78 个 8KB 大值、20 个 4KB burner，最后是 4000 字节的 <code>PHP_SESSION_UPLOAD_PROGRESS</code>。这个配比让 OOM 精确发生在 <code>php_url_encode()</code> 里，也就是 session 写 cookie 的那一刻。</p>
+<p>先看<strong>制造异常的请求（A1）</strong>。它是一个精心配比的 multipart 请求：860 个深度 64 层的嵌套空文件字段、14 个 filler、78 个 8KB 大值、20 个 4KB burner，最后是 4000 字节的 <code>PHP_SESSION_UPLOAD_PROGRESS</code>。这个配比让 OOM 精确发生在 <code>php_url_encode()</code> 里，也就是 session 写 cookie 的那一刻。</p>
 <p>崩在这一刻的后果是：<code>PS(id)</code> 和 <code>PS(mod_data)</code> 都成了悬空指针，而 <code>PS(send_cookie)</code> 已经被置成 1。请求返回 500，但进程活了下来。</p>
-<p>然后是 <strong>B1</strong>：用一个超长的 forge 值，把悬空的 <code>PS(id)</code> 指向一块伪造的 <code>zend_string</code> 头——<code>len</code> 字段写成 <code>0xC8000</code>（800KB），data 首字节写成 <code>/</code>。<code>/</code> 很关键：它会让后续的 <code>php_session_valid_key()</code> 校验失败，从而走 abort 分支，但在这之前 <code>Set-Cookie</code> 已经把 800KB 内存 urlencode 出来了。</p>
+<p>接着是<strong>读取地址的请求（B1）</strong>。它用一个超长的 forge 值，把 A1 留下的悬空 <code>PS(id)</code> 指向一块伪造的 <code>zend_string</code> 头——<code>len</code> 字段写成 <code>0xC8000</code>（800KB），data 首字节写成 <code>/</code>。<code>/</code> 很关键：它会让后续的 <code>php_session_valid_key()</code> 校验失败，从而走 abort 分支，但在这之前 <code>Set-Cookie</code> 已经把 800KB 内存 urlencode 出来了。</p>
 <p>一个 <code>Set-Cookie</code> 头，800KB 的数据外带。窗口里同时能捞到两样东西：</p>
 <ul>
 <li><strong>堆基址</strong>：所有 0x7f 开头的指针按 2MiB 对齐聚类，落在最前面的那个簇就是 id 所在的 Zend MM chunk；</li>
@@ -871,10 +879,10 @@ PHP-FPM:  php_request_startup() 失败 → php_module_shutdown() + return
 </ul>
 <p>这一步还带了合理性检查：<code>libphp - main</code> 必须落在 <code>0x1A00000</code>–<code>0x1F00000</code> 区间内。不在就说明窗口里「出现最多的指针」是别的模块的重复值，这次泄漏作废，整条链从 A1 重来。加固前失败过的那一次，就是靠这个检查识别出来的（当时推出来的差值差了 <code>0xCB80000</code>）。</p>
 <h3 id="Stage-3：伪造-HashTable，让-PHP-自己调-system"><a href="#Stage-3：伪造-HashTable，让-PHP-自己调-system" class="headerlink" title="Stage 3：伪造 HashTable，让 PHP 自己调 system()"></a>Stage 3：伪造 HashTable，让 PHP 自己调 <code>system()</code></h3><p>地址齐了，最后一步是把控制流接到 <code>zif_system</code>。</p>
-<p><strong>A2</strong> 是个 cheap-OOM：880 个 part、深度 64、115 个 filler，让 <code>PS(hash_serialize_verifier)</code> 悬空并指到 <code>main + 0x7D720</code>。</p>
-<p><strong>B2</strong> 用 384 字节的引用值把那个悬空指针覆盖成指向 <code>S = main + 0xF8398</code> 的 zval；S 处摆好一个伪造的 <code>zend_array</code>，把 <code>pDestructor</code> 写成 <code>zif_system</code>（<code>libphp + 0x465370</code>），<code>arData</code> 指向命令字符串 <code>"id&gt;/out/p1"</code>。</p>
+<p><strong>再次制造异常的请求（A2）</strong>沿用空文件元数据放大分配的办法（cheap-OOM）：880 个 part、深度 64、115 个 filler，让 <code>PS(hash_serialize_verifier)</code> 悬空并指到 <code>main + 0x7D720</code>。</p>
+<p><strong>布置并触发的请求（B2）</strong>接着使用这份失效状态：用 384 字节的引用值把那个悬空指针覆盖成指向 <code>S = main + 0xF8398</code> 的 zval；S 处摆好一个伪造的 <code>zend_array</code>，把 <code>pDestructor</code> 写成 <code>zif_system</code>（<code>libphp + 0x465370</code>），<code>arData</code> 指向命令字符串 <code>"id&gt;/out/p1"</code>。</p>
 <p>请求 shutdown 时，<code>zend_hash_destroy</code> 遍历到伪造的表，调用 <code>pDestructor</code>——<code>system()</code> 就这么执行了。命令输出落在挂载目录里，取回来就是 <code>uid=33(www-data)</code>。</p>
-<p><strong>不用 ROP、不碰栈、不依赖 libc</strong>：它没劫持任何控制流，只是让 PHP 自己的析构流程把自己坑了，走的全是合法调用路径。唯一的限制是单条命令不宜太长，绕过办法是用 <code>sh&lt;/out/c</code>（8 字节）从挂载目录读一个脚本执行，剩下的随便写。</p>
+<p>这条链没有使用 ROP；它通过伪造析构函数指针改变控制流，让 PHP 在收尾时调用攻击者选定的函数。仓库用实验环境的挂载目录保存执行结果，这属于验证方式，不是任意远端站点天然具备的条件。</p>
 <h3 id="新旧两条链的差别"><a href="#新旧两条链的差别" class="headerlink" title="新旧两条链的差别"></a>新旧两条链的差别</h3><p>9bie 仓库早期那一版依赖两个并不常见的配置：<code>display_errors=On</code>（借警告输出把 <code>headers_sent</code> 置 1，才有机会在响应里加头）和单 worker 的 prefork 配置。这两条让它在真实环境里的适用性打了不小的折扣——生产环境的 <code>php.ini</code> 通常是 <code>display_errors=Off</code>，而 prefork 也很少只配一个 worker。</p>
 <p>现在的版本把这两个前提都去掉了：</p>
 <table>
@@ -920,8 +928,8 @@ PHP-FPM:  php_request_startup() 失败 → php_module_shutdown() + return
 <p>这也是这条链最值得警惕的地方：<strong>所有前提条件都已经收窄到「官方默认配置」</strong>。不需要目标站点有任何错误配置，只要能往一个跑 mod_php 的 Apache 发 HTTP 请求。</p>
 <h3 id="顺手盘点：研究笔记里的可复用部件"><a href="#顺手盘点：研究笔记里的可复用部件" class="headerlink" title="顺手盘点：研究笔记里的可复用部件"></a>顺手盘点：研究笔记里的可复用部件</h3><p>仓库里几个部件在别的场景同样好使：</p>
 <ul>
-<li>**chunked 绕过 <code>post_max_size</code>**：这不是 php2shell 专属的，任何需要「body 大于 8M 但又不触发限制」的堆整形场景都能用；</li>
-<li><strong><code>Set-Cookie</code> 作为外带信道</strong>：只要能把某个长度字段改大，cookie 的 urlencode 就是一条现成的、不带响应体的越界读通道；</li>
+<li><strong>chunked 绕过 post_max_size</strong>：这不是 php2shell 专属的，任何需要「body 大于 8M 但又不触发限制」的堆整形场景都能用；</li>
+<li><strong>Set-Cookie 作为外带信道</strong>：只要能把某个长度字段改大，cookie 的 urlencode 就是一条现成的、不带响应体的越界读通道；</li>
 <li><strong>worker pinning</strong>：用不完整请求占满 prefork 子进程，这个技巧与 PHP 无关，任何需要「请求必须落在同一个进程」的利用都能复用；</li>
 <li><strong>A/B 请求对</strong>：A 制造悬空＋内存布局，B 重占＋消费，中间靠 worker pinning 保证地址连续性。</li>
 </ul>
@@ -938,10 +946,10 @@ PHP-FPM:  php_request_startup() 失败 → php_module_shutdown() + return
 <p>值得单独说的是：这三条里只有第一条（关 upload progress）还站得住。<code>memory_limit=-1</code> 要冒资源耗尽的风险，而关 <code>display_errors</code> 已经被绕过。也就是说，<strong>临时缓解的窗口正在关闭</strong>，能打补丁就尽快打。</p>
 <p><strong>检测面</strong>（来自利用代码的具体特征）：</p>
 <ul>
-<li>**异常巨大的 <code>Set-Cookie</code>**：当前版本一次外带 800KB，编码后响应头在 1.5–2.3MB 量级。这是最强、也最容易写的单点信号——正常应用的 cookie 不会超过几 KB。</li>
+<li><strong>异常巨大的 Set-Cookie</strong>：当前版本一次外带 800KB，编码后响应头在 1.5–2.3MB 量级。这是最强、也最容易写的单点信号——正常应用的 cookie 不会超过几 KB。</li>
 <li><strong>149 个半截断的 POST</strong>：worker pinning 会先开 <code>MaxRequestWorkers-1</code> 个连接，每个只发 POST 头和 1 字节 body 就挂住。短时间内大量连接卡在读 body 状态，是相当反常的形态。</li>
-<li><strong>带 <code>PHP_SESSION_UPLOAD_PROGRESS</code> 却不带文件 part 的 multipart 请求</strong>，以及单请求上千字段、单字段十几 MB、深度几十层的嵌套字段名。</li>
-<li><strong><code>Transfer-Encoding: chunked</code> 的超大 multipart 请求体</strong>：不带 <code>Content-Length</code> 却发送远超 <code>post_max_size</code> 的数据，Apache 访问日志里 <code>%b</code> 会明显偏离正常分布。</li>
+<li><strong>带 PHP_SESSION_UPLOAD_PROGRESS 却不带文件 part 的 multipart 请求</strong>，以及单请求上千字段、单字段十几 MB、深度几十层的嵌套字段名。</li>
+<li><strong>Transfer-Encoding: chunked 的超大 multipart 请求体</strong>：不带 <code>Content-Length</code> 却发送远超 <code>post_max_size</code> 的数据，Apache 访问日志里 <code>%b</code> 会明显偏离正常分布。</li>
 <li>worker 反复 SIGABRT 的 502 尖峰；日志里 <code>Session ID is too long or contains illegal characters</code> 与 <code>Failed to read session data</code> 成对出现。</li>
 </ul>
 <p><img src="/2026/10/22/Vuln_PHP2Shell/evidence.png" alt="HashTable、Session 与 Unserializer 的状态及修复对应图" loading="lazy" decoding="async" width="1600" height="920"></p>
@@ -1567,7 +1575,7 @@ PHP-FPM:  php_request_startup() 失败 → php_module_shutdown() + return
             |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
             |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
             <br>
-                        &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span class="white-color">513.5k</span>&nbsp;字
+                        &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span class="white-color">513.8k</span>&nbsp;字
                                                                                     <span id="busuanzi_container_site_pv">
 			|&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv" class="white-color"></span>&nbsp;次
             </span>
