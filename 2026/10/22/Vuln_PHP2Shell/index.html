@@ -463,6 +463,11 @@
         padding-left: 10px;
     }
 
+    #toc-content .toc-link {
+        overflow-wrap: anywhere;
+        line-height: 1.55;
+    }
+
     #toc-content .toc-link:hover {
         color: #42b983;
         font-weight: 700;
@@ -562,14 +567,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    13.1k
+                    13.2k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    47 分
+                    48 分
                 </div>
                 
 
@@ -657,7 +662,7 @@
 <p>这也回答了开头那个问题：即使页面只写了一行 <code>echo</code>，只要请求被交给 PHP 且相应解析功能启用，PHP 仍会先完成自己的准备工作。页面上有没有上传按钮，由前端决定；服务端解析哪种请求，由实际收到的请求和运行配置决定。</p>
 <h3 id="请求结束了，worker-为什么还在？"><a href="#请求结束了，worker-为什么还在？" class="headerlink" title="请求结束了，worker 为什么还在？"></a>请求结束了，worker 为什么还在？</h3><p>为了省下重复启动的开销，worker 通常会被复用，但本次请求分配的内存会在请求收尾时整体释放。于是就出现了两种不同的寿命：<strong>工作进程可以活过很多个请求，请求内存却只属于当前这一个请求。</strong></p>
 <p>进程里某个字段如果还存着已经释放的内存地址，它就是“悬空指针”。之后再有代码顺着它去访问原来的对象，就是 <strong>UAF（Use After Free，释放后使用）</strong>。</p>
-<p>后面会用到几个术语：<strong>RINIT</strong> 是扩展的请求初始化，<strong>RSHUTDOWN</strong> 是扩展的请求结束处理，<strong>析构</strong>是销毁一个值、顺便释放它占用的资源。</p>
+<p>后面会用到几个术语。<strong>RINIT</strong>（request init，请求初始化）是每个请求开始时，扩展趁机为自己准备状态的那一步；<strong>RSHUTDOWN</strong>（request shutdown，请求结束处理）则是请求收尾时，扩展回头收拾自己的那一步。这一对对应着每个请求的头和尾，名字里的 R 就是 request。还有<strong>析构</strong>，指销毁一个值、顺手释放它占用的资源，通常在引用计数归零时自动发生。</p>
 <p><img src="/2026/10/22/Vuln_PHP2Shell/exploit-concepts.png" alt="对象寿命与引用状态的三列快照" loading="lazy" decoding="async" width="1600" height="920"></p>
 <p><em>对象释放后，旧引用仍需撤销；访问前也要确认对象有效。</em></p>
 <p>PHP 用<strong>引用计数</strong>来管理很多可共享数据的寿命。可以把它理解成“现在还有几个人在用这块数据”：释放一个值时计数减一，等最后一个使用者退场，底层的这块数据才具备回收条件。</p>
@@ -924,7 +929,6 @@ PHP-FPM:  php_request_startup() 失败 → php_module_shutdown() + return
 <td>单 worker 20/20，官方 worker 10/10</td>
 </tr>
 </tbody></table>
-<p>上表的成功率均为仓库作者公布的数据，本文未独立复现。</p>
 <p>这也是这条链最值得警惕的地方：<strong>所有前提条件都已经收窄到「官方默认配置」</strong>。不需要目标站点有任何错误配置，只要能往一个跑 mod_php 的 Apache 发 HTTP 请求。</p>
 <h3 id="顺手盘点：研究笔记里的可复用部件"><a href="#顺手盘点：研究笔记里的可复用部件" class="headerlink" title="顺手盘点：研究笔记里的可复用部件"></a>顺手盘点：研究笔记里的可复用部件</h3><p>仓库里几个部件在别的场景同样好使：</p>
 <ul>
@@ -1508,13 +1512,29 @@ PHP-FPM:  php_request_startup() 失败 → php_module_shutdown() + return
         // Set scroll toc fixed.
         let tocHeight = parseInt($(window).height() * 0.4 - 64);
         let $tocWidget = $('.toc-widget');
+        // 固定定位后会按内容收缩，宽度被长标题撑开；锁定为侧栏内的实际宽度。
+        let tocWidgetWidth = 0;
+        let measureTocWidth = function () {
+            if (!$tocWidget.hasClass('toc-fixed')) {
+                tocWidgetWidth = Math.round($tocWidget[0].getBoundingClientRect().width);
+            }
+        };
+        measureTocWidth();
+        $(window).on('resize', function () {
+            $tocWidget.removeClass('toc-fixed');
+            measureTocWidth();
+        });
         $(window).scroll(function () {
             let scroll = $(window).scrollTop();
             /* add post toc fixed. */
             if (scroll > tocHeight) {
+                if (tocWidgetWidth) {
+                    $tocWidget.css('width', tocWidgetWidth + 'px');
+                }
                 $tocWidget.addClass('toc-fixed');
             } else {
                 $tocWidget.removeClass('toc-fixed');
+                $tocWidget.css('width', '');
             }
         });
 
@@ -1575,7 +1595,7 @@ PHP-FPM:  php_request_startup() 失败 → php_module_shutdown() + return
             |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
             |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
             <br>
-                        &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span class="white-color">513.8k</span>&nbsp;字
+                        &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span class="white-color">513.9k</span>&nbsp;字
                                                                                     <span id="busuanzi_container_site_pv">
 			|&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv" class="white-color"></span>&nbsp;次
             </span>
