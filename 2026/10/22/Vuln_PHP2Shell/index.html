@@ -5,7 +5,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="keywords" content="Security | PHP2Shell：内存耗尽之后，服务器怎么就被拿下了？, MiaoTony,blog">
-    <meta name="description" content="结合官方公告、补丁源码与公开利用实现，拆解 PHP CVE-2026-109618 / 109619 的三条利用路径、可复用攻击原语与完整武器化链路，兼谈修复与检测。">
+    <meta name="description" content="2026 年 10 月 21 日，#PHP 8.5.12 等版本紧急修复两个 CVSS 9.2 的未认证 RCE。本文从当晚半个互联网的停服现场说起，拆解 CVE-2026-109618 / 109619 的三条利用路径、可复用攻击原语，以及 9bie 在官方默认配置上跑通的纯 HTTP 武器化链，兼谈修复与检测。">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -17,7 +17,7 @@
     <meta property="og:type" content="article">
     <meta property="og:site_name" content="MiaoTony&#39;s小窝">
     <meta property="og:title" content="Security | PHP2Shell：内存耗尽之后，服务器怎么就被拿下了？">
-    <meta property="og:description" content="结合官方公告、补丁源码与公开利用实现，拆解 PHP CVE-2026-109618 / 109619 的三条利用路径、可复用攻击原语与完整武器化链路，兼谈修复与检测。">
+    <meta property="og:description" content="2026 年 10 月 21 日，#PHP 8.5.12 等版本紧急修复两个 CVSS 9.2 的未认证 RCE。本文从当晚半个互联网的停服现场说起，拆解 CVE-2026-109618 / 109619 的三条利用路径、可复用攻击原语，以及 9bie 在官方默认配置上跑通的纯 HTTP 武器化链，兼谈修复与检测。">
     <meta property="og:url" content="https://miaotony.xyz/2026/10/22/Vuln_PHP2Shell/">
     <meta property="og:image" content="https://miaotony.xyz/2026/10/22/Vuln_PHP2Shell/banner-mobile.png">
     <meta property="og:locale" content="zh_CN">
@@ -26,7 +26,7 @@
     
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Security | PHP2Shell：内存耗尽之后，服务器怎么就被拿下了？">
-    <meta name="twitter:description" content="结合官方公告、补丁源码与公开利用实现，拆解 PHP CVE-2026-109618 / 109619 的三条利用路径、可复用攻击原语与完整武器化链路，兼谈修复与检测。">
+    <meta name="twitter:description" content="2026 年 10 月 21 日，#PHP 8.5.12 等版本紧急修复两个 CVSS 9.2 的未认证 RCE。本文从当晚半个互联网的停服现场说起，拆解 CVE-2026-109618 / 109619 的三条利用路径、可复用攻击原语，以及 9bie 在官方默认配置上跑通的纯 HTTP 武器化链，兼谈修复与检测。">
     <meta name="twitter:image" content="https://miaotony.xyz/2026/10/22/Vuln_PHP2Shell/banner-mobile.png">
     
 <!-- Global site tag (gtag.js) - Google Analytics -->
@@ -562,14 +562,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    13.1k
+                    12.8k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    47 分
+                    46 分
                 </div>
                 
 
@@ -591,15 +591,15 @@
 <p><strong>免责声明</strong></p>
 <p>本文由 LLM 参与创作。内容仅供学习研究与授权环境中的安全分析，请勿对未授权系统开展测试。文中利用机制均来自已公开的安全研究与官方通告，代码片段为简化示意。</p>
 </blockquote>
-<h2 id="0x00-引言：那一晚，半个互联网同时熄灯"><a href="#0x00-引言：那一晚，半个互联网同时熄灯" class="headerlink" title="0x00 引言：那一晚，半个互联网同时熄灯"></a>0x00 引言：那一晚，半个互联网同时熄灯</h2><p>故事从 2026 年 10 月 21 日说起，那天是周三。下文提到的时间，除非特别注明，都是北京时间。</p>
+<h2 id="0x00-引言：那一晚，半个互联网同时熄灯"><a href="#0x00-引言：那一晚，半个互联网同时熄灯" class="headerlink" title="0x00 引言：那一晚，半个互联网同时熄灯"></a>0x00 引言：那一晚，半个互联网同时熄灯</h2><p>2026 年 10 月 21 日，周三。下面所有时间都是北京时间。</p>
 <p>从下午开始，日本一批游戏厂商的公告栏里陆续出现同一句措辞——「本サービスで使用している PHP に関する脆弱性が発見された」（本服务所使用的 PHP 被发现存在漏洞）。这些公告的发布时间惊人地集中：18:20，niconico 的频道功能先进入维护；19:00，Bandai Channel 全站暂停；21:00 前后，赛马娘、碧蓝幻想、公主连结、刀剑乱舞、文豪与炼金术师几乎同时宣布紧急维护；22:00，中二节奏的官网和 CHUNITHM-NET 也跟上了。</p>
 <p>它们分属不同的公司、不同的业务，公告却指向同一个原因：PHP。</p>
-<p>到午夜零点，能核实到的名单已经长到需要拉一张表——<strong>至少 17 家</strong>服务因这两个漏洞进入维护或暂停部分功能：至少 9 款游戏及其相关服务、至少 8 组平台与厂商服务，横跨日本、美国、欧洲。停摆的程度各不相同：有的只关了管理后台，网站照常访问；有的整站下线；还有像樱花云那样，把数据库的 Web 图形界面（phpMyAdmin 那一类）单独摘掉。这张表还在变长，下文写下的只是当晚零点前能确认的部分。</p>
+<p>到午夜零点，能核实到的名单已经长到需要拉一张表——<strong>至少 17 家</strong>服务因这两个漏洞进入维护或暂停部分功能：至少 9 款游戏及其相关服务、至少 8 组平台与厂商服务，横跨日本、美国、欧洲。停摆的程度各不相同：有的只关了管理后台，网站照常访问；有的整站下线；还有像樱花云那样，把数据库的 Web 图形界面（phpMyAdmin 那一类）单独摘掉。这只是当晚零点前能确认的部分。</p>
 <p><img src="/2026/10/22/Vuln_PHP2Shell/maintenance-wall.png" alt="当晚各家维护公告汇总" loading="eager" decoding="async" width="1600" height="858"></p>
 <p>比停服更值得注意的是另一件事。当晚 20:55，<strong>日本首相高市早苗在 X 上发了一条推文</strong>，标题是「皆様に、今夜に対応して頂きたい大至急のお願いです」——「今晚恳请大家立即应对的紧急请求」。</p>
 <p>国家首脑为一个编程语言的漏洞亲自喊话，这在此前几乎没有先例。她没有停在「请注意安全」这种层面，而是给了非常具体的指令：确认自己的网站是否在用 PHP；当晚 23:00（日本时间）补丁发布后第一时间应用；如果实在来不及打补丁，「暂时关闭网站」也是降低风险的有效手段之一。</p>
 <p><img src="/2026/10/22/Vuln_PHP2Shell/takaichi-tweet.png" alt="高市早苗首相当晚在 X 上的呼吁" loading="eager" decoding="async" width="1100" height="536"></p>
-<p>*<a target="_blank" rel="noopener" href="https://x.com/takaichi_sanae/status/2112890642590564386">高市早苗：皆様に、今夜に対応して頂きたい大至急のお願いです</a><em>，发布于北京时间 21 日 20:55，截图为 X 官方嵌入卡片的折叠形态。</em></p>
+<p>*<a target="_blank" rel="noopener" href="https://x.com/takaichi_sanae/status/2112890642590564386">高市早苗：皆様に、今夜に対応して頂きたい大至急のお願いです</a>*，发布于北京时间 21 日 20:55。</p>
 <p>补丁确实在一小时后发布了。而这一小时的窗口里，是什么让一个国家的首相都要出来喊话？原因写在 PHP 官方当天发布的安全公告里。</p>
 <p>PHP 紧急发布 8.5.12 / 8.4.27 / 8.3.36 / 8.2.35，修复两个 CVSS 4.0 均为 <strong>9.2</strong> 的未认证远程代码执行漏洞：<strong>CVE-2026-109618</strong>（OOM corruption）和 <strong>CVE-2026-109619</strong>（stale global state）。社区把这组漏洞称为 <strong>PHP2Shell</strong>。</p>
 <p>CVSS 9.2 是这个量表上的次高档。翻译成人话：不需要账号、不需要受害用户点任何东西、不需要任何前置条件，一个 HTTP 请求就能在服务器上执行任意命令。而 PHP 是 WordPress、Drupal、Joomla、Magento、Nextcloud 这些建站系统共同的底座——按 W3Techs 的统计，在服务端语言已知的网站里它占了七成以上。这就解释了当晚的连锁反应：修复必须换掉运行中的 PHP 进程，而大多数公司没把握在不停机的情况下安全完成，于是只能选择先停下来。</p>
@@ -624,7 +624,7 @@
 
 <p><code>multipart/form-data</code> 可以理解为“一个包裹里装了多个小包”。浏览器用 boundary 分隔各个 part；每个 part 的头部说明字段名，文件 part 还带文件名等信息，后面接实际内容。上面的请求包含两部分：<code>description</code> 的文字，以及 <code>photo</code> 的文件数据。这里的 part 指请求体中的一个分段，和一次新的 HTTP 请求是两回事。</p>
 <p><strong>第二步：Web 服务器把请求交给 PHP。</strong> 常见部署有两种。一种是 Apache 的 <code>mod_php</code>，PHP 直接嵌在 Apache 进程里跑；另一种是 PHP-FPM，它自己维护一批 PHP 工作进程，由 Nginx 或 Apache 通过 FastCGI 把请求转过去。</p>
-<p>后文反复出现的 <strong>SAPI</strong>，指的就是 PHP 与外部运行环境之间的这层接口；<strong>worker</strong> 则是真正处理请求的工作进程，一个 worker 通常要接连处理很多个请求。</p>
+<p>这一层接口叫 <strong>SAPI</strong>（Server API）；真正处理请求的工作进程则叫 <strong>worker</strong>，一个 worker 通常要接连处理很多个请求。</p>
 <p>Web 服务器还可能先缓冲请求体，再交给 PHP。因此“浏览器正在上传”和“PHP 正在解析上传数据”这两个时间段，具体如何重叠取决于部署配置。</p>
 <p><strong>第三步：PHP 解析请求，建立业务代码能直接读取的数据。</strong> 在开启自动 POST 解析的常见配置下，PHP 会在执行目标脚本之前处理适用的 POST 请求体。multipart 解析器逐段读取输入：普通字段进入 <code>$_POST</code>；文件内容通常写入上传临时文件；文件的名称、大小、临时路径和上传状态则记录到 <code>$_FILES</code>。</p>
 <pre class="line-numbers language-text" data-language="text"><code class="language-text">浏览器提交 multipart 请求
@@ -657,13 +657,13 @@
 <p>这也回答了开头那个问题：即使页面只写了一行 <code>echo</code>，只要请求被交给 PHP 且相应解析功能启用，PHP 仍会先完成自己的准备工作。页面上有没有上传按钮，由前端决定；服务端解析哪种请求，由实际收到的请求和运行配置决定。</p>
 <h3 id="请求结束了，worker-为什么还在？"><a href="#请求结束了，worker-为什么还在？" class="headerlink" title="请求结束了，worker 为什么还在？"></a>请求结束了，worker 为什么还在？</h3><p>为了省下重复启动的开销，worker 通常会被复用，但本次请求分配的内存会在请求收尾时整体释放。于是就出现了两种不同的寿命：<strong>工作进程可以活过很多个请求，请求内存却只属于当前这一个请求。</strong></p>
 <p>进程里某个字段如果还存着已经释放的内存地址，它就是“悬空指针”。之后再有代码顺着它去访问原来的对象，就是 <strong>UAF（Use After Free，释放后使用）</strong>。</p>
-<p>后文还会反复出现几个词，先在这里集中交代一下：<strong>RINIT</strong> 是扩展的请求初始化，<strong>RSHUTDOWN</strong> 是扩展的请求结束处理，<strong>析构</strong>是销毁一个值、顺便释放它占用的资源。</p>
+<p>后面会用到几个术语：<strong>RINIT</strong> 是扩展的请求初始化，<strong>RSHUTDOWN</strong> 是扩展的请求结束处理，<strong>析构</strong>是销毁一个值、顺便释放它占用的资源。</p>
 <p><img src="/2026/10/22/Vuln_PHP2Shell/exploit-concepts.png" alt="对象寿命与引用状态的三列快照" loading="lazy" decoding="async" width="1600" height="920"></p>
 <p><em>对象释放后，旧引用仍需撤销；访问前也要确认对象有效。</em></p>
 <p>PHP 用<strong>引用计数</strong>来管理很多可共享数据的寿命。可以把它理解成“现在还有几个人在用这块数据”：释放一个值时计数减一，等最后一个使用者退场，底层的这块数据才具备回收条件。</p>
 <p>这套机制的前提是计数和记录本身没错。一旦代码把无效内存误当成正常的值，连清理操作都会跟着读错记录——问题就从这里开始扩散。</p>
 <p>另外还有两个容易混的词：<strong>序列化</strong>是把数组、对象这类数据转成便于保存或传输的形式，<strong>反序列化</strong>是把它们还原回来。</p>
-<p>还原复杂数据时，PHP 要维护一份“还原进度”的上下文，里面记着已经处理过哪些值、彼此是什么引用关系、哪些对象还没清理。这份上下文自己也有初始化和销毁的过程。记住这一点，后面就能理解为什么文章既在谈业务数据，又在谈“负责还原数据的内部状态”。</p>
+<p>还原复杂数据时，PHP 要维护一份“还原进度”的上下文，里面记着已经处理过哪些值、彼此是什么引用关系、哪些对象还没清理。这份上下文自己也有初始化和销毁的过程——它的生命周期一旦出错，麻烦和业务数据出错是一样大的。</p>
 <p>到这儿，背景就齐了。四件事连起来看：<strong>上传解析会建立数据结构，进度记录会提前接触 session，异常退出会改变清理顺序，而 worker 复用让部分错误状态有机会延续到后续请求。</strong> 它们各自都合理，凑在一起却构成了一条完整的攻击链。</p>
 <p>不过在拆代码之前，还得先回答一个问题：这么基础的缺陷，为什么能活到今天？这就要说到一条长达二十年的伏笔。</p>
 <h2 id="0x01-漏洞披露：一条二十年长的伏笔"><a href="#0x01-漏洞披露：一条二十年长的伏笔" class="headerlink" title="0x01 漏洞披露：一条二十年长的伏笔"></a>0x01 漏洞披露：一条二十年长的伏笔</h2><p>PHP2Shell 不是一个突然冒出来的新问题。把时间线拉长，它更像一条埋了二十年、一直没人踩到的线。</p>
@@ -672,7 +672,7 @@
 <p><strong>2024 年</strong>，OSTIF 和 Quarkslab 对 PHP 做安全审计时，又碰到了同一片区域。他们确认了相关问题的存在，但没能证明「可以真正利用」，于是也就没有得到修复——这在当时是合理的判断：证明不了利用，优先级自然高不起来。</p>
 <p>转折发生在 <strong>2026 年 8 月</strong>。安全研究团队 Calif 参加 OpenAI 的「Patch the Planet」项目，把目标定成了 PHP。他们没有从最新代码扫起，而是翻出这段历史，顺着二十年前那条线往回追。几天之内，他们找到了第一个 OOM-fatal 中断点，随后一路扩展，做出了针对 mod_php 和 PHP-FPM 的可靠利用。8 月 11 日提交给 PHP 官方，四天后的 <strong>8 月 15 日，PHP 官方确认 RCE PoC 有效</strong>。</p>
 <p>从那天到补丁公开，中间隔了两个多月。<strong>2026 年 10 月 21 日</strong>，修复版本发布，两个编号同步披露：<a target="_blank" rel="noopener" href="https://github.com/php/php-src/security/advisories/GHSA-w8hw-w9fx-j79w">GHSA-w8hw-w9fx-j79w</a>（CVE-2026-109618）与 <a target="_blank" rel="noopener" href="https://github.com/php/php-src/security/advisories/GHSA-6wmf-4rv5-p3rp">GHSA-6wmf-4rv5-p3rp</a>（CVE-2026-109619）。</p>
-<p>官方确认的利用范围值得单独说一句：<strong>mod_php 在默认输入与内存限制、正常 prefork 多 worker 的配置下，已在业务代码运行之前就验证了完整 RCE</strong>——也就是说，不需要目标应用有任何漏洞，只要它跑在 Apache + mod_php 上就够。实测覆盖 WordPress、Drupal、Joomla、Magento、phpMyAdmin、Nextcloud、Laravel 等；FPM 侧也有官方验证的 session 生命周期 RCE，但需要一个前提：应用里存在可达的解码操作。</p>
+<p>官方确认的利用范围很关键：<strong>mod_php 在默认输入与内存限制、正常 prefork 多 worker 的配置下，已在业务代码运行之前就验证了完整 RCE</strong>——不需要目标应用有任何漏洞，只要它跑在 Apache + mod_php 上就够。实测覆盖 WordPress、Drupal、Joomla、Magento、phpMyAdmin、Nextcloud、Laravel 等；FPM 侧也有官方验证的 session 生命周期 RCE，但需要一个前提：应用里存在可达的解码操作。</p>
 <p>Calif 把已发现的路径最早追溯到 PHP 5.4，修复覆盖 8.2–8.5，并另外放出了 7.4 / 8.0 / 8.1 的最小源码回补分支。一手研究见 <a target="_blank" rel="noopener" href="https://calif.io/php2shell/">Calif 的 PHP2Shell 研究</a>。</p>
 <p>二十年的伏笔，最后落在两处代码上。要理解它们为什么能成立，最直接的办法不是看漏洞代码，而是先看官方是怎么修的——修法会告诉你作者认为哪里出了问题。</p>
 <h2 id="0x02-先看-patch：PHP-怎么改掉“OOM-即跳转”"><a href="#0x02-先看-patch：PHP-怎么改掉“OOM-即跳转”" class="headerlink" title="0x02 先看 patch：PHP 怎么改掉“OOM 即跳转”"></a>0x02 先看 patch：PHP 怎么改掉“OOM 即跳转”</h2><p>补丁很大，但核心只有一句话：让内存耗尽别再「半路跳走」。先看提交说明——8.4 分支的修复提交是 <a target="_blank" rel="noopener" href="https://github.com/php/php-src/commit/506e87fa7dcdd306975e5b8f8265ee03527aacbf"><code>506e87fa</code></a>（8.5 为 <code>31c0ea7d</code>），提交说明只有两行：</p>
@@ -733,7 +733,7 @@
 <p><img src="/2026/10/22/Vuln_PHP2Shell/patch.png" alt="OOM 处理与请求生命周期的补丁前后对比" loading="lazy" decoding="async" width="1600" height="1010"></p>
 <p><em>补丁机制概括：退出时机移到安全点，严重故障直接终止进程，跨请求引用在两端都被清理。</em></p>
 <p>补丁修了三件事：软 OOM 别中途跳走、硬 OOM 直接结束进程、跨请求的悬空引用在两端都清掉。把这三件事反过来看，就是三条攻击路径的入口。</p>
-<p>接下来按「先造一个可控的崩溃 → 三条路径各自利用 → 最后打进 shell」的顺序拆。先说那个所有路径共用的前提：怎么让崩溃精确落在你想要的那一行。</p>
+<p>接下来的顺序是：先造一个可控的崩溃，再看三条路径各自怎么利用，最后打进 shell。</p>
 <h2 id="0x03-公共原语：让崩溃发生在指定的那一行"><a href="#0x03-公共原语：让崩溃发生在指定的那一行" class="headerlink" title="0x03 公共原语：让崩溃发生在指定的那一行"></a>0x03 公共原语：让崩溃发生在指定的那一行</h2><p>三条路径都靠同一个前提：<strong>不只是把 PHP 的内存撑爆，还得让它在指定的某一次内存分配上爆</strong>。</p>
 <p>这个区别很关键。内存撑爆本身没什么用，顶多是个 500 错误；真正有价值的是“爆在某个函数执行到一半的时候”。那时代码已经把一半的状态写进了全局结构，剩下的收尾代码却再也不会执行——进程带着一份没写完的账继续活下去，后面谁去读这份账，谁就中招。</p>
 <p>所以第一个问题是：能不能挑？答案是能。Calif 公开了两个手法，本质都是同一个放大器——让“请求体有多少字节”和“PHP 吃掉多少内存”脱钩。一旦两者不成比例，把哪一次分配推到临界点，就变成了调参数的事。</p>
@@ -844,74 +844,88 @@ PHP-FPM:  php_request_startup() 失败 → php_module_shutdown() + return
 <p>再在序列化数据里放一组重复的 key，就能触发 <code>var_push_dtor_value()</code>，把一个完整的 zval（指针加类型）写进刚刚选定的那个位置。</p>
 <p><strong>往任意地址写任意值</strong>——配合前面泄漏出来的堆布局，这就是一个完整的类型混淆原语，稳定性远高于纯粹的堆喷。</p>
 <p>mod_php 和 FPM 通吃。官方在 FPM 上验证出的那条 session 生命周期 RCE，走的正是这条路。</p>
-<p>三条路径到这里就齐了。它们共用同一个「可控 OOM」的生产者，消费端分别落在哈希表计数、session 全局和反序列化器全局上。有了原语，离「真的执行一条命令」还差多远？剩下的路，就是绕过 ASLR、摆好堆布局、把控制流稳稳接到 <code>system()</code> 上。下面借 9bie 公开的利用链，一段一段看别人是怎么把这条路走通的。</p>
-<h2 id="0x07-武器化：9bie-公开利用链逐段拆解"><a href="#0x07-武器化：9bie-公开利用链逐段拆解" class="headerlink" title="0x07 武器化：9bie 公开利用链逐段拆解"></a>0x07 武器化：9bie 公开利用链逐段拆解</h2><p>到这里，我们已经有了三个能用的原语。但从「能读到悬空的内存」到「能执行一条命令」，中间还隔着三座山：ASLR 让地址每次都变，堆布局决定了谁能占住哪块内存，而触发过程必须稳定到能重试。这三件事凑不齐，原语就只是原语。</p>
-<p><strong>ASLR（Address Space Layout Randomization，地址空间布局随机化）</strong> 是操作系统的一项防护：把程序、共享库、堆、栈这些区域的装载或分配位置随机化，让人没法预先猜到内存地址。具体随机到什么程度，取决于平台和构建配置。</p>
-<p><a target="_blank" rel="noopener" href="https://github.com/9bie/php2shell-bypass-aslr-exp">9bie/php2shell-bypass-aslr-exp</a> 把最后这一公里也公开了：目标为 <code>php:8.4.26-apache</code> 官方镜像，加 Apache prefork 单 worker，README 里报的是 3/3 成功。</p>
-<p>下面结合 <code>exploit.py</code> 和 <code>NOTES.md</code> 做静态分析。成功次数是仓库作者的说法，本文没有独立跑过它的 RCE 实验。</p>
+<p>三条路径到这里就齐了。它们共用同一个「可控 OOM」的生产者，消费端分别落在哈希表计数、session 全局和反序列化器全局上——这已经足以构成漏洞的全部理论形态。</p>
+<p>但理论形态和「真的敲一条命令拿到 shell」之间，还有相当长的一段工程路。</p>
+<h2 id="0x07-武器化：9bie-的纯-HTTP-链逐段拆解"><a href="#0x07-武器化：9bie-的纯-HTTP-链逐段拆解" class="headerlink" title="0x07 武器化：9bie 的纯 HTTP 链逐段拆解"></a>0x07 武器化：9bie 的纯 HTTP 链逐段拆解</h2><p>这段工程路要翻三座山：ASLR 让地址每次都变，堆布局决定了谁能占住哪块内存，而触发过程必须稳定到能重试。这三件事凑不齐，原语就只是原语。</p>
+<p><strong>ASLR（Address Space Layout Randomization，地址空间布局随机化）</strong> 是操作系统的一项防护：把程序、共享库、堆、栈这些区域的装载或分配位置随机化，让人没法预先猜到内存地址。</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/9bie/php2shell-bypass-aslr-exp">9bie/php2shell-bypass-aslr-exp</a> 把最后这一公里也公开了。这个仓库在披露后两天内更新了好几轮，最后落地的版本比初版激进得多——<strong>目标环境是原封不动的官方镜像</strong>：<code>php:8.4.26-apache</code>、官方 <code>php.ini-production</code>（<code>display_errors=Off</code>、<code>memory_limit=128M</code>）、官方 prefork 配置（<code>MaxRequestWorkers=150</code>），不挂 gdb、不读目标 <code>/proc</code>、不改任何配置，目标页面就是开头那个 <code>&lt;?php echo "OK\n"; ?&gt;</code>。</p>
+<p>仓库自己报的成绩：官方 worker 配置下 <strong>10/10</strong>，单 worker 基线 <strong>20/20</strong>，单次 3–4 秒。</p>
 <p><img src="/2026/10/22/Vuln_PHP2Shell/aslr-concept.png" alt="ASLR 区域位置与堆内对象排列的两层对照" loading="lazy" decoding="async" width="1600" height="1150"></p>
 <p><em>区域基址与堆内对象排列属于不同层次；图中位置与宽度均为示意。</em></p>
-<h3 id="Stage-0：worker-轮换——prefork-白送的地址稳定性"><a href="#Stage-0：worker-轮换——prefork-白送的地址稳定性" class="headerlink" title="Stage 0：worker 轮换——prefork 白送的地址稳定性"></a>Stage 0：worker 轮换——prefork 白送的地址稳定性</h3><p>ASLR 让每次启动的地址都不一样，看起来无解。但 Apache prefork 有个特性，把这个问题化解掉了。</p>
-<p>A 请求先用一堆 3KB 的存活字段占住堆，再加上一个 12MB 的 OOM 字段，把 child 进程撑到 SIGABRT。prefork master 发现子进程死了，立刻 fork 一个新的补上来。</p>
-<p>关键就在这里：<strong>fork 出来的子进程，继承的是父进程的内存映射</strong>。所以同一个 master 底下，新 worker 的 libphp 基址、Zend MM 那堆 2MB chunk 的布局，跟刚死掉的那个 worker 一模一样。</p>
-<p>也就是说，ASLR 只有在 master 启动那一刻随机了一次，之后每个 worker 拿到的都是同一套坐标。于是每个 stage 只对付一次 ASLR 就够了；泄漏失败也不要紧，<code>rotate()</code> 换一个 worker 重来，地址还是那些地址（只有 master 重启才会重新随机）。</p>
-<p>这个“轮换原语”，就是整条链的工程地基。</p>
-<h3 id="Stage-1：Set-Cookie-堆泄漏——把-zend-string-len-改大"><a href="#Stage-1：Set-Cookie-堆泄漏——把-zend-string-len-改大" class="headerlink" title="Stage 1：Set-Cookie 堆泄漏——把 zend_string.len 改大"></a>Stage 1：Set-Cookie 堆泄漏——把 <code>zend_string.len</code> 改大</h3><p>第一阶段的目标：拿到 Zend MM 的 chunk 基址。</p>
-<p>做法是沿用路径②的配方，先留下悬空的 session 状态，但需要额外凑两个条件，把数据“偷”出来：</p>
+<h3 id="Stage-0：先把并发压成一个-worker"><a href="#Stage-0：先把并发压成一个-worker" class="headerlink" title="Stage 0：先把并发压成一个 worker"></a>Stage 0：先把并发压成一个 worker</h3><p>官方 prefork 默认起 150 个 worker。这对攻击者是致命的：A 请求把某个 child 的 session 状态弄坏，下一个请求却可能被分配到别的 child，悬空指针根本不存在。</p>
+<p>纯 HTTP 的解法很朴素——<strong>把别的 worker 全占住</strong>。</p>
+<p>先开 149 个连接，每个只发 POST 头和 1 字节 body、声明 <code>Content-Length: 1048576</code>，然后就不发了。prefork 会为每个连接分配一个 child，并让它在读 body 的地方一直阻塞（默认 <code>Timeout</code> 60 秒，而整条链只要 3–4 秒）。于是 149 个 child 被钉死，只剩一个空闲。</p>
+<p>接下来所有请求——热身、A1、B1、A2、B2——都必然落到这唯一一个 child 上。每个请求结束后它又变回唯一空闲的那个，所以四步一定在同一个进程里完成。</p>
+<p>早期版本用的是另一招：把 worker 打到崩溃，等 master fork 一个新的，继承的内存映射还是一模一样。那招能用，但要赌 fork 时序；把并发压平则不需要赌。</p>
+<p>有个细节很要命：不能多占。超过 N−1 个连接会排进 accept 队列，A1 结束后它们会抢走刚空出来的 child，反而把 B1 挤到别的进程上，整条链就断了。</p>
+<h3 id="Stage-1：chunked-绕过-post-max-size，先把堆整好形"><a href="#Stage-1：chunked-绕过-post-max-size，先把堆整好形" class="headerlink" title="Stage 1：chunked 绕过 post_max_size，先把堆整好形"></a>Stage 1：chunked 绕过 <code>post_max_size</code>，先把堆整好形</h3><p>堆布局需要往请求里灌远超 8MB 的数据，但默认 <code>post_max_size</code> 就卡在 8M。0x03 提到的绕过办法在这里落地了：<strong>不带 <code>Content-Length</code>，用 <code>Transfer-Encoding: chunked</code> 发</strong>。</p>
+<p>这样 <code>SG(request_info).content_length</code> 就是 0，<code>rfc1867_post_handler</code> 入口处那个 <code>post_max_size</code> 比较直接被跳过；而 Apache 的 <code>LimitRequestBody</code> 默认是 0（不限制）。multipart 解析器只管读 dechunk 之后的数据流，不再有任何总量核对。实测 10MB、63MB 的 body 都能正常解析。</p>
+<h3 id="Stage-2：Set-Cookie-越界读，一次拿到两个地址"><a href="#Stage-2：Set-Cookie-越界读，一次拿到两个地址" class="headerlink" title="Stage 2：Set-Cookie 越界读，一次拿到两个地址"></a>Stage 2：Set-Cookie 越界读，一次拿到两个地址</h3><p>这是整条链最精巧的一段。</p>
+<p>先说 <strong>A1</strong>：一个精心配比的 multipart 请求——860 个深度 64 层的嵌套空文件字段、14 个 filler、78 个 8KB 大值、20 个 4KB burner，最后是 4000 字节的 <code>PHP_SESSION_UPLOAD_PROGRESS</code>。这个配比让 OOM 精确发生在 <code>php_url_encode()</code> 里，也就是 session 写 cookie 的那一刻。</p>
+<p>崩在这一刻的后果是：<code>PS(id)</code> 和 <code>PS(mod_data)</code> 都成了悬空指针，而 <code>PS(send_cookie)</code> 已经被置成 1。请求返回 500，但进程活了下来。</p>
+<p>然后是 <strong>B1</strong>：用一个超长的 forge 值，把悬空的 <code>PS(id)</code> 指向一块伪造的 <code>zend_string</code> 头——<code>len</code> 字段写成 <code>0xC8000</code>（800KB），data 首字节写成 <code>/</code>。<code>/</code> 很关键：它会让后续的 <code>php_session_valid_key()</code> 校验失败，从而走 abort 分支，但在这之前 <code>Set-Cookie</code> 已经把 800KB 内存 urlencode 出来了。</p>
+<p>一个 <code>Set-Cookie</code> 头，800KB 的数据外带。窗口里同时能捞到两样东西：</p>
 <ul>
-<li><strong>凑够 1001 个字段</strong>，触发 <code>max_input_vars</code> 警告。这个警告如果被 <code>display_errors=On</code> 打到输出里，就等于提前向浏览器发了内容，<code>headers_sent</code> 随之变成 1。有了它，PHP 后面才允许在响应里追加响应头——这是能把数据塞进响应头的前提。</li>
-<li><strong><code>PHPSESSID=\x00</code></strong> 这种非法 SID，会逼 PHP 丢掉用户给的 id、重新生成一个，并置上 <code>send_cookie=1</code>。响应里于是多出一个 <code>Set-Cookie</code>，这个头就成了往外搬数据的信道。</li>
+<li><strong>堆基址</strong>：所有 0x7f 开头的指针按 2MiB 对齐聚类，落在最前面的那个簇就是 id 所在的 Zend MM chunk；</li>
+<li><strong>libphp 基址</strong>：窗口里还出现了 1095 次同一个指针——那是真实 HashTable 的 <code>pDestructor = zval_ptr_dtor</code>。原因挺巧妙：<code>G:400</code> 这个 forge 值在 id chunk 尾部留下 111 页空洞，随后 900 个嵌套数组字段的真实 HashTable 被 Best-Fit 塞进了这些洞里。减去固定偏移 <code>0x65EB60</code>，libphp 到手。</li>
 </ul>
-<p>B 请求用 56 字节的字段值缓冲区重占悬空 reference，再补一个 79B 的“伪造字段”，在第 0x10 偏移写入超大的 <code>zend_string.len</code>：</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python">forge <span class="token operator">=</span> <span class="token builtin">bytearray</span><span class="token punctuation">(</span><span class="token string">b"A"</span> <span class="token operator">*</span> <span class="token number">79</span><span class="token punctuation">)</span>
-struct<span class="token punctuation">.</span>pack_into<span class="token punctuation">(</span><span class="token string">"&lt;Q"</span><span class="token punctuation">,</span> forge<span class="token punctuation">,</span> <span class="token number">0x10</span><span class="token punctuation">,</span> <span class="token number">0x1000</span><span class="token punctuation">)</span>   <span class="token comment"># 伪 zend_string len=4096</span>
-forge<span class="token punctuation">[</span><span class="token number">0x18</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token builtin">ord</span><span class="token punctuation">(</span><span class="token string">"L"</span><span class="token punctuation">)</span>
-parts<span class="token punctuation">.</span>append<span class="token punctuation">(</span><span class="token punctuation">{</span><span class="token string">"name"</span><span class="token punctuation">:</span> <span class="token string">"1999"</span><span class="token punctuation">,</span> <span class="token string">"data"</span><span class="token punctuation">:</span> <span class="token builtin">bytes</span><span class="token punctuation">(</span>forge<span class="token punctuation">)</span><span class="token punctuation">}</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>接下来，PHP 写 cookie 的时候会对这个 session id 做一次 <code>php_url_encode()</code>。按正常逻辑，就是把这串 id 转成 URL 安全的形式——但这里发生了两件事：这个 id 所在的字符串早就被释放了，现在占着的是 B 请求塞进去的数据；而它的长度字段又被伪造成了 4096。</p>
-<p>编码器不知道这些，它只知道“我有一个 4096 字节的字符串要编码”。于是一路越界读下去，把紧跟其后的堆内容一起 urlencode 进 <code>Set-Cookie</code>，4KB 左右的内存就这么带出去了。</p>
-<p>看到数据还要能还原出地址。解析端的做法很朴素：在泄漏回来的字节流上滑动窗口，每次取 8 个字节按小端解读，值落在用户态指针区间内的就留下；再把这些候选值按 2MB 对齐折叠，取出现次数最多的那个——<strong>众数</strong>。</p>
-<p>这个思路的妙处在于，堆里会有一大堆指针，它们天然都落在同一个 2MB chunk 里。与其试图精确定位某一个指针，不如数一数大家“最常指向”哪里，后者抗噪得多。</p>
-<h3 id="Stage-2：libphp-泄漏——HashTable-恰好对齐-pDestructor"><a href="#Stage-2：libphp-泄漏——HashTable-恰好对齐-pDestructor" class="headerlink" title="Stage 2：libphp 泄漏——HashTable 恰好对齐 pDestructor"></a>Stage 2：libphp 泄漏——HashTable 恰好对齐 <code>pDestructor</code></h3><p>堆的位置到手，但光知道堆在哪没法直接跳到哪——还得知道代码段（libphp）的基址，因为要调用的 <code>zif_system</code> 就在里面。第二阶段要再偷一次，只不过这次偷的不再是堆指针，而是一个固定符号的地址。</p>
-<p>这次的落点更巧。B 请求构造 983 个数组字段，其中第 406 个是 16 个元素、每个 16B 的值。为什么是 16 个元素？因为 Zend 的 HashTable 是按 16 个槽位一页分配的，这样一份表的大小正好卡在那个位置上。</p>
-<p>结果就是：这份精心定尺寸的 HashTable，恰好重新占住了悬空的 <code>PS(id)</code> 那块内存。于是原本该被读成字符串的地方，现在躺着的是哈希表的结构体：</p>
-<pre class="line-numbers language-text" data-language="text"><code class="language-text">ZSTR_LEN(PS(id)) 读到的是 HashTable 的 nTableSize=16
-cookie 数据从 PS(id)+0x18 起 = nNextFreeElement | pDestructor
-而 pDestructor = ZVAL_PTR_DTOR，是 libphp 里的固定符号<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-
-<p>读法很直白：<code>PS(id)</code> 被当成 <code>zend_string</code>，它的长度字段读到的其实是这个 HashTable 的 <code>nTableSize</code>（也就是 16）；而 cookie 数据从 <code>PS(id)+0x18</code> 开始读，读出来的就是 <code>nNextFreeElement</code> 和 <code>pDestructor</code> 两个字段的值。</p>
-<p>这里的宝贝是 <code>pDestructor</code>——它是 <code>ZVAL_PTR_DTOR</code>，一个 libphp 里的固定符号。只要拿到它的实际地址，减去它相对 libphp 基址的固定偏移，基址就到手了。</p>
-<p>解析端会做双重校验：低 12 位必须和已知偏移里的低 12 位对上（页内偏移不受 ASLR 影响），解出来的基址还得是 4KB 对齐的。两条都满足才采纳。</p>
-<p>两次泄漏一拼，代码段和堆的地址就都知道了，ASLR 被彻底绕过。整个过程只靠 HTTP 响应头的读写，一次 libc 都没碰。</p>
-<p>地址全齐，接下来就不用再「看」了，该动手写了。</p>
-<h3 id="Stage-3：fake-析构链——让-PHP-自己调-zif-system"><a href="#Stage-3：fake-析构链——让-PHP-自己调-zif-system" class="headerlink" title="Stage 3：fake 析构链——让 PHP 自己调 zif_system"></a>Stage 3：fake 析构链——让 PHP 自己调 <code>zif_system</code></h3><p>地址都齐了，最后一步是真正执行命令。这一阶段不再往外泄漏什么，而是直接覆写那块悬空的 reference，让它指向攻击者搭好的假结构。</p>
-<p>先说怎么稳定地把 reference 摆到固定位置：A 请求用 6 组填充数据，把 reference 推到 chunk 内的某个确定偏移上。</p>
-<p>再说怎么改它：B 请求给一个 15 字节的 carrier。为什么是 15 字节？因为 <code>zend_string</code> 分配时会带一个计数头和一个 <code>\0</code> 结尾，bin-40 这一档的字符区正好在 reference 头上——这样写入的数据不会碰到别的结构。</p>
-<p>改的时候只动低 7 个字节的指针值，高字节保留原本的规范零。这样既不用关心高位，也不会越界到别的区域。改完，<code>val.value</code> 就指向了某个 167 字节存活字符串里预先摆好的三件套：</p>
-<p>之所以要放在一个“还活着”的字符串里，是因为这块内存必须活到最后——一旦被回收，内容会被别的数据覆盖，整套布置就散了。</p>
-<pre class="line-numbers language-text" data-language="text"><code class="language-text">fake HashTable      pDestructor = libphp + zif_system 偏移
-fake execute_data   num_args=1, arg1 → 指向命令字符串的 IS_STRING zval
-fake zend_string    命令本体（≤14 字节，167 − 0x98 − 1）<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-
-<p>触发完全走 PHP 自身的析构路径，无需任何注入：</p>
-<pre class="line-numbers language-text" data-language="text"><code class="language-text">php_session_track_init()
-  → zval_ptr_dtor(PS(http_session_vars))
-    → zend_reference_destroy(R0)
-      → zend_array_destroy(fake HT)
-        → zend_hash_destroy(fake HT)
-          → pDestructor(&amp;bucket-&gt;val)      # = zif_system(cmd)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>最后这行是关键：<code>zend_hash_destroy</code> 遍历到那唯一一个 bucket 时，会调 <code>pDestructor(&amp;p-&gt;val)</code>。</p>
-<p>而这个 <code>&amp;p-&gt;val</code> 的地址，恰好就是预先摆好的假 <code>execute_data</code> 所在的位置。<code>zif_system</code> 拿到它之后，就按一个标准内部函数该有的规矩去读 call frame——<code>num_args</code> 是几、第一个参数是什么，全都来自攻击者的数据。于是它老老实实把那条命令执行了。</p>
-<p>这一手的高明之处在于：<strong>不用 ROP、不碰栈、不依赖 libc</strong>。它没去劫持任何控制流，只是让 PHP 自己的析构流程把自己坑了——走的完全是合法调用路径。相比之下，NOTES.md 里早期那套靠 <code>pop rdi; ret</code> 加 <code>popen@plt</code> 的写法，要脆弱一个量级。</p>
-<p>唯一的限制是命令本身只有 14 字节。绕过办法也简单：用 <code>sh&lt;/out/c</code>（8 字节）从挂载目录读一个脚本执行，剩下的就随便写了。</p>
-<h3 id="顺手盘点：研究笔记里的可复用部件"><a href="#顺手盘点：研究笔记里的可复用部件" class="headerlink" title="顺手盘点：研究笔记里的可复用部件"></a>顺手盘点：研究笔记里的可复用部件</h3><p><code>NOTES.md</code> 记录了完整的探索过程，几个部件在别的场景同样好使：</p>
+<p>这一步还带了合理性检查：<code>libphp - main</code> 必须落在 <code>0x1A00000</code>–<code>0x1F00000</code> 区间内。不在就说明窗口里「出现最多的指针」是别的模块的重复值，这次泄漏作废，整条链从 A1 重来。加固前失败过的那一次，就是靠这个检查识别出来的（当时推出来的差值差了 <code>0xCB80000</code>）。</p>
+<h3 id="Stage-3：伪造-HashTable，让-PHP-自己调-system"><a href="#Stage-3：伪造-HashTable，让-PHP-自己调-system" class="headerlink" title="Stage 3：伪造 HashTable，让 PHP 自己调 system()"></a>Stage 3：伪造 HashTable，让 PHP 自己调 <code>system()</code></h3><p>地址齐了，最后一步是把控制流接到 <code>zif_system</code>。</p>
+<p><strong>A2</strong> 是个 cheap-OOM：880 个 part、深度 64、115 个 filler，让 <code>PS(hash_serialize_verifier)</code> 悬空并指到 <code>main + 0x7D720</code>。</p>
+<p><strong>B2</strong> 用 384 字节的引用值把那个悬空指针覆盖成指向 <code>S = main + 0xF8398</code> 的 zval；S 处摆好一个伪造的 <code>zend_array</code>，把 <code>pDestructor</code> 写成 <code>zif_system</code>（<code>libphp + 0x465370</code>），<code>arData</code> 指向命令字符串 <code>"id&gt;/out/p1"</code>。</p>
+<p>请求 shutdown 时，<code>zend_hash_destroy</code> 遍历到伪造的表，调用 <code>pDestructor</code>——<code>system()</code> 就这么执行了。命令输出落在挂载目录里，取回来就是 <code>uid=33(www-data)</code>。</p>
+<p><strong>不用 ROP、不碰栈、不依赖 libc</strong>：它没劫持任何控制流，只是让 PHP 自己的析构流程把自己坑了，走的全是合法调用路径。唯一的限制是单条命令不宜太长，绕过办法是用 <code>sh&lt;/out/c</code>（8 字节）从挂载目录读一个脚本执行，剩下的随便写。</p>
+<h3 id="新旧两条链的差别"><a href="#新旧两条链的差别" class="headerlink" title="新旧两条链的差别"></a>新旧两条链的差别</h3><p>9bie 仓库早期那一版依赖两个并不常见的配置：<code>display_errors=On</code>（借警告输出把 <code>headers_sent</code> 置 1，才有机会在响应里加头）和单 worker 的 prefork 配置。这两条让它在真实环境里的适用性打了不小的折扣——生产环境的 <code>php.ini</code> 通常是 <code>display_errors=Off</code>，而 prefork 也很少只配一个 worker。</p>
+<p>现在的版本把这两个前提都去掉了：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>早期版本</th>
+<th>当前版本</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>display_errors</code></td>
+<td>必须 <code>On</code></td>
+<td>任意，<code>Off</code> 也可</td>
+</tr>
+<tr>
+<td><code>memory_limit</code></td>
+<td>需改小</td>
+<td>官方 128M 即可</td>
+</tr>
+<tr>
+<td>worker 数</td>
+<td>单 worker</td>
+<td>官方 150 也打通</td>
+</tr>
+<tr>
+<td>目标 ini</td>
+<td>自定义</td>
+<td>官方 <code>php.ini-production</code></td>
+</tr>
+<tr>
+<td>泄漏方式</td>
+<td>依赖警告触发 <code>headers_sent</code></td>
+<td><code>Set-Cookie</code> 越界读 800KB</td>
+</tr>
+<tr>
+<td>成功率（作者报告）</td>
+<td>3/3</td>
+<td>单 worker 20/20，官方 worker 10/10</td>
+</tr>
+</tbody></table>
+<p>上表的成功率均为仓库作者公布的数据，本文未独立复现。</p>
+<p>这也是这条链最值得警惕的地方：<strong>所有前提条件都已经收窄到「官方默认配置」</strong>。不需要目标站点有任何错误配置，只要能往一个跑 mod_php 的 Apache 发 HTTP 请求。</p>
+<h3 id="顺手盘点：研究笔记里的可复用部件"><a href="#顺手盘点：研究笔记里的可复用部件" class="headerlink" title="顺手盘点：研究笔记里的可复用部件"></a>顺手盘点：研究笔记里的可复用部件</h3><p>仓库里几个部件在别的场景同样好使：</p>
 <ul>
-<li><strong><code>stream_bucket_new()</code> 320B 裸喷</strong>：给 stream filter 喂 payload，得到内容完全可控、且被资源保活的裸缓冲——早期 Defect D 线（<code>session_unset()</code> + <code>__destruct</code> 写 <code>$_SESSION</code> 触发 <code>zend_hash_clean</code> 重入 → resize 释放旧 arData → 320B 重占 → fake HT）就是靠它拿下的首个 RCE；</li>
-<li><strong><code>php_serialize</code> 重入泄漏</strong>：<code>__serialize()</code> 里清空 <code>$_SESSION</code> 释放正在序列化的数组，<code>zend_reference</code> 重占 32B 字符串块后 <code>val.type_info</code> 被当 <code>len</code>，一次 775B 越界读带出堆指针；换 4096B 块则伪造 <code>len=32768</code> 读 32KB，固定偏移处捞出 libphp 代码指针。注意默认 <code>php</code> handler 已被 GH-16590 堵住，此路要 <code>php_serialize</code>；</li>
-<li><strong>A/B 请求对</strong>本身就是一个通用模式：A 制造悬空＋内存布局，B 重占＋消费，中间靠 prefork 轮换保证地址连续性。</li>
+<li>**chunked 绕过 <code>post_max_size</code>**：这不是 php2shell 专属的，任何需要「body 大于 8M 但又不触发限制」的堆整形场景都能用；</li>
+<li><strong><code>Set-Cookie</code> 作为外带信道</strong>：只要能把某个长度字段改大，cookie 的 urlencode 就是一条现成的、不带响应体的越界读通道；</li>
+<li><strong>worker pinning</strong>：用不完整请求占满 prefork 子进程，这个技巧与 PHP 无关，任何需要「请求必须落在同一个进程」的利用都能复用；</li>
+<li><strong>A/B 请求对</strong>：A 制造悬空＋内存布局，B 重占＋消费，中间靠 worker pinning 保证地址连续性。</li>
 </ul>
-<p>值得一提的是，这条链的每一环都只用到了 HTTP 请求和响应。没有内存泄露工具、没有调试接口、不需要服务器上有任何可疑进程——在日志里，它看起来就是一串格式怪异的表单提交。这也解释了为什么防守方必须在补丁层面解决，而不是指望从流量里拦住。</p>
+<p>值得一提的是，这条链的每一环都只用到了 HTTP 请求和响应。没有内存泄露工具、没有调试接口、不需要服务器上有任何可疑进程——在日志里，它看起来就是一串格式怪异的表单提交，外加 149 个半截断的 POST。这也解释了为什么防守方必须在补丁层面解决，而不是指望从流量里拦住。</p>
 <h2 id="0x08-防御：在链条上动刀"><a href="#0x08-防御：在链条上动刀" class="headerlink" title="0x08 防御：在链条上动刀"></a>0x08 防御：在链条上动刀</h2><p>既然攻击是「可控崩溃 → 命中三个消费点 → 绕过 ASLR → 接上 system」这么一条链，那么防御也就不必想着「一招制敌」，而是看在哪一节最划算。</p>
 <p>按性价比排，优先级是这样的：</p>
 <p><strong>安装官方修复</strong>：升级到官方已发布的修复版本，或安装发行版明确回补这两个 CVE 的包，并<strong>重启全部 PHP worker</strong>。本次首批修复版本为 8.5.12 / 8.4.27 / 8.3.36 / 8.2.35；实际更新时以官方当前安全公告和发行版维护记录为准。补丁同时调整 OOM 处理、请求结束清理和 early RINIT，分别处理异常退出时机、失效引用和过早访问的问题。</p>
@@ -919,23 +933,33 @@ fake zend_string    命令本体（≤14 字节，167 − 0x98 − 1）<span ari
 <ul>
 <li><code>session.upload_progress.enabled=0</code> 斩断路径②③的<strong>消费者</strong>——B 请求的提前 session 处理直接消失，官方和 Calif 都点名的首选。这功能默认开启而几乎没人用，关了损失很小；</li>
 <li><code>memory_limit=-1</code> 移除 OOM <strong>生产者</strong>，但引入资源耗尽风险，只配合容器 / cgroup 边界短期用。<code>RLIMIT_AS</code> / <code>RLIMIT_DATA</code> 反而会制造底层分配失败，官方明确警告别用；</li>
-<li>关 <code>display_errors</code> 能掐掉 9bie 当前的泄漏信道（依赖警告输出置 <code>headers_sent</code>），但仓库已声明 off 版在路上，这只争取时间。</li>
+<li>关 <code>display_errors</code> 曾经有用——早期利用链靠警告输出把 <code>headers_sent</code> 置 1，不显示警告就凑不出外带信道。但 9bie 现在的版本改走 <code>Set-Cookie</code> 越界读，<code>display_errors=Off</code> 已经是它的目标环境之一，这一条<strong>已经失效</strong>。</li>
 </ul>
-<p><strong>检测面</strong>（来自利用代码的具体特征）：异常巨大的 <code>Set-Cookie</code>（约 4KB urlencoded 乱码，最强单点信号）；带 <code>PHP_SESSION_UPLOAD_PROGRESS</code> 却无文件 part 的 multipart 请求；单请求上千字段或单字段十几 MB；worker 反复 SIGABRT 的 502 尖峰；日志里 <code>Session ID is too long or contains illegal characters</code> 与 <code>Failed to read session data</code> 成对出现。</p>
+<p>值得单独说的是：这三条里只有第一条（关 upload progress）还站得住。<code>memory_limit=-1</code> 要冒资源耗尽的风险，而关 <code>display_errors</code> 已经被绕过。也就是说，<strong>临时缓解的窗口正在关闭</strong>，能打补丁就尽快打。</p>
+<p><strong>检测面</strong>（来自利用代码的具体特征）：</p>
+<ul>
+<li>**异常巨大的 <code>Set-Cookie</code>**：当前版本一次外带 800KB，编码后响应头在 1.5–2.3MB 量级。这是最强、也最容易写的单点信号——正常应用的 cookie 不会超过几 KB。</li>
+<li><strong>149 个半截断的 POST</strong>：worker pinning 会先开 <code>MaxRequestWorkers-1</code> 个连接，每个只发 POST 头和 1 字节 body 就挂住。短时间内大量连接卡在读 body 状态，是相当反常的形态。</li>
+<li><strong>带 <code>PHP_SESSION_UPLOAD_PROGRESS</code> 却不带文件 part 的 multipart 请求</strong>，以及单请求上千字段、单字段十几 MB、深度几十层的嵌套字段名。</li>
+<li><strong><code>Transfer-Encoding: chunked</code> 的超大 multipart 请求体</strong>：不带 <code>Content-Length</code> 却发送远超 <code>post_max_size</code> 的数据，Apache 访问日志里 <code>%b</code> 会明显偏离正常分布。</li>
+<li>worker 反复 SIGABRT 的 502 尖峰；日志里 <code>Session ID is too long or contains illegal characters</code> 与 <code>Failed to read session data</code> 成对出现。</li>
+</ul>
 <p><img src="/2026/10/22/Vuln_PHP2Shell/evidence.png" alt="HashTable、Session 与 Unserializer 的状态及修复对应图" loading="lazy" decoding="async" width="1600" height="920"></p>
 <p><em>三类问题涉及不同状态，补丁分别处理元素可见性、请求内存引用和共享解码上下文。</em></p>
 <p>链条上的每一个「消费点」，在补丁里都能找到对应的一处改动：桶的可见性、请求内存的引用、共享的解码上下文。这也是为什么升级之后必须重启 worker——补丁改的是进程内状态的生命周期，热加载一个库文件解决不了问题。</p>
 <h2 id="0x09-小结"><a href="#0x09-小结" class="headerlink" title="0x09 小结"></a>0x09 小结</h2><p>回到 10 月 21 日那个晚上。那么多公司同时选择停服，首相亲自发推喊话——搁在平时，这些反应看起来未免过激。看完这条链就会发现，它们其实相当克制：漏洞不需要任何业务代码配合，一个只写了 <code>echo</code> 的页面就是攻击目标；而修复必须替换运行中的进程，停服几乎是唯一能保证窗口期安全的选择。</p>
 <p>PHP2Shell 真正的价值，在于它把一条埋了二十年的线走通了：<strong>内存耗尽从“故障”变成了“可控中断”，而中断又恰好落在内部状态发布与提交之间的那道缝里。</strong></p>
 <p>三条路径共用同一个生产者原语，消费端则分别击中 HashTable 计数、session 全局和反序列化器全局。SAPI 对启动失败的处理差异，决定了 mod_php 先倒下；而应用层的解码操作，让 FPM 同样守不住。</p>
-<p>补丁的修法也值得回味：把软 OOM 的处理挪到受控检查点，用硬限约束还能分配多少余量，再把请求两端的状态清理补齐。</p>
+<p>补丁的修法本身就是个提醒：把软 OOM 的处理挪到受控检查点，用硬限约束还能分配多少余量，再把请求两端的状态清理补齐——三处改动分别对应三条路径。</p>
+<p>而 9bie 那条链的演进，给出的是另一个维度的警示：<strong>漏洞从「理论可打」到「官方默认配置下稳定可打」，只用了两天</strong>。披露当天的版本还依赖 <code>display_errors=On</code> 和单 worker；一天后，官方 <code>php.ini-production</code>、官方 150 worker 全部打通，成功率 10/10。中间没有出现新的 PHP 缺陷，只是利用工程在往前拱。</p>
+<p>这意味着「等别人先被打、我再看情况」这种心态，在这类漏洞上几乎没有缓冲期。</p>
 <p>对写 C 的工程师来说，这提醒我们重新审视“先更新记录、再执行可能失败的操作”这种很常见的顺序：一旦操作中断，后面的代码究竟会把这条记录当成什么状态？</p>
 <p><a target="_blank" rel="noopener" href="https://x.com/IceSolst/status/2112771812056510756">IceSolst 在 X 上的这段调侃</a>，倒很贴切：</p>
 <blockquote>
 <p>如果你先发布补丁，它会得到一个 PoC。</p>
 <p>如果你不发布补丁，人们会在你身上烧掉数百万个 token，并得到更多 PoC，包含你尚未修补的新漏洞。</p>
 </blockquote>
-<p><strong>这轮修复也值得继续跟踪：同类问题可能仍有遗漏，后续研究还可能找到新的异常路径或变体。</strong> PHP 官方当前将这些版本列为两项已披露漏洞的修复版本；“这类问题是否已经全部找完”，则是另一个需要持续研究的问题。本文尚未验证针对完整官方修复版本的新绕过。先更新，再关注 <a target="_blank" rel="noopener" href="https://www.php.net/archive/2026.php#2026-10-21-5">PHP 官方安全公告</a>、<a target="_blank" rel="noopener" href="https://www.php.net/ChangeLog-8.php">版本更新记录</a>、<a target="_blank" rel="noopener" href="https://watchtowr.com/intelligence/php-remote-code-execution-php2shell/">watchTowr 的 PHP2Shell 跟踪分析</a> 和发行版后续通告，两件事应当一起做。</p>
+<p><strong>这轮修复也值得继续跟踪：同类问题可能仍有遗漏，后续研究还可能找到新的异常路径或变体。</strong> 先更新，再关注 <a target="_blank" rel="noopener" href="https://www.php.net/archive/2026.php#2026-10-21-5">PHP 官方安全公告</a>、<a target="_blank" rel="noopener" href="https://www.php.net/ChangeLog-8.php">版本更新记录</a>、<a target="_blank" rel="noopener" href="https://watchtowr.com/intelligence/php-remote-code-execution-php2shell/">watchTowr 的 PHP2Shell 跟踪分析</a> 和发行版后续通告，两件事应当一起做。</p>
 <p>对维护者来说，修复、回归测试和后续审计需要持续推进；对使用者来说，及时更新并确认运行中的 worker 已切换，仍然是当下最实际的行动。</p>
 <h2 id="0xFE-附件：当晚维护公告核实清单"><a href="#0xFE-附件：当晚维护公告核实清单" class="headerlink" title="0xFE 附件：当晚维护公告核实清单"></a>0xFE 附件：当晚维护公告核实清单</h2><p>开头那张汇总图只是节选。当晚的核实清单整理成了一份 PDF：<strong>至少 17 项</strong>明确关联 PHP 的维护记录（至少 9 款游戏或相关服务、至少 8 组平台厂商服务），外加 4 项同期但官方未点名 PHP 的安全维护单列对照，每项都附有摘要、官方原链接与公告截图。</p>
 <p>核对口径：时间统一换算为北京时间，截至 2026 年 10 月 22 日 00:18；日本厂商的公告不代表所有地区服务器都受影响；名单非穷尽，欢迎补充。</p>
@@ -947,7 +971,7 @@ fake zend_string    命令本体（≤14 字节，167 − 0x98 − 1）<span ari
 <li><a target="_blank" rel="noopener" href="https://github.com/php/php-src/commit/506e87fa7dcdd306975e5b8f8265ee03527aacbf">PHP 8.4 安全提交：Avoid state corruption via bailout</a></li>
 <li><a target="_blank" rel="noopener" href="https://github.com/php/php-src/commit/31c0ea7d7ff1d1fccb6492e52dab544011628065">PHP 8.5 安全提交：Avoid state corruption via bailout</a></li>
 <li><a target="_blank" rel="noopener" href="https://calif.io/php2shell/">Calif：PHP2Shell 一手研究</a></li>
-<li><a target="_blank" rel="noopener" href="https://github.com/9bie/php2shell-bypass-aslr-exp">9bie：php2shell-bypass-aslr-exp 公开利用实现</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/9bie/php2shell-bypass-aslr-exp">9bie：php2shell-bypass-aslr-exp 公开利用实现</a>（官方 128M / <code>display_errors=Off</code> 纯 HTTP 链，含 <a target="_blank" rel="noopener" href="https://github.com/9bie/php2shell-bypass-aslr-exp/blob/main/pure/RESEARCH_PURE_128M.md">机制与标定</a> 与 <a target="_blank" rel="noopener" href="https://github.com/9bie/php2shell-bypass-aslr-exp/blob/main/pure/evidence/official_workers_20261022.log">官方 worker 日志</a>）</li>
 <li><a target="_blank" rel="noopener" href="https://www.wiz.io/blog/php2shell-php-rce">Wiz：PHP2Shell 技术分析</a></li>
 <li><a target="_blank" rel="noopener" href="https://bugs.php.net/bug.php?id=78876">PHP Bug #78876：multipart 长变量 OOM（2020）</a></li>
 <li><a target="_blank" rel="noopener" href="https://www.php.net/manual/en/session.upload-progress.php">PHP：Session Upload Progress 手册</a></li>
@@ -1253,7 +1277,7 @@ fake zend_string    命令本体（≤14 字节，167 − 0x98 − 1）<span ari
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            结合官方公告、补丁源码与公开利用实现，拆解 PHP CVE-2026-109618 / 109619 的三条利用路径、可复用攻击原语与完整武器化链路，兼谈修复与检测。
+                            2026 年 10 月 21 日，#PHP 8.5.12 等版本紧急修复两个 CVSS 9.2 的未认证 RCE。本文从当晚半个互联网的停服现场说起，拆解 CVE-2026-109618 / 109619 的三条利用路径、可复用攻击原语，以及 9bie 在官方默认配置上跑通的纯 HTTP 武器化链，兼谈修复与检测。
                         
                     </div>
                     <div class="publish-info">
@@ -1543,7 +1567,7 @@ fake zend_string    命令本体（≤14 字节，167 − 0x98 − 1）<span ari
             |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
             |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
             <br>
-                        &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span class="white-color">513.8k</span>&nbsp;字
+                        &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span class="white-color">513.5k</span>&nbsp;字
                                                                                     <span id="busuanzi_container_site_pv">
 			|&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv" class="white-color"></span>&nbsp;次
             </span>
