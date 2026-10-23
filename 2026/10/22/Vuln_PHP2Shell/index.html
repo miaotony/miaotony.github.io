@@ -562,14 +562,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    10.5k
+                    11.1k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    38 分
+                    41 分
                 </div>
                 
 
@@ -591,11 +591,21 @@
 <p><strong>免责声明</strong></p>
 <p>本文由 LLM 参与创作。内容仅供学习研究与授权环境中的安全分析，请勿对未授权系统开展测试。文中利用机制均来自已公开的安全研究与官方通告，代码片段为简化示意。</p>
 </blockquote>
-<h2 id="0x00-引言：一行-echo-的页面，为什么能被打穿？"><a href="#0x00-引言：一行-echo-的页面，为什么能被打穿？" class="headerlink" title="0x00 引言：一行 echo 的页面，为什么能被打穿？"></a>0x00 引言：一行 echo 的页面，为什么能被打穿？</h2><pre class="line-numbers language-php" data-language="php"><code class="language-php"><span class="token php language-php"><span class="token delimiter important">&lt;?php</span>
+<h2 id="0x00-引言：那一晚，半个互联网同时熄灯"><a href="#0x00-引言：那一晚，半个互联网同时熄灯" class="headerlink" title="0x00 引言：那一晚，半个互联网同时熄灯"></a>0x00 引言：那一晚，半个互联网同时熄灯</h2><p>2026 年 10 月 21 日，一个周三。</p>
+<p>从下午开始，日本一批游戏厂商的公告栏里陆续出现同样的措辞——「本サービスで使用している PHP に関する脆弱性が発見された」。傍晚六点，niconico 的频道功能停了；七点，Bandai Channel 全站下线；九点，赛马娘、碧蓝幻想、公主连结、刀剑乱舞、文豪与炼金术师一同进入紧急维护；十点，中二节奏的官网和 CHUNITHM-NET 也挂了。</p>
+<p>到深夜，这份名单已经长到需要拉表格：<strong>9 款游戏或相关服务、8 组平台厂商服务</strong>，横跨日本、美国、欧洲。有些只是停掉了管理后台，有些整站下线，还有些把数据库的 Web 图形界面（phpMyAdmin 那一类）直接关了。</p>
+<p><img src="/2026/10/22/Vuln_PHP2Shell/maintenance-wall.png" alt="当晚各家维护公告汇总" loading="eager" decoding="async" width="1600" height="1550"></p>
+<p><em>图中每一张都是当晚实际发布的官方公告，附中文摘要便于对照。完整核实清单见文末附件。</em></p>
+<p>这一切的起因，是 PHP 官方在当天发布的两个安全公告。</p>
+<p>PHP 在 10 月 21 日紧急发布 8.5.12 / 8.4.27 / 8.3.36 / 8.2.35，修复两个 CVSS 4.0 均为 <strong>9.2</strong> 的未认证远程代码执行漏洞：<strong>CVE-2026-109618</strong>（OOM corruption）和 <strong>CVE-2026-109619</strong>（stale global state）。社区把这组漏洞称为 <strong>PHP2Shell</strong>。</p>
+<p>CVSS 9.2 是什么概念？不需要账号、不需要交互、不需要用户点任何东西，一个 HTTP 请求就能在服务器上执行任意命令。而 PHP 是 WordPress、Drupal、Joomla、Magento、Nextcloud 这些建站系统共同的底座——按 W3Techs 的统计，在服务端语言已知的网站里，它占了七成以上。这就是为什么当晚那么多公司在同一时间选择直接停服：修复需要换掉运行中的 PHP 进程，而它们没把握在不停机的情况下安全完成。</p>
+<blockquote>
+<p>需要说清楚的一点：<strong>停服维护不等于已经被入侵。</strong> 绝大多数厂商是预防性下线，公告里也普遍写明「目前尚未确认有非法访问或信息泄露」。本文关心的是漏洞本身——它为什么能让一个只写了一行 <code>echo</code> 的页面，变成可以被远程拿下 shell 的目标。</p>
+</blockquote>
+<pre class="line-numbers language-php" data-language="php"><code class="language-php"><span class="token php language-php"><span class="token delimiter important">&lt;?php</span>
 <span class="token keyword">echo</span> <span class="token string double-quoted-string">"OK\n"</span><span class="token punctuation">;</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 
-<p>2026 年 10 月 21 日，PHP 紧急发布 8.5.12 / 8.4.27 / 8.3.36 / 8.2.35，修复两个 CVSS 4.0 均为 <strong>9.2</strong> 的未认证远程代码执行漏洞：<strong>CVE-2026-109618</strong>（OOM corruption）和 <strong>CVE-2026-109619</strong>（stale global state）。社区将这组漏洞称为 <strong>PHP2Shell</strong>。</p>
-<p>上面这个页面没有数据库、没有上传、没调 <code>session_start()</code>，但在公开的利用实现里，它就是标准的攻击目标——纯 HTTP 打进去，拿到 <code>uid=33(www-data)</code> 的命令执行。</p>
+<p>上面这段代码，没有数据库、没有文件上传、没有调 <code>session_start()</code>，业务逻辑只有一行输出。但在公开的利用实现里，它就是标准的攻击目标——纯 HTTP 打进去，拿到 <code>uid=33(www-data)</code> 的命令执行。</p>
 <p>秘密全在 <code>echo</code> 的前后。PHP 处理一个请求，得先把输入解析好、把运行环境初始化好，结束后还要做一遍请求清理，业务代码只占中间一小段。这两个 CVE 恰好埋在准备和收尾这两步里。<strong>内存耗尽（OOM）本来是最普通的故障，但在特定的时序下，它变成了攻击者手里的一个开关</strong>——这就是整条利用链的起点。</p>
 <h3 id="先补一点背景：上传一个文件，PHP-到底做了什么？"><a href="#先补一点背景：上传一个文件，PHP-到底做了什么？" class="headerlink" title="先补一点背景：上传一个文件，PHP 到底做了什么？"></a>先补一点背景：上传一个文件，PHP 到底做了什么？</h3><p>平时上传头像、提交附件，页面上看起来只有“选择文件”和“提交”两个动作。服务器实际要先拆开整个请求，分清哪些是普通文字、哪些是文件，再为业务代码准备数据。PHP2Shell 涉及的几个关键环节，就藏在这段准备工作和之后的清理工作里。</p>
 <p><strong>第一步：浏览器把表单编码成 multipart。</strong> 一个普通的上传表单大致如下。这只是正常上传功能的示例：</p>
@@ -713,7 +723,7 @@
 <span class="token function">php_url_scanner_early_rinit</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p>session 侧还加了个 <code>PS(in_rfc1867_update)</code> 标记：上传进度期间的解码被强制走 <code>incomplete_classes_only</code> 模式，所有对象一律保持 <code>__PHP_Incomplete_Class</code>。这样一来，那些早于业务代码执行的路径上，就不会再触发 autoload 或者 <code>__wakeup()</code> 之类的用户代码了。</p>
-<p><img src="/2026/10/22/Vuln_PHP2Shell/patch.png" alt="OOM 处理与请求生命周期的补丁前后对比" loading="eager" decoding="async" width="1600" height="1010"></p>
+<p><img src="/2026/10/22/Vuln_PHP2Shell/patch.png" alt="OOM 处理与请求生命周期的补丁前后对比" loading="lazy" decoding="async" width="1600" height="1010"></p>
 <p><em>补丁机制概括：退出时机移到安全点，严重故障直接终止进程，跨请求引用在两端都被清理。</em></p>
 <p>看懂补丁的思路，漏洞的形状也就出来了。下面按“公共原语 → 三条路径 → 完整武器化”的顺序拆。</p>
 <h2 id="0x03-公共原语：让崩溃发生在指定的那一行"><a href="#0x03-公共原语：让崩溃发生在指定的那一行" class="headerlink" title="0x03 公共原语：让崩溃发生在指定的那一行"></a>0x03 公共原语：让崩溃发生在指定的那一行</h2><p>三条路径都靠同一个前提：<strong>不只是把 PHP 的内存撑爆，还得让它在指定的某一次内存分配上爆</strong>。</p>
@@ -907,6 +917,9 @@ fake zend_string    命令本体（≤14 字节，167 − 0x98 − 1）<span ari
 </blockquote>
 <p><strong>这轮修复也值得继续跟踪：同类问题可能仍有遗漏，后续研究还可能找到新的异常路径或变体。</strong> PHP 官方当前将这些版本列为两项已披露漏洞的修复版本；“这类问题是否已经全部找完”，则是另一个需要持续研究的问题。本文尚未验证针对完整官方修复版本的新绕过。先更新，再关注 <a target="_blank" rel="noopener" href="https://www.php.net/archive/2026.php#2026-10-21-5">PHP 官方安全公告</a>、<a target="_blank" rel="noopener" href="https://www.php.net/ChangeLog-8.php">版本更新记录</a>、<a target="_blank" rel="noopener" href="https://watchtowr.com/intelligence/php-remote-code-execution-php2shell/">watchTowr 的 PHP2Shell 跟踪分析</a> 和发行版后续通告，两件事应当一起做。</p>
 <p>对维护者来说，修复、回归测试和后续审计需要持续推进；对使用者来说，及时更新并确认运行中的 worker 已切换，仍然是当下最实际的行动。</p>
+<h2 id="0xFE-附件：当晚维护公告核实清单"><a href="#0xFE-附件：当晚维护公告核实清单" class="headerlink" title="0xFE 附件：当晚维护公告核实清单"></a>0xFE 附件：当晚维护公告核实清单</h2><p>本文开头那张汇总图只是节选。当晚的完整核实清单整理成了一份 PDF，共 17 项明确关联 PHP 的维护记录（9 款游戏或相关服务、8 组平台厂商服务），外加 4 项同期但官方未点名 PHP 的安全维护单列对照，每项都附有摘要、官方原链接与公告截图。</p>
+<p>核对口径：时间统一换算为北京时间，截至 2026 年 10 月 22 日 00:18；日本厂商的公告不代表所有地区服务器都受影响；名单非穷尽。</p>
+<p>📄 **<a href="PHP2Shell-maintenance-20261021.pdf">PHP 漏洞维护公告汇总（2026-10-21）.pdf</a>**（4.3 MB）</p>
 <h2 id="0xFF-参考资料"><a href="#0xFF-参考资料" class="headerlink" title="0xFF 参考资料"></a>0xFF 参考资料</h2><ul>
 <li><a target="_blank" rel="noopener" href="https://www.php.net/archive/2026.php#2026-10-21-5">PHP 官方紧急安全公告与缓解措施</a></li>
 <li><a target="_blank" rel="noopener" href="https://github.com/php/php-src/security/advisories/GHSA-w8hw-w9fx-j79w">CVE-2026-109618：RCE via OOM corruption（GHSA-w8hw-w9fx-j79w）</a></li>
@@ -1510,7 +1523,7 @@ fake zend_string    命令本体（≤14 字节，167 − 0x98 − 1）<span ari
             |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
             |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
             <br>
-                        &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span class="white-color">511.1k</span>&nbsp;字
+                        &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span class="white-color">511.8k</span>&nbsp;字
                                                                                     <span id="busuanzi_container_site_pv">
 			|&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv" class="white-color"></span>&nbsp;次
             </span>
